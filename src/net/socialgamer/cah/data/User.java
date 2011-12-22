@@ -1,5 +1,8 @@
 package net.socialgamer.cah.data;
 
+import java.util.concurrent.PriorityBlockingQueue;
+
+
 public class User {
 
   enum DisconnectReason {
@@ -8,8 +11,52 @@ public class User {
 
   private final String nickname;
 
+  private final PriorityBlockingQueue<QueuedMessage> queuedMessages;
+
+  private final Object queuedMessageSynchronization = new Object();
+
   public User(final String nickname) {
     this.nickname = nickname;
+    queuedMessages = new PriorityBlockingQueue<QueuedMessage>();
+  }
+
+  public void enqueueMessage(final QueuedMessage message) {
+    synchronized (queuedMessageSynchronization) {
+      queuedMessages.add(message);
+      queuedMessageSynchronization.notifyAll();
+    }
+  }
+
+  public boolean hasQueuedMessages() {
+    return !queuedMessages.isEmpty();
+  }
+
+  /**
+   * Wait for a new message to be queued.
+   * 
+   * @see java.lang.Object#wait(long timeout)
+   * @param timeout
+   *          Maximum time to wait in milliseconds.
+   * @throws InterruptedException
+   */
+  public void waitForNewMessageNotification(final long timeout) throws InterruptedException {
+    synchronized (queuedMessageSynchronization) {
+      queuedMessageSynchronization.wait(timeout);
+    }
+  }
+
+  /**
+   * This method blocks if there are no messages to return, or perhaps if the queue is being
+   * modified by another thread.
+   * 
+   * @return The next message in the queue, or null if interrupted.
+   */
+  public QueuedMessage getNextQueuedMessage() {
+    try {
+      return queuedMessages.take();
+    } catch (final InterruptedException ie) {
+      return null;
+    }
   }
 
   public String getNickname() {

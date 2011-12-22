@@ -32,3 +32,7 @@
 span.error {
   color: red;	
 }
+
+span.debug {
+	color: blue;
+}

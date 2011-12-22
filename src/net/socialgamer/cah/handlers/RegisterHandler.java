@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
 
@@ -17,9 +18,14 @@ public class RegisterHandler implements Handler {
 
   private final ConnectedUsers users;
 
+  //  @Inject
+  //  public RegisterHandler(final ConnectedUsers users) {
+  //    this.users = users;
+  //  }
+
   @Inject
-  public RegisterHandler(final ConnectedUsers users) {
-    this.users = users;
+  public RegisterHandler(final Server server) {
+    this.users = server.getConnectedUsers();
   }
 
   @Override

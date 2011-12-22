@@ -3,6 +3,9 @@ cah.ajax = {};
 cah.ajax.ErrorHandlers = {};
 cah.ajax.SuccessHandlers = {};
 
+cah.DEBUG = true;
+cah.LONG_POLL_TIMEOUT = 2 * 60 * 1000;
+
 cah.ajax.ErrorHandlers.register = ajax_register_error;
 cah.ajax.ErrorHandlers.firstload = ajax_firstload_error;
 
@@ -20,6 +23,8 @@ $(document).ready(function() {
     cache : false,
     error : ajaxError,
     success : ajaxDone,
+    timeout : cah.DEBUG ? undefined : 10 * 1000, // 10 second timeout for normal requests
+    // timeout : 1, // 10 second timeout for normal requests
     type : 'POST',
     url : '/cah/AjaxServlet'
   });
@@ -51,47 +56,77 @@ function addLog(text) {
   $("#log").prop("scrollTop", $("#log").prop("scrollHeight"));
 }
 
+function addLogError(text) {
+  addLog("<span class='error'>Error: " + text + "</span>");
+}
+
+function addLogDebug(text) {
+  if (cah.DEBUG) {
+    addLog("<span class='debug'>DEBUG: " + text + "</span>");
+  }
+}
+
+function addLogDebugObject(text, obj) {
+  if (cah.DEBUG) {
+    if (JSON && JSON.stringify) {
+      addLogDebug(text + ": " + JSON.stringify(obj));
+    } else {
+      addLogDebug(text + ": TODO: debug log without JSON.stringify()");
+    }
+  }
+}
+
 /**
  * Send an ajax request to the server, and store that the request was sent so we know when it gets
  * responded to.
  * 
- * @param op
- *          {string} Operation code for the request.
- * @param data
- *          {object} Parameter map to send for the request.
+ * This should be used for data sent to the server, not long-polling.
+ * 
+ * @param {string}
+ *          op Operation code for the request.
+ * @param {object}
+ *          data Parameter map to send for the request.
+ * @param {?function(jqXHR,textStatus,errorThrown)}
+ *          [opt_errback] Optional error callback.
  */
-function ajaxRequest(op, data) {
+function ajaxRequest(op, data, opt_errback) {
   data.op = op;
   data.serial = serial++;
-  $.ajax({
+  var jqXHR = $.ajax({
     data : data
   });
   pendingRequests[data.serial] = data;
+  addLogDebugObject("ajax req", data);
+  if (opt_errback) {
+    jqXHR.fail(opt_errback);
+  }
 }
 
 function ajaxError(jqXHR, textStatus, errorThrown) {
   // TODO deal with this somehow
   // and figure out which request it was so we can remove it from pending
-  addLog("<span class='error'>Error: " + textStatus + "</span>");
+  debugger;
+  addLogError(textStatus);
 }
 
 function ajaxDone(data) {
+  addLogDebugObject("ajax done", data);
   if (data['error']) {
     // TODO cancel any timers or whatever we may have, and disable interface
     var req = pendingRequests[data.serial];
     if (req && cah.ajax.ErrorHandlers[req.op]) {
       cah.ajax.ErrorHandlers[req.op](data);
     } else {
-      addLog("<span class='error'>Error: " + data.error_message + "</span>");
+      addLogError(data.error_message);
     }
   } else {
     var req = pendingRequests[data.serial];
     if (req && cah.ajax.SuccessHandlers[req.op]) {
       cah.ajax.SuccessHandlers[req.op](data);
     } else if (req) {
-      addLog("<span class='error'>Error: Unhandled response for op " + req.op + "</span>");
+      addLogError("Unhandled response for op " + req.op);
     } else {
-      addLog("<span class='error'>Error: Unknown response for serial " + data.serial + "</span>");
+      addLogError("Unknown response for serial " + data.serial);
     }
   }
 
@@ -105,6 +140,8 @@ function ajax_register_success(data) {
   addLog("You are connected as " + nickname);
   $("#nickbox").hide();
   $("#canvass").show();
+
+  after_registered();
 }
 
 function ajax_register_error(data) {
@@ -120,9 +157,40 @@ function ajax_firstload_success(data) {
     addLog("You have reconnected as " + nickname);
     $("#nickbox").hide();
     $("#canvass").show();
+    after_registered();
   }
 }
 
 function ajax_firstload_error(data) {
+  // TODO dunno what to do here
+}
 
+/**
+ * This should only be called after we have a valid registration with the server, as we start doing
+ * long polling here.
+ */
+function after_registered() {
+  addLogDebug("done registering");
+  long_poll();
+}
+
+function long_poll() {
+  addLogDebug("starting long poll");
+  $.ajax({
+    complete : long_poll,
+    error : long_poll_error,
+    success : long_poll_done,
+    timeout : cah.LONG_POLL_TIMEOUT,
+    url : '/cah/LongPollServlet',
+  });
+}
+
+function long_poll_done(data) {
+  addLogDebugObject("long poll done", data);
+}
+
+function long_poll_error(jqXHR, textStatus, errorThrown) {
+  // TODO deal with this somehow
+  debugger;
+  addLogError(textStatus);
 }
