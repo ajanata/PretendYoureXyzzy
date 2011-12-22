@@ -16,9 +16,6 @@ import javax.servlet.http.HttpSession;
 import net.socialgamer.cah.handlers.Handler;
 import net.socialgamer.cah.handlers.Handlers;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -29,7 +26,7 @@ import com.google.inject.Injector;
  * This servlet is only used for client actions, not for long-polling.
  */
 @WebServlet("/AjaxServlet")
-public class AjaxServlet extends HttpServlet {
+public class AjaxServlet extends CahServlet {
   private static final long serialVersionUID = 1L;
 
   private final Injector injector;
@@ -42,8 +39,8 @@ public class AjaxServlet extends HttpServlet {
   public AjaxServlet() {
     super();
 
-    this.server = new Server();
-    injector = Guice.createInjector(new CahModule(server));
+    injector = Guice.createInjector();
+    this.server = injector.getInstance(Server.class);
   }
 
   /**
@@ -55,22 +52,14 @@ public class AjaxServlet extends HttpServlet {
   }
 
   /**
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+   * @see CahServlet#doPost(HttpServletRequest request, HttpServletResponse response, HttpSession
+   *      hSession)
    */
   @Override
-  protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-      throws ServletException, IOException {
-    response.setContentType("application/json");
+  protected void handleRequest(final HttpServletRequest request,
+      final HttpServletResponse response, final HttpSession hSession) throws ServletException,
+      IOException {
     final PrintWriter out = response.getWriter();
-
-    final HttpSession hSession = request.getSession(true);
-    if (hSession.isNew()) {
-      // they should have gotten a session from the index page.
-      // they probably don't have cookies on.
-      returnError(out, "Session not detected. Make sure you have cookies enabled.");
-      return;
-    }
-
     int serial = -1;
     if (request.getParameter("serial") != null) {
       try {
@@ -94,25 +83,10 @@ public class AjaxServlet extends HttpServlet {
       returnError(out, "Invalid operation.", serial);
       return;
     }
-    final Map<String, Object> returnData = handler.handle(request.getParameterMap(), hSession);
-    returnData.put("serial", serial);
-    returnData(out, returnData);
+    final Map<String, Object> data = handler.handle(request.getParameterMap(), hSession);
+    data.put("serial", serial);
+    returnData(out, data);
     return;
   }
 
-  private void returnError(final PrintWriter writer, final String message) {
-    returnError(writer, message, -1);
-  }
-
-  @SuppressWarnings("unchecked")
-  private void returnError(final PrintWriter writer, final String message, final int serial) {
-    final JSONObject ret = new JSONObject();
-    ret.put("error", Boolean.TRUE);
-    ret.put("error_message", message);
-    writer.println(ret.toJSONString());
-  }
-
-  private void returnData(final PrintWriter writer, final Map<String, Object> data) {
-    writer.println(JSONValue.toJSONString(data));
-  }
 }
