@@ -38,10 +38,16 @@ public abstract class CahServlet extends HttpServlet {
     response.setContentType("application/json");
 
     final HttpSession hSession = request.getSession(true);
+    final String op = request.getParameter("op");
+    final boolean skipSessionUserCheck = op != null
+        && (op.equals("register") || op.equals("firstload"));
     if (hSession.isNew()) {
       // they should have gotten a session from the index page.
       // they probably don't have cookies on.
-      returnError(response.getWriter(), "Session not detected. Make sure you have cookies enabled.");
+      returnError(response.getWriter(), "no_session",
+          "Session not detected. Make sure you have cookies enabled.");
+    } else if (!skipSessionUserCheck && hSession.getAttribute("user") == null) {
+      returnError(response.getWriter(), "not_registered", "Not registered. Refresh the page.");
     } else {
       handleRequest(request, response, hSession);
     }
@@ -61,14 +67,17 @@ public abstract class CahServlet extends HttpServlet {
       IOException;
 
   /**
-   * Return an error to the client. Prefer to use the PrintWriter,String,int version if you know the
-   * request serial number.
+   * Return an error to the client. Prefer to use the PrintWriter,String,String,int version if you
+   * know the request serial number.
    * 
    * @param writer
+   * @param code
+   *          Error code that the js code knows how to handle.
    * @param message
+   *          User-visible error message.
    */
-  protected void returnError(final PrintWriter writer, final String message) {
-    returnError(writer, message, -1);
+  protected void returnError(final PrintWriter writer, final String code, final String message) {
+    returnError(writer, code, message, -1);
   }
 
   /**
@@ -79,9 +88,11 @@ public abstract class CahServlet extends HttpServlet {
    * @param serial
    */
   @SuppressWarnings("unchecked")
-  protected void returnError(final PrintWriter writer, final String message, final int serial) {
+  protected void returnError(final PrintWriter writer, final String code, final String message,
+      final int serial) {
     final JSONObject ret = new JSONObject();
     ret.put("error", Boolean.TRUE);
+    ret.put("error_code", code);
     ret.put("error_message", message);
     writer.println(ret.toJSONString());
   }

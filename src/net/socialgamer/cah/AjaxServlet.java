@@ -65,14 +65,15 @@ public class AjaxServlet extends CahServlet {
       try {
         serial = Integer.parseInt(request.getParameter("serial"));
       } catch (final NumberFormatException nfe) {
-        returnError(out, "Bad request");
+        returnError(out, "bad_req", "Bad request");
         return;
       }
     }
 
     final String op = request.getParameter("op");
-    if (op.equals("") || !Handlers.LIST.containsKey(op)) {
-      returnError(out, "Operation not specified.", serial);
+    //  !Handlers.LIST.containsKey(op)
+    if (op == null || op.equals("")) {
+      returnError(out, "op_not_spec", "Operation not specified.", serial);
       return;
     }
 
@@ -80,7 +81,7 @@ public class AjaxServlet extends CahServlet {
     try {
       handler = injector.getInstance(Handlers.LIST.get(op));
     } catch (final Exception e) {
-      returnError(out, "Invalid operation.", serial);
+      returnError(out, "bad_op", "Invalid operation.", serial);
       return;
     }
     final Map<String, Object> data = handler.handle(request.getParameterMap(), hSession);
