@@ -23,7 +23,16 @@ import net.socialgamer.cah.data.User;
 public class LongPollServlet extends CahServlet {
   private static final long serialVersionUID = 1L;
 
-  private static final long TIMEOUT = 60 * 1000;
+  /**
+   * Minimum amount of time before timing out and returning a no-op, in nanoseconds.
+   */
+  private static final long TIMEOUT_BASE = 60 * 1000 * 1000;
+
+  /**
+   * Randomness factor added to minimum timeout duration, in nanoseconds. The maximum timeout delay
+   * will be TIMEOUT_BASE + TIMEOUT_RANDOMNESS.
+   */
+  private static final double TIMEOUT_RANDOMNESS = 20 * 1000 * 1000;
 
   /**
    * @see HttpServlet#HttpServlet()
@@ -42,12 +51,16 @@ public class LongPollServlet extends CahServlet {
       IOException {
     final PrintWriter out = response.getWriter();
 
-    final long start = System.currentTimeMillis();
+    final long start = System.nanoTime();
+    // Pick a random timeout point between TIMEOUT_BASE and TIMEOUT_BASE + TIMEOUT_RANDOMNESS
+    // nanoseconds from now.
+    final long end = start + TIMEOUT_BASE + (long) (Math.random() * TIMEOUT_RANDOMNESS);
     final User user = (User) hSession.getAttribute("user");
+    assert (user != null);
     // TODO we might have to synchronize on the user object?
-    while (!(user.hasQueuedMessages()) && start + TIMEOUT > System.currentTimeMillis()) {
+    while (!(user.hasQueuedMessages()) && System.nanoTime() < end) {
       try {
-        user.waitForNewMessageNotification(start + TIMEOUT - System.currentTimeMillis());
+        user.waitForNewMessageNotification((end - System.nanoTime()) / 1000);
       } catch (final InterruptedException ie) {
         // I don't think we care?
       }
