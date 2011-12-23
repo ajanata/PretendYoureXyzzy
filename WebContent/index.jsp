@@ -8,6 +8,13 @@
 <title>Cards Against Humanity</title>
 <script type="text/javascript" src="js/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="js/cah.js"></script>
+<%-- cah must be first, ajax must be before app. app probably has to be last. --%>
+<%-- TODO make this be dynamic with looking at the filesystem and using jquery --%>
+<script type="text/javascript" src="js/cah.log.js"></script>
+<script type="text/javascript" src="js/cah.longpoll.js"></script>
+<script type="text/javascript" src="js/cah.ajax.js"></script>
+<script type="text/javascript" src="js/cah.ajax.handlers.js"></script>
+<script type="text/javascript" src="js/cah.app.js"></script>
 <link rel="stylesheet" type="text/css" href="cah.css" media="screen" />
 </head>
 <body>
