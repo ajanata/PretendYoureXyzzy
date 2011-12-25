@@ -7,8 +7,11 @@
 cah.log = {};
 
 cah.log.status = function(text) {
+  var scroll = $("#log").prop("scrollHeight") - $("#log").height() - $("#log").prop("scrollTop") <= 5;
   $("#log").append("[" + new Date().toLocaleTimeString() + "] " + text + "<br/>");
-  $("#log").prop("scrollTop", $("#log").prop("scrollHeight"));
+  if (scroll) {
+    $("#log").prop("scrollTop", $("#log").prop("scrollHeight"));
+  }
 };
 
 cah.log.error = function(text) {
