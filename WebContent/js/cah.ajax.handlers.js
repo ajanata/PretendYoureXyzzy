@@ -14,7 +14,7 @@ cah.ajax.SuccessHandlers.register = function(data) {
 };
 
 cah.ajax.ErrorHandlers.register = function(data) {
-  $("#nickbox").append("<span class='error'>" + data.error_message + "</span>");
+  $("#nickbox_error").text(data.error_message);
   $("#nickname").focus();
 };
 
@@ -31,7 +31,7 @@ cah.ajax.SuccessHandlers.firstload = function(data) {
 };
 
 cah.ajax.ErrorHandlers.firstload = function(data) {
-  // TODO dunno what to do here
+  // TODO dunno what to do here, if anything
 };
 
 /**
@@ -41,4 +41,8 @@ cah.ajax.ErrorHandlers.firstload = function(data) {
 cah.ajax.after_registered = function() {
   cah.log.debug("done registering");
   cah.longpoll.longPoll();
+};
+
+cah.ajax.SuccessHandlers.chat = function(data) {
+  // pass
 };

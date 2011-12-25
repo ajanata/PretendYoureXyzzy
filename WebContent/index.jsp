@@ -12,6 +12,7 @@
 <%-- TODO make this be dynamic with looking at the filesystem and using jquery --%>
 <script type="text/javascript" src="js/cah.log.js"></script>
 <script type="text/javascript" src="js/cah.longpoll.js"></script>
+<script type="text/javascript" src="js/cah.longpoll.handlers.js"></script>
 <script type="text/javascript" src="js/cah.ajax.js"></script>
 <script type="text/javascript" src="js/cah.ajax.handlers.js"></script>
 <script type="text/javascript" src="js/cah.app.js"></script>
@@ -26,10 +27,15 @@
 <div id="nickbox">
     Nickname: <input type="text" id="nickname" value="" maxlength="30" />
     <input type="button" id="nicknameconfirm" value="Set" />
+    <span id="nickbox_error" class="error"></span>
 </div>
 
 <div id="canvass">
+  <div id="chat_area">
     <div id="log"></div>
+    <input type="text" id="chat" maxlength="200" />
+    <input type="button" id="chat_submit" value="Chat" />
+  </div>
 </div>
 
 </body>

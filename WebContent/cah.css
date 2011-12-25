@@ -9,24 +9,54 @@
 }
 
 #canvass {
-	/* */
+	/* * /
 	display: none;
 	/* */
-  height: 768px;
+  height: 750px;
 	overflow: none;
 	position: relative;
-  width: 1024px;
+  width: 1000px;
   border: 1px solid red;
 }
 
-#log {
-	width: 50%;
-	height: 200px;
-	border: 1px solid black;
+#chat_area {
+	width: 500px;
+	height: 215px;
+	border: 0px;
 	position: absolute;
 	bottom: 0px;
 	right: 0px;
+	overflow: none;
+}
+
+#log {
+	width: 500px;
+	height: 198px;
+	border: 1px solid black;
+	position: absolute;
+	bottom: 17px;
+	right: 0px;
 	overflow: auto;
+}
+
+#chat {
+	border: 1px solid black;
+	width: 451px;
+	height: 17px;
+	position: absolute;
+	bottom: -1px;
+	right: 49px;
+	padding: 0px;
+}
+
+#chat_submit {
+	width: 50px;
+	height: 19px;
+	position: absolute;
+	right: 0px;
+	bottom: -1px;
+	margin: 0px;
+	padding: 0px;
 }
 
 span.error {
