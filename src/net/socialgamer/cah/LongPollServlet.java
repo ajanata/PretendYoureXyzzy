@@ -57,6 +57,7 @@ public class LongPollServlet extends CahServlet {
     final long end = start + TIMEOUT_BASE + (long) (Math.random() * TIMEOUT_RANDOMNESS);
     final User user = (User) hSession.getAttribute("user");
     assert (user != null);
+    user.contactedServer();
     // TODO we might have to synchronize on the user object?
     while (!(user.hasQueuedMessages()) && System.nanoTime() < end) {
       try {

@@ -15,6 +15,8 @@ public class User {
 
   private final Object queuedMessageSynchronization = new Object();
 
+  private long lastHeardFrom = 0;
+
   public User(final String nickname) {
     this.nickname = nickname;
     queuedMessages = new PriorityBlockingQueue<QueuedMessage>();
@@ -61,6 +63,17 @@ public class User {
 
   public String getNickname() {
     return nickname;
+  }
+
+  /**
+   * Update the timestamp that we have last heard from this user to the current time.
+   */
+  public void contactedServer() {
+    lastHeardFrom = System.nanoTime();
+  }
+
+  public long getLastHeardFrom() {
+    return lastHeardFrom;
   }
 
 }
