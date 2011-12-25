@@ -15,7 +15,7 @@ import net.socialgamer.cah.data.User;
  * @author ajanata
  * 
  */
-public class FirstLoadHandler implements Handler {
+public class FirstLoadHandler extends Handler {
 
   public static final String OP = "firstload";
 

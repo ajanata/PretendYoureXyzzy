@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 
-public class TestHandler implements Handler {
+public class TestHandler extends Handler {
 
   public static final String OP = "test";
 
