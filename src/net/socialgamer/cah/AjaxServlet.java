@@ -31,8 +31,6 @@ public class AjaxServlet extends CahServlet {
 
   private final Injector injector;
 
-  private final Server server;
-
   /**
    * @see HttpServlet#HttpServlet()
    */
@@ -40,7 +38,6 @@ public class AjaxServlet extends CahServlet {
     super();
 
     injector = Guice.createInjector();
-    this.server = injector.getInstance(Server.class);
   }
 
   /**
