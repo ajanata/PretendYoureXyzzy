@@ -1,13 +1,5 @@
 package net.socialgamer.cah;
 
-import net.socialgamer.cah.db.BlackCard;
-import net.socialgamer.cah.db.WhiteCard;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -17,6 +9,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.socialgamer.cah.db.BlackCard;
+import net.socialgamer.cah.db.WhiteCard;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.AnnotationConfiguration;
 
 
 /**
@@ -44,23 +44,24 @@ public class TestServlet extends HttpServlet {
   /**
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+  @Override
+  protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
       throws ServletException, IOException {
     // TODO Auto-generated method stub
     // response.setCharacterEncoding("UTF-8");
-    PrintWriter out = response.getWriter();
+    final PrintWriter out = response.getWriter();
     // ServletOutputStream out = response.getOutputStream();
-    Session session = sessionFactory.openSession();
-    @SuppressWarnings("rawtypes")
-    List b = session.createQuery("from BlackCard order by random()").list();
-    for (BlackCard bc : (List<BlackCard>) b) {
+    final Session session = sessionFactory.openSession();
+    @SuppressWarnings("unchecked")
+    final List<BlackCard> b = session.createQuery("from BlackCard order by random()").list();
+    for (final BlackCard bc : b) {
       out.println(StringEscapeUtils.escapeHtml4(bc.toString()));
     }
 
     out.println("\n\n\n");
-    @SuppressWarnings("rawtypes")
-    List w = session.createQuery("from WhiteCard order by random()").list();
-    for (WhiteCard wc : (List<WhiteCard>) w) {
+    @SuppressWarnings("unchecked")
+    final List<WhiteCard> w = session.createQuery("from WhiteCard order by random()").list();
+    for (final WhiteCard wc : w) {
       out.println(StringEscapeUtils.escapeHtml4(wc.toString()));
     }
 
