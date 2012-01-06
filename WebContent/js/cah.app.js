@@ -15,6 +15,11 @@ $(document).ready(function() {
 
   $("#chat").keyup(chat_keyup);
   $("#chat_submit").click(chatsubmit_click);
+
+  // TODO: have some sort of mechanism to alert the server that we have unloaded the page, but
+  // have not expressed an interest in being cleared out yet.
+  // $(window).bind("beforeunload", window_beforeunload);
+  $("#logout").click(logout_click);
 });
 
 function nickbox_keyup(e) {
@@ -47,4 +52,8 @@ function chatsubmit_click(e) {
   cah.log.status("&lt;" + cah.nickname + "&gt; " + text);
   $("#chat").val("");
   $("#chat").focus();
+}
+
+function logout_click(e) {
+  cah.Ajax.request("logout", {});
 }

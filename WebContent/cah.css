@@ -49,6 +49,12 @@
 	padding: 0px;
 }
 
+#logout {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
 #chat_submit {
 	width: 50px;
 	height: 19px;

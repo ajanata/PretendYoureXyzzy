@@ -5,7 +5,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 public class User {
 
-  enum DisconnectReason {
+  public enum DisconnectReason {
     MANUAL, PING_TIMEOUT, KICKED
   }
 
@@ -72,6 +72,9 @@ public class User {
     lastHeardFrom = System.nanoTime();
   }
 
+  /**
+   * @return The time the user was last heard from, in nanoseconds.
+   */
   public long getLastHeardFrom() {
     return lastHeardFrom;
   }

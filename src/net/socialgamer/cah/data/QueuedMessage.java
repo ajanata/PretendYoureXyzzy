@@ -38,7 +38,7 @@ public class QueuedMessage implements Comparable<QueuedMessage> {
    * 
    */
   public enum Type {
-    PING(0), NEW_PLAYER(5), CHAT(5);
+    PING(0), NEW_PLAYER(3), PLAYER_DISCONNECT(3), CHAT(5);
 
     private final int weight;
 

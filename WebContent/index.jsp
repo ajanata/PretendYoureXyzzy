@@ -31,6 +31,7 @@
 </div>
 
 <div id="canvass">
+  <input type="button" id="logout" value="Log out" />
   <div id="chat_area">
     <div id="log"></div>
     <input type="text" id="chat" maxlength="200" />

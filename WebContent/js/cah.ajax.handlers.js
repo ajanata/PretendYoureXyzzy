@@ -46,3 +46,7 @@ cah.ajax.after_registered = function() {
 cah.ajax.SuccessHandlers.chat = function(data) {
   // pass
 };
+
+cah.ajax.SuccessHandlers.logout = function(data) {
+  window.location.reload();
+};
