@@ -2,9 +2,11 @@ package net.socialgamer.cah.data;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import net.socialgamer.cah.data.QueuedMessage.Type;
+import net.socialgamer.cah.data.User.DisconnectReason;
 
 
 /**
@@ -15,6 +17,11 @@ import net.socialgamer.cah.data.QueuedMessage.Type;
  * 
  */
 public class ConnectedUsers {
+
+  /**
+   * Duration of a ping timeout, in nanoseconds.
+   */
+  public static final long PING_TIMEOUT = 3L * 60L * 1000L * 1000000L;
 
   private final Map<String, User> users = new HashMap<String, User>();
 
@@ -33,10 +40,31 @@ public class ConnectedUsers {
   }
 
   public void removeUser(final User user, final User.DisconnectReason reason) {
-    // TODO fire an event for a disconnected user to interested parties
-    //    synchronized (users) {
-    //
-    //    }
+    synchronized (users) {
+      users.remove(user.getNickname());
+      notifyRemoveUser(user, reason);
+    }
+  }
+
+  private void notifyRemoveUser(final User user, final User.DisconnectReason reason) {
+    final HashMap<String, Object> data = new HashMap<String, Object>();
+    data.put("event", "player_leave");
+    data.put("nickname", user.getNickname());
+    data.put("reason", reason.toString());
+    broadcastToAll(Type.PLAYER_DISCONNECT, data);
+  }
+
+  public void checkForPingTimeouts() {
+    synchronized (users) {
+      final Iterator<User> iterator = users.values().iterator();
+      while (iterator.hasNext()) {
+        final User u = iterator.next();
+        if (System.nanoTime() - u.getLastHeardFrom() > PING_TIMEOUT) {
+          notifyRemoveUser(u, DisconnectReason.PING_TIMEOUT);
+          iterator.remove();
+        }
+      }
+    }
   }
 
   /**

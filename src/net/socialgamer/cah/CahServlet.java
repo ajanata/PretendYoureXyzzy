@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import com.google.inject.Injector;
+
 
 /**
  * Servlet implementation class CahServlet
@@ -109,4 +111,7 @@ public abstract class CahServlet extends HttpServlet {
     writer.println(JSONValue.toJSONString(data));
   }
 
+  protected Injector getInjector() {
+    return (Injector) getServletContext().getAttribute(StartupUtils.INJECTOR);
+  }
 }
