@@ -30,23 +30,26 @@ cah.longpoll.complete = function() {
   }
 };
 
-cah.longpoll.done = function(data) {
-  cah.log.debug("long poll done", data);
+cah.longpoll.done = function(data_list) {
+  cah.log.debug("long poll done", data_list);
 
-  if (data['error']) {
-    // TODO cancel any timers or whatever we may have, and disable interface
-    // this probably should be done in the appropriate error code handler because we may not
-    // want to always be that extreme.
-    if (cah.longpoll.ErrorCodeHandlers[data.error_code]) {
-      cah.longpoll.ErrorCodeHandlers[data.error_code](data);
+  for ( var index in data_list) {
+    var data = data_list[index];
+    if (data['error']) {
+      // TODO cancel any timers or whatever we may have, and disable interface
+      // this probably should be done in the appropriate error code handler because we may not
+      // want to always be that extreme.
+      if (cah.longpoll.ErrorCodeHandlers[data.error_code]) {
+        cah.longpoll.ErrorCodeHandlers[data.error_code](data);
+      } else {
+        cah.log.error(data.error_message);
+      }
     } else {
-      cah.log.error(data.error_message);
-    }
-  } else {
-    if (cah.longpoll.EventHandlers[data.event]) {
-      cah.longpoll.EventHandlers[data.event](data);
-    } else {
-      cah.log.error("Unhandled event " + data.event);
+      if (cah.longpoll.EventHandlers[data.event]) {
+        cah.longpoll.EventHandlers[data.event](data);
+      } else {
+        cah.log.error("Unhandled event " + data.event);
+      }
     }
   }
 
@@ -56,7 +59,6 @@ cah.longpoll.done = function(data) {
 
 cah.longpoll.error = function(jqXHR, textStatus, errorThrown) {
   // TODO deal with this somehow
-  debugger;
   cah.log.debug(textStatus);
   cah.longpoll.Backoff *= 2;
   cah.log

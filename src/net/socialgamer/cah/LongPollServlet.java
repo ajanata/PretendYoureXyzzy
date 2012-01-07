@@ -2,7 +2,10 @@ package net.socialgamer.cah;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -35,12 +38,10 @@ public class LongPollServlet extends CahServlet {
   private static final double TIMEOUT_RANDOMNESS = 20 * 1000 * 1000;
 
   /**
-   * @see HttpServlet#HttpServlet()
+   * The maximum number of messages which will be returned to a client during a single poll
+   * operation.
    */
-  public LongPollServlet() {
-    super();
-    // TODO Auto-generated constructor stub
-  }
+  private static final int MAX_MESSAGES_PER_POLL = 5;
 
   /**
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -67,10 +68,14 @@ public class LongPollServlet extends CahServlet {
       }
     }
     if (user.hasQueuedMessages()) {
-      final QueuedMessage qm = user.getNextQueuedMessage();
+      final Collection<QueuedMessage> msgs = user.getNextQueuedMessages(MAX_MESSAGES_PER_POLL);
       // just in case...
-      if (qm != null) {
-        returnData(out, qm.getData());
+      if (msgs.size() > 0) {
+        final List<Map<String, Object>> data = new ArrayList<Map<String, Object>>(msgs.size());
+        for (final QueuedMessage qm : msgs) {
+          data.add(qm.getData());
+        }
+        returnArray(out, data);
         return;
       }
     }
@@ -78,6 +83,8 @@ public class LongPollServlet extends CahServlet {
     final Map<String, Object> data = new HashMap<String, Object>();
     data.put("event", "noop");
     data.put("timestamp", System.currentTimeMillis());
-    returnData(out, data);
+    final List<Map<String, Object>> data_list = new ArrayList<Map<String, Object>>(1);
+    data_list.add(data);
+    returnArray(out, data_list);
   }
 }

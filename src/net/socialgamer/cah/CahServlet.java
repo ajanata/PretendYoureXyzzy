@@ -2,6 +2,7 @@ package net.socialgamer.cah;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -108,7 +109,23 @@ public abstract class CahServlet extends HttpServlet {
    *          Key-value data to return as the response.
    */
   protected void returnData(final PrintWriter writer, final Map<String, Object> data) {
-    writer.println(JSONValue.toJSONString(data));
+    returnObject(writer, data);
+  }
+
+  /**
+   * Return multiple response data to the client.
+   * 
+   * @param writer
+   *          Writer for the response.
+   * @param data_list
+   *          List of key-value data to return as the response.
+   */
+  protected void returnArray(final PrintWriter writer, final List<Map<String, Object>> data_list) {
+    returnObject(writer, data_list);
+  }
+
+  private void returnObject(final PrintWriter writer, final Object object) {
+    writer.println(JSONValue.toJSONString(object));
   }
 
   protected Injector getInjector() {

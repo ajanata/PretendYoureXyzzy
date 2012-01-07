@@ -1,5 +1,7 @@
 package net.socialgamer.cah.data;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.PriorityBlockingQueue;
 
 
@@ -59,6 +61,15 @@ public class User {
     } catch (final InterruptedException ie) {
       return null;
     }
+  }
+
+  public Collection<QueuedMessage> getNextQueuedMessages(final int maxElements) {
+    final ArrayList<QueuedMessage> c = new ArrayList<QueuedMessage>(maxElements);
+    synchronized (queuedMessageSynchronization) {
+      queuedMessages.drainTo(c, maxElements);
+    }
+    c.trimToSize();
+    return c;
   }
 
   public String getNickname() {
