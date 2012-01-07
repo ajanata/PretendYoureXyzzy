@@ -33,8 +33,17 @@ cah.longpoll.complete = function() {
 cah.longpoll.done = function(data_list) {
   cah.log.debug("long poll done", data_list);
 
-  for ( var index in data_list) {
-    var data = data_list[index];
+  var data_list_work;
+  // we need to handle non-array data, too, so just make it look like an array
+  if (data_list['error']) {
+    data_list_work = {};
+    data_list_work[0] = data_list;
+  } else {
+    data_list_work = data_list;
+  }
+
+  for ( var index in data_list_work) {
+    var data = data_list_work[index];
     if (data['error']) {
       // TODO cancel any timers or whatever we may have, and disable interface
       // this probably should be done in the appropriate error code handler because we may not
