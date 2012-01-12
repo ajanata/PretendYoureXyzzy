@@ -30,6 +30,7 @@ public class LongPollServlet extends CahServlet {
    * Minimum amount of time before timing out and returning a no-op, in nanoseconds.
    */
   private static final long TIMEOUT_BASE = 60 * 1000 * 1000;
+  //  private static final long TIMEOUT_BASE = 10 * 1000 * 1000;
 
   /**
    * Randomness factor added to minimum timeout duration, in nanoseconds. The maximum timeout delay

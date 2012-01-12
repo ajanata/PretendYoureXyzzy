@@ -16,6 +16,7 @@ public class BlackDeck {
   @SuppressWarnings("unchecked")
   public BlackDeck() {
     final Session session = HibernateUtil.instance.sessionFactory.openSession();
+    // TODO option to restrict to only stock cards or allow customs
     deck = session.createQuery("from BlackCard order by random()").list();
     dealt = new ArrayList<BlackCard>();
   }

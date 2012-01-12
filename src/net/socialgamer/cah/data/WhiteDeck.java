@@ -17,6 +17,7 @@ public class WhiteDeck {
   @SuppressWarnings("unchecked")
   public WhiteDeck() {
     final Session session = HibernateUtil.instance.sessionFactory.openSession();
+    // TODO option to restrict to only stock cards or allow customs
     deck = session.createQuery("from WhiteCard order by random()").list();
     dealt = new ArrayList<WhiteCard>();
   }
