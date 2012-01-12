@@ -12,7 +12,10 @@ cah.longpoll.ErrorCodeHandlers.not_registered = function(data) {
 };
 
 cah.longpoll.EventHandlers.new_player = function(data) {
-  cah.log.status(data.nickname + " has connected.");
+  // don't display our own join
+  if (data.nickname != cah.nickname) {
+    cah.log.status(data.nickname + " has connected.");
+  }
 };
 
 cah.longpoll.EventHandlers.player_leave = function(data) {
