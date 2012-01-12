@@ -18,7 +18,6 @@ cah.ajax.lib = function() {
   // TODO run a timer to see if we have more than X pending requests and delay further ones until
   // we get results
   this.pendingRequests = {};
-  this.serial = 0;
 };
 
 $(document).ready(function() {
@@ -34,7 +33,6 @@ $(document).ready(function() {
     error : cah.Ajax.error,
     success : cah.Ajax.done,
     timeout : cah.DEBUG ? undefined : 10 * 1000, // 10 second timeout for normal requests
-    // timeout : 1, // 10 second timeout for normal requests
     type : 'POST',
     url : '/cah/AjaxServlet'
   });
@@ -46,23 +44,17 @@ $(document).ready(function() {
  * 
  * This should be used for data sent to the server, not long-polling.
  * 
- * @param {string}
- *          op Operation code for the request.
- * @param {object}
- *          data Parameter map to send for the request.
- * @param {?function(jqXHR,textStatus,errorThrown)}
- *          [opt_errback] Optional error callback.
+ * @param {cah.ajax.Builder}
+ *          builder Request builder containing data to use.
  */
-cah.ajax.lib.prototype.request = function(op, data, opt_errback) {
-  data.op = op;
-  data.serial = this.serial++;
+cah.ajax.lib.prototype.requestWithBuilder = function(builder) {
   var jqXHR = $.ajax({
-    data : data
+    data : builder.data
   });
-  this.pendingRequests[data.serial] = data;
-  cah.log.debug("ajax req", data);
-  if (opt_errback) {
-    jqXHR.fail(opt_errback);
+  this.pendingRequests[builder.data.serial] = builder.data;
+  cah.log.debug("ajax req", builder.data);
+  if (builder.errback) {
+    jqXHR.fail(builder.errback);
   }
 };
 
@@ -97,4 +89,15 @@ cah.ajax.lib.prototype.done = function(data) {
   if (data.serial >= 0 && this.pendingRequests[data.serial]) {
     delete this.pendingRequests[data.serial];
   }
+};
+
+/**
+ * Get a builder for an ajax request.
+ * 
+ * @param {string}
+ *          op Operation code for the request.
+ * @returns {cah.ajax.Builder} Builder to create the request.
+ */
+cah.ajax.lib.prototype.build = function(op) {
+  return new cah.ajax.Builder(op);
 };

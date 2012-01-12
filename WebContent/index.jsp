@@ -14,6 +14,7 @@
 <script type="text/javascript" src="js/cah.longpoll.js"></script>
 <script type="text/javascript" src="js/cah.longpoll.handlers.js"></script>
 <script type="text/javascript" src="js/cah.ajax.js"></script>
+<script type="text/javascript" src="js/cah.ajax.builder.js"></script>
 <script type="text/javascript" src="js/cah.ajax.handlers.js"></script>
 <script type="text/javascript" src="js/cah.app.js"></script>
 <link rel="stylesheet" type="text/css" href="cah.css" media="screen" />

@@ -6,7 +6,7 @@
 
 $(document).ready(function() {
   // see if we already exist on the server so we can resume
-  cah.Ajax.request("firstload", {});
+  cah.Ajax.build("firstload").run();
 
   // TODO see if we have a stored nickname somewhere
   $("#nicknameconfirm").click(nicknameconfirm_click);
@@ -31,9 +31,7 @@ function nickbox_keyup(e) {
 
 function nicknameconfirm_click(e) {
   var nickname = $.trim($("#nickname").val());
-  cah.Ajax.request("register", {
-    nickname : nickname,
-  });
+  cah.Ajax.build("register").withNickname(nickname).run();
 }
 
 function chat_keyup(e) {
@@ -46,14 +44,12 @@ function chat_keyup(e) {
 function chatsubmit_click(e) {
   var text = $.trim($("#chat").val());
   // TODO when I get multiple channels working, this needs to know active and pass it
-  cah.Ajax.request("chat", {
-    message : text,
-  });
+  cah.Ajax.build("chat").withMessage(text).run();
   cah.log.status("&lt;" + cah.nickname + "&gt; " + text);
   $("#chat").val("");
   $("#chat").focus();
 }
 
 function logout_click(e) {
-  cah.Ajax.request("logout", {});
+  cah.Ajax.build("logout").run();
 }

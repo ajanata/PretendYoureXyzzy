@@ -1,5 +1,7 @@
 /**
- * AJAX callback handlers. TODO make this individual files instead of all in one.
+ * AJAX callback handlers.
+ * 
+ * TODO make this individual files instead of all in one.
  * 
  * @author ajanata
  */
@@ -41,7 +43,7 @@ cah.ajax.ErrorHandlers.firstload = function(data) {
 cah.ajax.after_registered = function() {
   cah.log.debug("done registering");
   // TODO once there are channels, this needs to specify the global channel
-  cah.Ajax.request("names", {});
+  cah.Ajax.build("names").run();
   cah.longpoll.longPoll();
 };
 
