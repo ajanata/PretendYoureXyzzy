@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -29,11 +30,12 @@ public class GameTest {
     game = new Game(0, cmMock);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testRemovePlayer() {
     cmMock.broadcastToList(anyObject(Collection.class), eq(Type.GAME_PLAYER_EVENT),
         anyObject(HashMap.class));
-    expectLastCall().anyTimes();
+    expectLastCall().times(4);
     replay(cmMock);
 
     final User user1 = new User("test1");
@@ -46,6 +48,8 @@ public class GameTest {
     assertEquals(user2, game.getHost());
     assertTrue(game.removePlayer(user2));
     assertEquals(null, game.getHost());
+
+    verify(cmMock);
 
   }
 }
