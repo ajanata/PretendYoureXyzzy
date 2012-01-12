@@ -13,6 +13,7 @@ public class Handlers {
     LIST.put(ChatHandler.OP, ChatHandler.class);
     LIST.put(FirstLoadHandler.OP, FirstLoadHandler.class);
     LIST.put(LogoutHandler.OP, LogoutHandler.class);
+    LIST.put(NamesHandler.OP, NamesHandler.class);
     LIST.put(RegisterHandler.OP, RegisterHandler.class);
     LIST.put(TestHandler.OP, TestHandler.class);
   }

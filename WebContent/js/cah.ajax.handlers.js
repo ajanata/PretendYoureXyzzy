@@ -40,6 +40,8 @@ cah.ajax.ErrorHandlers.firstload = function(data) {
  */
 cah.ajax.after_registered = function() {
   cah.log.debug("done registering");
+  // TODO once there are channels, this needs to specify the global channel
+  cah.Ajax.request("names", {});
   cah.longpoll.longPoll();
 };
 
@@ -49,4 +51,10 @@ cah.ajax.SuccessHandlers.chat = function(data) {
 
 cah.ajax.SuccessHandlers.logout = function(data) {
   window.location.reload();
+};
+
+cah.ajax.ErrorHandlers.logout = cah.ajax.SuccessHandlers.logout;
+
+cah.ajax.SuccessHandlers.names = function(data) {
+  cah.log.status("Currently connected: " + data.names.join(", "));
 };
