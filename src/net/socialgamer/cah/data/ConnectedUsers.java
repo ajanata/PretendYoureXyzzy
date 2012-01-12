@@ -1,5 +1,6 @@
 package net.socialgamer.cah.data;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,6 +23,7 @@ public class ConnectedUsers {
    * Duration of a ping timeout, in nanoseconds.
    */
   public static final long PING_TIMEOUT = 3L * 60L * 1000L * 1000000L;
+  //  public static final long PING_TIMEOUT = 30L * 1000L * 1000000L;
 
   private final Map<String, User> users = new HashMap<String, User>();
 
@@ -35,7 +37,7 @@ public class ConnectedUsers {
       final HashMap<String, Object> data = new HashMap<String, Object>();
       data.put("event", "new_player");
       data.put("nickname", user.getNickname());
-      broadcastToAll(Type.NEW_PLAYER, data);
+      broadcastToAll(Type.PLAYER_EVENT, data);
     }
   }
 
@@ -47,11 +49,12 @@ public class ConnectedUsers {
   }
 
   private void notifyRemoveUser(final User user, final User.DisconnectReason reason) {
+    // We might also have to tell games about this directly, probably with a listener system.
     final HashMap<String, Object> data = new HashMap<String, Object>();
     data.put("event", "player_leave");
     data.put("nickname", user.getNickname());
     data.put("reason", reason.toString());
-    broadcastToAll(Type.PLAYER_DISCONNECT, data);
+    broadcastToAll(Type.PLAYER_EVENT, data);
   }
 
   public void checkForPingTimeouts() {
@@ -60,6 +63,7 @@ public class ConnectedUsers {
       while (iterator.hasNext()) {
         final User u = iterator.next();
         if (System.nanoTime() - u.getLastHeardFrom() > PING_TIMEOUT) {
+          u.noLongerVaild();
           notifyRemoveUser(u, DisconnectReason.PING_TIMEOUT);
           iterator.remove();
         }
@@ -94,6 +98,13 @@ public class ConnectedUsers {
         final QueuedMessage qm = new QueuedMessage(type, data);
         u.enqueueMessage(qm);
       }
+    }
+  }
+
+  public Collection<User> getUsers() {
+    // return a copy
+    synchronized (users) {
+      return new ArrayList<User>(users.values());
     }
   }
 }

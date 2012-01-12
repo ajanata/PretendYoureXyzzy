@@ -6,7 +6,7 @@
 
 cah.longpoll = {};
 cah.longpoll.TIMEOUT = 2 * 60 * 1000;
-// cah.longpoll.TIMEOUT = 5 * 1000;
+// cah.longpoll.TIMEOUT = 30 * 1000;
 cah.longpoll.INITIAL_BACKOFF = 500;
 cah.longpoll.Backoff = cah.longpoll.INITIAL_BACKOFF;
 cah.longpoll.Resume = true;

@@ -19,6 +19,11 @@ public class User {
 
   private long lastHeardFrom = 0;
 
+  /**
+   * Reset when this user object is no longer valid, most likely because it pinged out.
+   */
+  private boolean valid = true;
+
   public User(final String nickname) {
     this.nickname = nickname;
     queuedMessages = new PriorityBlockingQueue<QueuedMessage>();
@@ -90,4 +95,17 @@ public class User {
     return lastHeardFrom;
   }
 
+  /**
+   * @return False when this user object is no longer valid, probably because it pinged out.
+   */
+  public boolean isValid() {
+    return valid;
+  }
+
+  /**
+   * Mark this user as no longer valid, probably because they pinged out.
+   */
+  public void noLongerVaild() {
+    valid = false;
+  }
 }

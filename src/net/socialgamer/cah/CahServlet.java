@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.data.User;
+
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -51,6 +53,12 @@ public abstract class CahServlet extends HttpServlet {
           "Session not detected. Make sure you have cookies enabled.");
     } else if (!skipSessionUserCheck && hSession.getAttribute("user") == null) {
       returnError(response.getWriter(), "not_registered", "Not registered. Refresh the page.");
+    } else if (hSession.getAttribute("user") != null
+        && !(((User) hSession.getAttribute("user")).isValid())) {
+      // user probably pinged out
+      hSession.invalidate();
+      returnError(response.getWriter(), "session_expired",
+          "Your session has expired. Refresh the page.");
     } else {
       handleRequest(request, response, hSession);
     }

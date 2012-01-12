@@ -47,7 +47,6 @@ public class RegisterHandler extends Handler {
       } else if (users.hasUser(nick)) {
         return error("Nickname " + nick + " already in use.");
       } else {
-        // TODO this will get cluttered until we do pinging
         final User user = new User(nick);
         users.newUser(user);
         session.setAttribute("user", user);

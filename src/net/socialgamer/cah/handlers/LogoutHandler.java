@@ -32,6 +32,7 @@ public class LogoutHandler extends Handler {
     final User user = (User) session.getAttribute("user");
     assert (user != null);
 
+    user.noLongerVaild();
     users.removeUser(user, DisconnectReason.MANUAL);
     session.invalidate();
     return data;
