@@ -5,10 +5,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Constants.DisconnectReason;
 import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
-import net.socialgamer.cah.data.User.DisconnectReason;
 
 import com.google.inject.Inject;
 

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import net.socialgamer.cah.data.QueuedMessage.Type;
+import net.socialgamer.cah.Constants.MessageType;
 
 
 public class Game {
@@ -41,7 +41,7 @@ public class Game {
     data.put("event", "game_player_join");
     data.put("game_id", id);
     data.put("nickname", user.getNickname());
-    broadcastToPlayers(Type.GAME_PLAYER_EVENT, data);
+    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
   }
 
   /**
@@ -60,7 +60,7 @@ public class Game {
           data.put("event", "game_player_leave");
           data.put("game_id", id);
           data.put("nickname", user.getNickname());
-          broadcastToPlayers(Type.GAME_PLAYER_EVENT, data);
+          broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
           if (host == player) {
             if (players.size() > 0) {
               host = players.get(0);
@@ -75,7 +75,7 @@ public class Game {
     }
   }
 
-  public void broadcastToPlayers(final Type type, final HashMap<String, Object> masterData) {
+  public void broadcastToPlayers(final MessageType type, final HashMap<String, Object> masterData) {
     connectedUsers.broadcastToList(playersToUsers(), type, masterData);
   }
 

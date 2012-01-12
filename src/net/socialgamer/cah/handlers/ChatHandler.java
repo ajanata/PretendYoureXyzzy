@@ -5,9 +5,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Constants.MessageType;
 import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
-import net.socialgamer.cah.data.QueuedMessage.Type;
 import net.socialgamer.cah.data.User;
 
 import com.google.inject.Inject;
@@ -45,7 +45,7 @@ public class ChatHandler extends Handler {
         broadcastData.put("message", message);
         // TODO once there are multiple chat channels, put the destination here
         // TODO once there are games and they have their own chat, make it only send to participants
-        users.broadcastToAll(Type.CHAT, broadcastData);
+        users.broadcastToAll(MessageType.CHAT, broadcastData);
       }
     }
 

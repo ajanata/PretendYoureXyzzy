@@ -7,10 +7,6 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 public class User {
 
-  public enum DisconnectReason {
-    MANUAL, PING_TIMEOUT, KICKED
-  }
-
   private final String nickname;
 
   private final PriorityBlockingQueue<QueuedMessage> queuedMessages;

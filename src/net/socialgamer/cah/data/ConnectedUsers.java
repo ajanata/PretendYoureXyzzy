@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.socialgamer.cah.data.QueuedMessage.Type;
-import net.socialgamer.cah.data.User.DisconnectReason;
+import net.socialgamer.cah.Constants.DisconnectReason;
+import net.socialgamer.cah.Constants.MessageType;
 
 
 /**
@@ -37,24 +37,24 @@ public class ConnectedUsers {
       final HashMap<String, Object> data = new HashMap<String, Object>();
       data.put("event", "new_player");
       data.put("nickname", user.getNickname());
-      broadcastToAll(Type.PLAYER_EVENT, data);
+      broadcastToAll(MessageType.PLAYER_EVENT, data);
     }
   }
 
-  public void removeUser(final User user, final User.DisconnectReason reason) {
+  public void removeUser(final User user, final DisconnectReason reason) {
     synchronized (users) {
       users.remove(user.getNickname());
       notifyRemoveUser(user, reason);
     }
   }
 
-  private void notifyRemoveUser(final User user, final User.DisconnectReason reason) {
+  private void notifyRemoveUser(final User user, final DisconnectReason reason) {
     // We might also have to tell games about this directly, probably with a listener system.
     final HashMap<String, Object> data = new HashMap<String, Object>();
     data.put("event", "player_leave");
     data.put("nickname", user.getNickname());
     data.put("reason", reason.toString());
-    broadcastToAll(Type.PLAYER_EVENT, data);
+    broadcastToAll(MessageType.PLAYER_EVENT, data);
   }
 
   public void checkForPingTimeouts() {
@@ -77,7 +77,7 @@ public class ConnectedUsers {
    * @param type
    * @param masterData
    */
-  public void broadcastToAll(final Type type, final HashMap<String, Object> masterData) {
+  public void broadcastToAll(final MessageType type, final HashMap<String, Object> masterData) {
     broadcastToList(users.values(), type, masterData);
   }
 
@@ -88,7 +88,7 @@ public class ConnectedUsers {
    * @param type
    * @param masterData
    */
-  public void broadcastToList(final Collection<User> broadcastTo, final Type type,
+  public void broadcastToList(final Collection<User> broadcastTo, final MessageType type,
       final HashMap<String, Object> masterData) {
     synchronized (users) {
       for (final User u : broadcastTo) {

@@ -2,18 +2,20 @@ package net.socialgamer.cah.data;
 
 import java.util.Map;
 
+import net.socialgamer.cah.Constants.MessageType;
+
 
 public class QueuedMessage implements Comparable<QueuedMessage> {
 
-  private final Type messageType;
+  private final MessageType messageType;
   private final Map<String, Object> data;
 
-  public QueuedMessage(final Type messageType, final Map<String, Object> data) {
+  public QueuedMessage(final MessageType messageType, final Map<String, Object> data) {
     this.messageType = messageType;
     this.data = data;
   }
 
-  public Type getMessageType() {
+  public MessageType getMessageType() {
     return messageType;
   }
 
@@ -29,26 +31,4 @@ public class QueuedMessage implements Comparable<QueuedMessage> {
   public int compareTo(final QueuedMessage qm) {
     return this.messageType.getWeight() - qm.messageType.getWeight();
   }
-
-  /**
-   * Types of messages that can be queued. The numerical value is the priority that this message
-   * should be delivered (lower = more important) compared to other queued messages.
-   * 
-   * @author ajanata
-   * 
-   */
-  public enum Type {
-    PLAYER_EVENT(3), GAME_PLAYER_EVENT(4), CHAT(5);
-
-    private final int weight;
-
-    Type(final int weight) {
-      this.weight = weight;
-    }
-
-    public int getWeight() {
-      return weight;
-    }
-  }
-
 }

@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.HashMap;
 
-import net.socialgamer.cah.data.QueuedMessage.Type;
+import net.socialgamer.cah.Constants.MessageType;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class GameTest {
   @SuppressWarnings("unchecked")
   @Test
   public void testRemovePlayer() {
-    cmMock.broadcastToList(anyObject(Collection.class), eq(Type.GAME_PLAYER_EVENT),
+    cmMock.broadcastToList(anyObject(Collection.class), eq(MessageType.GAME_PLAYER_EVENT),
         anyObject(HashMap.class));
     expectLastCall().times(4);
     replay(cmMock);
