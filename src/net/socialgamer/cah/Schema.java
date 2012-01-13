@@ -31,14 +31,15 @@ public class Schema extends HttpServlet {
   /**
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+  @Override
+  protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
       throws ServletException, IOException {
     // TODO Auto-generated method stub
-    AnnotationConfiguration c = new AnnotationConfiguration();
+    final AnnotationConfiguration c = new AnnotationConfiguration();
     c.configure();
-    String[] ls = c.generateSchemaCreationScript(new PostgreSQLDialect());
-    PrintWriter out = response.getWriter();
-    for (String l : ls) {
+    final String[] ls = c.generateSchemaCreationScript(new PostgreSQLDialect());
+    final PrintWriter out = response.getWriter();
+    for (final String l : ls) {
       out.println(l + ";");
     }
   }
