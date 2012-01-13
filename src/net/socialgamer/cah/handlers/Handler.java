@@ -5,6 +5,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Constants.AjaxResponse;
+import net.socialgamer.cah.Constants.ReturnableData;
+
 
 /**
  * Implementations of this interface MUST also have a public static final String OP.
@@ -13,12 +16,13 @@ import javax.servlet.http.HttpSession;
  * 
  */
 public abstract class Handler {
-  public abstract Map<String, Object> handle(Map<String, String[]> parameters, HttpSession session);
+  public abstract Map<ReturnableData, Object> handle(Map<String, String[]> parameters,
+      HttpSession session);
 
-  protected Map<String, Object> error(final String message) {
-    final Map<String, Object> data = new HashMap<String, Object>();
-    data.put("error", Boolean.TRUE);
-    data.put("error_message", message);
+  protected Map<ReturnableData, Object> error(final String message) {
+    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    data.put(AjaxResponse.ERROR, Boolean.TRUE);
+    data.put(AjaxResponse.ERROR_MESSAGE, message);
     return data;
   }
 }

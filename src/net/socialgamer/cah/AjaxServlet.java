@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Constants.AjaxResponse;
+import net.socialgamer.cah.Constants.ErrorCode;
+import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.handlers.Handler;
 import net.socialgamer.cah.handlers.Handlers;
 
@@ -37,7 +40,7 @@ public class AjaxServlet extends CahServlet {
       try {
         serial = Integer.parseInt(request.getParameter("serial"));
       } catch (final NumberFormatException nfe) {
-        returnError(out, "bad_req", "Bad request");
+        returnError(out, ErrorCode.BAD_REQUEST, "Bad request");
         return;
       }
     }
@@ -45,7 +48,7 @@ public class AjaxServlet extends CahServlet {
     final String op = request.getParameter("op");
     //  !Handlers.LIST.containsKey(op)
     if (op == null || op.equals("")) {
-      returnError(out, "op_not_spec", "Operation not specified.", serial);
+      returnError(out, ErrorCode.OP_NOT_SPECIFIED, "Operation not specified.", serial);
       return;
     }
 
@@ -53,11 +56,11 @@ public class AjaxServlet extends CahServlet {
     try {
       handler = getInjector().getInstance(Handlers.LIST.get(op));
     } catch (final Exception e) {
-      returnError(out, "bad_op", "Invalid operation.", serial);
+      returnError(out, ErrorCode.BAD_OP, "Invalid operation.", serial);
       return;
     }
-    final Map<String, Object> data = handler.handle(request.getParameterMap(), hSession);
-    data.put("serial", serial);
+    final Map<ReturnableData, Object> data = handler.handle(request.getParameterMap(), hSession);
+    data.put(AjaxResponse.SERIAL, serial);
     returnData(out, data);
     return;
   }

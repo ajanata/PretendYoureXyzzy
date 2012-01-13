@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Constants.AjaxOperation;
+import net.socialgamer.cah.Constants.AjaxResponse;
+import net.socialgamer.cah.Constants.ErrorCode;
+import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.User;
 
 import org.json.simple.JSONObject;
@@ -45,19 +49,21 @@ public abstract class CahServlet extends HttpServlet {
     final HttpSession hSession = request.getSession(true);
     final String op = request.getParameter("op");
     final boolean skipSessionUserCheck = op != null
-        && (op.equals("register") || op.equals("firstload"));
+        && (op.equals(AjaxOperation.REGISTER.toString())
+        || op.equals(AjaxOperation.FIRST_LOAD.toString()));
     if (hSession.isNew()) {
       // they should have gotten a session from the index page.
       // they probably don't have cookies on.
-      returnError(response.getWriter(), "no_session",
+      returnError(response.getWriter(), ErrorCode.NO_SESSION,
           "Session not detected. Make sure you have cookies enabled.");
     } else if (!skipSessionUserCheck && hSession.getAttribute("user") == null) {
-      returnError(response.getWriter(), "not_registered", "Not registered. Refresh the page.");
+      returnError(response.getWriter(), ErrorCode.NOT_REGISTERED,
+          "Not registered. Refresh the page.");
     } else if (hSession.getAttribute("user") != null
         && !(((User) hSession.getAttribute("user")).isValid())) {
       // user probably pinged out
       hSession.invalidate();
-      returnError(response.getWriter(), "session_expired",
+      returnError(response.getWriter(), ErrorCode.SESSION_EXPIRED,
           "Your session has expired. Refresh the page.");
     } else {
       handleRequest(request, response, hSession);
@@ -87,7 +93,7 @@ public abstract class CahServlet extends HttpServlet {
    * @param message
    *          User-visible error message.
    */
-  protected void returnError(final PrintWriter writer, final String code, final String message) {
+  protected void returnError(final PrintWriter writer, final ErrorCode code, final String message) {
     returnError(writer, code, message, -1);
   }
 
@@ -99,12 +105,12 @@ public abstract class CahServlet extends HttpServlet {
    * @param serial
    */
   @SuppressWarnings("unchecked")
-  protected void returnError(final PrintWriter writer, final String code, final String message,
+  protected void returnError(final PrintWriter writer, final ErrorCode code, final String message,
       final int serial) {
     final JSONObject ret = new JSONObject();
-    ret.put("error", Boolean.TRUE);
-    ret.put("error_code", code);
-    ret.put("error_message", message);
+    ret.put(AjaxResponse.ERROR, Boolean.TRUE);
+    ret.put(AjaxResponse.ERROR_CODE, code.toString());
+    ret.put(AjaxResponse.ERROR_MESSAGE, message);
     writer.println(ret.toJSONString());
   }
 
@@ -116,7 +122,7 @@ public abstract class CahServlet extends HttpServlet {
    * @param data
    *          Key-value data to return as the response.
    */
-  protected void returnData(final PrintWriter writer, final Map<String, Object> data) {
+  protected void returnData(final PrintWriter writer, final Map<ReturnableData, Object> data) {
     returnObject(writer, data);
   }
 
@@ -128,7 +134,8 @@ public abstract class CahServlet extends HttpServlet {
    * @param data_list
    *          List of key-value data to return as the response.
    */
-  protected void returnArray(final PrintWriter writer, final List<Map<String, Object>> data_list) {
+  protected void returnArray(final PrintWriter writer,
+      final List<Map<ReturnableData, Object>> data_list) {
     returnObject(writer, data_list);
   }
 

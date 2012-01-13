@@ -11,16 +11,15 @@ cah.longpoll.ErrorCodeHandlers.not_registered = function(data) {
   cah.log.error("You will need to refresh the page to start a new game.");
 };
 
-cah.longpoll.EventHandlers.new_player = function(data) {
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.NEW_PLAYER] = function(data) {
   // don't display our own join
   if (data.nickname != cah.nickname) {
     cah.log.status(data.nickname + " has connected.");
   }
 };
 
-cah.longpoll.EventHandlers.player_leave = function(data) {
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.PLAYER_LEAVE] = function(data) {
   var friendly_reason = "Leaving";
-  // see net.socialgamer.cah.data.User.DisconnectReason
   switch (data.reason) {
     case cah.$.DisconnectReason.KICKED:
       friendly_reason = "Kicked by server";
@@ -35,11 +34,11 @@ cah.longpoll.EventHandlers.player_leave = function(data) {
   cah.log.status(data.nickname + " has disconnected (" + friendly_reason + ").");
 };
 
-cah.longpoll.EventHandlers.noop = function(data) {
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.NOOP] = function(data) {
   // pass
 };
 
-cah.longpoll.EventHandlers.chat = function(data) {
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.CHAT] = function(data) {
   // TODO deal with multiple channels eventually
   // don't display our own chat
   if (data.from != cah.nickname) {

@@ -2,13 +2,15 @@ package net.socialgamer.cah.data;
 
 import java.util.Map;
 
+import net.socialgamer.cah.Constants.ReturnableData;
+
 
 public class QueuedMessage implements Comparable<QueuedMessage> {
 
   private final MessageType messageType;
-  private final Map<String, Object> data;
+  private final Map<ReturnableData, Object> data;
 
-  public QueuedMessage(final MessageType messageType, final Map<String, Object> data) {
+  public QueuedMessage(final MessageType messageType, final Map<ReturnableData, Object> data) {
     this.messageType = messageType;
     this.data = data;
   }
@@ -17,7 +19,7 @@ public class QueuedMessage implements Comparable<QueuedMessage> {
     return messageType;
   }
 
-  public Map<String, Object> getData() {
+  public Map<ReturnableData, Object> getData() {
     return data;
   }
 

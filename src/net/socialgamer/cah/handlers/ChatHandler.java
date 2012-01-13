@@ -6,6 +6,9 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
+import net.socialgamer.cah.Constants.LongPollEvent;
+import net.socialgamer.cah.Constants.LongPollResponse;
+import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
@@ -26,9 +29,9 @@ public class ChatHandler extends Handler {
   }
 
   @Override
-  public Map<String, Object> handle(final Map<String, String[]> parameters,
+  public Map<ReturnableData, Object> handle(final Map<String, String[]> parameters,
       final HttpSession session) {
-    final Map<String, Object> data = new HashMap<String, Object>();
+    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
     final User user = (User) session.getAttribute("user");
     assert (user != null);
@@ -40,10 +43,10 @@ public class ChatHandler extends Handler {
       if (message.length() > 200) {
         return error("Messages cannot be longer than 200 characters.");
       } else {
-        final HashMap<String, Object> broadcastData = new HashMap<String, Object>();
-        broadcastData.put("event", "chat");
-        broadcastData.put("from", user.getNickname());
-        broadcastData.put("message", message);
+        final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
+        broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
+        broadcastData.put(LongPollResponse.FROM, user.getNickname());
+        broadcastData.put(LongPollResponse.MESSAGE, message);
         // TODO once there are multiple chat channels, put the destination here
         // TODO once there are games and they have their own chat, make it only send to participants
         users.broadcastToAll(MessageType.CHAT, broadcastData);

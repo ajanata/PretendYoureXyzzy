@@ -12,6 +12,25 @@ cah.$.AjaxOperation.REGISTER = "register";
 cah.$.AjaxOperation.CHAT = "chat";
 cah.$.AjaxOperation.NAMES = "names";
 
+cah.$.AjaxRequest = function() {
+  // pass
+};
+cah.$.AjaxRequest.prototype.dummy = undefined;
+cah.$.AjaxRequest.SERIAL = "serial";
+
+cah.$.AjaxResponse = function() {
+  // pass
+};
+cah.$.AjaxResponse.prototype.dummy = undefined;
+cah.$.AjaxResponse.NEXT = "next";
+cah.$.AjaxResponse.ERROR = "error";
+cah.$.AjaxResponse.ERROR_CODE = "error_code";
+cah.$.AjaxResponse.SERIAL = "serial";
+cah.$.AjaxResponse.ERROR_MESSAGE = "error_message";
+cah.$.AjaxResponse.IN_PROGRESS = "in_progress";
+cah.$.AjaxResponse.NICKNAME = "nickname";
+cah.$.AjaxResponse.NAMES = "names";
+
 cah.$.DisconnectReason = function() {
   // pass
 };
@@ -19,4 +38,36 @@ cah.$.DisconnectReason.prototype.dummy = undefined;
 cah.$.DisconnectReason.PING_TIMEOUT = "ping_timeout";
 cah.$.DisconnectReason.KICKED = "kicked";
 cah.$.DisconnectReason.MANUAL = "manual";
+
+cah.$.ErrorCode = function() {
+  // pass
+};
+cah.$.ErrorCode.prototype.dummy = undefined;
+cah.$.ErrorCode.NO_SESSION = "no_session";
+cah.$.ErrorCode.NOT_REGISTERED = "not_registered";
+cah.$.ErrorCode.BAD_REQUEST = "bad_req";
+cah.$.ErrorCode.OP_NOT_SPECIFIED = "op_not_spec";
+cah.$.ErrorCode.SESSION_EXPIRED = "session_expired";
+cah.$.ErrorCode.BAD_OP = "bad_op";
+
+cah.$.LongPollEvent = function() {
+  // pass
+};
+cah.$.LongPollEvent.prototype.dummy = undefined;
+cah.$.LongPollEvent.NOOP = "noop";
+cah.$.LongPollEvent.NEW_PLAYER = "new_player";
+cah.$.LongPollEvent.PLAYER_LEAVE = "player_leave";
+cah.$.LongPollEvent.CHAT = "chat";
+
+cah.$.LongPollResponse = function() {
+  // pass
+};
+cah.$.LongPollResponse.prototype.dummy = undefined;
+cah.$.LongPollResponse.MESSAGE = "message";
+cah.$.LongPollResponse.REASON = "reason";
+cah.$.LongPollResponse.GAME_ID = "game_id";
+cah.$.LongPollResponse.FROM = "from";
+cah.$.LongPollResponse.EVENT = "event";
+cah.$.LongPollResponse.TIMESTAMP = "timestamp";
+cah.$.LongPollResponse.NICKNAME = "nickname";
 

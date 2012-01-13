@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
+import net.socialgamer.cah.Constants.AjaxResponse;
+import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
@@ -34,9 +36,9 @@ public class RegisterHandler extends Handler {
   }
 
   @Override
-  public Map<String, Object> handle(final Map<String, String[]> parameters,
+  public Map<ReturnableData, Object> handle(final Map<String, String[]> parameters,
       final HttpSession session) {
-    final Map<String, Object> data = new HashMap<String, Object>();
+    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
     if (!parameters.containsKey("nickname") || parameters.get("nickname").length != 1) {
       return error("No nickname specified.");
@@ -52,7 +54,7 @@ public class RegisterHandler extends Handler {
         users.newUser(user);
         session.setAttribute("user", user);
 
-        data.put("nickname", nick);
+        data.put(AjaxResponse.NICKNAME, nick);
       }
     }
     return data;

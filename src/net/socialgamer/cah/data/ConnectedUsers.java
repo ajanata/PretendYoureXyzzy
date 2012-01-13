@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.socialgamer.cah.Constants.DisconnectReason;
+import net.socialgamer.cah.Constants.LongPollResponse;
+import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
 
@@ -34,9 +36,9 @@ public class ConnectedUsers {
   public void newUser(final User user) {
     synchronized (users) {
       users.put(user.getNickname(), user);
-      final HashMap<String, Object> data = new HashMap<String, Object>();
-      data.put("event", "new_player");
-      data.put("nickname", user.getNickname());
+      final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+      data.put(LongPollResponse.EVENT, "new_player");
+      data.put(LongPollResponse.NICKNAME, user.getNickname());
       broadcastToAll(MessageType.PLAYER_EVENT, data);
     }
   }
@@ -50,10 +52,10 @@ public class ConnectedUsers {
 
   private void notifyRemoveUser(final User user, final DisconnectReason reason) {
     // We might also have to tell games about this directly, probably with a listener system.
-    final HashMap<String, Object> data = new HashMap<String, Object>();
-    data.put("event", "player_leave");
-    data.put("nickname", user.getNickname());
-    data.put("reason", reason.toString());
+    final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    data.put(LongPollResponse.EVENT, "player_leave");
+    data.put(LongPollResponse.NICKNAME, user.getNickname());
+    data.put(LongPollResponse.REASON, reason.toString());
     broadcastToAll(MessageType.PLAYER_EVENT, data);
   }
 
@@ -77,7 +79,8 @@ public class ConnectedUsers {
    * @param type
    * @param masterData
    */
-  public void broadcastToAll(final MessageType type, final HashMap<String, Object> masterData) {
+  public void broadcastToAll(final MessageType type,
+      final HashMap<ReturnableData, Object> masterData) {
     broadcastToList(users.values(), type, masterData);
   }
 
@@ -89,12 +92,12 @@ public class ConnectedUsers {
    * @param masterData
    */
   public void broadcastToList(final Collection<User> broadcastTo, final MessageType type,
-      final HashMap<String, Object> masterData) {
+      final HashMap<ReturnableData, Object> masterData) {
     synchronized (users) {
       for (final User u : broadcastTo) {
         @SuppressWarnings("unchecked")
-        final Map<String, Object> data = (Map<String, Object>) masterData.clone();
-        data.put("timestamp", System.currentTimeMillis());
+        final Map<ReturnableData, Object> data = (Map<ReturnableData, Object>) masterData.clone();
+        data.put(LongPollResponse.TIMESTAMP, System.currentTimeMillis());
         final QueuedMessage qm = new QueuedMessage(type, data);
         u.enqueueMessage(qm);
       }

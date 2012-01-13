@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import net.socialgamer.cah.Constants.LongPollResponse;
+import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
 
@@ -37,10 +39,10 @@ public class Game {
       }
     }
 
-    final HashMap<String, Object> data = new HashMap<String, Object>();
-    data.put("event", "game_player_join");
-    data.put("game_id", id);
-    data.put("nickname", user.getNickname());
+    final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    data.put(LongPollResponse.EVENT, "game_player_join");
+    data.put(LongPollResponse.GAME_ID, id);
+    data.put(LongPollResponse.NICKNAME, user.getNickname());
     broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
   }
 
@@ -56,10 +58,10 @@ public class Game {
         final Player player = iterator.next();
         if (player.getUser() == user) {
           iterator.remove();
-          final HashMap<String, Object> data = new HashMap<String, Object>();
-          data.put("event", "game_player_leave");
-          data.put("game_id", id);
-          data.put("nickname", user.getNickname());
+          final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+          data.put(LongPollResponse.EVENT, "game_player_leave");
+          data.put(LongPollResponse.GAME_ID, id);
+          data.put(LongPollResponse.NICKNAME, user.getNickname());
           broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
           if (host == player) {
             if (players.size() > 0) {
@@ -75,7 +77,8 @@ public class Game {
     }
   }
 
-  public void broadcastToPlayers(final MessageType type, final HashMap<String, Object> masterData) {
+  public void broadcastToPlayers(final MessageType type,
+      final HashMap<ReturnableData, Object> masterData) {
     connectedUsers.broadcastToList(playersToUsers(), type, masterData);
   }
 

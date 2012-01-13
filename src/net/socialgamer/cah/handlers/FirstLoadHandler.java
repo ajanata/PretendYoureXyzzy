@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
+import net.socialgamer.cah.Constants.AjaxResponse;
+import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.User;
 
 
@@ -21,21 +23,21 @@ public class FirstLoadHandler extends Handler {
   public static final String OP = AjaxOperation.FIRST_LOAD.toString();
 
   @Override
-  public Map<String, Object> handle(final Map<String, String[]> parameters,
+  public Map<ReturnableData, Object> handle(final Map<String, String[]> parameters,
       final HttpSession session) {
-    final HashMap<String, Object> ret = new HashMap<String, Object>();
+    final HashMap<ReturnableData, Object> ret = new HashMap<ReturnableData, Object>();
 
     final User user = (User) session.getAttribute("user");
     if (user == null) {
-      ret.put("in_progress", Boolean.FALSE);
-      ret.put("next", "register");
+      ret.put(AjaxResponse.IN_PROGRESS, Boolean.FALSE);
+      ret.put(AjaxResponse.NEXT, "register");
     } else {
       // They already have a session in progress, we need to figure out what they were doing
       // and tell the client where to continue from.
       // Right now we just tell them what their name is.
-      ret.put("in_progress", Boolean.TRUE);
-      ret.put("next", ""); // TODO
-      ret.put("nickname", user.getNickname());
+      ret.put(AjaxResponse.IN_PROGRESS, Boolean.TRUE);
+      ret.put(AjaxResponse.NEXT, ""); // TODO
+      ret.put(AjaxResponse.NICKNAME, user.getNickname());
     }
 
     return ret;
