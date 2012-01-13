@@ -32,6 +32,9 @@ public class UpdateJsConstants {
 
     final Class[] classes = Constants.class.getClasses();
     for (final Class c : classes) {
+      if (!c.isEnum()) {
+        continue;
+      }
       final String cName = c.getName().split("\\$")[1];
       System.out.println(cName);
       writer.format(enumHeaderFmt, cName);
