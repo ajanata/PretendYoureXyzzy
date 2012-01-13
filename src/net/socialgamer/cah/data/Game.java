@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import net.socialgamer.cah.Constants.MessageType;
+import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
 
 public class Game {

@@ -26,7 +26,7 @@ $(document).ready(function() {
   /**
    * Singleton instance for ajax utility.
    * 
-   * @type {cah.ajax.lib}
+   * @type {cah.Ajax}
    */
   cah.Ajax.instance = new cah.Ajax();
   $.ajaxSetup({

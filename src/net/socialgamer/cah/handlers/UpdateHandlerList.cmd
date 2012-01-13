@@ -1,1 +1,0 @@
-java -cp build\classes net.socialgamer.cah.handlers.UpdateHandlerList

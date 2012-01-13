@@ -22,14 +22,14 @@ cah.longpoll.EventHandlers.player_leave = function(data) {
   var friendly_reason = "Leaving";
   // see net.socialgamer.cah.data.User.DisconnectReason
   switch (data.reason) {
-    case "MANUAL":
+    case cah.$.DisconnectReason.KICKED:
+      friendly_reason = "Kicked by server";
+      break;
+    case cah.$.DisconnectReason.MANUAL:
       friendly_reason = "Leaving";
       break;
-    case "PING_TIMEOUT":
+    case cah.$.DisconnectReason.PING_TIMEOUT:
       friendly_reason = "Ping timeout";
-      break;
-    case "KICKED":
-      friendly_reason = "Kicked by server";
       break;
   }
   cah.log.status(data.nickname + " has disconnected (" + friendly_reason + ").");

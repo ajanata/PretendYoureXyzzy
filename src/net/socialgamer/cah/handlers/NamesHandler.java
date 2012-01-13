@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
@@ -17,7 +18,7 @@ import com.google.inject.Inject;
 
 public class NamesHandler extends Handler {
 
-  public static final String OP = "names";
+  public static final String OP = AjaxOperation.NAMES.toString();
 
   private final ConnectedUsers users;
 

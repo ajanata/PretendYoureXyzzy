@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.data.User;
 
 
@@ -17,7 +18,7 @@ import net.socialgamer.cah.data.User;
  */
 public class FirstLoadHandler extends Handler {
 
-  public static final String OP = "firstload";
+  public static final String OP = AjaxOperation.FIRST_LOAD.toString();
 
   @Override
   public Map<String, Object> handle(final Map<String, String[]> parameters,

@@ -10,6 +10,7 @@
 <script type="text/javascript" src="js/cah.js"></script>
 <%-- cah must be first, ajax must be before app. app probably has to be last. --%>
 <%-- TODO make this be dynamic with looking at the filesystem and using jquery --%>
+<script type="text/javascript" src="js/cah.constants.js"></script>
 <script type="text/javascript" src="js/cah.log.js"></script>
 <script type="text/javascript" src="js/cah.longpoll.js"></script>
 <script type="text/javascript" src="js/cah.longpoll.handlers.js"></script>

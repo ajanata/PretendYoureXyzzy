@@ -15,6 +15,5 @@ public class Handlers {
     LIST.put(LogoutHandler.OP, LogoutHandler.class);
     LIST.put(NamesHandler.OP, NamesHandler.class);
     LIST.put(RegisterHandler.OP, RegisterHandler.class);
-    LIST.put(TestHandler.OP, TestHandler.class);
   }
 }

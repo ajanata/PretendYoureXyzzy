@@ -2,26 +2,32 @@ package net.socialgamer.cah;
 
 public class Constants {
   public enum DisconnectReason {
-    MANUAL, PING_TIMEOUT, KICKED
-  }
+    KICKED("kicked"), MANUAL("manual"), PING_TIMEOUT("ping_timeout");
 
-  /**
-   * Types of messages that can be queued. The numerical value is the priority that this message
-   * should be delivered (lower = more important) compared to other queued messages.
-   * 
-   * @author ajanata
-   */
-  public enum MessageType {
-    PLAYER_EVENT(3), GAME_PLAYER_EVENT(4), CHAT(5);
+    private final String reason;
 
-    private final int weight;
-
-    MessageType(final int weight) {
-      this.weight = weight;
+    DisconnectReason(final String reason) {
+      this.reason = reason;
     }
 
-    public int getWeight() {
-      return weight;
+    @Override
+    public String toString() {
+      return reason;
+    }
+  }
+
+  public enum AjaxOperation {
+    CHAT("chat"), FIRST_LOAD("firstload"), LOG_OUT("logout"), NAMES("names"), REGISTER("register");
+
+    private final String op;
+
+    AjaxOperation(final String op) {
+      this.op = op;
+    }
+
+    @Override
+    public String toString() {
+      return op;
     }
   }
 }

@@ -5,9 +5,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import net.socialgamer.cah.Constants.MessageType;
+import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
+import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.data.User;
 
 import com.google.inject.Inject;
@@ -15,7 +16,7 @@ import com.google.inject.Inject;
 
 public class ChatHandler extends Handler {
 
-  public static final String OP = "chat";
+  public static final String OP = AjaxOperation.CHAT.toString();
 
   private final ConnectedUsers users;
 

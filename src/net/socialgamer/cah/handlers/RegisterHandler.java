@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
@@ -15,7 +16,7 @@ import com.google.inject.Inject;
 
 public class RegisterHandler extends Handler {
 
-  public static final String OP = "register";
+  public static final String OP = AjaxOperation.REGISTER.toString();
 
   private static final Pattern validName = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]{2,29}");
 

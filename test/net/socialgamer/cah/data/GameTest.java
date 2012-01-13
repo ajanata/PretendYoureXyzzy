@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.HashMap;
 
-import net.socialgamer.cah.Constants.MessageType;
+import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
 import org.junit.Before;
 import org.junit.Test;

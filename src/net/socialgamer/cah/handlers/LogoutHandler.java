@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.DisconnectReason;
 import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
@@ -15,7 +16,7 @@ import com.google.inject.Inject;
 
 public class LogoutHandler extends Handler {
 
-  public final static String OP = "logout";
+  public final static String OP = AjaxOperation.LOG_OUT.toString();
 
   private final ConnectedUsers users;
 

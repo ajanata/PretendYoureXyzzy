@@ -1,4 +1,4 @@
-package net.socialgamer.cah.handlers;
+package net.socialgamer.cah;
 
 import java.io.File;
 import java.io.PrintWriter;
