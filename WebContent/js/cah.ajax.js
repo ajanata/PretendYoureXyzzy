@@ -4,6 +4,8 @@
  * @author ajanata
  */
 
+cah.Ajax = {};
+cah.Ajax.instance = {};
 cah.ajax = {};
 cah.ajax.ErrorHandlers = {};
 cah.ajax.SuccessHandlers = {};
@@ -14,7 +16,7 @@ cah.ajax.SuccessHandlers = {};
  * @returns {cah.ajax.lib}
  * @constructor
  */
-cah.ajax.lib = function() {
+cah.Ajax = function() {
   // TODO run a timer to see if we have more than X pending requests and delay further ones until
   // we get results
   this.pendingRequests = {};
@@ -26,12 +28,12 @@ $(document).ready(function() {
    * 
    * @type {cah.ajax.lib}
    */
-  cah.Ajax = new cah.ajax.lib();
+  cah.Ajax.instance = new cah.Ajax();
   $.ajaxSetup({
     cache : false,
-    context : cah.Ajax,
-    error : cah.Ajax.error,
-    success : cah.Ajax.done,
+    context : cah.Ajax.instance,
+    error : cah.Ajax.instance.error,
+    success : cah.Ajax.instance.done,
     timeout : cah.DEBUG ? undefined : 10 * 1000, // 10 second timeout for normal requests
     type : 'POST',
     url : '/cah/AjaxServlet'
@@ -47,7 +49,7 @@ $(document).ready(function() {
  * @param {cah.ajax.Builder}
  *          builder Request builder containing data to use.
  */
-cah.ajax.lib.prototype.requestWithBuilder = function(builder) {
+cah.Ajax.prototype.requestWithBuilder = function(builder) {
   var jqXHR = $.ajax({
     data : builder.data
   });
@@ -58,14 +60,14 @@ cah.ajax.lib.prototype.requestWithBuilder = function(builder) {
   }
 };
 
-cah.ajax.lib.prototype.error = function(jqXHR, textStatus, errorThrown) {
+cah.Ajax.prototype.error = function(jqXHR, textStatus, errorThrown) {
   // TODO deal with this somehow
   // and figure out which request it was so we can remove it from pending
   debugger;
   cah.log.error(textStatus);
 };
 
-cah.ajax.lib.prototype.done = function(data) {
+cah.Ajax.prototype.done = function(data) {
   cah.log.debug("ajax done", data);
   if (data['error']) {
     // TODO cancel any timers or whatever we may have, and disable interface
@@ -98,6 +100,6 @@ cah.ajax.lib.prototype.done = function(data) {
  *          op Operation code for the request.
  * @returns {cah.ajax.Builder} Builder to create the request.
  */
-cah.ajax.lib.prototype.build = function(op) {
+cah.Ajax.build = function(op) {
   return new cah.ajax.Builder(op);
 };

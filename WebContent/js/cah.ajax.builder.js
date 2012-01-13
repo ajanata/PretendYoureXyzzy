@@ -55,7 +55,7 @@ cah.ajax.Builder.prototype.withErrback = function(errback) {
  */
 cah.ajax.Builder.prototype.run = function() {
   this.data.serial = cah.ajax.Builder.serial++;
-  cah.Ajax.requestWithBuilder(this);
+  cah.Ajax.instance.requestWithBuilder(this);
 };
 
 /**
