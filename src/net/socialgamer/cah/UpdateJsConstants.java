@@ -6,12 +6,16 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.socialgamer.cah.Constants.Localizable;
+
 
 public class UpdateJsConstants {
 
   private static final String enumHeaderFmt = "cah.$.%s = function() {\r\n  // pass\r\n};\r\n";
   private static final String enumDummyFmt = "cah.$.%s.prototype.dummy = undefined;\r\n";
   private static final String enumValueFmt = "cah.$.%s.%s = \"%s\";\r\n";
+  private static final String msgHeaderFmt = "cah.$.%s_msg = {};\r\n";
+  private static final String msgValueFmt = "cah.$.%s_msg['%s'] = \"%s\";\r\n";
 
   /**
    * @param args
@@ -44,6 +48,15 @@ public class UpdateJsConstants {
         final String value = values.get(key);
         writer.format(enumValueFmt, cName, key, value);
       }
+      if (Localizable.class.isAssignableFrom(c)) {
+        System.out.println(cName + "_msg");
+        writer.format(msgHeaderFmt, cName);
+        final Map<String, String> messages = getEnumMessageValues(c);
+        for (final String key : messages.keySet()) {
+          final String value = messages.get(key);
+          writer.format(msgValueFmt, cName, key, value);
+        }
+      }
       writer.println();
     }
     writer.flush();
@@ -65,6 +78,24 @@ public class UpdateJsConstants {
       }
     }
     return enumMap;
+  }
+
+  private static Map<String, String> getEnumMessageValues(final Class enumClass)
+      throws IllegalArgumentException, IllegalAccessException {
+    if (!enumClass.isEnum()) {
+      throw new IllegalArgumentException(enumClass.getName() + " is not an enum");
+    } else if (!Localizable.class.isAssignableFrom(enumClass)) {
+      throw new IllegalArgumentException(enumClass.getName() + " does not implement Localizable.");
+    }
+
+    final Field[] flds = enumClass.getDeclaredFields();
+    final HashMap<String, String> messageMap = new HashMap<String, String>();
+    for (final Field f : flds) {
+      if (f.isEnumConstant()) {
+        messageMap.put(f.get(null).toString(), ((Localizable) f.get(null)).getString());
+      }
+    }
+    return messageMap;
   }
 }
 

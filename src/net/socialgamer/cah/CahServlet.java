@@ -54,17 +54,14 @@ public abstract class CahServlet extends HttpServlet {
     if (hSession.isNew()) {
       // they should have gotten a session from the index page.
       // they probably don't have cookies on.
-      returnError(response.getWriter(), ErrorCode.NO_SESSION,
-          "Session not detected. Make sure you have cookies enabled.");
+      returnError(response.getWriter(), ErrorCode.NO_SESSION);
     } else if (!skipSessionUserCheck && hSession.getAttribute("user") == null) {
-      returnError(response.getWriter(), ErrorCode.NOT_REGISTERED,
-          "Not registered. Refresh the page.");
+      returnError(response.getWriter(), ErrorCode.NOT_REGISTERED);
     } else if (hSession.getAttribute("user") != null
         && !(((User) hSession.getAttribute("user")).isValid())) {
       // user probably pinged out
       hSession.invalidate();
-      returnError(response.getWriter(), ErrorCode.SESSION_EXPIRED,
-          "Your session has expired. Refresh the page.");
+      returnError(response.getWriter(), ErrorCode.SESSION_EXPIRED);
     } else {
       handleRequest(request, response, hSession);
     }
@@ -90,27 +87,22 @@ public abstract class CahServlet extends HttpServlet {
    * @param writer
    * @param code
    *          Error code that the js code knows how to handle.
-   * @param message
-   *          User-visible error message.
    */
-  protected void returnError(final PrintWriter writer, final ErrorCode code, final String message) {
-    returnError(writer, code, message, -1);
+  protected void returnError(final PrintWriter writer, final ErrorCode code) {
+    returnError(writer, code, -1);
   }
 
   /**
    * Return an error to the client.
    * 
    * @param writer
-   * @param message
    * @param serial
    */
   @SuppressWarnings("unchecked")
-  protected void returnError(final PrintWriter writer, final ErrorCode code, final String message,
-      final int serial) {
+  protected void returnError(final PrintWriter writer, final ErrorCode code, final int serial) {
     final JSONObject ret = new JSONObject();
     ret.put(AjaxResponse.ERROR, Boolean.TRUE);
     ret.put(AjaxResponse.ERROR_CODE, code.toString());
-    ret.put(AjaxResponse.ERROR_MESSAGE, message);
     writer.println(ret.toJSONString());
   }
 

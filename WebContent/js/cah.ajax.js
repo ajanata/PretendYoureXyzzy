@@ -75,7 +75,7 @@ cah.Ajax.prototype.done = function(data) {
     if (req && cah.ajax.ErrorHandlers[req.op]) {
       cah.ajax.ErrorHandlers[req.op](data);
     } else {
-      cah.log.error(data.error_message);
+      cah.log.error(cah.$.ErrorCode_msg[data.error_code]);
     }
   } else {
     var req = this.pendingRequests[data.serial];

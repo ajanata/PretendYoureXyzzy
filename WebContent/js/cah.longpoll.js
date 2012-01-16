@@ -51,7 +51,7 @@ cah.longpoll.done = function(data_list) {
       if (cah.longpoll.ErrorCodeHandlers[data.error_code]) {
         cah.longpoll.ErrorCodeHandlers[data.error_code](data);
       } else {
-        cah.log.error(data.error_message);
+        cah.log.error(cah.$.ErrorCode_msg[data.error_code]);
       }
     } else {
       if (cah.longpoll.EventHandlers[data.event]) {

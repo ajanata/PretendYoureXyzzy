@@ -16,7 +16,7 @@ cah.ajax.SuccessHandlers.register = function(data) {
 };
 
 cah.ajax.ErrorHandlers.register = function(data) {
-  $("#nickbox_error").text(data.error_message);
+  $("#nickbox_error").text(cah.$.ErrorCode_msg[data.error_code]);
   $("#nickname").focus();
 };
 

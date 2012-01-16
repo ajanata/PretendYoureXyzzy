@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxResponse;
+import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
@@ -41,14 +42,13 @@ public class RegisterHandler extends Handler {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
     if (!parameters.containsKey("nickname") || parameters.get("nickname").length != 1) {
-      return error("No nickname specified.");
+      return error(ErrorCode.NO_NICK_SPECIFIED);
     } else {
       final String nick = parameters.get("nickname")[0].trim();
       if (!validName.matcher(nick).matches()) {
-        return error("Nickname must contain only upper and lower case letters, numbers, or"
-            + " underscores, must be 3 to 30 characters long, and must not start with a number.");
+        return error(ErrorCode.INVALID_NICK);
       } else if (users.hasUser(nick)) {
-        return error("Nickname " + nick + " already in use.");
+        return error(ErrorCode.NICK_IN_USE);
       } else {
         final User user = new User(nick);
         users.newUser(user);

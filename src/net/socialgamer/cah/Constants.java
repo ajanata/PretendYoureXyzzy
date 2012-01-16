@@ -4,6 +4,10 @@ public class Constants {
   public interface ReturnableData {
   }
 
+  public interface Localizable {
+    public String getString();
+  }
+
   public enum DisconnectReason {
     KICKED("kicked"),
     MANUAL("manual"),
@@ -58,7 +62,6 @@ public class Constants {
   public enum AjaxResponse implements ReturnableData {
     ERROR("error"),
     ERROR_CODE("error_code"),
-    ERROR_MESSAGE("error_message"),
     IN_PROGRESS("in_progress"),
     NAMES("names"),
     NEXT("next"),
@@ -77,23 +80,43 @@ public class Constants {
     }
   }
 
-  public enum ErrorCode {
-    BAD_OP("bad_op"),
-    BAD_REQUEST("bad_req"),
-    NO_SESSION("no_session"),
-    NOT_REGISTERED("not_registered"),
-    OP_NOT_SPECIFIED("op_not_spec"),
-    SESSION_EXPIRED("session_expired");
+  public enum ErrorCode implements Localizable {
+    BAD_OP("bad_op", "Invalid operation."),
+    BAD_REQUEST("bad_req", "Bad request."),
+    INVALID_NICK("invalid_nick", "Nickname must contain only upper and lower case letters, " +
+        "numbers, or underscores, must be 3 to 30 characters long, and must not start with a " +
+        "number."),
+    MESSAGE_TOO_LONG("msg_too_long", "Messages cannot be longer than 200 characters."),
+    NICK_IN_USE("nick_in_use", "Nickname is already in use."),
+    NO_MSG_SPECIFIED("no_msg_spec", "No message specified."),
+    NO_NICK_SPECIFIED("no_nick_spec", "No nickname specified."),
+    NO_SESSION("no_session", "Session not detected. Make sure you have cookies enabled."),
+    NOT_REGISTERED("not_registered", "Not registered. Refresh the page."),
+    OP_NOT_SPECIFIED("op_not_spec", "Operation not specified."),
+    SESSION_EXPIRED("session_expired", "Your session has expired. Refresh the page.");
 
     private final String code;
+    private final String message;
 
-    ErrorCode(final String code) {
+    /**
+     * @param code
+     *          Error code to send over the wire to the client.
+     * @param message
+     *          Message the client should display for the error code.
+     */
+    ErrorCode(final String code, final String message) {
       this.code = code;
+      this.message = message;
     }
 
     @Override
     public String toString() {
       return code;
+    }
+
+    @Override
+    public String getString() {
+      return message;
     }
   }
 
