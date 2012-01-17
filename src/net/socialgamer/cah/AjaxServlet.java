@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
@@ -36,17 +37,16 @@ public class AjaxServlet extends CahServlet {
       IOException {
     final PrintWriter out = response.getWriter();
     int serial = -1;
-    if (request.getParameter("serial") != null) {
+    if (request.getParameter(AjaxRequest.SERIAL.toString()) != null) {
       try {
-        serial = Integer.parseInt(request.getParameter("serial"));
+        serial = Integer.parseInt(request.getParameter(AjaxRequest.SERIAL.toString()));
       } catch (final NumberFormatException nfe) {
         returnError(out, ErrorCode.BAD_REQUEST);
         return;
       }
     }
 
-    final String op = request.getParameter("op");
-    //  !Handlers.LIST.containsKey(op)
+    final String op = request.getParameter(AjaxRequest.OP.toString());
     if (op == null || op.equals("")) {
       returnError(out, ErrorCode.OP_NOT_SPECIFIED, serial);
       return;
