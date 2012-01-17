@@ -59,7 +59,7 @@ public class AjaxServlet extends CahServlet {
       returnError(out, ErrorCode.BAD_OP, serial);
       return;
     }
-    final Map<ReturnableData, Object> data = handler.handle(request.getParameterMap(), hSession);
+    final Map<ReturnableData, Object> data = handler.handle(new RequestWrapper(request), hSession);
     data.put(AjaxResponse.SERIAL, serial);
     returnData(out, data);
     return;

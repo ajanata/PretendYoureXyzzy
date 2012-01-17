@@ -21,7 +21,15 @@ cah.ajax.Builder = function(op) {
    */
   this.data = {};
 
-  this.data.op = op;
+  this.data[cah.$.AjaxRequest.OP] = op;
+
+  /**
+   * Whether this request has been run or not.
+   * 
+   * @type {boolean}
+   * @private
+   */
+  this.run_ = false;
 
   /**
    * Error callback for this request.
@@ -46,6 +54,7 @@ cah.ajax.Builder.serial = 0;
  * @returns {cah.ajax.Builder}
  */
 cah.ajax.Builder.prototype.withErrback = function(errback) {
+  this.assertNotExecuted();
   this.errback = errback;
   return this;
 };
@@ -54,7 +63,10 @@ cah.ajax.Builder.prototype.withErrback = function(errback) {
  * Run the ajax request.
  */
 cah.ajax.Builder.prototype.run = function() {
-  this.data.serial = cah.ajax.Builder.serial++;
+  this.assertNotExecuted();
+  this.run_ = true;
+
+  this.data[cah.$.AjaxRequest.SERIAL] = cah.ajax.Builder.serial++;
   cah.Ajax.instance.requestWithBuilder(this);
 };
 
@@ -64,7 +76,8 @@ cah.ajax.Builder.prototype.run = function() {
  * @returns {cah.ajax.Builder} This object.
  */
 cah.ajax.Builder.prototype.withNickname = function(nickname) {
-  this.data.nickname = nickname;
+  this.assertNotExecuted();
+  this.data[cah.$.AjaxRequest.NICKNAME] = nickname;
   return this;
 };
 
@@ -74,6 +87,29 @@ cah.ajax.Builder.prototype.withNickname = function(nickname) {
  * @returns {cah.ajax.Builder} This object.
  */
 cah.ajax.Builder.prototype.withMessage = function(message) {
-  this.data.message = message;
+  this.assertNotExecuted();
+  this.data[cah.$.AjaxRequest.MESSAGE] = message;
   return this;
+};
+
+cah.ajax.Builder.prototype.assertNotExecuted = function() {
+  if (this.run_) {
+    throw "Request already executed.";
+  }
+};
+
+cah.ajax.Builder.prototype.assertExecuted = function() {
+  if (!this.run_) {
+    throw "Request not yet executed.";
+  }
+};
+
+cah.ajax.Builder.prototype.getOp = function() {
+  this.assertExecuted();
+  return this.data[cah.$.AjaxRequest.OP];
+};
+
+cah.ajax.Builder.prototype.getSerial = function() {
+  this.assertExecuted();
+  return this.data[cah.$.AjaxRequest.SERIAL];
 };

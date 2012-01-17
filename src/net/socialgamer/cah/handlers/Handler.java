@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
+import net.socialgamer.cah.RequestWrapper;
 
 
 /**
@@ -17,7 +18,7 @@ import net.socialgamer.cah.Constants.ReturnableData;
  * 
  */
 public abstract class Handler {
-  public abstract Map<ReturnableData, Object> handle(Map<String, String[]> parameters,
+  public abstract Map<ReturnableData, Object> handle(RequestWrapper request,
       HttpSession session);
 
   protected Map<ReturnableData, Object> error(final ErrorCode errorCode) {

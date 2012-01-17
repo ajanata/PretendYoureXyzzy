@@ -6,10 +6,13 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
+import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
+import net.socialgamer.cah.Constants.SessionAttribute;
+import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
@@ -30,17 +33,17 @@ public class ChatHandler extends Handler {
   }
 
   @Override
-  public Map<ReturnableData, Object> handle(final Map<String, String[]> parameters,
+  public Map<ReturnableData, Object> handle(final RequestWrapper request,
       final HttpSession session) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
-    final User user = (User) session.getAttribute("user");
+    final User user = (User) session.getAttribute(SessionAttribute.USER);
     assert (user != null);
 
-    if (!parameters.containsKey("message") || parameters.get("message").length != 1) {
+    if (request.getParameter(AjaxRequest.MESSAGE) == null) {
       return error(ErrorCode.NO_MSG_SPECIFIED);
     } else {
-      final String message = parameters.get("message")[0].trim();
+      final String message = request.getParameter(AjaxRequest.MESSAGE).trim();
       if (message.length() > 200) {
         return error(ErrorCode.MESSAGE_TOO_LONG);
       } else {

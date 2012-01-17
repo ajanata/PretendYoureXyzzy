@@ -53,7 +53,7 @@ cah.Ajax.prototype.requestWithBuilder = function(builder) {
   var jqXHR = $.ajax({
     data : builder.data
   });
-  this.pendingRequests[builder.data.serial] = builder.data;
+  this.pendingRequests[builder.getSerial()] = builder;
   cah.log.debug("ajax req", builder.data);
   if (builder.errback) {
     jqXHR.fail(builder.errback);
@@ -69,27 +69,28 @@ cah.Ajax.prototype.error = function(jqXHR, textStatus, errorThrown) {
 
 cah.Ajax.prototype.done = function(data) {
   cah.log.debug("ajax done", data);
-  if (data['error']) {
+  if (data[cah.$.AjaxResponse.ERROR]) {
     // TODO cancel any timers or whatever we may have, and disable interface
-    var req = this.pendingRequests[data.serial];
-    if (req && cah.ajax.ErrorHandlers[req.op]) {
-      cah.ajax.ErrorHandlers[req.op](data);
+    var req = this.pendingRequests[data[cah.$.AjaxResponse.SERIAL]];
+    if (req && cah.ajax.ErrorHandlers[req.getOp()]) {
+      cah.ajax.ErrorHandlers[req.getOp()](data);
     } else {
-      cah.log.error(cah.$.ErrorCode_msg[data.error_code]);
+      cah.log.error(cah.$.ErrorCode_msg[data[cah.$.AjaxResponse.ERROR_CODE]]);
     }
   } else {
-    var req = this.pendingRequests[data.serial];
-    if (req && cah.ajax.SuccessHandlers[req.op]) {
-      cah.ajax.SuccessHandlers[req.op](data);
+    var req = this.pendingRequests[data[cah.$.AjaxResponse.SERIAL]];
+    if (req && cah.ajax.SuccessHandlers[req.getOp()]) {
+      cah.ajax.SuccessHandlers[req.getOp()](data);
     } else if (req) {
-      cah.log.error("Unhandled response for op " + req.op);
+      cah.log.error("Unhandled response for op " + req.getOp());
     } else {
-      cah.log.error("Response for unknown serial " + data.serial);
+      cah.log.error("Response for unknown serial " + data[cah.$.AjaxResponse.SERIAL]);
     }
   }
 
-  if (data.serial >= 0 && this.pendingRequests[data.serial]) {
-    delete this.pendingRequests[data.serial];
+  var serial = data[cah.$.AjaxResponse.SERIAL];
+  if (serial >= 0 && this.pendingRequests[serial]) {
+    delete this.pendingRequests[serial];
   }
 };
 

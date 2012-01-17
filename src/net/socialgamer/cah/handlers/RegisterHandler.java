@@ -7,9 +7,12 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
+import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
+import net.socialgamer.cah.Constants.SessionAttribute;
+import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
@@ -37,14 +40,14 @@ public class RegisterHandler extends Handler {
   }
 
   @Override
-  public Map<ReturnableData, Object> handle(final Map<String, String[]> parameters,
+  public Map<ReturnableData, Object> handle(final RequestWrapper request,
       final HttpSession session) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
-    if (!parameters.containsKey("nickname") || parameters.get("nickname").length != 1) {
+    if (request.getParameter(AjaxRequest.NICKNAME) == null) {
       return error(ErrorCode.NO_NICK_SPECIFIED);
     } else {
-      final String nick = parameters.get("nickname")[0].trim();
+      final String nick = request.getParameter(AjaxRequest.NICKNAME).trim();
       if (!validName.matcher(nick).matches()) {
         return error(ErrorCode.INVALID_NICK);
       } else if (users.hasUser(nick)) {
@@ -52,7 +55,7 @@ public class RegisterHandler extends Handler {
       } else {
         final User user = new User(nick);
         users.newUser(user);
-        session.setAttribute("user", user);
+        session.setAttribute(SessionAttribute.USER, user);
 
         data.put(AjaxResponse.NICKNAME, nick);
       }

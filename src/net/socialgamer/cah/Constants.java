@@ -45,6 +45,9 @@ public class Constants {
   }
 
   public enum AjaxRequest {
+    MESSAGE("message"),
+    NICKNAME("nickname"),
+    OP("op"),
     SERIAL("serial");
 
     private final String field;
@@ -66,7 +69,7 @@ public class Constants {
     NAMES("names"),
     NEXT("next"),
     NICKNAME("nickname"),
-    SERIAL("serial");
+    SERIAL(AjaxRequest.SERIAL.toString());
 
     private final String field;
 
@@ -139,6 +142,8 @@ public class Constants {
   }
 
   public enum LongPollResponse implements ReturnableData {
+    ERROR(AjaxResponse.ERROR.toString()),
+    ERROR_CODE(AjaxResponse.ERROR_CODE.toString()),
     EVENT("event"),
     FROM("from"),
     GAME_ID("game_id"),
@@ -157,5 +162,9 @@ public class Constants {
     public String toString() {
       return field;
     }
+  }
+
+  public class SessionAttribute {
+    public static final String USER = "user";
   }
 }

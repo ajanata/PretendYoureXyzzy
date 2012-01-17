@@ -12,9 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
+import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
+import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.data.User;
 
 import org.json.simple.JSONObject;
@@ -47,7 +49,7 @@ public abstract class CahServlet extends HttpServlet {
     response.setContentType("application/json");
 
     final HttpSession hSession = request.getSession(true);
-    final String op = request.getParameter("op");
+    final String op = request.getParameter(AjaxRequest.OP.toString());
     final boolean skipSessionUserCheck = op != null
         && (op.equals(AjaxOperation.REGISTER.toString())
         || op.equals(AjaxOperation.FIRST_LOAD.toString()));
@@ -55,10 +57,10 @@ public abstract class CahServlet extends HttpServlet {
       // they should have gotten a session from the index page.
       // they probably don't have cookies on.
       returnError(response.getWriter(), ErrorCode.NO_SESSION);
-    } else if (!skipSessionUserCheck && hSession.getAttribute("user") == null) {
+    } else if (!skipSessionUserCheck && hSession.getAttribute(SessionAttribute.USER) == null) {
       returnError(response.getWriter(), ErrorCode.NOT_REGISTERED);
-    } else if (hSession.getAttribute("user") != null
-        && !(((User) hSession.getAttribute("user")).isValid())) {
+    } else if (hSession.getAttribute(SessionAttribute.USER) != null
+        && !(((User) hSession.getAttribute(SessionAttribute.USER)).isValid())) {
       // user probably pinged out
       hSession.invalidate();
       returnError(response.getWriter(), ErrorCode.SESSION_EXPIRED);

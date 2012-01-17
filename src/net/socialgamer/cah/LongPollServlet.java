@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
+import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.data.QueuedMessage;
 import net.socialgamer.cah.data.User;
 
@@ -61,7 +62,7 @@ public class LongPollServlet extends CahServlet {
     // Pick a random timeout point between TIMEOUT_BASE and TIMEOUT_BASE + TIMEOUT_RANDOMNESS
     // nanoseconds from now.
     final long end = start + TIMEOUT_BASE + (long) (Math.random() * TIMEOUT_RANDOMNESS);
-    final User user = (User) hSession.getAttribute("user");
+    final User user = (User) hSession.getAttribute(SessionAttribute.USER);
     assert (user != null);
     user.contactedServer();
     // TODO we might have to synchronize on the user object?

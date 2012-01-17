@@ -16,7 +16,10 @@ cah.$.AjaxRequest = function() {
   // pass
 };
 cah.$.AjaxRequest.prototype.dummy = undefined;
+cah.$.AjaxRequest.MESSAGE = "message";
 cah.$.AjaxRequest.SERIAL = "serial";
+cah.$.AjaxRequest.OP = "op";
+cah.$.AjaxRequest.NICKNAME = "nickname";
 
 cah.$.AjaxResponse = function() {
   // pass
@@ -84,6 +87,8 @@ cah.$.LongPollResponse.REASON = "reason";
 cah.$.LongPollResponse.GAME_ID = "game_id";
 cah.$.LongPollResponse.FROM = "from";
 cah.$.LongPollResponse.EVENT = "event";
+cah.$.LongPollResponse.ERROR = "error";
+cah.$.LongPollResponse.ERROR_CODE = "error_code";
 cah.$.LongPollResponse.TIMESTAMP = "timestamp";
 cah.$.LongPollResponse.NICKNAME = "nickname";
 

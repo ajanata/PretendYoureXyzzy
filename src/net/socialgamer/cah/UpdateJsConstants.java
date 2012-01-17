@@ -35,7 +35,7 @@ public class UpdateJsConstants {
     writer.println();
 
     final Class[] classes = Constants.class.getClasses();
-    for (final Class c : classes) {
+    for (final Class<?> c : classes) {
       if (!c.isEnum()) {
         continue;
       }
@@ -63,8 +63,7 @@ public class UpdateJsConstants {
     writer.close();
   }
 
-  @SuppressWarnings("rawtypes")
-  private static Map<String, String> getEnumValues(final Class enumClass)
+  private static Map<String, String> getEnumValues(final Class<?> enumClass)
       throws IllegalArgumentException, IllegalAccessException {
     if (!enumClass.isEnum()) {
       throw new IllegalArgumentException(enumClass.getName() + " is not an enum");
@@ -80,7 +79,7 @@ public class UpdateJsConstants {
     return enumMap;
   }
 
-  private static Map<String, String> getEnumMessageValues(final Class enumClass)
+  private static Map<String, String> getEnumMessageValues(final Class<?> enumClass)
       throws IllegalArgumentException, IllegalAccessException {
     if (!enumClass.isEnum()) {
       throw new IllegalArgumentException(enumClass.getName() + " is not an enum");
