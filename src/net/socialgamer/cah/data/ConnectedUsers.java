@@ -11,14 +11,16 @@ import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
+import com.google.inject.Singleton;
+
 
 /**
  * Class that holds all users connected to the server, and provides functions to operate on said
  * list.
  * 
  * @author ajanata
- * 
  */
+@Singleton
 public class ConnectedUsers {
 
   /**

@@ -10,7 +10,6 @@ import net.socialgamer.cah.Constants.DisconnectReason;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.RequestWrapper;
-import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
 
@@ -24,8 +23,8 @@ public class LogoutHandler extends Handler {
   private final ConnectedUsers users;
 
   @Inject
-  public LogoutHandler(final Server server) {
-    this.users = server.getConnectedUsers();
+  public LogoutHandler(final ConnectedUsers users) {
+    this.users = users;
   }
 
   @Override

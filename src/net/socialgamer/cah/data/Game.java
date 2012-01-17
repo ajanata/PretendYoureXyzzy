@@ -7,7 +7,10 @@ import java.util.List;
 
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
+import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
+
+import com.google.inject.Inject;
 
 
 public class Game {
@@ -25,7 +28,8 @@ public class Game {
    * @param id
    * @param connectedUsers
    */
-  public Game(final int id, final ConnectedUsers connectedUsers) {
+  @Inject
+  public Game(@GameId final Integer id, final ConnectedUsers connectedUsers) {
     this.id = id;
     this.connectedUsers = connectedUsers;
   }
@@ -91,6 +95,10 @@ public class Game {
 
   public List<User> getUsers() {
     return playersToUsers();
+  }
+
+  public int getId() {
+    return id;
   }
 
   private List<User> playersToUsers() {

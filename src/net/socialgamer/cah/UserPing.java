@@ -12,8 +12,8 @@ public class UserPing extends TimerTask {
   private final ConnectedUsers users;
 
   @Inject
-  public UserPing(final Server server) {
-    users = server.getConnectedUsers();
+  public UserPing(final ConnectedUsers users) {
+    this.users = users;
   }
 
   @Override

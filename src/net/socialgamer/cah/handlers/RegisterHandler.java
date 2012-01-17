@@ -13,7 +13,6 @@ import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.RequestWrapper;
-import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
 
@@ -35,8 +34,8 @@ public class RegisterHandler extends Handler {
    * @param server
    */
   @Inject
-  public RegisterHandler(final Server server) {
-    this.users = server.getConnectedUsers();
+  public RegisterHandler(final ConnectedUsers users) {
+    this.users = users;
   }
 
   @Override

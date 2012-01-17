@@ -43,6 +43,6 @@ public class StartupUtils extends GuiceServletContextListener {
 
   @Override
   protected Injector getInjector() {
-    return Guice.createInjector();
+    return Guice.createInjector(new CahModule());
   }
 }

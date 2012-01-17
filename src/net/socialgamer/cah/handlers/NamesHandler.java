@@ -12,7 +12,6 @@ import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
-import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
 
@@ -26,8 +25,8 @@ public class NamesHandler extends Handler {
   private final ConnectedUsers users;
 
   @Inject
-  public NamesHandler(final Server server) {
-    this.users = server.getConnectedUsers();
+  public NamesHandler(final ConnectedUsers users) {
+    this.users = users;
   }
 
   @Override

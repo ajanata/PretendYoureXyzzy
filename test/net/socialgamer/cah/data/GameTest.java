@@ -50,6 +50,5 @@ public class GameTest {
     assertEquals(null, game.getHost());
 
     verify(cmMock);
-
   }
 }

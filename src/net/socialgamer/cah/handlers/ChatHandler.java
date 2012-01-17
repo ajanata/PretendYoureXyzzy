@@ -13,7 +13,6 @@ import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.RequestWrapper;
-import net.socialgamer.cah.Server;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.data.User;
@@ -28,8 +27,8 @@ public class ChatHandler extends Handler {
   private final ConnectedUsers users;
 
   @Inject
-  public ChatHandler(final Server server) {
-    this.users = server.getConnectedUsers();
+  public ChatHandler(final ConnectedUsers users) {
+    this.users = users;
   }
 
   @Override
