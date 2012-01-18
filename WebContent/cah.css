@@ -1,3 +1,20 @@
+#menubar {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 25px;
+	border: 1px solid black;
+}
+
+#menubar_left {
+	float: left;
+}
+
+#menubar_right {
+	float: right;
+}
+
 #nickbox {
 	border: 1px solid black;
 	display: inline;
@@ -8,7 +25,7 @@
 	*/
 }
 
-#canvass {
+#canvas {
 	/* * /
 	display: none;
 	/* */
@@ -17,6 +34,51 @@
 	position: relative;
   width: 1000px;
   border: 1px solid red;
+}
+
+#main {
+	position: absolute;
+	width: 100%;
+	top: 26px;
+	height: 506px;
+	border: 1px solid black;
+}
+
+#game_list {
+	height: 100%;
+	width: 100%;
+	background: #c0c0c0;
+	overflow: auto;
+}
+
+.gamelist_lobby {
+	width: 32%;
+	height: 100px;
+  float: left;
+  border: 1px solid black;
+	margin: 4px;
+}
+
+.gamelist_lobby_left {
+	width: 74%;
+	height: 100%;
+	float: left;
+}
+
+.gamelist_lobby_right {
+	border-left: 1px solid black;
+	width: 25%;
+	height: 100%;
+	float: right;
+}
+
+.gamelist_lobby_join {
+	width: 100%;
+	height: 100%;
+}
+
+.gamelist_lobby_status {
+	float: right;
 }
 
 #chat_area {
@@ -47,12 +109,6 @@
 	bottom: -1px;
 	right: 49px;
 	padding: 0px;
-}
-
-#logout {
-	position: absolute;
-	top: 0px;
-	right: 0px;
 }
 
 #chat_submit {

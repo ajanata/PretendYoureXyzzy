@@ -4,6 +4,8 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.GameManager.MaxGames;
 
@@ -85,5 +87,20 @@ public class GameManagerTest {
     gameManager.destroyGame(2);
     gameManager.destroyGame(0);
     assertEquals(2, gameManager.get().intValue());
+  }
+
+  @Test
+  public void testCreateGame() {
+    Game game = gameManager.createGame();
+    assertNotNull(game);
+    gameId = 1;
+    game = gameManager.createGame();
+    assertNotNull(game);
+    gameId = 2;
+    game = gameManager.createGame();
+    assertNotNull(game);
+    gameId = -1;
+    game = gameManager.createGame();
+    assertNull(game);
   }
 }

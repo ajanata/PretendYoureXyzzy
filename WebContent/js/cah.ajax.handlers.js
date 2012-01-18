@@ -6,7 +6,7 @@
  * @author ajanata
  */
 
-cah.ajax.SuccessHandlers.register = function(data) {
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
   cah.nickname = data['nickname'];
   cah.log.status("You are connected as " + cah.nickname);
   $("#nickbox").hide();
@@ -15,12 +15,12 @@ cah.ajax.SuccessHandlers.register = function(data) {
   cah.ajax.after_registered();
 };
 
-cah.ajax.ErrorHandlers.register = function(data) {
+cah.ajax.ErrorHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
   $("#nickbox_error").text(cah.$.ErrorCode_msg[data.error_code]);
   $("#nickname").focus();
 };
 
-cah.ajax.SuccessHandlers.firstload = function(data) {
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
   if (data.in_progress) {
     // TODO reload data. see what 'next' is and go from there.
     // for now just load the nickname
@@ -32,7 +32,7 @@ cah.ajax.SuccessHandlers.firstload = function(data) {
   }
 };
 
-cah.ajax.ErrorHandlers.firstload = function(data) {
+cah.ajax.ErrorHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
   // TODO dunno what to do here, if anything
 };
 
@@ -44,19 +44,24 @@ cah.ajax.after_registered = function() {
   cah.log.debug("done registering");
   // TODO once there are channels, this needs to specify the global channel
   cah.Ajax.build(cah.$.AjaxOperation.NAMES).run();
+  cah.Ajax.build(cah.$.AjaxOperation.GAME_LIST).run();
   cah.longpoll.longPoll();
 };
 
-cah.ajax.SuccessHandlers.chat = function(data) {
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CHAT] = function(data) {
   // pass
 };
 
-cah.ajax.SuccessHandlers.logout = function(data) {
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LOG_OUT] = function(data) {
   window.location.reload();
 };
 
-cah.ajax.ErrorHandlers.logout = cah.ajax.SuccessHandlers.logout;
+cah.ajax.ErrorHandlers[cah.$.AjaxOperation.LOG_OUT] = cah.ajax.SuccessHandlers.logout;
 
-cah.ajax.SuccessHandlers.names = function(data) {
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.NAMES] = function(data) {
   cah.log.status("Currently connected: " + data.names.join(", "));
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GAME_LIST] = function(data) {
+  cah.GameList.instance.update(data);
 };

@@ -8,6 +8,7 @@ cah.$.AjaxOperation = function() {
 cah.$.AjaxOperation.prototype.dummy = undefined;
 cah.$.AjaxOperation.FIRST_LOAD = "firstload";
 cah.$.AjaxOperation.LOG_OUT = "logout";
+cah.$.AjaxOperation.GAME_LIST = "games";
 cah.$.AjaxOperation.REGISTER = "register";
 cah.$.AjaxOperation.CHAT = "chat";
 cah.$.AjaxOperation.NAMES = "names";
@@ -29,7 +30,9 @@ cah.$.AjaxResponse.NEXT = "next";
 cah.$.AjaxResponse.ERROR = "error";
 cah.$.AjaxResponse.ERROR_CODE = "error_code";
 cah.$.AjaxResponse.SERIAL = "serial";
+cah.$.AjaxResponse.MAX_GAMES = "max_games";
 cah.$.AjaxResponse.IN_PROGRESS = "in_progress";
+cah.$.AjaxResponse.GAMES = "games";
 cah.$.AjaxResponse.NICKNAME = "nickname";
 cah.$.AjaxResponse.NAMES = "names";
 
@@ -68,6 +71,22 @@ cah.$.ErrorCode_msg['no_msg_spec'] = "No message specified.";
 cah.$.ErrorCode_msg['invalid_nick'] = "Nickname must contain only upper and lower case letters, numbers, or underscores, must be 3 to 30 characters long, and must not start with a number.";
 cah.$.ErrorCode_msg['no_session'] = "Session not detected. Make sure you have cookies enabled.";
 cah.$.ErrorCode_msg['no_nick_spec'] = "No nickname specified.";
+
+cah.$.GameInfo = function() {
+  // pass
+};
+cah.$.GameInfo.prototype.dummy = undefined;
+cah.$.GameInfo.HOST = "host";
+cah.$.GameInfo.STATE = "state";
+cah.$.GameInfo.PLAYERS = "players";
+cah.$.GameInfo.ID = "id";
+
+cah.$.GameState = function() {
+  // pass
+};
+cah.$.GameState.prototype.dummy = undefined;
+cah.$.GameState.LOBBY = "lobby";
+cah.$.GameState.DEALING = "dealing";
 
 cah.$.LongPollEvent = function() {
   // pass

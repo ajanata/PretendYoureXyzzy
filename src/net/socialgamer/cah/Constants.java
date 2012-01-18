@@ -28,6 +28,7 @@ public class Constants {
   public enum AjaxOperation {
     CHAT("chat"),
     FIRST_LOAD("firstload"),
+    GAME_LIST("games"),
     LOG_OUT("logout"),
     NAMES("names"),
     REGISTER("register");
@@ -65,7 +66,9 @@ public class Constants {
   public enum AjaxResponse implements ReturnableData {
     ERROR("error"),
     ERROR_CODE("error_code"),
+    GAMES("games"),
     IN_PROGRESS("in_progress"),
+    MAX_GAMES("max_games"),
     NAMES("names"),
     NEXT("next"),
     NICKNAME("nickname"),
@@ -166,5 +169,39 @@ public class Constants {
 
   public class SessionAttribute {
     public static final String USER = "user";
+  }
+
+  public enum GameState {
+    DEALING("dealing"),
+    LOBBY("lobby");
+
+    private final String state;
+
+    GameState(final String state) {
+      this.state = state;
+    }
+
+    @Override
+    public String toString() {
+      return state;
+    }
+  }
+
+  public enum GameInfo {
+    HOST("host"),
+    ID("id"),
+    PLAYERS("players"),
+    STATE("state");
+
+    private final String key;
+
+    GameInfo(final String key) {
+      this.key = key;
+    }
+
+    @Override
+    public String toString() {
+      return key;
+    }
   }
 }

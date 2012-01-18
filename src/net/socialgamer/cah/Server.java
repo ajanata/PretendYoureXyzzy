@@ -22,7 +22,7 @@ public class Server {
     return this.users;
   }
 
-  public GameManager getGames() {
+  public GameManager getGameManager() {
     return this.gameManager;
   }
 }

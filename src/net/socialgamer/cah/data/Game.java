@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import net.socialgamer.cah.Constants.GameInfo;
+import net.socialgamer.cah.Constants.GameState;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.GameManager.GameId;
@@ -20,6 +23,7 @@ public class Game {
   private Player host;
   private BlackDeck blackDeck;
   private WhiteDeck whiteDeck;
+  private GameState state;
 
   /**
    * TODO Injection here would be much nicer, but that would need a Provider for the id... Too much
@@ -32,6 +36,7 @@ public class Game {
   public Game(@GameId final Integer id, final ConnectedUsers connectedUsers) {
     this.id = id;
     this.connectedUsers = connectedUsers;
+    state = GameState.LOBBY;
   }
 
   public void addPlayer(final User user) {
@@ -41,6 +46,7 @@ public class Game {
       if (host == null) {
         host = player;
       }
+      user.joinGame(this);
     }
 
     final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
@@ -62,6 +68,7 @@ public class Game {
         final Player player = iterator.next();
         if (player.getUser() == user) {
           iterator.remove();
+          user.leaveGame(this);
           final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
           data.put(LongPollResponse.EVENT, "game_player_leave");
           data.put(LongPollResponse.GAME_ID, id);
@@ -99,6 +106,26 @@ public class Game {
 
   public int getId() {
     return id;
+  }
+
+  public Map<GameInfo, Object> getInfo() {
+    final Map<GameInfo, Object> info = new HashMap<GameInfo, Object>();
+    info.put(GameInfo.ID, id);
+    info.put(GameInfo.HOST, host.toString());
+    info.put(GameInfo.STATE, state.toString());
+    synchronized (players) {
+      final List<String> playerNames = new ArrayList<String>(players.size());
+      for (final Player player : players) {
+        playerNames.add(player.toString());
+      }
+      info.put(GameInfo.PLAYERS, playerNames);
+    }
+    return info;
+  }
+
+  public void start() {
+    state = GameState.DEALING;
+    // TODO deal
   }
 
   private List<User> playersToUsers() {

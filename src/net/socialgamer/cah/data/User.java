@@ -15,6 +15,8 @@ public class User {
 
   private long lastHeardFrom = 0;
 
+  private Game currentGame;
+
   /**
    * Reset when this user object is no longer valid, most likely because it pinged out.
    */
@@ -77,6 +79,11 @@ public class User {
     return nickname;
   }
 
+  @Override
+  public String toString() {
+    return getNickname();
+  }
+
   /**
    * Update the timestamp that we have last heard from this user to the current time.
    */
@@ -103,5 +110,43 @@ public class User {
    */
   public void noLongerVaild() {
     valid = false;
+  }
+
+  /**
+   * @return The current game in which this user is participating.
+   */
+  public Game getGame() {
+    return currentGame;
+  }
+
+  /**
+   * Marks a given game as this user's active game.
+   * 
+   * This should only be called from Game itself.
+   * 
+   * @param game
+   *          Game in which this user is playing.
+   * @throws IllegalStateException
+   *           Thrown if this user is already in another game.
+   */
+  void joinGame(final Game game) throws IllegalStateException {
+    if (currentGame != null && currentGame != game) {
+      throw new IllegalStateException("User is already in a game.");
+    }
+    currentGame = game;
+  }
+
+  /**
+   * Marks the user as no longer participating in a game.
+   * 
+   * This should only be called from Game itself.
+   * 
+   * @param game
+   *          Game from which to remove the user.
+   */
+  void leaveGame(final Game game) {
+    if (currentGame == game) {
+      currentGame = null;
+    }
   }
 }

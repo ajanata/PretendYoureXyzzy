@@ -2,6 +2,8 @@ package net.socialgamer.cah.data;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -50,7 +52,10 @@ public class GameManager implements Provider<Integer> {
         return null;
       }
       final Game game = gameProvider.get();
-      assert (game.getId() >= 0);
+      if (game.getId() < 0) {
+        return null;
+      }
+      games.put(game.getId(), game);
       return game;
     }
   }
@@ -120,6 +125,13 @@ public class GameManager implements Provider<Integer> {
         }
       }
       return -1;
+    }
+  }
+
+  public Collection<Game> getGameList() {
+    synchronized (games) {
+      // return a copy
+      return new ArrayList<Game>(games.values());
     }
   }
 

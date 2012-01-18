@@ -20,6 +20,8 @@ $(document).ready(function() {
   // have not expressed an interest in being cleared out yet.
   // $(window).bind("beforeunload", window_beforeunload);
   $("#logout").click(logout_click);
+
+  $("#refresh_games").click(refreshgames_click);
 });
 
 function nickbox_keyup(e) {
@@ -52,4 +54,8 @@ function chatsubmit_click(e) {
 
 function logout_click(e) {
   cah.Ajax.build(cah.$.AjaxOperation.LOG_OUT).run();
+}
+
+function refreshgames_click(e) {
+  cah.Ajax.build(cah.$.AjaxOperation.GAME_LIST).run();
 }
