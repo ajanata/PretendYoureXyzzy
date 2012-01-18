@@ -47,8 +47,11 @@
 #game_list {
 	height: 100%;
 	width: 100%;
-	background: #c0c0c0;
 	overflow: auto;
+}
+
+#gamelist_lobby_template {
+	display: none;
 }
 
 .gamelist_lobby {
@@ -79,6 +82,14 @@
 
 .gamelist_lobby_status {
 	float: right;
+}
+
+.gamelist_lobby_status_joinable {
+	color: green;
+}
+
+.gamelist_lobby_status_unjoinable {
+	color: #c0c0c0;
 }
 
 #chat_area {

@@ -171,19 +171,26 @@ public class Constants {
     public static final String USER = "user";
   }
 
-  public enum GameState {
-    DEALING("dealing"),
-    LOBBY("lobby");
+  public enum GameState implements Localizable {
+    DEALING("dealing", "Dealing"),
+    LOBBY("lobby", "Joinable (Not Started)");
 
     private final String state;
+    private final String message;
 
-    GameState(final String state) {
+    GameState(final String state, final String message) {
       this.state = state;
+      this.message = message;
     }
 
     @Override
     public String toString() {
       return state;
+    }
+
+    @Override
+    public String getString() {
+      return message;
     }
   }
 

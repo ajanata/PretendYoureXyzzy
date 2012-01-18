@@ -55,6 +55,7 @@
   </div>
 </div>
 
+<!-- Template for game lobbies in the game list. -->
 <div id="gamelist_lobby_template" class="gamelist_lobby">
   <div class="gamelist_lobby_left">
     Game <span class="gamelist_lobby_id">###</span>

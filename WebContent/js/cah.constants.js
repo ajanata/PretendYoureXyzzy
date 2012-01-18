@@ -87,6 +87,9 @@ cah.$.GameState = function() {
 cah.$.GameState.prototype.dummy = undefined;
 cah.$.GameState.LOBBY = "lobby";
 cah.$.GameState.DEALING = "dealing";
+cah.$.GameState_msg = {};
+cah.$.GameState_msg['lobby'] = "Joinable (Not Started)";
+cah.$.GameState_msg['dealing'] = "Dealing";
 
 cah.$.LongPollEvent = function() {
   // pass
