@@ -10,6 +10,7 @@ cah.$.AjaxOperation.FIRST_LOAD = "firstload";
 cah.$.AjaxOperation.LOG_OUT = "logout";
 cah.$.AjaxOperation.GAME_LIST = "games";
 cah.$.AjaxOperation.REGISTER = "register";
+cah.$.AjaxOperation.CREATE_GAME = "create_game";
 cah.$.AjaxOperation.CHAT = "chat";
 cah.$.AjaxOperation.NAMES = "names";
 
@@ -27,6 +28,7 @@ cah.$.AjaxResponse = function() {
 };
 cah.$.AjaxResponse.prototype.dummy = undefined;
 cah.$.AjaxResponse.NEXT = "next";
+cah.$.AjaxResponse.GAME_ID = "game_id";
 cah.$.AjaxResponse.ERROR = "error";
 cah.$.AjaxResponse.ERROR_CODE = "error_code";
 cah.$.AjaxResponse.SERIAL = "serial";
@@ -48,29 +50,33 @@ cah.$.ErrorCode = function() {
   // pass
 };
 cah.$.ErrorCode.prototype.dummy = undefined;
-cah.$.ErrorCode.NO_SESSION = "no_session";
-cah.$.ErrorCode.NOT_REGISTERED = "not_registered";
+cah.$.ErrorCode.TOO_MANY_GAMES = "too_many_games";
 cah.$.ErrorCode.INVALID_NICK = "invalid_nick";
 cah.$.ErrorCode.BAD_REQUEST = "bad_req";
+cah.$.ErrorCode.SESSION_EXPIRED = "session_expired";
+cah.$.ErrorCode.MESSAGE_TOO_LONG = "msg_too_long";
+cah.$.ErrorCode.BAD_OP = "bad_op";
+cah.$.ErrorCode.NO_SESSION = "no_session";
+cah.$.ErrorCode.NOT_REGISTERED = "not_registered";
+cah.$.ErrorCode.CANNOT_JOIN_GAME = "cannot_join_game";
 cah.$.ErrorCode.OP_NOT_SPECIFIED = "op_not_spec";
 cah.$.ErrorCode.NO_MSG_SPECIFIED = "no_msg_spec";
 cah.$.ErrorCode.NICK_IN_USE = "nick_in_use";
-cah.$.ErrorCode.SESSION_EXPIRED = "session_expired";
-cah.$.ErrorCode.MESSAGE_TOO_LONG = "msg_too_long";
 cah.$.ErrorCode.NO_NICK_SPECIFIED = "no_nick_spec";
-cah.$.ErrorCode.BAD_OP = "bad_op";
 cah.$.ErrorCode_msg = {};
-cah.$.ErrorCode_msg['nick_in_use'] = "Nickname is already in use.";
 cah.$.ErrorCode_msg['bad_op'] = "Invalid operation.";
 cah.$.ErrorCode_msg['not_registered'] = "Not registered. Refresh the page.";
-cah.$.ErrorCode_msg['bad_req'] = "Bad request.";
 cah.$.ErrorCode_msg['msg_too_long'] = "Messages cannot be longer than 200 characters.";
+cah.$.ErrorCode_msg['cannot_join_game'] = "You cannot join another game.";
 cah.$.ErrorCode_msg['session_expired'] = "Your session has expired. Refresh the page.";
+cah.$.ErrorCode_msg['invalid_nick'] = "Nickname must contain only upper and lower case letters, numbers, or underscores, must be 3 to 30 characters long, and must not start with a number.";
+cah.$.ErrorCode_msg['no_nick_spec'] = "No nickname specified.";
+cah.$.ErrorCode_msg['no_session'] = "Session not detected. Make sure you have cookies enabled.";
+cah.$.ErrorCode_msg['too_many_games'] = "There are too many games already in progress. Either join an existing game, or wait for one to become available.";
+cah.$.ErrorCode_msg['nick_in_use'] = "Nickname is already in use.";
+cah.$.ErrorCode_msg['bad_req'] = "Bad request.";
 cah.$.ErrorCode_msg['op_not_spec'] = "Operation not specified.";
 cah.$.ErrorCode_msg['no_msg_spec'] = "No message specified.";
-cah.$.ErrorCode_msg['invalid_nick'] = "Nickname must contain only upper and lower case letters, numbers, or underscores, must be 3 to 30 characters long, and must not start with a number.";
-cah.$.ErrorCode_msg['no_session'] = "Session not detected. Make sure you have cookies enabled.";
-cah.$.ErrorCode_msg['no_nick_spec'] = "No nickname specified.";
 
 cah.$.GameInfo = function() {
   // pass
@@ -96,6 +102,7 @@ cah.$.LongPollEvent = function() {
 };
 cah.$.LongPollEvent.prototype.dummy = undefined;
 cah.$.LongPollEvent.NOOP = "noop";
+cah.$.LongPollEvent.GAME_REFRESH = "game_refresh";
 cah.$.LongPollEvent.NEW_PLAYER = "new_player";
 cah.$.LongPollEvent.PLAYER_LEAVE = "player_leave";
 cah.$.LongPollEvent.CHAT = "chat";

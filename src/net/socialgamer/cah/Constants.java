@@ -27,6 +27,7 @@ public class Constants {
 
   public enum AjaxOperation {
     CHAT("chat"),
+    CREATE_GAME("create_game"),
     FIRST_LOAD("firstload"),
     GAME_LIST("games"),
     LOG_OUT("logout"),
@@ -66,6 +67,7 @@ public class Constants {
   public enum AjaxResponse implements ReturnableData {
     ERROR("error"),
     ERROR_CODE("error_code"),
+    GAME_ID("game_id"),
     GAMES("games"),
     IN_PROGRESS("in_progress"),
     MAX_GAMES("max_games"),
@@ -89,6 +91,7 @@ public class Constants {
   public enum ErrorCode implements Localizable {
     BAD_OP("bad_op", "Invalid operation."),
     BAD_REQUEST("bad_req", "Bad request."),
+    CANNOT_JOIN_GAME("cannot_join_game", "You cannot join another game."),
     INVALID_NICK("invalid_nick", "Nickname must contain only upper and lower case letters, " +
         "numbers, or underscores, must be 3 to 30 characters long, and must not start with a " +
         "number."),
@@ -99,7 +102,9 @@ public class Constants {
     NO_SESSION("no_session", "Session not detected. Make sure you have cookies enabled."),
     NOT_REGISTERED("not_registered", "Not registered. Refresh the page."),
     OP_NOT_SPECIFIED("op_not_spec", "Operation not specified."),
-    SESSION_EXPIRED("session_expired", "Your session has expired. Refresh the page.");
+    SESSION_EXPIRED("session_expired", "Your session has expired. Refresh the page."),
+    TOO_MANY_GAMES("too_many_games", "There are too many games already in progress. Either join " +
+        "an existing game, or wait for one to become available.");
 
     private final String code;
     private final String message;
@@ -128,6 +133,7 @@ public class Constants {
 
   public enum LongPollEvent {
     CHAT("chat"),
+    GAME_REFRESH("game_refresh"),
     NEW_PLAYER("new_player"),
     NOOP("noop"),
     PLAYER_LEAVE("player_leave");

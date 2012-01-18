@@ -4,10 +4,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import net.socialgamer.cah.Constants.LongPollEvent;
+import net.socialgamer.cah.Constants.LongPollResponse;
+import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.GameManager.GameId;
+import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
 import com.google.inject.BindingAnnotation;
 import com.google.inject.Inject;
@@ -29,15 +34,18 @@ public class GameManager implements Provider<Integer> {
   private final int maxGames;
   private final Map<Integer, Game> games = new TreeMap<Integer, Game>();
   private final Provider<Game> gameProvider;
+  private final ConnectedUsers users;
   /**
    * Potential next game id.
    */
   private int nextId = 0;
 
   @Inject
-  public GameManager(final Provider<Game> gameProvider, @MaxGames final Integer maxGames) {
+  public GameManager(final Provider<Game> gameProvider, @MaxGames final Integer maxGames,
+      final ConnectedUsers users) {
     this.gameProvider = gameProvider;
     this.maxGames = maxGames;
+    this.users = users;
   }
 
   /**
@@ -56,6 +64,37 @@ public class GameManager implements Provider<Integer> {
         return null;
       }
       games.put(game.getId(), game);
+      broadcastGameListRefresh();
+      return game;
+    }
+  }
+
+  /**
+   * Creates a new game and puts the specified user into the game, if there are free game slots.
+   * Returns null if there are already the maximum number of games in progress.
+   * 
+   * Creating the game and adding the user are done atomically with respect to another game getting
+   * created, or even getting the list of active games. It is impossible for another user to join
+   * the game before the requesting user.
+   * 
+   * @param user
+   *          User to place into the game.
+   * @return Newly created game, or {@code null} if the maximum number of games are in progress.
+   * @throws IllegalStateException
+   *           If the user is already in a game and cannot join another.
+   */
+  public Game createGameWithPlayer(final User user) throws IllegalStateException {
+    synchronized (games) {
+      final Game game = createGame();
+      if (game == null) {
+        return null;
+      }
+      try {
+        game.addPlayer(user);
+      } catch (final IllegalStateException ise) {
+        destroyGame(game.getId());
+        throw ise;
+      }
       return game;
     }
   }
@@ -78,7 +117,15 @@ public class GameManager implements Provider<Integer> {
         nextId = gameId;
       }
       // TODO remove the players from the game
+
+      broadcastGameListRefresh();
     }
+  }
+
+  private void broadcastGameListRefresh() {
+    final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
+    broadcastData.put(LongPollResponse.EVENT, LongPollEvent.GAME_REFRESH.toString());
+    users.broadcastToAll(MessageType.GAME_EVENT, broadcastData);
   }
 
   /**

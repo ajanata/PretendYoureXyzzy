@@ -11,6 +11,7 @@ public class Handlers {
   static {
     LIST = new HashMap<String, Class<? extends Handler>>();
     LIST.put(ChatHandler.OP, ChatHandler.class);
+    LIST.put(CreateGameHandler.OP, CreateGameHandler.class);
     LIST.put(FirstLoadHandler.OP, FirstLoadHandler.class);
     LIST.put(GameListHandler.OP, GameListHandler.class);
     LIST.put(LogoutHandler.OP, LogoutHandler.class);

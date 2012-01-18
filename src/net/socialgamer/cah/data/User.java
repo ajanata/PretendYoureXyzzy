@@ -109,6 +109,9 @@ public class User {
    * Mark this user as no longer valid, probably because they pinged out.
    */
   public void noLongerVaild() {
+    if (currentGame != null) {
+      currentGame.removePlayer(this);
+    }
     valid = false;
   }
 

@@ -15,6 +15,17 @@ cah.GameList = function() {
    * @private
    */
   this.element_ = $("#game_list")[0];
+
+  /**
+   * Array of all game lobby objects.
+   * 
+   * @type {Array}
+   * @private
+   */
+  this.games_ = new Array();
+
+  $("#create_game").click(cah.bind(this, this.createGameClick_));
+  $("#refresh_games").click(cah.bind(this, this.refreshGamesClick_));
 };
 
 $(document).ready(function() {
@@ -28,11 +39,40 @@ $(document).ready(function() {
  *          gameData The game data returned by the server.
  */
 cah.GameList.prototype.update = function(gameData) {
-  // TODO clear existing display
+  while (this.element_.hasChildNodes()) {
+    this.element_.removeChild(this.element_.firstChild);
+  }
+  this.games_ = new Array();
+
   for ( var key in gameData[cah.$.AjaxResponse.GAMES]) {
     var game = gameData[cah.$.AjaxResponse.GAMES][key];
     var lobby = new cah.GameListLobby(this.element_, game);
+    this.games_.push(lobby);
   }
+
+  if (gameData[cah.$.AjaxResponse.GAMES].length < gameData[cah.$.AjaxResponse.MAX_GAMES]) {
+    $("#create_game").removeAttr("disabled");
+  } else {
+    $("#create_game").attr("disabled", "disabled");
+  }
+};
+
+/**
+ * @private
+ */
+cah.GameList.prototype.createGameClick_ = function(e) {
+  cah.Ajax.build(cah.$.AjaxOperation.CREATE_GAME).run();
+};
+
+/**
+ * @private
+ */
+cah.GameList.prototype.refreshGamesClick_ = function(e) {
+  this.refreshGames();
+};
+
+cah.GameList.prototype.refreshGames = function() {
+  cah.Ajax.build(cah.$.AjaxOperation.GAME_LIST).run();
 };
 
 /**

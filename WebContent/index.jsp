@@ -39,6 +39,7 @@
   <div id="menubar">
     <div id="menubar_left">
       <input type="button" id="refresh_games" value="Refresh Games" />
+      <input type="button" id="create_game" value="Create Game" />
     </div>
     <div id="menubar_right">
       <input type="button" id="logout" value="Log out" />

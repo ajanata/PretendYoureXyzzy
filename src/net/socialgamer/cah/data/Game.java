@@ -20,6 +20,7 @@ public class Game {
   private final int id;
   private final List<Player> players = new ArrayList<Player>(10);
   private final ConnectedUsers connectedUsers;
+  private final GameManager gameManager;
   private Player host;
   private BlackDeck blackDeck;
   private WhiteDeck whiteDeck;
@@ -31,11 +32,14 @@ public class Game {
    * 
    * @param id
    * @param connectedUsers
+   * @param gameManager
    */
   @Inject
-  public Game(@GameId final Integer id, final ConnectedUsers connectedUsers) {
+  public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
+      final GameManager gameManager) {
     this.id = id;
     this.connectedUsers = connectedUsers;
+    this.gameManager = gameManager;
     state = GameState.LOBBY;
   }
 
@@ -83,6 +87,10 @@ public class Game {
           }
           break;
         }
+      }
+      // this seems terrible
+      if (players.size() == 0) {
+        gameManager.destroyGame(id);
       }
       return players.size() == 0;
     }

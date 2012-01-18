@@ -45,3 +45,7 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.CHAT] = function(data) {
     cah.log.status("&lt;" + data.from + "&gt; " + data.message);
   }
 };
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_REFRESH] = function(data) {
+  cah.GameList.instance.refreshGames();
+};
