@@ -56,6 +56,8 @@ public class AjaxServlet extends CahServlet {
     try {
       handler = getInjector().getInstance(Handlers.LIST.get(op));
     } catch (final Exception e) {
+      System.err.println("Exception creating handler for " + op);
+      e.printStackTrace(System.err);
       returnError(out, ErrorCode.BAD_OP, serial);
       return;
     }
