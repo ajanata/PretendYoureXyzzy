@@ -65,7 +65,12 @@ public abstract class CahServlet extends HttpServlet {
       hSession.invalidate();
       returnError(response.getWriter(), ErrorCode.SESSION_EXPIRED);
     } else {
-      handleRequest(request, response, hSession);
+      try {
+        handleRequest(request, response, hSession);
+      } catch (final AssertionError ae) {
+        getServletContext().log(ae.toString());
+        ae.printStackTrace();
+      }
     }
   }
 
