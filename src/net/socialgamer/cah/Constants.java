@@ -1,9 +1,19 @@
 package net.socialgamer.cah;
 
 public class Constants {
+  /**
+   * Enums that implement this interface are valid keys for data returned to clients.
+   * 
+   * @author ajanata
+   */
   public interface ReturnableData {
   }
 
+  /**
+   * Enums that implement this interface have a user-visible string associated with them.
+   * 
+   * @author ajanata
+   */
   public interface Localizable {
     public String getString();
   }
