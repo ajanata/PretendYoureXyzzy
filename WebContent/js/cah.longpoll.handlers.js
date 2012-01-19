@@ -6,9 +6,9 @@
 
 cah.longpoll.ErrorCodeHandlers.not_registered = function(data) {
   cah.longpoll.Resume = false;
-  // TODO disable interface
   cah.log.error("The server seems to have restarted. Any in-progress games have been lost.");
   cah.log.error("You will need to refresh the page to start a new game.");
+  $("input").attr("disabled", "disabled");
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.NEW_PLAYER] = function(data) {
