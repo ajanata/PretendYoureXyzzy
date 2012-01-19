@@ -25,6 +25,8 @@ public class Game {
   private BlackDeck blackDeck;
   private WhiteDeck whiteDeck;
   private GameState state;
+  // TODO make this host-configurable
+  private final int maxPlayers = 10;
 
   /**
    * TODO Injection here would be much nicer, but that would need a Provider for the id... Too much
@@ -43,14 +45,29 @@ public class Game {
     state = GameState.LOBBY;
   }
 
-  public void addPlayer(final User user) {
-    final Player player = new Player(user);
+  /**
+   * Add a player to the game.
+   * 
+   * @param user
+   *          Player to add to this game.
+   * @throws TooManyPlayersException
+   *           Thrown if this game is at its maximum player capacity.
+   * @throws IllegalStateException
+   *           Thrown if the user is already in a game.
+   */
+  public void addPlayer(final User user) throws TooManyPlayersException, IllegalStateException {
     synchronized (players) {
+      if (maxPlayers >= 3 && players.size() >= maxPlayers) {
+        throw new TooManyPlayersException();
+      }
+      // this will throw IllegalStateException if the user is already in a game, including this one.
+      user.joinGame(this);
+      final Player player = new Player(user);
       players.add(player);
       if (host == null) {
         host = player;
       }
-      user.joinGame(this);
+
     }
 
     final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
@@ -145,5 +162,8 @@ public class Game {
       }
     }
     return users;
+  }
+
+  public class TooManyPlayersException extends Exception {
   }
 }

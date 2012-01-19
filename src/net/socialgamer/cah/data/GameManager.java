@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
+import net.socialgamer.cah.data.Game.TooManyPlayersException;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
@@ -54,7 +55,7 @@ public class GameManager implements Provider<Integer> {
    * 
    * @return Newly created game, or {@code null} if the maximum number of games are in progress.
    */
-  public Game createGame() {
+  private Game createGame() {
     synchronized (games) {
       if (games.size() >= maxGames) {
         return null;
@@ -64,7 +65,6 @@ public class GameManager implements Provider<Integer> {
         return null;
       }
       games.put(game.getId(), game);
-      broadcastGameListRefresh();
       return game;
     }
   }
@@ -94,7 +94,11 @@ public class GameManager implements Provider<Integer> {
       } catch (final IllegalStateException ise) {
         destroyGame(game.getId());
         throw ise;
+      } catch (final TooManyPlayersException tmpe) {
+        // this should never happen -- we just made the game
+        throw new Error("Impossible exception: Too many players in new game.", tmpe);
       }
+      broadcastGameListRefresh();
       return game;
     }
   }
@@ -122,7 +126,7 @@ public class GameManager implements Provider<Integer> {
     }
   }
 
-  private void broadcastGameListRefresh() {
+  public void broadcastGameListRefresh() {
     final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
     broadcastData.put(LongPollResponse.EVENT, LongPollEvent.GAME_REFRESH.toString());
     users.broadcastToAll(MessageType.GAME_EVENT, broadcastData);
@@ -179,6 +183,19 @@ public class GameManager implements Provider<Integer> {
     synchronized (games) {
       // return a copy
       return new ArrayList<Game>(games.values());
+    }
+  }
+
+  /**
+   * Gets the game with the specified id, or {@code null} if there is no game with that id.
+   * 
+   * @param id
+   *          Id of game to retrieve.
+   * @return The Game, or {@code null} if there is no game with that id.
+   */
+  public Game getGame(final int id) {
+    synchronized (games) {
+      return games.get(id);
     }
   }
 

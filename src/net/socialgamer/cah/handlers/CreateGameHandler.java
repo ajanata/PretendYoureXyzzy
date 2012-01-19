@@ -44,7 +44,7 @@ public class CreateGameHandler extends Handler {
     try {
       game = gameManager.createGameWithPlayer(user);
     } catch (final IllegalStateException ise) {
-      return error(ErrorCode.CANNOT_JOIN_GAME);
+      return error(ErrorCode.CANNOT_JOIN_ANOTHER_GAME);
     }
     if (game == null) {
       return error(ErrorCode.TOO_MANY_GAMES);

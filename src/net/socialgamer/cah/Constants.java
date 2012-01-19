@@ -30,6 +30,7 @@ public class Constants {
     CREATE_GAME("create_game"),
     FIRST_LOAD("firstload"),
     GAME_LIST("games"),
+    JOIN_GAME("join_game"),
     LOG_OUT("logout"),
     NAMES("names"),
     REGISTER("register");
@@ -47,6 +48,7 @@ public class Constants {
   }
 
   public enum AjaxRequest {
+    GAME_ID("game_id"),
     MESSAGE("message"),
     NICKNAME("nickname"),
     OP("op"),
@@ -91,12 +93,15 @@ public class Constants {
   public enum ErrorCode implements Localizable {
     BAD_OP("bad_op", "Invalid operation."),
     BAD_REQUEST("bad_req", "Bad request."),
-    CANNOT_JOIN_GAME("cannot_join_game", "You cannot join another game."),
+    CANNOT_JOIN_ANOTHER_GAME("cannot_join_another_game", "You cannot join another game."),
+    GAME_FULL("game_full", "That game is full. Join another."),
+    INVALID_GAME("invalid_game", "Invalid game specified."),
     INVALID_NICK("invalid_nick", "Nickname must contain only upper and lower case letters, " +
         "numbers, or underscores, must be 3 to 30 characters long, and must not start with a " +
         "number."),
     MESSAGE_TOO_LONG("msg_too_long", "Messages cannot be longer than 200 characters."),
     NICK_IN_USE("nick_in_use", "Nickname is already in use."),
+    NO_GAME_SPECIFIED("no_game_spec", "No game specified."),
     NO_MSG_SPECIFIED("no_msg_spec", "No message specified."),
     NO_NICK_SPECIFIED("no_nick_spec", "No nickname specified."),
     NO_SESSION("no_session", "Session not detected. Make sure you have cookies enabled."),

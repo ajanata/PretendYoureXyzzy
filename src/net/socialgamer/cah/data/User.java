@@ -133,7 +133,7 @@ public class User {
    *           Thrown if this user is already in another game.
    */
   void joinGame(final Game game) throws IllegalStateException {
-    if (currentGame != null && currentGame != game) {
+    if (currentGame != null) {
       throw new IllegalStateException("User is already in a game.");
     }
     currentGame = game;

@@ -14,6 +14,7 @@ public class Handlers {
     LIST.put(CreateGameHandler.OP, CreateGameHandler.class);
     LIST.put(FirstLoadHandler.OP, FirstLoadHandler.class);
     LIST.put(GameListHandler.OP, GameListHandler.class);
+    LIST.put(JoinGameHandler.OP, JoinGameHandler.class);
     LIST.put(LogoutHandler.OP, LogoutHandler.class);
     LIST.put(NamesHandler.OP, NamesHandler.class);
     LIST.put(RegisterHandler.OP, RegisterHandler.class);

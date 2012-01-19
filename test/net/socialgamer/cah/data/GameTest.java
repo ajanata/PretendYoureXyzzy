@@ -1,5 +1,6 @@
 package net.socialgamer.cah.data;
 
+import static org.easymock.EasyMock.anyInt;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
@@ -13,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.HashMap;
 
+import net.socialgamer.cah.data.Game.TooManyPlayersException;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
 import org.junit.Before;
@@ -22,21 +24,26 @@ import org.junit.Test;
 public class GameTest {
 
   private Game game;
-  private ConnectedUsers cmMock;
+  private ConnectedUsers cuMock;
+  private GameManager gmMock;
 
   @Before
   public void setUp() throws Exception {
-    cmMock = createMock(ConnectedUsers.class);
-    game = new Game(0, cmMock);
+    cuMock = createMock(ConnectedUsers.class);
+    gmMock = createMock(GameManager.class);
+    game = new Game(0, cuMock, gmMock);
   }
 
   @SuppressWarnings("unchecked")
   @Test
-  public void testRemovePlayer() {
-    cmMock.broadcastToList(anyObject(Collection.class), eq(MessageType.GAME_PLAYER_EVENT),
+  public void testRemovePlayer() throws IllegalStateException, TooManyPlayersException {
+    cuMock.broadcastToList(anyObject(Collection.class), eq(MessageType.GAME_PLAYER_EVENT),
         anyObject(HashMap.class));
     expectLastCall().times(4);
-    replay(cmMock);
+    replay(cuMock);
+    gmMock.destroyGame(anyInt());
+    expectLastCall().once();
+    replay(gmMock);
 
     final User user1 = new User("test1");
     final User user2 = new User("test2");
@@ -49,6 +56,7 @@ public class GameTest {
     assertTrue(game.removePlayer(user2));
     assertEquals(null, game.getHost());
 
-    verify(cmMock);
+    verify(cuMock);
+    verify(gmMock);
   }
 }

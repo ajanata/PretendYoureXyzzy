@@ -85,8 +85,22 @@ cah.GameList.prototype.refreshGames = function() {
  * @constructor
  */
 cah.GameListLobby = function(parentElem, data) {
+  /**
+   * The game id represented by this lobby.
+   * 
+   * @type {number}
+   * @private
+   */
   this.id_ = data[cah.$.GameInfo.ID];
+
+  /**
+   * This game lobby's dom element.
+   * 
+   * @type {HTMLDivElement}
+   * @private
+   */
   this.element_ = $("#gamelist_lobby_template").clone()[0];
+
   this.element_.id = "gamelist_lobby_" + this.id_;
   parentElem.appendChild(this.element_);
   $("#gamelist_lobby_" + this.id_ + " .gamelist_lobby_id").text(this.id_);
@@ -114,5 +128,5 @@ cah.GameListLobby = function(parentElem, data) {
 };
 
 cah.GameListLobby.prototype.joinClick = function(e) {
-  debugger;
+  cah.Ajax.build(cah.$.AjaxOperation.JOIN_GAME).withGameId(this.id_).run();
 };
