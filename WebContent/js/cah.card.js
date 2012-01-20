@@ -217,15 +217,15 @@ cah.card.WhiteCard.prototype.getFaceUp_ = function() {
   return temp;
 };
 
-$(document).ready(function() {
-  var card = new cah.card.BlackCard();
-  $("#canvas").append(card.getElement());
-
-  var card2 = new cah.card.BlackCard(true);
-  card2.setText("black card");
-  $("#canvas").append(card2.getElement());
-
-  var card3 = new cah.card.WhiteCard(true);
-  card3.setText("white card");
-  $("#canvas").append(card3.getElement());
-});
+// $(document).ready(function() {
+// var card = new cah.card.BlackCard();
+// $("#canvas").append(card.getElement());
+//
+// var card2 = new cah.card.BlackCard(true);
+// card2.setText("black card");
+// $("#canvas").append(card2.getElement());
+//
+// var card3 = new cah.card.WhiteCard(true);
+// card3.setText("white card");
+// $("#canvas").append(card3.getElement());
+// });

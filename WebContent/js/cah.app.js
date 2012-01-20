@@ -45,6 +45,9 @@ function chatsubmit_click(e) {
   var text = $.trim($("#chat").val());
   // TODO when I get multiple channels working, this needs to know active and pass it
   cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text).run();
+  // Note: This is just for local display purposes. The server sanitizes it in a much more proper
+  // way before sending to other clients.
+  text = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   cah.log.status("&lt;" + cah.nickname + "&gt; " + text);
   $("#chat").val("");
   $("#chat").focus();

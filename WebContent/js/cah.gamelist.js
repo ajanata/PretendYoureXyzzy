@@ -32,20 +32,29 @@ $(document).ready(function() {
   cah.GameList.instance = new cah.GameList();
 });
 
+cah.GameList.prototype.show = function() {
+  $(this.element_).removeClass("hide");
+};
+
+cah.GameList.prototype.hide = function() {
+  $(this.element_).addClass("hide");
+};
+
+cah.GameList.prototype.update = function() {
+  // TODO display a loading indicator of some sort
+  cah.Ajax.build(cah.$.AjaxOperation.GAME_LIST).run();
+};
+
 /**
  * Update the list of games.
  * 
  * @param {Object}
  *          gameData The game data returned by the server.
  */
-cah.GameList.prototype.update = function(gameData) {
+cah.GameList.prototype.processUpdate = function(gameData) {
   for ( var key in this.games_) {
     this.games_[key].dispose();
   }
-
-  // while (this.element_.hasChildNodes()) {
-  // this.element_.removeChild(this.element_.firstChild);
-  // }
   this.games_ = new Array();
 
   for ( var key in gameData[cah.$.AjaxResponse.GAMES]) {
@@ -78,6 +87,8 @@ cah.GameList.prototype.refreshGamesClick_ = function(e) {
 cah.GameList.prototype.refreshGames = function() {
   cah.Ajax.build(cah.$.AjaxOperation.GAME_LIST).run();
 };
+
+// ///////////////////////////////////////////////
 
 /**
  * A single entry in the game list.
@@ -116,10 +127,9 @@ cah.GameListLobby = function(parentElem, data) {
   this.element_.id = "gamelist_lobby_" + this.id_;
   $(parentElem).append(this.element_);
   $(this.element_).removeClass("template");
-  $("#gamelist_lobby_" + this.id_ + " .gamelist_lobby_id").text(this.id_);
-  $("#gamelist_lobby_" + this.id_ + " .gamelist_lobby_host").text(data[cah.$.GameInfo.HOST]);
-  $("#gamelist_lobby_" + this.id_ + " .gamelist_lobby_players").text(
-      data[cah.$.GameInfo.PLAYERS].join(", "));
+  jQuery(".gamelist_lobby_id", this.element_).text(this.id_);
+  jQuery(".gamelist_lobby_host", this.element_).text(data[cah.$.GameInfo.HOST]);
+  jQuery(".gamelist_lobby_players", this.element_).text(data[cah.$.GameInfo.PLAYERS].join(", "));
   var statusClass = "unjoinable";
   var statusMessage = cah.$.GameState_msg[data[cah.$.GameInfo.STATE]];
   switch (data[cah.$.GameInfo.STATE]) {
@@ -130,13 +140,12 @@ cah.GameListLobby = function(parentElem, data) {
       statusClass = "unjoinable";
       break;
   }
-  $("#gamelist_lobby_" + this.id_ + " .gamelist_lobby_status").text(statusMessage).addClass(
+  jQuery(".gamelist_lobby_status", this.element_).text(statusMessage).addClass(
       "gamelist_lobby_status_" + statusClass);
   if (statusClass == "unjoinable") {
-    $("#gamelist_lobby_" + this.id_ + " .gamelist_lobby_join").attr("disabled", "disabled");
+    jQuery(".gamelist_lobby_join", this.element_).attr("disabled", "disabled");
   } else {
-    $("#gamelist_lobby_" + this.id_ + " .gamelist_lobby_join")
-        .click(cah.bind(this, this.joinClick));
+    jQuery(".gamelist_lobby_join", this.element_).click(cah.bind(this, this.joinClick));
   }
 };
 

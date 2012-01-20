@@ -47,7 +47,7 @@
     </div>
   </div>
   <div id="main">
-    <div id="game_list">
+    <div id="game_list" class="hide">
     </div>
   </div>
   <div id="chat_area">

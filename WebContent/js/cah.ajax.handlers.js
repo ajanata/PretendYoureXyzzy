@@ -44,7 +44,8 @@ cah.ajax.after_registered = function() {
   cah.log.debug("done registering");
   // TODO once there are channels, this needs to specify the global channel
   cah.Ajax.build(cah.$.AjaxOperation.NAMES).run();
-  cah.Ajax.build(cah.$.AjaxOperation.GAME_LIST).run();
+  cah.GameList.instance.show();
+  cah.GameList.instance.update();
   cah.longpoll.longPoll();
 };
 
@@ -63,5 +64,13 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.NAMES] = function(data) {
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GAME_LIST] = function(data) {
-  cah.GameList.instance.update(data);
+  cah.GameList.instance.processUpdate(data);
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CREATE_GAME] = function(data) {
+  // switch over to the game view and request information about it
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME] = function(data) {
+
 };

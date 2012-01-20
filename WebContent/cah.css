@@ -166,3 +166,7 @@ span.debug {
 	left: 0px;
 	margin: 15px;
 }
+
+.hide {
+	display: none;
+}
