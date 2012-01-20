@@ -139,3 +139,30 @@ span.error {
 span.debug {
 	color: blue;
 }
+
+.card {
+	width: 200px;
+	height: 200px;
+	border: 1px solid gray;
+	padding: 15px;
+	position: relative;
+	font-family: Arial, Verdana, san-serif;
+	font-size: 16pt;
+}
+
+.blackcard {
+	background: #231f20;
+	color: white;
+}
+
+.whitecard {
+  background: white;
+  color: black;
+}
+
+.cah {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	margin: 15px;
+}

@@ -19,7 +19,7 @@ cah.GameList = function() {
   /**
    * Array of all game lobby objects.
    * 
-   * @type {Array}
+   * @type {Array[cah.GameListLobby]}
    * @private
    */
   this.games_ = new Array();
@@ -39,9 +39,13 @@ $(document).ready(function() {
  *          gameData The game data returned by the server.
  */
 cah.GameList.prototype.update = function(gameData) {
-  while (this.element_.hasChildNodes()) {
-    this.element_.removeChild(this.element_.firstChild);
+  for ( var key in this.games_) {
+    this.games_[key].dispose();
   }
+
+  // while (this.element_.hasChildNodes()) {
+  // this.element_.removeChild(this.element_.firstChild);
+  // }
   this.games_ = new Array();
 
   for ( var key in gameData[cah.$.AjaxResponse.GAMES]) {
@@ -94,6 +98,14 @@ cah.GameListLobby = function(parentElem, data) {
   this.id_ = data[cah.$.GameInfo.ID];
 
   /**
+   * The element we live under.
+   * 
+   * @type {HTMLElement}
+   * @private
+   */
+  this.parentElem_ = parentElem;
+
+  /**
    * This game lobby's dom element.
    * 
    * @type {HTMLDivElement}
@@ -129,4 +141,9 @@ cah.GameListLobby = function(parentElem, data) {
 
 cah.GameListLobby.prototype.joinClick = function(e) {
   cah.Ajax.build(cah.$.AjaxOperation.JOIN_GAME).withGameId(this.id_).run();
+};
+
+cah.GameListLobby.prototype.dispose = function() {
+  this.parentElem_.removeChild(this.element_);
+  $("#gamelist_lobby_" + this.id_).unbind();
 };

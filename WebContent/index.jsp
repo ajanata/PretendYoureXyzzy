@@ -71,5 +71,25 @@
   </div>
 </div>
 
+<!-- Template for face-up black cards -->
+<div id="black_up_template" class="card blackcard">
+  <span id="black_up_template_text">The quick brown fox jumped over the lazy dog.</span>
+  <img src="img/cah-black.png" class="cah" alt="Cards Against Humanity" />
+</div>
+
+<!-- Template for face-down black cards -->
+<div id="black_down_template" class="card blackcard">
+</div>
+
+<!-- Template for face-up white cards -->
+<div id="white_up_template" class="card whitecard">
+  <span id="white_up_template_text">The quick brown fox jumped over the lazy dog.</span>
+  <img src="img/cah-white.png" class="cah" alt="Cards Against Humanity" />
+</div>
+
+<!-- Template for face-down white cards -->
+<div id="white_down_template" class="card whitecard">
+</div>
+
 </body>
 </html>
