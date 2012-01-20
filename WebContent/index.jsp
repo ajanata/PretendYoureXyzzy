@@ -14,6 +14,7 @@
 <script type="text/javascript" src="js/cah.constants.js"></script>
 <script type="text/javascript" src="js/cah.log.js"></script>
 <script type="text/javascript" src="js/cah.gamelist.js"></script>
+<script type="text/javascript" src="js/cah.card.js"></script>
 <script type="text/javascript" src="js/cah.longpoll.js"></script>
 <script type="text/javascript" src="js/cah.longpoll.handlers.js"></script>
 <script type="text/javascript" src="js/cah.ajax.js"></script>
@@ -57,7 +58,7 @@
 </div>
 
 <!-- Template for game lobbies in the game list. -->
-<div id="gamelist_lobby_template" class="gamelist_lobby">
+<div id="gamelist_lobby_template" class="gamelist_lobby template">
   <div class="gamelist_lobby_left">
     Game <span class="gamelist_lobby_id">###</span>
     <span class="gamelist_lobby_status">status</span>
@@ -72,23 +73,23 @@
 </div>
 
 <!-- Template for face-up black cards -->
-<div id="black_up_template" class="card blackcard">
-  <span id="black_up_template_text">The quick brown fox jumped over the lazy dog.</span>
+<div id="black_up_template" class="card blackcard template">
+  <span class="card_text">The quick brown fox jumped over the lazy dog.</span>
   <img src="img/cah-black.png" class="cah" alt="Cards Against Humanity" />
 </div>
 
 <!-- Template for face-down black cards -->
-<div id="black_down_template" class="card blackcard">
+<div id="black_down_template" class="card blackcard template">
 </div>
 
 <!-- Template for face-up white cards -->
-<div id="white_up_template" class="card whitecard">
-  <span id="white_up_template_text">The quick brown fox jumped over the lazy dog.</span>
+<div id="white_up_template" class="card whitecard template">
+  <span class="card_text">The quick brown fox jumped over the lazy dog.</span>
   <img src="img/cah-white.png" class="cah" alt="Cards Against Humanity" />
 </div>
 
 <!-- Template for face-down white cards -->
-<div id="white_down_template" class="card whitecard">
+<div id="white_down_template" class="card whitecard template">
 </div>
 
 </body>

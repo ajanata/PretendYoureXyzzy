@@ -114,7 +114,8 @@ cah.GameListLobby = function(parentElem, data) {
   this.element_ = $("#gamelist_lobby_template").clone()[0];
 
   this.element_.id = "gamelist_lobby_" + this.id_;
-  parentElem.appendChild(this.element_);
+  $(parentElem).append(this.element_);
+  $(this.element_).removeClass("template");
   $("#gamelist_lobby_" + this.id_ + " .gamelist_lobby_id").text(this.id_);
   $("#gamelist_lobby_" + this.id_ + " .gamelist_lobby_host").text(data[cah.$.GameInfo.HOST]);
   $("#gamelist_lobby_" + this.id_ + " .gamelist_lobby_players").text(

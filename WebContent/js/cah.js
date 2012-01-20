@@ -18,3 +18,24 @@ cah.bind = function(selfObj, func) {
     func.apply(selfObj, arguments);
   };
 };
+
+/**
+ * Inherity the proto methods from one constructor to another.
+ * 
+ * @param {Function}
+ *          childCtor Child class.
+ * @param {Function}
+ *          parentCtor Parent class.
+ */
+cah.inherits = function(childCtor, parentCtor) {
+  /** @constructor */
+  function tempCtor() {
+    // pass
+  }
+  ;
+
+  tempCtor.prototype = parentCtor.prototype;
+  childCtor.superClass_ = parentCtor.prototype;
+  childCtor.prototype = new tempCtor();
+  childCtor.prototype.constructor = childCtor;
+};

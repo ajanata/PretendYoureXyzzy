@@ -50,7 +50,7 @@
 	overflow: auto;
 }
 
-#gamelist_lobby_template {
+.template {
 	display: none;
 }
 
