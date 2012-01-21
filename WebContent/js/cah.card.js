@@ -10,9 +10,9 @@ cah.card.serial = 0;
 /**
  * Base class for cards.
  * 
- * @param {?boolean}
+ * @param {boolean}
  *          opt_faceUp True if this card is initially face-up.
- * @param {?number}
+ * @param {number}
  *          opt_id The id of this card, for server communication purposes.
  * 
  * @constructor
@@ -160,9 +160,9 @@ cah.card.BaseCard.prototype.getElement = function() {
 /**
  * Black card definition.
  * 
- * @param {?boolean}
+ * @param {boolean}
  *          opt_faceUp True if this card is initially face-up.
- * @param {?number}
+ * @param {number}
  *          opt_id The id of this card, for server communication purposes.
  * @extends cah.card.BaseCard
  * @constructor
@@ -191,9 +191,9 @@ cah.card.BlackCard.prototype.getFaceUp_ = function() {
 /**
  * White card definition.
  * 
- * @param {?boolean}
+ * @param {boolean}
  *          opt_faceUp True if this card is initially face-up.
- * @param {?number}
+ * @param {number}
  *          opt_id The id of this card, for server communication purposes.
  * @extends cah.card.BaseCard
  * @constructor
@@ -222,7 +222,7 @@ cah.card.WhiteCard.prototype.getFaceUp_ = function() {
 // $("#canvas").append(card.getElement());
 //
 // var card2 = new cah.card.BlackCard(true);
-// card2.setText("black card");
+// // card2.setText("black card");
 // $("#canvas").append(card2.getElement());
 //
 // var card3 = new cah.card.WhiteCard(true);

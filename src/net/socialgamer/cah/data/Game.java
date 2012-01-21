@@ -165,5 +165,6 @@ public class Game {
   }
 
   public class TooManyPlayersException extends Exception {
+    private static final long serialVersionUID = -6603422097641992017L;
   }
 }

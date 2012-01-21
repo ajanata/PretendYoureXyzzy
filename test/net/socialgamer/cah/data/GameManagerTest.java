@@ -70,6 +70,7 @@ public class GameManagerTest {
     verify(userMock);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testGetAndDestroyGame() {
     cuMock.broadcastToAll(eq(MessageType.GAME_EVENT), anyObject(HashMap.class));

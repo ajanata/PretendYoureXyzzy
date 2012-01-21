@@ -23,8 +23,8 @@ cah.log.error = function(text) {
  * 
  * @param {string}
  *          text Text to display
- * @param {?object}
- *          [opt_obj] Optional. Object to dump along with message.
+ * @param {object}
+ *          opt_obj Optional. Object to dump along with message.
  */
 cah.log.debug = function(text, opt_obj) {
   if (cah.DEBUG) {

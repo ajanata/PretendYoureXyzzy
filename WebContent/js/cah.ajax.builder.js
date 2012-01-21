@@ -49,11 +49,11 @@ cah.ajax.Builder.serial = 0;
 /**
  * Set an error callback for the request.
  * 
- * @param {?function(jqXHR,textStatus,errorThrown)}
- *          [opt_errback] Optional error callback.
+ * @param {Function}
+ *          opt_errback Optional error callback. (jqXHR,textStatus,errorThrown)
  * @returns {cah.ajax.Builder}
  */
-cah.ajax.Builder.prototype.withErrback = function(errback) {
+cah.ajax.Builder.prototype.withErrback = function(opt_errback) {
   this.assertNotExecuted();
   this.errback = errback;
   return this;
