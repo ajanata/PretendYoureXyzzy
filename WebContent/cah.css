@@ -33,14 +33,16 @@
 	overflow: none;
 	position: relative;
   width: 1000px;
+  /* */
   border: 1px solid red;
+  /* */
 }
 
 #main {
 	position: absolute;
 	width: 100%;
 	top: 26px;
-	height: 506px;
+	bottom: 216px;
 	border: 1px solid black;
 }
 
@@ -98,7 +100,7 @@
 	border: 0px;
 	position: absolute;
 	bottom: 0px;
-	right: 0px;
+	right: -2px;
 }
 
 #log {
