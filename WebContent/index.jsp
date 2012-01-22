@@ -15,6 +15,7 @@
 <script type="text/javascript" src="js/cah.log.js"></script>
 <script type="text/javascript" src="js/cah.gamelist.js"></script>
 <script type="text/javascript" src="js/cah.card.js"></script>
+<script type="text/javascript" src="js/cah.game.js"></script>
 <script type="text/javascript" src="js/cah.longpoll.js"></script>
 <script type="text/javascript" src="js/cah.longpoll.handlers.js"></script>
 <script type="text/javascript" src="js/cah.ajax.js"></script>
@@ -72,24 +73,35 @@
   </div>
 </div>
 
-<!-- Template for face-up black cards -->
+<!-- Template for face-up black cards. -->
 <div id="black_up_template" class="card blackcard template">
   <span class="card_text">The quick brown fox jumped over the lazy dog.</span>
   <img src="img/cah-black.png" class="cah" alt="Cards Against Humanity" />
 </div>
 
-<!-- Template for face-down black cards -->
+<!-- Template for face-down black cards. -->
 <div id="black_down_template" class="card blackcard template">
 </div>
 
-<!-- Template for face-up white cards -->
+<!-- Template for face-up white cards. -->
 <div id="white_up_template" class="card whitecard template">
   <span class="card_text">The quick brown fox jumped over the lazy dog.</span>
   <img src="img/cah-white.png" class="cah" alt="Cards Against Humanity" />
 </div>
 
-<!-- Template for face-down white cards -->
+<!-- Template for face-down white cards. -->
 <div id="white_down_template" class="card whitecard template">
+</div>
+
+<!-- Template for game lobbies. We have a holder here for designing only. -->
+<div style="width: 1000px; height: 506px; border: 1px solid black; position: relative;">
+  <div id="game_template" class="game">
+    <div class="game_hand">
+      <!-- <span class="header">Your Hand:</span> -->
+      <div class="game_hand_cards">
+      </div>
+    </div>
+  </div>
 </div>
 
 </body>

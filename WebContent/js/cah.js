@@ -20,7 +20,7 @@ cah.bind = function(selfObj, func) {
 };
 
 /**
- * Inherity the proto methods from one constructor to another.
+ * Inherit the proto methods from one constructor to another.
  * 
  * @param {Function}
  *          childCtor Child class.

@@ -146,9 +146,14 @@ span.debug {
 	height: 200px;
 	border: 1px solid gray;
 	padding: 15px;
-	position: relative;
+	/*
+	position: absolute;
+	bottom: 0px;
+	*/
 	font-family: Arial, Verdana, san-serif;
 	font-size: 16pt;
+	float: left;
+	zoom: .35;
 }
 
 .blackcard {
@@ -170,4 +175,37 @@ span.debug {
 
 .hide {
 	display: none;
+}
+
+.game {
+	height: 100%;
+	width: 100%;
+  background: #c0c0c0;
+  position: relative;
+}
+
+.header {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.game_hand {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	height: 33%;
+	border-top: 1px solid black;
+}
+
+.game_hand_cards {
+	position: absolute;
+	bottom: 0px;
+	height: 100%;
+}
+
+.card_holder {
+	float: left;
+	position: relative;
 }

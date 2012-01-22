@@ -155,5 +155,5 @@ cah.GameListLobby.prototype.joinClick = function(e) {
 
 cah.GameListLobby.prototype.dispose = function() {
   this.parentElem_.removeChild(this.element_);
-  $("#gamelist_lobby_" + this.id_).unbind();
+  jQuery(".gamelist_lobby_join", this.element_).unbind();
 };
