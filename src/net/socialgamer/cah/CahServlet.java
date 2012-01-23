@@ -139,7 +139,9 @@ public abstract class CahServlet extends HttpServlet {
   }
 
   private void returnObject(final PrintWriter writer, final Object object) {
-    writer.println(JSONValue.toJSONString(object));
+    final String ret = JSONValue.toJSONString(object);
+    writer.println(ret);
+    //    System.out.println(ret);
   }
 
   protected Injector getInjector() {
