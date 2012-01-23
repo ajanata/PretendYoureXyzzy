@@ -6,16 +6,23 @@
 
 cah.log = {};
 
-cah.log.status = function(text) {
+cah.log.status = function(text, opt_class) {
   var scroll = $("#log").prop("scrollHeight") - $("#log").height() - $("#log").prop("scrollTop") <= 5;
-  $("#log").append("[" + new Date().toLocaleTimeString() + "] " + text + "<br/>");
+
+  var node = $("<span></span><br/>");
+  $(node).text("[" + new Date().toLocaleTimeString() + "] " + text + "\n");
+  if (opt_class) {
+    $(node).addClass(opt_class);
+  }
+  $("#log").append(node);
+
   if (scroll) {
     $("#log").prop("scrollTop", $("#log").prop("scrollHeight"));
   }
 };
 
 cah.log.error = function(text) {
-  cah.log.status("<span class='error'>Error: " + text + "</span>");
+  cah.log.status("Error: " + text, "error");
 };
 
 /**
@@ -35,7 +42,7 @@ cah.log.debug = function(text, opt_obj) {
         cah.log.debug(text + ": TODO: debug log without JSON.stringify()");
       }
     } else {
-      cah.log.status("<span class='debug'>DEBUG: " + text + "</span>");
+      cah.log.status("DEBUG: " + text, "debug");
     }
   }
 };

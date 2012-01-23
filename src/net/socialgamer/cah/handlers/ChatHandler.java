@@ -17,8 +17,6 @@ import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.data.User;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
 import com.google.inject.Inject;
 
 
@@ -51,7 +49,7 @@ public class ChatHandler extends Handler {
         final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
         broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
         broadcastData.put(LongPollResponse.FROM, user.getNickname());
-        broadcastData.put(LongPollResponse.MESSAGE, StringEscapeUtils.escapeXml(message));
+        broadcastData.put(LongPollResponse.MESSAGE, message);
         // TODO once there are multiple chat channels, put the destination here
         // TODO once there are games and they have their own chat, make it only send to participants
         users.broadcastToAll(MessageType.CHAT, broadcastData);

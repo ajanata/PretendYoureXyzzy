@@ -42,7 +42,7 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.CHAT] = function(data) {
   // TODO deal with multiple channels eventually
   // don't display our own chat
   if (data.from != cah.nickname) {
-    cah.log.status("&lt;" + data.from + "&gt; " + data.message);
+    cah.log.status("<" + data.from + "> " + data.message);
   }
 };
 
