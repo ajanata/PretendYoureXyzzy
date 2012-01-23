@@ -10,6 +10,7 @@ import net.socialgamer.cah.Constants.GameInfo;
 import net.socialgamer.cah.Constants.GamePlayerInfo;
 import net.socialgamer.cah.Constants.GamePlayerStatus;
 import net.socialgamer.cah.Constants.GameState;
+import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.GameManager.GameId;
@@ -73,15 +74,17 @@ public class Game {
     }
 
     final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-    data.put(LongPollResponse.EVENT, "game_player_join");
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_JOIN.toString());
     data.put(LongPollResponse.GAME_ID, id);
     data.put(LongPollResponse.NICKNAME, user.getNickname());
     broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
   }
 
   /**
+   * Remove a player from the game.
    * 
    * @param user
+   *          Player to remove from the game.
    * @return True if {@code user} was the last player in the game.
    */
   public boolean removePlayer(final User user) {
@@ -93,7 +96,7 @@ public class Game {
           iterator.remove();
           user.leaveGame(this);
           final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-          data.put(LongPollResponse.EVENT, "game_player_leave");
+          data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_LEAVE.toString());
           data.put(LongPollResponse.GAME_ID, id);
           data.put(LongPollResponse.NICKNAME, user.getNickname());
           broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
@@ -160,7 +163,11 @@ public class Game {
         playerInfo.put(GamePlayerInfo.NAME, player.getUser().getNickname());
         playerInfo.put(GamePlayerInfo.SCORE, player.getScore());
         // TODO fix this once we actually have gameplay logic
-        playerInfo.put(GamePlayerInfo.STATUS, GamePlayerStatus.PLAYING.toString());
+        if (state == GameState.LOBBY && host == player) {
+          playerInfo.put(GamePlayerInfo.STATUS, GamePlayerStatus.HOST.toString());
+        } else {
+          playerInfo.put(GamePlayerInfo.STATUS, GamePlayerStatus.IDLE.toString());
+        }
         info.add(playerInfo);
       }
     }

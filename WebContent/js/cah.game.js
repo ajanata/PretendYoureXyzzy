@@ -54,6 +54,9 @@ cah.Game = function(id) {
    * @private
    */
   this.hand_ = Array();
+
+  $("#leave_game").click(cah.bind(this, this.leaveGameClick_));
+  $("#start_game").click(cah.bind(this, this.startGameClick_));
 };
 
 /**
@@ -65,8 +68,9 @@ cah.Game = function(id) {
 cah.Game.joinGame = function(gameId) {
   cah.Ajax.build(cah.$.AjaxOperation.GET_GAME_INFO).withGameId(gameId).run();
   cah.GameList.instance.hide();
-  cah.currentGame = new cah.Game(gameId);
-  cah.currentGame.insertIntoDocument();
+  var game = new cah.Game(gameId);
+  cah.currentGames[gameId] = game;
+  game.insertIntoDocument();
 };
 
 /**
@@ -106,7 +110,7 @@ cah.Game.prototype.dealtCard = function(card) {
 cah.Game.prototype.insertIntoDocument = function() {
   $("#main_holder").empty().append(this.element_);
   $("#info_area").empty().append(this.scoreboardElement_);
-  $("#leave_game").removeClass("hide");
+  $("#leave_game").show();
   // TODO display a loading animation
 };
 
@@ -119,9 +123,9 @@ cah.Game.prototype.insertIntoDocument = function() {
 cah.Game.prototype.updateGameStatus = function(data) {
   if (data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.HOST] == cah.nickname
       && data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.STATE] == cah.$.GameState.LOBBY) {
-    $("#start_game").removeClass("hide");
+    $("#start_game").show();
   } else {
-    $("#start_game").addClass("hide");
+    $("#start_game").hide();
   }
 
   var playerInfos = data[cah.$.AjaxResponse.PLAYER_INFO];
@@ -137,6 +141,34 @@ cah.Game.prototype.updateGameStatus = function(data) {
     }
     panel.update(thisInfo[cah.$.GamePlayerInfo.SCORE], thisInfo[cah.$.GamePlayerInfo.STATUS]);
   }
+};
+
+/**
+ * Event handler for leave game button.
+ * 
+ * @private
+ */
+cah.Game.prototype.leaveGameClick_ = function() {
+  cah.Ajax.build(cah.$.AjaxOperation.LEAVE_GAME).withGameId(this.id_).run();
+};
+
+/**
+ * Event handler for start game button.
+ * 
+ * @private
+ */
+cah.Game.prototype.startGameClick_ = function() {
+  // TODO
+};
+
+/**
+ * Free resources used by this game and remove from the document.
+ */
+cah.Game.prototype.dispose = function() {
+  $(this.element_).remove();
+  $(this.scoreboardElement_).remove();
+  $("#leave_game").hide();
+  $("#start_game").hide();
 };
 
 // /**

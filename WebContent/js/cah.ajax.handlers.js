@@ -86,5 +86,17 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME] = function(data) {
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CREATE_GAME] = cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME];
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_GAME_INFO] = function(data) {
-  cah.currentGame.updateGameStatus(data);
+  var game = cah.currentGames[data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.ID]];
+  if (game) {
+    game.updateGameStatus(data);
+  }
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LEAVE_GAME] = function(data) {
+  var game = cah.currentGames[data[cah.$.AjaxResponse.GAME_ID]];
+  if (game) {
+    game.dispose();
+  }
+  cah.GameList.instance.show();
+  cah.GameList.instance.update();
 };

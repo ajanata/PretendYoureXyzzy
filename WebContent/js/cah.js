@@ -10,12 +10,11 @@ cah.DEBUG = true;
 cah.nickname = "";
 
 /**
- * The current game this client is playing in. This may be a list later if I expand to multiple
- * concurrent game support.
+ * The games this client is playing in. Key is game id.
  * 
- * @type {cah.Game}
+ * @type {Object}
  */
-cah.currentGame = undefined;
+cah.currentGames = {};
 
 /**
  * Binds a function to a "this object". Result is a new function that will do the right thing across

@@ -58,6 +58,7 @@ public class Constants {
     GAME_LIST("games"),
     GET_GAME_INFO("get_game_info"),
     JOIN_GAME("join_game"),
+    LEAVE_GAME("leave_game"),
     LOG_OUT("logout"),
     NAMES("names"),
     REGISTER("register");
@@ -167,6 +168,8 @@ public class Constants {
 
   public enum LongPollEvent {
     CHAT("chat"),
+    GAME_PLAYER_JOIN("game_player_join"),
+    GAME_PLAYER_LEAVE("game_player_leave"),
     GAME_REFRESH("game_refresh"),
     NEW_PLAYER("new_player"),
     NOOP("noop"),
@@ -270,6 +273,7 @@ public class Constants {
   }
 
   public enum GamePlayerStatus implements Localizable {
+    HOST("host", "Host"),
     IDLE("idle", ""),
     JUDGE("judge", "Judge"),
     JUDGING("judging", "Judging"),

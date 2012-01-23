@@ -15,6 +15,7 @@ cah.$.AjaxOperation.REGISTER = "register";
 cah.$.AjaxOperation.CREATE_GAME = "create_game";
 cah.$.AjaxOperation.CHAT = "chat";
 cah.$.AjaxOperation.NAMES = "names";
+cah.$.AjaxOperation.LEAVE_GAME = "leave_game";
 
 cah.$.AjaxRequest = function() {
   // pass
@@ -110,6 +111,7 @@ cah.$.GamePlayerStatus = function() {
   // pass
 };
 cah.$.GamePlayerStatus.prototype.dummy = undefined;
+cah.$.GamePlayerStatus.HOST = "host";
 cah.$.GamePlayerStatus.IDLE = "idle";
 cah.$.GamePlayerStatus.PLAYING = "playing";
 cah.$.GamePlayerStatus.JUDGE = "judge";
@@ -118,6 +120,7 @@ cah.$.GamePlayerStatus_msg = {};
 cah.$.GamePlayerStatus_msg['playing'] = "Playing";
 cah.$.GamePlayerStatus_msg['idle'] = "";
 cah.$.GamePlayerStatus_msg['judging'] = "Judging";
+cah.$.GamePlayerStatus_msg['host'] = "Host";
 cah.$.GamePlayerStatus_msg['judge'] = "Judge";
 
 cah.$.GameState = function() {
@@ -136,8 +139,10 @@ cah.$.LongPollEvent = function() {
 cah.$.LongPollEvent.prototype.dummy = undefined;
 cah.$.LongPollEvent.NOOP = "noop";
 cah.$.LongPollEvent.GAME_REFRESH = "game_refresh";
+cah.$.LongPollEvent.GAME_PLAYER_LEAVE = "game_player_leave";
 cah.$.LongPollEvent.NEW_PLAYER = "new_player";
 cah.$.LongPollEvent.PLAYER_LEAVE = "player_leave";
+cah.$.LongPollEvent.GAME_PLAYER_JOIN = "game_player_join";
 cah.$.LongPollEvent.CHAT = "chat";
 
 cah.$.LongPollResponse = function() {
