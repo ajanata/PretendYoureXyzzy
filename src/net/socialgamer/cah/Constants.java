@@ -35,11 +35,28 @@ public class Constants {
     }
   }
 
+  public enum ReconnectNextAction {
+    GAME("game"),
+    NONE("none");
+
+    private final String action;
+
+    ReconnectNextAction(final String action) {
+      this.action = action;
+    }
+
+    @Override
+    public String toString() {
+      return action;
+    }
+  }
+
   public enum AjaxOperation {
     CHAT("chat"),
     CREATE_GAME("create_game"),
     FIRST_LOAD("firstload"),
     GAME_LIST("games"),
+    GET_GAME_INFO("get_game_info"),
     JOIN_GAME("join_game"),
     LOG_OUT("logout"),
     NAMES("names"),
@@ -80,12 +97,14 @@ public class Constants {
     ERROR("error"),
     ERROR_CODE("error_code"),
     GAME_ID("game_id"),
+    GAME_INFO("game_info"),
     GAMES("games"),
     IN_PROGRESS("in_progress"),
     MAX_GAMES("max_games"),
     NAMES("names"),
     NEXT("next"),
     NICKNAME("nickname"),
+    PLAYER_INFO("player_info"),
     SERIAL(AjaxRequest.SERIAL.toString());
 
     private final String field;
@@ -230,6 +249,48 @@ public class Constants {
     @Override
     public String toString() {
       return key;
+    }
+  }
+
+  public enum GamePlayerInfo {
+    NAME("name"),
+    SCORE("score"),
+    STATUS("status");
+
+    private final String key;
+
+    GamePlayerInfo(final String key) {
+      this.key = key;
+    }
+
+    @Override
+    public String toString() {
+      return key;
+    }
+  }
+
+  public enum GamePlayerStatus implements Localizable {
+    IDLE("idle", ""),
+    JUDGE("judge", "Judge"),
+    JUDGING("judging", "Judging"),
+    PLAYING("playing", "Playing");
+
+    private final String status;
+    private final String message;
+
+    GamePlayerStatus(final String status, final String message) {
+      this.status = status;
+      this.message = message;
+    }
+
+    @Override
+    public String toString() {
+      return status;
+    }
+
+    @Override
+    public String getString() {
+      return message;
     }
   }
 }

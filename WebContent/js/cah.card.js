@@ -175,14 +175,14 @@ cah.inherits(cah.card.BlackCard, cah.card.BaseCard);
 cah.card.BlackCard.prototype.getFaceDown_ = function() {
   var temp = $("#black_down_template").clone()[0];
   temp.id = "black_down_" + this.id_;
-  $(temp).removeClass("template");
+  $(temp).removeClass("hide");
   return temp;
 };
 
 cah.card.BlackCard.prototype.getFaceUp_ = function() {
   var temp = $("#black_up_template").clone()[0];
   temp.id = "black_up_" + this.id_;
-  $(temp).removeClass("template");
+  $(temp).removeClass("hide");
   return temp;
 };
 
@@ -206,14 +206,14 @@ cah.inherits(cah.card.WhiteCard, cah.card.BaseCard);
 cah.card.WhiteCard.prototype.getFaceDown_ = function() {
   var temp = $("#white_down_template").clone()[0];
   temp.id = "white_down_" + this.id_;
-  $(temp).removeClass("template");
+  $(temp).removeClass("hide");
   return temp;
 };
 
 cah.card.WhiteCard.prototype.getFaceUp_ = function() {
   var temp = $("#white_up_template").clone()[0];
   temp.id = "white_up_" + this.id_;
-  $(temp).removeClass("template");
+  $(temp).removeClass("hide");
   return temp;
 };
 

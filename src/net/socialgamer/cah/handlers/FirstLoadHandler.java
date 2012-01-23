@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxResponse;
+import net.socialgamer.cah.Constants.ReconnectNextAction;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.RequestWrapper;
@@ -38,8 +39,15 @@ public class FirstLoadHandler extends Handler {
       // and tell the client where to continue from.
       // Right now we just tell them what their name is.
       ret.put(AjaxResponse.IN_PROGRESS, Boolean.TRUE);
-      ret.put(AjaxResponse.NEXT, ""); // TODO
       ret.put(AjaxResponse.NICKNAME, user.getNickname());
+
+      // TODO more
+      if (user.getGame() != null) {
+        ret.put(AjaxResponse.NEXT, ReconnectNextAction.GAME.toString());
+        ret.put(AjaxResponse.GAME_ID, user.getGame().getId());
+      } else {
+        ret.put(AjaxResponse.NEXT, ReconnectNextAction.NONE.toString());
+      }
     }
 
     return ret;

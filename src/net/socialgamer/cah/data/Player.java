@@ -1,9 +1,16 @@
 package net.socialgamer.cah.data;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import net.socialgamer.cah.db.WhiteCard;
+
+
 public class Player {
   private final User user;
 
-  // TODO add their hand, etc.
+  private final List<WhiteCard> hand = new LinkedList<WhiteCard>();
+  private int score = 0;
 
   public Player(final User user) {
     this.user = user;
@@ -11,6 +18,18 @@ public class Player {
 
   public User getUser() {
     return user;
+  }
+
+  public int getScore() {
+    return score;
+  }
+
+  public void increaseScore() {
+    score++;
+  }
+
+  public List<WhiteCard> getHand() {
+    return hand;
   }
 
   @Override

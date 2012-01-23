@@ -33,11 +33,23 @@ $(document).ready(function() {
 });
 
 cah.GameList.prototype.show = function() {
-  $(this.element_).removeClass("hide");
+  $(this.element_).show();
+  $("#create_game").show();
+  $("#refresh_games").show();
+
+  // $(this.element_).removeClass("hide");
+  // $("#create_game").removeClass("hide");
+  // $("#refresh_games").removeClass("hide");
 };
 
 cah.GameList.prototype.hide = function() {
-  $(this.element_).addClass("hide");
+  $(this.element_).hide();
+  $("#create_game").hide();
+  $("#refresh_games").hide();
+
+  // $(this.element_).addClass("hide");
+  // $("#create_game").addClass("hide");
+  // $("#refresh_games").addClass("hide");
 };
 
 cah.GameList.prototype.update = function() {
@@ -126,7 +138,7 @@ cah.GameListLobby = function(parentElem, data) {
 
   this.element_.id = "gamelist_lobby_" + this.id_;
   $(parentElem).append(this.element_);
-  $(this.element_).removeClass("template");
+  $(this.element_).removeClass("hide");
   jQuery(".gamelist_lobby_id", this.element_).text(this.id_);
   jQuery(".gamelist_lobby_host", this.element_).text(data[cah.$.GameInfo.HOST]);
   jQuery(".gamelist_lobby_players", this.element_).text(data[cah.$.GameInfo.PLAYERS].join(", "));

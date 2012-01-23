@@ -1,7 +1,21 @@
 var cah = {};
 
 cah.DEBUG = true;
+
+/**
+ * This client's nickname.
+ * 
+ * @type {string}
+ */
 cah.nickname = "";
+
+/**
+ * The current game this client is playing in. This may be a list later if I expand to multiple
+ * concurrent game support.
+ * 
+ * @type {cah.Game}
+ */
+cah.currentGame = undefined;
 
 /**
  * Binds a function to a "this object". Result is a new function that will do the right thing across

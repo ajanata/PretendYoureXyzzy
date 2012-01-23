@@ -1,37 +1,36 @@
 #menubar {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 100%;
-	height: 25px;
-	border: 1px solid black;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 25px;
+  border: 1px solid black;
 }
 
 #menubar_left {
-	float: left;
+  float: left;
 }
 
 #menubar_right {
-	float: right;
+  float: right;
 }
 
 #nickbox {
-	border: 1px solid black;
-	display: inline;
-	padding: 5px;
-	/*
+  border: 1px solid black;
+  display: inline;
+  padding: 5px;
+  /*
 	text-align: center;
 	vertical-align: middle;
 	*/
 }
 
-#canvas {
-	/* * /
+#canvas { /* * /
 	display: none;
 	/* */
   height: 750px;
-	overflow: none;
-	position: relative;
+  overflow: none;
+  position: relative;
   width: 1000px;
   /* */
   border: 1px solid red;
@@ -39,126 +38,141 @@
 }
 
 #main {
-	position: absolute;
-	width: 100%;
-	top: 26px;
-	bottom: 216px;
-	border: 1px solid black;
+  position: absolute;
+  width: 100%;
+  top: 26px;
+  bottom: 216px;
+  border: 1px solid black;
+}
+
+#main_holder {
+  width: 100%;
+  height: 100%;
 }
 
 #game_list {
-	height: 100%;
-	width: 100%;
-	overflow: auto;
-}
-
-.template {
-	display: none;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
 }
 
 .gamelist_lobby {
-	width: 32%;
-	height: 100px;
+  width: 32%;
+  height: 100px;
   float: left;
   border: 1px solid black;
-	margin: 4px;
+  margin: 4px;
 }
 
 .gamelist_lobby_left {
-	width: 74%;
-	height: 100%;
-	float: left;
+  width: 74%;
+  height: 100%;
+  float: left;
 }
 
 .gamelist_lobby_right {
-	border-left: 1px solid black;
-	width: 25%;
-	height: 100%;
-	float: right;
+  border-left: 1px solid black;
+  width: 25%;
+  height: 100%;
+  float: right;
 }
 
 .gamelist_lobby_join {
-	width: 100%;
-	height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .gamelist_lobby_status {
-	float: right;
+  float: right;
 }
 
 .gamelist_lobby_status_joinable {
-	color: green;
+  color: green;
 }
 
 .gamelist_lobby_status_unjoinable {
-	color: #c0c0c0;
+  color: #c0c0c0;
+}
+
+#info_area {
+  width: 50%;
+  height: 215px;
+  border: 0px;
+  position: absolute;
+  bottom: 0px;
 }
 
 #chat_area {
-	width: 50%;
-	height: 215px;
-	border: 0px;
-	position: absolute;
-	bottom: 0px;
-	right: -2px;
+  width: 50%;
+  height: 215px;
+  border: 0px;
+  position: absolute;
+  bottom: 0px;
+  right: -2px;
 }
 
 #log {
-	width: 100%;
-	height: 198px;
-	border: 1px solid black;
-	position: absolute;
-	bottom: 17px;
-	right: 0px;
-	overflow: auto;
+  width: 100%;
+  height: 198px;
+  border: 1px solid black;
+  position: absolute;
+  bottom: 17px;
+  right: 0px;
+  overflow-y: scroll;
 }
 
 #chat {
-	border: 1px solid black;
-	left: -4px;
-	right: 46px;
-	height: 17px;
-	position: absolute;
-	bottom: -1px;
-	padding: 0px;
+  border: 1px solid black;
+  left: -4px;
+  right: 46px;
+  height: 17px;
+  position: absolute;
+  bottom: -1px;
+  padding: 0px;
 }
 
 #chat_submit {
-	width: 50px;
-	height: 19px;
-	position: absolute;
-	right: -1px;
-	bottom: -1px;
-	margin: 0px;
-	padding: 0px;
+  width: 50px;
+  height: 19px;
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  margin: 0px;
+  padding: 0px;
 }
 
 span.error {
-  color: red;	
+  color: red;
 }
 
 span.debug {
-	color: blue;
+  color: blue;
 }
 
 .card {
-	width: 200px;
-	height: 200px;
-	border: 1px solid gray;
-	padding: 15px;
-	/*
+  width: 200px;
+  height: 200px;
+  border: 1px solid gray;
+  padding: 15px;
+  /*
 	position: absolute;
 	bottom: 0px;
 	*/
-	font-family: Arial, Verdana, san-serif;
-	font-size: 16pt;
-	float: left;
-	zoom: .35;
+  font-family: Arial, Verdana, san-serif;
+  font-size: 16pt;
+  float: left;
+
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
 }
 
 .blackcard {
-	background: #231f20;
-	color: white;
+  background: #231f20;
+  color: white;
 }
 
 .whitecard {
@@ -167,45 +181,70 @@ span.debug {
 }
 
 .cah {
-	position: absolute;
-	bottom: 0px;
-	left: 0px;
-	margin: 15px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  margin: 15px;
 }
 
 .hide {
-	display: none;
+  display: none;
 }
 
 .game {
-	height: 100%;
-	width: 100%;
+  height: 100%;
+  width: 100%;
   background: #c0c0c0;
   position: relative;
 }
 
 .header {
-	position: absolute;
-	top: 0px;
-	left: 0px;
+  position: absolute;
+  bottom: 0px;
+  right: 5px;
 }
 
 .game_hand {
-	position: absolute;
-	bottom: 0px;
-	left: 0px;
-	right: 0px;
-	height: 33%;
-	border-top: 1px solid black;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  height: 33%;
+  border-top: 1px solid black;
 }
 
 .game_hand_cards {
-	position: absolute;
-	bottom: 0px;
-	height: 100%;
+  position: absolute;
+  bottom: 0px;
+  height: 100%;
+  zoom: .35;
+  cursor: pointer;
 }
 
 .card_holder {
-	float: left;
-	position: relative;
+  float: left;
+  position: relative;
+}
+
+.scoreboard {
+  width: 150px;
+  height: 100%;
+  border: 1px solid black;
+  overflow-y: scroll;
+}
+
+.scorecard {
+  height: 36px;
+  padding: 2px;
+  border-bottom: 1px solid black;
+  font-size: 11pt;
+}
+
+.scorecard_status {
+  float: right;
+  margin-right: 5px;
+}
+
+.clear {
+  clear: both;
 }

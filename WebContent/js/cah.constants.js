@@ -10,6 +10,7 @@ cah.$.AjaxOperation.FIRST_LOAD = "firstload";
 cah.$.AjaxOperation.LOG_OUT = "logout";
 cah.$.AjaxOperation.GAME_LIST = "games";
 cah.$.AjaxOperation.JOIN_GAME = "join_game";
+cah.$.AjaxOperation.GET_GAME_INFO = "get_game_info";
 cah.$.AjaxOperation.REGISTER = "register";
 cah.$.AjaxOperation.CREATE_GAME = "create_game";
 cah.$.AjaxOperation.CHAT = "chat";
@@ -31,7 +32,9 @@ cah.$.AjaxResponse = function() {
 cah.$.AjaxResponse.prototype.dummy = undefined;
 cah.$.AjaxResponse.NEXT = "next";
 cah.$.AjaxResponse.GAME_ID = "game_id";
+cah.$.AjaxResponse.GAME_INFO = "game_info";
 cah.$.AjaxResponse.ERROR = "error";
+cah.$.AjaxResponse.PLAYER_INFO = "player_info";
 cah.$.AjaxResponse.ERROR_CODE = "error_code";
 cah.$.AjaxResponse.SERIAL = "serial";
 cah.$.AjaxResponse.MAX_GAMES = "max_games";
@@ -95,6 +98,28 @@ cah.$.GameInfo.STATE = "state";
 cah.$.GameInfo.PLAYERS = "players";
 cah.$.GameInfo.ID = "id";
 
+cah.$.GamePlayerInfo = function() {
+  // pass
+};
+cah.$.GamePlayerInfo.prototype.dummy = undefined;
+cah.$.GamePlayerInfo.NAME = "name";
+cah.$.GamePlayerInfo.SCORE = "score";
+cah.$.GamePlayerInfo.STATUS = "status";
+
+cah.$.GamePlayerStatus = function() {
+  // pass
+};
+cah.$.GamePlayerStatus.prototype.dummy = undefined;
+cah.$.GamePlayerStatus.IDLE = "idle";
+cah.$.GamePlayerStatus.PLAYING = "playing";
+cah.$.GamePlayerStatus.JUDGE = "judge";
+cah.$.GamePlayerStatus.JUDGING = "judging";
+cah.$.GamePlayerStatus_msg = {};
+cah.$.GamePlayerStatus_msg['playing'] = "Playing";
+cah.$.GamePlayerStatus_msg['idle'] = "";
+cah.$.GamePlayerStatus_msg['judging'] = "Judging";
+cah.$.GamePlayerStatus_msg['judge'] = "Judge";
+
 cah.$.GameState = function() {
   // pass
 };
@@ -128,4 +153,11 @@ cah.$.LongPollResponse.ERROR = "error";
 cah.$.LongPollResponse.ERROR_CODE = "error_code";
 cah.$.LongPollResponse.TIMESTAMP = "timestamp";
 cah.$.LongPollResponse.NICKNAME = "nickname";
+
+cah.$.ReconnectNextAction = function() {
+  // pass
+};
+cah.$.ReconnectNextAction.prototype.dummy = undefined;
+cah.$.ReconnectNextAction.GAME = "game";
+cah.$.ReconnectNextAction.NONE = "none";
 

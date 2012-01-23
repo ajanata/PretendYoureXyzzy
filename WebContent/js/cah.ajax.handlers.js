@@ -29,6 +29,18 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
     $("#nickbox").hide();
     $("#canvass").show();
     cah.ajax.after_registered();
+
+    switch (data[cah.$.AjaxResponse.NEXT]) {
+      case cah.$.ReconnectNextAction.GAME:
+        cah.log.status("Reconnecting to game...");
+        cah.Game.joinGame(data[cah.$.AjaxResponse.GAME_ID]);
+        break;
+      case cah.$.ReconnectNextAction.NONE:
+        // pass
+        break;
+      default:
+        cah.log.error("Unknown reconnect next action " + data[cah.$.AjaxResponse.NEXT]);
+    }
   }
 };
 
@@ -67,10 +79,12 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GAME_LIST] = function(data) {
   cah.GameList.instance.processUpdate(data);
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CREATE_GAME] = function(data) {
-  // switch over to the game view and request information about it
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME] = function(data) {
+  cah.Game.joinGame(data[cah.$.AjaxResponse.GAME_ID]);
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME] = function(data) {
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CREATE_GAME] = cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME];
 
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_GAME_INFO] = function(data) {
+  cah.currentGame.updateGameStatus(data);
 };

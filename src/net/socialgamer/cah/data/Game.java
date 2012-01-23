@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.socialgamer.cah.Constants.GameInfo;
+import net.socialgamer.cah.Constants.GamePlayerInfo;
+import net.socialgamer.cah.Constants.GamePlayerStatus;
 import net.socialgamer.cah.Constants.GameState;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
@@ -144,6 +146,23 @@ public class Game {
         playerNames.add(player.toString());
       }
       info.put(GameInfo.PLAYERS, playerNames);
+    }
+    return info;
+  }
+
+  public List<Map<GamePlayerInfo, Object>> getPlayerInfo() {
+    final List<Map<GamePlayerInfo, Object>> info;
+    synchronized (players) {
+      info = new ArrayList<Map<GamePlayerInfo, Object>>(
+          players.size());
+      for (final Player player : players) {
+        final Map<GamePlayerInfo, Object> playerInfo = new HashMap<GamePlayerInfo, Object>();
+        playerInfo.put(GamePlayerInfo.NAME, player.getUser().getNickname());
+        playerInfo.put(GamePlayerInfo.SCORE, player.getScore());
+        // TODO fix this once we actually have gameplay logic
+        playerInfo.put(GamePlayerInfo.STATUS, GamePlayerStatus.PLAYING.toString());
+        info.add(playerInfo);
+      }
     }
     return info;
   }
