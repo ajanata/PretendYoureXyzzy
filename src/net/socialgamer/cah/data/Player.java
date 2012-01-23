@@ -28,6 +28,9 @@ public class Player {
     score++;
   }
 
+  /**
+   * @return The backing object for the player's hand (i.e., it can be modified).
+   */
   public List<WhiteCard> getHand() {
     return hand;
   }

@@ -61,7 +61,8 @@ public class Constants {
     LEAVE_GAME("leave_game"),
     LOG_OUT("logout"),
     NAMES("names"),
-    REGISTER("register");
+    REGISTER("register"),
+    START_GAME("start_game");
 
     private final String op;
 
@@ -135,6 +136,8 @@ public class Constants {
     NO_MSG_SPECIFIED("no_msg_spec", "No message specified."),
     NO_NICK_SPECIFIED("no_nick_spec", "No nickname specified."),
     NO_SESSION("no_session", "Session not detected. Make sure you have cookies enabled."),
+    NOT_ENOUGH_PLAYERS("not_enough_players", "There are not enough players to start the game."),
+    NOT_GAME_HOST("not_game_host", "Only the game host can do that."),
     NOT_REGISTERED("not_registered", "Not registered. Refresh the page."),
     OP_NOT_SPECIFIED("op_not_spec", "Operation not specified."),
     SESSION_EXPIRED("session_expired", "Your session has expired. Refresh the page."),
@@ -171,6 +174,7 @@ public class Constants {
     GAME_PLAYER_JOIN("game_player_join"),
     GAME_PLAYER_LEAVE("game_player_leave"),
     GAME_REFRESH("game_refresh"),
+    HAND_DEAL("hand_deal"),
     NEW_PLAYER("new_player"),
     NOOP("noop"),
     PLAYER_LEAVE("player_leave");
@@ -193,6 +197,7 @@ public class Constants {
     EVENT("event"),
     FROM("from"),
     GAME_ID("game_id"),
+    HAND("hand"),
     MESSAGE("message"),
     NICKNAME("nickname"),
     REASON("reason"),
@@ -214,9 +219,27 @@ public class Constants {
     public static final String USER = "user";
   }
 
+  public enum WhiteCardData {
+    ID("id"),
+    TEXT("text");
+
+    private final String key;
+
+    WhiteCardData(final String key) {
+      this.key = key;
+    }
+
+    @Override
+    public String toString() {
+      return key;
+    }
+  }
+
   public enum GameState implements Localizable {
     DEALING("dealing", "Dealing"),
-    LOBBY("lobby", "Joinable (Not Started)");
+    JUDGING("judging", "In Progress"),
+    LOBBY("lobby", "Joinable (Not Started)"),
+    PLAYING("playing", "In Progress");
 
     private final String state;
     private final String message;

@@ -3,6 +3,7 @@ package net.socialgamer.cah.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,12 +14,34 @@ import net.socialgamer.cah.Constants.GameState;
 import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
+import net.socialgamer.cah.Constants.WhiteCardData;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
+import net.socialgamer.cah.db.WhiteCard;
 
 import com.google.inject.Inject;
 
 
+/**
+ * Game data and logic class. Games are simple finite state machines, with 3 states that wait for
+ * user input, and 3 transient states that it quickly passes through on the way back to a waiting
+ * state:
+ * 
+ * ......Lobby.----------->.Dealing.(transient).-------->.Playing
+ * .......^........................^.........................|....................
+ * .......|.v----.Win.(transient).<+------.Judging.<---------+....................
+ * .....Reset.(transient)
+ * 
+ * Lobby is the default state. When the game host sends a start game event, the game moves to the
+ * Dealing state, where it deals out cards to every player and automatically moves into the Playing
+ * state. After all players have played a card, the game moves to Judging and waits for the judge to
+ * pick a card. The game either moves to Win, if a player reached the win goal, or Dealing
+ * otherwise. Win moves through Reset to reset the game back to default state. The game also
+ * immediately moves through Reset at any point there are fewer than 3 players in the game.
+ * 
+ * 
+ * @author ajanata
+ */
 public class Game {
   private final int id;
   private final List<Player> players = new ArrayList<Player>(10);
@@ -28,6 +51,8 @@ public class Game {
   private BlackDeck blackDeck;
   private WhiteDeck whiteDeck;
   private GameState state;
+  // TODO make this work with "draw x" cards. probably will not actually be done here.
+  private final int currentHandSize = 10;
   // TODO make this host-configurable
   private final int maxPlayers = 10;
 
@@ -174,9 +199,59 @@ public class Game {
     return info;
   }
 
-  public void start() {
+  /**
+   * Start the game, if there are at least 3 players present. This does not do any access checking!
+   * 
+   * @return True if the game is started. Would only be false if there aren't enough players, or the
+   *         game is already started, but hopefully clients would prevent that from happening!
+   */
+  public boolean start() {
+    if (state != GameState.LOBBY) {
+      return false;
+    }
+    synchronized (players) {
+      if (players.size() >= 3) {
+        blackDeck = new BlackDeck();
+        whiteDeck = new WhiteDeck();
+        dealState();
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  private void dealState() {
     state = GameState.DEALING;
-    // TODO deal
+    synchronized (players) {
+      for (final Player player : players) {
+        final List<WhiteCard> hand = player.getHand();
+        final List<WhiteCard> newCards = new LinkedList<WhiteCard>();
+        while (hand.size() < currentHandSize) {
+          final WhiteCard card = whiteDeck.getNextCard();
+          hand.add(card);
+          newCards.add(card);
+        }
+        sendDealtCardsToPlayer(player, newCards);
+      }
+    }
+  }
+
+  private void sendDealtCardsToPlayer(final Player player, final List<WhiteCard> cards) {
+    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    data.put(LongPollResponse.EVENT, LongPollEvent.HAND_DEAL.toString());
+    data.put(LongPollResponse.GAME_ID, id);
+    final List<Map<WhiteCardData, Object>> cardData =
+        new ArrayList<Map<WhiteCardData, Object>>(cards.size());
+    for (final WhiteCard card : cards) {
+      final Map<WhiteCardData, Object> thisCard = new HashMap<WhiteCardData, Object>();
+      thisCard.put(WhiteCardData.ID, card.getId());
+      thisCard.put(WhiteCardData.TEXT, card.getText());
+      cardData.add(thisCard);
+    }
+    data.put(LongPollResponse.HAND, cardData);
+    final QueuedMessage qm = new QueuedMessage(MessageType.GAME_EVENT, data);
+    player.getUser().enqueueMessage(qm);
   }
 
   private List<User> playersToUsers() {

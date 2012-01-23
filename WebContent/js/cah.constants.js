@@ -6,6 +6,7 @@ cah.$.AjaxOperation = function() {
   // pass
 };
 cah.$.AjaxOperation.prototype.dummy = undefined;
+cah.$.AjaxOperation.START_GAME = "start_game";
 cah.$.AjaxOperation.FIRST_LOAD = "firstload";
 cah.$.AjaxOperation.LOG_OUT = "logout";
 cah.$.AjaxOperation.GAME_LIST = "games";
@@ -58,6 +59,7 @@ cah.$.ErrorCode = function() {
 cah.$.ErrorCode.prototype.dummy = undefined;
 cah.$.ErrorCode.TOO_MANY_GAMES = "too_many_games";
 cah.$.ErrorCode.INVALID_NICK = "invalid_nick";
+cah.$.ErrorCode.NOT_GAME_HOST = "not_game_host";
 cah.$.ErrorCode.BAD_REQUEST = "bad_req";
 cah.$.ErrorCode.CANNOT_JOIN_ANOTHER_GAME = "cannot_join_another_game";
 cah.$.ErrorCode.NO_GAME_SPECIFIED = "no_game_spec";
@@ -66,6 +68,7 @@ cah.$.ErrorCode.MESSAGE_TOO_LONG = "msg_too_long";
 cah.$.ErrorCode.BAD_OP = "bad_op";
 cah.$.ErrorCode.NO_SESSION = "no_session";
 cah.$.ErrorCode.NOT_REGISTERED = "not_registered";
+cah.$.ErrorCode.NOT_ENOUGH_PLAYERS = "not_enough_players";
 cah.$.ErrorCode.INVALID_GAME = "invalid_game";
 cah.$.ErrorCode.OP_NOT_SPECIFIED = "op_not_spec";
 cah.$.ErrorCode.NO_MSG_SPECIFIED = "no_msg_spec";
@@ -76,6 +79,7 @@ cah.$.ErrorCode_msg = {};
 cah.$.ErrorCode_msg['bad_op'] = "Invalid operation.";
 cah.$.ErrorCode_msg['not_registered'] = "Not registered. Refresh the page.";
 cah.$.ErrorCode_msg['msg_too_long'] = "Messages cannot be longer than 200 characters.";
+cah.$.ErrorCode_msg['not_enough_players'] = "There are not enough players to start the game.";
 cah.$.ErrorCode_msg['session_expired'] = "Your session has expired. Refresh the page.";
 cah.$.ErrorCode_msg['invalid_game'] = "Invalid game specified.";
 cah.$.ErrorCode_msg['no_game_spec'] = "No game specified.";
@@ -85,6 +89,7 @@ cah.$.ErrorCode_msg['too_many_games'] = "There are too many games already in pro
 cah.$.ErrorCode_msg['no_nick_spec'] = "No nickname specified.";
 cah.$.ErrorCode_msg['no_session'] = "Session not detected. Make sure you have cookies enabled.";
 cah.$.ErrorCode_msg['nick_in_use'] = "Nickname is already in use.";
+cah.$.ErrorCode_msg['not_game_host'] = "Only the game host can do that.";
 cah.$.ErrorCode_msg['bad_req'] = "Bad request.";
 cah.$.ErrorCode_msg['cannot_join_another_game'] = "You cannot join another game.";
 cah.$.ErrorCode_msg['op_not_spec'] = "Operation not specified.";
@@ -127,9 +132,13 @@ cah.$.GameState = function() {
   // pass
 };
 cah.$.GameState.prototype.dummy = undefined;
+cah.$.GameState.PLAYING = "playing";
 cah.$.GameState.LOBBY = "lobby";
+cah.$.GameState.JUDGING = "judging";
 cah.$.GameState.DEALING = "dealing";
 cah.$.GameState_msg = {};
+cah.$.GameState_msg['playing'] = "In Progress";
+cah.$.GameState_msg['judging'] = "In Progress";
 cah.$.GameState_msg['lobby'] = "Joinable (Not Started)";
 cah.$.GameState_msg['dealing'] = "Dealing";
 
@@ -143,6 +152,7 @@ cah.$.LongPollEvent.GAME_PLAYER_LEAVE = "game_player_leave";
 cah.$.LongPollEvent.NEW_PLAYER = "new_player";
 cah.$.LongPollEvent.PLAYER_LEAVE = "player_leave";
 cah.$.LongPollEvent.GAME_PLAYER_JOIN = "game_player_join";
+cah.$.LongPollEvent.HAND_DEAL = "hand_deal";
 cah.$.LongPollEvent.CHAT = "chat";
 
 cah.$.LongPollResponse = function() {
@@ -152,6 +162,7 @@ cah.$.LongPollResponse.prototype.dummy = undefined;
 cah.$.LongPollResponse.MESSAGE = "message";
 cah.$.LongPollResponse.REASON = "reason";
 cah.$.LongPollResponse.GAME_ID = "game_id";
+cah.$.LongPollResponse.HAND = "hand";
 cah.$.LongPollResponse.FROM = "from";
 cah.$.LongPollResponse.EVENT = "event";
 cah.$.LongPollResponse.ERROR = "error";
@@ -165,4 +176,11 @@ cah.$.ReconnectNextAction = function() {
 cah.$.ReconnectNextAction.prototype.dummy = undefined;
 cah.$.ReconnectNextAction.GAME = "game";
 cah.$.ReconnectNextAction.NONE = "none";
+
+cah.$.WhiteCardData = function() {
+  // pass
+};
+cah.$.WhiteCardData.prototype.dummy = undefined;
+cah.$.WhiteCardData.TEXT = "text";
+cah.$.WhiteCardData.ID = "id";
 

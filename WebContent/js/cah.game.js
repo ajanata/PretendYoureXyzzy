@@ -28,6 +28,7 @@ cah.Game = function(id) {
    * @private
    */
   this.element_ = $("#game_template").clone()[0];
+  this.element_.id = "game_" + id;
   $(this.element_).removeClass("hide");
 
   /**
@@ -37,6 +38,7 @@ cah.Game = function(id) {
    * @private
    */
   this.scoreboardElement_ = $("#scoreboard_template").clone()[0];
+  this.scoreboardElement_.id = "scoreboard_" + id;
   $(this.scoreboardElement_).removeClass("hide");
 
   /**
@@ -78,6 +80,21 @@ cah.Game.joinGame = function(gameId) {
  */
 cah.Game.prototype.getElement = function() {
   return this.element_;
+};
+
+/**
+ * Add multiple cards to the player's hand.
+ * 
+ * @param {Array}
+ *          cards The array of card objects sent from the server.
+ */
+cah.Game.prototype.dealtCards = function(cards) {
+  for ( var index in cards) {
+    var thisCard = cards[index];
+    var card = new cah.card.WhiteCard(true, thisCard[cah.$.WhiteCardData.ID]);
+    card.setText(thisCard[cah.$.WhiteCardData.TEXT]);
+    this.dealtCard(card);
+  }
 };
 
 /**
@@ -150,6 +167,8 @@ cah.Game.prototype.updateGameStatus = function(data) {
  * @private
  */
 cah.Game.prototype.leaveGameClick_ = function() {
+  // TODO make sure everything cleans up right, I got an error when I tried to start a different
+  // game after leaving one
   cah.Ajax.build(cah.$.AjaxOperation.LEAVE_GAME).withGameId(this.id_).run();
 };
 
@@ -159,7 +178,7 @@ cah.Game.prototype.leaveGameClick_ = function() {
  * @private
  */
 cah.Game.prototype.startGameClick_ = function() {
-  // TODO
+  cah.Ajax.build(cah.$.AjaxOperation.START_GAME).withGameId(this.id_).run();
 };
 
 /**
@@ -289,14 +308,3 @@ cah.GameScorePanel.prototype.update = function(score, status) {
   jQuery(".scorecard_score", this.element_).text(score);
   jQuery(".scorecard_status", this.element_).text(cah.$.GamePlayerStatus_msg[status]);
 };
-
-// $(document).ready(function() {
-// var game = new cah.Game(0);
-// $("#main_holder").append(game.getElement());
-//
-// for ( var i = 0; i < 10; i++) {
-// var card = new cah.card.WhiteCard(true);
-// card.setText("This is card " + i);
-// game.dealtCard(card);
-// }
-// });

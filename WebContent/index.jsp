@@ -37,7 +37,7 @@
     <span id="nickbox_error" class="error"></span>
 </div>
 
-<div id="canvas">
+<div id="canvas" class="hide">
   <div id="menubar">
     <div id="menubar_left">
       <input type="button" id="refresh_games" class="hide" value="Refresh Games" />

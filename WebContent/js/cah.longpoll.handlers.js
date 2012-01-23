@@ -69,3 +69,13 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_LEAVE] = function(dat
     cah.log.error("Received player leave event for unknown game id " + gameId);
   }
 };
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.HAND_DEAL] = function(data) {
+  var gameId = data[cah.$.LongPollResponse.GAME_ID];
+  var game = cah.currentGames[gameId];
+  if (game) {
+    game.dealtCards(data[cah.$.LongPollResponse.HAND]);
+  } else {
+    cah.log.error("Received dealt cards for unknown game id " + gameId);
+  }
+};
