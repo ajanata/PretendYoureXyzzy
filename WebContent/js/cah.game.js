@@ -137,6 +137,7 @@ cah.Game.prototype.updateGameStatus = function(data) {
       // new score panel
       panel = new cah.GameScorePanel(playerName);
       $(this.scoreboardElement_).append(panel.getElement());
+      this.scoreCards_[playerName] = panel;
       // TODO remove panels for players that have left the game? or just on the event?
     }
     panel.update(thisInfo[cah.$.GamePlayerInfo.SCORE], thisInfo[cah.$.GamePlayerInfo.STATUS]);
@@ -169,6 +170,48 @@ cah.Game.prototype.dispose = function() {
   $(this.scoreboardElement_).remove();
   $("#leave_game").hide();
   $("#start_game").hide();
+};
+
+/**
+ * A player has joined the game.
+ * 
+ * @param {String}
+ *          player Player that joined.
+ */
+cah.Game.prototype.playerJoin = function(player) {
+  if (player != cah.nickname) {
+    cah.log.status(player + " has joined the game.");
+    this.refreshGameStatus();
+  } else {
+    cah.log.status("You have joined the game.");
+  }
+};
+
+/**
+ * A player has left the game.
+ * 
+ * @param {String}
+ *          player Player that left.
+ */
+cah.Game.prototype.playerLeave = function(player) {
+  if (player != cah.nickname) {
+    cah.log.status(player + " has left the game.");
+    this.refreshGameStatus();
+  } else {
+    cah.log.status("You have left the game.");
+  }
+  var scorecard = this.scoreCards_[player];
+  if (scorecard) {
+    $(scorecard.getElement()).remove();
+  }
+  delete this.scoreCards_[player];
+};
+
+/**
+ * Refresh game scoreboard, etc.
+ */
+cah.Game.prototype.refreshGameStatus = function() {
+  cah.Ajax.build(cah.$.AjaxOperation.GET_GAME_INFO).withGameId(this.id_).run();
 };
 
 // /**

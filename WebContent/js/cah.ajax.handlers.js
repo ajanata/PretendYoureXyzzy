@@ -97,6 +97,6 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LEAVE_GAME] = function(data) {
   if (game) {
     game.dispose();
   }
+  // This will get updated when the server fires a refresh event
   cah.GameList.instance.show();
-  cah.GameList.instance.update();
 };

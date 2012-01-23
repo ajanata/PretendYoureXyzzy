@@ -49,3 +49,23 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.CHAT] = function(data) {
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_REFRESH] = function(data) {
   cah.GameList.instance.refreshGames();
 };
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_JOIN] = function(data) {
+  var gameId = data[cah.$.LongPollResponse.GAME_ID];
+  var game = cah.currentGames[gameId];
+  if (game) {
+    game.playerJoin(data[cah.$.LongPollResponse.NICKNAME]);
+  } else if (cah.nickname != data[cah.$.LongPollResponse.NICKNAME]) {
+    cah.log.error("Received player join event for unknown game id " + gameId);
+  }
+};
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_LEAVE] = function(data) {
+  var gameId = data[cah.$.LongPollResponse.GAME_ID];
+  var game = cah.currentGames[gameId];
+  if (game) {
+    game.playerLeave(data[cah.$.LongPollResponse.NICKNAME]);
+  } else if (cah.nickname != data[cah.$.LongPollResponse.NICKNAME]) {
+    cah.log.error("Received player leave event for unknown game id " + gameId);
+  }
+};
