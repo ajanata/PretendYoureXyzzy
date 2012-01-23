@@ -8,8 +8,7 @@ import java.util.List;
 
 public class UpdateHandlerList {
 
-  private static final List<String> EXCLUDE = Arrays.asList("UpdateHandlerList", "Handler",
-      "Handlers");
+  private static final List<String> EXCLUDE = Arrays.asList("GameHandler", "Handler", "Handlers");
 
   /**
    * @param args
