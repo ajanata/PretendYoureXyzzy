@@ -7,6 +7,8 @@
 <head>
 <title>Cards Against Humanity</title>
 <script type="text/javascript" src="js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/QTransform.js"></script>
 <script type="text/javascript" src="js/cah.js"></script>
 <%-- cah must be first, ajax must be before app. app probably has to be last. --%>
 <%-- TODO make this be dynamic with looking at the filesystem and using jquery --%>
@@ -30,6 +32,16 @@
 <%--
 < % = new net.socialgamer.cah.data.WhiteDeck().getNextCard().toString() % >
 --%>
+
+<div id="browser" class="hide">
+  <div id="browser_inner">
+	  <p>Cards Against Humanity is known to have graphical glitches in
+	  <span id="browser_name">$BROWSER_NAME</span>. The game should work,
+	  but it looks much better in <a href="http://google.com/chrome/">Google Chrome.</a></p>
+	  <p>We will not bug you about this again after you dismiss this dialog.</p>
+	  <input type="button" id="browser_ok" value="Okay, I Understand" />
+  </div>
+</div>
 
 <div id="nickbox">
     Nickname: <input type="text" id="nickname" value="" maxlength="30" />

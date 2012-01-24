@@ -1,3 +1,31 @@
+#browser {
+  background: rgba(0, 0, 0, .5);
+}
+
+#browser_inner {
+  border: 10px solid red;
+  padding: 15px;
+  background: white;
+  margin: 150px;
+  min-height: 150px;
+}
+
+#browser, #browser_inner {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  z-index: 9001;
+}
+
+#browser_ok {
+  margin: 15px;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+}
+
 #menubar {
   position: absolute;
   top: 0px;

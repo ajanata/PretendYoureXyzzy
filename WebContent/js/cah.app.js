@@ -20,6 +20,18 @@ $(document).ready(function() {
   // have not expressed an interest in being cleared out yet.
   // $(window).bind("beforeunload", window_beforeunload);
   $("#logout").click(logout_click);
+
+  if (($.browser.mozilla || $.browser.opera) && !$.cookie("browser_dismiss")) {
+    var name = $.browser.mozilla ? "Firefox" : "Opera";
+    $("#browser").show();
+    $("#browser_name").text(name);
+    $("#browser_ok").click(function() {
+      $("#browser").hide();
+      $.cookie("browser_dismiss", true, {
+        expires : 3650,
+      });
+    });
+  }
 });
 
 function nickbox_keyup(e) {

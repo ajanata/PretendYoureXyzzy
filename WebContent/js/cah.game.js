@@ -57,6 +57,14 @@ cah.Game = function(id) {
    */
   this.hand_ = Array();
 
+  /**
+   * Firefox is horrible, and Opera is pretty bad too.
+   * 
+   * @type {number}
+   * @private
+   */
+  this.badBrowserZOrderHack_ = 10000;
+
   $("#leave_game").click(cah.bind(this, this.leaveGameClick_));
   $("#start_game").click(cah.bind(this, this.startGameClick_));
 };
@@ -100,6 +108,8 @@ cah.Game.prototype.dealtCards = function(cards) {
 /**
  * Add a card to the player's hand.
  * 
+ * TODO: in IE, for some reason, the logo is only on the leftmost card.
+ * 
  * @param {cah.card.WhiteCard}
  *          card Card to add to hand.
  */
@@ -107,6 +117,8 @@ cah.Game.prototype.dealtCard = function(card) {
   this.hand_.push(card);
   var element = card.getElement();
   jQuery(".game_hand_cards", this.element_).append(element);
+
+  $(element).css("zoom", ".35");
   var data = {
     card : element,
   };
@@ -114,16 +126,40 @@ cah.Game.prototype.dealtCard = function(card) {
     duration : 200,
     queue : false,
   };
-  $(element).mouseenter(data, function(e) {
-    $(e.data.card).animate({
-      zoom : .7
-    }, options);
-  }).mouseleave(data, function(e) {
-    $(e.data.card).animate({
-      zoom : .35
-    }, options);
-  });
-  $(element).css("zoom", ".35");
+
+  if ($.browser.mozilla || $.browser.opera) {
+    var origSize = parseInt($(element).css("width"));
+    if ($.browser.mozilla) {
+      $(element).css("-moz-transform", "scale(0.35, 0.35)").css("-moz-transform-origin", "0 0");
+    } else {
+      $(element).css("-o-transform", "scale(0.35, 0.35)").css("-o-transform-origin", "0 0");
+    }
+    $(element).css("width", origSize * .35).css("height", origSize * .35).css("z-index",
+        this.badBrowserZOrderHack_--);
+    $(".cah", element).css("bottom", "-150px");
+
+    $(element).mouseenter(data, function(e) {
+      $(e.data.card).animate({
+        scale : .7,
+      }, options);
+    }).mouseleave(data, function(e) {
+      $(e.data.card).animate({
+        scale : .35,
+      }, options);
+    });
+
+  } else {
+
+    $(element).mouseenter(data, function(e) {
+      $(e.data.card).animate({
+        zoom : .7
+      }, options);
+    }).mouseleave(data, function(e) {
+      $(e.data.card).animate({
+        zoom : .35
+      }, options);
+    });
+  }
 };
 
 cah.Game.prototype.insertIntoDocument = function() {
@@ -311,13 +347,13 @@ cah.GameScorePanel.prototype.update = function(score, status) {
   jQuery(".scorecard_status", this.element_).text(cah.$.GamePlayerStatus_msg[status]);
 };
 
-$(document).ready(function() {
-  var game = new cah.Game(0);
-  $("#main_holder").append(game.getElement());
-
-  for ( var i = 0; i < 10; i++) {
-    var card = new cah.card.WhiteCard(true);
-    card.setText("This is card " + i);
-    game.dealtCard(card);
-  }
-});
+// $(document).ready(function() {
+// var game = new cah.Game(0);
+// $("#main_holder").append(game.getElement());
+//
+// for ( var i = 0; i < 10; i++) {
+// var card = new cah.card.WhiteCard(true);
+// card.setText("This is card " + i);
+// game.dealtCard(card);
+// }
+// });
