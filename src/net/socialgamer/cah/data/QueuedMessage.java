@@ -32,6 +32,11 @@ public class QueuedMessage implements Comparable<QueuedMessage> {
     return this.messageType.getWeight() - qm.messageType.getWeight();
   }
 
+  @Override
+  public String toString() {
+    return messageType.toString() + "_" + data.toString();
+  }
+
   /**
    * Types of messages that can be queued. The numerical value is the priority that this message
    * should be delivered (lower = more important) compared to other queued messages.
