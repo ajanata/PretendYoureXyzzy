@@ -115,7 +115,7 @@ cah.Game.prototype.dealtCard = function(card) {
   $(element).animate({
     scale : .35,
   }, {
-    duration : 1,
+    duration : 0,
   });
 
   $(element).css("transform", "scale(0.35, 0.35)").css("transform-origin", "0 0");
@@ -132,11 +132,13 @@ cah.Game.prototype.dealtCard = function(card) {
     $(this).animate({
       scale : .6,
       "z-index" : 2,
+      width : origSize * .6,
     }, options);
   }).mouseleave(function(e) {
     $(this).animate({
       scale : .35,
       "z-index" : 1,
+      width : origSize * .35,
     }, options);
   });
 };

@@ -256,6 +256,8 @@ span.debug {
 .card_holder {
   float: left;
   position: relative;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
 }
 
 .scoreboard {
