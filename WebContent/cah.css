@@ -151,12 +151,13 @@
 
 #chat {
   border: 1px solid black;
-  left: -4px;
-  right: 46px;
+  left: -2px;
+  /*right: 46px;*/
+  bottom: -1px;
   height: 17px;
   position: absolute;
-  bottom: -1px;
   padding: 0px;
+  width: 90%;
 }
 
 #chat_submit {
@@ -182,10 +183,6 @@ span.debug {
   height: 200px;
   border: 1px solid gray;
   padding: 15px;
-  /*
-	position: absolute;
-	bottom: 0px;
-	*/
   font-family: Arial, Verdana, san-serif;
   font-size: 18pt;
   float: left;
@@ -208,9 +205,9 @@ span.debug {
   color: black;
 }
 
-.cah {
+.game_hand_cards .cah {
   position: absolute;
-  bottom: 0px;
+  bottom: -150px;
   left: 0px;
   margin: 15px;
 }
@@ -237,7 +234,7 @@ span.debug {
   bottom: 0px;
   left: 0px;
   right: 0px;
-  height: 33%;
+  height: 30%;
   border-top: 1px solid black;
 }
 
@@ -246,11 +243,6 @@ span.debug {
   bottom: 0px;
   height: 100%;
   width: 100%;
-  /* * /
-  zoom: .35;
-  -moz-transform: scale(.35);
-  -moz-transform-origin: 0 0;
-  / * */
   cursor: pointer;
 }
 
@@ -262,11 +254,6 @@ span.debug {
 .card_holder {
   float: left;
   position: relative;
-  /*
-  zoom: .35;
-  -moz-transform: scale(.35);
-  -moz-transform-origin: 0 0;
-  */
 }
 
 .scoreboard {

@@ -77,6 +77,7 @@ cah.Game = function(id) {
  */
 cah.Game.joinGame = function(gameId) {
   cah.Ajax.build(cah.$.AjaxOperation.GET_GAME_INFO).withGameId(gameId).run();
+  cah.Ajax.build(cah.$.AjaxOperation.GET_HAND).withGameId(gameId).run();
   cah.GameList.instance.hide();
   var game = new cah.Game(gameId);
   cah.currentGames[gameId] = game;
@@ -118,48 +119,34 @@ cah.Game.prototype.dealtCard = function(card) {
   var element = card.getElement();
   jQuery(".game_hand_cards", this.element_).append(element);
 
-  $(element).css("zoom", ".35");
-  var data = {
-    card : element,
-  };
+  // animate it so we don't have to hard-code per browser
+  $(element).animate({
+    scale : .35,
+  }, {
+    duration : 1,
+  });
+
+  $(element).css("transform", "scale(0.35, 0.35)").css("transform-origin", "0 0");
+
+  // TODO scale on available width and number of cards
+  var origSize = parseInt($(element).css("width"));
+  $(element).css("width", origSize * .35).css("height", origSize * .35);
+
   var options = {
     duration : 200,
     queue : false,
   };
-
-  if ($.browser.mozilla || $.browser.opera) {
-    var origSize = parseInt($(element).css("width"));
-    if ($.browser.mozilla) {
-      $(element).css("-moz-transform", "scale(0.35, 0.35)").css("-moz-transform-origin", "0 0");
-    } else {
-      $(element).css("-o-transform", "scale(0.35, 0.35)").css("-o-transform-origin", "0 0");
-    }
-    $(element).css("width", origSize * .35).css("height", origSize * .35).css("z-index",
-        this.badBrowserZOrderHack_--);
-    $(".cah", element).css("bottom", "-150px");
-
-    $(element).mouseenter(data, function(e) {
-      $(e.data.card).animate({
-        scale : .7,
-      }, options);
-    }).mouseleave(data, function(e) {
-      $(e.data.card).animate({
-        scale : .35,
-      }, options);
-    });
-
-  } else {
-
-    $(element).mouseenter(data, function(e) {
-      $(e.data.card).animate({
-        zoom : .7
-      }, options);
-    }).mouseleave(data, function(e) {
-      $(e.data.card).animate({
-        zoom : .35
-      }, options);
-    });
-  }
+  $(element).mouseenter(function(e) {
+    $(this).animate({
+      scale : .6,
+      "z-index" : 2,
+    }, options);
+  }).mouseleave(function(e) {
+    $(this).animate({
+      scale : .35,
+      "z-index" : 1,
+    }, options);
+  });
 };
 
 cah.Game.prototype.insertIntoDocument = function() {

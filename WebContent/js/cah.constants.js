@@ -11,6 +11,7 @@ cah.$.AjaxOperation.FIRST_LOAD = "firstload";
 cah.$.AjaxOperation.LOG_OUT = "logout";
 cah.$.AjaxOperation.GAME_LIST = "games";
 cah.$.AjaxOperation.JOIN_GAME = "join_game";
+cah.$.AjaxOperation.GET_HAND = "get_hand";
 cah.$.AjaxOperation.GET_GAME_INFO = "get_game_info";
 cah.$.AjaxOperation.REGISTER = "register";
 cah.$.AjaxOperation.CREATE_GAME = "create_game";
@@ -32,17 +33,18 @@ cah.$.AjaxResponse = function() {
   // pass
 };
 cah.$.AjaxResponse.prototype.dummy = undefined;
-cah.$.AjaxResponse.NEXT = "next";
 cah.$.AjaxResponse.GAME_ID = "game_id";
-cah.$.AjaxResponse.GAME_INFO = "game_info";
-cah.$.AjaxResponse.ERROR = "error";
+cah.$.AjaxResponse.HAND = "hand";
 cah.$.AjaxResponse.PLAYER_INFO = "player_info";
-cah.$.AjaxResponse.ERROR_CODE = "error_code";
-cah.$.AjaxResponse.SERIAL = "serial";
-cah.$.AjaxResponse.MAX_GAMES = "max_games";
 cah.$.AjaxResponse.IN_PROGRESS = "in_progress";
 cah.$.AjaxResponse.GAMES = "games";
 cah.$.AjaxResponse.NICKNAME = "nickname";
+cah.$.AjaxResponse.NEXT = "next";
+cah.$.AjaxResponse.GAME_INFO = "game_info";
+cah.$.AjaxResponse.ERROR = "error";
+cah.$.AjaxResponse.ERROR_CODE = "error_code";
+cah.$.AjaxResponse.SERIAL = "serial";
+cah.$.AjaxResponse.MAX_GAMES = "max_games";
 cah.$.AjaxResponse.NAMES = "names";
 
 cah.$.DisconnectReason = function() {

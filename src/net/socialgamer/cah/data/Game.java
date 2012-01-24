@@ -232,15 +232,22 @@ public class Game {
           hand.add(card);
           newCards.add(card);
         }
-        sendDealtCardsToPlayer(player, newCards);
+        sendCardsToPlayer(player, newCards);
       }
     }
   }
 
-  private void sendDealtCardsToPlayer(final Player player, final List<WhiteCard> cards) {
+  private void sendCardsToPlayer(final Player player, final List<WhiteCard> cards) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
     data.put(LongPollResponse.EVENT, LongPollEvent.HAND_DEAL.toString());
     data.put(LongPollResponse.GAME_ID, id);
+    final List<Map<WhiteCardData, Object>> cardData = handSubsetToClient(cards);
+    data.put(LongPollResponse.HAND, cardData);
+    final QueuedMessage qm = new QueuedMessage(MessageType.GAME_EVENT, data);
+    player.getUser().enqueueMessage(qm);
+  }
+
+  private List<Map<WhiteCardData, Object>> handSubsetToClient(final List<WhiteCard> cards) {
     final List<Map<WhiteCardData, Object>> cardData =
         new ArrayList<Map<WhiteCardData, Object>>(cards.size());
     for (final WhiteCard card : cards) {
@@ -249,9 +256,18 @@ public class Game {
       thisCard.put(WhiteCardData.TEXT, card.getText());
       cardData.add(thisCard);
     }
-    data.put(LongPollResponse.HAND, cardData);
-    final QueuedMessage qm = new QueuedMessage(MessageType.GAME_EVENT, data);
-    player.getUser().enqueueMessage(qm);
+    return cardData;
+  }
+
+  public List<Map<WhiteCardData, Object>> getHand(final User user) {
+    synchronized (players) {
+      for (final Player player : players) {
+        if (player.getUser() == user) {
+          return handSubsetToClient(player.getHand());
+        }
+      }
+    }
+    return null;
   }
 
   private List<User> playersToUsers() {

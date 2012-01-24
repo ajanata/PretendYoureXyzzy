@@ -99,10 +99,20 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LEAVE_GAME] = function(data) {
     game.dispose();
     delete cah.currentGames[data[cah.$.AjaxResponse.GAME_ID]];
   }
-  // This will get updated when the server fires a refresh event
+  cah.GameList.instance.update();
   cah.GameList.instance.show();
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.START_GAME] = function(data) {
   // pass
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_HAND] = function(data) {
+  var gameId = data[cah.$.AjaxResponse.GAME_ID];
+  var game = cah.currentGames[gameId];
+  if (game) {
+    game.dealtCards(data[cah.$.AjaxResponse.HAND]);
+  } else {
+    cah.log.error("Received hand for unknown game id " + gameId);
+  }
 };
