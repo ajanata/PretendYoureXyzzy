@@ -57,14 +57,6 @@ cah.Game = function(id) {
    */
   this.hand_ = Array();
 
-  /**
-   * Firefox is horrible, and Opera is pretty bad too.
-   * 
-   * @type {number}
-   * @private
-   */
-  this.badBrowserZOrderHack_ = 10000;
-
   $("#leave_game").click(cah.bind(this, this.leaveGameClick_));
   $("#start_game").click(cah.bind(this, this.startGameClick_));
 };
