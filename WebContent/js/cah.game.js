@@ -105,23 +105,25 @@ cah.Game.prototype.dealtCards = function(cards) {
  */
 cah.Game.prototype.dealtCard = function(card) {
   this.hand_.push(card);
-  jQuery(".game_hand_cards", this.element_).append(card.getElement());
+  var element = card.getElement();
+  jQuery(".game_hand_cards", this.element_).append(element);
   var data = {
-    card : card.getElement()
+    card : element,
   };
   var options = {
     duration : 200,
-    queue : false
+    queue : false,
   };
-  $(card.getElement()).mouseenter(data, function(e) {
+  $(element).mouseenter(data, function(e) {
     $(e.data.card).animate({
-      zoom : 2
+      zoom : .7
     }, options);
   }).mouseleave(data, function(e) {
     $(e.data.card).animate({
-      zoom : 1
+      zoom : .35
     }, options);
   });
+  $(element).css("zoom", ".35");
 };
 
 cah.Game.prototype.insertIntoDocument = function() {
@@ -187,8 +189,8 @@ cah.Game.prototype.startGameClick_ = function() {
 cah.Game.prototype.dispose = function() {
   $(this.element_).remove();
   $(this.scoreboardElement_).remove();
-  $("#leave_game").hide();
-  $("#start_game").hide();
+  $("#leave_game").unbind().hide();
+  $("#start_game").unbind().hide();
 };
 
 /**
@@ -308,3 +310,14 @@ cah.GameScorePanel.prototype.update = function(score, status) {
   jQuery(".scorecard_score", this.element_).text(score);
   jQuery(".scorecard_status", this.element_).text(cah.$.GamePlayerStatus_msg[status]);
 };
+
+$(document).ready(function() {
+  var game = new cah.Game(0);
+  $("#main_holder").append(game.getElement());
+
+  for ( var i = 0; i < 10; i++) {
+    var card = new cah.card.WhiteCard(true);
+    card.setText("This is card " + i);
+    game.dealtCard(card);
+  }
+});

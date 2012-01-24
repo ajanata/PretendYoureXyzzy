@@ -217,13 +217,28 @@ span.debug {
   position: absolute;
   bottom: 0px;
   height: 100%;
+  width: 100%;
+  /* * /
   zoom: .35;
+  -moz-transform: scale(.35);
+  -moz-transform-origin: 0 0;
+  / * */
   cursor: pointer;
+}
+
+.moz_trans {
+  -moz-transform: scale(.35);
+  -moz-transform-origin: 0 0;
 }
 
 .card_holder {
   float: left;
   position: relative;
+  /*
+  zoom: .35;
+  -moz-transform: scale(.35);
+  -moz-transform-origin: 0 0;
+  */
 }
 
 .scoreboard {
