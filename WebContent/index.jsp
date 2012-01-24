@@ -33,6 +33,7 @@
 < % = new net.socialgamer.cah.data.WhiteDeck().getNextCard().toString() % >
 --%>
 
+<%--
 <div id="browser" class="hide">
   <div id="browser_inner">
 	  <p>Cards Against Humanity is known to have graphical glitches in
@@ -42,6 +43,7 @@
 	  <input type="button" id="browser_ok" value="Okay, I Understand" />
   </div>
 </div>
+--%>
 
 <div id="nickbox">
     Nickname: <input type="text" id="nickname" value="" maxlength="30" />
