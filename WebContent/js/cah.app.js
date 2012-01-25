@@ -32,6 +32,11 @@ $(document).ready(function() {
   // });
   // });
   // }
+
+  if ($.browser.mozilla) {
+    // Firefox sucks.
+    $("body").css("font-size", "12px");
+  }
 });
 
 function nickbox_keyup(e) {

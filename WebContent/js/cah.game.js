@@ -89,10 +89,44 @@ cah.Game = function(id) {
    */
   this.judge_ = null;
 
+  /**
+   * Scale factor for hand cards when zoomed out.
+   * 
+   * @type {Number}
+   * @private
+   */
+  this.handCardSmallScale_ = .35;
+
+  /**
+   * Scale factor for hand cards when zoomed in.
+   * 
+   * @type {Number}
+   * @private
+   */
+  this.handCardLargeScale_ = .6;
+
+  /**
+   * Size for hand cards when zoomed out.
+   * 
+   * @type {Number}
+   * @private
+   */
+  this.handCardSmallSize_ = 83;
+
+  /**
+   * Size for hand cards when zoomed in.
+   * 
+   * @type {Number}
+   * @private
+   */
+  this.handCardLargeSize_ = 142;
+
   $("#leave_game").click(cah.bind(this, this.leaveGameClick_));
   $("#start_game").click(cah.bind(this, this.startGameClick_));
 
   $(".confirm_card", this.element_).click(cah.bind(this, this.confirmClick_));
+
+  $(window).on("resize.game_" + this.id_, cah.bind(this, this.windowResize_));
 };
 
 /**
@@ -160,41 +194,92 @@ cah.Game.prototype.dealtCard = function(card) {
 
   // animate it so we don't have to hard-code per browser
   $(element).animate({
-    scale : .35,
+    scale : this.handCardSmallScale_,
   }, {
     duration : 0,
   });
 
-  // TODO scale on available width and number of cards
-  var origSize = parseInt($(element).css("width"));
-  $(element).css("width", origSize * .35).css("height", origSize * .35).css("transform-origin",
-      "0 0");
+  $(element).css("width", this.handCardSmallSize_).css("height", this.handCardSmallSize_).css(
+      "transform-origin", "0 0");
 
-  var options = {
+  var data = {
+    card : card,
+  };
+  $(element).mouseenter(data, cah.bind(this, this.handCardMouseEnter_)).mouseleave(data,
+      cah.bind(this, this.handCardMouseLeave_)).click(data, cah.bind(this, this.handCardClick_));
+  this.windowResize_();
+};
+
+/**
+ * Event handler for hand card mouse enter.
+ * 
+ * @param e
+ * @private
+ */
+cah.Game.prototype.handCardMouseEnter_ = function(e) {
+  $(e.data.card.getElement()).animate({
+    scale : this.handCardLargeScale_,
+    "z-index" : 2,
+    width : this.handCardLargeSize_,
+  }, {
     duration : 200,
     queue : false,
-  };
-  $(element).mouseenter(function(e) {
-    $(this).animate({
-      scale : .6,
-      "z-index" : 2,
-      width : origSize * .6,
-    }, options);
-  }).mouseleave(function(e) {
-    $(this).animate({
-      scale : .35,
-      "z-index" : 1,
-      width : origSize * .35,
-    }, options);
-  }).click({
-    card : card,
-  }, cah.bind(this, this.handCardClick_));
+  });
+};
+
+/**
+ * Event handler for hand card mouse leave.
+ * 
+ * @param e
+ * @private
+ */
+cah.Game.prototype.handCardMouseLeave_ = function(e) {
+  $(e.data.card.getElement()).animate({
+    scale : this.handCardSmallScale_,
+    "z-index" : 1,
+    width : this.handCardSmallSize_,
+  }, {
+    duration : 200,
+    queue : false,
+  });
+};
+
+/**
+ * Event handler for window resize.
+ * 
+ * @private
+ */
+cah.Game.prototype.windowResize_ = function() {
+  this.resizeHandCards_();
+};
+
+/**
+ * Resize cards in hand to fit window size and hand size.
+ * 
+ * @private
+ */
+cah.Game.prototype.resizeHandCards_ = function() {
+  var elems = $(".game_hand_cards .card_holder", this.element_);
+  var ct = elems.length;
+  this.handCardSmallSize_ = ($(".game_hand_cards", this.element_).width() - 20) / (ct + 1);
+  if (this.handCardSmallSize_ > 150) {
+    this.handCardSmallSize_ = 150;
+  }
+  this.handCardLargeSize_ = this.handCardSmallSize_ * 1.8;
+  this.handCardSmallScale_ = this.handCardSmallSize_ / 236;
+  this.handCardLargeScale_ = this.handCardSmallScale_ * 1.8;
+  elems.width(this.handCardSmallSize_).height(this.handCardSmallSize_).animate({
+    scale : this.handCardSmallScale_,
+  }, {
+    duration : 0,
+  });
 };
 
 cah.Game.prototype.insertIntoDocument = function() {
   $("#main_holder").empty().append(this.element_);
   $("#info_area").empty().append(this.scoreboardElement_);
   $("#leave_game").show();
+  this.windowResize_();
   // TODO display a loading animation
 };
 
@@ -316,6 +401,7 @@ cah.Game.prototype.dispose = function() {
   $(this.scoreboardElement_).remove();
   $("#leave_game").unbind().hide();
   $("#start_game").unbind().hide();
+  $(window).off("resize.game_" + this.id_);
 };
 
 /**

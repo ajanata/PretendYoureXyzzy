@@ -1,3 +1,7 @@
+body {
+  overflow: hidden;
+}
+
 /*
 #browser {
   background: rgba(0, 0, 0, .5);
@@ -61,7 +65,7 @@
   height: 750px;
   overflow: none;
   position: relative;
-  width: 1000px;
+  width: 100%;
   /* */
   border: 1px solid red;
   /* */
@@ -181,12 +185,13 @@ span.debug {
 }
 
 .card {
+  position: relative;
   width: 200px;
   height: 200px;
   border: 3px solid gray;
   padding: 15px;
   font-family: Arial, Verdana, san-serif;
-  font-size: 18pt;
+  font-size: 16pt;
   float: left;
 
   -webkit-user-select: none;
@@ -209,7 +214,7 @@ span.debug {
 
 .game_hand_cards .cah {
   position: absolute;
-  bottom: -150px;
+  bottom: 0px;
   left: 0px;
   margin: 15px;
 }
@@ -247,6 +252,7 @@ span.debug {
   width: 100%;
   cursor: pointer;
   padding-left: 2px;
+  min-width: 750px;
 }
 
 .game_message {
@@ -302,6 +308,7 @@ span.debug {
   overflow-x: visible !important;
   overflow-y: visible !important;
   margin-right: 2px;
+  z-index: 1;
 }
 
 .scoreboard {
