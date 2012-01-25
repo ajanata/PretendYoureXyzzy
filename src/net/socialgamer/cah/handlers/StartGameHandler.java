@@ -6,7 +6,9 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
+import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.ErrorCode;
+import net.socialgamer.cah.Constants.GameState;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.Game;
@@ -27,18 +29,18 @@ public class StartGameHandler extends GameHandler {
 
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
-      final HttpSession session, final User user,
-      final Game game) {
+      final HttpSession session, final User user, final Game game) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
     if (game.getHost() != user) {
       return error(ErrorCode.NOT_GAME_HOST);
-    }
-    if (!game.start()) {
+    } else if (game.getState() != GameState.LOBBY) {
+      return error(ErrorCode.ALREADY_STARTED);
+    } else if (!game.start()) {
       return error(ErrorCode.NOT_ENOUGH_PLAYERS);
+    } else {
+      data.put(AjaxResponse.GAME_ID, game.getId());
+      return data;
     }
-
-    return data;
   }
-
 }

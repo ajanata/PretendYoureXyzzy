@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import net.socialgamer.cah.Constants.BlackCardData;
 import net.socialgamer.cah.Constants.GameInfo;
 import net.socialgamer.cah.Constants.GamePlayerInfo;
 import net.socialgamer.cah.Constants.GamePlayerStatus;
@@ -17,6 +18,7 @@ import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.WhiteCardData;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
+import net.socialgamer.cah.db.BlackCard;
 import net.socialgamer.cah.db.WhiteCard;
 
 import com.google.inject.Inject;
@@ -49,12 +51,15 @@ public class Game {
   private final GameManager gameManager;
   private Player host;
   private BlackDeck blackDeck;
+  private BlackCard blackCard;
+  private final Object blackCardLock = new Object();
   private WhiteDeck whiteDeck;
   private GameState state;
   // TODO make this work with "draw x" cards. probably will not actually be done here.
   private final int currentHandSize = 10;
   // TODO make this host-configurable
   private final int maxPlayers = 10;
+  private final int judgeIndex = 0;
 
   /**
    * TODO Injection here would be much nicer, but that would need a Provider for the id... Too much
@@ -139,6 +144,9 @@ public class Game {
       if (players.size() == 0) {
         gameManager.destroyGame(id);
       }
+      if (players.size() < 3 && state != GameState.LOBBY) {
+        resetState(true);
+      }
       return players.size() == 0;
     }
   }
@@ -146,6 +154,10 @@ public class Game {
   public void broadcastToPlayers(final MessageType type,
       final HashMap<ReturnableData, Object> masterData) {
     connectedUsers.broadcastToList(playersToUsers(), type, masterData);
+  }
+
+  public GameState getState() {
+    return state;
   }
 
   public User getHost() {
@@ -178,25 +190,57 @@ public class Game {
     return info;
   }
 
-  public List<Map<GamePlayerInfo, Object>> getPlayerInfo() {
+  public List<Map<GamePlayerInfo, Object>> getAllPlayerInfo() {
     final List<Map<GamePlayerInfo, Object>> info;
     synchronized (players) {
       info = new ArrayList<Map<GamePlayerInfo, Object>>(
           players.size());
       for (final Player player : players) {
-        final Map<GamePlayerInfo, Object> playerInfo = new HashMap<GamePlayerInfo, Object>();
-        playerInfo.put(GamePlayerInfo.NAME, player.getUser().getNickname());
-        playerInfo.put(GamePlayerInfo.SCORE, player.getScore());
-        // TODO fix this once we actually have gameplay logic
-        if (state == GameState.LOBBY && host == player) {
-          playerInfo.put(GamePlayerInfo.STATUS, GamePlayerStatus.HOST.toString());
-        } else {
-          playerInfo.put(GamePlayerInfo.STATUS, GamePlayerStatus.IDLE.toString());
-        }
+        final Map<GamePlayerInfo, Object> playerInfo = getPlayerInfo(player);
         info.add(playerInfo);
       }
     }
     return info;
+  }
+
+  private Map<GamePlayerInfo, Object> getPlayerInfo(final Player player) {
+    final Map<GamePlayerInfo, Object> playerInfo = new HashMap<GamePlayerInfo, Object>();
+    playerInfo.put(GamePlayerInfo.NAME, player.getUser().getNickname());
+    playerInfo.put(GamePlayerInfo.SCORE, player.getScore());
+    // TODO fix this once we actually have gameplay logic
+
+    final GamePlayerStatus playerStatus;
+
+    switch (state) {
+      case LOBBY:
+        if (host == player) {
+          playerStatus = GamePlayerStatus.HOST;
+        } else {
+          playerStatus = GamePlayerStatus.IDLE;
+        }
+        break;
+      case PLAYING:
+        if (players.get(judgeIndex) == player) {
+          playerStatus = GamePlayerStatus.JUDGE;
+        } else {
+          // TODO check if they have played a card
+          playerStatus = GamePlayerStatus.PLAYING;
+        }
+        break;
+      case JUDGING:
+        if (players.get(judgeIndex) == player) {
+          playerStatus = GamePlayerStatus.JUDGING;
+        } else {
+          playerStatus = GamePlayerStatus.IDLE;
+        }
+        break;
+      default:
+        throw new IllegalStateException("Unknown GameState " + state.toString());
+    }
+
+    playerInfo.put(GamePlayerInfo.STATUS, playerStatus.toString());
+
+    return playerInfo;
   }
 
   /**
@@ -235,6 +279,65 @@ public class Game {
         sendCardsToPlayer(player, newCards);
       }
     }
+    playingState();
+  }
+
+  private void playingState() {
+    state = GameState.PLAYING;
+
+    synchronized (blackCardLock) {
+      do {
+        blackCard = blackDeck.getNextCard();
+        // TODO remove this loop once the game supports the pick and draw features
+      } while (blackCard.getPick() != 1 || blackCard.getDraw() != 0);
+    }
+
+    final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
+    data.put(LongPollResponse.GAME_ID, id);
+    data.put(LongPollResponse.BLACK_CARD, getBlackCard());
+    data.put(LongPollResponse.GAME_STATE, GameState.PLAYING.toString());
+    data.put(LongPollResponse.JUDGE, players.get(judgeIndex).getUser().getNickname());
+
+    broadcastToPlayers(MessageType.GAME_EVENT, data);
+  }
+
+  private void judgingState() {
+    state = GameState.JUDGING;
+
+    // TODO pick a new judge after the judge has selected a winner
+    // delay for a short while after the judge selects so that everyone has a chance to see the
+    // selection
+  }
+
+  private void winState() {
+    // TODO announce the victory
+    resetState(false);
+  }
+
+  /**
+   * Reset the game state to a lobby.
+   * 
+   * @param lostPlayer
+   *          True if because there are no long enough people to play a game, false if because the
+   *          previous game finished.
+   */
+  private void resetState(final boolean lostPlayer) {
+    // Reset the game.
+    synchronized (players) {
+      for (final Player player : players) {
+        player.getHand().clear();
+        player.resetScore();
+      }
+    }
+    whiteDeck = null;
+    blackDeck = null;
+    synchronized (blackCardLock) {
+      blackCard = null;
+    }
+    state = GameState.LOBBY;
+
+    // TODO announce the reset
   }
 
   private void sendCardsToPlayer(final Player player, final List<WhiteCard> cards) {
@@ -268,6 +371,21 @@ public class Game {
       }
     }
     return null;
+  }
+
+  public Map<BlackCardData, Object> getBlackCard() {
+    synchronized (blackCardLock) {
+      final Map<BlackCardData, Object> cardData = new HashMap<BlackCardData, Object>();
+      if (blackCard != null) {
+        cardData.put(BlackCardData.ID, blackCard.getId());
+        cardData.put(BlackCardData.TEXT, blackCard.getText());
+        cardData.put(BlackCardData.DRAW, blackCard.getDraw());
+        cardData.put(BlackCardData.PICK, blackCard.getPick());
+        return cardData;
+      } else {
+        return null;
+      }
+    }
   }
 
   private List<User> playersToUsers() {

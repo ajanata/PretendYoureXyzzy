@@ -31,7 +31,7 @@ public class GetGameInfoHandler extends GameHandler {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
     data.put(AjaxResponse.GAME_INFO, game.getInfo());
-    data.put(AjaxResponse.PLAYER_INFO, game.getPlayerInfo());
+    data.put(AjaxResponse.PLAYER_INFO, game.getAllPlayerInfo());
     return data;
   }
 }

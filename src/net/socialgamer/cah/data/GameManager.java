@@ -128,7 +128,7 @@ public class GameManager implements Provider<Integer> {
 
   public void broadcastGameListRefresh() {
     final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
-    broadcastData.put(LongPollResponse.EVENT, LongPollEvent.GAME_REFRESH.toString());
+    broadcastData.put(LongPollResponse.EVENT, LongPollEvent.GAME_LIST_REFRESH.toString());
     users.broadcastToAll(MessageType.GAME_EVENT, broadcastData);
   }
 

@@ -3,15 +3,15 @@
 cah.$ = {};
 
 cah.$.AjaxOperation = function() {
-  // pass
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.AjaxOperation.prototype.dummy = undefined;
+cah.$.AjaxOperation.prototype.dummyForAutocomplete = undefined;
 cah.$.AjaxOperation.START_GAME = "start_game";
 cah.$.AjaxOperation.FIRST_LOAD = "firstload";
 cah.$.AjaxOperation.LOG_OUT = "logout";
+cah.$.AjaxOperation.GET_CARDS = "get_cards";
 cah.$.AjaxOperation.GAME_LIST = "games";
 cah.$.AjaxOperation.JOIN_GAME = "join_game";
-cah.$.AjaxOperation.GET_HAND = "get_hand";
 cah.$.AjaxOperation.GET_GAME_INFO = "get_game_info";
 cah.$.AjaxOperation.REGISTER = "register";
 cah.$.AjaxOperation.CREATE_GAME = "create_game";
@@ -20,9 +20,9 @@ cah.$.AjaxOperation.NAMES = "names";
 cah.$.AjaxOperation.LEAVE_GAME = "leave_game";
 
 cah.$.AjaxRequest = function() {
-  // pass
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.AjaxRequest.prototype.dummy = undefined;
+cah.$.AjaxRequest.prototype.dummyForAutocomplete = undefined;
 cah.$.AjaxRequest.MESSAGE = "message";
 cah.$.AjaxRequest.GAME_ID = "game_id";
 cah.$.AjaxRequest.SERIAL = "serial";
@@ -30,12 +30,13 @@ cah.$.AjaxRequest.OP = "op";
 cah.$.AjaxRequest.NICKNAME = "nickname";
 
 cah.$.AjaxResponse = function() {
-  // pass
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.AjaxResponse.prototype.dummy = undefined;
+cah.$.AjaxResponse.prototype.dummyForAutocomplete = undefined;
 cah.$.AjaxResponse.GAME_ID = "game_id";
 cah.$.AjaxResponse.HAND = "hand";
 cah.$.AjaxResponse.PLAYER_INFO = "player_info";
+cah.$.AjaxResponse.BLACK_CARD = "black_card";
 cah.$.AjaxResponse.IN_PROGRESS = "in_progress";
 cah.$.AjaxResponse.GAMES = "games";
 cah.$.AjaxResponse.NICKNAME = "nickname";
@@ -47,21 +48,31 @@ cah.$.AjaxResponse.SERIAL = "serial";
 cah.$.AjaxResponse.MAX_GAMES = "max_games";
 cah.$.AjaxResponse.NAMES = "names";
 
-cah.$.DisconnectReason = function() {
-  // pass
+cah.$.BlackCardData = function() {
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.DisconnectReason.prototype.dummy = undefined;
+cah.$.BlackCardData.prototype.dummyForAutocomplete = undefined;
+cah.$.BlackCardData.TEXT = "text";
+cah.$.BlackCardData.PICK = "pick";
+cah.$.BlackCardData.ID = "id";
+cah.$.BlackCardData.DRAW = "draw";
+
+cah.$.DisconnectReason = function() {
+  // Dummy constructor to make Eclipse auto-complete.
+};
+cah.$.DisconnectReason.prototype.dummyForAutocomplete = undefined;
 cah.$.DisconnectReason.PING_TIMEOUT = "ping_timeout";
 cah.$.DisconnectReason.KICKED = "kicked";
 cah.$.DisconnectReason.MANUAL = "manual";
 
 cah.$.ErrorCode = function() {
-  // pass
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.ErrorCode.prototype.dummy = undefined;
+cah.$.ErrorCode.prototype.dummyForAutocomplete = undefined;
 cah.$.ErrorCode.TOO_MANY_GAMES = "too_many_games";
 cah.$.ErrorCode.INVALID_NICK = "invalid_nick";
 cah.$.ErrorCode.NOT_GAME_HOST = "not_game_host";
+cah.$.ErrorCode.ALREADY_STARTED = "already_started";
 cah.$.ErrorCode.BAD_REQUEST = "bad_req";
 cah.$.ErrorCode.CANNOT_JOIN_ANOTHER_GAME = "cannot_join_another_game";
 cah.$.ErrorCode.NO_GAME_SPECIFIED = "no_game_spec";
@@ -80,8 +91,8 @@ cah.$.ErrorCode.NO_NICK_SPECIFIED = "no_nick_spec";
 cah.$.ErrorCode_msg = {};
 cah.$.ErrorCode_msg['bad_op'] = "Invalid operation.";
 cah.$.ErrorCode_msg['not_registered'] = "Not registered. Refresh the page.";
-cah.$.ErrorCode_msg['msg_too_long'] = "Messages cannot be longer than 200 characters.";
 cah.$.ErrorCode_msg['not_enough_players'] = "There are not enough players to start the game.";
+cah.$.ErrorCode_msg['msg_too_long'] = "Messages cannot be longer than 200 characters.";
 cah.$.ErrorCode_msg['session_expired'] = "Your session has expired. Refresh the page.";
 cah.$.ErrorCode_msg['invalid_game'] = "Invalid game specified.";
 cah.$.ErrorCode_msg['no_game_spec'] = "No game specified.";
@@ -95,29 +106,30 @@ cah.$.ErrorCode_msg['not_game_host'] = "Only the game host can do that.";
 cah.$.ErrorCode_msg['bad_req'] = "Bad request.";
 cah.$.ErrorCode_msg['cannot_join_another_game'] = "You cannot join another game.";
 cah.$.ErrorCode_msg['op_not_spec'] = "Operation not specified.";
+cah.$.ErrorCode_msg['already_started'] = "The game has already started.";
 cah.$.ErrorCode_msg['no_msg_spec'] = "No message specified.";
 
 cah.$.GameInfo = function() {
-  // pass
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.GameInfo.prototype.dummy = undefined;
+cah.$.GameInfo.prototype.dummyForAutocomplete = undefined;
 cah.$.GameInfo.HOST = "host";
 cah.$.GameInfo.STATE = "state";
 cah.$.GameInfo.PLAYERS = "players";
 cah.$.GameInfo.ID = "id";
 
 cah.$.GamePlayerInfo = function() {
-  // pass
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.GamePlayerInfo.prototype.dummy = undefined;
+cah.$.GamePlayerInfo.prototype.dummyForAutocomplete = undefined;
 cah.$.GamePlayerInfo.NAME = "name";
 cah.$.GamePlayerInfo.SCORE = "score";
 cah.$.GamePlayerInfo.STATUS = "status";
 
 cah.$.GamePlayerStatus = function() {
-  // pass
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.GamePlayerStatus.prototype.dummy = undefined;
+cah.$.GamePlayerStatus.prototype.dummyForAutocomplete = undefined;
 cah.$.GamePlayerStatus.HOST = "host";
 cah.$.GamePlayerStatus.IDLE = "idle";
 cah.$.GamePlayerStatus.PLAYING = "playing";
@@ -129,11 +141,17 @@ cah.$.GamePlayerStatus_msg['idle'] = "";
 cah.$.GamePlayerStatus_msg['judging'] = "Judging";
 cah.$.GamePlayerStatus_msg['host'] = "Host";
 cah.$.GamePlayerStatus_msg['judge'] = "Judge";
+cah.$.GamePlayerStatus_msg_2 = {};
+cah.$.GamePlayerStatus_msg_2['playing'] = "Select a card to play.";
+cah.$.GamePlayerStatus_msg_2['idle'] = "Waiting for players...";
+cah.$.GamePlayerStatus_msg_2['judging'] = "Select a winning card.";
+cah.$.GamePlayerStatus_msg_2['host'] = "Wait for players then click Start Game.";
+cah.$.GamePlayerStatus_msg_2['judge'] = "You are the judge this round.";
 
 cah.$.GameState = function() {
-  // pass
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.GameState.prototype.dummy = undefined;
+cah.$.GameState.prototype.dummyForAutocomplete = undefined;
 cah.$.GameState.PLAYING = "playing";
 cah.$.GameState.LOBBY = "lobby";
 cah.$.GameState.JUDGING = "judging";
@@ -145,44 +163,50 @@ cah.$.GameState_msg['lobby'] = "Joinable (Not Started)";
 cah.$.GameState_msg['dealing'] = "Dealing";
 
 cah.$.LongPollEvent = function() {
-  // pass
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.LongPollEvent.prototype.dummy = undefined;
+cah.$.LongPollEvent.prototype.dummyForAutocomplete = undefined;
 cah.$.LongPollEvent.NOOP = "noop";
-cah.$.LongPollEvent.GAME_REFRESH = "game_refresh";
+cah.$.LongPollEvent.GAME_PLAYER_INFO_CHANGE = "game_player_info_change";
+cah.$.LongPollEvent.GAME_STATE_CHANGE = "game_state_change";
 cah.$.LongPollEvent.GAME_PLAYER_LEAVE = "game_player_leave";
 cah.$.LongPollEvent.NEW_PLAYER = "new_player";
 cah.$.LongPollEvent.PLAYER_LEAVE = "player_leave";
 cah.$.LongPollEvent.GAME_PLAYER_JOIN = "game_player_join";
 cah.$.LongPollEvent.HAND_DEAL = "hand_deal";
 cah.$.LongPollEvent.CHAT = "chat";
+cah.$.LongPollEvent.GAME_LIST_REFRESH = "game_list_refresh";
 
 cah.$.LongPollResponse = function() {
-  // pass
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.LongPollResponse.prototype.dummy = undefined;
-cah.$.LongPollResponse.MESSAGE = "message";
-cah.$.LongPollResponse.REASON = "reason";
+cah.$.LongPollResponse.prototype.dummyForAutocomplete = undefined;
 cah.$.LongPollResponse.GAME_ID = "game_id";
+cah.$.LongPollResponse.REASON = "reason";
 cah.$.LongPollResponse.HAND = "hand";
-cah.$.LongPollResponse.FROM = "from";
-cah.$.LongPollResponse.EVENT = "event";
+cah.$.LongPollResponse.JUDGE = "judge";
+cah.$.LongPollResponse.PLAYER_INFO = "player_info";
+cah.$.LongPollResponse.BLACK_CARD = "black_card";
+cah.$.LongPollResponse.GAME_STATE = "game_state";
+cah.$.LongPollResponse.NICKNAME = "nickname";
+cah.$.LongPollResponse.MESSAGE = "message";
 cah.$.LongPollResponse.ERROR = "error";
+cah.$.LongPollResponse.EVENT = "event";
+cah.$.LongPollResponse.FROM = "from";
 cah.$.LongPollResponse.ERROR_CODE = "error_code";
 cah.$.LongPollResponse.TIMESTAMP = "timestamp";
-cah.$.LongPollResponse.NICKNAME = "nickname";
 
 cah.$.ReconnectNextAction = function() {
-  // pass
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.ReconnectNextAction.prototype.dummy = undefined;
+cah.$.ReconnectNextAction.prototype.dummyForAutocomplete = undefined;
 cah.$.ReconnectNextAction.GAME = "game";
 cah.$.ReconnectNextAction.NONE = "none";
 
 cah.$.WhiteCardData = function() {
-  // pass
+  // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.WhiteCardData.prototype.dummy = undefined;
+cah.$.WhiteCardData.prototype.dummyForAutocomplete = undefined;
 cah.$.WhiteCardData.TEXT = "text";
 cah.$.WhiteCardData.ID = "id";
 

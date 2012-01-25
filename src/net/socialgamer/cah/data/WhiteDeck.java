@@ -10,7 +10,6 @@ import org.hibernate.Session;
 
 
 public class WhiteDeck {
-
   private final List<WhiteCard> deck;
   private final List<WhiteCard> dealt;
 

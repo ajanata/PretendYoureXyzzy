@@ -248,9 +248,26 @@ span.debug {
   cursor: pointer;
 }
 
-.moz_trans {
-  -moz-transform: scale(.35);
-  -moz-transform-origin: 0 0;
+.game_message {
+  font-size: 14pt;
+  border-bottom: 2px solid black;
+}
+
+.game_black_card_wrapper {
+  width: 232px;
+  margin-top: 10px;
+}
+
+.game_black_card {
+  width: 232px;
+  height: 232px;
+  margin-top: 15px;
+}
+
+.game_black_card .cah {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
 }
 
 .card_holder {

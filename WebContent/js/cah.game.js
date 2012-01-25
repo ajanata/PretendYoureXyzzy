@@ -57,6 +57,22 @@ cah.Game = function(id) {
    */
   this.hand_ = Array();
 
+  /**
+   * The game's state.
+   * 
+   * @type {cah.$.GameState}
+   * @private
+   */
+  this.state_ = cah.$.GameState.LOBBY;
+
+  /**
+   * The black card on display.
+   * 
+   * @type {cah.card.BlackCard}
+   * @private
+   */
+  this.blackCard_ = null;
+
   $("#leave_game").click(cah.bind(this, this.leaveGameClick_));
   $("#start_game").click(cah.bind(this, this.startGameClick_));
 };
@@ -69,7 +85,7 @@ cah.Game = function(id) {
  */
 cah.Game.joinGame = function(gameId) {
   cah.Ajax.build(cah.$.AjaxOperation.GET_GAME_INFO).withGameId(gameId).run();
-  cah.Ajax.build(cah.$.AjaxOperation.GET_HAND).withGameId(gameId).run();
+  cah.Ajax.build(cah.$.AjaxOperation.GET_CARDS).withGameId(gameId).run();
   cah.GameList.instance.hide();
   var game = new cah.Game(gameId);
   cah.currentGames[gameId] = game;
@@ -81,6 +97,19 @@ cah.Game.joinGame = function(gameId) {
  */
 cah.Game.prototype.getElement = function() {
   return this.element_;
+};
+
+/**
+ * Set the black card on display.
+ * 
+ * @param {Object}
+ *          card Black card data from server.
+ */
+cah.Game.prototype.setBlackCard = function(card) {
+  this.blackCard_ = new cah.card.BlackCard(true, card[cah.$.BlackCardData.ID]);
+  this.blackCard_.setText(card[cah.$.BlackCardData.TEXT]);
+
+  $(".game_black_card", this.element_).empty().append(this.blackCard_.getElement());
 };
 
 /**
@@ -174,9 +203,13 @@ cah.Game.prototype.updateGameStatus = function(data) {
       panel = new cah.GameScorePanel(playerName);
       $(this.scoreboardElement_).append(panel.getElement());
       this.scoreCards_[playerName] = panel;
-      // TODO remove panels for players that have left the game? or just on the event?
     }
     panel.update(thisInfo[cah.$.GamePlayerInfo.SCORE], thisInfo[cah.$.GamePlayerInfo.STATUS]);
+
+    if (playerName == cah.nickname) {
+      $(".game_message", this.element_).text(
+          cah.$.GamePlayerStatus_msg_2[thisInfo[cah.$.GamePlayerInfo.STATUS]]);
+    }
   }
 };
 
@@ -197,7 +230,12 @@ cah.Game.prototype.leaveGameClick_ = function() {
  * @private
  */
 cah.Game.prototype.startGameClick_ = function() {
+  // TODO make the button go disabled
   cah.Ajax.build(cah.$.AjaxOperation.START_GAME).withGameId(this.id_).run();
+};
+
+cah.Game.prototype.startGameComplete = function() {
+  $("#start_game").hide();
 };
 
 /**
@@ -250,6 +288,32 @@ cah.Game.prototype.playerLeave = function(player) {
  */
 cah.Game.prototype.refreshGameStatus = function() {
   cah.Ajax.build(cah.$.AjaxOperation.GET_GAME_INFO).withGameId(this.id_).run();
+};
+
+/**
+ * The game state has changed.
+ * 
+ * @param {Object}
+ *          data Data from server.
+ */
+cah.Game.prototype.stateChange = function(data) {
+  this.state_ = data[cah.$.LongPollResponse.GAME_STATE];
+
+  switch (this.state_) {
+    case cah.$.GameState.LOBBY:
+      // TODO
+      break;
+    case cah.$.GameState.PLAYING:
+      this.refreshGameStatus();
+      this.setBlackCard(data[cah.$.LongPollResponse.BLACK_CARD]);
+      break;
+    case cah.$.GameState.JUDGING:
+      // TODO
+      break;
+    default:
+      cah.log.error("Game " + this.id_ + " changed to unknown state " + this.state_);
+      return;
+  }
 };
 
 // /**

@@ -28,6 +28,10 @@ public class Player {
     score++;
   }
 
+  public void resetScore() {
+    score = 0;
+  }
+
   /**
    * @return The backing object for the player's hand (i.e., it can be modified).
    */

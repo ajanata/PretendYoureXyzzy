@@ -19,14 +19,14 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
-public class GetHandHandler extends GameHandler {
+public class GetCardsHandler extends GameHandler {
 
   @Inject
-  public GetHandHandler(final GameManager gameManager) {
+  public GetCardsHandler(final GameManager gameManager) {
     super(gameManager);
   }
 
-  public static final String OP = AjaxOperation.GET_HAND.toString();
+  public static final String OP = AjaxOperation.GET_CARDS.toString();
 
   @SuppressWarnings("unchecked")
   @Override
@@ -34,12 +34,13 @@ public class GetHandHandler extends GameHandler {
       final HttpSession session, final User user, final Game game) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
-    final List<Map<WhiteCardData, Object>> hand = user.getGame().getHand(user);
+    final List<Map<WhiteCardData, Object>> hand = game.getHand(user);
     if (hand != null) {
       data.put(AjaxResponse.HAND, hand);
     } else {
       data.put(AjaxResponse.HAND, Arrays.asList(new HashMap<WhiteCardData, Object>()));
     }
+    data.put(AjaxResponse.BLACK_CARD, game.getBlackCard());
 
     data.put(AjaxResponse.GAME_ID, game.getId());
     return data;

@@ -46,36 +46,48 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.CHAT] = function(data) {
   }
 };
 
-cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_REFRESH] = function(data) {
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_LIST_REFRESH] = function(data) {
   cah.GameList.instance.refreshGames();
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_JOIN] = function(data) {
-  var gameId = data[cah.$.LongPollResponse.GAME_ID];
-  var game = cah.currentGames[gameId];
-  if (game) {
-    game.playerJoin(data[cah.$.LongPollResponse.NICKNAME]);
-  } else if (cah.nickname != data[cah.$.LongPollResponse.NICKNAME]) {
-    cah.log.error("Received player join event for unknown game id " + gameId);
-  }
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.playerJoin,
+      data[cah.$.LongPollResponse.NICKNAME], "player join");
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_LEAVE] = function(data) {
-  var gameId = data[cah.$.LongPollResponse.GAME_ID];
-  var game = cah.currentGames[gameId];
-  if (game) {
-    game.playerLeave(data[cah.$.LongPollResponse.NICKNAME]);
-  } else if (cah.nickname != data[cah.$.LongPollResponse.NICKNAME]) {
-    cah.log.error("Received player leave event for unknown game id " + gameId);
-  }
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.playerLeave,
+      data[cah.$.LongPollResponse.NICKNAME], "player leave");
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.HAND_DEAL] = function(data) {
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.dealtCards,
+      data[cah.$.LongPollResponse.HAND], "dealt cards");
+};
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_STATE_CHANGE] = function(data) {
+  cah.longpoll.EventHandlers
+      .__gameEvent(data, cah.Game.prototype.stateChange, data, "state change");
+};
+
+/**
+ * Helper for event handlers for game events.
+ * 
+ * @param {Object}
+ *          data Data from server
+ * @param {Function}
+ *          func Function to call.
+ * @param {Object}
+ *          funcData Data to be passed to the function.
+ * @param {String}
+ *          errorStr To be displayed if this is for an unknown game.
+ */
+cah.longpoll.EventHandlers.__gameEvent = function(data, func, funcData, errorStr) {
   var gameId = data[cah.$.LongPollResponse.GAME_ID];
   var game = cah.currentGames[gameId];
   if (game) {
-    game.dealtCards(data[cah.$.LongPollResponse.HAND]);
+    func.call(game, funcData);
   } else {
-    cah.log.error("Received dealt cards for unknown game id " + gameId);
+    cah.log.error("Received " + errorStr + " for unknown game id " + gameId);
   }
 };

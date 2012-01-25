@@ -104,14 +104,20 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LEAVE_GAME] = function(data) {
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.START_GAME] = function(data) {
-  // pass
+  var game = cah.currentGames[data[cah.$.AjaxResponse.GAME_ID]];
+  if (game) {
+    game.startGameComplete();
+  }
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_HAND] = function(data) {
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_CARDS] = function(data) {
   var gameId = data[cah.$.AjaxResponse.GAME_ID];
   var game = cah.currentGames[gameId];
   if (game) {
     game.dealtCards(data[cah.$.AjaxResponse.HAND]);
+    if (data[cah.$.AjaxResponse.BLACK_CARD]) {
+      game.setBlackCard(data[cah.$.AjaxResponse.BLACK_CARD]);
+    }
   } else {
     cah.log.error("Received hand for unknown game id " + gameId);
   }

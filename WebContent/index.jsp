@@ -117,6 +117,14 @@
 <div style="width: 1000px; height: 506px; border: 1px solid black; position: relative;"
     class="hide">
   <div id="game_template" class="game hide">
+    <div class="game_message">
+      Waiting for server...
+    </div>
+    <div class="game_black_card_wrapper">
+      The black card for this round is:
+      <div class="game_black_card">
+      </div>
+    </div>
     <div class="game_hand">
       <span class="header">Your Hand</span>
       <div class="game_hand_cards">

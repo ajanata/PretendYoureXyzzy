@@ -18,6 +18,17 @@ public class Constants {
     public String getString();
   }
 
+  /**
+   * Enums that implement this interface have two user-visible strings associated with them.
+   * 
+   * @author ajanata
+   */
+  public interface DoubleLocalizable {
+    public String getString();
+
+    public String getString2();
+  }
+
   public enum DisconnectReason {
     KICKED("kicked"),
     MANUAL("manual"),
@@ -56,8 +67,8 @@ public class Constants {
     CREATE_GAME("create_game"),
     FIRST_LOAD("firstload"),
     GAME_LIST("games"),
+    GET_CARDS("get_cards"),
     GET_GAME_INFO("get_game_info"),
-    GET_HAND("get_hand"),
     JOIN_GAME("join_game"),
     LEAVE_GAME("leave_game"),
     LOG_OUT("logout"),
@@ -97,6 +108,7 @@ public class Constants {
   }
 
   public enum AjaxResponse implements ReturnableData {
+    BLACK_CARD("black_card"),
     ERROR("error"),
     ERROR_CODE("error_code"),
     GAME_ID("game_id"),
@@ -124,6 +136,7 @@ public class Constants {
   }
 
   public enum ErrorCode implements Localizable {
+    ALREADY_STARTED("already_started", "The game has already started."),
     BAD_OP("bad_op", "Invalid operation."),
     BAD_REQUEST("bad_req", "Bad request."),
     CANNOT_JOIN_ANOTHER_GAME("cannot_join_another_game", "You cannot join another game."),
@@ -173,9 +186,11 @@ public class Constants {
 
   public enum LongPollEvent {
     CHAT("chat"),
+    GAME_LIST_REFRESH("game_list_refresh"),
+    GAME_PLAYER_INFO_CHANGE("game_player_info_change"),
     GAME_PLAYER_JOIN("game_player_join"),
     GAME_PLAYER_LEAVE("game_player_leave"),
-    GAME_REFRESH("game_refresh"),
+    GAME_STATE_CHANGE("game_state_change"),
     HAND_DEAL("hand_deal"),
     NEW_PLAYER("new_player"),
     NOOP("noop"),
@@ -194,14 +209,18 @@ public class Constants {
   }
 
   public enum LongPollResponse implements ReturnableData {
+    BLACK_CARD(AjaxResponse.BLACK_CARD.toString()),
     ERROR(AjaxResponse.ERROR.toString()),
     ERROR_CODE(AjaxResponse.ERROR_CODE.toString()),
     EVENT("event"),
     FROM("from"),
-    GAME_ID("game_id"),
+    GAME_ID(AjaxResponse.GAME_ID.toString()),
+    GAME_STATE("game_state"),
     HAND("hand"),
+    JUDGE("judge"),
     MESSAGE("message"),
-    NICKNAME("nickname"),
+    NICKNAME(AjaxRequest.NICKNAME.toString()),
+    PLAYER_INFO(AjaxResponse.PLAYER_INFO.toString()),
     REASON("reason"),
     TIMESTAMP("timestamp");
 
@@ -228,6 +247,24 @@ public class Constants {
     private final String key;
 
     WhiteCardData(final String key) {
+      this.key = key;
+    }
+
+    @Override
+    public String toString() {
+      return key;
+    }
+  }
+
+  public enum BlackCardData {
+    DRAW("draw"),
+    ID("id"),
+    PICK("pick"),
+    TEXT("text");
+
+    private final String key;
+
+    BlackCardData(final String key) {
       this.key = key;
     }
 
@@ -297,19 +334,21 @@ public class Constants {
     }
   }
 
-  public enum GamePlayerStatus implements Localizable {
-    HOST("host", "Host"),
-    IDLE("idle", ""),
-    JUDGE("judge", "Judge"),
-    JUDGING("judging", "Judging"),
-    PLAYING("playing", "Playing");
+  public enum GamePlayerStatus implements DoubleLocalizable {
+    HOST("host", "Host", "Wait for players then click Start Game."),
+    IDLE("idle", "", "Waiting for players..."),
+    JUDGE("judge", "Judge", "You are the judge this round."),
+    JUDGING("judging", "Judging", "Select a winning card."),
+    PLAYING("playing", "Playing", "Select a card to play.");
 
     private final String status;
     private final String message;
+    private final String message2;
 
-    GamePlayerStatus(final String status, final String message) {
+    GamePlayerStatus(final String status, final String message, final String message2) {
       this.status = status;
       this.message = message;
+      this.message2 = message2;
     }
 
     @Override
@@ -320,6 +359,11 @@ public class Constants {
     @Override
     public String getString() {
       return message;
+    }
+
+    @Override
+    public String getString2() {
+      return message2;
     }
   }
 }
