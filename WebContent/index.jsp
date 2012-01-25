@@ -120,14 +120,26 @@
     <div class="game_message">
       Waiting for server...
     </div>
-    <div class="game_black_card_wrapper">
-      The black card for this round is:
-      <div class="game_black_card">
+    <div style="width:100%; height:100%;">
+      <div style="width:100%; height:100%;">
+        <div class="game_left_side">
+          <div class="game_black_card_wrapper">
+            The black card for this round is:
+            <div class="game_black_card">
+            </div>
+          </div>
+          <input type="button" class="confirm_card" value="Confirm Selection" />
+        </div>
+        <div class="game_white_card_wrapper">
+          The white cards played this round are:
+          <div class="game_white_cards">
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="game_hand">
-      <span class="header">Your Hand</span>
-      <div class="game_hand_cards">
+      <div class="game_hand">
+        <span class="header">Your Hand</span>
+        <div class="game_hand_cards">
+        </div>
       </div>
     </div>
   </div>

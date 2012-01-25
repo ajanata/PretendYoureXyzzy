@@ -73,8 +73,26 @@ cah.Game = function(id) {
    */
   this.blackCard_ = null;
 
+  /**
+   * Selected card from the player's hand.
+   * 
+   * @type {cah.card.WhiteCard}
+   * @private;
+   */
+  this.handSelectedCard_ = null;
+
+  /**
+   * The judge of the current round.
+   * 
+   * @type {String}
+   * @private
+   */
+  this.judge_ = null;
+
   $("#leave_game").click(cah.bind(this, this.leaveGameClick_));
   $("#start_game").click(cah.bind(this, this.startGameClick_));
+
+  $(".confirm_card", this.element_).click(cah.bind(this, this.confirmClick_));
 };
 
 /**
@@ -138,7 +156,7 @@ cah.Game.prototype.dealtCards = function(cards) {
 cah.Game.prototype.dealtCard = function(card) {
   this.hand_.push(card);
   var element = card.getElement();
-  jQuery(".game_hand_cards", this.element_).append(element);
+  $(".game_hand_cards", this.element_).append(element);
 
   // animate it so we don't have to hard-code per browser
   $(element).animate({
@@ -147,11 +165,10 @@ cah.Game.prototype.dealtCard = function(card) {
     duration : 0,
   });
 
-  $(element).css("transform", "scale(0.35, 0.35)").css("transform-origin", "0 0");
-
   // TODO scale on available width and number of cards
   var origSize = parseInt($(element).css("width"));
-  $(element).css("width", origSize * .35).css("height", origSize * .35);
+  $(element).css("width", origSize * .35).css("height", origSize * .35).css("transform-origin",
+      "0 0");
 
   var options = {
     duration : 200,
@@ -169,7 +186,9 @@ cah.Game.prototype.dealtCard = function(card) {
       "z-index" : 1,
       width : origSize * .35,
     }, options);
-  });
+  }).click({
+    card : card,
+  }, cah.bind(this, this.handCardClick_));
 };
 
 cah.Game.prototype.insertIntoDocument = function() {
@@ -197,6 +216,7 @@ cah.Game.prototype.updateGameStatus = function(data) {
   for ( var index in playerInfos) {
     var thisInfo = playerInfos[index];
     var playerName = thisInfo[cah.$.GamePlayerInfo.NAME];
+    var playerStatus = thisInfo[cah.$.GamePlayerInfo.STATUS];
     var panel = this.scoreCards_[playerName];
     if (!panel) {
       // new score panel
@@ -204,12 +224,62 @@ cah.Game.prototype.updateGameStatus = function(data) {
       $(this.scoreboardElement_).append(panel.getElement());
       this.scoreCards_[playerName] = panel;
     }
-    panel.update(thisInfo[cah.$.GamePlayerInfo.SCORE], thisInfo[cah.$.GamePlayerInfo.STATUS]);
+    panel.update(thisInfo[cah.$.GamePlayerInfo.SCORE], playerStatus);
 
     if (playerName == cah.nickname) {
-      $(".game_message", this.element_).text(
-          cah.$.GamePlayerStatus_msg_2[thisInfo[cah.$.GamePlayerInfo.STATUS]]);
+      $(".game_message", this.element_).text(cah.$.GamePlayerStatus_msg_2[playerStatus]);
+      if (playerStatus == cah.$.GamePlayerStatus.PLAYING) {
+        $(".confirm_card", this.element_).removeAttr("disabled");
+      } else {
+        this.handSelectedCard_ = null;
+        $(".selected", $(".game_hand", this.element_)).removeClass("selected");
+        $(".confirm_card", this.element_).attr("disabled", "disabled");
+      }
     }
+
+    if (playerStatus == cah.$.GamePlayerStatus.JUDGE
+        || playerStatus == cah.$.GamePlayerStatus.JUDGING) {
+      this.judge_ = playerName;
+    }
+  }
+};
+
+/**
+ * Event handler for confirm selection button.
+ * 
+ * @private
+ */
+cah.Game.prototype.confirmClick_ = function() {
+  // TODO
+};
+
+/**
+ * Event handler for clicking on a card in the hand.
+ * 
+ * @param e
+ * @private
+ */
+cah.Game.prototype.handCardClick_ = function(e) {
+  // judge can't select a card.
+  if (this.judge_ == cah.nickname) {
+    return;
+  }
+  /** @type {cah.card.WhiteCard} */
+  var card = e.data.card;
+
+  // remove style from existing selected card
+  if (this.handSelectedCard_) {
+    $(".card", this.handSelectedCard_.getElement()).removeClass("selected");
+  }
+
+  // if the user clicked on the same card, deselect it.
+  if (card == this.handSelectedCard_) {
+    this.handSelectedCard_ = null;
+    $(".confirm_card", this.element_).attr("disabled", "disabled");
+  } else {
+    this.handSelectedCard_ = card;
+    $(".card", card.getElement()).addClass("selected");
+    $(".confirm_card", this.element_).removeAttr("disabled");
   }
 };
 

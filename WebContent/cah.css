@@ -183,7 +183,7 @@ span.debug {
 .card {
   width: 200px;
   height: 200px;
-  border: 1px solid gray;
+  border: 3px solid gray;
   padding: 15px;
   font-family: Arial, Verdana, san-serif;
   font-size: 18pt;
@@ -246,16 +246,18 @@ span.debug {
   height: 100%;
   width: 100%;
   cursor: pointer;
+  padding-left: 2px;
 }
 
 .game_message {
   font-size: 14pt;
   border-bottom: 2px solid black;
+  padding: 5px;
 }
 
 .game_black_card_wrapper {
   width: 232px;
-  margin-top: 10px;
+  float: left;
 }
 
 .game_black_card {
@@ -270,11 +272,36 @@ span.debug {
   left: 15px;
 }
 
+.confirm_card {
+  float: left;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.game_left_side {
+  float: left;
+  width: 232px;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.game_white_card_wrapper {
+  width: 738px;
+  height: 60%;
+  float: right;
+  margin: 10px;
+}
+
+.game_white_cards {
+  margin-top: 10px;
+}
+
 .card_holder {
   float: left;
   position: relative;
   overflow-x: visible !important;
   overflow-y: visible !important;
+  margin-right: 2px;
 }
 
 .scoreboard {
@@ -298,4 +325,8 @@ span.debug {
 
 .clear {
   clear: both;
+}
+
+.selected {
+  border: 3px solid blue;
 }
