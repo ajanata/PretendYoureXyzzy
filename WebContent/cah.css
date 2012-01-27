@@ -243,13 +243,17 @@ span.debug {
   right: 0px;
   height: 30%;
   border-top: 1px solid black;
+  /*
+  overflow-x: auto;
+  overflow-y: visible;
+  */
 }
 
 .game_hand_cards {
   position: absolute;
   bottom: 0px;
   height: 100%;
-  width: 100%;
+  width: 99%;
   cursor: pointer;
   padding-left: 2px;
   min-width: 750px;
@@ -285,15 +289,23 @@ span.debug {
   padding-top: 10px;
 }
 
+.game_right_side {
+  position: absolute;
+  left: 246px;
+  width: 700px;
+  /*
+  overflow-x: auto;
+  */
+}
+
 .game_white_card_wrapper {
-  width: 738px;
   height: 60%;
-  float: right;
   margin: 10px;
 }
 
 .game_white_cards {
-  margin-top: 10px;
+  margin-top: 15px;
+  min-width: 600px;
 }
 
 .card_holder {

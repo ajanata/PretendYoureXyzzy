@@ -82,6 +82,14 @@ cah.Game = function(id) {
   this.handSelectedCard_ = null;
 
   /**
+   * Selected card from the round's white cards.
+   * 
+   * @type {cah.card.WhiteCard}
+   * @private;
+   */
+  this.roundSelectedCard_ = null;
+
+  /**
    * Card the player played this round.
    * 
    * TODO make this an array when we support the multiple play blacks
@@ -97,8 +105,8 @@ cah.Game = function(id) {
    * @type {String}
    * @private
    */
-
   this.judge_ = null;
+
   /**
    * Scale factor for hand cards when zoomed out.
    * 
@@ -130,6 +138,38 @@ cah.Game = function(id) {
    * @private
    */
   this.handCardLargeSize_ = 142;
+
+  /**
+   * Scale factor for round cards when zoomed out.
+   * 
+   * @type {Number}
+   * @private
+   */
+  this.roundCardSmallScale_ = 1;
+
+  /**
+   * Scale factor for round cards when zoomed in.
+   * 
+   * @type {Number}
+   * @private
+   */
+  this.roundCardLargeScale_ = 1;
+
+  /**
+   * Size for round cards when zoomed out.
+   * 
+   * @type {Number}
+   * @private
+   */
+  this.roundCardSmallSize_ = 236;
+
+  /**
+   * Size for round cards when zoomed in.
+   * 
+   * @type {Number}
+   * @private
+   */
+  this.roundCardLargeSize_ = 236;
 
   $("#leave_game").click(cah.bind(this, this.leaveGameClick_));
   $("#start_game").click(cah.bind(this, this.startGameClick_));
@@ -202,15 +242,7 @@ cah.Game.prototype.dealtCard = function(card) {
   var element = card.getElement();
   $(".game_hand_cards", this.element_).append(element);
 
-  // animate it so we don't have to hard-code per browser
-  $(element).animate({
-    scale : this.handCardSmallScale_,
-  }, {
-    duration : 0,
-  });
-
-  $(element).css("width", this.handCardSmallSize_).css("height", this.handCardSmallSize_).css(
-      "transform-origin", "0 0");
+  $(element).css("transform-origin", "0 0");
 
   var data = {
     card : card,
@@ -275,7 +307,18 @@ cah.Game.prototype.setRoundWhiteCards = function(cards) {
  * @private
  */
 cah.Game.prototype.addRoundWhiteCard_ = function(card) {
-  $(".game_white_cards", this.element_).append(card.getElement());
+  var element = card.getElement();
+  $(".game_white_cards", this.element_).append(element);
+  $(element).css("transform-origin", "0 0");
+
+  var data = {
+    card : card,
+  };
+  $(element).on("mouseenter.round", data, cah.bind(this, this.roundCardMouseEnter_)).on(
+      "mouseleave.round", data, cah.bind(this, this.roundCardMouseLeave_)).on("click.round", data,
+      cah.bind(this, this.roundCardClick_));
+
+  this.resizeRoundCards_();
 };
 
 /**
@@ -285,9 +328,8 @@ cah.Game.prototype.addRoundWhiteCard_ = function(card) {
  * @private
  */
 cah.Game.prototype.handCardMouseEnter_ = function(e) {
-  $(e.data.card.getElement()).animate({
+  $(e.data.card.getElement()).css("z-index", "2").animate({
     scale : this.handCardLargeScale_,
-    "z-index" : 2,
     width : this.handCardLargeSize_,
   }, {
     duration : 200,
@@ -313,12 +355,46 @@ cah.Game.prototype.handCardMouseLeave_ = function(e) {
 };
 
 /**
+ * Event handler for round card mouse enter.
+ * 
+ * @param e
+ * @private
+ */
+cah.Game.prototype.roundCardMouseEnter_ = function(e) {
+  $(e.data.card.getElement()).css("z-index", "2").animate({
+    scale : this.roundCardLargeScale_,
+    width : this.roundCardLargeSize_,
+  }, {
+    duration : 200,
+    queue : false,
+  });
+};
+
+/**
+ * Event handler for round card mouse leave.
+ * 
+ * @param e
+ * @private
+ */
+cah.Game.prototype.roundCardMouseLeave_ = function(e) {
+  $(e.data.card.getElement()).animate({
+    scale : this.roundCardSmallScale_,
+    "z-index" : 1,
+    width : this.roundCardSmallSize_,
+  }, {
+    duration : 200,
+    queue : false,
+  });
+};
+
+/**
  * Event handler for window resize.
  * 
  * @private
  */
 cah.Game.prototype.windowResize_ = function() {
   this.resizeHandCards_();
+  this.resizeRoundCards_();
 };
 
 /**
@@ -338,6 +414,46 @@ cah.Game.prototype.resizeHandCards_ = function() {
   this.handCardLargeScale_ = this.handCardSmallScale_ * 1.8;
   elems.width(this.handCardSmallSize_).height(this.handCardSmallSize_).animate({
     scale : this.handCardSmallScale_,
+  }, {
+    duration : 0,
+  });
+};
+
+/**
+ * Resize cards in the round white cards are to fit window size and number of players.
+ * 
+ * TODO This will need some more consideration when there are multiple cards played per player.
+ * 
+ * @private
+ */
+cah.Game.prototype.resizeRoundCards_ = function() {
+  var elems = $(".game_white_cards .card_holder", this.element_);
+  var ct = elems.length;
+  // 30 by experiment in chrome.
+  $(".game_right_side", this.element_).width(
+      $(window).width() - $(".game_left_side", this.element_).width() - 30);
+  this.roundCardSmallSize_ = ($(".game_white_cards", this.element_).width() - 20 - $(
+      ".game_left_side", this.element_).width())
+      / ct;
+  if (this.roundCardSmallSize_ > 236) {
+    this.roundCardSmallSize_ = 236;
+  }
+  if (this.roundCardSmallSize_ < 118) {
+    this.roundCardSmallSize_ = 118;
+  }
+  var maxScale = 236 / this.roundCardSmallSize_;
+  var scale = maxScale < 1.8 ? maxScale : 1.8;
+  this.roundCardLargeSize_ = this.roundCardSmallSize_ * scale;
+  if (this.roundCardLargeSize_ > 236) {
+    this.roundCardLargeSize_ = 236;
+  }
+  this.roundCardSmallScale_ = this.roundCardSmallSize_ / 236;
+  this.roundCardLargeScale_ = this.roundCardSmallScale_ * scale;
+  if (this.roundCardLargeScale_ > maxScale) {
+    this.roundCardLargeScale_ = maxScale;
+  }
+  elems.width(this.roundCardSmallSize_).height(this.roundCardSmallSize_).animate({
+    scale : this.roundCardSmallScale_,
   }, {
     duration : 0,
   });
@@ -468,6 +584,37 @@ cah.Game.prototype.handCardClick_ = function(e) {
     $(".confirm_card", this.element_).attr("disabled", "disabled");
   } else {
     this.handSelectedCard_ = card;
+    $(".card", card.getElement()).addClass("selected");
+    $(".confirm_card", this.element_).removeAttr("disabled");
+  }
+};
+
+/**
+ * Event handler for clicking on a card in the round.
+ * 
+ * @param e
+ * @private
+ */
+cah.Game.prototype.roundCardClick_ = function(e) {
+  // this player isn't in judging state.
+  var scorecard = this.scoreCards_[cah.nickname];
+  if (scorecard && scorecard.getStatus() != cah.$.GamePlayerStatus.JUDGING) {
+    return;
+  }
+  /** @type {cah.card.WhiteCard} */
+  var card = e.data.card;
+
+  // remove style from existing selected card
+  if (this.roundSelectedCard_) {
+    $(".card", this.roundSelectedCard_.getElement()).removeClass("selected");
+  }
+
+  // if the user clicked on the same card, deselect it.
+  if (card == this.roundSelectedCard_) {
+    this.roundSelectedCard_ = null;
+    $(".confirm_card", this.element_).attr("disabled", "disabled");
+  } else {
+    this.roundSelectedCard_ = card;
     $(".card", card.getElement()).addClass("selected");
     $(".confirm_card", this.element_).removeAttr("disabled");
   }

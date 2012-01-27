@@ -130,9 +130,11 @@
           </div>
           <input type="button" class="confirm_card" value="Confirm Selection" />
         </div>
-        <div class="game_white_card_wrapper">
-          The white cards played this round are:
-          <div class="game_white_cards">
+        <div class="game_right_side">
+          <div class="game_white_card_wrapper">
+            The white cards played this round are:
+            <div class="game_white_cards">
+            </div>
           </div>
         </div>
       </div>
