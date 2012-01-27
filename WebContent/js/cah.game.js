@@ -58,6 +58,14 @@ cah.Game = function(id) {
   this.hand_ = Array();
 
   /**
+   * Map of id to card object for round cards.
+   * 
+   * @type {Object}
+   * @private
+   */
+  this.roundCards_ = {};
+
+  /**
    * The game's state.
    * 
    * @type {cah.$.GameState}
@@ -318,6 +326,8 @@ cah.Game.prototype.addRoundWhiteCard_ = function(card) {
       "mouseleave.round", data, cah.bind(this, this.roundCardMouseLeave_)).on("click.round", data,
       cah.bind(this, this.roundCardClick_));
 
+  this.roundCards_[card.getServerId()] = card;
+
   this.resizeRoundCards_();
 };
 
@@ -520,6 +530,11 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
       $(".confirm_card", this.element_).attr("disabled", "disabled");
     }
     if (playerStatus != cah.$.GamePlayerStatus.PLAYING) {
+      if (this.handSelectedCard_ != null) {
+        // we have a card selected, but we're changing state. this almost certainly is an
+        // out-of-order reception of events. remove it from hand, we don't need to do anything else
+        this.removeCardFromHand(this.handSelectedCard_);
+      }
       this.handSelectedCard_ = null;
       $(".selected", $(".game_hand", this.element_)).removeClass("selected");
     }
@@ -540,13 +555,32 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
 };
 
 /**
+ * Round has completed. Update display of round cards to show winner.
+ * 
+ * @param {Object}
+ *          data Data from server.
+ */
+cah.Game.prototype.roundComplete = function(data) {
+  var card = this.roundCards_[data[cah.$.LongPollResponse.WINNING_CARD]];
+  $(card.getElement()).addClass("selected");
+  var scoreCard = this.scoreCards_[data[cah.$.LongPollResponse.ROUND_WINNER]];
+  $(scoreCard.getElement()).addClass("selected");
+  cah.log.status("The next round will begin in "
+      + (data[cah.$.LongPollResponse.INTERMISSION] / 1000) + " seconds.");
+};
+
+/**
  * Event handler for confirm selection button.
  * 
  * @private
  */
 cah.Game.prototype.confirmClick_ = function() {
   if (this.judge_ == cah.nickname) {
-    // TODO
+    if (this.roundSelectedCard_ != null) {
+      // TODO fix for multiple select
+      cah.Ajax.build(cah.$.AjaxOperation.JUDGE_SELECT).withGameId(this.id_).withCardId(
+          this.roundSelectedCard_.getServerId()).run();
+    }
   } else {
     if (this.handSelectedCard_ != null) {
       cah.Ajax.build(cah.$.AjaxOperation.PLAY_CARD).withGameId(this.id_).withCardId(
@@ -720,6 +754,8 @@ cah.Game.prototype.refreshGameStatus = function() {
 cah.Game.prototype.stateChange = function(data) {
   this.state_ = data[cah.$.LongPollResponse.GAME_STATE];
 
+  $(".scorecard", this.scoreboardElement_).removeClass("selected");
+
   switch (this.state_) {
     case cah.$.GameState.LOBBY:
       var handCount = this.hand_.length;
@@ -731,7 +767,10 @@ cah.Game.prototype.stateChange = function(data) {
       this.judge_ = null;
       $(".confirm_card", this.element_).attr("disabled", "disabled");
       $(".game_black_card", this.element_).empty();
-      // TODO make this remove handlers
+      for ( var index in this.roundCards_) {
+        $(this.roundCards_[index]).off(".round");
+      }
+      this.roundCards_ = {};
       $(".game_white_cards", this.element_).empty();
       break;
 

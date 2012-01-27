@@ -70,6 +70,7 @@ public class Constants {
     GET_CARDS("get_cards"),
     GET_GAME_INFO("get_game_info"),
     JOIN_GAME("join_game"),
+    JUDGE_SELECT("judge_select"),
     LEAVE_GAME("leave_game"),
     LOG_OUT("logout"),
     NAMES("names"),
@@ -161,9 +162,11 @@ public class Constants {
     NOT_ENOUGH_PLAYERS("not_enough_players", "There are not enough players to start the game."),
     NOT_GAME_HOST("not_game_host", "Only the game host can do that."),
     NOT_IN_THAT_GAME("not_in_that_game", "You are not in that game."),
+    NOT_JUDGE("not_judge", "You aren't the judge."),
     NOT_REGISTERED("not_registered", "Not registered. Refresh the page."),
     NOT_YOUR_TURN("not_your_turn", "It is not your turn to play a card."),
     OP_NOT_SPECIFIED("op_not_spec", "Operation not specified."),
+    SERVER_ERROR("server_error", "An error occured on the server."),
     SESSION_EXPIRED("session_expired", "Your session has expired. Refresh the page."),
     TOO_MANY_GAMES("too_many_games", "There are too many games already in progress. Either join " +
         "an existing game, or wait for one to become available.");
@@ -199,6 +202,7 @@ public class Constants {
     GAME_PLAYER_INFO_CHANGE("game_player_info_change"),
     GAME_PLAYER_JOIN("game_player_join"),
     GAME_PLAYER_LEAVE("game_player_leave"),
+    GAME_ROUND_COMPLETE("game_round_complete"),
     GAME_STATE_CHANGE("game_state_change"),
     HAND_DEAL("hand_deal"),
     NEW_PLAYER("new_player"),
@@ -226,12 +230,15 @@ public class Constants {
     GAME_ID(AjaxResponse.GAME_ID.toString()),
     GAME_STATE("game_state"),
     HAND("hand"),
+    INTERMISSION("intermission"),
     MESSAGE("message"),
     NICKNAME(AjaxRequest.NICKNAME.toString()),
     PLAYER_INFO(AjaxResponse.PLAYER_INFO.toString()),
     REASON("reason"),
+    ROUND_WINNER("round_winner"),
     TIMESTAMP("timestamp"),
-    WHITE_CARDS("white_cards");
+    WHITE_CARDS("white_cards"),
+    WINNING_CARD("winning_card");
 
     private final String field;
 
@@ -287,7 +294,8 @@ public class Constants {
     DEALING("dealing", "In Progress"),
     JUDGING("judging", "In Progress"),
     LOBBY("lobby", "Joinable (Not Started)"),
-    PLAYING("playing", "In Progress");
+    PLAYING("playing", "In Progress"),
+    ROUND_OVER("round_over", "In Progress");
 
     private final String state;
     private final String message;

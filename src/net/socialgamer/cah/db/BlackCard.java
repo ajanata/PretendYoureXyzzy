@@ -9,11 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import net.socialgamer.cah.Constants.BlackCardData;
+import net.socialgamer.cah.data.HasId;
 
 
 @Entity
 @Table(name = "black_cards")
-public class BlackCard {
+public class BlackCard implements HasId {
   @Id
   @GeneratedValue
   int id;
@@ -21,6 +22,7 @@ public class BlackCard {
   int draw;
   int pick;
 
+  @Override
   public int getId() {
     return id;
   }

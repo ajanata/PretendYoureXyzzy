@@ -76,6 +76,11 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_INFO_CHANGE] = functi
       data[cah.$.LongPollResponse.PLAYER_INFO], "player info change");
 };
 
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_ROUND_COMPLETE] = function(data) {
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.roundComplete, data,
+      "round complete");
+};
+
 /**
  * Helper for event handlers for game events.
  * 

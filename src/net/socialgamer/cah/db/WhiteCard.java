@@ -9,16 +9,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import net.socialgamer.cah.Constants.WhiteCardData;
+import net.socialgamer.cah.data.HasId;
 
 
 @Entity
 @Table(name = "white_cards")
-public class WhiteCard {
+public class WhiteCard implements HasId {
   @Id
   @GeneratedValue
   int id;
   String text;
 
+  @Override
   public int getId() {
     return id;
   }

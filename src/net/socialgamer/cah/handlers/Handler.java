@@ -21,11 +21,10 @@ public abstract class Handler {
   public abstract Map<ReturnableData, Object> handle(RequestWrapper request,
       HttpSession session);
 
-  protected Map<ReturnableData, Object> error(final ErrorCode errorCode) {
+  protected static Map<ReturnableData, Object> error(final ErrorCode errorCode) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
     data.put(AjaxResponse.ERROR, Boolean.TRUE);
     data.put(AjaxResponse.ERROR_CODE, errorCode.toString());
-    //    data.put(AjaxResponse.ERROR_MESSAGE, message);
     return data;
   }
 }

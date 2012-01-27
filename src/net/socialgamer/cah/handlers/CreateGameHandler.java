@@ -11,7 +11,6 @@ import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.RequestWrapper;
-import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.User;
@@ -24,12 +23,10 @@ public class CreateGameHandler extends Handler {
   public static final String OP = AjaxOperation.CREATE_GAME.toString();
 
   private final GameManager gameManager;
-  private final ConnectedUsers users;
 
   @Inject
-  public CreateGameHandler(final GameManager gameManager, final ConnectedUsers users) {
+  public CreateGameHandler(final GameManager gameManager) {
     this.gameManager = gameManager;
-    this.users = users;
   }
 
   @Override

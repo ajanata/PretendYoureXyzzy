@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import net.socialgamer.cah.Constants.BlackCardData;
 import net.socialgamer.cah.Constants.ErrorCode;
@@ -50,7 +52,8 @@ public class Game {
   private final int id;
   private final List<Player> players = new ArrayList<Player>(10);
   // TODO make this Map<Player, List<WhiteCard>> once we support the multiple play black cards
-  private final Map<Player, WhiteCard> playedCards = new HashMap<Player, WhiteCard>();
+  private final BidiFromIdHashMap<Player, WhiteCard> playedCards =
+      new BidiFromIdHashMap<Player, WhiteCard>();
   private final ConnectedUsers connectedUsers;
   private final GameManager gameManager;
   private Player host;
@@ -63,7 +66,8 @@ public class Game {
   private final int currentHandSize = 10;
   // TODO make this host-configurable
   private final int maxPlayers = 10;
-  private final int judgeIndex = 0;
+  private int judgeIndex = 0;
+  private final static int ROUND_INTERMISSION = 15 * 1000;
 
   /**
    * TODO Injection here would be much nicer, but that would need a Provider for the id... Too much
@@ -118,6 +122,10 @@ public class Game {
    * Remove a player from the game.
    * 
    * TODO adjust judgeIndex if the player removed is at or before the index
+   * 
+   * TODO remove card they played
+   * 
+   * TODO start a new round if they were the judge
    * 
    * @param user
    *          Player to remove from the game.
@@ -249,6 +257,9 @@ public class Game {
         } else {
           playerStatus = GamePlayerStatus.IDLE;
         }
+        break;
+      case ROUND_OVER:
+        playerStatus = GamePlayerStatus.IDLE;
         break;
       default:
         throw new IllegalStateException("Unknown GameState " + state.toString());
@@ -424,7 +435,6 @@ public class Game {
 
   public Map<BlackCardData, Object> getBlackCard() {
     synchronized (blackCardLock) {
-      final Map<BlackCardData, Object> cardData = new HashMap<BlackCardData, Object>();
       if (blackCard != null) {
         return blackCard.getClientData();
       } else {
@@ -536,6 +546,64 @@ public class Game {
     } else {
       return null;
     }
+  }
+
+  public ErrorCode judgeCard(final User user, final int cardId) {
+    final Player player = getPlayerForUser(user);
+    if (getJudge() != player) {
+      return ErrorCode.NOT_JUDGE;
+    } else if (state != GameState.JUDGING) {
+      return ErrorCode.NOT_YOUR_TURN;
+    }
+
+    final Player cardPlayer;
+    synchronized (playedCards) {
+      cardPlayer = playedCards.getKeyForId(cardId);
+    }
+    if (cardPlayer == null) {
+      return ErrorCode.INVALID_CARD;
+    }
+
+    cardPlayer.increaseScore();
+
+    HashMap<ReturnableData, Object> data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_ROUND_COMPLETE.toString());
+    data.put(LongPollResponse.ROUND_WINNER, cardPlayer.getUser().getNickname());
+    data.put(LongPollResponse.WINNING_CARD, cardId);
+    data.put(LongPollResponse.INTERMISSION, ROUND_INTERMISSION);
+    broadcastToPlayers(MessageType.GAME_EVENT, data);
+
+    data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
+    data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(getJudge()));
+    state = GameState.ROUND_OVER;
+    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+
+    data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
+    data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(cardPlayer));
+    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+
+    final Timer timer = new Timer();
+    timer.schedule(new TimerTask() {
+      @Override
+      public void run() {
+        startNextRound();
+      }
+    }, ROUND_INTERMISSION);
+
+    return null;
+  }
+
+  private void startNextRound() {
+    synchronized (players) {
+      judgeIndex++;
+      if (judgeIndex >= players.size()) {
+        judgeIndex = 0;
+      }
+    }
+
+    dealState();
   }
 
   public class TooManyPlayersException extends Exception {

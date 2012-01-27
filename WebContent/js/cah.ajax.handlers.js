@@ -135,3 +135,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.PLAY_CARD] = function(data, req) {
     game.playCardComplete();
   }
 };
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JUDGE_SELECT] = function(data) {
+  // pass?
+};
