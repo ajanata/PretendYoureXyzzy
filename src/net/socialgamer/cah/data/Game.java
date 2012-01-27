@@ -1,6 +1,7 @@
 package net.socialgamer.cah.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -275,6 +276,15 @@ public class Game {
     }
   }
 
+  /**
+   * @return A HashMap to use for events dispatched from this game, with the game id already set.
+   */
+  private HashMap<ReturnableData, Object> getEventMap() {
+    final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    data.put(LongPollResponse.GAME_ID, id);
+    return data;
+  }
+
   private void dealState() {
     state = GameState.DEALING;
     synchronized (players) {
@@ -304,18 +314,27 @@ public class Game {
       } while (blackCard.getPick() != 1 || blackCard.getDraw() != 0);
     }
 
-    final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
-    data.put(LongPollResponse.GAME_ID, id);
     data.put(LongPollResponse.BLACK_CARD, getBlackCard());
     data.put(LongPollResponse.GAME_STATE, GameState.PLAYING.toString());
-    data.put(LongPollResponse.JUDGE, getJudge().getUser().getNickname());
 
     broadcastToPlayers(MessageType.GAME_EVENT, data);
   }
 
   private void judgingState() {
     state = GameState.JUDGING;
+
+    HashMap<ReturnableData, Object> data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
+    data.put(LongPollResponse.GAME_STATE, GameState.JUDGING.toString());
+    data.put(LongPollResponse.WHITE_CARDS, getWhiteCards());
+    broadcastToPlayers(MessageType.GAME_EVENT, data);
+
+    data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
+    data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(getJudge()));
+    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
 
     // TODO pick a new judge after the judge has selected a winner
     // delay for a short while after the judge selects so that everyone has a chance to see the
@@ -350,6 +369,9 @@ public class Game {
     state = GameState.LOBBY;
 
     // TODO announce the reset
+    final HashMap<ReturnableData, Object> data = getEventMap();
+    data.put(LongPollResponse.GAME_STATE, GameState.LOBBY.toString());
+    broadcastToPlayers(MessageType.GAME_EVENT, data);
   }
 
   private void sendCardsToPlayer(final Player player, final List<WhiteCard> cards) {
@@ -408,21 +430,47 @@ public class Game {
     }
   }
 
-  public List<Map<WhiteCardData, Object>> getWhiteCards(final User user) {
-    // TODO fix this for multi-play
-    synchronized (playedCards) {
-      final List<Map<WhiteCardData, Object>> cardData = new ArrayList<Map<WhiteCardData, Object>>(
-          playedCards.size());
-      int blankCards = playedCards.size();
-      final Player player = getPlayerForUser(user);
-      if (playedCards.containsKey(player)) {
-        cardData.add(playedCards.get(player).getClientData());
-        blankCards--;
+  private List<Map<WhiteCardData, Object>> getWhiteCards() {
+    if (state != GameState.JUDGING) {
+      return new ArrayList<Map<WhiteCardData, Object>>();
+    } else {
+      // TODO fix this for multi-play
+      final List<WhiteCard> shuffledPlayedCards;
+      synchronized (playedCards) {
+        shuffledPlayedCards = new ArrayList<WhiteCard>(playedCards.values());
       }
-      while (blankCards-- > 0) {
-        cardData.add(WhiteCard.getBlankCardClientData());
+      final List<Map<WhiteCardData, Object>> cardData = new ArrayList<Map<WhiteCardData, Object>>(
+          shuffledPlayedCards.size());
+      Collections.shuffle(shuffledPlayedCards);
+      for (final WhiteCard card : shuffledPlayedCards) {
+        cardData.add(card.getClientData());
       }
       return cardData;
+    }
+  }
+
+  public List<Map<WhiteCardData, Object>> getWhiteCards(final User user) {
+    // if we're in judge mode, return all of the cards and ignore which user is asking
+    if (state == GameState.JUDGING) {
+      return getWhiteCards();
+    } else if (state != GameState.PLAYING) {
+      return new ArrayList<Map<WhiteCardData, Object>>();
+    } else {
+      // TODO fix this for multi-play
+      synchronized (playedCards) {
+        final List<Map<WhiteCardData, Object>> cardData = new ArrayList<Map<WhiteCardData, Object>>(
+            playedCards.size());
+        int blankCards = playedCards.size();
+        final Player player = getPlayerForUser(user);
+        if (playedCards.containsKey(player)) {
+          cardData.add(playedCards.get(player).getClientData());
+          blankCards--;
+        }
+        while (blankCards-- > 0) {
+          cardData.add(WhiteCard.getBlankCardClientData());
+        }
+        return cardData;
+      }
     }
   }
 
@@ -444,7 +492,7 @@ public class Game {
   public ErrorCode playCard(final User user, final int cardId) {
     final Player player = getPlayerForUser(user);
     if (player != null) {
-      if (getJudge() == player) {
+      if (getJudge() == player || state != GameState.PLAYING) {
         return ErrorCode.NOT_YOUR_TURN;
       }
       final List<WhiteCard> hand = player.getHand();

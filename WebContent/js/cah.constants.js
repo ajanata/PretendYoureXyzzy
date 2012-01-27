@@ -174,7 +174,7 @@ cah.$.GameState_msg = {};
 cah.$.GameState_msg['playing'] = "In Progress";
 cah.$.GameState_msg['judging'] = "In Progress";
 cah.$.GameState_msg['lobby'] = "Joinable (Not Started)";
-cah.$.GameState_msg['dealing'] = "Dealing";
+cah.$.GameState_msg['dealing'] = "In Progress";
 
 cah.$.LongPollEvent = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -195,10 +195,10 @@ cah.$.LongPollResponse = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.LongPollResponse.prototype.dummyForAutocomplete = undefined;
+cah.$.LongPollResponse.WHITE_CARDS = "white_cards";
 cah.$.LongPollResponse.GAME_ID = "game_id";
 cah.$.LongPollResponse.REASON = "reason";
 cah.$.LongPollResponse.HAND = "hand";
-cah.$.LongPollResponse.JUDGE = "judge";
 cah.$.LongPollResponse.PLAYER_INFO = "player_info";
 cah.$.LongPollResponse.BLACK_CARD = "black_card";
 cah.$.LongPollResponse.GAME_STATE = "game_state";

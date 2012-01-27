@@ -396,12 +396,15 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
 
   if (playerName == cah.nickname) {
     $(".game_message", this.element_).text(cah.$.GamePlayerStatus_msg_2[playerStatus]);
-    if (playerStatus == cah.$.GamePlayerStatus.PLAYING) {
+    if (playerStatus == cah.$.GamePlayerStatus.PLAYING
+        || playerStatus == cah.$.GamePlayerStatus.JUDGING) {
       $(".confirm_card", this.element_).removeAttr("disabled");
     } else {
+      $(".confirm_card", this.element_).attr("disabled", "disabled");
+    }
+    if (playerStatus != cah.$.GamePlayerStatus.PLAYING) {
       this.handSelectedCard_ = null;
       $(".selected", $(".game_hand", this.element_)).removeClass("selected");
-      $(".confirm_card", this.element_).attr("disabled", "disabled");
     }
   }
 
@@ -411,14 +414,11 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
   }
 
   if (oldStatus == cah.$.GamePlayerStatus.PLAYING && playerStatus == cah.$.GamePlayerStatus.IDLE) {
-    // this player played a card. display a face-down white card in the area, or our card.
-    var displayCard;
-    if (playerName == cah.nickname) {
-      displayCard = this.myPlayedCard_;
-    } else {
-      displayCard = new cah.card.WhiteCard();
+    // this player played a card. display a face-down white card in the area, or nothing if it is
+    // us. we put the card there when we get the acknowledgement from the server from playing.
+    if (playerName != cah.nickname) {
+      this.addRoundWhiteCard_(new cah.card.WhiteCard());
     }
-    this.addRoundWhiteCard_(displayCard);
   }
 };
 
@@ -504,6 +504,7 @@ cah.Game.prototype.playCardComplete = function() {
     // TODO support for multiple play
     this.myPlayedCard_ = this.handSelectedCard_;
     this.removeCardFromHand(this.handSelectedCard_);
+    this.addRoundWhiteCard_(this.handSelectedCard_);
     this.handSelectedCard_ = null;
   }
   $(".confirm_card", this.element_).attr("disabled", "disabled");
@@ -573,15 +574,29 @@ cah.Game.prototype.stateChange = function(data) {
 
   switch (this.state_) {
     case cah.$.GameState.LOBBY:
-      // TODO
+      var handCount = this.hand_.length;
+      for ( var i = 0; i < handCount; i++) {
+        this.removeCardFromHand(this.hand_[0]);
+      }
+      this.handSelectedCard_ = null;
+      this.myPlayedCard_ = null;
+      this.judge_ = null;
+      $(".confirm_card", this.element_).attr("disabled", "disabled");
+      $(".game_black_card", this.element_).empty();
+      // TODO make this remove handlers
+      $(".game_white_cards", this.element_).empty();
       break;
+
     case cah.$.GameState.PLAYING:
       this.refreshGameStatus();
       this.setBlackCard(data[cah.$.LongPollResponse.BLACK_CARD]);
       break;
+
     case cah.$.GameState.JUDGING:
-      // TODO
+      $(".game_white_cards", this.element_).empty();
+      this.setRoundWhiteCards(data[cah.$.LongPollResponse.WHITE_CARDS]);
       break;
+
     default:
       cah.log.error("Game " + this.id_ + " changed to unknown state " + this.state_);
       return;

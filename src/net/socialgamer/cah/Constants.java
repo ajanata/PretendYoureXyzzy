@@ -226,12 +226,12 @@ public class Constants {
     GAME_ID(AjaxResponse.GAME_ID.toString()),
     GAME_STATE("game_state"),
     HAND("hand"),
-    JUDGE("judge"),
     MESSAGE("message"),
     NICKNAME(AjaxRequest.NICKNAME.toString()),
     PLAYER_INFO(AjaxResponse.PLAYER_INFO.toString()),
     REASON("reason"),
-    TIMESTAMP("timestamp");
+    TIMESTAMP("timestamp"),
+    WHITE_CARDS("white_cards");
 
     private final String field;
 
@@ -284,7 +284,7 @@ public class Constants {
   }
 
   public enum GameState implements Localizable {
-    DEALING("dealing", "Dealing"),
+    DEALING("dealing", "In Progress"),
     JUDGING("judging", "In Progress"),
     LOBBY("lobby", "Joinable (Not Started)"),
     PLAYING("playing", "In Progress");
