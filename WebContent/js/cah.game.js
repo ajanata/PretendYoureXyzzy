@@ -512,8 +512,9 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
 
   if (playerName == cah.nickname) {
     $(".game_message", this.element_).text(cah.$.GamePlayerStatus_msg_2[playerStatus]);
-    if (playerStatus == cah.$.GamePlayerStatus.PLAYING
-        || playerStatus == cah.$.GamePlayerStatus.JUDGING) {
+    if (playerStatus == cah.$.GamePlayerStatus.PLAYING && this.handSelectedCard_ != null) {
+      $(".confirm_card", this.element_).removeAttr("disabled");
+    } else if (playerStatus == cah.$.GamePlayerStatus.JUDGING && this.roundSelectedCard_ != null) {
       $(".confirm_card", this.element_).removeAttr("disabled");
     } else {
       $(".confirm_card", this.element_).attr("disabled", "disabled");
