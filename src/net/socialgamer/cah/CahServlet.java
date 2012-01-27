@@ -47,6 +47,7 @@ public abstract class CahServlet extends HttpServlet {
   protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
       throws ServletException, IOException {
     response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
 
     final HttpSession hSession = request.getSession(true);
     final String op = request.getParameter(AjaxRequest.OP.toString());
