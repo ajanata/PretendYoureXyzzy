@@ -306,6 +306,7 @@ span.debug {
 .game_white_cards {
   margin-top: 15px;
   min-width: 600px;
+  cursor: pointer;
 }
 
 .card_holder {
