@@ -117,6 +117,8 @@ public class Game {
   /**
    * Remove a player from the game.
    * 
+   * TODO adjust judgeIndex if the player removed is at or before the index
+   * 
    * @param user
    *          Player to remove from the game.
    * @return True if {@code user} was the last player in the game.
@@ -370,6 +372,7 @@ public class Game {
 
     // TODO announce the reset
     final HashMap<ReturnableData, Object> data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
     data.put(LongPollResponse.GAME_STATE, GameState.LOBBY.toString());
     broadcastToPlayers(MessageType.GAME_EVENT, data);
   }
