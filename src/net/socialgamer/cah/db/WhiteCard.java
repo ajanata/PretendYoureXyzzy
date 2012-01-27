@@ -1,9 +1,14 @@
 package net.socialgamer.cah.db;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import net.socialgamer.cah.Constants.WhiteCardData;
 
 
 @Entity
@@ -18,7 +23,7 @@ public class WhiteCard {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(final int id) {
     this.id = id;
   }
 
@@ -26,12 +31,26 @@ public class WhiteCard {
     return text;
   }
 
-  public void setText(String text) {
+  public void setText(final String text) {
     this.text = text;
   }
 
   @Override
   public String toString() {
     return text + " (id:" + id + ")";
+  }
+
+  public Map<WhiteCardData, Object> getClientData() {
+    final Map<WhiteCardData, Object> cardData = new HashMap<WhiteCardData, Object>();
+    cardData.put(WhiteCardData.ID, id);
+    cardData.put(WhiteCardData.TEXT, text);
+    return cardData;
+  }
+
+  public static Map<WhiteCardData, Object> getBlankCardClientData() {
+    final Map<WhiteCardData, Object> cardData = new HashMap<WhiteCardData, Object>();
+    cardData.put(WhiteCardData.ID, -1);
+    cardData.put(WhiteCardData.TEXT, "");
+    return cardData;
   }
 }

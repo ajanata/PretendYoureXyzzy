@@ -242,6 +242,40 @@ cah.Game.prototype.removeCardFromHand = function(card) {
         "").css("-o-transform", "").off(".hand");
     this.hand_.splice(cardIndex, 1);
   }
+
+  $(card.getElement(), $("game_hand_cards", this.element_)).remove();
+  this.resizeHandCards_();
+};
+
+/**
+ * Set the round white cards.
+ * 
+ * @param {Array}
+ *          cards Array of cah.card.WhiteCard to display.
+ */
+cah.Game.prototype.setRoundWhiteCards = function(cards) {
+  for ( var index in cards) {
+    var card;
+    var id = cards[index][cah.$.WhiteCardData.ID];
+    if (id >= 0) {
+      card = new cah.card.WhiteCard(true, id);
+      card.setText(cards[index][cah.$.WhiteCardData.TEXT]);
+    } else {
+      card = new cah.card.WhiteCard();
+    }
+    this.addRoundWhiteCard_(card);
+  }
+};
+
+/**
+ * Add a white card to the round white cards area.
+ * 
+ * @param {cah.card.WhiteCard}
+ *          card Card to add to area.
+ * @private
+ */
+cah.Game.prototype.addRoundWhiteCard_ = function(card) {
+  $(".game_white_cards", this.element_).append(card.getElement());
 };
 
 /**
@@ -331,6 +365,10 @@ cah.Game.prototype.updateGameStatus = function(data) {
     $("#start_game").hide();
   }
 
+  if (data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.STATE] == cah.$.GameState.PLAYING) {
+    $(".game_white_cards", this.element_).empty();
+  }
+
   var playerInfos = data[cah.$.AjaxResponse.PLAYER_INFO];
   for ( var index in playerInfos) {
     this.updateUserStatus(playerInfos[index]);
@@ -380,7 +418,7 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
     } else {
       displayCard = new cah.card.WhiteCard();
     }
-    $(".game_white_cards", this.element_).append(displayCard.getElement());
+    this.addRoundWhiteCard_(displayCard);
   }
 };
 
@@ -409,6 +447,11 @@ cah.Game.prototype.confirmClick_ = function() {
 cah.Game.prototype.handCardClick_ = function(e) {
   // judge can't select a card.
   if (this.judge_ == cah.nickname) {
+    return;
+  }
+  // this player isn't in playing state
+  var scorecard = this.scoreCards_[cah.nickname];
+  if (scorecard && scorecard.getStatus() != cah.$.GamePlayerStatus.PLAYING) {
     return;
   }
   /** @type {cah.card.WhiteCard} */

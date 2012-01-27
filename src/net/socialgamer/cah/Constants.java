@@ -124,7 +124,8 @@ public class Constants {
     NEXT("next"),
     NICKNAME(AjaxRequest.NICKNAME.toString()),
     PLAYER_INFO("player_info"),
-    SERIAL(AjaxRequest.SERIAL.toString());
+    SERIAL(AjaxRequest.SERIAL.toString()),
+    WHITE_CARDS("white_cards");
 
     private final String field;
 
@@ -266,9 +267,9 @@ public class Constants {
 
   public enum BlackCardData {
     DRAW("draw"),
-    ID("id"),
+    ID(WhiteCardData.ID.toString()),
     PICK("pick"),
-    TEXT("text");
+    TEXT(WhiteCardData.TEXT.toString());
 
     private final String key;
 

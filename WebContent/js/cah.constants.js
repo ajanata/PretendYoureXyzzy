@@ -35,6 +35,7 @@ cah.$.AjaxResponse = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.AjaxResponse.prototype.dummyForAutocomplete = undefined;
+cah.$.AjaxResponse.WHITE_CARDS = "white_cards";
 cah.$.AjaxResponse.GAME_ID = "game_id";
 cah.$.AjaxResponse.HAND = "hand";
 cah.$.AjaxResponse.PLAYER_INFO = "player_info";

@@ -295,6 +295,8 @@ public class Game {
   private void playingState() {
     state = GameState.PLAYING;
 
+    playedCards.clear();
+
     synchronized (blackCardLock) {
       do {
         blackCard = blackDeck.getNextCard();
@@ -399,14 +401,28 @@ public class Game {
     synchronized (blackCardLock) {
       final Map<BlackCardData, Object> cardData = new HashMap<BlackCardData, Object>();
       if (blackCard != null) {
-        cardData.put(BlackCardData.ID, blackCard.getId());
-        cardData.put(BlackCardData.TEXT, blackCard.getText());
-        cardData.put(BlackCardData.DRAW, blackCard.getDraw());
-        cardData.put(BlackCardData.PICK, blackCard.getPick());
-        return cardData;
+        return blackCard.getClientData();
       } else {
         return null;
       }
+    }
+  }
+
+  public List<Map<WhiteCardData, Object>> getWhiteCards(final User user) {
+    // TODO fix this for multi-play
+    synchronized (playedCards) {
+      final List<Map<WhiteCardData, Object>> cardData = new ArrayList<Map<WhiteCardData, Object>>(
+          playedCards.size());
+      int blankCards = playedCards.size();
+      final Player player = getPlayerForUser(user);
+      if (playedCards.containsKey(player)) {
+        cardData.add(playedCards.get(player).getClientData());
+        blankCards--;
+      }
+      while (blankCards-- > 0) {
+        cardData.add(WhiteCard.getBlankCardClientData());
+      }
+      return cardData;
     }
   }
 

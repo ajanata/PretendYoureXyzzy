@@ -120,6 +120,9 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_CARDS] = function(data, req) {
     if (data[cah.$.AjaxResponse.BLACK_CARD]) {
       game.setBlackCard(data[cah.$.AjaxResponse.BLACK_CARD]);
     }
+    if (data[cah.$.AjaxResponse.WHITE_CARDS]) {
+      game.setRoundWhiteCards(data[cah.$.AjaxResponse.WHITE_CARDS]);
+    }
   } else {
     cah.log.error("Received hand for unknown game id " + gameId);
   }

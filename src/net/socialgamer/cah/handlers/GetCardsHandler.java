@@ -41,7 +41,7 @@ public class GetCardsHandler extends GameWithPlayerHandler {
       data.put(AjaxResponse.HAND, Arrays.asList(new HashMap<WhiteCardData, Object>()));
     }
     data.put(AjaxResponse.BLACK_CARD, game.getBlackCard());
-
+    data.put(AjaxResponse.WHITE_CARDS, game.getWhiteCards(user));
     data.put(AjaxResponse.GAME_ID, game.getId());
     return data;
   }

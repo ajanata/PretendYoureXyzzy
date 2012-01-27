@@ -1,9 +1,14 @@
 package net.socialgamer.cah.db;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import net.socialgamer.cah.Constants.BlackCardData;
 
 
 @Entity
@@ -20,7 +25,7 @@ public class BlackCard {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(final int id) {
     this.id = id;
   }
 
@@ -28,7 +33,7 @@ public class BlackCard {
     return text;
   }
 
-  public void setText(String text) {
+  public void setText(final String text) {
     this.text = text;
   }
 
@@ -36,7 +41,7 @@ public class BlackCard {
     return draw;
   }
 
-  public void setDraw(int draw) {
+  public void setDraw(final int draw) {
     this.draw = draw;
   }
 
@@ -44,12 +49,21 @@ public class BlackCard {
     return pick;
   }
 
-  public void setPick(int pick) {
+  public void setPick(final int pick) {
     this.pick = pick;
   }
 
   @Override
   public String toString() {
     return text + " (id:" + id + ", draw:" + draw + ", pick:" + pick + ")";
+  }
+
+  public Map<BlackCardData, Object> getClientData() {
+    final Map<BlackCardData, Object> cardData = new HashMap<BlackCardData, Object>();
+    cardData.put(BlackCardData.ID, id);
+    cardData.put(BlackCardData.TEXT, text);
+    cardData.put(BlackCardData.DRAW, draw);
+    cardData.put(BlackCardData.PICK, pick);
+    return cardData;
   }
 }
