@@ -80,7 +80,7 @@ cah.Ajax.prototype.done = function(data) {
   } else {
     var req = this.pendingRequests[data[cah.$.AjaxResponse.SERIAL]];
     if (req && cah.ajax.SuccessHandlers[req.getOp()]) {
-      cah.ajax.SuccessHandlers[req.getOp()](data);
+      cah.ajax.SuccessHandlers[req.getOp()](data, req.data);
     } else if (req) {
       cah.log.error("Unhandled response for op " + req.getOp());
     } else {

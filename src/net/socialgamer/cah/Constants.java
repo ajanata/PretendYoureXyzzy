@@ -73,6 +73,7 @@ public class Constants {
     LEAVE_GAME("leave_game"),
     LOG_OUT("logout"),
     NAMES("names"),
+    PLAY_CARD("play_card"),
     REGISTER("register"),
     START_GAME("start_game");
 
@@ -89,6 +90,7 @@ public class Constants {
   }
 
   public enum AjaxRequest {
+    CARD_ID("card_id"),
     GAME_ID("game_id"),
     MESSAGE("message"),
     NICKNAME("nickname"),
@@ -109,6 +111,7 @@ public class Constants {
 
   public enum AjaxResponse implements ReturnableData {
     BLACK_CARD("black_card"),
+    CARD_ID(AjaxRequest.CARD_ID.toString()),
     ERROR("error"),
     ERROR_CODE("error_code"),
     GAME_ID("game_id"),
@@ -119,7 +122,7 @@ public class Constants {
     MAX_GAMES("max_games"),
     NAMES("names"),
     NEXT("next"),
-    NICKNAME("nickname"),
+    NICKNAME(AjaxRequest.NICKNAME.toString()),
     PLAYER_INFO("player_info"),
     SERIAL(AjaxRequest.SERIAL.toString());
 
@@ -140,20 +143,25 @@ public class Constants {
     BAD_OP("bad_op", "Invalid operation."),
     BAD_REQUEST("bad_req", "Bad request."),
     CANNOT_JOIN_ANOTHER_GAME("cannot_join_another_game", "You cannot join another game."),
+    DO_NOT_HAVE_CARD("do_not_have_card", "You don't have that card."),
     GAME_FULL("game_full", "That game is full. Join another."),
+    INVALID_CARD("invalid_card", "Invalid card specified."),
     INVALID_GAME("invalid_game", "Invalid game specified."),
     INVALID_NICK("invalid_nick", "Nickname must contain only upper and lower case letters, " +
         "numbers, or underscores, must be 3 to 30 characters long, and must not start with a " +
         "number."),
     MESSAGE_TOO_LONG("msg_too_long", "Messages cannot be longer than 200 characters."),
     NICK_IN_USE("nick_in_use", "Nickname is already in use."),
+    NO_CARD_SPECIFIED("no_card_spec", "No card specified."),
     NO_GAME_SPECIFIED("no_game_spec", "No game specified."),
     NO_MSG_SPECIFIED("no_msg_spec", "No message specified."),
     NO_NICK_SPECIFIED("no_nick_spec", "No nickname specified."),
     NO_SESSION("no_session", "Session not detected. Make sure you have cookies enabled."),
     NOT_ENOUGH_PLAYERS("not_enough_players", "There are not enough players to start the game."),
     NOT_GAME_HOST("not_game_host", "Only the game host can do that."),
+    NOT_IN_THAT_GAME("not_in_that_game", "You are not in that game."),
     NOT_REGISTERED("not_registered", "Not registered. Refresh the page."),
+    NOT_YOUR_TURN("not_your_turn", "It is not your turn to play a card."),
     OP_NOT_SPECIFIED("op_not_spec", "Operation not specified."),
     SESSION_EXPIRED("session_expired", "Your session has expired. Refresh the page."),
     TOO_MANY_GAMES("too_many_games", "There are too many games already in progress. Either join " +

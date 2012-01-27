@@ -19,7 +19,7 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
-public class GetCardsHandler extends GameHandler {
+public class GetCardsHandler extends GameWithPlayerHandler {
 
   @Inject
   public GetCardsHandler(final GameManager gameManager) {
@@ -30,7 +30,7 @@ public class GetCardsHandler extends GameHandler {
 
   @SuppressWarnings("unchecked")
   @Override
-  public Map<ReturnableData, Object> handle(final RequestWrapper request,
+  public Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,
       final HttpSession session, final User user, final Game game) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 

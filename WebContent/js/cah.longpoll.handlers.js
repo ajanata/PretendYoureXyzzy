@@ -52,7 +52,8 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_LIST_REFRESH] = function(dat
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_JOIN] = function(data) {
   cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.playerJoin,
-      data[cah.$.LongPollResponse.NICKNAME], "player join");
+      data[cah.$.LongPollResponse.NICKNAME],
+      "player join (if you just joined a game this may be OK)");
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_LEAVE] = function(data) {
@@ -68,6 +69,11 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.HAND_DEAL] = function(data) {
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_STATE_CHANGE] = function(data) {
   cah.longpoll.EventHandlers
       .__gameEvent(data, cah.Game.prototype.stateChange, data, "state change");
+};
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_INFO_CHANGE] = function(data) {
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.updateUserStatus,
+      data[cah.$.LongPollResponse.PLAYER_INFO], "player info change");
 };
 
 /**

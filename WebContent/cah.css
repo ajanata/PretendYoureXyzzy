@@ -212,7 +212,7 @@ span.debug {
   color: black;
 }
 
-.game_hand_cards .cah {
+.cah {
   position: absolute;
   bottom: 0px;
   left: 0px;
@@ -270,12 +270,6 @@ span.debug {
   width: 232px;
   height: 232px;
   margin-top: 15px;
-}
-
-.game_black_card .cah {
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
 }
 
 .confirm_card {

@@ -16,7 +16,7 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
-public class GetGameInfoHandler extends GameHandler {
+public class GetGameInfoHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.GET_GAME_INFO.toString();
 
@@ -26,7 +26,7 @@ public class GetGameInfoHandler extends GameHandler {
   }
 
   @Override
-  public Map<ReturnableData, Object> handle(final RequestWrapper request,
+  public Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,
       final HttpSession session, final User user, final Game game) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 

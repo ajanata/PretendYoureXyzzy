@@ -82,13 +82,23 @@ cah.Game = function(id) {
   this.handSelectedCard_ = null;
 
   /**
+   * Card the player played this round.
+   * 
+   * TODO make this an array when we support the multiple play blacks
+   * 
+   * @type {cah.card.WhiteCard}
+   * @private
+   */
+  this.myPlayedCard_ = null;
+
+  /**
    * The judge of the current round.
    * 
    * @type {String}
    * @private
    */
-  this.judge_ = null;
 
+  this.judge_ = null;
   /**
    * Scale factor for hand cards when zoomed out.
    * 
@@ -205,9 +215,33 @@ cah.Game.prototype.dealtCard = function(card) {
   var data = {
     card : card,
   };
-  $(element).mouseenter(data, cah.bind(this, this.handCardMouseEnter_)).mouseleave(data,
-      cah.bind(this, this.handCardMouseLeave_)).click(data, cah.bind(this, this.handCardClick_));
-  this.windowResize_();
+  $(element).on("mouseenter.hand", data, cah.bind(this, this.handCardMouseEnter_)).on(
+      "mouseleave.hand", data, cah.bind(this, this.handCardMouseLeave_)).on("click.hand", data,
+      cah.bind(this, this.handCardClick_));
+
+  this.resizeHandCards_();
+};
+
+/**
+ * Remove a card from the hand.
+ * 
+ * @param {cah.card.WhiteCard}
+ *          card Card to remove.
+ */
+cah.Game.prototype.removeCardFromHand = function(card) {
+  var cardIndex = -1;
+  for ( var index in this.hand_) {
+    if (this.hand_[index] == card) {
+      cardIndex = index;
+      break;
+    }
+  }
+  if (cardIndex != -1) {
+    $(card.getElement()).css("width", "").css("height", "").css("transform-origin", "").css(
+        "z-index", "").css("-moz-transform", "").css("-ms-transform", "").css("-webkit-transform",
+        "").css("-o-transform", "").off(".hand");
+    this.hand_.splice(cardIndex, 1);
+  }
 };
 
 /**
@@ -299,33 +333,54 @@ cah.Game.prototype.updateGameStatus = function(data) {
 
   var playerInfos = data[cah.$.AjaxResponse.PLAYER_INFO];
   for ( var index in playerInfos) {
-    var thisInfo = playerInfos[index];
-    var playerName = thisInfo[cah.$.GamePlayerInfo.NAME];
-    var playerStatus = thisInfo[cah.$.GamePlayerInfo.STATUS];
-    var panel = this.scoreCards_[playerName];
-    if (!panel) {
-      // new score panel
-      panel = new cah.GameScorePanel(playerName);
-      $(this.scoreboardElement_).append(panel.getElement());
-      this.scoreCards_[playerName] = panel;
-    }
-    panel.update(thisInfo[cah.$.GamePlayerInfo.SCORE], playerStatus);
+    this.updateUserStatus(playerInfos[index]);
+  }
+};
 
+/**
+ * Update a single player's info.
+ * 
+ * @param {Object}
+ *          playerInfo The PlayerInfo from the server.
+ */
+cah.Game.prototype.updateUserStatus = function(playerInfo) {
+  var playerName = playerInfo[cah.$.GamePlayerInfo.NAME];
+  var playerStatus = playerInfo[cah.$.GamePlayerInfo.STATUS];
+  var panel = this.scoreCards_[playerName];
+  if (!panel) {
+    // new score panel
+    panel = new cah.GameScorePanel(playerName);
+    $(this.scoreboardElement_).append(panel.getElement());
+    this.scoreCards_[playerName] = panel;
+  }
+  var oldStatus = panel.getStatus();
+  panel.update(playerInfo[cah.$.GamePlayerInfo.SCORE], playerStatus);
+
+  if (playerName == cah.nickname) {
+    $(".game_message", this.element_).text(cah.$.GamePlayerStatus_msg_2[playerStatus]);
+    if (playerStatus == cah.$.GamePlayerStatus.PLAYING) {
+      $(".confirm_card", this.element_).removeAttr("disabled");
+    } else {
+      this.handSelectedCard_ = null;
+      $(".selected", $(".game_hand", this.element_)).removeClass("selected");
+      $(".confirm_card", this.element_).attr("disabled", "disabled");
+    }
+  }
+
+  if (playerStatus == cah.$.GamePlayerStatus.JUDGE
+      || playerStatus == cah.$.GamePlayerStatus.JUDGING) {
+    this.judge_ = playerName;
+  }
+
+  if (oldStatus == cah.$.GamePlayerStatus.PLAYING && playerStatus == cah.$.GamePlayerStatus.IDLE) {
+    // this player played a card. display a face-down white card in the area, or our card.
+    var displayCard;
     if (playerName == cah.nickname) {
-      $(".game_message", this.element_).text(cah.$.GamePlayerStatus_msg_2[playerStatus]);
-      if (playerStatus == cah.$.GamePlayerStatus.PLAYING) {
-        $(".confirm_card", this.element_).removeAttr("disabled");
-      } else {
-        this.handSelectedCard_ = null;
-        $(".selected", $(".game_hand", this.element_)).removeClass("selected");
-        $(".confirm_card", this.element_).attr("disabled", "disabled");
-      }
+      displayCard = this.myPlayedCard_;
+    } else {
+      displayCard = new cah.card.WhiteCard();
     }
-
-    if (playerStatus == cah.$.GamePlayerStatus.JUDGE
-        || playerStatus == cah.$.GamePlayerStatus.JUDGING) {
-      this.judge_ = playerName;
-    }
+    $(".game_white_cards", this.element_).append(displayCard.getElement());
   }
 };
 
@@ -335,7 +390,14 @@ cah.Game.prototype.updateGameStatus = function(data) {
  * @private
  */
 cah.Game.prototype.confirmClick_ = function() {
-  // TODO
+  if (this.judge_ == cah.nickname) {
+    // TODO
+  } else {
+    if (this.handSelectedCard_ != null) {
+      cah.Ajax.build(cah.$.AjaxOperation.PLAY_CARD).withGameId(this.id_).withCardId(
+          this.handSelectedCard_.getServerId()).run();
+    }
+  }
 };
 
 /**
@@ -391,6 +453,17 @@ cah.Game.prototype.startGameClick_ = function() {
 
 cah.Game.prototype.startGameComplete = function() {
   $("#start_game").hide();
+};
+
+cah.Game.prototype.playCardComplete = function() {
+  if (this.handSelectedCard_) {
+    $(".card", this.handSelectedCard_.getElement()).removeClass("selected");
+    // TODO support for multiple play
+    this.myPlayedCard_ = this.handSelectedCard_;
+    this.removeCardFromHand(this.handSelectedCard_);
+    this.handSelectedCard_ = null;
+  }
+  $(".confirm_card", this.element_).attr("disabled", "disabled");
 };
 
 /**
@@ -472,16 +545,6 @@ cah.Game.prototype.stateChange = function(data) {
   }
 };
 
-// /**
-// * Remove a card from the hand.
-// *
-// * @param {number|cah.card.WhiteCard}
-// * card If number, index of card to remove. If cah.card.WhiteCard, card instance to remove.
-// */
-// cah.Game.prototype.removeCard = function(card) {
-//
-// };
-
 // ///////////////////////////////////////////////
 
 /**
@@ -546,6 +609,13 @@ cah.GameScorePanel.prototype.update = function(score, status) {
   this.status_ = status;
   jQuery(".scorecard_score", this.element_).text(score);
   jQuery(".scorecard_status", this.element_).text(cah.$.GamePlayerStatus_msg[status]);
+};
+
+/**
+ * @returns {cah.$.GamePlayerStatus} The status of the player represented by this panel.
+ */
+cah.GameScorePanel.prototype.getStatus = function() {
+  return this.status_;
 };
 
 // $(document).ready(function() {

@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
-import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
@@ -39,14 +38,7 @@ public class JoinGameHandler extends GameHandler {
     } catch (final TooManyPlayersException e) {
       return error(ErrorCode.GAME_FULL);
     }
-
-    // return the game id as a positive result to the client, which will then make another request
-    // to actually get game data
-    data.put(AjaxResponse.GAME_ID, game.getId());
-
     gameManager.broadcastGameListRefresh();
-
     return data;
   }
-
 }

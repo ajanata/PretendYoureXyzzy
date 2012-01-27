@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.socialgamer.cah.Constants.BlackCardData;
+import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.GameInfo;
 import net.socialgamer.cah.Constants.GamePlayerInfo;
 import net.socialgamer.cah.Constants.GamePlayerStatus;
@@ -47,6 +48,8 @@ import com.google.inject.Inject;
 public class Game {
   private final int id;
   private final List<Player> players = new ArrayList<Player>(10);
+  // TODO make this Map<Player, List<WhiteCard>> once we support the multiple play black cards
+  private final Map<Player, WhiteCard> playedCards = new HashMap<Player, WhiteCard>();
   private final ConnectedUsers connectedUsers;
   private final GameManager gameManager;
   private Player host;
@@ -207,8 +210,13 @@ public class Game {
     final Map<GamePlayerInfo, Object> playerInfo = new HashMap<GamePlayerInfo, Object>();
     playerInfo.put(GamePlayerInfo.NAME, player.getUser().getNickname());
     playerInfo.put(GamePlayerInfo.SCORE, player.getScore());
-    // TODO fix this once we actually have gameplay logic
+    playerInfo.put(GamePlayerInfo.STATUS, getPlayerStatus(player).toString());
 
+    return playerInfo;
+  }
+
+  private GamePlayerStatus getPlayerStatus(final Player player) {
+    // TODO fix this once we actually have gameplay logic
     final GamePlayerStatus playerStatus;
 
     switch (state) {
@@ -220,15 +228,20 @@ public class Game {
         }
         break;
       case PLAYING:
-        if (players.get(judgeIndex) == player) {
+        if (getJudge() == player) {
           playerStatus = GamePlayerStatus.JUDGE;
         } else {
-          // TODO check if they have played a card
-          playerStatus = GamePlayerStatus.PLAYING;
+          synchronized (playedCards) {
+            if (playedCards.containsKey(player)) {
+              playerStatus = GamePlayerStatus.IDLE;
+            } else {
+              playerStatus = GamePlayerStatus.PLAYING;
+            }
+          }
         }
         break;
       case JUDGING:
-        if (players.get(judgeIndex) == player) {
+        if (getJudge() == player) {
           playerStatus = GamePlayerStatus.JUDGING;
         } else {
           playerStatus = GamePlayerStatus.IDLE;
@@ -237,10 +250,7 @@ public class Game {
       default:
         throw new IllegalStateException("Unknown GameState " + state.toString());
     }
-
-    playerInfo.put(GamePlayerInfo.STATUS, playerStatus.toString());
-
-    return playerInfo;
+    return playerStatus;
   }
 
   /**
@@ -297,7 +307,7 @@ public class Game {
     data.put(LongPollResponse.GAME_ID, id);
     data.put(LongPollResponse.BLACK_CARD, getBlackCard());
     data.put(LongPollResponse.GAME_STATE, GameState.PLAYING.toString());
-    data.put(LongPollResponse.JUDGE, players.get(judgeIndex).getUser().getNickname());
+    data.put(LongPollResponse.JUDGE, getJudge().getUser().getNickname());
 
     broadcastToPlayers(MessageType.GAME_EVENT, data);
   }
@@ -363,10 +373,22 @@ public class Game {
   }
 
   public List<Map<WhiteCardData, Object>> getHand(final User user) {
+    final Player player = getPlayerForUser(user);
+    if (player != null) {
+      final List<WhiteCard> hand = player.getHand();
+      synchronized (hand) {
+        return handSubsetToClient(player.getHand());
+      }
+    } else {
+      return null;
+    }
+  }
+
+  private Player getPlayerForUser(final User user) {
     synchronized (players) {
       for (final Player player : players) {
         if (player.getUser() == user) {
-          return handSubsetToClient(player.getHand());
+          return player;
         }
       }
     }
@@ -397,6 +419,56 @@ public class Game {
       }
     }
     return users;
+  }
+
+  private Player getJudge() {
+    return players.get(judgeIndex);
+  }
+
+  public ErrorCode playCard(final User user, final int cardId) {
+    final Player player = getPlayerForUser(user);
+    if (player != null) {
+      if (getJudge() == player) {
+        return ErrorCode.NOT_YOUR_TURN;
+      }
+      final List<WhiteCard> hand = player.getHand();
+      WhiteCard playCard = null;
+      synchronized (hand) {
+        final Iterator<WhiteCard> iter = hand.iterator();
+        while (iter.hasNext()) {
+          final WhiteCard card = iter.next();
+          if (card.getId() == cardId) {
+            playCard = card;
+            // remove the card from their hand. the client will also do so when we return
+            // success, so no need to tell it to do so here.
+            iter.remove();
+            break;
+          }
+        }
+      }
+      if (playCard != null) {
+        synchronized (playedCards) {
+          playedCards.put(player, playCard);
+
+          final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+          data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
+          data.put(LongPollResponse.GAME_ID, id);
+          data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(player));
+          broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+
+          // TODO make this check that everybody has played proper number of cards when we support
+          // multiple play blacks
+          if (playedCards.size() == players.size() - 1) {
+            judgingState();
+          }
+        }
+        return null;
+      } else {
+        return ErrorCode.DO_NOT_HAVE_CARD;
+      }
+    } else {
+      return null;
+    }
   }
 
   public class TooManyPlayersException extends Exception {

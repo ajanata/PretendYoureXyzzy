@@ -80,38 +80,40 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GAME_LIST] = function(data) {
   cah.GameList.instance.processUpdate(data);
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME] = function(data) {
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME] = function(data, req) {
+  cah.Game.joinGame(req[cah.$.AjaxRequest.GAME_ID]);
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CREATE_GAME] = function(data) {
   cah.Game.joinGame(data[cah.$.AjaxResponse.GAME_ID]);
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CREATE_GAME] = cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME];
-
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_GAME_INFO] = function(data) {
-  var game = cah.currentGames[data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.ID]];
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_GAME_INFO] = function(data, req) {
+  var game = cah.currentGames[req[cah.$.AjaxRequest.GAME_ID]];
   if (game) {
     game.updateGameStatus(data);
   }
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LEAVE_GAME] = function(data) {
-  var game = cah.currentGames[data[cah.$.AjaxResponse.GAME_ID]];
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LEAVE_GAME] = function(data, req) {
+  var game = cah.currentGames[req[cah.$.AjaxRequest.GAME_ID]];
   if (game) {
     game.dispose();
-    delete cah.currentGames[data[cah.$.AjaxResponse.GAME_ID]];
+    delete cah.currentGames[req[cah.$.AjaxRequest.GAME_ID]];
   }
   cah.GameList.instance.update();
   cah.GameList.instance.show();
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.START_GAME] = function(data) {
-  var game = cah.currentGames[data[cah.$.AjaxResponse.GAME_ID]];
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.START_GAME] = function(data, req) {
+  var game = cah.currentGames[data[cah.$.AjaxRequest.GAME_ID]];
   if (game) {
     game.startGameComplete();
   }
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_CARDS] = function(data) {
-  var gameId = data[cah.$.AjaxResponse.GAME_ID];
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_CARDS] = function(data, req) {
+  var gameId = req[cah.$.AjaxRequest.GAME_ID];
   var game = cah.currentGames[gameId];
   if (game) {
     game.dealtCards(data[cah.$.AjaxResponse.HAND]);
@@ -120,5 +122,13 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_CARDS] = function(data) {
     }
   } else {
     cah.log.error("Received hand for unknown game id " + gameId);
+  }
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.PLAY_CARD] = function(data, req) {
+  var gameId = req[cah.$.AjaxRequest.GAME_ID];
+  var game = cah.currentGames[gameId];
+  if (game) {
+    game.playCardComplete();
   }
 };

@@ -103,6 +103,17 @@ cah.ajax.Builder.prototype.withGameId = function(gameId) {
   return this;
 };
 
+/**
+ * @param {number}
+ *          cardId Card id field to use in the request.
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withCardId = function(cardId) {
+  this.assertNotExecuted();
+  this.data[cah.$.AjaxRequest.CARD_ID] = cardId;
+  return this;
+};
+
 cah.ajax.Builder.prototype.assertNotExecuted = function() {
   if (this.run_) {
     throw "Request already executed.";
