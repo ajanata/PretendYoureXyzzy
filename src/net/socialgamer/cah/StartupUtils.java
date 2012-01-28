@@ -1,5 +1,6 @@
 package net.socialgamer.cah;
 
+import java.util.Date;
 import java.util.Timer;
 
 import javax.servlet.ServletContext;
@@ -20,6 +21,10 @@ public class StartupUtils extends GuiceServletContextListener {
 
   private static final String PING_TIMER_NAME = "ping_timer";
 
+  public static final String DATE_NAME = "started_at";
+
+  private Date serverStarted;
+
   @Override
   public void contextDestroyed(final ServletContextEvent contextEvent) {
     final ServletContext context = contextEvent.getServletContext();
@@ -28,6 +33,9 @@ public class StartupUtils extends GuiceServletContextListener {
     timer.cancel();
     context.removeAttribute(PING_TIMER_NAME);
     context.removeAttribute(INJECTOR);
+    context.removeAttribute(DATE_NAME);
+
+    super.contextDestroyed(contextEvent);
   }
 
   @Override
@@ -37,8 +45,10 @@ public class StartupUtils extends GuiceServletContextListener {
     final UserPing ping = injector.getInstance(UserPing.class);
     final Timer timer = new Timer();
     timer.schedule(ping, PING_START_DELAY, PING_CHECK_DELAY);
+    serverStarted = new Date();
     context.setAttribute(PING_TIMER_NAME, timer);
     context.setAttribute(INJECTOR, injector);
+    context.setAttribute(DATE_NAME, serverStarted);
   }
 
   @Override
