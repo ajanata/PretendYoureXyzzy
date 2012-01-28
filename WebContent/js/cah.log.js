@@ -34,6 +34,9 @@ cah.log.error = function(text) {
  *          opt_obj Optional. Object to dump along with message.
  */
 cah.log.debug = function(text, opt_obj) {
+  if (cah.SILENT_DEBUG && console) {
+    console.debug("[" + new Date().toLocaleTimeString() + "]", text, opt_obj);
+  }
   if (cah.DEBUG) {
     if (opt_obj) {
       if (JSON && JSON.stringify) {

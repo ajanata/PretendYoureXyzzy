@@ -1,6 +1,7 @@
 var cah = {};
 
-cah.DEBUG = true;
+cah.DEBUG = false;
+cah.SILENT_DEBUG = true;
 
 /**
  * This client's nickname.
