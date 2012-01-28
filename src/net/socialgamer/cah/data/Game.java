@@ -67,7 +67,7 @@ public class Game {
   // TODO make this host-configurable
   private final int maxPlayers = 10;
   private int judgeIndex = 0;
-  private final static int ROUND_INTERMISSION = 15 * 1000;
+  private final static int ROUND_INTERMISSION = 8 * 1000;
 
   /**
    * TODO Injection here would be much nicer, but that would need a Provider for the id... Too much
