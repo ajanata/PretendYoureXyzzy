@@ -548,7 +548,9 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
   if (oldStatus == cah.$.GamePlayerStatus.PLAYING && playerStatus == cah.$.GamePlayerStatus.IDLE) {
     // this player played a card. display a face-down white card in the area, or nothing if it is
     // us. we put the card there when we get the acknowledgement from the server from playing.
-    if (playerName != cah.nickname) {
+    // also, don't put the card up if we're already into judging state -- we already displayed all
+    // of the cards!
+    if (playerName != cah.nickname && this.state_ == cah.$.GameState.PLAYING) {
       this.addRoundWhiteCard_(new cah.card.WhiteCard());
     }
   }
@@ -873,3 +875,8 @@ cah.GameScorePanel.prototype.getStatus = function() {
 // game.dealtCard(card);
 // }
 // });
+
+/*
+ * - confirm card as judge without selecting a round card did ... something - don't always see your
+ * card after playing it
+ */
