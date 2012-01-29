@@ -564,7 +564,7 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
  */
 cah.Game.prototype.roundComplete = function(data) {
   var card = this.roundCards_[data[cah.$.LongPollResponse.WINNING_CARD]];
-  $(card.getElement()).addClass("selected");
+  $(".card", card.getElement()).addClass("selected");
   var scoreCard = this.scoreCards_[data[cah.$.LongPollResponse.ROUND_WINNER]];
   $(scoreCard.getElement()).addClass("selected");
   cah.log.status("The next round will begin in "
@@ -876,7 +876,8 @@ cah.GameScorePanel.prototype.getStatus = function() {
 // }
 // });
 
-/*
- * - confirm card as judge without selecting a round card did ... something - don't always see your
- * card after playing it
+/**
+ * confirm card as judge without selecting a round card did ... something
+ * 
+ * don't always see your card after playing it
  */
