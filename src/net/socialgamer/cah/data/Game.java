@@ -380,8 +380,8 @@ public class Game {
       blackCard = null;
     }
     state = GameState.LOBBY;
+    judgeIndex = 0;
 
-    // TODO announce the reset
     final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
     data.put(LongPollResponse.GAME_STATE, GameState.LOBBY.toString());
