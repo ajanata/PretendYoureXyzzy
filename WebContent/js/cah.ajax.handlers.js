@@ -54,12 +54,15 @@ cah.ajax.ErrorHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
  */
 cah.ajax.after_registered = function() {
   cah.log.debug("done registering");
-  $("#canvas").show();
+  $("#canvas").removeClass("hide");
+  $("#bottom").removeClass("hide");
   // TODO once there are channels, this needs to specify the global channel
   cah.Ajax.build(cah.$.AjaxOperation.NAMES).run();
   cah.GameList.instance.show();
   cah.GameList.instance.update();
   cah.longpoll.longPoll();
+  // Dirty that we have to do this here... Oh well.
+  app_resize();
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CHAT] = function(data) {

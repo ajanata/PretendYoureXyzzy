@@ -37,6 +37,9 @@ $(document).ready(function() {
     // Firefox sucks.
     $("body").css("font-size", "12px");
   }
+
+  $(window).resize(app_resize);
+  app_resize();
 });
 
 function nickbox_keyup(e) {
@@ -69,4 +72,22 @@ function chatsubmit_click(e) {
 
 function logout_click(e) {
   cah.Ajax.build(cah.$.AjaxOperation.LOG_OUT).run();
+}
+
+function app_resize() {
+  // this works well enough in chrome. I would not be surprised if this sucks everywhere else.
+  var chatWidth = $("#canvas").width() - 251;
+  $("#chat_area").width(chatWidth);
+  $("#chat").width(chatWidth - 48);
+  var bottomHeight = $(window).height() - $("#main").height() - $("#menubar").height() - 27;
+  $("#bottom").height(bottomHeight);
+  $("#info_area").height(bottomHeight);
+  $("#chat_area").height(bottomHeight);
+  $("#log").height(bottomHeight - $("#chat").height() - 1);
+  // this is ugly and terrible.
+  if ($(window).height() < 650) {
+    $("body").css("overflow-y", "auto");
+  } else {
+    $("body").css("overflow-y", "hidden");
+  }
 }

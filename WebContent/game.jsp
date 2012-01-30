@@ -70,6 +70,8 @@
     <div id="main_holder">
     </div>
   </div>
+</div>
+<div id="bottom" class="hide">
   <div id="info_area">
   </div>
   <div id="chat_area">
@@ -159,7 +161,7 @@
 	<div id="scorecard_template" class="scorecard hide">
 	  <span class="scorecard_player">PlayerName</span>
 	  <div class="clear"></div>
-	  <span class="scorecard_score">0</span> points
+	  <span class="scorecard_score">0</span> Awesome Point<span class="scorecard_s">s</span>
 	  <span class="scorecard_status">Status</span>
 	</div>
 </div>

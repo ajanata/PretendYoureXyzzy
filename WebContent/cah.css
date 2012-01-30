@@ -1,5 +1,6 @@
 body {
   overflow: hidden;
+  min-height: 640px;
 }
 
 /*
@@ -59,23 +60,22 @@ body {
 	*/
 }
 
-#canvas { /* * /
-	display: none;
-	/* */
-  height: 750px;
+#canvas {
+  height: 533px;
   overflow: none;
   position: relative;
   width: 100%;
-  /* */
+  /* * /
   border: 1px solid red;
-  /* */
+  / * */
 }
 
 #main {
   position: absolute;
   width: 100%;
+  height: 506px;
   top: 26px;
-  bottom: 216px;
+  /*bottom: 216px;*/
   border: 1px solid black;
 }
 
@@ -128,21 +128,32 @@ body {
   color: #c0c0c0;
 }
 
-#info_area {
-  width: 50%;
+#bottom {
+  width: 100%;
   height: 215px;
+  position: absolute;
+  top: 543px;
+  min-height: 100px;
+}
+
+#info_area {
+  width: 250px;
+  height: 100%;
   border: 0px;
   position: absolute;
   bottom: 0px;
+  min-height: 100px;
+  border: 1px solid black;
 }
 
 #chat_area {
+  min-height: 100px;
   width: 50%;
-  height: 215px;
+  height: 100%;
   border: 0px;
   position: absolute;
   bottom: 0px;
-  right: -2px;
+  right: 14px;
 }
 
 #log {
@@ -150,16 +161,17 @@ body {
   height: 198px;
   border: 1px solid black;
   position: absolute;
-  bottom: 17px;
+  bottom: 18px;
   right: 0px;
   overflow-y: scroll;
+  min-height: 82px;
 }
 
 #chat {
   border: 1px solid black;
   left: -2px;
   /*right: 46px;*/
-  bottom: -1px;
+  bottom: 0px;
   height: 17px;
   position: absolute;
   padding: 0px;
@@ -168,7 +180,7 @@ body {
 
 #chat_submit {
   width: 50px;
-  height: 19px;
+  height: 20px;
   position: absolute;
   right: -1px;
   bottom: -1px;
@@ -226,7 +238,6 @@ span.debug {
 .game {
   height: 100%;
   width: 100%;
-  background: #c0c0c0;
   position: relative;
 }
 
@@ -319,9 +330,9 @@ span.debug {
 }
 
 .scoreboard {
-  width: 150px;
+  width: 250px;
   height: 100%;
-  border: 1px solid black;
+  position: absolute;
   overflow-y: scroll;
 }
 
