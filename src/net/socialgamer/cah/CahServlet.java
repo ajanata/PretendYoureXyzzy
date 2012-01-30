@@ -2,6 +2,8 @@ package net.socialgamer.cah;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import com.google.inject.Injector;
+import com.sun.istack.internal.Nullable;
 
 
 /**
@@ -32,13 +35,7 @@ import com.google.inject.Injector;
 public abstract class CahServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  /**
-   * @see HttpServlet#HttpServlet()
-   */
-  public CahServlet() {
-    super();
-    // TODO Auto-generated constructor stub
-  }
+  private final boolean debugLog = false;
 
   /**
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -50,6 +47,21 @@ public abstract class CahServlet extends HttpServlet {
     response.setCharacterEncoding("UTF-8");
 
     final HttpSession hSession = request.getSession(true);
+    final User user = (User) hSession.getAttribute(SessionAttribute.USER);
+
+    if (verboseDebug()) {
+      // TODO if we have any sort of authentication later, we need to make sure to not log passwords!
+      // I could use getParameterMap, but that returns an array, and getting pretty strings out of
+      // array values is a lot of work.
+      final Map<String, Object> params = new HashMap<String, Object>();
+      final Enumeration<String> paramNames = request.getParameterNames();
+      while (paramNames.hasMoreElements()) {
+        final String name = paramNames.nextElement();
+        params.put(name, request.getParameter(name));
+      }
+      log(user, "Request: " + JSONValue.toJSONString(params));
+    }
+
     final String op = request.getParameter(AjaxRequest.OP.toString());
     final boolean skipSessionUserCheck = op != null
         && (op.equals(AjaxOperation.REGISTER.toString())
@@ -57,22 +69,29 @@ public abstract class CahServlet extends HttpServlet {
     if (hSession.isNew()) {
       // they should have gotten a session from the index page.
       // they probably don't have cookies on.
-      returnError(response.getWriter(), ErrorCode.NO_SESSION);
+      returnError(user, response.getWriter(), ErrorCode.NO_SESSION);
     } else if (!skipSessionUserCheck && hSession.getAttribute(SessionAttribute.USER) == null) {
-      returnError(response.getWriter(), ErrorCode.NOT_REGISTERED);
-    } else if (hSession.getAttribute(SessionAttribute.USER) != null
-        && !(((User) hSession.getAttribute(SessionAttribute.USER)).isValid())) {
+      returnError(user, response.getWriter(), ErrorCode.NOT_REGISTERED);
+    } else if (user != null && !user.isValid()) {
       // user probably pinged out
       hSession.invalidate();
-      returnError(response.getWriter(), ErrorCode.SESSION_EXPIRED);
+      returnError(user, response.getWriter(), ErrorCode.SESSION_EXPIRED);
     } else {
       try {
         handleRequest(request, response, hSession);
       } catch (final AssertionError ae) {
+        log("Assertion failed", ae);
         getServletContext().log(ae.toString());
         ae.printStackTrace();
       }
     }
+  }
+
+  private boolean verboseDebug() {
+    final Boolean verboseDebugObj = (Boolean) getServletContext().getAttribute(
+        StartupUtils.VERBOSE_DEBUG);
+    final boolean verboseDebug = verboseDebugObj != null ? verboseDebugObj.booleanValue() : false;
+    return verboseDebug;
   }
 
   /**
@@ -96,8 +115,9 @@ public abstract class CahServlet extends HttpServlet {
    * @param code
    *          Error code that the js code knows how to handle.
    */
-  protected void returnError(final PrintWriter writer, final ErrorCode code) {
-    returnError(writer, code, -1);
+  protected void returnError(@Nullable final User user, final PrintWriter writer,
+      final ErrorCode code) {
+    returnError(user, writer, code, -1);
   }
 
   /**
@@ -107,7 +127,9 @@ public abstract class CahServlet extends HttpServlet {
    * @param serial
    */
   @SuppressWarnings("unchecked")
-  protected void returnError(final PrintWriter writer, final ErrorCode code, final int serial) {
+  protected void returnError(@Nullable final User user, final PrintWriter writer,
+      final ErrorCode code,
+      final int serial) {
     final JSONObject ret = new JSONObject();
     ret.put(AjaxResponse.ERROR, Boolean.TRUE);
     ret.put(AjaxResponse.ERROR_CODE, code.toString());
@@ -122,8 +144,9 @@ public abstract class CahServlet extends HttpServlet {
    * @param data
    *          Key-value data to return as the response.
    */
-  protected void returnData(final PrintWriter writer, final Map<ReturnableData, Object> data) {
-    returnObject(writer, data);
+  protected void returnData(@Nullable final User user, final PrintWriter writer,
+      final Map<ReturnableData, Object> data) {
+    returnObject(user, writer, data);
   }
 
   /**
@@ -134,18 +157,28 @@ public abstract class CahServlet extends HttpServlet {
    * @param data_list
    *          List of key-value data to return as the response.
    */
-  protected void returnArray(final PrintWriter writer,
+  protected void returnArray(@Nullable final User user, final PrintWriter writer,
       final List<Map<ReturnableData, Object>> data_list) {
-    returnObject(writer, data_list);
+    returnObject(user, writer, data_list);
   }
 
-  private void returnObject(final PrintWriter writer, final Object object) {
+  private void returnObject(@Nullable final User user, final PrintWriter writer, final Object object) {
     final String ret = JSONValue.toJSONString(object);
     writer.println(ret);
-    //    System.out.println(">>>> " + ret + " <<<<");
+    if (verboseDebug()) {
+      log(user, "Response: " + ret);
+    }
   }
 
   protected Injector getInjector() {
     return (Injector) getServletContext().getAttribute(StartupUtils.INJECTOR);
+  }
+
+  protected void log(@Nullable final User user, final String message) {
+    String userStr = "unknown user";
+    if (user != null) {
+      userStr = user.getNickname();
+    }
+    log("For " + userStr + ": " + message);
   }
 }

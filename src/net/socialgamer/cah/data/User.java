@@ -17,13 +17,16 @@ public class User {
 
   private Game currentGame;
 
+  private final String hostName;
+
   /**
    * Reset when this user object is no longer valid, most likely because it pinged out.
    */
   private boolean valid = true;
 
-  public User(final String nickname) {
+  public User(final String nickname, final String hostName) {
     this.nickname = nickname;
+    this.hostName = hostName;
     queuedMessages = new PriorityBlockingQueue<QueuedMessage>();
   }
 
@@ -77,6 +80,10 @@ public class User {
 
   public String getNickname() {
     return nickname;
+  }
+
+  public String getHostName() {
+    return hostName;
   }
 
   @Override

@@ -82,7 +82,7 @@ public class LongPollServlet extends CahServlet {
         for (final QueuedMessage qm : msgs) {
           data.add(qm.getData());
         }
-        returnArray(out, data);
+        returnArray(user, out, data);
         return;
       }
     }
@@ -90,6 +90,6 @@ public class LongPollServlet extends CahServlet {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
     data.put(LongPollResponse.EVENT, LongPollEvent.NOOP.toString());
     data.put(LongPollResponse.TIMESTAMP, System.currentTimeMillis());
-    returnData(out, data);
+    returnData(user, out, data);
   }
 }

@@ -23,6 +23,8 @@ public class StartupUtils extends GuiceServletContextListener {
 
   public static final String DATE_NAME = "started_at";
 
+  public static final String VERBOSE_DEBUG = "verbose_debug";
+
   private Date serverStarted;
 
   @Override

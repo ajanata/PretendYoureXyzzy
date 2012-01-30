@@ -14,6 +14,8 @@ import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
+import net.socialgamer.cah.Constants.SessionAttribute;
+import net.socialgamer.cah.data.User;
 import net.socialgamer.cah.handlers.Handler;
 import net.socialgamer.cah.handlers.Handlers;
 
@@ -36,19 +38,20 @@ public class AjaxServlet extends CahServlet {
       final HttpServletResponse response, final HttpSession hSession) throws ServletException,
       IOException {
     final PrintWriter out = response.getWriter();
+    final User user = (User) hSession.getAttribute(SessionAttribute.USER);
     int serial = -1;
     if (request.getParameter(AjaxRequest.SERIAL.toString()) != null) {
       try {
         serial = Integer.parseInt(request.getParameter(AjaxRequest.SERIAL.toString()));
       } catch (final NumberFormatException nfe) {
-        returnError(out, ErrorCode.BAD_REQUEST);
+        returnError(user, out, ErrorCode.BAD_REQUEST);
         return;
       }
     }
 
     final String op = request.getParameter(AjaxRequest.OP.toString());
     if (op == null || op.equals("")) {
-      returnError(out, ErrorCode.OP_NOT_SPECIFIED, serial);
+      returnError(user, out, ErrorCode.OP_NOT_SPECIFIED, serial);
       return;
     }
 
@@ -58,12 +61,12 @@ public class AjaxServlet extends CahServlet {
     } catch (final Exception e) {
       System.err.println("Exception creating handler for " + op);
       e.printStackTrace(System.err);
-      returnError(out, ErrorCode.BAD_OP, serial);
+      returnError(user, out, ErrorCode.BAD_OP, serial);
       return;
     }
     final Map<ReturnableData, Object> data = handler.handle(new RequestWrapper(request), hSession);
     data.put(AjaxResponse.SERIAL, serial);
-    returnData(out, data);
+    returnData(user, out, data);
     return;
   }
 

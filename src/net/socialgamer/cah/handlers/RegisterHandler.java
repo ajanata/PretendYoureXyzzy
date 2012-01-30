@@ -52,7 +52,7 @@ public class RegisterHandler extends Handler {
       } else if (users.hasUser(nick)) {
         return error(ErrorCode.NICK_IN_USE);
       } else {
-        final User user = new User(nick);
+        final User user = new User(nick, request.getRemoteHost());
         users.newUser(user);
         session.setAttribute(SessionAttribute.USER, user);
 

@@ -13,6 +13,19 @@ String remoteAddr = request.getRemoteAddr();
 if (!(remoteAddr.equals("0:0:0:0:0:0:0:1") || remoteAddr.equals("127.0.0.1"))) {
   response.sendError(403, "Access is restricted to known hosts");
 }
+
+ServletContext servletContext = pageContext.getServletContext();
+
+// process verbose toggle
+String verboseParam = request.getParameter("verbose");
+if (verboseParam != null) {
+  if (verboseParam.equals("on")) {
+    servletContext.setAttribute(StartupUtils.VERBOSE_DEBUG, Boolean.TRUE);
+  } else {
+    servletContext.setAttribute(StartupUtils.VERBOSE_DEBUG, Boolean.FALSE);
+  }
+}
+
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -33,7 +46,6 @@ th, td {
 <body>
 
 <%
-ServletContext servletContext = pageContext.getServletContext();
 Injector injector = (Injector) servletContext.getAttribute(StartupUtils.INJECTOR);
 %>
 
@@ -83,17 +95,28 @@ Collection<User> users = connectedUsers.getUsers();
 <table>
   <tr>
     <th>Username</th>
+    <th>Host</th>
   </tr>
   <%
   for (User u : users) {
 	  %>
 	  <tr>
 	    <td><% out.print(u.getNickname()); %></td>
+	    <td><% out.print(u.getHostName()); %></td>
 	  </tr>
 	  <%
   }
   %>
 </table>
+
+<%
+Boolean verboseDebugObj = (Boolean) servletContext.getAttribute(StartupUtils.VERBOSE_DEBUG); 
+boolean verboseDebug = verboseDebugObj != null ? verboseDebugObj.booleanValue() : false;
+%>
+<p>
+  Verbose logging is currently <strong><% out.print(verboseDebug ? "ON" : "OFF"); %></strong>.
+  <a href="?verbose=on">Turn on.</a> <a href="?verbose=off">Turn off.</a>
+</p>
 
 </body>
 </html>

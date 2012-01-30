@@ -22,4 +22,12 @@ public class RequestWrapper {
   public String getParameter(final AjaxRequest parameter) {
     return request.getParameter(parameter.toString());
   }
+
+  public String getRemoteAddr() {
+    return request.getRemoteAddr();
+  }
+
+  public String getRemoteHost() {
+    return request.getRemoteHost();
+  }
 }
