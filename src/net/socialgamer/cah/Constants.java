@@ -63,6 +63,7 @@ public class Constants {
   }
 
   public enum AjaxOperation {
+    ADMIN_SET_VERBOSE_LOG("set_verbose_log"),
     CHAT("chat"),
     CREATE_GAME("create_game"),
     FIRST_LOAD("firstload"),
@@ -141,6 +142,7 @@ public class Constants {
   }
 
   public enum ErrorCode implements Localizable {
+    ACCESS_DENIED("access_denied", "Access denied."),
     ALREADY_STARTED("already_started", "The game has already started."),
     BAD_OP("bad_op", "Invalid operation."),
     BAD_REQUEST("bad_req", "Bad request."),
