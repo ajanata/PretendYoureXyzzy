@@ -160,15 +160,15 @@ cah.$.GamePlayerStatus.JUDGING = "judging";
 cah.$.GamePlayerStatus_msg = {};
 cah.$.GamePlayerStatus_msg['playing'] = "Playing";
 cah.$.GamePlayerStatus_msg['idle'] = "";
-cah.$.GamePlayerStatus_msg['judging'] = "Judging";
+cah.$.GamePlayerStatus_msg['judging'] = "Selecting";
 cah.$.GamePlayerStatus_msg['host'] = "Host";
-cah.$.GamePlayerStatus_msg['judge'] = "Judge";
+cah.$.GamePlayerStatus_msg['judge'] = "Card Czar";
 cah.$.GamePlayerStatus_msg_2 = {};
 cah.$.GamePlayerStatus_msg_2['playing'] = "Select a card to play.";
 cah.$.GamePlayerStatus_msg_2['idle'] = "Waiting for players...";
 cah.$.GamePlayerStatus_msg_2['judging'] = "Select a winning card.";
 cah.$.GamePlayerStatus_msg_2['host'] = "Wait for players then click Start Game.";
-cah.$.GamePlayerStatus_msg_2['judge'] = "You are the judge this round.";
+cah.$.GamePlayerStatus_msg_2['judge'] = "You are the Card Czar this round.";
 
 cah.$.GameState = function() {
   // Dummy constructor to make Eclipse auto-complete.
