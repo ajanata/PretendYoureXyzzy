@@ -19,8 +19,18 @@
 </p>
 <p>Known issues:</p>
 <ul>
+  <li>This game was extensively tested in <a href="http://google.com/chrome">Google Chrome</a>.
+  It should work in all recent versions of major browsers, but it may not look 100% as intended. If
+  you find a major issue, please
+  <a href="mailto:ajanata@socialgamer.net?subject=Cards%20Against%20Humanity%20bug">email me</a>
+  with a screenshot and the name and version of the browser you are using, and I'll try to fix it.
+  </li>
   <li>You may not always see your card in the top area after you play it.</li>
   <li>Leaving the game could very easily break the game.</li>
+  <li>If you refresh in the game, an error will pop up in the log briefly before the refresh
+  happens. It is safe to ignore.</li>
+  <li>Elements may not be perfectly sized and positioned immediately after loading the page if your
+  window is sufficiently small. Resize the window to fix.</li>
 </ul>
 <p>Current limitations:</p>
 <ul>
@@ -31,6 +41,13 @@
   browser crashes or they lose connection, they will be removed from the game after approximately 3
   minutes.</li>
 </ul>
+<p>
+  If the game seems to be in a weird state, refresh the page and it should take you back to where
+  you were. It would be helpful to take a screenshot and
+  <a href="mailto:ajanata@socialgamer.net?subject=Cards%20Against%20Humanity%20bug">email it to
+  me</a> along with a general description of the problem and the time that it happened (include a
+  time zone please!).
+</p>
 <p>
   <input type="button" value="I have read the above; Take me to the game!"
     onclick="window.location='game.jsp';" />
