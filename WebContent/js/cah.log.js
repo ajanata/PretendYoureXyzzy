@@ -35,7 +35,23 @@ cah.log.error = function(text) {
  */
 cah.log.debug = function(text, opt_obj) {
   if (cah.SILENT_DEBUG && console) {
-    console.debug("[" + new Date().toLocaleTimeString() + "]", text, opt_obj);
+    if (console.debug) {
+      console.debug("[" + new Date().toLocaleTimeString() + "]", text, opt_obj);
+    } else if (console.log) {
+      console.log("[" + new Date().toLocaleTimeString() + "] " + text);
+      if (opt_obj) {
+        if (console.dir) {
+          console.dir(opt_obj);
+        } else if (JSON && JSON.stringify) {
+          console.log(JSON.stringify(opt_obj));
+        } else {
+          console.log("TODO: SILENT_DEBUG without console.debug, with console.log, "
+              + "without console.dir, without JSON.stringify");
+        }
+      }
+    } else if (console.log) {
+      console.log("[" + new Date().toLocaleTimeString() + "]", text, opt_obj);
+    }
   }
   if (cah.DEBUG) {
     if (opt_obj) {
