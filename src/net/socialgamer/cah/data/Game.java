@@ -68,6 +68,8 @@ public class Game {
   private final int maxPlayers = 10;
   private int judgeIndex = 0;
   private final static int ROUND_INTERMISSION = 8 * 1000;
+  private Timer nextRoundTimer;
+  private final Object nextRoundTimerLock = new Object();
 
   /**
    * TODO Injection here would be much nicer, but that would need a Provider for the id... Too much
@@ -367,7 +369,12 @@ public class Game {
    *          previous game finished.
    */
   private void resetState(final boolean lostPlayer) {
-    // Reset the game.
+    synchronized (nextRoundTimerLock) {
+      if (nextRoundTimer != null) {
+        nextRoundTimer.cancel();
+        nextRoundTimer = null;
+      }
+    }
     synchronized (players) {
       for (final Player player : players) {
         player.getHand().clear();
@@ -584,13 +591,15 @@ public class Game {
     data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(cardPlayer));
     broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
 
-    final Timer timer = new Timer();
-    timer.schedule(new TimerTask() {
-      @Override
-      public void run() {
-        startNextRound();
-      }
-    }, ROUND_INTERMISSION);
+    synchronized (nextRoundTimerLock) {
+      nextRoundTimer = new Timer();
+      nextRoundTimer.schedule(new TimerTask() {
+        @Override
+        public void run() {
+          startNextRound();
+        }
+      }, ROUND_INTERMISSION);
+    }
 
     return null;
   }
