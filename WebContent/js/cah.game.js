@@ -567,6 +567,7 @@ cah.Game.prototype.roundComplete = function(data) {
   $(".card", card.getElement()).addClass("selected");
   var scoreCard = this.scoreCards_[data[cah.$.LongPollResponse.ROUND_WINNER]];
   $(scoreCard.getElement()).addClass("selected");
+  $(".confirm_card", this.element_).attr("disabled", "disabled");
   cah.log.status("The next round will begin in "
       + (data[cah.$.LongPollResponse.INTERMISSION] / 1000) + " seconds.");
 };
@@ -854,8 +855,9 @@ cah.GameScorePanel.prototype.getElement = function() {
 cah.GameScorePanel.prototype.update = function(score, status) {
   this.score_ = score;
   this.status_ = status;
-  jQuery(".scorecard_score", this.element_).text(score);
-  jQuery(".scorecard_status", this.element_).text(cah.$.GamePlayerStatus_msg[status]);
+  $(".scorecard_score", this.element_).text(score);
+  $(".scorecard_status", this.element_).text(cah.$.GamePlayerStatus_msg[status]);
+  $(".scorecard_s", this.element_).text(score == 1 ? "" : "s");
 };
 
 /**
@@ -864,17 +866,6 @@ cah.GameScorePanel.prototype.update = function(score, status) {
 cah.GameScorePanel.prototype.getStatus = function() {
   return this.status_;
 };
-
-// $(document).ready(function() {
-// var game = new cah.Game(0);
-// $("#main_holder").append(game.getElement());
-//
-// for ( var i = 0; i < 10; i++) {
-// var card = new cah.card.WhiteCard(true);
-// card.setText("This is card " + i);
-// game.dealtCard(card);
-// }
-// });
 
 /**
  * confirm card as judge without selecting a round card did ... something
