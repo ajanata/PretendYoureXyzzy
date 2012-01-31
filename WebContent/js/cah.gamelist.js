@@ -36,20 +36,12 @@ cah.GameList.prototype.show = function() {
   $(this.element_).show();
   $("#create_game").show();
   $("#refresh_games").show();
-
-  // $(this.element_).removeClass("hide");
-  // $("#create_game").removeClass("hide");
-  // $("#refresh_games").removeClass("hide");
 };
 
 cah.GameList.prototype.hide = function() {
   $(this.element_).hide();
   $("#create_game").hide();
   $("#refresh_games").hide();
-
-  // $(this.element_).addClass("hide");
-  // $("#create_game").addClass("hide");
-  // $("#refresh_games").addClass("hide");
 };
 
 cah.GameList.prototype.update = function() {
@@ -139,26 +131,12 @@ cah.GameListLobby = function(parentElem, data) {
   this.element_.id = "gamelist_lobby_" + this.id_;
   $(parentElem).append(this.element_);
   $(this.element_).removeClass("hide");
-  jQuery(".gamelist_lobby_id", this.element_).text(this.id_);
-  jQuery(".gamelist_lobby_host", this.element_).text(data[cah.$.GameInfo.HOST]);
-  jQuery(".gamelist_lobby_players", this.element_).text(data[cah.$.GameInfo.PLAYERS].join(", "));
-  var statusClass = "unjoinable";
+  $(".gamelist_lobby_id", this.element_).text(this.id_);
+  $(".gamelist_lobby_host", this.element_).text(data[cah.$.GameInfo.HOST]);
+  $(".gamelist_lobby_players", this.element_).text(data[cah.$.GameInfo.PLAYERS].join(", "));
   var statusMessage = cah.$.GameState_msg[data[cah.$.GameInfo.STATE]];
-  switch (data[cah.$.GameInfo.STATE]) {
-    case cah.$.GameState.LOBBY:
-      statusClass = "joinable";
-      break;
-    case cah.$.GameState.DEALING:
-      statusClass = "unjoinable";
-      break;
-  }
-  jQuery(".gamelist_lobby_status", this.element_).text(statusMessage).addClass(
-      "gamelist_lobby_status_" + statusClass);
-  if (statusClass == "unjoinable") {
-    jQuery(".gamelist_lobby_join", this.element_).attr("disabled", "disabled");
-  } else {
-    jQuery(".gamelist_lobby_join", this.element_).click(cah.bind(this, this.joinClick));
-  }
+  $(".gamelist_lobby_status", this.element_).text(statusMessage);
+  $(".gamelist_lobby_join", this.element_).click(cah.bind(this, this.joinClick));
 };
 
 cah.GameListLobby.prototype.joinClick = function(e) {
@@ -167,5 +145,5 @@ cah.GameListLobby.prototype.joinClick = function(e) {
 
 cah.GameListLobby.prototype.dispose = function() {
   this.parentElem_.removeChild(this.element_);
-  jQuery(".gamelist_lobby_join", this.element_).unbind();
+  $(".gamelist_lobby_join", this.element_).unbind();
 };
