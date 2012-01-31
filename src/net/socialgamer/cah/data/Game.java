@@ -346,6 +346,8 @@ public class Game {
     }
     synchronized (players) {
       if (players.size() >= 3) {
+        // Pick a random start judge, though the "next" judge will actually go first.
+        judgeIndex = (int) (Math.random() * players.size());
         blackDeck = new BlackDeck();
         whiteDeck = new WhiteDeck();
         startNextRound();
