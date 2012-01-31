@@ -75,9 +75,6 @@ public class Game {
   private final int scoreGoal = 8;
 
   /**
-   * TODO Injection here would be much nicer, but that would need a Provider for the id... Too much
-   * work for now.
-   * 
    * @param id
    * @param connectedUsers
    * @param gameManager
@@ -119,16 +116,12 @@ public class Game {
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_JOIN.toString());
     data.put(LongPollResponse.NICKNAME, user.getNickname());
     broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+
+    gameManager.broadcastGameListRefresh();
   }
 
   /**
    * Remove a player from the game.
-   * 
-   * TODO adjust judgeIndex if the player removed is at or before the index
-   * 
-   * TODO remove card they played
-   * 
-   * TODO start a new round if they were the judge
    * 
    * @param user
    *          Player to remove from the game.
@@ -139,13 +132,9 @@ public class Game {
     synchronized (players) {
       final Iterator<Player> iterator = players.iterator();
       while (iterator.hasNext()) {
+        HashMap<ReturnableData, Object> data;
         final Player player = iterator.next();
         if (player.getUser() == user) {
-          HashMap<ReturnableData, Object> data = getEventMap();
-          data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_LEAVE.toString());
-          data.put(LongPollResponse.NICKNAME, user.getNickname());
-          broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
-
           // If they played this round, remove card from played card list.
           synchronized (playedCards) {
             if (playedCards.containsKey(player)) {
@@ -203,6 +192,14 @@ public class Game {
           // index stuff first.
           iterator.remove();
           user.leaveGame(this);
+
+          // do this down here so the person that left doesn't get the notice too
+          data = getEventMap();
+          data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_LEAVE.toString());
+          data.put(LongPollResponse.NICKNAME, user.getNickname());
+          broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+
+          gameManager.broadcastGameListRefresh();
 
           if (host == player) {
             if (players.size() > 0) {
@@ -290,7 +287,6 @@ public class Game {
   }
 
   private GamePlayerStatus getPlayerStatus(final Player player) {
-    // TODO fix this once we actually have gameplay logic
     final GamePlayerStatus playerStatus;
 
     switch (state) {
@@ -441,14 +437,9 @@ public class Game {
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
     data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(getJudge()));
     broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
-
-    // TODO pick a new judge after the judge has selected a winner
-    // delay for a short while after the judge selects so that everyone has a chance to see the
-    // selection
   }
 
   private void winState() {
-    // TODO announce the victory
     resetState(false);
   }
 
