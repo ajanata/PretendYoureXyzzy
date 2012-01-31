@@ -145,13 +145,7 @@ public class Game {
           data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_LEAVE.toString());
           data.put(LongPollResponse.NICKNAME, user.getNickname());
           broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
-          if (host == player) {
-            if (players.size() > 0) {
-              host = players.get(0);
-            } else {
-              host = null;
-            }
-          }
+
           // If they played this round, remove card from played card list.
           synchronized (playedCards) {
             if (playedCards.containsKey(player)) {
@@ -182,7 +176,7 @@ public class Game {
             }
           }
           // If they are judge, return all played cards to hand, and move to next judge.
-          if (getJudge() == player) {
+          if (getJudge() == player && (state == GameState.PLAYING || state == GameState.JUDGING)) {
             data = getEventMap();
             data.put(LongPollResponse.EVENT, LongPollEvent.GAME_JUDGE_LEFT.toString());
             broadcastToPlayers(MessageType.GAME_EVENT, data);
@@ -209,6 +203,15 @@ public class Game {
           // index stuff first.
           iterator.remove();
           user.leaveGame(this);
+
+          if (host == player) {
+            if (players.size() > 0) {
+              host = players.get(0);
+            } else {
+              host = null;
+            }
+          }
+
           break;
         }
       }
