@@ -28,14 +28,6 @@ public class TestServlet extends HttpServlet {
 
   private SessionFactory sessionFactory;
 
-  /**
-   * @see HttpServlet#HttpServlet()
-   */
-  public TestServlet() {
-    super();
-    // TODO Auto-generated constructor stub
-  }
-
   @Override
   public void init() {
     sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
@@ -47,7 +39,6 @@ public class TestServlet extends HttpServlet {
   @Override
   protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
       throws ServletException, IOException {
-    // TODO Auto-generated method stub
     // response.setCharacterEncoding("UTF-8");
     final PrintWriter out = response.getWriter();
     // ServletOutputStream out = response.getOutputStream();

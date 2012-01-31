@@ -22,8 +22,6 @@ cah.ajax.ErrorHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
   if (data.in_progress) {
-    // TODO reload data. see what 'next' is and go from there.
-    // for now just load the nickname
     cah.nickname = data['nickname'];
     cah.log.status("You have reconnected as " + cah.nickname);
     $("#nickbox").hide();
@@ -45,7 +43,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
 };
 
 cah.ajax.ErrorHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
-  // TODO dunno what to do here, if anything
+  // pass
 };
 
 /**

@@ -5,6 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -120,7 +121,11 @@ public class GameManager implements Provider<Integer> {
       if (nextId == -1 || games.containsKey(nextId)) {
         nextId = gameId;
       }
-      // TODO remove the players from the game
+      // remove the players from the game
+      final List<User> users = game.getUsers();
+      for (final User user : users) {
+        game.removePlayer(user);
+      }
 
       broadcastGameListRefresh();
     }

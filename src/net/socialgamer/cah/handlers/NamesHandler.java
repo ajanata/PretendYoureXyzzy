@@ -33,7 +33,7 @@ public class NamesHandler extends Handler {
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
       final HttpSession session) {
     final Map<ReturnableData, Object> ret = new HashMap<ReturnableData, Object>();
-    // TODO once there are multiple rooms, we needCollection<E>hich one was asked for
+    // TODO once there are multiple rooms, we need which one was asked for
     final Collection<User> userList = users.getUsers();
     final List<String> names = new ArrayList<String>(userList.size());
     for (final User u : userList) {

@@ -41,7 +41,6 @@ public class FirstLoadHandler extends Handler {
       ret.put(AjaxResponse.IN_PROGRESS, Boolean.TRUE);
       ret.put(AjaxResponse.NICKNAME, user.getNickname());
 
-      // TODO more
       if (user.getGame() != null) {
         ret.put(AjaxResponse.NEXT, ReconnectNextAction.GAME.toString());
         ret.put(AjaxResponse.GAME_ID, user.getGame().getId());

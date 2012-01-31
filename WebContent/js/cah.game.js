@@ -190,6 +190,8 @@ cah.Game = function(id) {
 /**
  * Load game data from the server and display the game lobby.
  * 
+ * TODO reload round win state
+ * 
  * @param {number}
  *          gameId The game id.
  */
