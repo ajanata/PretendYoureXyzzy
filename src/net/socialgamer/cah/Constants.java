@@ -210,6 +210,7 @@ public class Constants {
     GAME_STATE_CHANGE("game_state_change"),
     GAME_WHITE_RESHUFFLE("game_white_reshuffle"),
     HAND_DEAL("hand_deal"),
+    KICKED("kicked"),
     NEW_PLAYER("new_player"),
     NOOP("noop"),
     PLAYER_LEAVE("player_leave");

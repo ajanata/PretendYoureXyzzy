@@ -193,13 +193,14 @@ cah.$.LongPollEvent = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.LongPollEvent.prototype.dummyForAutocomplete = undefined;
+cah.$.LongPollEvent.KICKED = "kicked";
 cah.$.LongPollEvent.GAME_PLAYER_LEAVE = "game_player_leave";
 cah.$.LongPollEvent.NEW_PLAYER = "new_player";
 cah.$.LongPollEvent.GAME_PLAYER_JOIN = "game_player_join";
 cah.$.LongPollEvent.GAME_LIST_REFRESH = "game_list_refresh";
 cah.$.LongPollEvent.GAME_ROUND_COMPLETE = "game_round_complete";
-cah.$.LongPollEvent.GAME_PLAYER_INFO_CHANGE = "game_player_info_change";
 cah.$.LongPollEvent.NOOP = "noop";
+cah.$.LongPollEvent.GAME_PLAYER_INFO_CHANGE = "game_player_info_change";
 cah.$.LongPollEvent.GAME_BLACK_RESHUFFLE = "game_black_reshuffle";
 cah.$.LongPollEvent.GAME_WHITE_RESHUFFLE = "game_white_reshuffle";
 cah.$.LongPollEvent.GAME_STATE_CHANGE = "game_state_change";

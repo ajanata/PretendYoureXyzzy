@@ -12,6 +12,7 @@ import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
 import com.google.inject.Singleton;
+import com.sun.istack.internal.Nullable;
 
 
 /**
@@ -47,9 +48,23 @@ public class ConnectedUsers {
 
   public void removeUser(final User user, final DisconnectReason reason) {
     synchronized (users) {
-      users.remove(user.getNickname());
-      notifyRemoveUser(user, reason);
+      if (users.containsValue(user)) {
+        user.noLongerVaild();
+        users.remove(user.getNickname());
+        notifyRemoveUser(user, reason);
+      }
     }
+  }
+
+  /**
+   * Get the User for the specified nickname, or null if no such user exists.
+   * 
+   * @param nickname
+   * @return User, or null.
+   */
+  @Nullable
+  public User getUser(final String nickname) {
+    return users.get(nickname);
   }
 
   private void notifyRemoveUser(final User user, final DisconnectReason reason) {

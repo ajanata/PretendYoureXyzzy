@@ -44,7 +44,7 @@ public class QueuedMessage implements Comparable<QueuedMessage> {
    * @author ajanata
    */
   public enum MessageType {
-    PLAYER_EVENT(3), GAME_EVENT(3), GAME_PLAYER_EVENT(4), CHAT(5);
+    KICKED(1), PLAYER_EVENT(3), GAME_EVENT(3), GAME_PLAYER_EVENT(4), CHAT(5);
 
     private final int weight;
 

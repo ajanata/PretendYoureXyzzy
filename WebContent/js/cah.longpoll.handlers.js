@@ -38,6 +38,15 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.NOOP] = function(data) {
   // pass
 };
 
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.KICKED] = function() {
+  cah.log.status("You have been kicked by the server administrator.");
+  cah.longpoll.Resume = false;
+  $("input").attr("disabled", "disabled");
+  $("#menubar_left").empty();
+  $("#main").empty();
+  $("#info_area").empty();
+};
+
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.CHAT] = function(data) {
   // TODO deal with multiple channels eventually
   // don't display our own chat
