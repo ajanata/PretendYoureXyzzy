@@ -71,7 +71,8 @@ Injector injector = (Injector) servletContext.getAttribute(StartupUtils.INJECTOR
   </tr>
   <tr>  
     <td>In Use</td>
-    <td><% out.print((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024); %></td>
+    <td><% out.print((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
+        / 1024 / 1024); %></td>
   </tr>
   <tr>  
     <td>Free</td>
