@@ -74,6 +74,12 @@ public class LongPollServlet extends CahServlet {
       }
     }
     if (user.hasQueuedMessages()) {
+      try {
+        // Delay for a short while in case there will be other messages queued to be delivered.
+        Thread.sleep(5);
+      } catch (final InterruptedException ie) {
+        // pass
+      }
       final Collection<QueuedMessage> msgs = user.getNextQueuedMessages(MAX_MESSAGES_PER_POLL);
       // just in case...
       if (msgs.size() > 0) {
