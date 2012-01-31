@@ -538,6 +538,9 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
       this.handSelectedCard_ = null;
       $(".selected", $(".game_hand", this.element_)).removeClass("selected");
     }
+    if (playerStatus == cah.$.GamePlayerStatus.HOST) {
+      $("#start_game").show();
+    }
   }
 
   if (playerStatus == cah.$.GamePlayerStatus.JUDGE
@@ -570,6 +573,24 @@ cah.Game.prototype.roundComplete = function(data) {
   $(".confirm_card", this.element_).attr("disabled", "disabled");
   cah.log.status("The next round will begin in "
       + (data[cah.$.LongPollResponse.INTERMISSION] / 1000) + " seconds.");
+};
+
+/**
+ * Notify the player that a deck has been reshuffled.
+ * 
+ * @param {String}
+ *          deck Deck name which has been reshuffled.
+ */
+cah.Game.prototype.reshuffle = function(deck) {
+  cah.log.status("The " + deck + " deck has been reshuffled.");
+};
+
+/**
+ * Notify the player that the judge has left the game and cards are being returned to hands.
+ */
+cah.Game.prototype.judgeLeft = function() {
+  cah.log
+      .status("The judge has left the game. Cards played this round are being returned to hands.");
 };
 
 /**

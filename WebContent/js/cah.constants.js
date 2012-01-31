@@ -154,6 +154,7 @@ cah.$.GamePlayerStatus = function() {
 cah.$.GamePlayerStatus.prototype.dummyForAutocomplete = undefined;
 cah.$.GamePlayerStatus.HOST = "host";
 cah.$.GamePlayerStatus.IDLE = "idle";
+cah.$.GamePlayerStatus.WINNER = "winner";
 cah.$.GamePlayerStatus.PLAYING = "playing";
 cah.$.GamePlayerStatus.JUDGE = "judge";
 cah.$.GamePlayerStatus.JUDGING = "judging";
@@ -163,12 +164,14 @@ cah.$.GamePlayerStatus_msg['idle'] = "";
 cah.$.GamePlayerStatus_msg['judging'] = "Selecting";
 cah.$.GamePlayerStatus_msg['host'] = "Host";
 cah.$.GamePlayerStatus_msg['judge'] = "Card Czar";
+cah.$.GamePlayerStatus_msg['winner'] = "Winner!";
 cah.$.GamePlayerStatus_msg_2 = {};
 cah.$.GamePlayerStatus_msg_2['playing'] = "Select a card to play.";
 cah.$.GamePlayerStatus_msg_2['idle'] = "Waiting for players...";
 cah.$.GamePlayerStatus_msg_2['judging'] = "Select a winning card.";
 cah.$.GamePlayerStatus_msg_2['host'] = "Wait for players then click Start Game.";
 cah.$.GamePlayerStatus_msg_2['judge'] = "You are the Card Czar this round.";
+cah.$.GamePlayerStatus_msg_2['winner'] = "You have won!";
 
 cah.$.GameState = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -182,7 +185,7 @@ cah.$.GameState.DEALING = "dealing";
 cah.$.GameState_msg = {};
 cah.$.GameState_msg['playing'] = "In Progress";
 cah.$.GameState_msg['judging'] = "In Progress";
-cah.$.GameState_msg['lobby'] = "Joinable (Not Started)";
+cah.$.GameState_msg['lobby'] = "Not Started";
 cah.$.GameState_msg['dealing'] = "In Progress";
 cah.$.GameState_msg['round_over'] = "In Progress";
 
@@ -190,17 +193,20 @@ cah.$.LongPollEvent = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.LongPollEvent.prototype.dummyForAutocomplete = undefined;
-cah.$.LongPollEvent.GAME_ROUND_COMPLETE = "game_round_complete";
-cah.$.LongPollEvent.NOOP = "noop";
-cah.$.LongPollEvent.GAME_PLAYER_INFO_CHANGE = "game_player_info_change";
-cah.$.LongPollEvent.GAME_STATE_CHANGE = "game_state_change";
 cah.$.LongPollEvent.GAME_PLAYER_LEAVE = "game_player_leave";
 cah.$.LongPollEvent.NEW_PLAYER = "new_player";
-cah.$.LongPollEvent.PLAYER_LEAVE = "player_leave";
 cah.$.LongPollEvent.GAME_PLAYER_JOIN = "game_player_join";
-cah.$.LongPollEvent.HAND_DEAL = "hand_deal";
-cah.$.LongPollEvent.CHAT = "chat";
 cah.$.LongPollEvent.GAME_LIST_REFRESH = "game_list_refresh";
+cah.$.LongPollEvent.GAME_ROUND_COMPLETE = "game_round_complete";
+cah.$.LongPollEvent.GAME_PLAYER_INFO_CHANGE = "game_player_info_change";
+cah.$.LongPollEvent.NOOP = "noop";
+cah.$.LongPollEvent.GAME_BLACK_RESHUFFLE = "game_black_reshuffle";
+cah.$.LongPollEvent.GAME_WHITE_RESHUFFLE = "game_white_reshuffle";
+cah.$.LongPollEvent.GAME_STATE_CHANGE = "game_state_change";
+cah.$.LongPollEvent.PLAYER_LEAVE = "player_leave";
+cah.$.LongPollEvent.CHAT = "chat";
+cah.$.LongPollEvent.HAND_DEAL = "hand_deal";
+cah.$.LongPollEvent.GAME_JUDGE_LEFT = "game_judge_left";
 
 cah.$.LongPollResponse = function() {
   // Dummy constructor to make Eclipse auto-complete.

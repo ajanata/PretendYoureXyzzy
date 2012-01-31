@@ -81,6 +81,20 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_ROUND_COMPLETE] = function(d
       "round complete");
 };
 
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_WHITE_RESHUFFLE] = function(data) {
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.reshuffle, "white",
+      "white reshuffle");
+};
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_BLACK_RESHUFFLE] = function(data) {
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.reshuffle, "black",
+      "black reshuffle");
+};
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_JUDGE_LEFT] = function(data) {
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.judgeLeft, "", "judge left");
+};
+
 /**
  * Helper for event handlers for game events.
  * 

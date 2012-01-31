@@ -200,12 +200,15 @@ public class Constants {
 
   public enum LongPollEvent {
     CHAT("chat"),
+    GAME_BLACK_RESHUFFLE("game_black_reshuffle"),
+    GAME_JUDGE_LEFT("game_judge_left"),
     GAME_LIST_REFRESH("game_list_refresh"),
     GAME_PLAYER_INFO_CHANGE("game_player_info_change"),
     GAME_PLAYER_JOIN("game_player_join"),
     GAME_PLAYER_LEAVE("game_player_leave"),
     GAME_ROUND_COMPLETE("game_round_complete"),
     GAME_STATE_CHANGE("game_state_change"),
+    GAME_WHITE_RESHUFFLE("game_white_reshuffle"),
     HAND_DEAL("hand_deal"),
     NEW_PLAYER("new_player"),
     NOOP("noop"),
@@ -295,7 +298,7 @@ public class Constants {
   public enum GameState implements Localizable {
     DEALING("dealing", "In Progress"),
     JUDGING("judging", "In Progress"),
-    LOBBY("lobby", "Joinable (Not Started)"),
+    LOBBY("lobby", "Not Started"),
     PLAYING("playing", "In Progress"),
     ROUND_OVER("round_over", "In Progress");
 
@@ -358,7 +361,8 @@ public class Constants {
     IDLE("idle", "", "Waiting for players..."),
     JUDGE("judge", "Card Czar", "You are the Card Czar this round."),
     JUDGING("judging", "Selecting", "Select a winning card."),
-    PLAYING("playing", "Playing", "Select a card to play.");
+    PLAYING("playing", "Playing", "Select a card to play."),
+    WINNER("winner", "Winner!", "You have won!");
 
     private final String status;
     private final String message;

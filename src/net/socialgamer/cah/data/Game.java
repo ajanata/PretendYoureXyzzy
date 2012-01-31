@@ -1,6 +1,7 @@
 package net.socialgamer.cah.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -51,6 +52,7 @@ import com.google.inject.Inject;
 public class Game {
   private final int id;
   private final List<Player> players = new ArrayList<Player>(10);
+  private final List<Player> roundPlayers = new ArrayList<Player>(9);
   // TODO make this Map<Player, List<WhiteCard>> once we support the multiple play black cards
   private final BidiFromIdHashMap<Player, WhiteCard> playedCards =
       new BidiFromIdHashMap<Player, WhiteCard>();
@@ -62,14 +64,15 @@ public class Game {
   private final Object blackCardLock = new Object();
   private WhiteDeck whiteDeck;
   private GameState state;
-  // TODO make this work with "draw x" cards. probably will not actually be done here.
-  private final int currentHandSize = 10;
   // TODO make this host-configurable
   private final int maxPlayers = 10;
+  // TODO also need to configure this
   private int judgeIndex = 0;
   private final static int ROUND_INTERMISSION = 8 * 1000;
   private Timer nextRoundTimer;
   private final Object nextRoundTimerLock = new Object();
+  // TODO host config
+  private final int scoreGoal = 8;
 
   /**
    * TODO Injection here would be much nicer, but that would need a Provider for the id... Too much
@@ -110,12 +113,10 @@ public class Game {
       if (host == null) {
         host = player;
       }
-
     }
 
-    final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_JOIN.toString());
-    data.put(LongPollResponse.GAME_ID, id);
     data.put(LongPollResponse.NICKNAME, user.getNickname());
     broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
   }
@@ -134,16 +135,14 @@ public class Game {
    * @return True if {@code user} was the last player in the game.
    */
   public boolean removePlayer(final User user) {
+    boolean wasJudge = false;
     synchronized (players) {
       final Iterator<Player> iterator = players.iterator();
       while (iterator.hasNext()) {
         final Player player = iterator.next();
         if (player.getUser() == user) {
-          iterator.remove();
-          user.leaveGame(this);
-          final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+          HashMap<ReturnableData, Object> data = getEventMap();
           data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_LEAVE.toString());
-          data.put(LongPollResponse.GAME_ID, id);
           data.put(LongPollResponse.NICKNAME, user.getNickname());
           broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
           if (host == player) {
@@ -153,6 +152,63 @@ public class Game {
               host = null;
             }
           }
+          // If they played this round, remove card from played card list.
+          synchronized (playedCards) {
+            if (playedCards.containsKey(player)) {
+              synchronized (whiteDeck) {
+                // FIXME for multi-play
+                whiteDeck.discard(playedCards.get(player));
+              }
+              playedCards.remove(player);
+            }
+          }
+          // If they are to play this round, remove them from that list.
+          synchronized (roundPlayers) {
+            if (roundPlayers.contains(player)) {
+              roundPlayers.remove(player);
+              if (roundPlayers.size() == playedCards.size()) {
+                // FIXME for multi-play
+                judgingState();
+              }
+            }
+          }
+          // If they have a hand, return it to discard pile.
+          if (player.getHand().size() > 0) {
+            synchronized (whiteDeck) {
+              final List<WhiteCard> hand = player.getHand();
+              for (final WhiteCard card : hand) {
+                whiteDeck.discard(card);
+              }
+            }
+          }
+          // If they are judge, return all played cards to hand, and move to next judge.
+          if (getJudge() == player) {
+            data = getEventMap();
+            data.put(LongPollResponse.EVENT, LongPollEvent.GAME_JUDGE_LEFT.toString());
+            broadcastToPlayers(MessageType.GAME_EVENT, data);
+            synchronized (playedCards) {
+              // FIXME for multi-play
+              for (final Player p : playedCards.keySet()) {
+                p.getHand().add(playedCards.get(p));
+                sendCardsToPlayer(p, Arrays.asList(playedCards.get(p)));
+              }
+              // prevent startNextRound from discarding cards
+              playedCards.clear();
+            }
+            // startNextRound will advance it again.
+            judgeIndex--;
+            // Can't start the next round right here.
+            wasJudge = true;
+          }
+          // If they aren't judge but are earlier in judging order, fix the judge index.
+          else if (players.indexOf(player) < judgeIndex) {
+            judgeIndex--;
+          }
+
+          // we can't actually remove them until down here because we need to deal with the judge
+          // index stuff first.
+          iterator.remove();
+          user.leaveGame(this);
           break;
         }
       }
@@ -162,6 +218,8 @@ public class Game {
       }
       if (players.size() < 3 && state != GameState.LOBBY) {
         resetState(true);
+      } else if (wasJudge) {
+        startNextRound();
       }
       return players.size() == 0;
     }
@@ -261,7 +319,15 @@ public class Game {
         }
         break;
       case ROUND_OVER:
-        playerStatus = GamePlayerStatus.IDLE;
+        if (getJudge() == player) {
+          playerStatus = GamePlayerStatus.JUDGE;
+        }
+        // TODO win-by-x
+        else if (player.getScore() == scoreGoal) {
+          playerStatus = GamePlayerStatus.WINNER;
+        } else {
+          playerStatus = GamePlayerStatus.IDLE;
+        }
         break;
       default:
         throw new IllegalStateException("Unknown GameState " + state.toString());
@@ -283,7 +349,7 @@ public class Game {
       if (players.size() >= 3) {
         blackDeck = new BlackDeck();
         whiteDeck = new WhiteDeck();
-        dealState();
+        startNextRound();
         return true;
       } else {
         return false;
@@ -306,10 +372,21 @@ public class Game {
       for (final Player player : players) {
         final List<WhiteCard> hand = player.getHand();
         final List<WhiteCard> newCards = new LinkedList<WhiteCard>();
-        while (hand.size() < currentHandSize) {
-          final WhiteCard card = whiteDeck.getNextCard();
-          hand.add(card);
-          newCards.add(card);
+        synchronized (whiteDeck) {
+          while (hand.size() < 10) {
+            final WhiteCard card;
+            try {
+              card = whiteDeck.getNextCard();
+            } catch (final OutOfCardsException e) {
+              whiteDeck.reshuffle();
+              final HashMap<ReturnableData, Object> data = getEventMap();
+              data.put(LongPollResponse.EVENT, LongPollEvent.GAME_WHITE_RESHUFFLE);
+              broadcastToPlayers(MessageType.GAME_EVENT, data);
+              continue;
+            }
+            hand.add(card);
+            newCards.add(card);
+          }
         }
         sendCardsToPlayer(player, newCards);
       }
@@ -320,11 +397,22 @@ public class Game {
   private void playingState() {
     state = GameState.PLAYING;
 
-    playedCards.clear();
+    synchronized (playedCards) {
+      playedCards.clear();
+    }
 
     synchronized (blackCardLock) {
       do {
-        blackCard = blackDeck.getNextCard();
+        try {
+          blackDeck.discard(blackCard);
+          blackCard = blackDeck.getNextCard();
+        } catch (final OutOfCardsException e) {
+          blackDeck.reshuffle();
+          final HashMap<ReturnableData, Object> data = getEventMap();
+          data.put(LongPollResponse.EVENT, LongPollEvent.GAME_BLACK_RESHUFFLE);
+          broadcastToPlayers(MessageType.GAME_EVENT, data);
+          continue;
+        }
         // TODO remove this loop once the game supports the pick and draw features
       } while (blackCard.getPick() != 1 || blackCard.getDraw() != 0);
     }
@@ -386,19 +474,35 @@ public class Game {
     synchronized (blackCardLock) {
       blackCard = null;
     }
+    synchronized (playedCards) {
+      playedCards.clear();
+    }
+    synchronized (roundPlayers) {
+      roundPlayers.clear();
+    }
     state = GameState.LOBBY;
+    final Player judge = getJudge();
     judgeIndex = 0;
 
-    final HashMap<ReturnableData, Object> data = getEventMap();
+    HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
     data.put(LongPollResponse.GAME_STATE, GameState.LOBBY.toString());
     broadcastToPlayers(MessageType.GAME_EVENT, data);
+
+    data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
+    data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(host));
+    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+
+    data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
+    data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(judge));
+    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
   }
 
   private void sendCardsToPlayer(final Player player, final List<WhiteCard> cards) {
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.HAND_DEAL.toString());
-    data.put(LongPollResponse.GAME_ID, id);
     final List<Map<WhiteCardData, Object>> cardData = handSubsetToClient(cards);
     data.put(LongPollResponse.HAND, cardData);
     final QueuedMessage qm = new QueuedMessage(MessageType.GAME_EVENT, data);
@@ -506,7 +610,11 @@ public class Game {
   }
 
   private Player getJudge() {
-    return players.get(judgeIndex);
+    if (judgeIndex >= 0 && judgeIndex < players.size()) {
+      return players.get(judgeIndex);
+    } else {
+      return null;
+    }
   }
 
   public ErrorCode playCard(final User user, final int cardId) {
@@ -534,15 +642,14 @@ public class Game {
         synchronized (playedCards) {
           playedCards.put(player, playCard);
 
-          final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+          final HashMap<ReturnableData, Object> data = getEventMap();
           data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
-          data.put(LongPollResponse.GAME_ID, id);
           data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(player));
           broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
 
           // TODO make this check that everybody has played proper number of cards when we support
           // multiple play blacks
-          if (playedCards.size() == players.size() - 1) {
+          if (playedCards.size() == roundPlayers.size()) {
             judgingState();
           }
         }
@@ -572,6 +679,7 @@ public class Game {
     }
 
     cardPlayer.increaseScore();
+    state = GameState.ROUND_OVER;
 
     HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_ROUND_COMPLETE.toString());
@@ -583,7 +691,6 @@ public class Game {
     data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
     data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(getJudge()));
-    state = GameState.ROUND_OVER;
     broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
 
     data = getEventMap();
@@ -593,22 +700,51 @@ public class Game {
 
     synchronized (nextRoundTimerLock) {
       nextRoundTimer = new Timer();
-      nextRoundTimer.schedule(new TimerTask() {
-        @Override
-        public void run() {
-          startNextRound();
-        }
-      }, ROUND_INTERMISSION);
+      final TimerTask task;
+      // TODO win-by-x option
+      if (cardPlayer.getScore() == scoreGoal) {
+        task = new TimerTask() {
+          @Override
+          public void run() {
+            winState();
+          }
+        };
+      } else {
+        task = new TimerTask() {
+          @Override
+          public void run() {
+            startNextRound();
+          }
+        };
+      }
+      nextRoundTimer.schedule(task, ROUND_INTERMISSION);
     }
 
     return null;
   }
 
   private void startNextRound() {
+    synchronized (whiteDeck) {
+      synchronized (playedCards) {
+        for (final WhiteCard card : playedCards.values()) {
+          // TODO fix this for multiple played cards
+          whiteDeck.discard(card);
+        }
+      }
+    }
+
     synchronized (players) {
       judgeIndex++;
       if (judgeIndex >= players.size()) {
         judgeIndex = 0;
+      }
+      synchronized (roundPlayers) {
+        roundPlayers.clear();
+        for (final Player player : players) {
+          if (player != getJudge()) {
+            roundPlayers.add(player);
+          }
+        }
       }
     }
 
