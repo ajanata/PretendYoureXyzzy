@@ -7,7 +7,18 @@
 cah.longpoll = {};
 cah.longpoll.TIMEOUT = 2 * 60 * 1000;
 // cah.longpoll.TIMEOUT = 30 * 1000;
+/**
+ * Backoff when there was an error.
+ * 
+ * @type {number}
+ */
 cah.longpoll.INITIAL_BACKOFF = 500;
+/**
+ * Backoff after a successful request.
+ * 
+ * @type {number}
+ */
+cah.longpoll.NORMAL_BACKOFF = 1;
 cah.longpoll.Backoff = cah.longpoll.INITIAL_BACKOFF;
 cah.longpoll.Resume = true;
 cah.longpoll.ErrorCodeHandlers = {};
@@ -20,7 +31,7 @@ cah.longpoll.longPoll = function() {
     error : cah.longpoll.error,
     success : cah.longpoll.done,
     timeout : cah.longpoll.TIMEOUT,
-    url : '/cah/LongPollServlet',
+    url : cah.LONGPOLL_URI,
   });
 };
 
@@ -65,13 +76,17 @@ cah.longpoll.done = function(data_list) {
   }
 
   // reset the backoff to normal when there's a successful operation
-  cah.longpoll.Backoff = cah.longpoll.INITIAL_BACKOFF;
+  cah.longpoll.Backoff = cah.longpoll.NORMAL_BACKOFF;
 };
 
 cah.longpoll.error = function(jqXHR, textStatus, errorThrown) {
   // TODO deal with this somehow
   cah.log.debug(textStatus);
-  cah.longpoll.Backoff *= 2;
+  if (cah.longpoll.Backoff < cah.longpoll.INITIAL_BACKOFF) {
+    cah.longpoll.Backoff = cah.longpoll.INITIAL_BACKOFF;
+  } else {
+    cah.longpoll.Backoff *= 2;
+  }
   cah.log
       .error("Error communicating with server. Will try again in " + (cah.longpoll.Backoff / 1000)
           + " second" + (cah.longpoll.Backoff != 1000 ? "s" : "") + ".");

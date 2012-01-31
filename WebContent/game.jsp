@@ -2,7 +2,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%
+// Ensure a session exists for the user.
+@SuppressWarnings("unused")
+HttpSession hSession = request.getSession(true);
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -11,6 +17,7 @@
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/QTransform.js"></script>
 <script type="text/javascript" src="js/cah.js"></script>
+<script type="text/javascript" src="js/cah.config.js"></script>
 <%-- cah must be first, ajax must be before app. app probably has to be last. --%>
 <%-- TODO make this be dynamic with looking at the filesystem and using jquery --%>
 <%-- except that is nontrivial thanks to dependency ordering -_- --%>
@@ -28,11 +35,6 @@
 <link rel="stylesheet" type="text/css" href="cah.css" media="screen" />
 </head>
 <body>
-<%-- Ensure a session exists for the user. --%>
-<% HttpSession hSession = request.getSession(true); %>
-<%--
-< % = new net.socialgamer.cah.data.WhiteDeck().getNextCard().toString() % >
---%>
 
 <%--
 <div id="browser" class="hide">

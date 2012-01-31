@@ -36,7 +36,7 @@ $(document).ready(function() {
     success : cah.Ajax.instance.done,
     timeout : cah.DEBUG ? undefined : 10 * 1000, // 10 second timeout for normal requests
     type : 'POST',
-    url : '/cah/AjaxServlet'
+    url : cah.AJAX_URI,
   });
 });
 
@@ -64,13 +64,15 @@ cah.Ajax.prototype.error = function(jqXHR, textStatus, errorThrown) {
   // TODO deal with this somehow
   // and figure out which request it was so we can remove it from pending
   debugger;
-  cah.log.error(textStatus);
+  cah.log.error(textStatus + " " + errorThrown);
 };
 
 cah.Ajax.prototype.done = function(data) {
   cah.log.debug("ajax done", data);
   if (data[cah.$.AjaxResponse.ERROR]) {
     // TODO cancel any timers or whatever we may have, and disable interface
+    // or probably in individual error handlers as there are some errors that are fine like
+    // "you don't have that card" etc.
     var req = this.pendingRequests[data[cah.$.AjaxResponse.SERIAL]];
     if (req && cah.ajax.ErrorHandlers[req.getOp()]) {
       cah.ajax.ErrorHandlers[req.getOp()](data);
