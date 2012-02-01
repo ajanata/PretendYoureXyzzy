@@ -320,6 +320,13 @@ span.debug {
   cursor: pointer;
 }
 
+.game_white_cards_binder {
+  border: 5px solid silver;
+  display: inline-block;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
 .card_holder {
   float: left;
   position: relative;
@@ -327,6 +334,10 @@ span.debug {
   overflow-y: visible !important;
   margin-right: 2px;
   z-index: 1;
+}
+
+.game_white_cards_binder .card_holder {
+  margin-right: 0px;
 }
 
 .scoreboard {

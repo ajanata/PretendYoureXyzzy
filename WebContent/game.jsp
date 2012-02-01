@@ -84,44 +84,54 @@ HttpSession hSession = request.getSession(true);
 </div>
 
 <!-- Template for game lobbies in the game list. -->
-<div id="gamelist_lobby_template" class="gamelist_lobby hide">
-  <div class="gamelist_lobby_left">
-    Game <span class="gamelist_lobby_id">###</span>
-    <span class="gamelist_lobby_status">status</span>
-    <br/>
-    Host: <span class="gamelist_lobby_host">host</span>
-    <br/>
-    Players: <span class="gamelist_lobby_players">host, player1, player2</span>
-  </div>
-  <div class="gamelist_lobby_right">
-    <input type="button" class="gamelist_lobby_join" value="Join" />
-  </div>
+<div class="hide">
+	<div id="gamelist_lobby_template" class="gamelist_lobby">
+	  <div class="gamelist_lobby_left">
+	    Game <span class="gamelist_lobby_id">###</span>
+	    <span class="gamelist_lobby_status">status</span>
+	    <br/>
+	    Host: <span class="gamelist_lobby_host">host</span>
+	    <br/>
+	    Players: <span class="gamelist_lobby_players">host, player1, player2</span>
+	  </div>
+	  <div class="gamelist_lobby_right">
+	    <input type="button" class="gamelist_lobby_join" value="Join" />
+	  </div>
+	</div>
 </div>
 
 <!-- Template for face-up black cards. -->
-<div id="black_up_template" class="card blackcard hide">
-  <span class="card_text">The quick brown fox jumped over the lazy dog.</span>
-  <img src="img/cah-black.png" class="cah" alt="Cards Against Humanity" />
+<div class="hide">
+	<div id="black_up_template" class="card blackcard">
+	  <span class="card_text">The quick brown fox jumped over the lazy dog.</span>
+	  <img src="img/cah-black.png" class="cah" alt="Cards Against Humanity" />
+	</div>
 </div>
 
 <!-- Template for face-down black cards. -->
-<div id="black_down_template" class="card blackcard hide">
+<div class="hide">
+	<div id="black_down_template" class="card blackcard">
+	</div>
 </div>
 
 <!-- Template for face-up white cards. -->
-<div id="white_up_template" class="card whitecard hide">
-  <span class="card_text">The quick brown fox jumped over the lazy dog.</span>
-  <img src="img/cah-white.png" class="cah" alt="Cards Against Humanity" />
+<div class="hide">
+	<div id="white_up_template" class="card whitecard">
+	  <span class="card_text">The quick brown fox jumped over the lazy dog.</span>
+	  <img src="img/cah-white.png" class="cah" alt="Cards Against Humanity" />
+	</div>
 </div>
 
 <!-- Template for face-down white cards. -->
-<div id="white_down_template" class="card whitecard hide">
+<div class="hide">
+	<div id="white_down_template" class="card whitecard">
+	</div>
 </div>
 
 <!-- Template for game lobbies. We have a holder here for designing only. -->
 <div style="width: 1000px; height: 506px; border: 1px solid black; position: relative;"
     class="hide">
-  <div id="game_template" class="game hide">
+  <div id="game_template" class="game">
     <div class="game_message">
       Waiting for server...
     </div>
@@ -154,17 +164,23 @@ HttpSession hSession = request.getSession(true);
 
 <!-- Template for scoreboard container. Holder for design. -->
 <div style="height: 215px; border: 1px solid black;" class="hide">
-	<div id="scoreboard_template" class="scoreboard hide">
+	<div id="scoreboard_template" class="scoreboard">
 	</div>
 </div>
 
 <!-- Template for scoreboard score card. Holder for design. -->
 <div class="scoreboard hide" style="height: 215px;">
-	<div id="scorecard_template" class="scorecard hide">
+	<div id="scorecard_template" class="scorecard">
 	  <span class="scorecard_player">PlayerName</span>
 	  <div class="clear"></div>
 	  <span class="scorecard_score">0</span> Awesome Point<span class="scorecard_s">s</span>
 	  <span class="scorecard_status">Status</span>
+	</div>
+</div>
+
+<!-- Template for round card set binder. -->
+<div class="hide">
+	<div id="game_white_cards_binder_template" class="game_white_cards_binder hide">
 	</div>
 </div>
 

@@ -54,8 +54,7 @@ public class Game {
   private final List<Player> players = new ArrayList<Player>(10);
   private final List<Player> roundPlayers = new ArrayList<Player>(9);
   // TODO make this Map<Player, List<WhiteCard>> once we support the multiple play black cards
-  private final BidiFromIdHashMap<Player, WhiteCard> playedCards =
-      new BidiFromIdHashMap<Player, WhiteCard>();
+  private final PlayerPlayedCardsTracker playedCards = new PlayerPlayedCardsTracker();
   private final ConnectedUsers connectedUsers;
   private final GameManager gameManager;
   private Player host;
@@ -137,10 +136,13 @@ public class Game {
         if (player.getUser() == user) {
           // If they played this round, remove card from played card list.
           synchronized (playedCards) {
-            if (playedCards.containsKey(player)) {
+            if (playedCards.hasPlayer(player)) {
               synchronized (whiteDeck) {
                 // FIXME for multi-play
-                whiteDeck.discard(playedCards.get(player));
+                final List<WhiteCard> cards = playedCards.getCards(player);
+                for (final WhiteCard card : cards) {
+                  whiteDeck.discard(card);
+                }
               }
               playedCards.remove(player);
             }
@@ -171,9 +173,9 @@ public class Game {
             broadcastToPlayers(MessageType.GAME_EVENT, data);
             synchronized (playedCards) {
               // FIXME for multi-play
-              for (final Player p : playedCards.keySet()) {
-                p.getHand().add(playedCards.get(p));
-                sendCardsToPlayer(p, Arrays.asList(playedCards.get(p)));
+              for (final Player p : playedCards.playedPlayers()) {
+                p.getHand().addAll(playedCards.getCards(p));
+                sendCardsToPlayer(p, playedCards.getCards(p));
               }
               // prevent startNextRound from discarding cards
               playedCards.clear();
@@ -302,7 +304,9 @@ public class Game {
           playerStatus = GamePlayerStatus.JUDGE;
         } else {
           synchronized (playedCards) {
-            if (playedCards.containsKey(player)) {
+            final List<WhiteCard> playerCards = playedCards.getCards(player);
+            if (playerCards != null && blackCard != null
+                && playerCards.size() == blackCard.getPick()) {
               playerStatus = GamePlayerStatus.IDLE;
             } else {
               playerStatus = GamePlayerStatus.PLAYING;
@@ -375,16 +379,7 @@ public class Game {
         final List<WhiteCard> newCards = new LinkedList<WhiteCard>();
         synchronized (whiteDeck) {
           while (hand.size() < 10) {
-            final WhiteCard card;
-            try {
-              card = whiteDeck.getNextCard();
-            } catch (final OutOfCardsException e) {
-              whiteDeck.reshuffle();
-              final HashMap<ReturnableData, Object> data = getEventMap();
-              data.put(LongPollResponse.EVENT, LongPollEvent.GAME_WHITE_RESHUFFLE);
-              broadcastToPlayers(MessageType.GAME_EVENT, data);
-              continue;
-            }
+            final WhiteCard card = getNextWhiteCard();
             hand.add(card);
             newCards.add(card);
           }
@@ -393,6 +388,21 @@ public class Game {
       }
     }
     playingState();
+  }
+
+  /**
+   * @return The next White Card from the deck, reshuffling if required.
+   */
+  private WhiteCard getNextWhiteCard() {
+    try {
+      return whiteDeck.getNextCard();
+    } catch (final OutOfCardsException e) {
+      whiteDeck.reshuffle();
+      final HashMap<ReturnableData, Object> data = getEventMap();
+      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_WHITE_RESHUFFLE);
+      broadcastToPlayers(MessageType.GAME_EVENT, data);
+      return getNextWhiteCard();
+    }
   }
 
   private void playingState() {
@@ -415,7 +425,22 @@ public class Game {
           continue;
         }
         // TODO remove this loop once the game supports the pick and draw features
-      } while (blackCard.getPick() != 1 || blackCard.getDraw() != 0);
+      } while (blackCard.getDraw() != 2);
+
+      if (blackCard.getDraw() > 0) {
+        synchronized (players) {
+          for (final Player player : players) {
+            if (getJudge() == player) {
+              continue;
+            }
+            final List<WhiteCard> cards = new ArrayList<WhiteCard>(blackCard.getDraw());
+            for (int i = 0; i < blackCard.getDraw(); i++) {
+              cards.add(getNextWhiteCard());
+            }
+            sendCardsToPlayer(player, cards);
+          }
+        }
+      }
     }
 
     final HashMap<ReturnableData, Object> data = getEventMap();
@@ -550,48 +575,76 @@ public class Game {
     }
   }
 
-  private List<Map<WhiteCardData, Object>> getWhiteCards() {
+  /**
+   * @return The "real" white cards played.
+   */
+  private List<List<Map<WhiteCardData, Object>>> getWhiteCards() {
     if (state != GameState.JUDGING) {
-      return new ArrayList<Map<WhiteCardData, Object>>();
+      return new ArrayList<List<Map<WhiteCardData, Object>>>();
     } else {
       // TODO fix this for multi-play
-      final List<WhiteCard> shuffledPlayedCards;
+      final List<List<WhiteCard>> shuffledPlayedCards;
       synchronized (playedCards) {
-        shuffledPlayedCards = new ArrayList<WhiteCard>(playedCards.values());
+        shuffledPlayedCards = new ArrayList<List<WhiteCard>>(playedCards.cards());
       }
-      final List<Map<WhiteCardData, Object>> cardData = new ArrayList<Map<WhiteCardData, Object>>(
-          shuffledPlayedCards.size());
+      // list of all sets of cards played, which have data. this looks terrible...
+      final List<List<Map<WhiteCardData, Object>>> cardData =
+          new ArrayList<List<Map<WhiteCardData, Object>>>(shuffledPlayedCards.size());
       Collections.shuffle(shuffledPlayedCards);
-      for (final WhiteCard card : shuffledPlayedCards) {
-        cardData.add(card.getClientData());
+      //      for (final WhiteCard card : shuffledPlayedCards) {
+      //        cardData.add(card.getClientData());
+      //      }
+      for (final List<WhiteCard> cards : shuffledPlayedCards) {
+        cardData.add(getWhiteCardData(cards));
       }
       return cardData;
     }
   }
 
-  public List<Map<WhiteCardData, Object>> getWhiteCards(final User user) {
+  /**
+   * @param user
+   *          User to return white cards for.
+   * @return The white cards the specified user can see, i.e., theirs and face-down cards for
+   *         everyone else.
+   */
+  @SuppressWarnings("unchecked")
+  public List<List<Map<WhiteCardData, Object>>> getWhiteCards(final User user) {
     // if we're in judge mode, return all of the cards and ignore which user is asking
     if (state == GameState.JUDGING) {
       return getWhiteCards();
     } else if (state != GameState.PLAYING) {
-      return new ArrayList<Map<WhiteCardData, Object>>();
+      return new ArrayList<List<Map<WhiteCardData, Object>>>();
     } else {
       // TODO fix this for multi-play
       synchronized (playedCards) {
-        final List<Map<WhiteCardData, Object>> cardData = new ArrayList<Map<WhiteCardData, Object>>(
-            playedCards.size());
+        final List<List<Map<WhiteCardData, Object>>> cardData =
+            new ArrayList<List<Map<WhiteCardData, Object>>>(playedCards.size());
         int blankCards = playedCards.size();
         final Player player = getPlayerForUser(user);
-        if (playedCards.containsKey(player)) {
-          cardData.add(playedCards.get(player).getClientData());
+        if (playedCards.hasPlayer(player)) {
+          cardData.add(getWhiteCardData(playedCards.getCards(player)));
           blankCards--;
         }
+        // TODO make this figure out how many blank cards in each spot
         while (blankCards-- > 0) {
-          cardData.add(WhiteCard.getBlankCardClientData());
+          cardData.add(Arrays.asList(WhiteCard.getBlankCardClientData()));
         }
         return cardData;
       }
     }
+  }
+
+  /**
+   * @param cards
+   * @return The client data for the list of cards passed in.
+   */
+  private List<Map<WhiteCardData, Object>> getWhiteCardData(final List<WhiteCard> cards) {
+    final List<Map<WhiteCardData, Object>> data =
+        new ArrayList<Map<WhiteCardData, Object>>(cards.size());
+    for (final WhiteCard card : cards) {
+      data.add(card.getClientData());
+    }
+    return data;
   }
 
   private List<User> playersToUsers() {
@@ -636,7 +689,7 @@ public class Game {
       }
       if (playCard != null) {
         synchronized (playedCards) {
-          playedCards.put(player, playCard);
+          playedCards.addCard(player, playCard);
 
           final HashMap<ReturnableData, Object> data = getEventMap();
           data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
@@ -646,7 +699,16 @@ public class Game {
           // TODO make this check that everybody has played proper number of cards when we support
           // multiple play blacks
           if (playedCards.size() == roundPlayers.size()) {
-            judgingState();
+            boolean startJudging = true;
+            for (final List<WhiteCard> cards : playedCards.cards()) {
+              if (cards.size() != blackCard.getPick()) {
+                startJudging = false;
+                break;
+              }
+            }
+            if (startJudging) {
+              judgingState();
+            }
           }
         }
         return null;
@@ -658,6 +720,17 @@ public class Game {
     }
   }
 
+  /**
+   * The judge has selected a card. The {@code cardId} passed in may be any white cards's ID for
+   * black cards that have multiple selection, however only the first card in the set's ID will be
+   * passed around to clients.
+   * 
+   * @param user
+   *          Judge user.
+   * @param cardId
+   *          Selected card ID.
+   * @return Error code if there is an error, or null if success.
+   */
   public ErrorCode judgeCard(final User user, final int cardId) {
     final Player player = getPlayerForUser(user);
     if (getJudge() != player) {
@@ -668,7 +741,7 @@ public class Game {
 
     final Player cardPlayer;
     synchronized (playedCards) {
-      cardPlayer = playedCards.getKeyForId(cardId);
+      cardPlayer = playedCards.getPlayerForId(cardId);
     }
     if (cardPlayer == null) {
       return ErrorCode.INVALID_CARD;
@@ -676,11 +749,12 @@ public class Game {
 
     cardPlayer.increaseScore();
     state = GameState.ROUND_OVER;
+    final int clientCardId = playedCards.getCards(cardPlayer).get(0).getId();
 
     HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_ROUND_COMPLETE.toString());
     data.put(LongPollResponse.ROUND_WINNER, cardPlayer.getUser().getNickname());
-    data.put(LongPollResponse.WINNING_CARD, cardId);
+    data.put(LongPollResponse.WINNING_CARD, clientCardId);
     data.put(LongPollResponse.INTERMISSION, ROUND_INTERMISSION);
     broadcastToPlayers(MessageType.GAME_EVENT, data);
 
@@ -722,9 +796,11 @@ public class Game {
   private void startNextRound() {
     synchronized (whiteDeck) {
       synchronized (playedCards) {
-        for (final WhiteCard card : playedCards.values()) {
+        for (final List<WhiteCard> cards : playedCards.cards()) {
           // TODO fix this for multiple played cards
-          whiteDeck.discard(card);
+          for (final WhiteCard card : cards) {
+            whiteDeck.discard(card);
+          }
         }
       }
     }
@@ -745,6 +821,20 @@ public class Game {
     }
 
     dealState();
+
+    // HACK HACK
+    //    for (final Player player : players) {
+    //      if (player == getJudge()) {
+    //        continue;
+    //      }
+    //      try {
+    //        playedCards.addCard(player, whiteDeck.getNextCard());
+    //        playedCards.addCard(player, whiteDeck.getNextCard());
+    //      } catch (final OutOfCardsException ooce) {
+    //        // pass
+    //      }
+    //    }
+    //    judgingState();
   }
 
   public class TooManyPlayersException extends Exception {

@@ -58,7 +58,7 @@ cah.Game = function(id) {
   this.hand_ = Array();
 
   /**
-   * Map of id to card object for round cards.
+   * Map of id to card object arrays for round cards.
    * 
    * @type {Object}
    * @private
@@ -293,42 +293,61 @@ cah.Game.prototype.removeCardFromHand = function(card) {
  * Set the round white cards.
  * 
  * @param {Array}
- *          cards Array of cah.card.WhiteCard to display.
+ *          cardSets Array of arrays of cah.$.WhiteCardData to display.
  */
-cah.Game.prototype.setRoundWhiteCards = function(cards) {
-  for ( var index in cards) {
-    var card;
-    var id = cards[index][cah.$.WhiteCardData.ID];
-    if (id >= 0) {
-      card = new cah.card.WhiteCard(true, id);
-      card.setText(cards[index][cah.$.WhiteCardData.TEXT]);
-    } else {
-      card = new cah.card.WhiteCard();
+cah.Game.prototype.setRoundWhiteCards = function(cardSets) {
+  for ( var setIndex in cardSets) {
+    var thisSet = Array();
+    for ( var index in cardSets[setIndex]) {
+      var cardData = cardSets[setIndex][index];
+      var card;
+      var id = cardData[cah.$.WhiteCardData.ID];
+      if (id >= 0) {
+        card = new cah.card.WhiteCard(true, id);
+        card.setText(cardData[cah.$.WhiteCardData.TEXT]);
+      } else {
+        card = new cah.card.WhiteCard();
+      }
+      thisSet.push(card);
     }
-    this.addRoundWhiteCard_(card);
+    this.addRoundWhiteCard_(thisSet);
   }
 };
 
 /**
  * Add a white card to the round white cards area.
  * 
- * @param {cah.card.WhiteCard}
- *          card Card to add to area.
+ * @param {Array}
+ *          cards Array of cah.card.WhiteCard to add to area.
  * @private
  */
-cah.Game.prototype.addRoundWhiteCard_ = function(card) {
-  var element = card.getElement();
-  $(".game_white_cards", this.element_).append(element);
-  $(element).css("transform-origin", "0 0");
+cah.Game.prototype.addRoundWhiteCard_ = function(cards) {
+  var parentElem;
+  if (cards.length > 1) {
+    parentElem = $("#game_white_cards_binder_template").clone()[0];
+    parentElem.id = "";
+    $(parentElem).removeClass("hide");
+    $(".game_white_cards", this.element_).append(parentElem);
+  } else {
+    parentElem = $(".game_white_cards", this.element_)[0];
+  }
 
-  var data = {
-    card : card,
-  };
-  $(element).on("mouseenter.round", data, cah.bind(this, this.roundCardMouseEnter_)).on(
-      "mouseleave.round", data, cah.bind(this, this.roundCardMouseLeave_)).on("click.round", data,
-      cah.bind(this, this.roundCardClick_));
+  for ( var index in cards) {
+    var card = cards[index];
 
-  this.roundCards_[card.getServerId()] = card;
+    var element = card.getElement();
+    $(parentElem).append(element);
+    $(element).css("transform-origin", "0 0");
+
+    var data = {
+      card : card,
+    };
+    $(element).on("mouseenter.round", data, cah.bind(this, this.roundCardMouseEnter_)).on(
+        "mouseleave.round", data, cah.bind(this, this.roundCardMouseLeave_)).on("click.round",
+        data, cah.bind(this, this.roundCardClick_));
+
+  }
+  this.roundCards_[cards[0].getServerId()] = cards;
 
   this.resizeRoundCards_();
 };
@@ -556,7 +575,8 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
     // also, don't put the card up if we're already into judging state -- we already displayed all
     // of the cards!
     if (playerName != cah.nickname && this.state_ == cah.$.GameState.PLAYING) {
-      this.addRoundWhiteCard_(new cah.card.WhiteCard());
+      // TODO make this not suck for multiple selection
+      this.addRoundWhiteCard_(Array(new cah.card.WhiteCard()));
     }
   }
 };
@@ -568,8 +588,11 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
  *          data Data from server.
  */
 cah.Game.prototype.roundComplete = function(data) {
-  var card = this.roundCards_[data[cah.$.LongPollResponse.WINNING_CARD]];
-  $(".card", card.getElement()).addClass("selected");
+  var cards = this.roundCards_[data[cah.$.LongPollResponse.WINNING_CARD]];
+  for ( var index in cards) {
+    var card = cards[index];
+    $(".card", card.getElement()).addClass("selected");
+  }
   var scoreCard = this.scoreCards_[data[cah.$.LongPollResponse.ROUND_WINNER]];
   $(scoreCard.getElement()).addClass("selected");
   $(".confirm_card", this.element_).attr("disabled", "disabled");
@@ -712,7 +735,7 @@ cah.Game.prototype.playCardComplete = function() {
     // TODO support for multiple play
     this.myPlayedCard_ = this.handSelectedCard_;
     this.removeCardFromHand(this.handSelectedCard_);
-    this.addRoundWhiteCard_(this.handSelectedCard_);
+    this.addRoundWhiteCard_(Array(this.handSelectedCard_));
     this.handSelectedCard_ = null;
   }
   $(".confirm_card", this.element_).attr("disabled", "disabled");
