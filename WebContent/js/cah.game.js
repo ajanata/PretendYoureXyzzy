@@ -102,6 +102,8 @@ cah.Game = function(id) {
    * 
    * TODO make this an array when we support the multiple play blacks
    * 
+   * TODO what, exactly, is this being used for, since multi-play seems to be working...
+   * 
    * @type {cah.card.WhiteCard}
    * @private
    */
@@ -248,8 +250,6 @@ cah.Game.prototype.dealtCards = function(cards) {
 
 /**
  * Add a card to the player's hand.
- * 
- * TODO: in IE, for some reason, the logo is only on the leftmost card.
  * 
  * @param {cah.card.WhiteCard}
  *          card Card to add to hand.
@@ -582,7 +582,9 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
     // also, don't put the card up if we're already into judging state -- we already displayed all
     // of the cards!
     if (playerName != cah.nickname && this.state_ == cah.$.GameState.PLAYING) {
-      // TODO make this not suck for multiple selection
+      // TODO make this not suck for multiple selection. it only shows one card when they're done.
+      // TODO have some sort of way to know, from the server, how far along everybody is playing
+      // for multi-play
       this.addRoundWhiteCard_(Array(new cah.card.WhiteCard()));
     }
   }
@@ -633,7 +635,6 @@ cah.Game.prototype.judgeLeft = function() {
 cah.Game.prototype.confirmClick_ = function() {
   if (this.judge_ == cah.nickname) {
     if (this.roundSelectedCard_ != null) {
-      // TODO fix for multiple select
       cah.Ajax.build(cah.$.AjaxOperation.JUDGE_SELECT).withGameId(this.id_).withCardId(
           this.roundSelectedCard_.getServerId()).run();
     }
@@ -739,7 +740,7 @@ cah.Game.prototype.startGameComplete = function() {
 cah.Game.prototype.playCardComplete = function() {
   if (this.handSelectedCard_) {
     $(".card", this.handSelectedCard_.getElement()).removeClass("selected");
-    // TODO support for multiple play
+    // TODO support for multiple play, though it seems to be working now...
     this.myPlayedCard_ = this.handSelectedCard_;
     this.removeCardFromHand(this.handSelectedCard_);
     this.addRoundWhiteCard_(Array(this.handSelectedCard_));

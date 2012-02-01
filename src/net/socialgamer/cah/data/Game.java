@@ -53,7 +53,6 @@ public class Game {
   private final int id;
   private final List<Player> players = new ArrayList<Player>(10);
   private final List<Player> roundPlayers = new ArrayList<Player>(9);
-  // TODO make this Map<Player, List<WhiteCard>> once we support the multiple play black cards
   private final PlayerPlayedCardsTracker playedCards = new PlayerPlayedCardsTracker();
   private final ConnectedUsers connectedUsers;
   private final GameManager gameManager;
@@ -138,7 +137,6 @@ public class Game {
           synchronized (playedCards) {
             if (playedCards.hasPlayer(player)) {
               synchronized (whiteDeck) {
-                // FIXME for multi-play
                 final List<WhiteCard> cards = playedCards.getCards(player);
                 for (final WhiteCard card : cards) {
                   whiteDeck.discard(card);
@@ -151,8 +149,7 @@ public class Game {
           synchronized (roundPlayers) {
             if (roundPlayers.contains(player)) {
               roundPlayers.remove(player);
-              if (roundPlayers.size() == playedCards.size()) {
-                // FIXME for multi-play
+              if (startJudging()) {
                 judgingState();
               }
             }
@@ -172,7 +169,6 @@ public class Game {
             data.put(LongPollResponse.EVENT, LongPollEvent.GAME_JUDGE_LEFT.toString());
             broadcastToPlayers(MessageType.GAME_EVENT, data);
             synchronized (playedCards) {
-              // FIXME for multi-play
               for (final Player p : playedCards.playedPlayers()) {
                 p.getHand().addAll(playedCards.getCards(p));
                 sendCardsToPlayer(p, playedCards.getCards(p));
@@ -586,7 +582,6 @@ public class Game {
     if (state != GameState.JUDGING) {
       return new ArrayList<List<Map<WhiteCardData, Object>>>();
     } else {
-      // TODO fix this for multi-play
       final List<List<WhiteCard>> shuffledPlayedCards;
       synchronized (playedCards) {
         shuffledPlayedCards = new ArrayList<List<WhiteCard>>(playedCards.cards());
@@ -595,9 +590,6 @@ public class Game {
       final List<List<Map<WhiteCardData, Object>>> cardData =
           new ArrayList<List<Map<WhiteCardData, Object>>>(shuffledPlayedCards.size());
       Collections.shuffle(shuffledPlayedCards);
-      //      for (final WhiteCard card : shuffledPlayedCards) {
-      //        cardData.add(card.getClientData());
-      //      }
       for (final List<WhiteCard> cards : shuffledPlayedCards) {
         cardData.add(getWhiteCardData(cards));
       }
@@ -619,7 +611,6 @@ public class Game {
     } else if (state != GameState.PLAYING) {
       return new ArrayList<List<Map<WhiteCardData, Object>>>();
     } else {
-      // TODO fix this for multi-play
       synchronized (playedCards) {
         final List<List<Map<WhiteCardData, Object>>> cardData =
             new ArrayList<List<Map<WhiteCardData, Object>>>(playedCards.size());
@@ -629,7 +620,7 @@ public class Game {
           cardData.add(getWhiteCardData(playedCards.getCards(player)));
           blankCards--;
         }
-        // TODO make this figure out how many blank cards in each spot
+        // TODO make this figure out how many blank cards in each spot, for multi-play cards
         while (blankCards-- > 0) {
           cardData.add(Arrays.asList(WhiteCard.getBlankCardClientData()));
         }
@@ -700,19 +691,8 @@ public class Game {
           data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(player));
           broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
 
-          // TODO make this check that everybody has played proper number of cards when we support
-          // multiple play blacks
-          if (playedCards.size() == roundPlayers.size()) {
-            boolean startJudging = true;
-            for (final List<WhiteCard> cards : playedCards.cards()) {
-              if (cards.size() != blackCard.getPick()) {
-                startJudging = false;
-                break;
-              }
-            }
-            if (startJudging) {
-              judgingState();
-            }
+          if (startJudging()) {
+            judgingState();
           }
         }
         return null;
@@ -721,6 +701,27 @@ public class Game {
       }
     } else {
       return null;
+    }
+  }
+
+  /**
+   * Check to see if judging should begin, based on the number of players that have played and the
+   * number of cards they have played.
+   * 
+   * @return True if judging should begin.
+   */
+  private boolean startJudging() {
+    if (playedCards.size() == roundPlayers.size()) {
+      boolean startJudging = true;
+      for (final List<WhiteCard> cards : playedCards.cards()) {
+        if (cards.size() != blackCard.getPick()) {
+          startJudging = false;
+          break;
+        }
+      }
+      return startJudging;
+    } else {
+      return false;
     }
   }
 
@@ -801,7 +802,6 @@ public class Game {
     synchronized (whiteDeck) {
       synchronized (playedCards) {
         for (final List<WhiteCard> cards : playedCards.cards()) {
-          // TODO fix this for multiple played cards
           for (final WhiteCard card : cards) {
             whiteDeck.discard(card);
           }
@@ -825,20 +825,6 @@ public class Game {
     }
 
     dealState();
-
-    // HACK HACK
-    //    for (final Player player : players) {
-    //      if (player == getJudge()) {
-    //        continue;
-    //      }
-    //      try {
-    //        playedCards.addCard(player, whiteDeck.getNextCard());
-    //        playedCards.addCard(player, whiteDeck.getNextCard());
-    //      } catch (final OutOfCardsException ooce) {
-    //        // pass
-    //      }
-    //    }
-    //    judgingState();
   }
 
   public class TooManyPlayersException extends Exception {
