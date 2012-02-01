@@ -104,7 +104,19 @@ HttpSession hSession = request.getSession(true);
 <div class="hide">
 	<div id="black_up_template" class="card blackcard">
 	  <span class="card_text">The quick brown fox jumped over the lazy dog.</span>
-	  <img src="img/cah-black.png" class="cah" alt="Cards Against Humanity" />
+	  <div class="logo">
+	    <div class="logo_1 logo_element">
+	    </div>
+	    <div class="logo_2 logo_element">
+	    </div>
+	    <div class="logo_3 logo_element">
+	    </div>
+	    <div class="logo_text">Cards Against Humanity</div>
+	  </div>
+    <div class="card_metadata">
+      <div class="draw hide">DRAW <div class="card_number"></div></div>
+      <div class="pick hide">PICK <div class="card_number"></div></div>
+    </div>
 	</div>
 </div>
 
@@ -118,7 +130,15 @@ HttpSession hSession = request.getSession(true);
 <div class="hide">
 	<div id="white_up_template" class="card whitecard">
 	  <span class="card_text">The quick brown fox jumped over the lazy dog.</span>
-	  <img src="img/cah-white.png" class="cah" alt="Cards Against Humanity" />
+	  <div class="logo">
+	    <div class="logo_1 logo_element">
+	    </div>
+	    <div class="logo_2 logo_element">
+	    </div>
+	    <div class="logo_3 logo_element">
+	    </div>
+	    <div class="logo_text">Cards Against Humanity</div>
+	  </div>
 	</div>
 </div>
 

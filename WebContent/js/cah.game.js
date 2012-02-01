@@ -220,6 +220,13 @@ cah.Game.prototype.getElement = function() {
 cah.Game.prototype.setBlackCard = function(card) {
   this.blackCard_ = new cah.card.BlackCard(true, card[cah.$.BlackCardData.ID]);
   this.blackCard_.setText(card[cah.$.BlackCardData.TEXT]);
+  this.blackCard_.setDraw(card[cah.$.BlackCardData.DRAW]);
+  this.blackCard_.setPick(card[cah.$.BlackCardData.PICK]);
+
+  if (1 != card[cah.$.BlackCardData.PICK] && this.judge_ != cah.nickname) {
+    cah.log.status("Play " + card[cah.$.BlackCardData.PICK]
+        + " cards, in the order you wish them to be judged.");
+  }
 
   $(".game_black_card", this.element_).empty().append(this.blackCard_.getElement());
 };

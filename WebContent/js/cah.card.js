@@ -127,6 +127,18 @@ cah.card.BaseCard.prototype.setText = function(text) {
 cah.card.BaseCard.prototype.ensureFaceUpElement_ = function() {
   if (!this.faceUpElem_) {
     this.faceUpElem_ = this.getFaceUp_();
+    $(".logo_1", this.faceUpElem_).animate({
+      rotate : "-13deg",
+    }, {
+      duration : 0,
+      queue : false,
+    });
+    $(".logo_3", this.faceUpElem_).animate({
+      rotate : "13deg",
+    }, {
+      duration : 0,
+      queue : false,
+    });
   }
 };
 
@@ -169,6 +181,22 @@ cah.card.BaseCard.prototype.getElement = function() {
  */
 cah.card.BlackCard = function(opt_faceUp, opt_id) {
   cah.card.BaseCard.call(this, opt_faceUp, opt_id);
+
+  /**
+   * The number of white cards to draw when this is the active black card.
+   * 
+   * @type {number}
+   * @private
+   */
+  this.draw_ = 0;
+
+  /**
+   * The number of white cards to play for this black card.
+   * 
+   * @type {number}
+   * @private
+   */
+  this.pick_ = 1;
 };
 cah.inherits(cah.card.BlackCard, cah.card.BaseCard);
 
@@ -184,6 +212,51 @@ cah.card.BlackCard.prototype.getFaceUp_ = function() {
   temp.id = "black_up_" + this.id_;
   $(temp).removeClass("hide");
   return temp;
+};
+
+/**
+ * @param {number}
+ *          draw The number of white cards to draw when this black card is played.
+ */
+cah.card.BlackCard.prototype.setDraw = function(draw) {
+  this.draw_ = draw;
+  this.updateCardInfo_();
+};
+
+/**
+ * @param {number}
+ *          pick The number of white cards to play for this black card.
+ */
+cah.card.BlackCard.prototype.setPick = function(pick) {
+  this.pick_ = pick;
+  this.updateCardInfo_();
+};
+
+/**
+ * Update the pick and draw displays on this card, and potentially change the game name to or from
+ * "CAH".
+ * 
+ * @private
+ */
+cah.card.BlackCard.prototype.updateCardInfo_ = function() {
+  if (this.draw_ != 0 || this.pick_ != 1) {
+    $(".logo_text", this.faceUpElem_).text("CAH");
+    if (this.draw_ != 0) {
+      $(".draw .card_number", this.faceUpElem_).text(this.draw_);
+      $(".draw", this.faceUpElem_).removeClass("hide");
+    } else {
+      $(".draw", this.faceUpElem_).addClass("hide");
+    }
+
+    if (this.pick_ != 1) {
+      $(".pick .card_number", this.faceUpElem_).text(this.pick_);
+      $(".pick", this.faceUpElem_).removeClass("hide");
+    } else {
+      $(".pick", this.faceUpElem_).addClass("hide");
+    }
+  } else {
+    $(".logo_text", this.faceUpElem_).text("Cards Against Humanity");
+  }
 };
 
 // ///////////////////////////////////////////////

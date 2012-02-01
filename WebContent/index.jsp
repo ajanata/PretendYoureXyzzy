@@ -49,8 +49,18 @@
 </ul>
 <p>Current limitations:</p>
 <ul>
-  <li>Support for Black Cards with "pick" and/or "draw" annotations is not implemented. These cards
-  are skipped entirely at the moment.</li>
+  <li>Support for Black Cards with "pick" and/or "draw" annotations is rudimentary. When you play
+  your cards, it does not group them until the judging starts. Also, when other players play cards,
+  you do not see any progress from them until they have played all 2 or 3 cards, and it only shows
+  a single face-down card for them. I will try to make this look nicer, but it works.
+	  <ul>
+	    <li>Also, you cannot un-do your first (or second) card: Once it's played, it's played.</li>
+	    <li>While judging, only one card will be highlighted. It does not matter which card in a group
+	    you click, the game will figure it out.</li>
+	    <li>I have not tried to make a 9-way Pick 3 result yet. It may be very hard to read. I will
+	    tweak the scaling on the cards if necessary.</li>
+	  </ul>
+  </li>
   <li>All games and the main lobby share the same chat.</li>
   <li>There is no play timer to keep the game moving if one person goes idle. However, if their
   browser crashes or they lose connection, they will be removed from the game after approximately 3
@@ -63,7 +73,7 @@
 <ul>
   <li>There will be a button to see the result of the previous round eventually.</li>
   <li>There will be host options to limit the number of players and set the target score soon.</li>
-  <li>There will be a timer to keep the game moving if somebody goes afk soon.</li>
+  <li>There will be a timer to keep the game moving if somebody goes AFK soon.</li>
   <li>There may be an option to display who played every card.</li>
   <li>There will be improved status information, so it will be easier to tell who is the Card Czar.
   </li>

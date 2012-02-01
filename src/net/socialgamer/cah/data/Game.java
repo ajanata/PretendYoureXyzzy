@@ -399,9 +399,24 @@ public class Game {
     } catch (final OutOfCardsException e) {
       whiteDeck.reshuffle();
       final HashMap<ReturnableData, Object> data = getEventMap();
-      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_WHITE_RESHUFFLE);
+      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_WHITE_RESHUFFLE.toString());
       broadcastToPlayers(MessageType.GAME_EVENT, data);
       return getNextWhiteCard();
+    }
+  }
+
+  /**
+   * @return The next Black Card from the deck, reshuffling if required.
+   */
+  private BlackCard getNextBlackCard() {
+    try {
+      return blackDeck.getNextCard();
+    } catch (final OutOfCardsException e) {
+      whiteDeck.reshuffle();
+      final HashMap<ReturnableData, Object> data = getEventMap();
+      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_BLACK_RESHUFFLE.toString());
+      broadcastToPlayers(MessageType.GAME_EVENT, data);
+      return getNextBlackCard();
     }
   }
 
@@ -413,19 +428,7 @@ public class Game {
     }
 
     synchronized (blackCardLock) {
-      do {
-        try {
-          blackDeck.discard(blackCard);
-          blackCard = blackDeck.getNextCard();
-        } catch (final OutOfCardsException e) {
-          blackDeck.reshuffle();
-          final HashMap<ReturnableData, Object> data = getEventMap();
-          data.put(LongPollResponse.EVENT, LongPollEvent.GAME_BLACK_RESHUFFLE);
-          broadcastToPlayers(MessageType.GAME_EVENT, data);
-          continue;
-        }
-        // TODO remove this loop once the game supports the pick and draw features
-      } while (blackCard.getDraw() != 2);
+      blackCard = getNextBlackCard();
 
       if (blackCard.getDraw() > 0) {
         synchronized (players) {
@@ -437,6 +440,7 @@ public class Game {
             for (int i = 0; i < blackCard.getDraw(); i++) {
               cards.add(getNextWhiteCard());
             }
+            player.getHand().addAll(cards);
             sendCardsToPlayer(player, cards);
           }
         }

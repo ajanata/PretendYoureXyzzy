@@ -221,7 +221,7 @@ span.debug {
 
 .whitecard {
   background: white;
-  color: black;
+  color: #231f20;
 }
 
 .cah {
@@ -365,4 +365,105 @@ span.debug {
 
 .selected {
   border: 3px solid blue;
+}
+
+.logo {
+  position: absolute;
+  width: 250px;
+  height: 32px;
+  bottom: 15px;
+  left: 15px;
+}
+
+.logo_element {
+  top: 2px;
+  position: absolute;
+  width: 22px;
+  height: 22px;
+}
+
+
+.blackcard .logo_element {
+  border: 1px solid #231f20;
+}
+
+/*
+.whitecard .logo_element {
+  border: 1px solid white;
+}
+*/
+
+.logo_1 {
+  left: 2px;
+}
+
+.blackcard .logo_1 {
+  background: #57585a;
+}
+
+.whitecard .logo_1 {
+  background: #231f20;
+}
+
+.logo_2 {
+  left: 10px;
+}
+
+.blackcard .logo_2 {
+  background: #b2b3b7;
+}
+
+.whitecard .logo_2 {
+  background: #636366;
+}
+
+.logo_3 {
+  left: 16px;
+  top: 5px;
+}
+
+.blackcard .logo_3 {
+  background: white;
+}
+
+.whitecard .logo_3 {
+  background: #c7c8ca;
+}
+
+.logo_text {
+  position: absolute;
+  font-size: 8pt;
+  font-weight: bold;
+  left: 45px;
+  bottom: 4px;
+}
+
+.card_metadata {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+}
+
+.draw, .pick {
+  float: right;
+  clear: both;
+  font-weight: bold;
+  font-size: 12pt;
+}
+
+.card_number {
+  width: 20px;
+  height: 20px;
+
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.blackcard .card_number {
+  background: white;
+  display: inline-block;
+  color: #231f20;
+  text-align: center;
 }
