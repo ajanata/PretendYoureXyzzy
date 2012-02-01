@@ -20,6 +20,9 @@
 </p>
 <p>Known issues:</p>
 <ul>
+  <li><strong>Do not open the game more than once in the same browser.</strong> Neither instances
+  will receive all data from the server, and you will not be able to play. I'm not sure how I'm
+  going to prevent this yet.</li>
   <li>This game was extensively tested in <a href="http://google.com/chrome">Google Chrome</a>.
   It should work in all recent versions of major browsers, but it may not look 100% as intended. If
   you find a major issue, please
