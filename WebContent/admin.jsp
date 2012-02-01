@@ -87,7 +87,7 @@ th, td {
   long minutes = (uptime / 60L) % 60L;
   long hours = (uptime / 60L / 60L) % 24L;
   long days = (uptime / 60L / 60L / 24L);
-  out.print(String.format("%s (%d hours, %02d:%02d:%02d)",
+  out.print(String.format("%s (%d days, %02d:%02d:%02d)",
       startedDate.toString(), days, hours, minutes, seconds));
   %>
 </p>
