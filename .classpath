@@ -17,6 +17,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/ajanata/Documents/Eclipse EE Workspace/cah/hibernate3.jar">
 		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Libraries/hibernate-distribution-3.6.9.Final/documentation/javadocs/"/>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
