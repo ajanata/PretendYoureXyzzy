@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Andy Janata
+ * Copyright (c) 2012, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
