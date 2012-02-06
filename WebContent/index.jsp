@@ -128,9 +128,10 @@ to, for instance, display the number of connected players.
   or download and print it out yourself. It is distributed under a
   <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons - Attribution -
   Noncommercial - Share Alike license</a>. This web version is in no way endorsed or sponsored by
-  cardsagainsthumanity.com. You may download the source code to this version from FIXME AFTER
-  FIGURING OUT WHAT LICENSE TO USE. For full license information, including information about
-  included libraries, see the <a href="license.html">full license information</a>.
+  cardsagainsthumanity.com. You may download the source code to this version from
+  <a href="https://github.com/ajanata/CardsAgainstHumanity">GitHub</a>. For full license
+  information, including information about included libraries, see the
+  <a href="license.html">full license information</a>.
 </p>
 </body>
 </html>
