@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.socialgamer.cah.Constants.DisconnectReason;
+import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
@@ -42,7 +43,7 @@ import com.sun.istack.internal.Nullable;
  * Class that holds all users connected to the server, and provides functions to operate on said
  * list.
  * 
- * @author ajanata
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
 @Singleton
 public class ConnectedUsers {
@@ -55,10 +56,21 @@ public class ConnectedUsers {
 
   private final Map<String, User> users = new HashMap<String, User>();
 
+  /**
+   * @param userName
+   *          User name to check.
+   * @return True if {@code userName} is a connected user.
+   */
   public boolean hasUser(final String userName) {
     return users.containsKey(userName);
   }
 
+  /**
+   * Add a new user.
+   * 
+   * @param user
+   *          User to add.
+   */
   public void newUser(final User user) {
     synchronized (users) {
       users.put(user.getNickname(), user);
@@ -69,6 +81,15 @@ public class ConnectedUsers {
     }
   }
 
+  /**
+   * Remove a user from the user list, and mark them as invalid so the next time they make a request
+   * they can be informed.
+   * 
+   * @param user
+   *          User to remove.
+   * @param reason
+   *          Reason the user is being removed.
+   */
   public void removeUser(final User user, final DisconnectReason reason) {
     synchronized (users) {
       if (users.containsValue(user)) {
@@ -90,15 +111,27 @@ public class ConnectedUsers {
     return users.get(nickname);
   }
 
+  /**
+   * Broadcast to all remaining users that a user has left.
+   * 
+   * @param user
+   *          User that has left.
+   * @param reason
+   *          Reason why the user has left.
+   */
   private void notifyRemoveUser(final User user, final DisconnectReason reason) {
-    // We might also have to tell games about this directly, probably with a listener system.
+    // Games are informed about the user leaving when the user object is marked invalid.
     final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-    data.put(LongPollResponse.EVENT, "player_leave");
+    data.put(LongPollResponse.EVENT, LongPollEvent.PLAYER_LEAVE.toString());
     data.put(LongPollResponse.NICKNAME, user.getNickname());
     data.put(LongPollResponse.REASON, reason.toString());
     broadcastToAll(MessageType.PLAYER_EVENT, data);
   }
 
+  /**
+   * Check for any users that have not communicated with the server withing the ping timeout delay,
+   * and remove users which have not so communicated.
+   */
   public void checkForPingTimeouts() {
     synchronized (users) {
       final Iterator<User> iterator = users.values().iterator();
@@ -117,7 +150,10 @@ public class ConnectedUsers {
    * Broadcast a message to all connected players.
    * 
    * @param type
+   *          Type of message to broadcast. This determines the order the messages are returned by
+   *          priority.
    * @param masterData
+   *          Message data to broadcast.
    */
   public void broadcastToAll(final MessageType type,
       final HashMap<ReturnableData, Object> masterData) {
@@ -128,8 +164,12 @@ public class ConnectedUsers {
    * Broadcast a message to a specified subset of connected players.
    * 
    * @param broadcastTo
+   *          List of users to broadcast the message to.
    * @param type
+   *          Type of message to broadcast. This determines the order the messages are returned by
+   *          priority.
    * @param masterData
+   *          Message data to broadcast.
    */
   public void broadcastToList(final Collection<User> broadcastTo, final MessageType type,
       final HashMap<ReturnableData, Object> masterData) {
@@ -144,8 +184,10 @@ public class ConnectedUsers {
     }
   }
 
+  /**
+   * @return A copy of the list of connected users.
+   */
   public Collection<User> getUsers() {
-    // return a copy
     synchronized (users) {
       return new ArrayList<User>(users.values());
     }

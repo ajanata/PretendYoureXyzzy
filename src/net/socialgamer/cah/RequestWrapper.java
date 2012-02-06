@@ -28,9 +28,20 @@ import javax.servlet.http.HttpServletRequest;
 import net.socialgamer.cah.Constants.AjaxRequest;
 
 
+/**
+ * Wrap around an {@code HttpServletRequest}, to allow parameters to be retrieved by enum value.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class RequestWrapper {
   private final HttpServletRequest request;
 
+  /**
+   * Create a new RequestWrapper.
+   * 
+   * @param request
+   *          An {@code HttpServletRequest} to wrap around.
+   */
   public RequestWrapper(final HttpServletRequest request) {
     this.request = request;
   }
@@ -46,10 +57,16 @@ public class RequestWrapper {
     return request.getParameter(parameter.toString());
   }
 
+  /**
+   * @see HttpServletRequest#getRemoteAddr()
+   */
   public String getRemoteAddr() {
     return request.getRemoteAddr();
   }
 
+  /**
+   * @see HttpServletRequest#getRemoteHost()
+   */
   public String getRemoteHost() {
     return request.getRemoteHost();
   }

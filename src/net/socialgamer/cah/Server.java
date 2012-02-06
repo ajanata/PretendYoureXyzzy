@@ -30,6 +30,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 
+/**
+ * I believe this class is not actually used nor required.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 @Singleton
 public class Server {
   private final ConnectedUsers users;

@@ -42,6 +42,11 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
+/**
+ * Handler to get the Black, White, and hand cards for a particular game and player in the game.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class GetCardsHandler extends GameWithPlayerHandler {
 
   @Inject

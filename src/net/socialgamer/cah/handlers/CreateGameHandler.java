@@ -41,6 +41,11 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
+/**
+ * Handler to create a new game.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class CreateGameHandler extends Handler {
 
   public static final String OP = AjaxOperation.CREATE_GAME.toString();

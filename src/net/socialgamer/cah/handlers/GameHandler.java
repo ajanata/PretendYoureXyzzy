@@ -37,6 +37,12 @@ import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.User;
 
 
+/**
+ * Handler superclass for handlers that require a game. This finds the game and makes sure it's
+ * valid and specified.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public abstract class GameHandler extends Handler {
 
   protected GameManager gameManager;
@@ -71,6 +77,19 @@ public abstract class GameHandler extends Handler {
     return handle(request, session, user, game);
   }
 
+  /**
+   * Handle a client request. The {@code Game} is guaranteed to be valid.
+   * 
+   * @param request
+   *          The request data.
+   * @param session
+   *          The client's session.
+   * @param user
+   *          The client's {@code User}.
+   * @param game
+   *          The {@code Game} for this request.
+   * @return Response data.
+   */
   public abstract Map<ReturnableData, Object> handle(final RequestWrapper request,
       final HttpSession session, final User user, final Game game);
 }

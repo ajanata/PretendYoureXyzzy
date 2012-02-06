@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
  * 
@@ -24,12 +24,26 @@
 /**
  * Logging functions.
  * 
- * @author ajanata
+ * TODO make this a proper object with a singleton instance.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
 
 cah.log = {};
 
+/**
+ * Log a message for the user the see, always, as a status message. This is also used for chat. The
+ * current time is displayed with the log message, using the user's locale settings to determine
+ * format.
+ * 
+ * @param {string}
+ *          text Text to display for this message. Text is added as a TextNode, so HTML is properly
+ *          escaped automatically.
+ * @param {?string}
+ *          opt_class Optional CSS class to use for this message.
+ */
 cah.log.status = function(text, opt_class) {
+  // TODO this doesn't work right on some mobile browsers
   var scroll = $("#log").prop("scrollHeight") - $("#log").height() - $("#log").prop("scrollTop") <= 5;
 
   var node = $("<span></span><br/>");
@@ -44,12 +58,22 @@ cah.log.status = function(text, opt_class) {
   }
 };
 
+/**
+ * Log a message for the user to see, always, as an error message.
+ * 
+ * @param {string}
+ *          text Text to display for this message. Text is added as a TextNode, so HTML is properly
+ *          escaped automatically.
+ */
 cah.log.error = function(text) {
   cah.log.status("Error: " + text, "error");
 };
 
 /**
  * Log a message if debugging is enabled, optionally dumping the contents of an object.
+ * 
+ * If SILENT_DEBUG is on, and IE is in use, it can cause the game to break if the debugger isn't
+ * open...
  * 
  * @param {string}
  *          text Text to display

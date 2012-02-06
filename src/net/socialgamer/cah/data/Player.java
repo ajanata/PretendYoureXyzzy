@@ -29,28 +29,51 @@ import java.util.List;
 import net.socialgamer.cah.db.WhiteCard;
 
 
+/**
+ * Data required for a player in a {@code Game}.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class Player {
   private final User user;
 
   private final List<WhiteCard> hand = new LinkedList<WhiteCard>();
   private int score = 0;
 
+  /**
+   * Create a new player object.
+   * 
+   * @param user
+   *          The {@code User} associated with this player.
+   */
   public Player(final User user) {
     this.user = user;
   }
 
+  /**
+   * @return The {@code User} associated with this player.
+   */
   public User getUser() {
     return user;
   }
 
+  /**
+   * @return The player's score.
+   */
   public int getScore() {
     return score;
   }
 
+  /**
+   * Increase the player's score by 1 point.
+   */
   public void increaseScore() {
     score++;
   }
 
+  /**
+   * Reset the player's score to 0.
+   */
   public void resetScore() {
     score = 0;
   }

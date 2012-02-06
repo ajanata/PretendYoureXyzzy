@@ -33,10 +33,30 @@ import java.util.Set;
 import net.socialgamer.cah.db.WhiteCard;
 
 
+/**
+ * Class to track which card(s) have been played by players. Can get the card(s) for a player, and
+ * also which player played a given card.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class PlayerPlayedCardsTracker {
+  /**
+   * Forward mapping of player to cards.
+   */
   private final Map<Player, List<WhiteCard>> playerCardMap = new HashMap<Player, List<WhiteCard>>();
+  /**
+   * Reverse mapping of cards to player.
+   */
   private final Map<Integer, Player> reverseIdMap = new HashMap<Integer, Player>();
 
+  /**
+   * Add a played card to the mappings.
+   * 
+   * @param player
+   *          Player which played the card.
+   * @param card
+   *          The card the player played.
+   */
   public void addCard(final Player player, final WhiteCard card) {
     List<WhiteCard> cards = playerCardMap.get(player);
     if (cards == null) {
@@ -47,14 +67,24 @@ public class PlayerPlayedCardsTracker {
     cards.add(card);
   }
 
-  public boolean hasPlayerForId(final int id) {
-    return reverseIdMap.containsKey(id);
-  }
-
+  /**
+   * Get the {@code Player} that played a card, given the card's ID.
+   * 
+   * @param id
+   *          Card ID to check.
+   * @return The {@code Player} that played the card.
+   */
   public Player getPlayerForId(final int id) {
     return reverseIdMap.get(id);
   }
 
+  /**
+   * Determine whether a player has played any cards this round.
+   * 
+   * @param player
+   *          Player to check.
+   * @return True if the player has played any cards this round.
+   */
   public boolean hasPlayer(final Player player) {
     return playerCardMap.containsKey(player);
   }
@@ -68,6 +98,13 @@ public class PlayerPlayedCardsTracker {
     return playerCardMap.get(player);
   }
 
+  /**
+   * Remove and return a player's cards from the played cards tracking.
+   * 
+   * @param player
+   *          Player to remove.
+   * @return The cards the player had played.
+   */
   public List<WhiteCard> remove(final Player player) {
     final List<WhiteCard> cards = playerCardMap.remove(player);
     if (cards != null && cards.size() > 0) {
@@ -76,19 +113,31 @@ public class PlayerPlayedCardsTracker {
     return cards;
   }
 
+  /**
+   * @return The number of players that have played this round.
+   */
   public int size() {
     return playerCardMap.size();
   }
 
+  /**
+   * @return A {@code Set} of all players that have played this round.
+   */
   public Set<Player> playedPlayers() {
     return playerCardMap.keySet();
   }
 
+  /**
+   * Clear both the forward and reverse card mappings.
+   */
   public void clear() {
     playerCardMap.clear();
     reverseIdMap.clear();
   }
 
+  /**
+   * @return A {@code Collection} of all played card lists.
+   */
   public Collection<List<WhiteCard>> cards() {
     return playerCardMap.values();
   }

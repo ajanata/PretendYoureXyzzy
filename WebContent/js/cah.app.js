@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
  * 
@@ -22,9 +22,11 @@
  */
 
 /**
- * Main app for cah.
+ * Main application for Cards Against Humanity. This only has to handle the initial nickname
+ * registration, the chat box, the logout button, and resizing the window. It should probably be
+ * split up into multiple files.
  * 
- * @author ajanata
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
 
 $(document).ready(function() {
@@ -65,6 +67,12 @@ $(document).ready(function() {
   app_resize();
 });
 
+/**
+ * Handle a key up event in the nick box. If the key was enter, try to register with the server.
+ * 
+ * @param {jQuery.Event}
+ *          e
+ */
 function nickbox_keyup(e) {
   if (e.which == 13) {
     $("#nicknameconfirm").click();
@@ -72,11 +80,20 @@ function nickbox_keyup(e) {
   }
 }
 
-function nicknameconfirm_click(e) {
+/**
+ * Handle a click event on the set nickname box. Try to register with the server.
+ */
+function nicknameconfirm_click() {
   var nickname = $.trim($("#nickname").val());
   cah.Ajax.build(cah.$.AjaxOperation.REGISTER).withNickname(nickname).run();
 }
 
+/**
+ * Handle a key up event in the chat box. If the key was enter, send the message to the server.
+ * 
+ * @param {jQuery.Event}
+ *          e
+ */
 function chat_keyup(e) {
   if (e.which == 13) {
     $("#chat_submit").click();
@@ -84,7 +101,10 @@ function chat_keyup(e) {
   }
 }
 
-function chatsubmit_click(e) {
+/**
+ * Handle a click even on the chat button. Send the message to the server.
+ */
+function chatsubmit_click() {
   var text = $.trim($("#chat").val());
   // TODO when I get multiple channels working, this needs to know active and pass it
   cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text).run();
@@ -93,12 +113,18 @@ function chatsubmit_click(e) {
   $("#chat").focus();
 }
 
-function logout_click(e) {
+/**
+ * Handle a click event on the log out button. Tell the server to log us out.
+ */
+function logout_click() {
   cah.Ajax.build(cah.$.AjaxOperation.LOG_OUT).run();
 }
 
+/**
+ * Handle a window resize event. Resize the chat and info areas to fit vertically and horizontally.
+ * This was tested extensively in Chrome. It may not be pixel-perfect in other browsers.
+ */
 function app_resize() {
-  // this works well enough in chrome. I would not be surprised if this sucks everywhere else.
   var chatWidth = $("#canvas").width() - 251;
   $("#chat_area").width(chatWidth);
   $("#chat").width(chatWidth - 48);

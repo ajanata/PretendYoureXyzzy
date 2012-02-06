@@ -40,6 +40,11 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
+/**
+ * Handler to join a game.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class JoinGameHandler extends GameHandler {
 
   public static final String OP = AjaxOperation.JOIN_GAME.toString();

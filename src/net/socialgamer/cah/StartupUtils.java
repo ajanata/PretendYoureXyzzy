@@ -34,20 +34,48 @@ import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 
 
+/**
+ * Class with things that need to be done when the servlet context is created and destroyed. Creates
+ * and stores a Guice injector, stores the time the server was started, and creates a thread to
+ * check for any clients which have stopped responding.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class StartupUtils extends GuiceServletContextListener {
 
+  /**
+   * Context attribute key name for the Guice injector.
+   */
   public static final String INJECTOR = "injector";
 
+  /**
+   * Delay before the disconnected client timer is started when the server starts, in milliseconds.
+   */
   private static final long PING_START_DELAY = 60 * 1000;
 
+  /**
+   * Delay between invocations of the disconnected client timer, in milliseconds.
+   */
   private static final long PING_CHECK_DELAY = 5 * 1000;
 
+  /**
+   * Context attribute key name for the disconnected client timer.
+   */
   private static final String PING_TIMER_NAME = "ping_timer";
 
+  /**
+   * Context attribute key name for the time the server was started.
+   */
   public static final String DATE_NAME = "started_at";
 
+  /**
+   * Context attribute key name for whether verbose request and response logging is enabled.
+   */
   public static final String VERBOSE_DEBUG = "verbose_debug";
 
+  /**
+   * The time the server was started.
+   */
   private Date serverStarted;
 
   @Override

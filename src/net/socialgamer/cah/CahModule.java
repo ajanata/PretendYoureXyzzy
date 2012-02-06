@@ -31,6 +31,11 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
 
+/**
+ * CAH Guice module.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class CahModule extends AbstractModule {
 
   @Override
@@ -38,6 +43,11 @@ public class CahModule extends AbstractModule {
     bind(Integer.class).annotatedWith(GameId.class).toProvider(GameManager.class);
   }
 
+  /**
+   * TODO Provide a configuration option for this instead of hard-coding it.
+   * 
+   * @return The maximum number of games allowed on this server.
+   */
   @Provides
   @MaxGames
   Integer provideMaxGames() {

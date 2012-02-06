@@ -33,31 +33,51 @@ import net.socialgamer.cah.db.BlackCard;
 import org.hibernate.Session;
 
 
+/**
+ * Deck of Black Cards.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class BlackDeck {
   private final List<BlackCard> deck;
   private final List<BlackCard> dealt;
   private final List<BlackCard> discard;
 
+  /**
+   * Create a new black card deck, loading the cards from the database and shuffling them.
+   */
   @SuppressWarnings("unchecked")
   public BlackDeck() {
     final Session session = HibernateUtil.instance.sessionFactory.openSession();
     // TODO option to restrict to only stock cards or allow customs
-    deck = session.createQuery("from BlackCard order by random()").list();
+    deck = session.createQuery("from BlackCard order by random()").setReadOnly(true).list();
     dealt = new ArrayList<BlackCard>();
     discard = new ArrayList<BlackCard>();
   }
 
+  /**
+   * Get the next card from the top of deck.
+   * 
+   * @return The next card.
+   * @throws OutOfCardsException
+   *           There are no more cards in the deck.
+   */
   public BlackCard getNextCard() throws OutOfCardsException {
     if (deck.size() == 0) {
       throw new OutOfCardsException();
     }
     // Hibernate is returning an ArrayList, so this is a bit faster.
-    final BlackCard card = deck.get(deck.size() - 1);
-    deck.remove(deck.size() - 1);
+    final BlackCard card = deck.remove(deck.size() - 1);
     dealt.add(card);
     return card;
   }
 
+  /**
+   * Add a card to the discard pile.
+   * 
+   * @param card
+   *          Card to add to discard pile.
+   */
   public void discard(final BlackCard card) {
     if (card != null) {
       discard.add(card);
@@ -70,5 +90,6 @@ public class BlackDeck {
   public void reshuffle() {
     Collections.shuffle(discard);
     deck.addAll(0, discard);
+    discard.clear();
   }
 }

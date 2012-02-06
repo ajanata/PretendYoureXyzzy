@@ -29,12 +29,25 @@ import java.util.Arrays;
 import java.util.List;
 
 
+/**
+ * Update the list of client request operation handlers, based on files in the package source
+ * directory.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class UpdateHandlerList {
 
+  /**
+   * Files in the package source directory to ignore. This list should include abstract handler
+   * superclasses, the interface definition, and the list of handlers itself.
+   */
   private static final List<String> EXCLUDE = Arrays.asList("AdminHandler", "GameHandler",
       "GameWithPlayerHandler", "Handler", "Handlers");
 
   /**
+   * Run the handler list update. This program's working directory should be the base directory of
+   * the project.
+   * 
    * @param args
    */
   public static void main(final String[] args) throws Exception {
@@ -73,21 +86,5 @@ public class UpdateHandlerList {
     writer.println("}");
     writer.flush();
     writer.close();
-
   }
 }
-
-// package net.socialgamer.cah.handlers;
-//
-// import java.util.HashMap;
-// import java.util.Map;
-//
-//
-// public class Handlers {
-// public final static Map<String, Class<? extends Handler>> LIST;
-//
-// static {
-// LIST = new HashMap<String, Class<? extends Handler>>();
-// LIST.put(new RegisterHandler().getOp(), RegisterHandler.class);
-// }
-// }

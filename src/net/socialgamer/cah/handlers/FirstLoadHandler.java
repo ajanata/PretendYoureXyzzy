@@ -41,8 +41,7 @@ import net.socialgamer.cah.data.User;
  * Handler called for first invocation after a client loads. This can be used to restore a game in
  * progress if the browser reloads.
  * 
- * @author ajanata
- * 
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class FirstLoadHandler extends Handler {
 

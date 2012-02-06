@@ -38,6 +38,11 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
+/**
+ * Handler to leave a game.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class LeaveGameHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.LEAVE_GAME.toString();

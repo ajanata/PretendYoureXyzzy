@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
  * 
@@ -22,12 +22,18 @@
  */
 
 /**
- * Card objects.
+ * Card objects. There is a base class, and individual classes for White and Black cards. This could
+ * probably stand to be split up into 3 files.
  * 
- * @author ajanata
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
 
 cah.card = {};
+/**
+ * Serial number to use in card div IDs. This possibly isn't needed.
+ * 
+ * @type {Number}
+ */
 cah.card.serial = 0;
 
 /**
@@ -37,7 +43,6 @@ cah.card.serial = 0;
  *          opt_faceUp True if this card is initially face-up.
  * @param {number}
  *          opt_id The id of this card, for server communication purposes.
- * 
  * @constructor
  */
 cah.card.BaseCard = function(opt_faceUp, opt_id) {
@@ -150,6 +155,7 @@ cah.card.BaseCard.prototype.setText = function(text) {
 cah.card.BaseCard.prototype.ensureFaceUpElement_ = function() {
   if (!this.faceUpElem_) {
     this.faceUpElem_ = this.getFaceUp_();
+    // TODO move the logo stuff out to static css instead of doing it for every card...
     $(".logo_1", this.faceUpElem_).animate({
       rotate : "-13deg",
     }, {
@@ -177,7 +183,7 @@ cah.card.BaseCard.prototype.ensureFaceDownElement_ = function() {
 };
 
 /**
- * @returns {?number} The server ID of this card, if one was specified at creation.
+ * @return {?number} The server ID of this card, if one was specified at creation.
  */
 cah.card.BaseCard.prototype.getServerId = function() {
   return this.serverId_;
@@ -223,6 +229,9 @@ cah.card.BlackCard = function(opt_faceUp, opt_id) {
 };
 cah.inherits(cah.card.BlackCard, cah.card.BaseCard);
 
+/**
+ * @override
+ */
 cah.card.BlackCard.prototype.getFaceDown_ = function() {
   var temp = $("#black_down_template").clone()[0];
   temp.id = "black_down_" + this.id_;
@@ -230,6 +239,9 @@ cah.card.BlackCard.prototype.getFaceDown_ = function() {
   return temp;
 };
 
+/**
+ * @override
+ */
 cah.card.BlackCard.prototype.getFaceUp_ = function() {
   var temp = $("#black_up_template").clone()[0];
   temp.id = "black_up_" + this.id_;
@@ -299,6 +311,9 @@ cah.card.WhiteCard = function(opt_faceUp, opt_id) {
 };
 cah.inherits(cah.card.WhiteCard, cah.card.BaseCard);
 
+/**
+ * @override
+ */
 cah.card.WhiteCard.prototype.getFaceDown_ = function() {
   var temp = $("#white_down_template").clone()[0];
   temp.id = "white_down_" + this.id_;
@@ -306,6 +321,9 @@ cah.card.WhiteCard.prototype.getFaceDown_ = function() {
   return temp;
 };
 
+/**
+ * @override
+ */
 cah.card.WhiteCard.prototype.getFaceUp_ = function() {
   var temp = $("#white_up_template").clone()[0];
   temp.id = "white_up_" + this.id_;

@@ -52,13 +52,14 @@ import com.sun.istack.internal.Nullable;
 
 
 /**
- * Servlet implementation class CahServlet
+ * Servlet implementation class CahServlet.
+ * 
+ * Superclass for all CAH servlets. Provides utility methods to return errors and data, and to log.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
-// @WebServlet("/CahServlet")
 public abstract class CahServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
-
-  private final boolean debugLog = false;
 
   /**
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -86,6 +87,8 @@ public abstract class CahServlet extends HttpServlet {
     }
 
     final String op = request.getParameter(AjaxRequest.OP.toString());
+    // we don't make sure they have a User object if they are doing either of the requests that
+    // create or check for the User object. That would be silly.
     final boolean skipSessionUserCheck = op != null
         && (op.equals(AjaxOperation.REGISTER.toString())
         || op.equals(AjaxOperation.FIRST_LOAD.toString()));
@@ -96,7 +99,7 @@ public abstract class CahServlet extends HttpServlet {
     } else if (!skipSessionUserCheck && hSession.getAttribute(SessionAttribute.USER) == null) {
       returnError(user, response.getWriter(), ErrorCode.NOT_REGISTERED);
     } else if (user != null && !user.isValid()) {
-      // user probably pinged out
+      // user probably pinged out, or possibly kicked by admin
       hSession.invalidate();
       returnError(user, response.getWriter(), ErrorCode.SESSION_EXPIRED);
     } else {
@@ -104,12 +107,14 @@ public abstract class CahServlet extends HttpServlet {
         handleRequest(request, response, hSession);
       } catch (final AssertionError ae) {
         log("Assertion failed", ae);
-        getServletContext().log(ae.toString());
-        ae.printStackTrace();
+        log(user, ae.toString());
       }
     }
   }
 
+  /**
+   * @return Whether verbose logging is enabled.
+   */
   private boolean verboseDebug() {
     final Boolean verboseDebugObj = (Boolean) getServletContext().getAttribute(
         StartupUtils.VERBOSE_DEBUG);
@@ -121,8 +126,11 @@ public abstract class CahServlet extends HttpServlet {
    * Handles a request from a CAH client. A session is guaranteed to exist at this point.
    * 
    * @param request
+   *          The request data.
    * @param response
+   *          The response to the client.
    * @param hSession
+   *          The client's session.
    * @throws ServletException
    * @throws IOException
    */
@@ -131,12 +139,15 @@ public abstract class CahServlet extends HttpServlet {
       IOException;
 
   /**
-   * Return an error to the client. Prefer to use the PrintWriter,String,String,int version if you
-   * know the request serial number.
+   * Return an error to the client. Prefer to use
+   * {@link #returnError(User, PrintWriter, ErrorCode, int)} if you know the request serial number.
    * 
+   * @param user
+   *          User that caused this error.
    * @param writer
+   *          Response writer to send the error data to.
    * @param code
-   *          Error code that the js code knows how to handle.
+   *          Error code to return to client.
    */
   protected void returnError(@Nullable final User user, final PrintWriter writer,
       final ErrorCode code) {
@@ -146,13 +157,18 @@ public abstract class CahServlet extends HttpServlet {
   /**
    * Return an error to the client.
    * 
+   * @param user
+   *          User that caused the error.
    * @param writer
+   *          Response writer to send the error data to.
+   * @param code
+   *          Error code to return to client.
    * @param serial
+   *          Request serial number from client.
    */
   @SuppressWarnings("unchecked")
   protected void returnError(@Nullable final User user, final PrintWriter writer,
-      final ErrorCode code,
-      final int serial) {
+      final ErrorCode code, final int serial) {
     final JSONObject ret = new JSONObject();
     ret.put(AjaxResponse.ERROR, Boolean.TRUE);
     ret.put(AjaxResponse.ERROR_CODE, code.toString());
@@ -162,6 +178,8 @@ public abstract class CahServlet extends HttpServlet {
   /**
    * Return response data to the client.
    * 
+   * @param user
+   *          User this response is for.
    * @param writer
    *          Writer for the response.
    * @param data
@@ -175,6 +193,8 @@ public abstract class CahServlet extends HttpServlet {
   /**
    * Return multiple response data to the client.
    * 
+   * @param user
+   *          User this response is for.
    * @param writer
    *          Writer for the response.
    * @param data_list
@@ -185,7 +205,18 @@ public abstract class CahServlet extends HttpServlet {
     returnObject(user, writer, data_list);
   }
 
-  private void returnObject(@Nullable final User user, final PrintWriter writer, final Object object) {
+  /**
+   * Return any response data to the client.
+   * 
+   * @param user
+   *          User this response is for.
+   * @param writer
+   *          Writer for the response.
+   * @param object
+   *          Data to return.
+   */
+  private void returnObject(@Nullable final User user, final PrintWriter writer,
+      final Object object) {
     final String ret = JSONValue.toJSONString(object);
     writer.println(ret);
     if (verboseDebug()) {
@@ -193,14 +224,27 @@ public abstract class CahServlet extends HttpServlet {
     }
   }
 
+  /**
+   * @return Guice injector for the servlet context.
+   */
   protected Injector getInjector() {
     return (Injector) getServletContext().getAttribute(StartupUtils.INJECTOR);
   }
 
+  /**
+   * Log a message, with the user's name if {@code user} is not null.
+   * 
+   * @param user
+   *          The user this log message is about, or {@code null} if unknown.
+   * @param message
+   *          The message to log.
+   */
   protected void log(@Nullable final User user, final String message) {
-    String userStr = "unknown user";
+    final String userStr;
     if (user != null) {
       userStr = user.getNickname();
+    } else {
+      userStr = "unknown user";
     }
     log("For " + userStr + ": " + message);
   }

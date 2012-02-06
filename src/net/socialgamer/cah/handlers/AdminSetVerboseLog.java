@@ -30,6 +30,12 @@ import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
 
 
+/**
+ * Admin handler for turning verbose logging on and off. This has been temporarily abandoned as
+ * using this ajax framework for administration purposes would take a while to set up.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class AdminSetVerboseLog extends AdminHandler {
 
   public static final String OP = AjaxOperation.ADMIN_SET_VERBOSE_LOG.toString();

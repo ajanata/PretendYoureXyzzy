@@ -40,6 +40,11 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
+/**
+ * Handler to play a card.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class PlayCardHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.PLAY_CARD.toString();

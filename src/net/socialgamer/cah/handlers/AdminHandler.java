@@ -32,6 +32,12 @@ import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
 
 
+/**
+ * Superclass of handlers for administrative actions. Ensures that the client is allowed to make
+ * admin requests.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public abstract class AdminHandler extends Handler {
 
   @Override
@@ -44,5 +50,12 @@ public abstract class AdminHandler extends Handler {
     return handle(request);
   }
 
+  /**
+   * Handle a request.
+   * 
+   * @param request
+   *          Request data from the client.
+   * @return Response data.
+   */
   public abstract Map<ReturnableData, Object> handle(RequestWrapper request);
 }

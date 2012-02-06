@@ -47,7 +47,11 @@ import net.socialgamer.cah.data.User;
 
 
 /**
- * Servlet implementation class LongPollServlet
+ * Servlet implementation class LongPollServlet.
+ * 
+ * This servlet is used for client long polling requests.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
 @WebServlet("/LongPollServlet")
 public class LongPollServlet extends CahServlet {
@@ -61,7 +65,7 @@ public class LongPollServlet extends CahServlet {
 
   /**
    * Randomness factor added to minimum timeout duration, in nanoseconds. The maximum timeout delay
-   * will be TIMEOUT_BASE + TIMEOUT_RANDOMNESS.
+   * will be TIMEOUT_BASE + TIMEOUT_RANDOMNESS - 1.
    */
   private static final double TIMEOUT_RANDOMNESS = 20 * 1000 * 1000;
   //  private static final double TIMEOUT_RANDOMNESS = 0;
@@ -82,23 +86,24 @@ public class LongPollServlet extends CahServlet {
     final PrintWriter out = response.getWriter();
 
     final long start = System.nanoTime();
-    // Pick a random timeout point between TIMEOUT_BASE and TIMEOUT_BASE + TIMEOUT_RANDOMNESS
+    // Pick a random timeout point between [TIMEOUT_BASE, TIMEOUT_BASE + TIMEOUT_RANDOMNESS)
     // nanoseconds from now.
     final long end = start + TIMEOUT_BASE + (long) (Math.random() * TIMEOUT_RANDOMNESS);
     final User user = (User) hSession.getAttribute(SessionAttribute.USER);
     assert (user != null);
     user.contactedServer();
-    // TODO we might have to synchronize on the user object?
     while (!(user.hasQueuedMessages()) && System.nanoTime() < end) {
       try {
         user.waitForNewMessageNotification((end - System.nanoTime()) / 1000);
       } catch (final InterruptedException ie) {
-        // I don't think we care?
+        // pass
       }
     }
     if (user.hasQueuedMessages()) {
       try {
         // Delay for a short while in case there will be other messages queued to be delivered.
+        // This will certainly happen in some game states. We want to deliver as much to the client
+        // in as few round-trips as possible while not waiting too long.
         Thread.sleep(5);
       } catch (final InterruptedException ie) {
         // pass
@@ -106,8 +111,8 @@ public class LongPollServlet extends CahServlet {
       final Collection<QueuedMessage> msgs = user.getNextQueuedMessages(MAX_MESSAGES_PER_POLL);
       // just in case...
       if (msgs.size() > 0) {
-        final List<Map<ReturnableData, Object>> data = new ArrayList<Map<ReturnableData, Object>>(
-            msgs.size());
+        final List<Map<ReturnableData, Object>> data =
+            new ArrayList<Map<ReturnableData, Object>>(msgs.size());
         for (final QueuedMessage qm : msgs) {
           data.add(qm.getData());
         }

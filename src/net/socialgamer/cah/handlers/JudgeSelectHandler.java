@@ -22,6 +22,7 @@
  */
 
 package net.socialgamer.cah.handlers;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +40,11 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
-
+/**
+ * Handler for the judge selecting a winning card.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class JudgeSelectHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.JUDGE_SELECT.toString();

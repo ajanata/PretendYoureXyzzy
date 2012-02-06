@@ -30,6 +30,11 @@ import net.socialgamer.cah.data.ConnectedUsers;
 import com.google.inject.Inject;
 
 
+/**
+ * Timer task to check for disconnected clients.
+ * 
+ * @author Andy Janata (ajanata@gmail.com)
+ */
 public class UserPing extends TimerTask {
 
   private final ConnectedUsers users;

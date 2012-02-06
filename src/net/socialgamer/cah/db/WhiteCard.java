@@ -22,6 +22,7 @@
  */
 
 package net.socialgamer.cah.db;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,19 +32,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import net.socialgamer.cah.Constants.WhiteCardData;
-import net.socialgamer.cah.data.HasId;
 
 
-
+/**
+ * A white Card. Cards are persisted in a database and loaded with Hibernate.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 @Entity
 @Table(name = "white_cards")
-public class WhiteCard implements HasId {
+public class WhiteCard {
   @Id
   @GeneratedValue
   int id;
   String text;
 
-  @Override
   public int getId() {
     return id;
   }
@@ -65,6 +68,9 @@ public class WhiteCard implements HasId {
     return text + " (id:" + id + ")";
   }
 
+  /**
+   * @return Client representation of this card.
+   */
   public Map<WhiteCardData, Object> getClientData() {
     final Map<WhiteCardData, Object> cardData = new HashMap<WhiteCardData, Object>();
     cardData.put(WhiteCardData.ID, id);
@@ -72,6 +78,9 @@ public class WhiteCard implements HasId {
     return cardData;
   }
 
+  /**
+   * @return Client representation of a blank White Card.
+   */
   public static Map<WhiteCardData, Object> getBlankCardClientData() {
     final Map<WhiteCardData, Object> cardData = new HashMap<WhiteCardData, Object>();
     cardData.put(WhiteCardData.ID, -1);

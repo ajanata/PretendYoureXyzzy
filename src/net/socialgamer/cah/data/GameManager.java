@@ -50,7 +50,7 @@ import com.google.inject.Singleton;
  * 
  * This is also a Guice provider for game ids.
  * 
- * @author ajanata
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
 @Singleton
 @GameId
@@ -65,6 +65,16 @@ public class GameManager implements Provider<Integer> {
    */
   private int nextId = 0;
 
+  /**
+   * Create a new game manager.
+   * 
+   * @param gameProvider
+   *          Provider for new {@code Game} instances.
+   * @param maxGames
+   *          Maximum number of games allowed on the server.
+   * @param users
+   *          Connected user manager.
+   */
   @Inject
   public GameManager(final Provider<Game> gameProvider, @MaxGames final Integer maxGames,
       final ConnectedUsers users) {
@@ -74,8 +84,8 @@ public class GameManager implements Provider<Integer> {
   }
 
   /**
-   * Creates a new game, if there are free game slots. Returns null if there are already the maximum
-   * number of games in progress.
+   * Creates a new game, if there are free game slots. Returns {@code null} if there are already the
+   * maximum number of games in progress.
    * 
    * @return Newly created game, or {@code null} if the maximum number of games are in progress.
    */
@@ -95,7 +105,7 @@ public class GameManager implements Provider<Integer> {
 
   /**
    * Creates a new game and puts the specified user into the game, if there are free game slots.
-   * Returns null if there are already the maximum number of games in progress.
+   * Returns {@code null} if there are already the maximum number of games in progress.
    * 
    * Creating the game and adding the user are done atomically with respect to another game getting
    * created, or even getting the list of active games. It is impossible for another user to join
@@ -133,6 +143,9 @@ public class GameManager implements Provider<Integer> {
    * 
    * Destroys a game immediately. This will almost certainly cause errors on the client for any
    * players left in the game. If {@code gameId} isn't valid, this method silently returns.
+   * 
+   * @param gameId
+   *          ID of game to destroy.
    */
   public void destroyGame(final int gameId) {
     synchronized (games) {
@@ -154,6 +167,9 @@ public class GameManager implements Provider<Integer> {
     }
   }
 
+  /**
+   * Broadcast an event to all users that they should refresh the game list.
+   */
   public void broadcastGameListRefresh() {
     final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
     broadcastData.put(LongPollResponse.EVENT, LongPollEvent.GAME_LIST_REFRESH.toString());
@@ -166,7 +182,7 @@ public class GameManager implements Provider<Integer> {
    * 
    * TODO: make this not suck
    * 
-   * @return Next game id, or -1 if the maximum number of games are in progress.
+   * @return Next game id, or {@code -1} if the maximum number of games are in progress.
    */
   @Override
   public Integer get() {
@@ -190,6 +206,13 @@ public class GameManager implements Provider<Integer> {
     return candidateGameId(-1);
   }
 
+  /**
+   * Try to guess a good candidate for the next game id.
+   * 
+   * @param skip
+   *          An id to skip over.
+   * @return A guess for the next game id.
+   */
   private int candidateGameId(final int skip) {
     synchronized (games) {
       if (games.size() >= maxGames) {
@@ -207,6 +230,9 @@ public class GameManager implements Provider<Integer> {
     }
   }
 
+  /**
+   * @return A copy of the list of all current games.
+   */
   public Collection<Game> getGameList() {
     synchronized (games) {
       // return a copy

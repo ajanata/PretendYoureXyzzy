@@ -44,6 +44,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 
+/**
+ * Tests for {@code Game}.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class GameTest {
 
   private Game game;

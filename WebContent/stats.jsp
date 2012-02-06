@@ -24,6 +24,8 @@ WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH 
 A simple stats page. Outputs the number of connected users and active game lobbies. This is intended
 to be used with a script for munin. This is instantaneous usage, so it will not necessarily be the
 most useful graph if it is only updated every 15 minutes, but it is still nice to have.
+
+@author Andy Janata (ajanata@socialgamer.net)
 --%>
 <%@ page language="java" contentType="text/plain; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.google.inject.Injector" %>
@@ -40,5 +42,4 @@ GameManager games = injector.getInstance(GameManager.class);
 out.clear();
 out.println("USERS " + users.getUsers().size());
 out.println("GAMES " + games.getGameList().size());
-
 %>

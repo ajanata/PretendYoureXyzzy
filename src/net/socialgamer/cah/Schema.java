@@ -37,7 +37,9 @@ import org.hibernate.dialect.PostgreSQLDialect;
 
 
 /**
- * Servlet implementation class Schema
+ * Servlet implementation class Schema.
+ * 
+ * Get the database schema for known Hibernate objects.
  */
 @WebServlet("/Schema")
 public class Schema extends HttpServlet {

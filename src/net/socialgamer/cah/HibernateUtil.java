@@ -27,13 +27,20 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 
+/**
+ * Utility class for Hibernate.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class HibernateUtil {
   public static final HibernateUtil instance = new HibernateUtil();
 
+  /**
+   * Hibernate session factory to use.
+   */
   public final SessionFactory sessionFactory;
 
   private HibernateUtil() {
     sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
   }
-
 }

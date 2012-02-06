@@ -32,12 +32,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import net.socialgamer.cah.Constants.BlackCardData;
-import net.socialgamer.cah.data.HasId;
 
 
+/**
+ * A Black Card. Cards are persisted in a database and loaded with Hibernate.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 @Entity
 @Table(name = "black_cards")
-public class BlackCard implements HasId {
+public class BlackCard {
   @Id
   @GeneratedValue
   int id;
@@ -45,7 +49,6 @@ public class BlackCard implements HasId {
   int draw;
   int pick;
 
-  @Override
   public int getId() {
     return id;
   }
@@ -83,6 +86,9 @@ public class BlackCard implements HasId {
     return text + " (id:" + id + ", draw:" + draw + ", pick:" + pick + ")";
   }
 
+  /**
+   * @return Client representation of this card.
+   */
   public Map<BlackCardData, Object> getClientData() {
     final Map<BlackCardData, Object> cardData = new HashMap<BlackCardData, Object>();
     cardData.put(BlackCardData.ID, id);

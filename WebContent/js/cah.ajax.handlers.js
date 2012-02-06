@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
  * 
@@ -22,11 +22,9 @@
  */
 
 /**
- * AJAX callback handlers.
+ * AJAX callback handlers. TODO make this individual files instead of all in one.
  * 
- * TODO make this individual files instead of all in one.
- * 
- * @author ajanata
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {

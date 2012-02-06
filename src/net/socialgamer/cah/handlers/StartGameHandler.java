@@ -42,6 +42,11 @@ import org.hibernate.exception.JDBCConnectionException;
 import com.google.inject.Inject;
 
 
+/**
+ * Handler to start a game.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class StartGameHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.START_GAME.toString();

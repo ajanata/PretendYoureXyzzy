@@ -50,6 +50,11 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 
 
+/**
+ * Tests for {@code GameManager}.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class GameManagerTest {
 
   private Injector injector;

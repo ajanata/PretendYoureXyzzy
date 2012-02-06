@@ -22,6 +22,7 @@
  */
 
 package net.socialgamer.cah.handlers;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +39,11 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
-
+/**
+ * Handler to log out of the server.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class LogoutHandler extends Handler {
 
   public final static String OP = AjaxOperation.LOG_OUT.toString();

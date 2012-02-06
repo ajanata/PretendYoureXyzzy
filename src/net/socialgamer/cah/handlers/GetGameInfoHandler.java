@@ -39,6 +39,11 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
+/**
+ * Handler to get a game's information.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class GetGameInfoHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.GET_GAME_INFO.toString();

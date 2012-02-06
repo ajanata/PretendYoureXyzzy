@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
  * 
@@ -24,7 +24,7 @@
 /**
  * Configuration file.
  * 
- * @author ajanata
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
 
 cah.DEBUG = false;

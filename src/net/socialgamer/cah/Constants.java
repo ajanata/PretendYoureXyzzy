@@ -23,11 +23,20 @@
 
 package net.socialgamer.cah;
 
+/**
+ * Constants needed on both the CAH server and client. This file is examined with reflection to
+ * produce a Javascript version for the client to use.
+ * 
+ * All of the enums in here take a string in their constructor to define the over-the-wire value to
+ * be used to represent that enum value. This allows for verbose names while debugging, and short
+ * names to reduce traffic and latency, by only having to change it in one place for both the server
+ * and client.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class Constants {
   /**
    * Enums that implement this interface are valid keys for data returned to clients.
-   * 
-   * @author ajanata
    */
   public interface ReturnableData {
   }
@@ -35,26 +44,47 @@ public class Constants {
   /**
    * Enums that implement this interface have a user-visible string associated with them.
    * 
-   * @author ajanata
+   * There presently is not support for localization, but the name fits.
    */
   public interface Localizable {
+    /**
+     * @return The user-visible string that is associated with this enum value.
+     */
     public String getString();
   }
 
   /**
    * Enums that implement this interface have two user-visible strings associated with them.
    * 
-   * @author ajanata
+   * There presently is not support for localization, but the name fits.
    */
   public interface DoubleLocalizable {
+    /**
+     * @return The first user-visible string that is associated with this enum value.
+     */
     public String getString();
 
+    /**
+     * @return The second user-visible string that is associated with this enum value.
+     */
     public String getString2();
   }
 
+  /**
+   * Reason why a client disconnected.
+   */
   public enum DisconnectReason {
+    /**
+     * The client was kicked by the server administrator.
+     */
     KICKED("kicked"),
+    /**
+     * The user clicked the "log out" button.
+     */
     MANUAL("manual"),
+    /**
+     * The client failed to make any queries within the timeout window.
+     */
     PING_TIMEOUT("ping_timeout");
 
     private final String reason;
@@ -69,8 +99,18 @@ public class Constants {
     }
   }
 
+  /**
+   * The next thing the client should do during reconnect phase.
+   */
   public enum ReconnectNextAction {
+    /**
+     * The client should load a game as part of the reconnect process.
+     */
     GAME("game"),
+    /**
+     * There is nothing for the client to reload, perhaps because they were not in any special
+     * state, or they are a new client.
+     */
     NONE("none");
 
     private final String action;
@@ -85,18 +125,27 @@ public class Constants {
     }
   }
 
+  /**
+   * Valid client request operations.
+   */
   public enum AjaxOperation {
     ADMIN_SET_VERBOSE_LOG("set_verbose_log"),
     CHAT("chat"),
     CREATE_GAME("create_game"),
     FIRST_LOAD("firstload"),
     GAME_LIST("games"),
+    /**
+     * Get all cards for a particular game: black, hand, and round white cards.
+     */
     GET_CARDS("get_cards"),
     GET_GAME_INFO("get_game_info"),
     JOIN_GAME("join_game"),
     JUDGE_SELECT("judge_select"),
     LEAVE_GAME("leave_game"),
     LOG_OUT("logout"),
+    /**
+     * Get the names of all clients connected to the server.
+     */
     NAMES("names"),
     PLAY_CARD("play_card"),
     REGISTER("register"),
@@ -114,6 +163,9 @@ public class Constants {
     }
   }
 
+  /**
+   * Parameters for client requests.
+   */
   public enum AjaxRequest {
     CARD_ID("card_id"),
     GAME_ID("game_id"),
@@ -134,6 +186,9 @@ public class Constants {
     }
   }
 
+  /**
+   * Keys for client request responses.
+   */
   public enum AjaxResponse implements ReturnableData {
     BLACK_CARD("black_card"),
     CARD_ID(AjaxRequest.CARD_ID.toString()),
@@ -143,9 +198,15 @@ public class Constants {
     GAME_INFO("game_info"),
     GAMES("games"),
     HAND("hand"),
+    /**
+     * Whether this client is reconnecting or not.
+     */
     IN_PROGRESS("in_progress"),
     MAX_GAMES("max_games"),
     NAMES("names"),
+    /**
+     * Next thing that should be done in reconnect process.
+     */
     NEXT("next"),
     NICKNAME(AjaxRequest.NICKNAME.toString()),
     PLAYER_INFO("player_info"),
@@ -164,6 +225,9 @@ public class Constants {
     }
   }
 
+  /**
+   * Client request and long poll response errors.
+   */
   public enum ErrorCode implements Localizable {
     ACCESS_DENIED("access_denied", "Access denied."),
     ALREADY_STARTED("already_started", "The game has already started."),
@@ -174,9 +238,15 @@ public class Constants {
     GAME_FULL("game_full", "That game is full. Join another."),
     INVALID_CARD("invalid_card", "Invalid card specified."),
     INVALID_GAME("invalid_game", "Invalid game specified."),
+    /**
+     * TODO this probably should be pulled in from a static inside the RegisterHandler.
+     */
     INVALID_NICK("invalid_nick", "Nickname must contain only upper and lower case letters, " +
         "numbers, or underscores, must be 3 to 30 characters long, and must not start with a " +
         "number."),
+    /**
+     * TODO this probably should be pulled in from a static inside the ChatHandler.
+     */
     MESSAGE_TOO_LONG("msg_too_long", "Messages cannot be longer than 200 characters."),
     NICK_IN_USE("nick_in_use", "Nickname is already in use."),
     NO_CARD_SPECIFIED("no_card_spec", "No card specified."),
@@ -221,6 +291,9 @@ public class Constants {
     }
   }
 
+  /**
+   * Events that can be returned in a long poll response.
+   */
   public enum LongPollEvent {
     CHAT("chat"),
     GAME_BLACK_RESHUFFLE("game_black_reshuffle"),
@@ -235,6 +308,10 @@ public class Constants {
     HAND_DEAL("hand_deal"),
     KICKED("kicked"),
     NEW_PLAYER("new_player"),
+    /**
+     * There has been no other action to inform the client about in a certain timeframe, so inform
+     * the client that we have nothing to inform them so the client doesn't think we went away.
+     */
     NOOP("noop"),
     PLAYER_LEAVE("player_leave");
 
@@ -250,19 +327,31 @@ public class Constants {
     }
   }
 
+  /**
+   * Data keys that can be in a long poll response.
+   */
   public enum LongPollResponse implements ReturnableData {
     BLACK_CARD(AjaxResponse.BLACK_CARD.toString()),
     ERROR(AjaxResponse.ERROR.toString()),
     ERROR_CODE(AjaxResponse.ERROR_CODE.toString()),
     EVENT("event"),
+    /**
+     * Player a chat message is from.
+     */
     FROM("from"),
     GAME_ID(AjaxResponse.GAME_ID.toString()),
     GAME_STATE("game_state"),
     HAND("hand"),
+    /**
+     * The delay until the next game round begins.
+     */
     INTERMISSION("intermission"),
     MESSAGE("message"),
     NICKNAME(AjaxRequest.NICKNAME.toString()),
     PLAYER_INFO(AjaxResponse.PLAYER_INFO.toString()),
+    /**
+     * Reason why a player disconnected.
+     */
     REASON("reason"),
     ROUND_WINNER("round_winner"),
     TIMESTAMP("timestamp"),
@@ -281,10 +370,9 @@ public class Constants {
     }
   }
 
-  public class SessionAttribute {
-    public static final String USER = "user";
-  }
-
+  /**
+   * Data fields for white cards.
+   */
   public enum WhiteCardData {
     ID("id"),
     TEXT("text");
@@ -301,6 +389,9 @@ public class Constants {
     }
   }
 
+  /**
+   * Data fields for black cards.
+   */
   public enum BlackCardData {
     DRAW("draw"),
     ID(WhiteCardData.ID.toString()),
@@ -319,6 +410,9 @@ public class Constants {
     }
   }
 
+  /**
+   * A game's current state.
+   */
   public enum GameState implements Localizable {
     DEALING("dealing", "In Progress"),
     JUDGING("judging", "In Progress"),
@@ -345,6 +439,9 @@ public class Constants {
     }
   }
 
+  /**
+   * Fields for information about a game.
+   */
   public enum GameInfo {
     HOST("host"),
     ID("id"),
@@ -363,6 +460,9 @@ public class Constants {
     }
   }
 
+  /**
+   * Keys for the information about players in a game.
+   */
   public enum GamePlayerInfo {
     NAME("name"),
     SCORE("score"),
@@ -380,6 +480,11 @@ public class Constants {
     }
   }
 
+  /**
+   * States that a player in a game can be in. The first client string is displayed in the
+   * scoreboard, and the second one is displayed in a banner at the top, telling the user what to
+   * do.
+   */
   public enum GamePlayerStatus implements DoubleLocalizable {
     HOST("host", "Host", "Wait for players then click Start Game."),
     IDLE("idle", "", "Waiting for players..."),
@@ -412,5 +517,12 @@ public class Constants {
     public String getString2() {
       return message2;
     }
+  }
+
+  /**
+   * Attributes stored in a client session.
+   */
+  public class SessionAttribute {
+    public static final String USER = "user";
   }
 }

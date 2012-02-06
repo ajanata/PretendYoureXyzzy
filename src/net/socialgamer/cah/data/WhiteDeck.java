@@ -33,31 +33,51 @@ import net.socialgamer.cah.db.WhiteCard;
 import org.hibernate.Session;
 
 
+/**
+ * Deck of White Cards.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class WhiteDeck {
   private final List<WhiteCard> deck;
   private final List<WhiteCard> dealt;
   private final List<WhiteCard> discard;
 
+  /**
+   * Create a new white card deck, loading the cards from the database and shuffling them.
+   */
   @SuppressWarnings("unchecked")
   public WhiteDeck() {
     final Session session = HibernateUtil.instance.sessionFactory.openSession();
     // TODO option to restrict to only stock cards or allow customs
-    deck = session.createQuery("from WhiteCard order by random()").list();
+    deck = session.createQuery("from WhiteCard order by random()").setReadOnly(true).list();
     dealt = new ArrayList<WhiteCard>();
     discard = new ArrayList<WhiteCard>();
   }
 
+  /**
+   * Get the next card from the top of deck.
+   * 
+   * @return The next card.
+   * @throws OutOfCardsException
+   *           There are no more cards in the deck.
+   */
   public WhiteCard getNextCard() throws OutOfCardsException {
     if (deck.size() == 0) {
       throw new OutOfCardsException();
     }
     // Hibernate is returning an ArrayList, so this is a bit faster.
-    final WhiteCard card = deck.get(deck.size() - 1);
-    deck.remove(deck.size() - 1);
+    final WhiteCard card = deck.remove(deck.size() - 1);
     dealt.add(card);
     return card;
   }
 
+  /**
+   * Add a card to the discard pile.
+   * 
+   * @param card
+   *          Card to add to discard pile.
+   */
   public void discard(final WhiteCard card) {
     if (card != null) {
       discard.add(card);
@@ -70,5 +90,6 @@ public class WhiteDeck {
   public void reshuffle() {
     Collections.shuffle(discard);
     deck.addAll(0, discard);
+    discard.clear();
   }
 }

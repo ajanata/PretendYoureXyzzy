@@ -41,6 +41,11 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
+/**
+ * Handler to get the names of all players connected to the server.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class NamesHandler extends Handler {
 
   public static final String OP = AjaxOperation.NAMES.toString();

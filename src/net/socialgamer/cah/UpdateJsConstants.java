@@ -33,6 +33,11 @@ import net.socialgamer.cah.Constants.DoubleLocalizable;
 import net.socialgamer.cah.Constants.Localizable;
 
 
+/**
+ * Analyze the server enums using reflection and create a Javascript version for the client to use.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class UpdateJsConstants {
 
   private static final String enumHeaderFmt =
@@ -46,6 +51,8 @@ public class UpdateJsConstants {
   private static final String msg2ValueFmt = "cah.$.%s_msg_2['%s'] = \"%s\";\r\n";
 
   /**
+   * Run the enum updater. The working directory for this program should be the project's root.
+   * 
    * @param args
    */
   @SuppressWarnings("rawtypes")
@@ -64,9 +71,11 @@ public class UpdateJsConstants {
 
     final Class[] classes = Constants.class.getClasses();
     for (final Class<?> c : classes) {
+      // We only care about enums.
       if (!c.isEnum()) {
         continue;
       }
+      // We need to know the name of the enum itself, not that it's Constants$Foo.
       final String cName = c.getName().split("\\$")[1];
       System.out.println(cName);
       writer.format(enumHeaderFmt, cName);
@@ -100,6 +109,18 @@ public class UpdateJsConstants {
     writer.close();
   }
 
+  /**
+   * Return a map of enum values in an Enum class, with the enum field names as keys and the values
+   * of toString() as the values.
+   * 
+   * @param enumClass
+   *          The Enum to examine.
+   * @return Map of field name -> toString values.
+   * @throws IllegalArgumentException
+   *           Thrown if {@code enumClass} isn't actually an enum.
+   * @throws IllegalAccessException
+   *           If the value was unable to be retrieved.
+   */
   private static Map<String, String> getEnumValues(final Class<?> enumClass)
       throws IllegalArgumentException, IllegalAccessException {
     if (!enumClass.isEnum()) {
@@ -116,6 +137,18 @@ public class UpdateJsConstants {
     return enumMap;
   }
 
+  /**
+   * Return a map of {@code Localizable} message values in an Enum class, with the enum field names
+   * as keys and the values of getString() as the values.
+   * 
+   * @param enumClass
+   *          The Enum to examine.
+   * @return Map of field name -> getString values.
+   * @throws IllegalArgumentException
+   *           Thrown if {@code enumClass} isn't actually an enum.
+   * @throws IllegalAccessException
+   *           If the value was unable to be retrieved.
+   */
   private static Map<String, String> getEnumMessageValues(final Class<?> enumClass)
       throws IllegalArgumentException, IllegalAccessException {
     if (!enumClass.isEnum()) {
@@ -140,6 +173,18 @@ public class UpdateJsConstants {
     return messageMap;
   }
 
+  /**
+   * Return a map of {@code DoubleLocalizable} message values in an Enum class, with the enum field
+   * names as keys and the values of getString2() as the values.
+   * 
+   * @param enumClass
+   *          The Enum to examine.
+   * @return Map of field name -> getString2 values.
+   * @throws IllegalArgumentException
+   *           Thrown if {@code enumClass} isn't actually an enum.
+   * @throws IllegalAccessException
+   *           If the value was unable to be retrieved.
+   */
   private static Map<String, String> getEnumMessage2Values(final Class<?> enumClass)
       throws IllegalArgumentException, IllegalAccessException {
     if (!enumClass.isEnum()) {
@@ -159,13 +204,3 @@ public class UpdateJsConstants {
     return messageMap;
   }
 }
-
-////Automatically generated file. Do not edit!
-//
-//cah.$ = {};
-//
-//cah.$.DisconnectReason = {};
-//cah.$.DisconnectReason.prototype.dummy = undefined;
-//cah.$.DisconnectReason.KICKED = "kicked";
-//cah.$.DisconnectReason.MANUAL = "manual";
-//cah.$.DisconnectReason.PING_TIMEOUT = "ping_timeout";

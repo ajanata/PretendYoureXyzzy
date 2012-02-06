@@ -50,6 +50,7 @@ import net.socialgamer.cah.db.BlackCard;
 import net.socialgamer.cah.db.WhiteCard;
 
 import com.google.inject.Inject;
+import com.sun.istack.internal.Nullable;
 
 
 /**
@@ -69,12 +70,17 @@ import com.google.inject.Inject;
  * otherwise. Win moves through Reset to reset the game back to default state. The game also
  * immediately moves through Reset at any point there are fewer than 3 players in the game.
  * 
- * 
- * @author ajanata
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class Game {
   private final int id;
+  /**
+   * All players present in the game.
+   */
   private final List<Player> players = new ArrayList<Player>(10);
+  /**
+   * Players participating in the current round.
+   */
   private final List<Player> roundPlayers = new ArrayList<Player>(9);
   private final PlayerPlayedCardsTracker playedCards = new PlayerPlayedCardsTracker();
   private final ConnectedUsers connectedUsers;
@@ -87,8 +93,8 @@ public class Game {
   private GameState state;
   // TODO make this host-configurable
   private final int maxPlayers = 10;
-  // TODO also need to configure this
   private int judgeIndex = 0;
+  // TODO also need to configure this
   private final static int ROUND_INTERMISSION = 8 * 1000;
   private Timer nextRoundTimer;
   private final Object nextRoundTimerLock = new Object();
@@ -96,9 +102,15 @@ public class Game {
   private final int scoreGoal = 8;
 
   /**
+   * Create a new game.
+   * 
    * @param id
+   *          The game's ID.
    * @param connectedUsers
+   *          The user manager, for broadcasting messages.
    * @param gameManager
+   *          The game manager, for broadcasting game list refresh notices and destroying this game
+   *          when everybody leaves.
    */
   @Inject
   public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
@@ -117,7 +129,7 @@ public class Game {
    * @throws TooManyPlayersException
    *           Thrown if this game is at its maximum player capacity.
    * @throws IllegalStateException
-   *           Thrown if the user is already in a game.
+   *           Thrown if {@code user} is already in a game.
    */
   public void addPlayer(final User user) throws TooManyPlayersException, IllegalStateException {
     synchronized (players) {
@@ -246,15 +258,30 @@ public class Game {
     }
   }
 
-  public void broadcastToPlayers(final MessageType type,
+  /**
+   * Broadcast a message to all players in this game.
+   * 
+   * @param type
+   *          Type of message to broadcast. This determines the order the messages are returned by
+   *          priority.
+   * @param masterData
+   *          Message data to broadcast.
+   */
+  private void broadcastToPlayers(final MessageType type,
       final HashMap<ReturnableData, Object> masterData) {
     connectedUsers.broadcastToList(playersToUsers(), type, masterData);
   }
 
+  /**
+   * @return The game's current state.
+   */
   public GameState getState() {
     return state;
   }
 
+  /**
+   * @return The {@code User} who is the host of this game.
+   */
   public User getHost() {
     if (host == null) {
       return null;
@@ -262,14 +289,23 @@ public class Game {
     return host.getUser();
   }
 
+  /**
+   * @return All {@code User}s in this game.
+   */
   public List<User> getUsers() {
     return playersToUsers();
   }
 
+  /**
+   * @return This game's ID.
+   */
   public int getId() {
     return id;
   }
 
+  /**
+   * @return This game's general information: ID, host, state, player list.
+   */
   public Map<GameInfo, Object> getInfo() {
     final Map<GameInfo, Object> info = new HashMap<GameInfo, Object>();
     info.put(GameInfo.ID, id);
@@ -285,11 +321,13 @@ public class Game {
     return info;
   }
 
+  /**
+   * @return Player information for every player in this game: Name, score, status.
+   */
   public List<Map<GamePlayerInfo, Object>> getAllPlayerInfo() {
     final List<Map<GamePlayerInfo, Object>> info;
     synchronized (players) {
-      info = new ArrayList<Map<GamePlayerInfo, Object>>(
-          players.size());
+      info = new ArrayList<Map<GamePlayerInfo, Object>>(players.size());
       for (final Player player : players) {
         final Map<GamePlayerInfo, Object> playerInfo = getPlayerInfo(player);
         info.add(playerInfo);
@@ -298,6 +336,13 @@ public class Game {
     return info;
   }
 
+  /**
+   * Get player information for a single player.
+   * 
+   * @param player
+   *          The player for whom to get status.
+   * @return Information for {@code player}: Name, score, status.
+   */
   private Map<GamePlayerInfo, Object> getPlayerInfo(final Player player) {
     final Map<GamePlayerInfo, Object> playerInfo = new HashMap<GamePlayerInfo, Object>();
     playerInfo.put(GamePlayerInfo.NAME, player.getUser().getNickname());
@@ -307,6 +352,15 @@ public class Game {
     return playerInfo;
   }
 
+  /**
+   * Determine the player status for a given player, based on game state.
+   * 
+   * @param player
+   *          Player for whom to get the state.
+   * @return The state of {@code player}, one of {@code HOST}, {@code IDLE}, {@code JUDGE},
+   *         {@code PLAYING}, {@code JUDGING}, or {@code WINNER}, depending on the game's state and
+   *         what the player has done.
+   */
   private GamePlayerStatus getPlayerStatus(final Player player) {
     final GamePlayerStatus playerStatus;
 
@@ -322,6 +376,12 @@ public class Game {
         if (getJudge() == player) {
           playerStatus = GamePlayerStatus.JUDGE;
         } else {
+          synchronized (roundPlayers) {
+            if (!roundPlayers.contains(player)) {
+              playerStatus = GamePlayerStatus.IDLE;
+              break;
+            }
+          }
           synchronized (playedCards) {
             final List<WhiteCard> playerCards = playedCards.getCards(player);
             if (playerCards != null && blackCard != null
@@ -382,14 +442,9 @@ public class Game {
   }
 
   /**
-   * @return A HashMap to use for events dispatched from this game, with the game id already set.
+   * Move the game into the {@code DEALING} state, and deal cards. The game immediately then moves
+   * into the {@code PLAYING} state.
    */
-  private HashMap<ReturnableData, Object> getEventMap() {
-    final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-    data.put(LongPollResponse.GAME_ID, id);
-    return data;
-  }
-
   private void dealState() {
     state = GameState.DEALING;
     synchronized (players) {
@@ -410,35 +465,9 @@ public class Game {
   }
 
   /**
-   * @return The next White Card from the deck, reshuffling if required.
+   * Move the game into the {@code PLAYING} state, drawing a new Black Card and dispatching a
+   * message to all players.
    */
-  private WhiteCard getNextWhiteCard() {
-    try {
-      return whiteDeck.getNextCard();
-    } catch (final OutOfCardsException e) {
-      whiteDeck.reshuffle();
-      final HashMap<ReturnableData, Object> data = getEventMap();
-      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_WHITE_RESHUFFLE.toString());
-      broadcastToPlayers(MessageType.GAME_EVENT, data);
-      return getNextWhiteCard();
-    }
-  }
-
-  /**
-   * @return The next Black Card from the deck, reshuffling if required.
-   */
-  private BlackCard getNextBlackCard() {
-    try {
-      return blackDeck.getNextCard();
-    } catch (final OutOfCardsException e) {
-      whiteDeck.reshuffle();
-      final HashMap<ReturnableData, Object> data = getEventMap();
-      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_BLACK_RESHUFFLE.toString());
-      broadcastToPlayers(MessageType.GAME_EVENT, data);
-      return getNextBlackCard();
-    }
-  }
-
   private void playingState() {
     state = GameState.PLAYING;
 
@@ -474,6 +503,9 @@ public class Game {
     broadcastToPlayers(MessageType.GAME_EVENT, data);
   }
 
+  /**
+   * Move the game into the {@code JUDGING} state.
+   */
   private void judgingState() {
     state = GameState.JUDGING;
 
@@ -489,12 +521,17 @@ public class Game {
     broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
   }
 
+  /**
+   * Move the game into the {@code WIN} state, which really just moves into the game reset logic.
+   */
   private void winState() {
     resetState(false);
   }
 
   /**
    * Reset the game state to a lobby.
+   * 
+   * TODO change the message sent to the client if the game reset due to insufficient players.
    * 
    * @param lostPlayer
    *          True if because there are no long enough people to play a game, false if because the
@@ -544,39 +581,108 @@ public class Game {
     broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
   }
 
-  private void sendCardsToPlayer(final Player player, final List<WhiteCard> cards) {
-    final Map<ReturnableData, Object> data = getEventMap();
-    data.put(LongPollResponse.EVENT, LongPollEvent.HAND_DEAL.toString());
-    final List<Map<WhiteCardData, Object>> cardData = handSubsetToClient(cards);
-    data.put(LongPollResponse.HAND, cardData);
-    final QueuedMessage qm = new QueuedMessage(MessageType.GAME_EVENT, data);
-    player.getUser().enqueueMessage(qm);
-  }
-
-  private List<Map<WhiteCardData, Object>> handSubsetToClient(final List<WhiteCard> cards) {
-    final List<Map<WhiteCardData, Object>> cardData =
-        new ArrayList<Map<WhiteCardData, Object>>(cards.size());
-    for (final WhiteCard card : cards) {
-      final Map<WhiteCardData, Object> thisCard = new HashMap<WhiteCardData, Object>();
-      thisCard.put(WhiteCardData.ID, card.getId());
-      thisCard.put(WhiteCardData.TEXT, card.getText());
-      cardData.add(thisCard);
-    }
-    return cardData;
-  }
-
-  public List<Map<WhiteCardData, Object>> getHand(final User user) {
-    final Player player = getPlayerForUser(user);
-    if (player != null) {
-      final List<WhiteCard> hand = player.getHand();
-      synchronized (hand) {
-        return handSubsetToClient(player.getHand());
+  /**
+   * Check to see if judging should begin, based on the number of players that have played and the
+   * number of cards they have played.
+   * 
+   * @return True if judging should begin.
+   */
+  private boolean startJudging() {
+    if (playedCards.size() == roundPlayers.size()) {
+      boolean startJudging = true;
+      for (final List<WhiteCard> cards : playedCards.cards()) {
+        if (cards.size() != blackCard.getPick()) {
+          startJudging = false;
+          break;
+        }
       }
+      return startJudging;
     } else {
-      return null;
+      return false;
     }
   }
 
+  /**
+   * Start the next round. Clear out the list of played cards into the discard pile, pick a new
+   * judge, set the list of players participating in the round, and move into the {@code DEALING}
+   * state.
+   */
+  private void startNextRound() {
+    synchronized (whiteDeck) {
+      synchronized (playedCards) {
+        for (final List<WhiteCard> cards : playedCards.cards()) {
+          for (final WhiteCard card : cards) {
+            whiteDeck.discard(card);
+          }
+        }
+      }
+    }
+
+    synchronized (players) {
+      judgeIndex++;
+      if (judgeIndex >= players.size()) {
+        judgeIndex = 0;
+      }
+      synchronized (roundPlayers) {
+        roundPlayers.clear();
+        for (final Player player : players) {
+          if (player != getJudge()) {
+            roundPlayers.add(player);
+          }
+        }
+      }
+    }
+
+    dealState();
+  }
+
+  /**
+   * @return A HashMap to use for events dispatched from this game, with the game id already set.
+   */
+  private HashMap<ReturnableData, Object> getEventMap() {
+    final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    data.put(LongPollResponse.GAME_ID, id);
+    return data;
+  }
+
+  /**
+   * @return The next White Card from the deck, reshuffling if required.
+   */
+  private WhiteCard getNextWhiteCard() {
+    try {
+      return whiteDeck.getNextCard();
+    } catch (final OutOfCardsException e) {
+      whiteDeck.reshuffle();
+      final HashMap<ReturnableData, Object> data = getEventMap();
+      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_WHITE_RESHUFFLE.toString());
+      broadcastToPlayers(MessageType.GAME_EVENT, data);
+      return getNextWhiteCard();
+    }
+  }
+
+  /**
+   * @return The next Black Card from the deck, reshuffling if required.
+   */
+  private BlackCard getNextBlackCard() {
+    try {
+      return blackDeck.getNextCard();
+    } catch (final OutOfCardsException e) {
+      whiteDeck.reshuffle();
+      final HashMap<ReturnableData, Object> data = getEventMap();
+      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_BLACK_RESHUFFLE.toString());
+      broadcastToPlayers(MessageType.GAME_EVENT, data);
+      return getNextBlackCard();
+    }
+  }
+
+  /**
+   * Get the {@code Player} object for a given {@code User} object.
+   * 
+   * @param user
+   * @return The {@code Player} object representing {@code user} in this game, or {@code null} if
+   *         {@code user} is not in this game.
+   */
+  @Nullable
   private Player getPlayerForUser(final User user) {
     synchronized (players) {
       for (final Player player : players) {
@@ -588,6 +694,10 @@ public class Game {
     return null;
   }
 
+  /**
+   * @return Client data for the current {@code BlackCard}, or {@code null} if there is not a
+   *         {@code BlackCard}.
+   */
   public Map<BlackCardData, Object> getBlackCard() {
     synchronized (blackCardLock) {
       if (blackCard != null) {
@@ -653,8 +763,11 @@ public class Game {
   }
 
   /**
+   * Convert a list of {@code WhiteCard}s to data suitable for sending to a client.
+   * 
    * @param cards
-   * @return The client data for the list of cards passed in.
+   *          Cards to convert to client data.
+   * @return Client representation of {@code cards}.
    */
   private List<Map<WhiteCardData, Object>> getWhiteCardData(final List<WhiteCard> cards) {
     final List<Map<WhiteCardData, Object>> data =
@@ -665,6 +778,44 @@ public class Game {
     return data;
   }
 
+  /**
+   * Send a list of {@code WhiteCard}s to a player.
+   * 
+   * @param player
+   *          Player to send the cards to.
+   * @param cards
+   *          The cards to send the player.
+   */
+  private void sendCardsToPlayer(final Player player, final List<WhiteCard> cards) {
+    final Map<ReturnableData, Object> data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.HAND_DEAL.toString());
+    data.put(LongPollResponse.HAND, getWhiteCardData(cards));
+    final QueuedMessage qm = new QueuedMessage(MessageType.GAME_EVENT, data);
+    player.getUser().enqueueMessage(qm);
+  }
+
+  /**
+   * Get a client data representation of a user's hand.
+   * 
+   * @param user
+   *          User whose hand to convert to client data.
+   * @return Client representation of {@code user}'s hand.
+   */
+  public List<Map<WhiteCardData, Object>> getHand(final User user) {
+    final Player player = getPlayerForUser(user);
+    if (player != null) {
+      final List<WhiteCard> hand = player.getHand();
+      synchronized (hand) {
+        return getWhiteCardData(player.getHand());
+      }
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * @return A list of all {@code User}s in this game.
+   */
   private List<User> playersToUsers() {
     final List<User> users;
     synchronized (players) {
@@ -676,6 +827,10 @@ public class Game {
     return users;
   }
 
+  /**
+   * @return The judge for the current round, or {@code null} if the judge index is somehow invalid.
+   */
+  @Nullable
   private Player getJudge() {
     if (judgeIndex >= 0 && judgeIndex < players.size()) {
       return players.get(judgeIndex);
@@ -684,6 +839,17 @@ public class Game {
     }
   }
 
+  /**
+   * Play a card.
+   * 
+   * @param user
+   *          User playing the card.
+   * @param cardId
+   *          ID of the card to play.
+   * @return An {@code ErrorCode} if the play was unsuccessful ({@code user} doesn't have the card,
+   *         {@code user} is the judge, etc.), or {@code null} if there was no error and the play
+   *         was successful.
+   */
   public ErrorCode playCard(final User user, final int cardId) {
     final Player player = getPlayerForUser(user);
     if (player != null) {
@@ -724,27 +890,6 @@ public class Game {
       }
     } else {
       return null;
-    }
-  }
-
-  /**
-   * Check to see if judging should begin, based on the number of players that have played and the
-   * number of cards they have played.
-   * 
-   * @return True if judging should begin.
-   */
-  private boolean startJudging() {
-    if (playedCards.size() == roundPlayers.size()) {
-      boolean startJudging = true;
-      for (final List<WhiteCard> cards : playedCards.cards()) {
-        if (cards.size() != blackCard.getPick()) {
-          startJudging = false;
-          break;
-        }
-      }
-      return startJudging;
-    } else {
-      return false;
     }
   }
 
@@ -821,35 +966,9 @@ public class Game {
     return null;
   }
 
-  private void startNextRound() {
-    synchronized (whiteDeck) {
-      synchronized (playedCards) {
-        for (final List<WhiteCard> cards : playedCards.cards()) {
-          for (final WhiteCard card : cards) {
-            whiteDeck.discard(card);
-          }
-        }
-      }
-    }
-
-    synchronized (players) {
-      judgeIndex++;
-      if (judgeIndex >= players.size()) {
-        judgeIndex = 0;
-      }
-      synchronized (roundPlayers) {
-        roundPlayers.clear();
-        for (final Player player : players) {
-          if (player != getJudge()) {
-            roundPlayers.add(player);
-          }
-        }
-      }
-    }
-
-    dealState();
-  }
-
+  /**
+   * Exception to be thrown when there are too many players in a game.
+   */
   public class TooManyPlayersException extends Exception {
     private static final long serialVersionUID = -6603422097641992017L;
   }

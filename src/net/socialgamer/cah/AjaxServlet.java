@@ -44,9 +44,11 @@ import net.socialgamer.cah.handlers.Handlers;
 
 
 /**
- * Servlet implementation class AjaxServlet
+ * Servlet implementation class AjaxServlet.
  * 
  * This servlet is only used for client actions, not for long-polling.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
 @WebServlet("/AjaxServlet")
 public class AjaxServlet extends CahServlet {
@@ -82,8 +84,8 @@ public class AjaxServlet extends CahServlet {
     try {
       handler = getInjector().getInstance(Handlers.LIST.get(op));
     } catch (final Exception e) {
-      System.err.println("Exception creating handler for " + op);
-      e.printStackTrace(System.err);
+      log((User) hSession.getAttribute(SessionAttribute.USER), "Exception handling op " + op + ": "
+          + e.toString());
       returnError(user, out, ErrorCode.BAD_OP, serial);
       return;
     }
@@ -92,5 +94,4 @@ public class AjaxServlet extends CahServlet {
     returnData(user, out, data);
     return;
   }
-
 }

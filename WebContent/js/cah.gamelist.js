@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
  * 
@@ -22,12 +22,10 @@
  */
 
 /**
- * Display the list of games on the server.
+ * Display the list of games on the server, and enable the player to join a game. This is a
+ * singleton.
  * 
- * @author ajanata
- */
-
-/**
+ * @author Andy Janata (ajanata@socialgamer.net)
  * @constructor
  */
 cah.GameList = function() {
@@ -52,28 +50,42 @@ cah.GameList = function() {
 };
 
 $(document).ready(function() {
+  /**
+   * The singleton instance of GameList.
+   * 
+   * @type {cah.GameList}
+   */
   cah.GameList.instance = new cah.GameList();
 });
 
+/**
+ * Show the game list.
+ */
 cah.GameList.prototype.show = function() {
   $(this.element_).show();
   $("#create_game").show();
   $("#refresh_games").show();
 };
 
+/**
+ * Hide the game list.
+ */
 cah.GameList.prototype.hide = function() {
   $(this.element_).hide();
   $("#create_game").hide();
   $("#refresh_games").hide();
 };
 
+/**
+ * Query the server to update the game list.
+ */
 cah.GameList.prototype.update = function() {
   // TODO display a loading indicator of some sort
   cah.Ajax.build(cah.$.AjaxOperation.GAME_LIST).run();
 };
 
 /**
- * Update the list of games.
+ * Update the list of games with fresh data from the server.
  * 
  * @param {Object}
  *          gameData The game data returned by the server.
@@ -98,21 +110,21 @@ cah.GameList.prototype.processUpdate = function(gameData) {
 };
 
 /**
+ * Event handler for the clicking the Create Game button.
+ * 
  * @private
  */
-cah.GameList.prototype.createGameClick_ = function(e) {
+cah.GameList.prototype.createGameClick_ = function() {
   cah.Ajax.build(cah.$.AjaxOperation.CREATE_GAME).run();
 };
 
 /**
+ * Event handler for clicking the Refresh Games button.
+ * 
  * @private
  */
-cah.GameList.prototype.refreshGamesClick_ = function(e) {
-  this.refreshGames();
-};
-
-cah.GameList.prototype.refreshGames = function() {
-  cah.Ajax.build(cah.$.AjaxOperation.GAME_LIST).run();
+cah.GameList.prototype.refreshGamesClick_ = function() {
+  this.update();
 };
 
 // ///////////////////////////////////////////////
@@ -162,10 +174,16 @@ cah.GameListLobby = function(parentElem, data) {
   $(".gamelist_lobby_join", this.element_).click(cah.bind(this, this.joinClick));
 };
 
-cah.GameListLobby.prototype.joinClick = function(e) {
+/**
+ * Event handler for clicking the Join button in a game lobby.
+ */
+cah.GameListLobby.prototype.joinClick = function() {
   cah.Ajax.build(cah.$.AjaxOperation.JOIN_GAME).withGameId(this.id_).run();
 };
 
+/**
+ * Remove the game lobby from the document and free up resources.
+ */
 cah.GameListLobby.prototype.dispose = function() {
   this.parentElem_.removeChild(this.element_);
   $(".gamelist_lobby_join", this.element_).unbind();

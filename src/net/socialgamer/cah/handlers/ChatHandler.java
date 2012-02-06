@@ -43,6 +43,11 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
+/**
+ * Handler for chat messages.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class ChatHandler extends Handler {
 
   public static final String OP = AjaxOperation.CHAT.toString();

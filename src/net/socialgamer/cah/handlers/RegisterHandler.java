@@ -42,6 +42,11 @@ import net.socialgamer.cah.data.User;
 import com.google.inject.Inject;
 
 
+/**
+ * Handler to register a name with the server and get connected.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class RegisterHandler extends Handler {
 
   public static final String OP = AjaxOperation.REGISTER.toString();

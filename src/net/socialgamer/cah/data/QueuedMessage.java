@@ -28,20 +28,40 @@ import java.util.Map;
 import net.socialgamer.cah.Constants.ReturnableData;
 
 
+/**
+ * A message to be queued for delivery to a client.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class QueuedMessage implements Comparable<QueuedMessage> {
 
   private final MessageType messageType;
   private final Map<ReturnableData, Object> data;
 
+  /**
+   * Create a new queued message.
+   * 
+   * @param messageType
+   *          Type of message to be queued. The type influences the priority in returning messages
+   *          to the client.
+   * @param data
+   *          The data of the message to be queued.
+   */
   public QueuedMessage(final MessageType messageType, final Map<ReturnableData, Object> data) {
     this.messageType = messageType;
     this.data = data;
   }
 
+  /**
+   * @return The type of the message.
+   */
   public MessageType getMessageType() {
     return messageType;
   }
 
+  /**
+   * @return The data in the message.
+   */
   public Map<ReturnableData, Object> getData() {
     return data;
   }
@@ -63,8 +83,6 @@ public class QueuedMessage implements Comparable<QueuedMessage> {
   /**
    * Types of messages that can be queued. The numerical value is the priority that this message
    * should be delivered (lower = more important) compared to other queued messages.
-   * 
-   * @author ajanata
    */
   public enum MessageType {
     KICKED(1), PLAYER_EVENT(3), GAME_EVENT(3), GAME_PLAYER_EVENT(4), CHAT(5);

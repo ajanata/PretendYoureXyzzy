@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
  * 
@@ -22,17 +22,11 @@
  */
 
 /**
- * Game interface.
- * 
- * @author ajanata
- */
-
-/**
  * Class to manage the game interface.
  * 
+ * @author Andy Janata (ajanata@socialgamer.net)
  * @param {number}
  *          id The game id.
- * 
  * @constructor
  */
 cah.Game = function(id) {
@@ -121,18 +115,6 @@ cah.Game = function(id) {
   this.roundSelectedCard_ = null;
 
   /**
-   * Card the player played this round.
-   * 
-   * TODO make this an array when we support the multiple play blacks
-   * 
-   * TODO what, exactly, is this being used for, since multi-play seems to be working...
-   * 
-   * @type {cah.card.WhiteCard}
-   * @private
-   */
-  this.myPlayedCard_ = null;
-
-  /**
    * The judge of the current round.
    * 
    * @type {String}
@@ -206,7 +188,6 @@ cah.Game = function(id) {
 
   $("#leave_game").click(cah.bind(this, this.leaveGameClick_));
   $("#start_game").click(cah.bind(this, this.startGameClick_));
-
   $(".confirm_card", this.element_).click(cah.bind(this, this.confirmClick_));
 
   $(window).on("resize.game_" + this.id_, cah.bind(this, this.windowResize_));
@@ -483,7 +464,8 @@ cah.Game.prototype.resizeHandCards_ = function() {
 /**
  * Resize cards in the round white cards are to fit window size and number of players.
  * 
- * TODO This will need some more consideration when there are multiple cards played per player.
+ * TODO This will need some more consideration when there are multiple cards played per player,
+ * though it seems to mostly work.
  * 
  * @private
  */
@@ -520,6 +502,9 @@ cah.Game.prototype.resizeRoundCards_ = function() {
   });
 };
 
+/**
+ * Insert this game into the document.
+ */
 cah.Game.prototype.insertIntoDocument = function() {
   $("#main_holder").empty().append(this.element_);
   $("#info_area").empty().append(this.scoreboardElement_);
@@ -756,15 +741,20 @@ cah.Game.prototype.startGameClick_ = function() {
   cah.Ajax.build(cah.$.AjaxOperation.START_GAME).withGameId(this.id_).run();
 };
 
+/**
+ * Called when the call to the server to start the game has completed successfully.
+ */
 cah.Game.prototype.startGameComplete = function() {
   $("#start_game").hide();
 };
 
+/**
+ * Called when the call to the server to play a card has completed successfully.
+ */
 cah.Game.prototype.playCardComplete = function() {
   if (this.handSelectedCard_) {
     $(".card", this.handSelectedCard_.getElement()).removeClass("selected");
     // TODO support for multiple play, though it seems to be working now...
-    this.myPlayedCard_ = this.handSelectedCard_;
     this.removeCardFromHand(this.handSelectedCard_);
     this.addRoundWhiteCard_(Array(this.handSelectedCard_));
     this.handSelectedCard_ = null;
@@ -843,7 +833,6 @@ cah.Game.prototype.stateChange = function(data) {
         this.removeCardFromHand(this.hand_[0]);
       }
       this.handSelectedCard_ = null;
-      this.myPlayedCard_ = null;
       this.judge_ = null;
       $(".confirm_card", this.element_).attr("disabled", "disabled");
       $(".game_black_card", this.element_).empty();
@@ -893,6 +882,7 @@ cah.GameScorePanel = function(player) {
    * @private
    */
   this.element_ = $("#scorecard_template").clone()[0];
+  this.element_.id = "";
   $(this.element_).removeClass("hide");
 
   /**
@@ -944,7 +934,7 @@ cah.GameScorePanel.prototype.getStatus = function() {
   return this.status_;
 };
 
-/**
+/*
  * confirm card as judge without selecting a round card did ... something
  * 
  * don't always see your card after playing it

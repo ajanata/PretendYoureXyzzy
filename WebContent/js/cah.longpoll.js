@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
  * 
@@ -24,29 +24,40 @@
 /**
  * AJAX long polling library.
  * 
- * @author ajanata
+ * @author Andy Janata (ajanata@socialgamer.net)
  */
 
 cah.longpoll = {};
 cah.longpoll.TIMEOUT = 2 * 60 * 1000;
 // cah.longpoll.TIMEOUT = 30 * 1000;
+
 /**
  * Backoff when there was an error.
  * 
  * @type {number}
  */
 cah.longpoll.INITIAL_BACKOFF = 500;
+
 /**
  * Backoff after a successful request.
  * 
  * @type {number}
  */
 cah.longpoll.NORMAL_BACKOFF = 1;
+
+/**
+ * Current backkoff.
+ * 
+ * @type {number}
+ */
 cah.longpoll.Backoff = cah.longpoll.INITIAL_BACKOFF;
 cah.longpoll.Resume = true;
 cah.longpoll.ErrorCodeHandlers = {};
 cah.longpoll.EventHandlers = {};
 
+/**
+ * Start a long polling operation.
+ */
 cah.longpoll.longPoll = function() {
   cah.log.debug("starting long poll");
   $.ajax({
@@ -58,12 +69,24 @@ cah.longpoll.longPoll = function() {
   });
 };
 
+/**
+ * Called when a long polling operation completes, success or failure. Will start another poll
+ * unless the previous one ended in a terminal failure (likely because the server restarted and we
+ * no longer have a session on it).
+ */
 cah.longpoll.complete = function() {
   if (cah.longpoll.Resume) {
     setTimeout("cah.longpoll.longPoll()", cah.longpoll.Backoff);
   }
 };
 
+/**
+ * Called when a long polling operation completes successfully. Dispatches the events to the
+ * appropriate handler.
+ * 
+ * @param {Array}
+ *          data_list A list of events to process.
+ */
 cah.longpoll.done = function(data_list) {
   cah.log.debug("long poll done", data_list);
 
@@ -102,6 +125,9 @@ cah.longpoll.done = function(data_list) {
   cah.longpoll.Backoff = cah.longpoll.NORMAL_BACKOFF;
 };
 
+/**
+ * Called when a long polling operation completes with an error.
+ */
 cah.longpoll.error = function(jqXHR, textStatus, errorThrown) {
   // TODO deal with this somehow
   cah.log.debug(textStatus);

@@ -43,6 +43,11 @@ import net.socialgamer.cah.data.GameManager.MaxGames;
 import com.google.inject.Inject;
 
 
+/**
+ * Handler to get a list of active games.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class GameListHandler extends Handler {
 
   public static final String OP = AjaxOperation.GAME_LIST.toString();

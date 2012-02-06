@@ -28,6 +28,11 @@ import java.util.Collection;
 import java.util.concurrent.PriorityBlockingQueue;
 
 
+/**
+ * A user connected to the server.
+ * 
+ * @author Andy Janata (ajanata@socialgamer.net)
+ */
 public class User {
 
   private final String nickname;
@@ -47,12 +52,26 @@ public class User {
    */
   private boolean valid = true;
 
+  /**
+   * Create a new user.
+   * 
+   * @param nickname
+   *          The user's nickname.
+   * @param hostName
+   *          The user's Internet hostname (which will likely just be their IP address).
+   */
   public User(final String nickname, final String hostName) {
     this.nickname = nickname;
     this.hostName = hostName;
     queuedMessages = new PriorityBlockingQueue<QueuedMessage>();
   }
 
+  /**
+   * Enqueue a new message to be delivered to the user.
+   * 
+   * @param message
+   *          Message to enqueue.
+   */
   public void enqueueMessage(final QueuedMessage message) {
     synchronized (queuedMessageSynchronization) {
       queuedMessages.add(message);
@@ -60,6 +79,9 @@ public class User {
     }
   }
 
+  /**
+   * @return True if the user has any messages queued to be delivered.
+   */
   public boolean hasQueuedMessages() {
     return !queuedMessages.isEmpty();
   }
@@ -92,6 +114,11 @@ public class User {
     }
   }
 
+  /**
+   * @param maxElements
+   *          Maximum number of messages to return.
+   * @return The next {@code maxElements} messages queued for this user.
+   */
   public Collection<QueuedMessage> getNextQueuedMessages(final int maxElements) {
     final ArrayList<QueuedMessage> c = new ArrayList<QueuedMessage>(maxElements);
     synchronized (queuedMessageSynchronization) {
@@ -101,10 +128,16 @@ public class User {
     return c;
   }
 
+  /**
+   * @return The user's nickname.
+   */
   public String getNickname() {
     return nickname;
   }
 
+  /**
+   * @return The user's Internet hostname, or IP address.
+   */
   public String getHostName() {
     return hostName;
   }
