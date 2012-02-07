@@ -201,6 +201,9 @@ HttpSession hSession = request.getSession(true);
         </div>
       </div>
       <div class="game_hand">
+        <div class="game_hand_filter hide">
+          <span class="game_hand_filter_text"></span>
+        </div>
         <span class="header">Your Hand</span>
         <div class="game_hand_cards">
         </div>

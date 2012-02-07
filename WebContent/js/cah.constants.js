@@ -170,7 +170,7 @@ cah.$.GamePlayerStatus_msg_2['playing'] = "Select a card to play.";
 cah.$.GamePlayerStatus_msg_2['idle'] = "Waiting for players...";
 cah.$.GamePlayerStatus_msg_2['judging'] = "Select a winning card.";
 cah.$.GamePlayerStatus_msg_2['host'] = "Wait for players then click Start Game.";
-cah.$.GamePlayerStatus_msg_2['judge'] = "You are the Card Czar this round.";
+cah.$.GamePlayerStatus_msg_2['judge'] = "You are the Card Czar.";
 cah.$.GamePlayerStatus_msg_2['winner'] = "You have won!";
 
 cah.$.GameState = function() {

@@ -283,6 +283,22 @@ span.debug {
   */
 }
 
+.game_hand_filter {
+  height: 100%;
+  position: relative;
+  background: rgba(192, 192, 192, .5);
+  z-index: 100;
+  text-align: center;
+}
+
+.game_hand_filter_text {
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  font-size: 300%;
+  margin-top: -30px;
+}
+
 .game_hand_cards {
   position: absolute;
   bottom: 0px;

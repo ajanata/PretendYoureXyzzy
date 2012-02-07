@@ -558,6 +558,7 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
 
   if (playerName == cah.nickname) {
     $(".game_message", this.element_).text(cah.$.GamePlayerStatus_msg_2[playerStatus]);
+
     if (playerStatus == cah.$.GamePlayerStatus.PLAYING && this.handSelectedCard_ != null) {
       $(".confirm_card", this.element_).removeAttr("disabled");
     } else if (playerStatus == cah.$.GamePlayerStatus.JUDGING && this.roundSelectedCard_ != null) {
@@ -565,6 +566,7 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
     } else {
       $(".confirm_card", this.element_).attr("disabled", "disabled");
     }
+
     if (playerStatus != cah.$.GamePlayerStatus.PLAYING) {
       if (this.handSelectedCard_ != null) {
         // we have a card selected, but we're changing state. this almost certainly is an
@@ -574,8 +576,18 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
       this.handSelectedCard_ = null;
       $(".selected", $(".game_hand", this.element_)).removeClass("selected");
     }
+
     if (playerStatus == cah.$.GamePlayerStatus.HOST) {
       $("#start_game").show();
+    }
+
+    if (playerStatus == cah.$.GamePlayerStatus.JUDGE) {
+      $(".game_hand_filter", this.element_).removeClass("hide");
+      $(".game_hand_filter_text", this.element_).text(cah.$.GamePlayerStatus_msg_2[playerStatus]);
+      // We need to kick it to properly re-center the text.
+      $(".game_hand_filter").width($(".game_hand_filter").width());
+    } else if (playerStatus == cah.$.GamePlayerStatus.PLAYING) {
+      $(".game_hand_filter", this.element_).addClass("hide");
     }
   }
 

@@ -488,7 +488,7 @@ public class Constants {
   public enum GamePlayerStatus implements DoubleLocalizable {
     HOST("host", "Host", "Wait for players then click Start Game."),
     IDLE("idle", "", "Waiting for players..."),
-    JUDGE("judge", "Card Czar", "You are the Card Czar this round."),
+    JUDGE("judge", "Card Czar", "You are the Card Czar."),
     JUDGING("judging", "Selecting", "Select a winning card."),
     PLAYING("playing", "Playing", "Select a card to play."),
     WINNER("winner", "Winner!", "You have won!");
