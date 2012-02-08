@@ -115,7 +115,7 @@ cah.Game = function(id) {
   this.roundSelectedCard_ = null;
 
   /**
-   * The judge of the current round.
+   * The name of the judge of the current round.
    * 
    * @type {String}
    * @private
@@ -451,9 +451,20 @@ cah.Game.prototype.resizeHandCards_ = function() {
   if (this.handCardSmallSize_ > 150) {
     this.handCardSmallSize_ = 150;
   }
-  this.handCardLargeSize_ = this.handCardSmallSize_ * 1.8;
+  if (this.handCardSmallSize_ < 66) {
+    this.handCardSmallSize_ = 66;
+  }
+  var maxScale = 236 / this.handCardSmallSize_;
+  var scale = maxScale < 1.8 ? maxScale : 1.8;
+  this.handCardLargeSize_ = this.handCardSmallSize_ * scale;
+  if (this.handCardLargeSize_ > 236) {
+    this.handCardLargeSize_ = 236;
+  }
   this.handCardSmallScale_ = this.handCardSmallSize_ / 236;
-  this.handCardLargeScale_ = this.handCardSmallScale_ * 1.8;
+  this.handCardLargeScale_ = this.handCardSmallScale_ * scale;
+  if (this.handCardLargeScale_ > maxScale) {
+    this.handCardLargeScale_ = maxScale;
+  }
   elems.width(this.handCardSmallSize_).height(this.handCardSmallSize_).animate({
     scale : this.handCardSmallScale_,
   }, {
