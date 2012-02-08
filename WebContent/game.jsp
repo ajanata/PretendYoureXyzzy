@@ -179,23 +179,32 @@ HttpSession hSession = request.getSession(true);
 <div style="width: 1000px; height: 506px; border: 1px solid black; position: relative;"
     class="hide">
   <div id="game_template" class="game">
-    <div class="game_message">
-      Waiting for server...
+    <div class="game_top">
+      <input type="button" class="game_show_last_round" value="Show Last Round"
+          disabled="disabled" />
+      <div class="game_message">
+        Waiting for server...
+      </div>
     </div>
     <div style="width:100%; height:100%;">
       <div style="width:100%; height:100%;">
         <div class="game_left_side">
           <div class="game_black_card_wrapper">
-            The black card for this round is:
+            The black card for <span class="game_black_card_round_indicator">this round is</span>:
             <div class="game_black_card">
             </div>
           </div>
           <input type="button" class="confirm_card" value="Confirm Selection" />
         </div>
         <div class="game_right_side">
-          <div class="game_white_card_wrapper">
+          <div class="game_right_side_box game_white_card_wrapper">
             The white cards played this round are:
-            <div class="game_white_cards">
+            <div class="game_white_cards game_right_side_cards">
+            </div>
+          </div>
+          <div class="game_right_side_box game_last_round hide">
+            The previous round was won by <span class="game_last_round_winner"></span>.
+            <div class="game_last_round_cards game_right_side_cards">
             </div>
           </div>
         </div>
@@ -232,6 +241,15 @@ HttpSession hSession = request.getSession(true);
 <div class="hide">
 	<div id="game_white_cards_binder_template" class="game_white_cards_binder hide">
 	</div>
+</div>
+
+<!-- Previous round display. -->
+<div class="hide">
+  <div id="previous_round_template" class="previous_round">
+    <input type="button" class="previous_round_close" value="Close" />
+    Round winner: <span class="previous_round_winner"></span>
+    <div class="previous_round_cards"></div>
+  </div>
 </div>
 
 </body>

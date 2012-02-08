@@ -91,12 +91,20 @@ cah.Game = function(id) {
   this.state_ = cah.$.GameState.LOBBY;
 
   /**
-   * The black card on display.
+   * The black card for the current round.
    * 
    * @type {cah.card.BlackCard}
    * @private
    */
   this.blackCard_ = null;
+
+  /**
+   * The black card for the previous round.
+   * 
+   * @type {cah.card.BlackCard}
+   * @private
+   */
+  this.lastBlackCard_ = null;
 
   /**
    * Selected card from the player's hand.
@@ -186,9 +194,18 @@ cah.Game = function(id) {
    */
   this.roundCardLargeSize_ = 236;
 
+  /**
+   * Whether we are showing the result of the last round.
+   * 
+   * @type {Boolean}
+   * @private
+   */
+  this.showingLastRound_ = false;
+
   $("#leave_game").click(cah.bind(this, this.leaveGameClick_));
   $("#start_game").click(cah.bind(this, this.startGameClick_));
   $(".confirm_card", this.element_).click(cah.bind(this, this.confirmClick_));
+  $(".game_show_last_round", this.element_).click(cah.bind(this, this.showLastRoundClick_));
 
   $(window).on("resize.game_" + this.id_, cah.bind(this, this.windowResize_));
 };
@@ -208,6 +225,29 @@ cah.Game.joinGame = function(gameId) {
   var game = new cah.Game(gameId);
   cah.currentGames[gameId] = game;
   game.insertIntoDocument();
+};
+
+/**
+ * Toggle showing the previous round result.
+ * 
+ * @private
+ */
+cah.Game.prototype.showLastRoundClick_ = function() {
+  if (this.showingLastRound_) {
+    $(".game_show_last_round", this.element_).attr("value", "Show Last Round");
+    $(".game_black_card_round_indicator", this.element_).text("this round is");
+    $(".game_black_card", this.element_).empty().append(this.blackCard_.getElement());
+    $(".game_white_card_wrapper", this.element_).removeClass("hide");
+    $(".game_last_round", this.element_).addClass("hide");
+  } else {
+    $(".game_show_last_round", this.element_).attr("value", "Show Current Round");
+    $(".game_black_card_round_indicator", this.element_).text("last round was");
+    $(".game_black_card", this.element_).empty().append(this.lastBlackCard_.getElement());
+    $(".game_white_card_wrapper", this.element_).addClass("hide");
+    $(".game_last_round", this.element_).removeClass("hide");
+  }
+
+  this.showingLastRound_ = !this.showingLastRound_;
 };
 
 /**
@@ -613,8 +653,6 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
     if (playerStatus == cah.$.GamePlayerStatus.JUDGE) {
       $(".game_hand_filter", this.element_).removeClass("hide");
       $(".game_hand_filter_text", this.element_).text(cah.$.GamePlayerStatus_msg_2[playerStatus]);
-      // We need to kick it to properly re-center the text.
-      $(".game_hand_filter").width($(".game_hand_filter").width());
     } else if (playerStatus == cah.$.GamePlayerStatus.PLAYING) {
       $(".game_hand_filter", this.element_).addClass("hide");
     }
@@ -651,11 +689,19 @@ cah.Game.prototype.roundComplete = function(data) {
     var card = cards[index];
     $(".card", card.getElement()).addClass("selected");
   }
-  var scoreCard = this.scoreCards_[data[cah.$.LongPollResponse.ROUND_WINNER]];
+  var roundWinner = data[cah.$.LongPollResponse.ROUND_WINNER];
+  var scoreCard = this.scoreCards_[roundWinner];
   $(scoreCard.getElement()).addClass("selected");
   $(".confirm_card", this.element_).attr("disabled", "disabled");
   cah.log.status("The next round will begin in "
       + (data[cah.$.LongPollResponse.INTERMISSION] / 1000) + " seconds.");
+
+  // update the previous round display
+  $(".game_last_round_winner", this.element_).text(roundWinner);
+  $(".game_last_round_cards", this.element_).empty().append(
+      $(".game_white_card_wrapper .card_holder", this.element_).clone());
+  this.lastBlackCard_ = this.blackCard_;
+  $(".game_show_last_round", this.element_).removeAttr("disabled");
 };
 
 /**

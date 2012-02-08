@@ -309,10 +309,17 @@ span.debug {
   min-width: 750px;
 }
 
-.game_message {
-  font-size: 14pt;
+.game_top {
   border-bottom: 2px solid black;
   padding: 5px;
+}
+
+.game_show_last_round {
+  float: right;
+}
+
+.game_message {
+  font-size: 14pt;
 }
 
 .game_black_card_wrapper {
@@ -348,12 +355,12 @@ span.debug {
   */
 }
 
-.game_white_card_wrapper {
+.game_right_side_box {
   height: 60%;
   margin: 10px;
 }
 
-.game_white_cards {
+.game_right_side_cards {
   margin-top: 15px;
   min-width: 600px;
   cursor: pointer;
@@ -505,4 +512,20 @@ span.debug {
   display: inline-block;
   color: #231f20;
   text-align: center;
+}
+
+.previous_round {
+  z-index: 50;
+  border: 3px solid black;
+  width: 60%;
+  height: 60%;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  padding: 5px;
+}
+
+.previous_round_close {
+  position: absolute;
+  right: 0px;
 }
