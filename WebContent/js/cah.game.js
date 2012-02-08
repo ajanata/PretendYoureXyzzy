@@ -445,31 +445,24 @@ cah.Game.prototype.windowResize_ = function() {
  * @private
  */
 cah.Game.prototype.resizeHandCards_ = function() {
-  var elems = $(".game_hand_cards .card_holder", this.element_);
-  var ct = elems.length;
-  this.handCardSmallSize_ = ($(".game_hand_cards", this.element_).width() - 20) / (ct + 1);
-  if (this.handCardSmallSize_ > 150) {
-    this.handCardSmallSize_ = 150;
-  }
-  if (this.handCardSmallSize_ < 66) {
-    this.handCardSmallSize_ = 66;
-  }
-  var maxScale = 236 / this.handCardSmallSize_;
-  var scale = maxScale < 1.8 ? maxScale : 1.8;
-  this.handCardLargeSize_ = this.handCardSmallSize_ * scale;
-  if (this.handCardLargeSize_ > 236) {
-    this.handCardLargeSize_ = 236;
-  }
-  this.handCardSmallScale_ = this.handCardSmallSize_ / 236;
-  this.handCardLargeScale_ = this.handCardSmallScale_ * scale;
-  if (this.handCardLargeScale_ > maxScale) {
-    this.handCardLargeScale_ = maxScale;
-  }
-  elems.width(this.handCardSmallSize_).height(this.handCardSmallSize_).animate({
-    scale : this.handCardSmallScale_,
-  }, {
-    duration : 0,
-  });
+  var data = {
+    class : ".game_hand_cards",
+    cardSmallSize : this.handCardSmallSize_,
+    cardLargeSize : this.handCardLargeSize_,
+    cardSmallScale : this.handCardSmallScale_,
+    cardLargeScale : this.handCardLargeScale_,
+    maxSmallSize : 150,
+    minSmallSize : 66,
+    smallSize : function() {
+      return ($(".game_hand_cards", this.element_).width() - 20)
+          / ($(".game_hand_cards .card_holder", this.element_).length + 1);
+    },
+  };
+  this.resizeCardHelper_(data);
+  this.handCardSmallSize_ = data.cardSmallSize;
+  this.handCardLargeSize_ = data.cardLargeSize;
+  this.handCardSmallScale_ = data.cardSmallScale;
+  this.handCardLargeScale_ = data.cardLargeScale;
 };
 
 /**
@@ -481,33 +474,58 @@ cah.Game.prototype.resizeHandCards_ = function() {
  * @private
  */
 cah.Game.prototype.resizeRoundCards_ = function() {
-  var elems = $(".game_white_cards .card_holder", this.element_);
-  var ct = elems.length;
-  // 30 by experiment in chrome.
   $(".game_right_side", this.element_).width(
       $(window).width() - $(".game_left_side", this.element_).width() - 30);
-  this.roundCardSmallSize_ = ($(".game_white_cards", this.element_).width() - 20 - $(
-      ".game_left_side", this.element_).width())
-      / ct;
-  if (this.roundCardSmallSize_ > 236) {
-    this.roundCardSmallSize_ = 236;
+  var data = {
+    class : ".game_white_cards",
+    cardSmallSize : this.roundCardSmallSize_,
+    cardLargeSize : this.roundCardLargeSize_,
+    cardSmallScale : this.roundCardSmallScale_,
+    cardLargeScale : this.roundCardLargeScale_,
+    maxSmallSize : 236,
+    minSmallSize : 118,
+    smallSize : function() {
+      return ($(window).width() - $(".game_left_side", this.element_).width() - 60)
+          / $(".game_white_cards .card_holder", this.element_).length;
+    },
+  };
+  this.resizeCardHelper_(data);
+  this.roundCardSmallSize_ = data.cardSmallSize;
+  this.roundCardLargeSize_ = data.cardLargeSize;
+  this.roundCardSmallScale_ = data.cardSmallScale;
+  this.roundCardLargeScale_ = data.cardLargeScale;
+};
+
+/**
+ * Helper for resizing cards, so the logic only needs to be in one place.
+ * 
+ * @param {Object}
+ *          data In/out. Scale, size, and callback helper.
+ * @private
+ */
+cah.Game.prototype.resizeCardHelper_ = function(data) {
+  var elems = $(data.class + " .card_holder", this.element_);
+
+  data.cardSmallSize = data.smallSize();
+  if (data.cardSmallSize > data.maxSmallSize) {
+    data.cardSmallSize = data.maxSmallSize;
   }
-  if (this.roundCardSmallSize_ < 118) {
-    this.roundCardSmallSize_ = 118;
+  if (data.cardSmallSize < data.minSmallSize) {
+    data.cardSmallSize = data.minSmallSize;
   }
-  var maxScale = 236 / this.roundCardSmallSize_;
+  var maxScale = 236 / data.cardSmallSize;
   var scale = maxScale < 1.8 ? maxScale : 1.8;
-  this.roundCardLargeSize_ = this.roundCardSmallSize_ * scale;
-  if (this.roundCardLargeSize_ > 236) {
-    this.roundCardLargeSize_ = 236;
+  data.cardLargeSize = data.cardSmallSize * scale;
+  if (data.cardLargeSize > 236) {
+    data.cardLargeSize = 236;
   }
-  this.roundCardSmallScale_ = this.roundCardSmallSize_ / 236;
-  this.roundCardLargeScale_ = this.roundCardSmallScale_ * scale;
-  if (this.roundCardLargeScale_ > maxScale) {
-    this.roundCardLargeScale_ = maxScale;
+  data.cardSmallScale = data.cardSmallSize / 236;
+  data.cardLargeScale = data.cardSmallScale * scale;
+  if (data.cardLargeScale > maxScale) {
+    data.cardLargeScale = maxScale;
   }
-  elems.width(this.roundCardSmallSize_).height(this.roundCardSmallSize_).animate({
-    scale : this.roundCardSmallScale_,
+  elems.width(data.cardSmallSize).height(data.cardSmallSize).animate({
+    scale : data.cardSmallScale,
   }, {
     duration : 0,
   });
