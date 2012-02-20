@@ -25,7 +25,7 @@
  * Class to manage the game interface.
  * 
  * @author Andy Janata (ajanata@socialgamer.net)
- * @param {number}
+ * @param {Number}
  *          id The game id.
  * @constructor
  */
@@ -33,7 +33,7 @@ cah.Game = function(id) {
   /**
    * The game id.
    * 
-   * @type {number}
+   * @type {Number}
    * @private
    */
   this.id_ = id;
@@ -215,7 +215,7 @@ cah.Game = function(id) {
  * 
  * TODO reload round win state
  * 
- * @param {number}
+ * @param {Number}
  *          gameId The game id.
  */
 cah.Game.joinGame = function(gameId) {
@@ -977,7 +977,7 @@ cah.GameScorePanel = function(player) {
   /**
    * The score on this scorecard.
    * 
-   * @type {number}
+   * @type {Number}
    * @private
    */
   this.score_ = 0;
@@ -1003,7 +1003,7 @@ cah.GameScorePanel.prototype.getElement = function() {
  * 
  * TODO add some color for different statuses
  * 
- * @param {number}
+ * @param {Number}
  *          score The player's score
  * @param {cah.$.GamePlayerStatus}
  *          status The player's status.
