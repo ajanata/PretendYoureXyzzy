@@ -274,7 +274,9 @@ cah.Game.prototype.setBlackCard = function(card) {
         + " cards, in the order you wish them to be judged.");
   }
 
-  $(".game_black_card", this.element_).empty().append(this.blackCard_.getElement());
+  if (!this.showingLastRound_) {
+    $(".game_black_card", this.element_).empty().append(this.blackCard_.getElement());
+  }
 };
 
 /**
