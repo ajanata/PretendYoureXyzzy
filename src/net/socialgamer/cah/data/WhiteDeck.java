@@ -31,6 +31,7 @@ import net.socialgamer.cah.HibernateUtil;
 import net.socialgamer.cah.db.WhiteCard;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 
 /**
@@ -49,10 +50,13 @@ public class WhiteDeck {
   @SuppressWarnings("unchecked")
   public WhiteDeck() {
     final Session session = HibernateUtil.instance.sessionFactory.openSession();
+    final Transaction transaction = session.beginTransaction();
+    transaction.begin();
     // TODO option to restrict to only stock cards or allow customs
     deck = session.createQuery("from WhiteCard order by random()").setReadOnly(true).list();
     dealt = new ArrayList<WhiteCard>();
     discard = new ArrayList<WhiteCard>();
+    transaction.commit();
   }
 
   /**
