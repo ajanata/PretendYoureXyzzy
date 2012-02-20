@@ -21,7 +21,7 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.socialgamer.cah;
+package net.socialgamer.cah.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -38,6 +38,7 @@ import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.SessionAttribute;
+import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.User;
 import net.socialgamer.cah.handlers.Handler;
 import net.socialgamer.cah.handlers.Handlers;
