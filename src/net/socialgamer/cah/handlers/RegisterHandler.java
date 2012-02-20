@@ -82,6 +82,13 @@ public class RegisterHandler extends Handler {
       } else {
         final User user = new User(nick, request.getRemoteHost());
         users.newUser(user);
+        // There is a findbugs warning on this line:
+        // cah/src/net/socialgamer/cah/handlers/RegisterHandler.java:85 Store of non serializable
+        // net.socialgamer.cah.data.User into HttpSession in
+        // net.socialgamer.cah.handlers.RegisterHandler.handle(RequestWrapper, HttpSession)
+        // I am choosing to ignore this for the time being as it works under light load, and I am
+        // intending on moving away from HttpSession for storing user data in the not too distant
+        // future, to fix issues with loading the game twice in the same browser.
         session.setAttribute(SessionAttribute.USER, user);
 
         data.put(AjaxResponse.NICKNAME, nick);
