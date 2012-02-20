@@ -67,6 +67,7 @@ public abstract class CahServlet extends HttpServlet {
   @Override
   protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
       throws ServletException, IOException {
+    request.setCharacterEncoding("UTF-8");
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
 
