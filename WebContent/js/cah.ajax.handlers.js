@@ -28,7 +28,7 @@
  */
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
-  cah.nickname = data['nickname'];
+  cah.nickname = data[cah.$.AjaxResponse.NICKNAME];
   cah.log.status("You are connected as " + cah.nickname);
   $("#nickbox").hide();
   $("#canvass").show();
@@ -37,13 +37,13 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
 };
 
 cah.ajax.ErrorHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
-  $("#nickbox_error").text(cah.$.ErrorCode_msg[data.error_code]);
+  $("#nickbox_error").text(cah.$.ErrorCode_msg[data[cah.$.AjaxResponse.ERROR_CODE]]);
   $("#nickname").focus();
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
-  if (data.in_progress) {
-    cah.nickname = data['nickname'];
+  if (data[cah.$.AjaxResponse.IN_PROGRESS]) {
+    cah.nickname = data[cah.$.AjaxResponse.NICKNAME];
     cah.log.status("You have reconnected as " + cah.nickname);
     $("#nickbox").hide();
     $("#canvass").show();
@@ -95,7 +95,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LOG_OUT] = function(data) {
 cah.ajax.ErrorHandlers[cah.$.AjaxOperation.LOG_OUT] = cah.ajax.SuccessHandlers.logout;
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.NAMES] = function(data) {
-  cah.log.status("Currently connected: " + data.names.join(", "));
+  cah.log.status("Currently connected: " + data[cah.$.AjaxResponse.NAMES].join(", "));
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GAME_LIST] = function(data) {

@@ -26,7 +26,7 @@
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 
-cah.longpoll.ErrorCodeHandlers.not_registered = function(data) {
+cah.longpoll.ErrorCodeHandlers[cah.$.ErrorCode.NOT_REGISTERED] = function(data) {
   cah.longpoll.Resume = false;
   cah.log.error("The server seems to have restarted. Any in-progress games have been lost.");
   cah.log.error("You will need to refresh the page to start a new game.");
@@ -35,14 +35,14 @@ cah.longpoll.ErrorCodeHandlers.not_registered = function(data) {
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.NEW_PLAYER] = function(data) {
   // don't display our own join
-  if (data.nickname != cah.nickname) {
-    cah.log.status(data.nickname + " has connected.");
+  if (data[cah.$.LongPollResponse.NICKNAME] != cah.nickname) {
+    cah.log.status(data[cah.$.LongPollResponse.NICKNAME] + " has connected.");
   }
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.PLAYER_LEAVE] = function(data) {
   var friendly_reason = "Leaving";
-  switch (data.reason) {
+  switch (data[cah.$.LongPollResponse.REASON]) {
     case cah.$.DisconnectReason.KICKED:
       friendly_reason = "Kicked by server";
       break;
@@ -53,7 +53,8 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.PLAYER_LEAVE] = function(data) {
       friendly_reason = "Ping timeout";
       break;
   }
-  cah.log.status(data.nickname + " has disconnected (" + friendly_reason + ").");
+  cah.log.status(data[cah.$.LongPollResponse.NICKNAME] + " has disconnected (" + friendly_reason
+      + ").");
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.NOOP] = function(data) {
@@ -72,8 +73,9 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.KICKED] = function() {
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.CHAT] = function(data) {
   // TODO deal with multiple channels eventually
   // don't display our own chat
-  if (data.from != cah.nickname) {
-    cah.log.status("<" + data.from + "> " + data.message);
+  if (data[cah.$.LongPollResponse.FROM] != cah.nickname) {
+    cah.log.status("<" + data[cah.$.LongPollResponse.FROM] + "> "
+        + data[cah.$.LongPollResponse.MESSAGE]);
   }
 };
 
