@@ -23,6 +23,10 @@
 
 package net.socialgamer.cah;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+
 /**
  * Constants needed on both the CAH server and client. This file is examined with reflection to
  * produce a Javascript version for the client to use.
@@ -133,7 +137,7 @@ public class Constants {
     CHAT("chat"),
     CREATE_GAME("create_game"),
     FIRST_LOAD("firstload"),
-    GAME_LIST("games"),
+    GAME_LIST("game_list"),
     /**
      * Get all cards for a particular game: black, hand, and round white cards.
      */
@@ -146,7 +150,7 @@ public class Constants {
     /**
      * Get the names of all clients connected to the server.
      */
-    NAMES("names"),
+    NAMES("get_names"),
     PLAY_CARD("play_card"),
     REGISTER("register"),
     START_GAME("start_game");
@@ -191,10 +195,12 @@ public class Constants {
    */
   public enum AjaxResponse implements ReturnableData {
     BLACK_CARD("black_card"),
-    CARD_ID(AjaxRequest.CARD_ID.toString()),
+    @DuplicationAllowed
+    CARD_ID(AjaxRequest.CARD_ID),
     ERROR("error"),
     ERROR_CODE("error_code"),
-    GAME_ID("game_id"),
+    @DuplicationAllowed
+    GAME_ID(AjaxRequest.GAME_ID),
     GAME_INFO("game_info"),
     GAMES("games"),
     HAND("hand"),
@@ -208,15 +214,21 @@ public class Constants {
      * Next thing that should be done in reconnect process.
      */
     NEXT("next"),
-    NICKNAME(AjaxRequest.NICKNAME.toString()),
+    @DuplicationAllowed
+    NICKNAME(AjaxRequest.NICKNAME),
     PLAYER_INFO("player_info"),
-    SERIAL(AjaxRequest.SERIAL.toString()),
+    @DuplicationAllowed
+    SERIAL(AjaxRequest.SERIAL),
     WHITE_CARDS("white_cards");
 
     private final String field;
 
     AjaxResponse(final String field) {
       this.field = field;
+    }
+
+    AjaxResponse(final Enum<?> field) {
+      this.field = field.toString();
     }
 
     @Override
@@ -295,7 +307,8 @@ public class Constants {
    * Events that can be returned in a long poll response.
    */
   public enum LongPollEvent {
-    CHAT("chat"),
+    @DuplicationAllowed
+    CHAT(AjaxOperation.CHAT),
     GAME_BLACK_RESHUFFLE("game_black_reshuffle"),
     GAME_JUDGE_LEFT("game_judge_left"),
     GAME_LIST_REFRESH("game_list_refresh"),
@@ -306,7 +319,8 @@ public class Constants {
     GAME_STATE_CHANGE("game_state_change"),
     GAME_WHITE_RESHUFFLE("game_white_reshuffle"),
     HAND_DEAL("hand_deal"),
-    KICKED("kicked"),
+    @DuplicationAllowed
+    KICKED(DisconnectReason.KICKED),
     NEW_PLAYER("new_player"),
     /**
      * There has been no other action to inform the client about in a certain timeframe, so inform
@@ -321,6 +335,10 @@ public class Constants {
       this.event = event;
     }
 
+    LongPollEvent(final Enum<?> event) {
+      this.event = event.toString();
+    }
+
     @Override
     public String toString() {
       return event;
@@ -331,37 +349,50 @@ public class Constants {
    * Data keys that can be in a long poll response.
    */
   public enum LongPollResponse implements ReturnableData {
-    BLACK_CARD(AjaxResponse.BLACK_CARD.toString()),
-    ERROR(AjaxResponse.ERROR.toString()),
-    ERROR_CODE(AjaxResponse.ERROR_CODE.toString()),
+    @DuplicationAllowed
+    BLACK_CARD(AjaxResponse.BLACK_CARD),
+    @DuplicationAllowed
+    ERROR(AjaxResponse.ERROR),
+    @DuplicationAllowed
+    ERROR_CODE(AjaxResponse.ERROR_CODE),
     EVENT("event"),
     /**
      * Player a chat message is from.
      */
     FROM("from"),
-    GAME_ID(AjaxResponse.GAME_ID.toString()),
+    @DuplicationAllowed
+    GAME_ID(AjaxResponse.GAME_ID),
     GAME_STATE("game_state"),
-    HAND("hand"),
+    @DuplicationAllowed
+    HAND(AjaxResponse.HAND),
     /**
      * The delay until the next game round begins.
      */
     INTERMISSION("intermission"),
-    MESSAGE("message"),
-    NICKNAME(AjaxRequest.NICKNAME.toString()),
-    PLAYER_INFO(AjaxResponse.PLAYER_INFO.toString()),
+    @DuplicationAllowed
+    MESSAGE(AjaxRequest.MESSAGE),
+    @DuplicationAllowed
+    NICKNAME(AjaxRequest.NICKNAME),
+    @DuplicationAllowed
+    PLAYER_INFO(AjaxResponse.PLAYER_INFO),
     /**
      * Reason why a player disconnected.
      */
     REASON("reason"),
     ROUND_WINNER("round_winner"),
     TIMESTAMP("timestamp"),
-    WHITE_CARDS("white_cards"),
+    @DuplicationAllowed
+    WHITE_CARDS(AjaxResponse.WHITE_CARDS),
     WINNING_CARD("winning_card");
 
     private final String field;
 
     LongPollResponse(final String field) {
       this.field = field;
+    }
+
+    LongPollResponse(final Enum<?> field) {
+      this.field = field.toString();
     }
 
     @Override
@@ -374,13 +405,18 @@ public class Constants {
    * Data fields for white cards.
    */
   public enum WhiteCardData {
-    ID("id"),
+    @DuplicationAllowed
+    ID(AjaxRequest.CARD_ID),
     TEXT("text");
 
     private final String key;
 
     WhiteCardData(final String key) {
       this.key = key;
+    }
+
+    WhiteCardData(final Enum<?> key) {
+      this.key = key.toString();
     }
 
     @Override
@@ -394,14 +430,20 @@ public class Constants {
    */
   public enum BlackCardData {
     DRAW("draw"),
-    ID(WhiteCardData.ID.toString()),
+    @DuplicationAllowed
+    ID(WhiteCardData.ID),
     PICK("pick"),
-    TEXT(WhiteCardData.TEXT.toString());
+    @DuplicationAllowed
+    TEXT(WhiteCardData.TEXT);
 
     private final String key;
 
     BlackCardData(final String key) {
       this.key = key;
+    }
+
+    BlackCardData(final Enum<?> key) {
+      this.key = key.toString();
     }
 
     @Override
@@ -444,7 +486,8 @@ public class Constants {
    */
   public enum GameInfo {
     HOST("host"),
-    ID("id"),
+    @DuplicationAllowed
+    ID(AjaxRequest.GAME_ID),
     PLAYERS("players"),
     STATE("state");
 
@@ -452,6 +495,10 @@ public class Constants {
 
     GameInfo(final String key) {
       this.key = key;
+    }
+
+    GameInfo(final Enum<?> key) {
+      this.key = key.toString();
     }
 
     @Override
@@ -486,12 +533,12 @@ public class Constants {
    * do.
    */
   public enum GamePlayerStatus implements DoubleLocalizable {
-    HOST("host", "Host", "Wait for players then click Start Game."),
-    IDLE("idle", "", "Waiting for players..."),
-    JUDGE("judge", "Card Czar", "You are the Card Czar."),
-    JUDGING("judging", "Selecting", "Select a winning card."),
-    PLAYING("playing", "Playing", "Select a card to play."),
-    WINNER("winner", "Winner!", "You have won!");
+    HOST("status_host", "Host", "Wait for players then click Start Game."),
+    IDLE("status_idle", "", "Waiting for players..."),
+    JUDGE("status_judge", "Card Czar", "You are the Card Czar."),
+    JUDGING("status_judging", "Selecting", "Select a winning card."),
+    PLAYING("status_playing", "Playing", "Select a card to play."),
+    WINNER("status_winner", "Winner!", "You have won!");
 
     private final String status;
     private final String message;
@@ -524,5 +571,14 @@ public class Constants {
    */
   public class SessionAttribute {
     public static final String USER = "user";
+  }
+
+  /**
+   * Mark an enum value as being allowed to be the same as another enum value. Should only be used
+   * when another enum's value is directly used as the value. This will prevent the test from
+   * flagging it as an invalid reuse.
+   */
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface DuplicationAllowed {
   }
 }

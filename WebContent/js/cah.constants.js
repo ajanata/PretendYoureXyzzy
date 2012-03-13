@@ -10,7 +10,7 @@ cah.$.AjaxOperation.START_GAME = "start_game";
 cah.$.AjaxOperation.FIRST_LOAD = "firstload";
 cah.$.AjaxOperation.JUDGE_SELECT = "judge_select";
 cah.$.AjaxOperation.LOG_OUT = "logout";
-cah.$.AjaxOperation.GAME_LIST = "games";
+cah.$.AjaxOperation.GAME_LIST = "game_list";
 cah.$.AjaxOperation.GET_GAME_INFO = "get_game_info";
 cah.$.AjaxOperation.PLAY_CARD = "play_card";
 cah.$.AjaxOperation.CREATE_GAME = "create_game";
@@ -20,7 +20,7 @@ cah.$.AjaxOperation.JOIN_GAME = "join_game";
 cah.$.AjaxOperation.REGISTER = "register";
 cah.$.AjaxOperation.CHAT = "chat";
 cah.$.AjaxOperation.LEAVE_GAME = "leave_game";
-cah.$.AjaxOperation.NAMES = "names";
+cah.$.AjaxOperation.NAMES = "get_names";
 
 cah.$.AjaxRequest = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -60,7 +60,7 @@ cah.$.BlackCardData = function() {
 cah.$.BlackCardData.prototype.dummyForAutocomplete = undefined;
 cah.$.BlackCardData.TEXT = "text";
 cah.$.BlackCardData.PICK = "pick";
-cah.$.BlackCardData.ID = "id";
+cah.$.BlackCardData.ID = "card_id";
 cah.$.BlackCardData.DRAW = "draw";
 
 cah.$.DisconnectReason = function() {
@@ -138,7 +138,7 @@ cah.$.GameInfo.prototype.dummyForAutocomplete = undefined;
 cah.$.GameInfo.HOST = "host";
 cah.$.GameInfo.STATE = "state";
 cah.$.GameInfo.PLAYERS = "players";
-cah.$.GameInfo.ID = "id";
+cah.$.GameInfo.ID = "game_id";
 
 cah.$.GamePlayerInfo = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -152,26 +152,26 @@ cah.$.GamePlayerStatus = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.GamePlayerStatus.prototype.dummyForAutocomplete = undefined;
-cah.$.GamePlayerStatus.HOST = "host";
-cah.$.GamePlayerStatus.IDLE = "idle";
-cah.$.GamePlayerStatus.WINNER = "winner";
-cah.$.GamePlayerStatus.PLAYING = "playing";
-cah.$.GamePlayerStatus.JUDGE = "judge";
-cah.$.GamePlayerStatus.JUDGING = "judging";
+cah.$.GamePlayerStatus.HOST = "status_host";
+cah.$.GamePlayerStatus.IDLE = "status_idle";
+cah.$.GamePlayerStatus.WINNER = "status_winner";
+cah.$.GamePlayerStatus.PLAYING = "status_playing";
+cah.$.GamePlayerStatus.JUDGE = "status_judge";
+cah.$.GamePlayerStatus.JUDGING = "status_judging";
 cah.$.GamePlayerStatus_msg = {};
-cah.$.GamePlayerStatus_msg['playing'] = "Playing";
-cah.$.GamePlayerStatus_msg['idle'] = "";
-cah.$.GamePlayerStatus_msg['judging'] = "Selecting";
-cah.$.GamePlayerStatus_msg['host'] = "Host";
-cah.$.GamePlayerStatus_msg['judge'] = "Card Czar";
-cah.$.GamePlayerStatus_msg['winner'] = "Winner!";
+cah.$.GamePlayerStatus_msg['status_playing'] = "Playing";
+cah.$.GamePlayerStatus_msg['status_judge'] = "Card Czar";
+cah.$.GamePlayerStatus_msg['status_judging'] = "Selecting";
+cah.$.GamePlayerStatus_msg['status_host'] = "Host";
+cah.$.GamePlayerStatus_msg['status_idle'] = "";
+cah.$.GamePlayerStatus_msg['status_winner'] = "Winner!";
 cah.$.GamePlayerStatus_msg_2 = {};
-cah.$.GamePlayerStatus_msg_2['playing'] = "Select a card to play.";
-cah.$.GamePlayerStatus_msg_2['idle'] = "Waiting for players...";
-cah.$.GamePlayerStatus_msg_2['judging'] = "Select a winning card.";
-cah.$.GamePlayerStatus_msg_2['host'] = "Wait for players then click Start Game.";
-cah.$.GamePlayerStatus_msg_2['judge'] = "You are the Card Czar.";
-cah.$.GamePlayerStatus_msg_2['winner'] = "You have won!";
+cah.$.GamePlayerStatus_msg_2['status_playing'] = "Select a card to play.";
+cah.$.GamePlayerStatus_msg_2['status_judge'] = "You are the Card Czar.";
+cah.$.GamePlayerStatus_msg_2['status_judging'] = "Select a winning card.";
+cah.$.GamePlayerStatus_msg_2['status_host'] = "Wait for players then click Start Game.";
+cah.$.GamePlayerStatus_msg_2['status_idle'] = "Waiting for players...";
+cah.$.GamePlayerStatus_msg_2['status_winner'] = "You have won!";
 
 cah.$.GameState = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -243,5 +243,5 @@ cah.$.WhiteCardData = function() {
 };
 cah.$.WhiteCardData.prototype.dummyForAutocomplete = undefined;
 cah.$.WhiteCardData.TEXT = "text";
-cah.$.WhiteCardData.ID = "id";
+cah.$.WhiteCardData.ID = "card_id";
 
