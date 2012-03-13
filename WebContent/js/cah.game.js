@@ -599,6 +599,7 @@ cah.Game.prototype.updateGameStatus = function(data) {
   }
 
   if (data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.STATE] == cah.$.GameState.PLAYING) {
+    // TODO this is the cause of the cards blanking when someone joins or leaves
     $(".game_white_cards", this.element_).empty();
   }
 
