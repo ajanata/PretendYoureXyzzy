@@ -81,15 +81,15 @@ public class Constants {
     /**
      * The client was kicked by the server administrator.
      */
-    KICKED("kicked"),
+    KICKED("k"),
     /**
      * The user clicked the "log out" button.
      */
-    MANUAL("manual"),
+    MANUAL("man"),
     /**
      * The client failed to make any queries within the timeout window.
      */
-    PING_TIMEOUT("ping_timeout");
+    PING_TIMEOUT("pt");
 
     private final String reason;
 
@@ -105,6 +105,8 @@ public class Constants {
 
   /**
    * The next thing the client should do during reconnect phase.
+   * 
+   * Leaving these as longer strings as they are only used once per client.
    */
   public enum ReconnectNextAction {
     /**
@@ -133,27 +135,27 @@ public class Constants {
    * Valid client request operations.
    */
   public enum AjaxOperation {
-    ADMIN_SET_VERBOSE_LOG("set_verbose_log"),
-    CHAT("chat"),
-    CREATE_GAME("create_game"),
-    FIRST_LOAD("firstload"),
-    GAME_LIST("game_list"),
+    ADMIN_SET_VERBOSE_LOG("svl"),
+    CHAT("c"),
+    CREATE_GAME("cg"),
+    FIRST_LOAD("fl"),
+    GAME_LIST("ggl"),
     /**
      * Get all cards for a particular game: black, hand, and round white cards.
      */
-    GET_CARDS("get_cards"),
-    GET_GAME_INFO("get_game_info"),
-    JOIN_GAME("join_game"),
-    JUDGE_SELECT("judge_select"),
-    LEAVE_GAME("leave_game"),
-    LOG_OUT("logout"),
+    GET_CARDS("gc"),
+    GET_GAME_INFO("ggi"),
+    JOIN_GAME("jg"),
+    JUDGE_SELECT("js"),
+    LEAVE_GAME("lg"),
+    LOG_OUT("lo"),
     /**
      * Get the names of all clients connected to the server.
      */
-    NAMES("get_names"),
-    PLAY_CARD("play_card"),
-    REGISTER("register"),
-    START_GAME("start_game");
+    NAMES("gn"),
+    PLAY_CARD("pc"),
+    REGISTER("r"),
+    START_GAME("sg");
 
     private final String op;
 
@@ -171,12 +173,12 @@ public class Constants {
    * Parameters for client requests.
    */
   public enum AjaxRequest {
-    CARD_ID("card_id"),
-    GAME_ID("game_id"),
-    MESSAGE("message"),
-    NICKNAME("nickname"),
-    OP("op"),
-    SERIAL("serial");
+    CARD_ID("cid"),
+    GAME_ID("gid"),
+    MESSAGE("m"),
+    NICKNAME("n"),
+    OP("o"),
+    SERIAL("s");
 
     private final String field;
 
@@ -194,32 +196,32 @@ public class Constants {
    * Keys for client request responses.
    */
   public enum AjaxResponse implements ReturnableData {
-    BLACK_CARD("black_card"),
+    BLACK_CARD("bc"),
     @DuplicationAllowed
     CARD_ID(AjaxRequest.CARD_ID),
-    ERROR("error"),
-    ERROR_CODE("error_code"),
+    ERROR("e"),
+    ERROR_CODE("ec"),
     @DuplicationAllowed
     GAME_ID(AjaxRequest.GAME_ID),
-    GAME_INFO("game_info"),
-    GAMES("games"),
-    HAND("hand"),
+    GAME_INFO("gi"),
+    GAMES("gl"),
+    HAND("h"),
     /**
      * Whether this client is reconnecting or not.
      */
-    IN_PROGRESS("in_progress"),
-    MAX_GAMES("max_games"),
-    NAMES("names"),
+    IN_PROGRESS("ip"),
+    MAX_GAMES("mg"),
+    NAMES("nl"),
     /**
-     * Next thing that should be done in reconnect process.
+     * Next thing that should be done in reconnect process. Used once, long string OK.
      */
     NEXT("next"),
     @DuplicationAllowed
     NICKNAME(AjaxRequest.NICKNAME),
-    PLAYER_INFO("player_info"),
+    PLAYER_INFO("pi"),
     @DuplicationAllowed
     SERIAL(AjaxRequest.SERIAL),
-    WHITE_CARDS("white_cards");
+    WHITE_CARDS("wc");
 
     private final String field;
 
@@ -241,41 +243,41 @@ public class Constants {
    * Client request and long poll response errors.
    */
   public enum ErrorCode implements Localizable {
-    ACCESS_DENIED("access_denied", "Access denied."),
-    ALREADY_STARTED("already_started", "The game has already started."),
-    BAD_OP("bad_op", "Invalid operation."),
-    BAD_REQUEST("bad_req", "Bad request."),
-    CANNOT_JOIN_ANOTHER_GAME("cannot_join_another_game", "You cannot join another game."),
-    DO_NOT_HAVE_CARD("do_not_have_card", "You don't have that card."),
-    GAME_FULL("game_full", "That game is full. Join another."),
-    INVALID_CARD("invalid_card", "Invalid card specified."),
-    INVALID_GAME("invalid_game", "Invalid game specified."),
+    ACCESS_DENIED("ad", "Access denied."),
+    ALREADY_STARTED("as", "The game has already started."),
+    BAD_OP("bo", "Invalid operation."),
+    BAD_REQUEST("br", "Bad request."),
+    CANNOT_JOIN_ANOTHER_GAME("cjag", "You cannot join another game."),
+    DO_NOT_HAVE_CARD("dnhc", "You don't have that card."),
+    GAME_FULL("gf", "That game is full. Join another."),
+    INVALID_CARD("ic", "Invalid card specified."),
+    INVALID_GAME("ig", "Invalid game specified."),
     /**
      * TODO this probably should be pulled in from a static inside the RegisterHandler.
      */
-    INVALID_NICK("invalid_nick", "Nickname must contain only upper and lower case letters, " +
+    INVALID_NICK("in", "Nickname must contain only upper and lower case letters, " +
         "numbers, or underscores, must be 3 to 30 characters long, and must not start with a " +
         "number."),
     /**
      * TODO this probably should be pulled in from a static inside the ChatHandler.
      */
-    MESSAGE_TOO_LONG("msg_too_long", "Messages cannot be longer than 200 characters."),
-    NICK_IN_USE("nick_in_use", "Nickname is already in use."),
-    NO_CARD_SPECIFIED("no_card_spec", "No card specified."),
-    NO_GAME_SPECIFIED("no_game_spec", "No game specified."),
-    NO_MSG_SPECIFIED("no_msg_spec", "No message specified."),
-    NO_NICK_SPECIFIED("no_nick_spec", "No nickname specified."),
-    NO_SESSION("no_session", "Session not detected. Make sure you have cookies enabled."),
-    NOT_ENOUGH_PLAYERS("not_enough_players", "There are not enough players to start the game."),
-    NOT_GAME_HOST("not_game_host", "Only the game host can do that."),
-    NOT_IN_THAT_GAME("not_in_that_game", "You are not in that game."),
-    NOT_JUDGE("not_judge", "You aren't the judge."),
-    NOT_REGISTERED("not_registered", "Not registered. Refresh the page."),
-    NOT_YOUR_TURN("not_your_turn", "It is not your turn to play a card."),
-    OP_NOT_SPECIFIED("op_not_spec", "Operation not specified."),
-    SERVER_ERROR("server_error", "An error occured on the server."),
-    SESSION_EXPIRED("session_expired", "Your session has expired. Refresh the page."),
-    TOO_MANY_GAMES("too_many_games", "There are too many games already in progress. Either join " +
+    MESSAGE_TOO_LONG("mtl", "Messages cannot be longer than 200 characters."),
+    NICK_IN_USE("niu", "Nickname is already in use."),
+    NO_CARD_SPECIFIED("ncs", "No card specified."),
+    NO_GAME_SPECIFIED("ngs", "No game specified."),
+    NO_MSG_SPECIFIED("nms", "No message specified."),
+    NO_NICK_SPECIFIED("nns", "No nickname specified."),
+    NO_SESSION("ns", "Session not detected. Make sure you have cookies enabled."),
+    NOT_ENOUGH_PLAYERS("nep", "There are not enough players to start the game."),
+    NOT_GAME_HOST("ngh", "Only the game host can do that."),
+    NOT_IN_THAT_GAME("nitg", "You are not in that game."),
+    NOT_JUDGE("nj", "You aren't the judge."),
+    NOT_REGISTERED("nr", "Not registered. Refresh the page."),
+    NOT_YOUR_TURN("nyt", "It is not your turn to play a card."),
+    OP_NOT_SPECIFIED("ons", "Operation not specified."),
+    SERVER_ERROR("serr", "An error occured on the server."),
+    SESSION_EXPIRED("se", "Your session has expired. Refresh the page."),
+    TOO_MANY_GAMES("tmg", "There are too many games already in progress. Either join " +
         "an existing game, or wait for one to become available.");
 
     private final String code;
@@ -309,25 +311,25 @@ public class Constants {
   public enum LongPollEvent {
     @DuplicationAllowed
     CHAT(AjaxOperation.CHAT),
-    GAME_BLACK_RESHUFFLE("game_black_reshuffle"),
-    GAME_JUDGE_LEFT("game_judge_left"),
-    GAME_LIST_REFRESH("game_list_refresh"),
-    GAME_PLAYER_INFO_CHANGE("game_player_info_change"),
-    GAME_PLAYER_JOIN("game_player_join"),
-    GAME_PLAYER_LEAVE("game_player_leave"),
-    GAME_ROUND_COMPLETE("game_round_complete"),
-    GAME_STATE_CHANGE("game_state_change"),
-    GAME_WHITE_RESHUFFLE("game_white_reshuffle"),
-    HAND_DEAL("hand_deal"),
+    GAME_BLACK_RESHUFFLE("gbr"),
+    GAME_JUDGE_LEFT("gjl"),
+    GAME_LIST_REFRESH("glr"),
+    GAME_PLAYER_INFO_CHANGE("gpic"),
+    GAME_PLAYER_JOIN("gpj"),
+    GAME_PLAYER_LEAVE("gpl"),
+    GAME_ROUND_COMPLETE("grc"),
+    GAME_STATE_CHANGE("gsc"),
+    GAME_WHITE_RESHUFFLE("gwr"),
+    HAND_DEAL("hd"),
     @DuplicationAllowed
     KICKED(DisconnectReason.KICKED),
-    NEW_PLAYER("new_player"),
+    NEW_PLAYER("np"),
     /**
      * There has been no other action to inform the client about in a certain timeframe, so inform
      * the client that we have nothing to inform them so the client doesn't think we went away.
      */
-    NOOP("noop"),
-    PLAYER_LEAVE("player_leave");
+    NOOP("0"),
+    PLAYER_LEAVE("pl");
 
     private final String event;
 
@@ -355,20 +357,20 @@ public class Constants {
     ERROR(AjaxResponse.ERROR),
     @DuplicationAllowed
     ERROR_CODE(AjaxResponse.ERROR_CODE),
-    EVENT("event"),
+    EVENT("E"),
     /**
      * Player a chat message is from.
      */
-    FROM("from"),
+    FROM("f"),
     @DuplicationAllowed
     GAME_ID(AjaxResponse.GAME_ID),
-    GAME_STATE("game_state"),
+    GAME_STATE("gs"),
     @DuplicationAllowed
     HAND(AjaxResponse.HAND),
     /**
      * The delay until the next game round begins.
      */
-    INTERMISSION("intermission"),
+    INTERMISSION("i"),
     @DuplicationAllowed
     MESSAGE(AjaxRequest.MESSAGE),
     @DuplicationAllowed
@@ -378,12 +380,12 @@ public class Constants {
     /**
      * Reason why a player disconnected.
      */
-    REASON("reason"),
-    ROUND_WINNER("round_winner"),
-    TIMESTAMP("timestamp"),
+    REASON("qr"),
+    ROUND_WINNER("rw"),
+    TIMESTAMP("ts"),
     @DuplicationAllowed
     WHITE_CARDS(AjaxResponse.WHITE_CARDS),
-    WINNING_CARD("winning_card");
+    WINNING_CARD("WC");
 
     private final String field;
 
@@ -407,7 +409,7 @@ public class Constants {
   public enum WhiteCardData {
     @DuplicationAllowed
     ID(AjaxRequest.CARD_ID),
-    TEXT("text");
+    TEXT("T");
 
     private final String key;
 
@@ -429,10 +431,10 @@ public class Constants {
    * Data fields for black cards.
    */
   public enum BlackCardData {
-    DRAW("draw"),
+    DRAW("D"),
     @DuplicationAllowed
     ID(WhiteCardData.ID),
-    PICK("pick"),
+    PICK("PK"),
     @DuplicationAllowed
     TEXT(WhiteCardData.TEXT);
 
@@ -456,11 +458,11 @@ public class Constants {
    * A game's current state.
    */
   public enum GameState implements Localizable {
-    DEALING("dealing", "In Progress"),
-    JUDGING("judging", "In Progress"),
-    LOBBY("lobby", "Not Started"),
-    PLAYING("playing", "In Progress"),
-    ROUND_OVER("round_over", "In Progress");
+    DEALING("d", "In Progress"),
+    JUDGING("j", "In Progress"),
+    LOBBY("l", "Not Started"),
+    PLAYING("p", "In Progress"),
+    ROUND_OVER("ro", "In Progress");
 
     private final String state;
     private final String message;
@@ -485,11 +487,11 @@ public class Constants {
    * Fields for information about a game.
    */
   public enum GameInfo {
-    HOST("host"),
+    HOST("H"),
     @DuplicationAllowed
     ID(AjaxRequest.GAME_ID),
-    PLAYERS("players"),
-    STATE("state");
+    PLAYERS("P"),
+    STATE("S");
 
     private final String key;
 
@@ -511,9 +513,9 @@ public class Constants {
    * Keys for the information about players in a game.
    */
   public enum GamePlayerInfo {
-    NAME("name"),
-    SCORE("score"),
-    STATUS("status");
+    NAME("N"),
+    SCORE("sc"),
+    STATUS("st");
 
     private final String key;
 
@@ -533,12 +535,12 @@ public class Constants {
    * do.
    */
   public enum GamePlayerStatus implements DoubleLocalizable {
-    HOST("status_host", "Host", "Wait for players then click Start Game."),
-    IDLE("status_idle", "", "Waiting for players..."),
-    JUDGE("status_judge", "Card Czar", "You are the Card Czar."),
-    JUDGING("status_judging", "Selecting", "Select a winning card."),
-    PLAYING("status_playing", "Playing", "Select a card to play."),
-    WINNER("status_winner", "Winner!", "You have won!");
+    HOST("sh", "Host", "Wait for players then click Start Game."),
+    IDLE("si", "", "Waiting for players..."),
+    JUDGE("sj", "Card Czar", "You are the Card Czar."),
+    JUDGING("sjj", "Selecting", "Select a winning card."),
+    PLAYING("sp", "Playing", "Select a card to play."),
+    WINNER("sw", "Winner!", "You have won!");
 
     private final String status;
     private final String message;

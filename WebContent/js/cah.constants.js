@@ -6,230 +6,230 @@ cah.$.AjaxOperation = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.AjaxOperation.prototype.dummyForAutocomplete = undefined;
-cah.$.AjaxOperation.START_GAME = "start_game";
-cah.$.AjaxOperation.FIRST_LOAD = "firstload";
-cah.$.AjaxOperation.JUDGE_SELECT = "judge_select";
-cah.$.AjaxOperation.LOG_OUT = "logout";
-cah.$.AjaxOperation.GAME_LIST = "game_list";
-cah.$.AjaxOperation.GET_GAME_INFO = "get_game_info";
-cah.$.AjaxOperation.PLAY_CARD = "play_card";
-cah.$.AjaxOperation.CREATE_GAME = "create_game";
-cah.$.AjaxOperation.ADMIN_SET_VERBOSE_LOG = "set_verbose_log";
-cah.$.AjaxOperation.GET_CARDS = "get_cards";
-cah.$.AjaxOperation.JOIN_GAME = "join_game";
-cah.$.AjaxOperation.REGISTER = "register";
-cah.$.AjaxOperation.CHAT = "chat";
-cah.$.AjaxOperation.LEAVE_GAME = "leave_game";
-cah.$.AjaxOperation.NAMES = "get_names";
+cah.$.AjaxOperation.START_GAME = "sg";
+cah.$.AjaxOperation.FIRST_LOAD = "fl";
+cah.$.AjaxOperation.JUDGE_SELECT = "js";
+cah.$.AjaxOperation.LOG_OUT = "lo";
+cah.$.AjaxOperation.GAME_LIST = "ggl";
+cah.$.AjaxOperation.GET_GAME_INFO = "ggi";
+cah.$.AjaxOperation.PLAY_CARD = "pc";
+cah.$.AjaxOperation.CREATE_GAME = "cg";
+cah.$.AjaxOperation.ADMIN_SET_VERBOSE_LOG = "svl";
+cah.$.AjaxOperation.GET_CARDS = "gc";
+cah.$.AjaxOperation.JOIN_GAME = "jg";
+cah.$.AjaxOperation.REGISTER = "r";
+cah.$.AjaxOperation.CHAT = "c";
+cah.$.AjaxOperation.LEAVE_GAME = "lg";
+cah.$.AjaxOperation.NAMES = "gn";
 
 cah.$.AjaxRequest = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.AjaxRequest.prototype.dummyForAutocomplete = undefined;
-cah.$.AjaxRequest.MESSAGE = "message";
-cah.$.AjaxRequest.CARD_ID = "card_id";
-cah.$.AjaxRequest.GAME_ID = "game_id";
-cah.$.AjaxRequest.SERIAL = "serial";
-cah.$.AjaxRequest.OP = "op";
-cah.$.AjaxRequest.NICKNAME = "nickname";
+cah.$.AjaxRequest.MESSAGE = "m";
+cah.$.AjaxRequest.CARD_ID = "cid";
+cah.$.AjaxRequest.GAME_ID = "gid";
+cah.$.AjaxRequest.SERIAL = "s";
+cah.$.AjaxRequest.OP = "o";
+cah.$.AjaxRequest.NICKNAME = "n";
 
 cah.$.AjaxResponse = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.AjaxResponse.prototype.dummyForAutocomplete = undefined;
-cah.$.AjaxResponse.WHITE_CARDS = "white_cards";
-cah.$.AjaxResponse.GAME_ID = "game_id";
-cah.$.AjaxResponse.HAND = "hand";
-cah.$.AjaxResponse.PLAYER_INFO = "player_info";
-cah.$.AjaxResponse.BLACK_CARD = "black_card";
-cah.$.AjaxResponse.IN_PROGRESS = "in_progress";
-cah.$.AjaxResponse.GAMES = "games";
-cah.$.AjaxResponse.NICKNAME = "nickname";
-cah.$.AjaxResponse.CARD_ID = "card_id";
+cah.$.AjaxResponse.WHITE_CARDS = "wc";
+cah.$.AjaxResponse.GAME_ID = "gid";
+cah.$.AjaxResponse.HAND = "h";
+cah.$.AjaxResponse.PLAYER_INFO = "pi";
+cah.$.AjaxResponse.BLACK_CARD = "bc";
+cah.$.AjaxResponse.IN_PROGRESS = "ip";
+cah.$.AjaxResponse.GAMES = "gl";
+cah.$.AjaxResponse.NICKNAME = "n";
+cah.$.AjaxResponse.CARD_ID = "cid";
 cah.$.AjaxResponse.NEXT = "next";
-cah.$.AjaxResponse.GAME_INFO = "game_info";
-cah.$.AjaxResponse.ERROR = "error";
-cah.$.AjaxResponse.ERROR_CODE = "error_code";
-cah.$.AjaxResponse.SERIAL = "serial";
-cah.$.AjaxResponse.MAX_GAMES = "max_games";
-cah.$.AjaxResponse.NAMES = "names";
+cah.$.AjaxResponse.GAME_INFO = "gi";
+cah.$.AjaxResponse.ERROR = "e";
+cah.$.AjaxResponse.ERROR_CODE = "ec";
+cah.$.AjaxResponse.SERIAL = "s";
+cah.$.AjaxResponse.MAX_GAMES = "mg";
+cah.$.AjaxResponse.NAMES = "nl";
 
 cah.$.BlackCardData = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.BlackCardData.prototype.dummyForAutocomplete = undefined;
-cah.$.BlackCardData.TEXT = "text";
-cah.$.BlackCardData.PICK = "pick";
-cah.$.BlackCardData.ID = "card_id";
-cah.$.BlackCardData.DRAW = "draw";
+cah.$.BlackCardData.TEXT = "T";
+cah.$.BlackCardData.PICK = "PK";
+cah.$.BlackCardData.ID = "cid";
+cah.$.BlackCardData.DRAW = "D";
 
 cah.$.DisconnectReason = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.DisconnectReason.prototype.dummyForAutocomplete = undefined;
-cah.$.DisconnectReason.PING_TIMEOUT = "ping_timeout";
-cah.$.DisconnectReason.KICKED = "kicked";
-cah.$.DisconnectReason.MANUAL = "manual";
+cah.$.DisconnectReason.PING_TIMEOUT = "pt";
+cah.$.DisconnectReason.KICKED = "k";
+cah.$.DisconnectReason.MANUAL = "man";
 
 cah.$.ErrorCode = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.ErrorCode.prototype.dummyForAutocomplete = undefined;
-cah.$.ErrorCode.TOO_MANY_GAMES = "too_many_games";
-cah.$.ErrorCode.NO_CARD_SPECIFIED = "no_card_spec";
-cah.$.ErrorCode.ACCESS_DENIED = "access_denied";
-cah.$.ErrorCode.NOT_GAME_HOST = "not_game_host";
-cah.$.ErrorCode.CANNOT_JOIN_ANOTHER_GAME = "cannot_join_another_game";
-cah.$.ErrorCode.INVALID_CARD = "invalid_card";
-cah.$.ErrorCode.NO_GAME_SPECIFIED = "no_game_spec";
-cah.$.ErrorCode.SESSION_EXPIRED = "session_expired";
-cah.$.ErrorCode.BAD_OP = "bad_op";
-cah.$.ErrorCode.NO_SESSION = "no_session";
-cah.$.ErrorCode.NOT_REGISTERED = "not_registered";
-cah.$.ErrorCode.NOT_JUDGE = "not_judge";
-cah.$.ErrorCode.OP_NOT_SPECIFIED = "op_not_spec";
-cah.$.ErrorCode.NOT_IN_THAT_GAME = "not_in_that_game";
-cah.$.ErrorCode.NICK_IN_USE = "nick_in_use";
-cah.$.ErrorCode.SERVER_ERROR = "server_error";
-cah.$.ErrorCode.GAME_FULL = "game_full";
-cah.$.ErrorCode.NO_NICK_SPECIFIED = "no_nick_spec";
-cah.$.ErrorCode.NOT_YOUR_TURN = "not_your_turn";
-cah.$.ErrorCode.INVALID_NICK = "invalid_nick";
-cah.$.ErrorCode.ALREADY_STARTED = "already_started";
-cah.$.ErrorCode.BAD_REQUEST = "bad_req";
-cah.$.ErrorCode.DO_NOT_HAVE_CARD = "do_not_have_card";
-cah.$.ErrorCode.MESSAGE_TOO_LONG = "msg_too_long";
-cah.$.ErrorCode.NOT_ENOUGH_PLAYERS = "not_enough_players";
-cah.$.ErrorCode.INVALID_GAME = "invalid_game";
-cah.$.ErrorCode.NO_MSG_SPECIFIED = "no_msg_spec";
+cah.$.ErrorCode.TOO_MANY_GAMES = "tmg";
+cah.$.ErrorCode.NO_CARD_SPECIFIED = "ncs";
+cah.$.ErrorCode.ACCESS_DENIED = "ad";
+cah.$.ErrorCode.NOT_GAME_HOST = "ngh";
+cah.$.ErrorCode.CANNOT_JOIN_ANOTHER_GAME = "cjag";
+cah.$.ErrorCode.INVALID_CARD = "ic";
+cah.$.ErrorCode.NO_GAME_SPECIFIED = "ngs";
+cah.$.ErrorCode.SESSION_EXPIRED = "se";
+cah.$.ErrorCode.BAD_OP = "bo";
+cah.$.ErrorCode.NO_SESSION = "ns";
+cah.$.ErrorCode.NOT_REGISTERED = "nr";
+cah.$.ErrorCode.NOT_JUDGE = "nj";
+cah.$.ErrorCode.OP_NOT_SPECIFIED = "ons";
+cah.$.ErrorCode.NOT_IN_THAT_GAME = "nitg";
+cah.$.ErrorCode.NICK_IN_USE = "niu";
+cah.$.ErrorCode.SERVER_ERROR = "serr";
+cah.$.ErrorCode.GAME_FULL = "gf";
+cah.$.ErrorCode.NO_NICK_SPECIFIED = "nns";
+cah.$.ErrorCode.NOT_YOUR_TURN = "nyt";
+cah.$.ErrorCode.INVALID_NICK = "in";
+cah.$.ErrorCode.ALREADY_STARTED = "as";
+cah.$.ErrorCode.BAD_REQUEST = "br";
+cah.$.ErrorCode.DO_NOT_HAVE_CARD = "dnhc";
+cah.$.ErrorCode.MESSAGE_TOO_LONG = "mtl";
+cah.$.ErrorCode.NOT_ENOUGH_PLAYERS = "nep";
+cah.$.ErrorCode.INVALID_GAME = "ig";
+cah.$.ErrorCode.NO_MSG_SPECIFIED = "nms";
 cah.$.ErrorCode_msg = {};
-cah.$.ErrorCode_msg['bad_op'] = "Invalid operation.";
-cah.$.ErrorCode_msg['not_registered'] = "Not registered. Refresh the page.";
-cah.$.ErrorCode_msg['server_error'] = "An error occured on the server.";
-cah.$.ErrorCode_msg['not_enough_players'] = "There are not enough players to start the game.";
-cah.$.ErrorCode_msg['session_expired'] = "Your session has expired. Refresh the page.";
-cah.$.ErrorCode_msg['invalid_game'] = "Invalid game specified.";
-cah.$.ErrorCode_msg['not_judge'] = "You aren't the judge.";
-cah.$.ErrorCode_msg['no_card_spec'] = "No card specified.";
-cah.$.ErrorCode_msg['game_full'] = "That game is full. Join another.";
-cah.$.ErrorCode_msg['too_many_games'] = "There are too many games already in progress. Either join an existing game, or wait for one to become available.";
-cah.$.ErrorCode_msg['no_session'] = "Session not detected. Make sure you have cookies enabled.";
-cah.$.ErrorCode_msg['not_your_turn'] = "It is not your turn to play a card.";
-cah.$.ErrorCode_msg['bad_req'] = "Bad request.";
-cah.$.ErrorCode_msg['cannot_join_another_game'] = "You cannot join another game.";
-cah.$.ErrorCode_msg['no_msg_spec'] = "No message specified.";
-cah.$.ErrorCode_msg['not_in_that_game'] = "You are not in that game.";
-cah.$.ErrorCode_msg['msg_too_long'] = "Messages cannot be longer than 200 characters.";
-cah.$.ErrorCode_msg['do_not_have_card'] = "You don't have that card.";
-cah.$.ErrorCode_msg['no_game_spec'] = "No game specified.";
-cah.$.ErrorCode_msg['access_denied'] = "Access denied.";
-cah.$.ErrorCode_msg['invalid_nick'] = "Nickname must contain only upper and lower case letters, numbers, or underscores, must be 3 to 30 characters long, and must not start with a number.";
-cah.$.ErrorCode_msg['no_nick_spec'] = "No nickname specified.";
-cah.$.ErrorCode_msg['nick_in_use'] = "Nickname is already in use.";
-cah.$.ErrorCode_msg['not_game_host'] = "Only the game host can do that.";
-cah.$.ErrorCode_msg['invalid_card'] = "Invalid card specified.";
-cah.$.ErrorCode_msg['op_not_spec'] = "Operation not specified.";
-cah.$.ErrorCode_msg['already_started'] = "The game has already started.";
+cah.$.ErrorCode_msg['tmg'] = "There are too many games already in progress. Either join an existing game, or wait for one to become available.";
+cah.$.ErrorCode_msg['ncs'] = "No card specified.";
+cah.$.ErrorCode_msg['ns'] = "Session not detected. Make sure you have cookies enabled.";
+cah.$.ErrorCode_msg['nr'] = "Not registered. Refresh the page.";
+cah.$.ErrorCode_msg['nitg'] = "You are not in that game.";
+cah.$.ErrorCode_msg['nep'] = "There are not enough players to start the game.";
+cah.$.ErrorCode_msg['nyt'] = "It is not your turn to play a card.";
+cah.$.ErrorCode_msg['mtl'] = "Messages cannot be longer than 200 characters.";
+cah.$.ErrorCode_msg['gf'] = "That game is full. Join another.";
+cah.$.ErrorCode_msg['br'] = "Bad request.";
+cah.$.ErrorCode_msg['ngs'] = "No game specified.";
+cah.$.ErrorCode_msg['ic'] = "Invalid card specified.";
+cah.$.ErrorCode_msg['bo'] = "Invalid operation.";
+cah.$.ErrorCode_msg['dnhc'] = "You don't have that card.";
+cah.$.ErrorCode_msg['cjag'] = "You cannot join another game.";
+cah.$.ErrorCode_msg['ons'] = "Operation not specified.";
+cah.$.ErrorCode_msg['ig'] = "Invalid game specified.";
+cah.$.ErrorCode_msg['nns'] = "No nickname specified.";
+cah.$.ErrorCode_msg['ngh'] = "Only the game host can do that.";
+cah.$.ErrorCode_msg['serr'] = "An error occured on the server.";
+cah.$.ErrorCode_msg['as'] = "The game has already started.";
+cah.$.ErrorCode_msg['se'] = "Your session has expired. Refresh the page.";
+cah.$.ErrorCode_msg['in'] = "Nickname must contain only upper and lower case letters, numbers, or underscores, must be 3 to 30 characters long, and must not start with a number.";
+cah.$.ErrorCode_msg['nms'] = "No message specified.";
+cah.$.ErrorCode_msg['niu'] = "Nickname is already in use.";
+cah.$.ErrorCode_msg['ad'] = "Access denied.";
+cah.$.ErrorCode_msg['nj'] = "You aren't the judge.";
 
 cah.$.GameInfo = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.GameInfo.prototype.dummyForAutocomplete = undefined;
-cah.$.GameInfo.HOST = "host";
-cah.$.GameInfo.STATE = "state";
-cah.$.GameInfo.PLAYERS = "players";
-cah.$.GameInfo.ID = "game_id";
+cah.$.GameInfo.HOST = "H";
+cah.$.GameInfo.STATE = "S";
+cah.$.GameInfo.PLAYERS = "P";
+cah.$.GameInfo.ID = "gid";
 
 cah.$.GamePlayerInfo = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.GamePlayerInfo.prototype.dummyForAutocomplete = undefined;
-cah.$.GamePlayerInfo.NAME = "name";
-cah.$.GamePlayerInfo.SCORE = "score";
-cah.$.GamePlayerInfo.STATUS = "status";
+cah.$.GamePlayerInfo.NAME = "N";
+cah.$.GamePlayerInfo.SCORE = "sc";
+cah.$.GamePlayerInfo.STATUS = "st";
 
 cah.$.GamePlayerStatus = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.GamePlayerStatus.prototype.dummyForAutocomplete = undefined;
-cah.$.GamePlayerStatus.HOST = "status_host";
-cah.$.GamePlayerStatus.IDLE = "status_idle";
-cah.$.GamePlayerStatus.WINNER = "status_winner";
-cah.$.GamePlayerStatus.PLAYING = "status_playing";
-cah.$.GamePlayerStatus.JUDGE = "status_judge";
-cah.$.GamePlayerStatus.JUDGING = "status_judging";
+cah.$.GamePlayerStatus.HOST = "sh";
+cah.$.GamePlayerStatus.IDLE = "si";
+cah.$.GamePlayerStatus.WINNER = "sw";
+cah.$.GamePlayerStatus.PLAYING = "sp";
+cah.$.GamePlayerStatus.JUDGE = "sj";
+cah.$.GamePlayerStatus.JUDGING = "sjj";
 cah.$.GamePlayerStatus_msg = {};
-cah.$.GamePlayerStatus_msg['status_playing'] = "Playing";
-cah.$.GamePlayerStatus_msg['status_judge'] = "Card Czar";
-cah.$.GamePlayerStatus_msg['status_judging'] = "Selecting";
-cah.$.GamePlayerStatus_msg['status_host'] = "Host";
-cah.$.GamePlayerStatus_msg['status_idle'] = "";
-cah.$.GamePlayerStatus_msg['status_winner'] = "Winner!";
+cah.$.GamePlayerStatus_msg['sp'] = "Playing";
+cah.$.GamePlayerStatus_msg['sh'] = "Host";
+cah.$.GamePlayerStatus_msg['sw'] = "Winner!";
+cah.$.GamePlayerStatus_msg['sj'] = "Card Czar";
+cah.$.GamePlayerStatus_msg['sjj'] = "Selecting";
+cah.$.GamePlayerStatus_msg['si'] = "";
 cah.$.GamePlayerStatus_msg_2 = {};
-cah.$.GamePlayerStatus_msg_2['status_playing'] = "Select a card to play.";
-cah.$.GamePlayerStatus_msg_2['status_judge'] = "You are the Card Czar.";
-cah.$.GamePlayerStatus_msg_2['status_judging'] = "Select a winning card.";
-cah.$.GamePlayerStatus_msg_2['status_host'] = "Wait for players then click Start Game.";
-cah.$.GamePlayerStatus_msg_2['status_idle'] = "Waiting for players...";
-cah.$.GamePlayerStatus_msg_2['status_winner'] = "You have won!";
+cah.$.GamePlayerStatus_msg_2['sp'] = "Select a card to play.";
+cah.$.GamePlayerStatus_msg_2['sh'] = "Wait for players then click Start Game.";
+cah.$.GamePlayerStatus_msg_2['sw'] = "You have won!";
+cah.$.GamePlayerStatus_msg_2['sj'] = "You are the Card Czar.";
+cah.$.GamePlayerStatus_msg_2['sjj'] = "Select a winning card.";
+cah.$.GamePlayerStatus_msg_2['si'] = "Waiting for players...";
 
 cah.$.GameState = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.GameState.prototype.dummyForAutocomplete = undefined;
-cah.$.GameState.PLAYING = "playing";
-cah.$.GameState.ROUND_OVER = "round_over";
-cah.$.GameState.LOBBY = "lobby";
-cah.$.GameState.JUDGING = "judging";
-cah.$.GameState.DEALING = "dealing";
+cah.$.GameState.PLAYING = "p";
+cah.$.GameState.ROUND_OVER = "ro";
+cah.$.GameState.LOBBY = "l";
+cah.$.GameState.JUDGING = "j";
+cah.$.GameState.DEALING = "d";
 cah.$.GameState_msg = {};
-cah.$.GameState_msg['playing'] = "In Progress";
-cah.$.GameState_msg['judging'] = "In Progress";
-cah.$.GameState_msg['lobby'] = "Not Started";
-cah.$.GameState_msg['dealing'] = "In Progress";
-cah.$.GameState_msg['round_over'] = "In Progress";
+cah.$.GameState_msg['ro'] = "In Progress";
+cah.$.GameState_msg['d'] = "In Progress";
+cah.$.GameState_msg['p'] = "In Progress";
+cah.$.GameState_msg['l'] = "Not Started";
+cah.$.GameState_msg['j'] = "In Progress";
 
 cah.$.LongPollEvent = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.LongPollEvent.prototype.dummyForAutocomplete = undefined;
-cah.$.LongPollEvent.KICKED = "kicked";
-cah.$.LongPollEvent.GAME_PLAYER_LEAVE = "game_player_leave";
-cah.$.LongPollEvent.NEW_PLAYER = "new_player";
-cah.$.LongPollEvent.GAME_PLAYER_JOIN = "game_player_join";
-cah.$.LongPollEvent.GAME_LIST_REFRESH = "game_list_refresh";
-cah.$.LongPollEvent.GAME_ROUND_COMPLETE = "game_round_complete";
-cah.$.LongPollEvent.NOOP = "noop";
-cah.$.LongPollEvent.GAME_PLAYER_INFO_CHANGE = "game_player_info_change";
-cah.$.LongPollEvent.GAME_BLACK_RESHUFFLE = "game_black_reshuffle";
-cah.$.LongPollEvent.GAME_WHITE_RESHUFFLE = "game_white_reshuffle";
-cah.$.LongPollEvent.GAME_STATE_CHANGE = "game_state_change";
-cah.$.LongPollEvent.PLAYER_LEAVE = "player_leave";
-cah.$.LongPollEvent.CHAT = "chat";
-cah.$.LongPollEvent.HAND_DEAL = "hand_deal";
-cah.$.LongPollEvent.GAME_JUDGE_LEFT = "game_judge_left";
+cah.$.LongPollEvent.KICKED = "k";
+cah.$.LongPollEvent.GAME_PLAYER_LEAVE = "gpl";
+cah.$.LongPollEvent.NEW_PLAYER = "np";
+cah.$.LongPollEvent.GAME_PLAYER_JOIN = "gpj";
+cah.$.LongPollEvent.GAME_LIST_REFRESH = "glr";
+cah.$.LongPollEvent.GAME_ROUND_COMPLETE = "grc";
+cah.$.LongPollEvent.NOOP = "0";
+cah.$.LongPollEvent.GAME_PLAYER_INFO_CHANGE = "gpic";
+cah.$.LongPollEvent.GAME_BLACK_RESHUFFLE = "gbr";
+cah.$.LongPollEvent.GAME_WHITE_RESHUFFLE = "gwr";
+cah.$.LongPollEvent.GAME_STATE_CHANGE = "gsc";
+cah.$.LongPollEvent.PLAYER_LEAVE = "pl";
+cah.$.LongPollEvent.CHAT = "c";
+cah.$.LongPollEvent.HAND_DEAL = "hd";
+cah.$.LongPollEvent.GAME_JUDGE_LEFT = "gjl";
 
 cah.$.LongPollResponse = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.LongPollResponse.prototype.dummyForAutocomplete = undefined;
-cah.$.LongPollResponse.WHITE_CARDS = "white_cards";
-cah.$.LongPollResponse.GAME_ID = "game_id";
-cah.$.LongPollResponse.REASON = "reason";
-cah.$.LongPollResponse.HAND = "hand";
-cah.$.LongPollResponse.INTERMISSION = "intermission";
-cah.$.LongPollResponse.PLAYER_INFO = "player_info";
-cah.$.LongPollResponse.BLACK_CARD = "black_card";
-cah.$.LongPollResponse.WINNING_CARD = "winning_card";
-cah.$.LongPollResponse.GAME_STATE = "game_state";
-cah.$.LongPollResponse.NICKNAME = "nickname";
-cah.$.LongPollResponse.MESSAGE = "message";
-cah.$.LongPollResponse.ERROR = "error";
-cah.$.LongPollResponse.EVENT = "event";
-cah.$.LongPollResponse.FROM = "from";
-cah.$.LongPollResponse.ERROR_CODE = "error_code";
-cah.$.LongPollResponse.TIMESTAMP = "timestamp";
-cah.$.LongPollResponse.ROUND_WINNER = "round_winner";
+cah.$.LongPollResponse.WHITE_CARDS = "wc";
+cah.$.LongPollResponse.GAME_ID = "gid";
+cah.$.LongPollResponse.REASON = "qr";
+cah.$.LongPollResponse.HAND = "h";
+cah.$.LongPollResponse.INTERMISSION = "i";
+cah.$.LongPollResponse.PLAYER_INFO = "pi";
+cah.$.LongPollResponse.BLACK_CARD = "bc";
+cah.$.LongPollResponse.WINNING_CARD = "WC";
+cah.$.LongPollResponse.GAME_STATE = "gs";
+cah.$.LongPollResponse.NICKNAME = "n";
+cah.$.LongPollResponse.MESSAGE = "m";
+cah.$.LongPollResponse.ERROR = "e";
+cah.$.LongPollResponse.EVENT = "E";
+cah.$.LongPollResponse.FROM = "f";
+cah.$.LongPollResponse.ERROR_CODE = "ec";
+cah.$.LongPollResponse.TIMESTAMP = "ts";
+cah.$.LongPollResponse.ROUND_WINNER = "rw";
 
 cah.$.ReconnectNextAction = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -242,6 +242,6 @@ cah.$.WhiteCardData = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.WhiteCardData.prototype.dummyForAutocomplete = undefined;
-cah.$.WhiteCardData.TEXT = "text";
-cah.$.WhiteCardData.ID = "card_id";
+cah.$.WhiteCardData.TEXT = "T";
+cah.$.WhiteCardData.ID = "cid";
 
