@@ -364,6 +364,7 @@ span.debug {
   margin-top: 15px;
   min-width: 600px;
   cursor: pointer;
+  z-index: 200;
 }
 
 .game_white_cards_binder {
