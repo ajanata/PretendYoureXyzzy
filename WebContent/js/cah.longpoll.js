@@ -28,7 +28,7 @@
  */
 
 cah.longpoll = {};
-cah.longpoll.TIMEOUT = 2 * 60 * 1000;
+cah.longpoll.TIMEOUT = 45 * 1000;
 // cah.longpoll.TIMEOUT = 30 * 1000;
 
 /**

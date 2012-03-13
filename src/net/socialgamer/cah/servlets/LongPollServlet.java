@@ -38,7 +38,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
@@ -61,21 +60,21 @@ public class LongPollServlet extends CahServlet {
   /**
    * Minimum amount of time before timing out and returning a no-op, in nanoseconds.
    */
-  private static final long TIMEOUT_BASE = 60 * 1000 * 1000;
+  private static final long TIMEOUT_BASE = 20 * 1000 * 1000;
   //  private static final long TIMEOUT_BASE = 10 * 1000 * 1000;
 
   /**
    * Randomness factor added to minimum timeout duration, in nanoseconds. The maximum timeout delay
    * will be TIMEOUT_BASE + TIMEOUT_RANDOMNESS - 1.
    */
-  private static final double TIMEOUT_RANDOMNESS = 20 * 1000 * 1000;
+  private static final double TIMEOUT_RANDOMNESS = 5 * 1000 * 1000;
   //  private static final double TIMEOUT_RANDOMNESS = 0;
 
   /**
    * The maximum number of messages which will be returned to a client during a single poll
    * operation.
    */
-  private static final int MAX_MESSAGES_PER_POLL = 5;
+  private static final int MAX_MESSAGES_PER_POLL = 10;
 
   /**
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

@@ -51,8 +51,7 @@ public class ConnectedUsers {
   /**
    * Duration of a ping timeout, in nanoseconds.
    */
-  public static final long PING_TIMEOUT = 3L * 60L * 1000L * 1000000L;
-  //  public static final long PING_TIMEOUT = 30L * 1000L * 1000000L;
+  public static final long PING_TIMEOUT = 45L * 1000L * 1000000L;
 
   private final Map<String, User> users = new HashMap<String, User>();
 
@@ -75,7 +74,7 @@ public class ConnectedUsers {
     synchronized (users) {
       users.put(user.getNickname(), user);
       final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-      data.put(LongPollResponse.EVENT, "new_player");
+      data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
       data.put(LongPollResponse.NICKNAME, user.getNickname());
       broadcastToAll(MessageType.PLAYER_EVENT, data);
     }
