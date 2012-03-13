@@ -106,6 +106,9 @@ function chat_keyup(e) {
  */
 function chatsubmit_click() {
   var text = $.trim($("#chat").val());
+  if (text == "") {
+    return;
+  }
   // TODO when I get multiple channels working, this needs to know active and pass it
   cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text).run();
   cah.log.status("<" + cah.nickname + "> " + text);
