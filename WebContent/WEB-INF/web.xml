@@ -41,4 +41,16 @@
   <listener>
     <listener-class>net.socialgamer.cah.StartupUtils</listener-class>
   </listener>
+  <filter>
+    <filter-name>SetCacheControl</filter-name>
+    <filter-class>net.socialgamer.cah.CacheControlFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>SetCacheControl</filter-name>
+    <url-pattern>/js/*</url-pattern>
+    <url-pattern>*.js</url-pattern>
+    <url-pattern>*.css</url-pattern>
+    <url-pattern>*.html</url-pattern>
+    <url-pattern>*.jsp</url-pattern>
+  </filter-mapping>
 </web-app>
