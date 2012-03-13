@@ -48,8 +48,8 @@ to, for instance, display the number of connected players.
 <p>Known issues:</p>
 <ul>
   <li><strong>Do not open the game more than once in the same browser.</strong> Neither instances
-  will receive all data from the server, and you will not be able to play. I'm not sure how I'm
-  going to prevent this yet.</li>
+  will receive all data from the server, and you will not be able to play. I have an idea on how to
+  fix this, but I haven't had time to do so.</li>
   <li>This game was extensively tested in <a href="http://google.com/chrome">Google Chrome</a>.
   It should work in all recent versions of major browsers, but it may not look 100% as intended. If
   you find a major issue, please
@@ -87,26 +87,25 @@ to, for instance, display the number of connected players.
 	    <li>Also, you cannot un-do your first (or second) card: Once it's played, it's played.</li>
 	    <li>While judging, only one card will be highlighted. It does not matter which card in a group
 	    you click, the game will figure it out.</li>
-	    <li>I have not tried to make a 9-way Pick 3 result yet. It may be very hard to read. I will
-	    tweak the scaling on the cards if necessary.</li>
+	    <li>I know that when you have a lot of players, especially with Pick 2 or Pick 3, it gets very
+      hard to read, and cards overlap (and underlap) your hard, and are hard to click sometimes.
+      I'll work on this soon. You can resize the window to try to help if you're having problems
+      for now.</li>
 	  </ul>
   </li>
   <li>All games and the main lobby share the same chat.</li>
   <li>There is no play timer to keep the game moving if one person goes idle. However, if their
-  browser crashes or they lose connection, they will be removed from the game after approximately 3
-  minutes.</li>
+  browser crashes or they lose connection, they will be removed from the game after approximately 45
+  seconds. An AFK timer is near the top of the priority list to add.</li>
   <li>The first player to 8 Awesome Points wins. This is currently hard-coded, but you will be able
   to change it later.</li>
   <li>You can't bet Awesome Points to play another card, and I am unsure if I will add this.</li>
 </ul>
 <p>Future enhancements:</p>
 <ul>
-  <li>There will be a button to see the result of the previous round eventually.</li>
   <li>There will be host options to limit the number of players and set the target score soon.</li>
   <li>There will be a timer to keep the game moving if somebody goes AFK soon.</li>
   <li>There may be an option to display who played every card.</li>
-  <li>There will be improved status information, so it will be easier to tell who is the Card Czar.
-  </li>
   <li>A registration system and long-term statistics tracking may be added at some point.</li>
   <li>Support for custom Black and White cards will also likely be added, with a game host option to
   use them or just the stock cards.</li>
