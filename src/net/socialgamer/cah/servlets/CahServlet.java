@@ -36,14 +36,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.socialgamer.cah.Constants;
-import net.socialgamer.cah.StartupUtils;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.SessionAttribute;
+import net.socialgamer.cah.StartupUtils;
 import net.socialgamer.cah.data.User;
 
 import org.json.simple.JSONObject;

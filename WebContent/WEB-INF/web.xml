@@ -8,19 +8,19 @@
   </welcome-file-list>
   <servlet>
     <servlet-name>TestServlet</servlet-name>
-    <servlet-class>net.socialgamer.cah.TestServlet</servlet-class>
+    <servlet-class>net.socialgamer.cah.servlets.TestServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>LongPollServlet</servlet-name>
-    <servlet-class>net.socialgamer.cah.LongPollServlet</servlet-class>
+    <servlet-class>net.socialgamer.cah.servlets.LongPollServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>AjaxServlet</servlet-name>
-    <servlet-class>net.socialgamer.cah.AjaxServlet</servlet-class>
+    <servlet-class>net.socialgamer.cah.servlets.AjaxServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>Schema</servlet-name>
-    <servlet-class>net.socialgamer.cah.Schema</servlet-class>
+    <servlet-class>net.socialgamer.cah.servlets.Schema</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>TestServlet</servlet-name>
@@ -47,10 +47,6 @@
   </filter>
   <filter-mapping>
     <filter-name>SetCacheControl</filter-name>
-    <url-pattern>/js/*</url-pattern>
-    <url-pattern>*.js</url-pattern>
-    <url-pattern>*.css</url-pattern>
-    <url-pattern>*.html</url-pattern>
-    <url-pattern>*.jsp</url-pattern>
+    <url-pattern>/*</url-pattern>
   </filter-mapping>
 </web-app>

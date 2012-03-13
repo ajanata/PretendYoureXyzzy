@@ -328,7 +328,7 @@ public class Constants {
      * There has been no other action to inform the client about in a certain timeframe, so inform
      * the client that we have nothing to inform them so the client doesn't think we went away.
      */
-    NOOP("0"),
+    NOOP("_"),
     PLAYER_LEAVE("pl");
 
     private final String event;

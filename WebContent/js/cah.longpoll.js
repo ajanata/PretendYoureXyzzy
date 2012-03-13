@@ -61,6 +61,7 @@ cah.longpoll.EventHandlers = {};
 cah.longpoll.longPoll = function() {
   cah.log.debug("starting long poll");
   $.ajax({
+    cache : false,
     complete : cah.longpoll.complete,
     error : cah.longpoll.error,
     success : cah.longpoll.done,
