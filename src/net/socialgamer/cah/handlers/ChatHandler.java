@@ -73,6 +73,8 @@ public class ChatHandler extends Handler {
       final String message = request.getParameter(AjaxRequest.MESSAGE).trim();
       if (message.length() > 200) {
         return error(ErrorCode.MESSAGE_TOO_LONG);
+      } else if (message.length() == 0) {
+        return error(ErrorCode.NO_MSG_SPECIFIED);
       } else {
         final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
         broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
