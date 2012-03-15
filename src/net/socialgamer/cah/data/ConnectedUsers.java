@@ -128,7 +128,7 @@ public class ConnectedUsers {
   }
 
   /**
-   * Check for any users that have not communicated with the server withing the ping timeout delay,
+   * Check for any users that have not communicated with the server within the ping timeout delay,
    * and remove users which have not so communicated.
    */
   public void checkForPingTimeouts() {
@@ -137,9 +137,15 @@ public class ConnectedUsers {
       while (iterator.hasNext()) {
         final User u = iterator.next();
         if (System.nanoTime() - u.getLastHeardFrom() > PING_TIMEOUT) {
-          u.noLongerVaild();
-          notifyRemoveUser(u, DisconnectReason.PING_TIMEOUT);
-          iterator.remove();
+          try {
+            u.noLongerVaild();
+            notifyRemoveUser(u, DisconnectReason.PING_TIMEOUT);
+          } catch (final Exception e) {
+            // TODO log
+            // otherwise ignore
+          } finally {
+            iterator.remove();
+          }
         }
       }
     }
