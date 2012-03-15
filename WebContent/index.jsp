@@ -33,9 +33,12 @@ to, for instance, display the number of connected players.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Cards Against Humanity</title>
+<title>Pretend You're Xyzzy</title>
 </head>
 <body>
+<h1>Pretend You're <dfn style="border-bottom: 1px dotted black"
+  title="Xyzzy is an Artificial Unintelligence bot. You'll be making more sense than him in this game.">
+  Xyzzy</dfn></h1>
 <p>
   This webapp is still in development. There will be bugs, but hopefully they won't affect gameplay
   very much. To assist with development, <strong>all traffic on this server <em>may</em> be
@@ -53,8 +56,8 @@ to, for instance, display the number of connected players.
   <li>This game was extensively tested in <a href="http://google.com/chrome">Google Chrome</a>.
   It should work in all recent versions of major browsers, but it may not look 100% as intended. If
   you find a major issue, please
-  <a href="mailto:ajanata@socialgamer.net?subject=Cards%20Against%20Humanity%20bug">email me</a>
-  with a screenshot and the name and version of the browser you are using, and I'll try to fix it.
+  <a href="mailto:ajanata@socialgamer.net?subject=PYZ%20bug">email me</a> with a screenshot and the
+  name and version of the browser you are using, and I'll try to fix it.
 	  <ul>
 	    <li>That having been said, the chat area doesn't work right at all in Opera. The game still
 	    plays properly, but no log messages work. This is rather low on my to-do list as Opera isn't
@@ -113,16 +116,15 @@ to, for instance, display the number of connected players.
 <p>
   If the game seems to be in a weird state, refresh the page and it should take you back to where
   you were. It would be helpful to take a screenshot and
-  <a href="mailto:ajanata@socialgamer.net?subject=Cards%20Against%20Humanity%20bug">email it to
-  me</a> along with a general description of the problem and the time that it happened (include a
-  time zone please!).
+  <a href="mailto:ajanata@socialgamer.net?subject=PYZ%20bug">email it to me</a> along with a general
+  description of the problem and the time that it happened (include a time zone please!).
 </p>
 <p>
   <input type="button" value="I have read the above; Take me to the game!"
     onclick="window.location='game.jsp';" />
 </p>
 <p>
-  Cards Against Humanity is available at
+  Pretend You're Xyzzy is a Cards Against Humanity clone, which is available at
   <a href="http://www.cardsagainsthumanity.com/">cardsagainsthumanity.com</a>, where you can buy it
   or download and print it out yourself. It is distributed under a
   <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons - Attribution -

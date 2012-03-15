@@ -39,7 +39,7 @@ HttpSession hSession = request.getSession(true);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Cards Against Humanity</title>
+<title>Pretend You're Xyzzy</title>
 <script type="text/javascript" src="js/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/QTransform.js"></script>
@@ -66,7 +66,7 @@ HttpSession hSession = request.getSession(true);
 <%--
 <div id="browser" class="hide">
   <div id="browser_inner">
-	  <p>Cards Against Humanity is known to have graphical glitches in
+	  <p>Pretend You're Xyzzy is known to have graphical glitches in
 	  <span id="browser_name">$BROWSER_NAME</span>. The game should work,
 	  but it looks much better in <a href="http://google.com/chrome/">Google Chrome.</a></p>
 	  <p>We will not bug you about this again after you dismiss this dialog.</p>
@@ -76,9 +76,10 @@ HttpSession hSession = request.getSession(true);
 --%>
 
 <div id="nickbox">
-    Nickname: <input type="text" id="nickname" value="" maxlength="30" />
-    <input type="button" id="nicknameconfirm" value="Set" />
-    <span id="nickbox_error" class="error"></span>
+  Having trouble logging in? Clear your cache.
+  Nickname: <input type="text" id="nickname" value="" maxlength="30" />
+  <input type="button" id="nicknameconfirm" value="Set" />
+  <span id="nickbox_error" class="error"></span>
 </div>
 
 <div id="canvas" class="hide">
@@ -138,7 +139,7 @@ HttpSession hSession = request.getSession(true);
 	    </div>
 	    <div class="logo_3 logo_element">
 	    </div>
-	    <div class="logo_text">Cards Against Humanity</div>
+	    <div class="logo_text">Pretend You're Xyzzy</div>
 	  </div>
     <div class="card_metadata">
       <div class="draw hide">DRAW <div class="card_number"></div></div>
@@ -164,7 +165,7 @@ HttpSession hSession = request.getSession(true);
 	    </div>
 	    <div class="logo_3 logo_element">
 	    </div>
-	    <div class="logo_text">Cards Against Humanity</div>
+	    <div class="logo_text">Pretend You're Xyzzy</div>
 	  </div>
 	</div>
 </div>

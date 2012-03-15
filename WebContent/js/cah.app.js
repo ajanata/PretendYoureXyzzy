@@ -22,7 +22,7 @@
  */
 
 /**
- * Main application for Cards Against Humanity. This only has to handle the initial nickname
+ * Main application for Pretend You're Xyzzy. This only has to handle the initial nickname
  * registration, the chat box, the logout button, and resizing the window. It should probably be
  * split up into multiple files.
  * 

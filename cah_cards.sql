@@ -1,4 +1,4 @@
--- Cards Against Humanity cards by Andy Janata is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+-- Pretend You're Xyzzy cards by Andy Janata is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 -- Based on a work at www.cardsagainsthumanity.com.
 -- For more information, see http://creativecommons.org/licenses/by-nc-sa/3.0/
 
