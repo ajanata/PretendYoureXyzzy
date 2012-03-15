@@ -36,9 +36,12 @@ to, for instance, display the number of connected players.
 <title>Pretend You're Xyzzy</title>
 </head>
 <body>
-<h1>Pretend You're <dfn style="border-bottom: 1px dotted black"
+<h1>
+  Pretend You're <dfn style="border-bottom: 1px dotted black"
   title="Xyzzy is an Artificial Unintelligence bot. You'll be making more sense than him in this game.">
-  Xyzzy</dfn></h1>
+  Xyzzy</dfn>
+</h1>
+<h3>A Cards Against Humanity clone.</h3>
 <p>
   This webapp is still in development. There will be bugs, but hopefully they won't affect gameplay
   very much. To assist with development, <strong>all traffic on this server <em>may</em> be
