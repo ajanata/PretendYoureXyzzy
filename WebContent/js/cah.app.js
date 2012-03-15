@@ -120,7 +120,9 @@ function chatsubmit_click() {
  * Handle a click event on the log out button. Tell the server to log us out.
  */
 function logout_click() {
-  cah.Ajax.build(cah.$.AjaxOperation.LOG_OUT).run();
+  if (confirm("Are you sure you wish to log out?")) {
+    cah.Ajax.build(cah.$.AjaxOperation.LOG_OUT).run();
+  }
 }
 
 /**
