@@ -197,7 +197,9 @@ HttpSession hSession = request.getSession(true);
           </div>
           <input type="button" class="confirm_card" value="Confirm Selection" />
         </div>
-        <div class="game_right_side">
+        <div class="game_options">
+        </div>
+        <div class="game_right_side hide">
           <div class="game_right_side_box game_white_card_wrapper">
             The white cards played this round are:
             <div class="game_white_cards game_right_side_cards">
@@ -250,6 +252,45 @@ HttpSession hSession = request.getSession(true);
     <input type="button" class="previous_round_close" value="Close" />
     Round winner: <span class="previous_round_winner"></span>
     <div class="previous_round_cards"></div>
+  </div>
+</div>
+
+<!-- Template for game options. -->
+<div class="hide">
+  <div class="game_options" id="game_options_template">
+    Only the game host can change options.
+    <br/><br/>
+    Game options:
+    <br/>
+    <label id="score_limit_template_label" for="score_limit_template">Score limit:</label>
+    <select id="score_limit_template">
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8" selected="selected">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+    <br/>
+    <label id="player_limit_template_label" for="player_limit_template">Player limit:</label>
+    <select id="player_limit_template">
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10" selected="selected">10</option>
+    </select>
+    <br/>
+    <label id="version_template_label" for="version_template">Use cards from version:</label>
+    <select id="version_template">
+      <option value="1">first</option>
+      <option value="2">second</option>
+      <option value="both">both</option>
+    </select>
   </div>
 </div>
 

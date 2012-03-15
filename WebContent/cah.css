@@ -346,7 +346,7 @@ span.debug {
   padding-top: 10px;
 }
 
-.game_right_side {
+.game_right_side, .game_options {
   position: absolute;
   left: 246px;
   width: 700px;

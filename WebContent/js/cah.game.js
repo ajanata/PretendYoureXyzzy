@@ -59,6 +59,32 @@ cah.Game = function(id) {
   $(this.scoreboardElement_).removeClass("hide");
 
   /**
+   * The element for the game options for this game.
+   * 
+   * @type {HTMLDivElement}
+   * @private
+   */
+  this.optionsElement_ = $("#game_options_template").clone()[0];
+  this.optionsElement_.id = "game_options_" + id;
+  $("#score_limit_template_label", this.optionsElement_).attr("for", "score_limit_" + id);
+  $("#player_limit_template_label", this.optionsElement_).attr("for", "player_limit_" + id);
+  $("#version_template_label", this.optionsElement_).attr("for", "version_" + id);
+  $("#score_limit_template", this.optionsElement_).attr("id", "score_limit_" + id);
+  $("#player_limit_template", this.optionsElement_).attr("id", "player_limit_" + id);
+  $("#version_template", this.optionsElement_).attr("id", "version_" + id);
+  $("label", this.optionsElement_).removeAttr("id");
+  $(".game_options", this.element_).replaceWith(this.optionsElement_);
+  this.hideOptions_();
+
+  /**
+   * The nickname of the host of this game.
+   * 
+   * @type {String}
+   * @private
+   */
+  this.host_ = "";
+
+  /**
    * User->value mapping of scorecards in the scoreboard.
    * 
    * @type {Object}
@@ -591,15 +617,24 @@ cah.Game.prototype.insertIntoDocument = function() {
  *          data Game data returned from server.
  */
 cah.Game.prototype.updateGameStatus = function(data) {
-  if (data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.HOST] == cah.nickname
+  this.host_ = data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.HOST];
+
+  if (this.host_ == cah.nickname
       && data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.STATE] == cah.$.GameState.LOBBY) {
     $("#start_game").show();
   } else {
     $("#start_game").hide();
   }
 
+  if (data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.STATE] == cah.$.GameState.LOBBY) {
+    this.showOptions_();
+  } else {
+    this.hideOptions_();
+  }
+
   if (data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.STATE] == cah.$.GameState.PLAYING) {
     // TODO this is the cause of the cards blanking when someone joins or leaves
+    // store the last state somewhere too?
     $(".game_white_cards", this.element_).empty();
   }
 
@@ -818,7 +853,9 @@ cah.Game.prototype.roundCardClick_ = function(e) {
 cah.Game.prototype.leaveGameClick_ = function() {
   // TODO make sure everything cleans up right, I got an error when I tried to start a different
   // game after leaving one
-  cah.Ajax.build(cah.$.AjaxOperation.LEAVE_GAME).withGameId(this.id_).run();
+  if (confirm("Are you sure you wish to leave the game?")) {
+    cah.Ajax.build(cah.$.AjaxOperation.LEAVE_GAME).withGameId(this.id_).run();
+  }
 };
 
 /**
@@ -931,9 +968,13 @@ cah.Game.prototype.stateChange = function(data) {
       }
       this.roundCards_ = {};
       $(".game_white_cards", this.element_).empty();
+
+      this.showOptions_();
+
       break;
 
     case cah.$.GameState.PLAYING:
+      this.hideOptions_();
       this.refreshGameStatus();
       this.setBlackCard(data[cah.$.LongPollResponse.BLACK_CARD]);
       break;
@@ -947,6 +988,40 @@ cah.Game.prototype.stateChange = function(data) {
       cah.log.error("Game " + this.id_ + " changed to unknown state " + this.state_);
       return;
   }
+};
+
+/**
+ * Show the options panel. Enables or disables the controls based on whether we are the host.
+ * 
+ * @private
+ */
+cah.Game.prototype.showOptions_ = function() {
+  // $(".game_options", this.element_).removeClass("hide");
+  // $(".game_right_side", this.element_).addClass("hide");
+  this.updateOptionsEnabled_();
+};
+
+/**
+ * Enable or disable the option controls depending on whether we are the host.
+ * 
+ * @private
+ */
+cah.Game.prototype.updateOptionsEnabled_ = function() {
+  if (this.host_ == cah.nickname) {
+    $("select", this.optionsElement_).removeAttr("disabled");
+  } else {
+    $("select", this.optionsElement_).attr("disabled", "disabled");
+  }
+};
+
+/**
+ * Hide the options panel.
+ * 
+ * @private
+ */
+cah.Game.prototype.hideOptions_ = function() {
+  $(".game_options", this.element_).addClass("hide");
+  $(".game_right_side", this.element_).removeClass("hide");
 };
 
 // ///////////////////////////////////////////////
