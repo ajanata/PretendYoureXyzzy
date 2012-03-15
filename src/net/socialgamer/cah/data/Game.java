@@ -345,6 +345,10 @@ public class Game {
    */
   private Map<GamePlayerInfo, Object> getPlayerInfo(final Player player) {
     final Map<GamePlayerInfo, Object> playerInfo = new HashMap<GamePlayerInfo, Object>();
+    // TODO make sure this can't happen in the first place
+    if (player == null) {
+      return playerInfo;
+    }
     playerInfo.put(GamePlayerInfo.NAME, player.getUser().getNickname());
     playerInfo.put(GamePlayerInfo.SCORE, player.getScore());
     playerInfo.put(GamePlayerInfo.STATUS, getPlayerStatus(player).toString());
@@ -570,15 +574,19 @@ public class Game {
     data.put(LongPollResponse.GAME_STATE, GameState.LOBBY.toString());
     broadcastToPlayers(MessageType.GAME_EVENT, data);
 
-    data = getEventMap();
-    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
-    data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(host));
-    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+    if (host != null) {
+      data = getEventMap();
+      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
+      data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(host));
+      broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+    }
 
-    data = getEventMap();
-    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
-    data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(judge));
-    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+    if (judge != null) {
+      data = getEventMap();
+      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
+      data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(judge));
+      broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+    }
   }
 
   /**
