@@ -96,7 +96,7 @@ public class StartupUtils extends GuiceServletContextListener {
     final ServletContext context = contextEvent.getServletContext();
     final Injector injector = getInjector();
     final UserPing ping = injector.getInstance(UserPing.class);
-    final Timer timer = new Timer();
+    final Timer timer = new Timer("PingCheck", true);
     timer.schedule(ping, PING_START_DELAY, PING_CHECK_DELAY);
     serverStarted = new Date();
     context.setAttribute(PING_TIMER_NAME, timer);
