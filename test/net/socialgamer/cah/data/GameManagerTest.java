@@ -138,7 +138,7 @@ public class GameManagerTest {
   @Test
   public void testCreateGame() {
     cuMock.broadcastToAll(eq(MessageType.GAME_EVENT), anyObject(HashMap.class));
-    expectLastCall().times(3);
+    expectLastCall().times(6);
     cuMock.broadcastToList(anyObject(Collection.class), eq(MessageType.GAME_PLAYER_EVENT),
         anyObject(HashMap.class));
     expectLastCall().times(3);

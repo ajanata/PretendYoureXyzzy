@@ -68,6 +68,8 @@ public class GameTest {
     cuMock.broadcastToList(anyObject(Collection.class), eq(MessageType.GAME_PLAYER_EVENT),
         anyObject(HashMap.class));
     expectLastCall().times(4);
+    gmMock.broadcastGameListRefresh();
+    expectLastCall().times(4);
     replay(cuMock);
     gmMock.destroyGame(anyInt());
     expectLastCall().once();
