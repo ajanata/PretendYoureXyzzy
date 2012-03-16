@@ -1042,8 +1042,8 @@ cah.Game.prototype.updateOptionsEnabled_ = function() {
 cah.Game.prototype.optionChanged_ = function(e) {
   cah.Ajax.build(cah.$.AjaxOperation.CHANGE_GAME_OPTIONS).withGameId(this.id_).withScoreLimit(
       $(".score_limit", this.optionsElement_).val()).withPlayerLimit(
-      $(".player_limit", this.optionsElement_).val()).withCardSet(
-      $(".card_set", this.optionsElement_).val()).run();
+      $(".player_limit", this.optionsElement_).val()).withCardSet(0).run();
+  // $(".card_set", this.optionsElement_).val()).run();
 };
 
 /**
