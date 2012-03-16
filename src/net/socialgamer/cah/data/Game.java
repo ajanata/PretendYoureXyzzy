@@ -94,6 +94,30 @@ public class Game {
   private int maxPlayers = 10;
   private int judgeIndex = 0;
   private final static int ROUND_INTERMISSION = 8 * 1000;
+  /**
+   * Duration, in milliseconds, for the minimum timeout a player has to choose a card to play.
+   * Minimum 10 seconds.
+   */
+  private final static int PLAY_TIMEOUT_BASE = 30 * 1000;
+  /**
+   * Duration, in milliseconds, for the additional timeout a player has to choose a card to play,
+   * for each additional card that must be played. For example, on a PICK 2 card, this amount of
+   * time is added to {@code PLAY_TIMEOUT_BASE}.
+   */
+  private final static int PLAY_TIMEOUT_PER_CARD = 15 * 1000;
+  /**
+   * Duration, in milliseconds, for the minimum timeout a judge has to choose a winner.
+   * Minimum combined of this and 2 * {@code JUDGE_TIMEOUT_PER_CARD} is 10 seconds.
+   */
+  private final static int JUDGE_TIMEOUT_BASE = 20 * 1000;
+  /**
+   * Duration, in milliseconds, for the additional timeout a judge has to choose a winning card,
+   * for each additional card that was played in the round. For example, on a PICK 2 card with
+   * 3 non-judge players, 6 times this value is added to {@code JUDGE_TIMEOUT_BASE}.
+   */
+  private final static int JUDGE_TIMEOUT_PER_CARD = 5 * 1000;
+  private final static int MAX_SKIPS_BEFORE_KICK = 2;
+  private final Object judgeLock = new Object();
   private Timer nextRoundTimer;
   private final Object nextRoundTimerLock = new Object();
   private int scoreGoal = 8;
@@ -202,14 +226,7 @@ public class Game {
             data.put(LongPollResponse.EVENT, LongPollEvent.GAME_JUDGE_LEFT.toString());
             data.put(LongPollResponse.INTERMISSION, ROUND_INTERMISSION);
             broadcastToPlayers(MessageType.GAME_EVENT, data);
-            synchronized (playedCards) {
-              for (final Player p : playedCards.playedPlayers()) {
-                p.getHand().addAll(playedCards.getCards(p));
-                sendCardsToPlayer(p, playedCards.getCards(p));
-              }
-              // prevent startNextRound from discarding cards
-              playedCards.clear();
-            }
+            returnCardsToHand();
             // startNextRound will advance it again.
             judgeIndex--;
             // Can't start the next round right here.
@@ -252,17 +269,28 @@ public class Game {
         resetState(true);
       } else if (wasJudge) {
         synchronized (nextRoundTimerLock) {
-          nextRoundTimer = new Timer();
           final TimerTask task = new TimerTask() {
             @Override
             public void run() {
               startNextRound();
             }
           };
+          nextRoundTimer = new Timer("judge-left-" + id, true);
           nextRoundTimer.schedule(task, ROUND_INTERMISSION);
         }
       }
       return players.size() == 0;
+    }
+  }
+
+  private void returnCardsToHand() {
+    synchronized (playedCards) {
+      for (final Player p : playedCards.playedPlayers()) {
+        p.getHand().addAll(playedCards.getCards(p));
+        sendCardsToPlayer(p, playedCards.getCards(p));
+      }
+      // prevent startNextRound from discarding cards
+      playedCards.clear();
     }
   }
 
@@ -520,30 +548,203 @@ public class Game {
       }
     }
 
+    final int playTimer = PLAY_TIMEOUT_BASE + (PLAY_TIMEOUT_PER_CARD * (blackCard.getPick() - 1));
+
     final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
     data.put(LongPollResponse.BLACK_CARD, getBlackCard());
     data.put(LongPollResponse.GAME_STATE, GameState.PLAYING.toString());
+    data.put(LongPollResponse.PLAY_TIMER, playTimer);
 
     broadcastToPlayers(MessageType.GAME_EVENT, data);
+
+    synchronized (nextRoundTimerLock) {
+      killRoundTimer();
+      final TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+          warnPlayersToPlay();
+        }
+      };
+      // 10 second warning
+      nextRoundTimer = new Timer("hurry-up-" + id, true);
+      nextRoundTimer.schedule(task, playTimer - 10 * 1000);
+    }
+  }
+
+  private void warnPlayersToPlay() {
+    // have to do this all synchronized in case they play while we're processing this
+    synchronized (nextRoundTimerLock) {
+      killRoundTimer();
+
+      synchronized (players) {
+        for (final Player player : players) {
+          if (getJudge() == player) {
+            continue;
+          }
+          synchronized (playedCards) {
+            if (!playedCards.hasPlayer(player)) {
+              final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+              data.put(LongPollResponse.EVENT, LongPollEvent.HURRY_UP.toString());
+              data.put(LongPollResponse.GAME_ID, this.id);
+              final QueuedMessage q = new QueuedMessage(MessageType.GAME_EVENT, data);
+              player.getUser().enqueueMessage(q);
+            }
+          }
+        }
+      }
+
+      final TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+          skipIdlePlayers();
+        }
+      };
+      // 10 seconds to finish playing
+      nextRoundTimer = new Timer("hurry-up-" + id, true);
+      nextRoundTimer.schedule(task, 10 * 1000);
+    }
+  }
+
+  private void warnJudgeToJudge() {
+    // have to do this all synchronized in case they play while we're processing this
+    synchronized (nextRoundTimerLock) {
+      killRoundTimer();
+
+      if (state == GameState.JUDGING) {
+        final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+        data.put(LongPollResponse.EVENT, LongPollEvent.HURRY_UP.toString());
+        data.put(LongPollResponse.GAME_ID, this.id);
+        final QueuedMessage q = new QueuedMessage(MessageType.GAME_EVENT, data);
+        getJudge().getUser().enqueueMessage(q);
+      }
+
+      final TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+          skipIdleJudge();
+        }
+      };
+      // 10 seconds to finish playing
+      nextRoundTimer = new Timer("hurry-up-" + id, true);
+      nextRoundTimer.schedule(task, 10 * 1000);
+    }
+  }
+
+  private void skipIdleJudge() {
+    killRoundTimer();
+    synchronized (judgeLock) {
+      if (state != GameState.JUDGING) {
+        return;
+      }
+      getJudge().skipped();
+      final HashMap<ReturnableData, Object> data = getEventMap();
+      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_JUDGE_SKIPPED.toString());
+      broadcastToPlayers(MessageType.GAME_EVENT, data);
+      returnCardsToHand();
+      startNextRound();
+    }
+  }
+
+  private void skipIdlePlayers() {
+    killRoundTimer();
+    synchronized (players) {
+      final List<User> playersToRemove = new ArrayList<User>();
+      final List<Player> playersToUpdateStatus = new ArrayList<Player>();
+
+      for (final Player player : players) {
+        if (getJudge() == player) {
+          continue;
+        }
+        synchronized (playedCards) {
+          if (!playedCards.hasPlayer(player)) {
+            player.skipped();
+            final HashMap<ReturnableData, Object> data = getEventMap();
+
+            if (player.getSkipCount() >= MAX_SKIPS_BEFORE_KICK || playedCards.size() < 2) {
+              data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_KICKED_IDLE.toString());
+              data.put(LongPollResponse.NICKNAME, player.getUser().getNickname());
+              playersToRemove.add(player.getUser());
+            } else {
+              data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_SKIPPED.toString());
+              data.put(LongPollResponse.NICKNAME, player.getUser().getNickname());
+              playersToUpdateStatus.add(player);
+            }
+            broadcastToPlayers(MessageType.GAME_EVENT, data);
+          }
+        }
+      }
+
+      for (final User user : playersToRemove) {
+        removePlayer(user);
+        final HashMap<ReturnableData, Object> data = getEventMap();
+        data.put(LongPollResponse.EVENT, LongPollEvent.KICKED_FROM_GAME_IDLE.toString());
+        final QueuedMessage q = new QueuedMessage(MessageType.GAME_PLAYER_EVENT, data);
+        user.enqueueMessage(q);
+      }
+
+      synchronized (playedCards) {
+        // not sure how much of this check is actually required
+        if (players.size() < 3 || playedCards.size() < 2 || state != GameState.PLAYING) {
+          resetState(true);
+        } else {
+          judgingState();
+        }
+      }
+
+      // have to do this after we move to judging state
+      for (final Player player : playersToUpdateStatus) {
+        final HashMap<ReturnableData, Object> data = getEventMap();
+        data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
+        data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(player));
+        broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+      }
+    }
+  }
+
+  private void killRoundTimer() {
+    synchronized (nextRoundTimerLock) {
+      if (nextRoundTimer != null) {
+        nextRoundTimer.cancel();
+        nextRoundTimer = null;
+      }
+    }
   }
 
   /**
    * Move the game into the {@code JUDGING} state.
    */
   private void judgingState() {
+    killRoundTimer();
     state = GameState.JUDGING;
+
+    final int judgeTimer = JUDGE_TIMEOUT_BASE
+        + (JUDGE_TIMEOUT_PER_CARD * playedCards.size() * blackCard.getPick());
 
     HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
     data.put(LongPollResponse.GAME_STATE, GameState.JUDGING.toString());
     data.put(LongPollResponse.WHITE_CARDS, getWhiteCards());
+    data.put(LongPollResponse.PLAY_TIMER, judgeTimer);
     broadcastToPlayers(MessageType.GAME_EVENT, data);
 
     data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
     data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(getJudge()));
     broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+
+    synchronized (nextRoundTimerLock) {
+      killRoundTimer();
+      final TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+          warnJudgeToJudge();
+        }
+      };
+      // 10 second warning
+      nextRoundTimer = new Timer("hurry-up-" + id, true);
+      nextRoundTimer.schedule(task, judgeTimer - 10 * 1000);
+    }
   }
 
   /**
@@ -889,6 +1090,7 @@ public class Game {
   public ErrorCode playCard(final User user, final int cardId) {
     final Player player = getPlayerForUser(user);
     if (player != null) {
+      player.resetSkipCount();
       if (getJudge() == player || state != GameState.PLAYING) {
         return ErrorCode.NOT_YOUR_TURN;
       }
@@ -941,23 +1143,27 @@ public class Game {
    * @return Error code if there is an error, or null if success.
    */
   public ErrorCode judgeCard(final User user, final int cardId) {
-    final Player player = getPlayerForUser(user);
-    if (getJudge() != player) {
-      return ErrorCode.NOT_JUDGE;
-    } else if (state != GameState.JUDGING) {
-      return ErrorCode.NOT_YOUR_TURN;
-    }
-
     final Player cardPlayer;
-    synchronized (playedCards) {
-      cardPlayer = playedCards.getPlayerForId(cardId);
-    }
-    if (cardPlayer == null) {
-      return ErrorCode.INVALID_CARD;
-    }
+    synchronized (judgeLock) {
+      final Player player = getPlayerForUser(user);
+      if (getJudge() != player) {
+        return ErrorCode.NOT_JUDGE;
+      } else if (state != GameState.JUDGING) {
+        return ErrorCode.NOT_YOUR_TURN;
+      }
 
-    cardPlayer.increaseScore();
-    state = GameState.ROUND_OVER;
+      player.resetSkipCount();
+
+      synchronized (playedCards) {
+        cardPlayer = playedCards.getPlayerForId(cardId);
+      }
+      if (cardPlayer == null) {
+        return ErrorCode.INVALID_CARD;
+      }
+
+      cardPlayer.increaseScore();
+      state = GameState.ROUND_OVER;
+    }
     final int clientCardId = playedCards.getCards(cardPlayer).get(0).getId();
 
     HashMap<ReturnableData, Object> data = getEventMap();
@@ -978,7 +1184,7 @@ public class Game {
     broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
 
     synchronized (nextRoundTimerLock) {
-      nextRoundTimer = new Timer();
+      killRoundTimer();
       final TimerTask task;
       // TODO win-by-x option
       if (cardPlayer.getScore() == scoreGoal) {
@@ -996,6 +1202,7 @@ public class Game {
           }
         };
       }
+      nextRoundTimer = new Timer("round-intermission-" + id, true);
       nextRoundTimer.schedule(task, ROUND_INTERMISSION);
     }
 

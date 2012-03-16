@@ -39,6 +39,7 @@ public class Player {
 
   private final List<WhiteCard> hand = new LinkedList<WhiteCard>();
   private int score = 0;
+  private int skipCount = 0;
 
   /**
    * Create a new player object.
@@ -76,6 +77,27 @@ public class Player {
    */
   public void resetScore() {
     score = 0;
+  }
+
+  /**
+   * Increases this player's skipped round count.
+   */
+  public void skipped() {
+    skipCount++;
+  }
+
+  /**
+   * Reset this player's skipped round count to 0, because they have been back for a round.
+   */
+  public void resetSkipCount() {
+    skipCount = 0;
+  }
+
+  /**
+   * @return This player's skipped round count.
+   */
+  public int getSkipCount() {
+    return skipCount;
   }
 
   /**

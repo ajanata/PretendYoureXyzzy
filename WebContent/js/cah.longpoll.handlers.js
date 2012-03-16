@@ -133,6 +133,37 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_OPTIONS_CHANGED] = function(
       "options changed");
 };
 
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.HURRY_UP] = function(data) {
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.hurryUp, "", "hurry up");
+};
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_KICKED_IDLE] = function(data) {
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.playerKickedIdle, data,
+      "idle kick");
+};
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_SKIPPED] = function(data) {
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.playerSkipped, data,
+      "player skip");
+};
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_JUDGE_SKIPPED] = function(data) {
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.judgeSkipped, "", "judge skip");
+};
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.KICKED_FROM_GAME_IDLE] = function(data) {
+  var game = cah.currentGames[data[cah.$.LongPollResponse.GAME_ID]];
+  if (game) {
+    game.dispose();
+    delete cah.currentGames[data[cah.$.LongPollResponse.GAME_ID]];
+  }
+  cah.GameList.instance.update();
+  cah.GameList.instance.show();
+
+  cah.log.error("You were kicked from game " + data[cah.$.LongPollResponse.GAME_ID]
+      + " for being idle for too long.");
+};
+
 /**
  * Helper for event handlers for game events.
  * 

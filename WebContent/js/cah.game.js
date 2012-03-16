@@ -750,6 +750,42 @@ cah.Game.prototype.roundComplete = function(data) {
 };
 
 /**
+ * Notify the user that they are running out of time to play.
+ */
+cah.Game.prototype.hurryUp = function() {
+  cah.log.status("Hurry up! You have less than 10 seconds to decide, or you will be skipped.");
+};
+
+/**
+ * A player was kicked due to being idle.
+ * 
+ * @param {object}
+ *          data Event data from server.
+ */
+cah.Game.prototype.playerKickedIdle = function(data) {
+  cah.log.status(data[cah.$.LongPollResponse.NICKNAME]
+      + " was kicked for being idle for too many rounds.");
+};
+
+/**
+ * A player was skipped due to being idle.
+ * 
+ * @param {obejct}
+ *          data Event data from server.
+ */
+cah.Game.prototype.playerSkipped = function(data) {
+  cah.log.status(data[cah.$.LongPollResponse.NICKNAME]
+      + " was skipped this round for being idle for too long.");
+};
+
+/**
+ * This player was kicked due to being idle.
+ */
+cah.Game.prototype.iWasKickedIdle = function() {
+
+};
+
+/**
  * Notify the player that a deck has been reshuffled.
  * 
  * @param {String}
@@ -766,11 +802,19 @@ cah.Game.prototype.reshuffle = function(deck) {
  *          data Event data from the server.
  */
 cah.Game.prototype.judgeLeft = function(data) {
-  cah.log
-      .status("The judge has left the game. Cards played this round are being returned to hands.");
+  cah.log.status("The Card Czar has left the game. Cards played this round are being returned to "
+      + "hands.");
   cah.log.status("The next round will begin in "
       + (data[cah.$.LongPollResponse.INTERMISSION] / 1000) + " seconds.");
   cah.log.status("(Displayed state will look weird until the next round.)");
+};
+
+/**
+ * The judge was skipped for taking too long.
+ */
+cah.Game.prototype.judgeSkipped = function() {
+  cah.log.status("The Card Czar has taken too long to decide and has been skipped. "
+      + "Cards played this round are being returned to hands.");
 };
 
 /**

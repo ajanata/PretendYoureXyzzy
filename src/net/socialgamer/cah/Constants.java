@@ -317,17 +317,22 @@ public class Constants {
     CHAT(AjaxOperation.CHAT),
     GAME_BLACK_RESHUFFLE("gbr"),
     GAME_JUDGE_LEFT("gjl"),
+    GAME_JUDGE_SKIPPED("gjs"),
     GAME_LIST_REFRESH("glr"),
     GAME_OPTIONS_CHANGED("goc"),
     GAME_PLAYER_INFO_CHANGE("gpic"),
     GAME_PLAYER_JOIN("gpj"),
+    GAME_PLAYER_KICKED_IDLE("gpki"),
     GAME_PLAYER_LEAVE("gpl"),
+    GAME_PLAYER_SKIPPED("gps"),
     GAME_ROUND_COMPLETE("grc"),
     GAME_STATE_CHANGE("gsc"),
     GAME_WHITE_RESHUFFLE("gwr"),
     HAND_DEAL("hd"),
+    HURRY_UP("hu"),
     @DuplicationAllowed
     KICKED(DisconnectReason.KICKED),
+    KICKED_FROM_GAME_IDLE("kfgi"),
     NEW_PLAYER("np"),
     /**
      * There has been no other action to inform the client about in a certain timeframe, so inform
@@ -380,6 +385,7 @@ public class Constants {
     MESSAGE(AjaxRequest.MESSAGE),
     @DuplicationAllowed
     NICKNAME(AjaxRequest.NICKNAME),
+    PLAY_TIMER("pt"),
     @DuplicationAllowed
     PLAYER_INFO(AjaxResponse.PLAYER_INFO),
     /**

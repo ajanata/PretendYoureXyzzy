@@ -51,6 +51,18 @@ to, for instance, display the number of connected players.
   The name you enter and your computer's IP address will <strong>always</strong> be logged when you
   load the game client. Chat and gameplay may also be logged.
 </p>
+<p>Recent Changes:</p>
+<ul>
+  <li>17 March, Midnight UTC:<ul>
+    <li>Initial AFK timer support added. This will skip (or kick, if there are not enough players) a
+    player that takes longer than 15 + 15 * PICK seconds to play, or skip a judge that takes longer
+    than 20 + 5 * PICK * PLAYERS seconds to select a winner. If a player is idle for two consecutive
+    rounds, they will be kicked from the game. All of these numbers are adjustable; if the timeouts
+    are too long or too short, please let me know!</li>
+    <li>The game host can specify the Awesome Point goal from 4 to 10.</li>
+    <li>The game host can specify the maximum number of players in a game from 3 to 10.</li>
+  </ul></li>
+</ul>
 <p>Known issues:</p>
 <ul>
   <li><strong>Do not open the game more than once in the same browser.</strong> Neither instances
@@ -80,7 +92,7 @@ to, for instance, display the number of connected players.
   game state until the next round begins.</li>
   <li>Reloading the page when the winning card is displayed does not display the winning card
   again.</li>
-  <li>Played cards seem to blank when someone joins (or leaves?). You may have to refresh the page
+  <li>Played cards seem to blank when someone joins or leaves. You may have to refresh the page
   to see the cards again if you're the Card Czar.</li>
 </ul>
 <p>Current limitations:</p>
@@ -100,17 +112,10 @@ to, for instance, display the number of connected players.
 	  </ul>
   </li>
   <li>All games and the main lobby share the same chat.</li>
-  <li>There is no play timer to keep the game moving if one person goes idle. However, if their
-  browser crashes or they lose connection, they will be removed from the game after approximately 45
-  seconds. An AFK timer is near the top of the priority list to add.</li>
-  <li>The first player to 8 Awesome Points wins. This is currently hard-coded, but you will be able
-  to change it later.</li>
   <li>You can't bet Awesome Points to play another card, and I am unsure if I will add this.</li>
 </ul>
 <p>Future enhancements:</p>
 <ul>
-  <li>There will be host options to limit the number of players and set the target score soon.</li>
-  <li>There will be a timer to keep the game moving if somebody goes AFK soon.</li>
   <li>There may be an option to display who played every card.</li>
   <li>A registration system and long-term statistics tracking may be added at some point.</li>
   <li>Support for custom Black and White cards will also likely be added, with a game host option to
