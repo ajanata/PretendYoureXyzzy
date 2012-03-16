@@ -761,10 +761,16 @@ cah.Game.prototype.reshuffle = function(deck) {
 
 /**
  * Notify the player that the judge has left the game and cards are being returned to hands.
+ * 
+ * @param {object}
+ *          data Event data from the server.
  */
-cah.Game.prototype.judgeLeft = function() {
+cah.Game.prototype.judgeLeft = function(data) {
   cah.log
       .status("The judge has left the game. Cards played this round are being returned to hands.");
+  cah.log.status("The next round will begin in "
+      + (data[cah.$.LongPollResponse.INTERMISSION] / 1000) + " seconds.");
+  cah.log.status("(Displayed state will look weird until the next round.)");
 };
 
 /**

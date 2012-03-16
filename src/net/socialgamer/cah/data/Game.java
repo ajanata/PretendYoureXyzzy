@@ -200,6 +200,7 @@ public class Game {
           if (getJudge() == player && (state == GameState.PLAYING || state == GameState.JUDGING)) {
             data = getEventMap();
             data.put(LongPollResponse.EVENT, LongPollEvent.GAME_JUDGE_LEFT.toString());
+            data.put(LongPollResponse.INTERMISSION, ROUND_INTERMISSION);
             broadcastToPlayers(MessageType.GAME_EVENT, data);
             synchronized (playedCards) {
               for (final Player p : playedCards.playedPlayers()) {
@@ -250,7 +251,16 @@ public class Game {
       if (players.size() < 3 && state != GameState.LOBBY) {
         resetState(true);
       } else if (wasJudge) {
-        startNextRound();
+        synchronized (nextRoundTimerLock) {
+          nextRoundTimer = new Timer();
+          final TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+              startNextRound();
+            }
+          };
+          nextRoundTimer.schedule(task, ROUND_INTERMISSION);
+        }
       }
       return players.size() == 0;
     }
@@ -627,6 +637,13 @@ public class Game {
    * state.
    */
   private void startNextRound() {
+    synchronized (nextRoundTimerLock) {
+      if (nextRoundTimer != null) {
+        nextRoundTimer.cancel();
+        nextRoundTimer = null;
+      }
+    }
+
     synchronized (whiteDeck) {
       synchronized (playedCards) {
         for (final List<WhiteCard> cards : playedCards.cards()) {
