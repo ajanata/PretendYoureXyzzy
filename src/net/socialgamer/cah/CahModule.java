@@ -51,6 +51,6 @@ public class CahModule extends AbstractModule {
   @Provides
   @MaxGames
   Integer provideMaxGames() {
-    return 8;
+    return 20;
   }
 }
