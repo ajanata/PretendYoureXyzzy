@@ -161,3 +161,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.PLAY_CARD] = function(data, req) {
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JUDGE_SELECT] = function(data) {
   // pass?
 };
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CHANGE_GAME_OPTIONS] = function(data) {
+  // pass
+};

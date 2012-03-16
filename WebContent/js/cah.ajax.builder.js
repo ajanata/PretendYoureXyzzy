@@ -134,6 +134,39 @@ cah.ajax.Builder.prototype.withCardId = function(cardId) {
 };
 
 /**
+ * @param {number}
+ *          cardSet Card set field to use in the request.
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withCardSet = function(cardSet) {
+  this.assertNotExecuted_();
+  this.data[cah.$.AjaxRequest.CARD_SET] = cardSet;
+  return this;
+};
+
+/**
+ * @param {number}
+ *          playerLimit Player limit field to use in the request.
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withPlayerLimit = function(playerLimit) {
+  this.assertNotExecuted_();
+  this.data[cah.$.AjaxRequest.PLAYER_LIMIT] = playerLimit;
+  return this;
+};
+
+/**
+ * @param {number}
+ *          scoreLimit Score limit field to use in the request.
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withScoreLimit = function(scoreLimit) {
+  this.assertNotExecuted_();
+  this.data[cah.$.AjaxRequest.SCORE_LIMIT] = scoreLimit;
+  return this;
+};
+
+/**
  * Assert that the request from this builder has not already run. Throws an exception if it has.
  * 
  * @private

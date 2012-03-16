@@ -258,12 +258,12 @@ HttpSession hSession = request.getSession(true);
 <!-- Template for game options. -->
 <div class="hide">
   <div class="game_options" id="game_options_template">
-    Only the game host can change options.
+    <span class="options_host_only">Only the game host can change options.</span>
     <br/><br/>
     Game options:
     <br/>
     <label id="score_limit_template_label" for="score_limit_template">Score limit:</label>
-    <select id="score_limit_template">
+    <select id="score_limit_template" class="score_limit">
       <option value="4">4</option>
       <option value="5">5</option>
       <option value="6">6</option>
@@ -274,7 +274,7 @@ HttpSession hSession = request.getSession(true);
     </select>
     <br/>
     <label id="player_limit_template_label" for="player_limit_template">Player limit:</label>
-    <select id="player_limit_template">
+    <select id="player_limit_template" class="player_limit">
       <option value="3">3</option>
       <option value="4">4</option>
       <option value="5">5</option>
@@ -285,12 +285,14 @@ HttpSession hSession = request.getSession(true);
       <option value="10" selected="selected">10</option>
     </select>
     <br/>
-    <label id="version_template_label" for="version_template">Use cards from version:</label>
-    <select id="version_template">
+    <!--
+    <label id="card_set_template_label" for="card_set_template">Use cards from version:</label>
+    <select id="card_set_template" class="card_set">
       <option value="1">first</option>
       <option value="2">second</option>
-      <option value="both">both</option>
+      <option value="3">both</option>
     </select>
+    -->
   </div>
 </div>
 

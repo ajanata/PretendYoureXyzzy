@@ -128,6 +128,11 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_JUDGE_LEFT] = function(data)
   cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.judgeLeft, "", "judge left");
 };
 
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_OPTIONS_CHANGED] = function(data) {
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.optionsChanged, data,
+      "options changed");
+};
+
 /**
  * Helper for event handlers for game events.
  * 

@@ -91,15 +91,13 @@ public class Game {
   private final Object blackCardLock = new Object();
   private WhiteDeck whiteDeck;
   private GameState state;
-  // TODO make this host-configurable
-  private final int maxPlayers = 10;
+  private int maxPlayers = 10;
   private int judgeIndex = 0;
-  // TODO also need to configure this
   private final static int ROUND_INTERMISSION = 8 * 1000;
   private Timer nextRoundTimer;
   private final Object nextRoundTimerLock = new Object();
-  // TODO host config
-  private final int scoreGoal = 8;
+  private int scoreGoal = 8;
+  private int cardSet = 0;
 
   /**
    * Create a new game.
@@ -303,6 +301,16 @@ public class Game {
     return id;
   }
 
+  public void updateGameSettings(final int scoreLimit, final int playerLimit, final int cardSet1) {
+    this.scoreGoal = scoreLimit;
+    this.maxPlayers = playerLimit;
+    this.cardSet = cardSet1;
+
+    final HashMap<ReturnableData, Object> data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_OPTIONS_CHANGED.toString());
+    broadcastToPlayers(MessageType.GAME_EVENT, data);
+  }
+
   /**
    * @return This game's general information: ID, host, state, player list.
    */
@@ -311,6 +319,9 @@ public class Game {
     info.put(GameInfo.ID, id);
     info.put(GameInfo.HOST, host.toString());
     info.put(GameInfo.STATE, state.toString());
+    info.put(GameInfo.CARD_SET, cardSet);
+    info.put(GameInfo.PLAYER_LIMIT, maxPlayers);
+    info.put(GameInfo.SCORE_LIMIT, scoreGoal);
     synchronized (players) {
       final List<String> playerNames = new ArrayList<String>(players.size());
       for (final Player player : players) {

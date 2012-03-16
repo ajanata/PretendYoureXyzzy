@@ -68,13 +68,12 @@ cah.Game = function(id) {
   this.optionsElement_.id = "game_options_" + id;
   $("#score_limit_template_label", this.optionsElement_).attr("for", "score_limit_" + id);
   $("#player_limit_template_label", this.optionsElement_).attr("for", "player_limit_" + id);
-  $("#version_template_label", this.optionsElement_).attr("for", "version_" + id);
+  $("#card_set_template_label", this.optionsElement_).attr("for", "card_set_" + id);
   $("#score_limit_template", this.optionsElement_).attr("id", "score_limit_" + id);
   $("#player_limit_template", this.optionsElement_).attr("id", "player_limit_" + id);
-  $("#version_template", this.optionsElement_).attr("id", "version_" + id);
+  $("#card_set_template", this.optionsElement_).attr("id", "card_set_" + id);
   $("label", this.optionsElement_).removeAttr("id");
   $(".game_options", this.element_).replaceWith(this.optionsElement_);
-  this.hideOptions_();
 
   /**
    * The nickname of the host of this game.
@@ -232,6 +231,7 @@ cah.Game = function(id) {
   $("#start_game").click(cah.bind(this, this.startGameClick_));
   $(".confirm_card", this.element_).click(cah.bind(this, this.confirmClick_));
   $(".game_show_last_round", this.element_).click(cah.bind(this, this.showLastRoundClick_));
+  $("select", this.element_).change(cah.bind(this, this.optionChanged_));
 
   $(window).on("resize.game_" + this.id_, cah.bind(this, this.windowResize_));
 };
@@ -638,6 +638,13 @@ cah.Game.prototype.updateGameStatus = function(data) {
     $(".game_white_cards", this.element_).empty();
   }
 
+  $(".score_limit", this.optionsElement_).val(
+      data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.SCORE_LIMIT]);
+  $(".player_limit", this.optionsElement_).val(
+      data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.PLAYER_LIMIT]);
+  $(".card_set", this.optionsElement_).val(
+      data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.CARD_SET]);
+
   var playerInfos = data[cah.$.AjaxResponse.PLAYER_INFO];
   for ( var index in playerInfos) {
     this.updateUserStatus(playerInfos[index]);
@@ -991,13 +998,23 @@ cah.Game.prototype.stateChange = function(data) {
 };
 
 /**
+ * Hide the options panel.
+ * 
+ * @private
+ */
+cah.Game.prototype.hideOptions_ = function() {
+  $(".game_options", this.element_).addClass("hide");
+  $(".game_right_side", this.element_).removeClass("hide");
+};
+
+/**
  * Show the options panel. Enables or disables the controls based on whether we are the host.
  * 
  * @private
  */
 cah.Game.prototype.showOptions_ = function() {
-  // $(".game_options", this.element_).removeClass("hide");
-  // $(".game_right_side", this.element_).addClass("hide");
+  $(".game_options", this.element_).removeClass("hide");
+  $(".game_right_side", this.element_).addClass("hide");
   this.updateOptionsEnabled_();
 };
 
@@ -1009,19 +1026,33 @@ cah.Game.prototype.showOptions_ = function() {
 cah.Game.prototype.updateOptionsEnabled_ = function() {
   if (this.host_ == cah.nickname) {
     $("select", this.optionsElement_).removeAttr("disabled");
+    $(".options_host_only", this.optionsElement_).addClass("hide");
   } else {
     $("select", this.optionsElement_).attr("disabled", "disabled");
+    $(".options_host_only", this.optionsElement_).removeClass("hide");
   }
 };
 
 /**
- * Hide the options panel.
+ * Event handler for changing an option.
  * 
+ * @param e
  * @private
  */
-cah.Game.prototype.hideOptions_ = function() {
-  $(".game_options", this.element_).addClass("hide");
-  $(".game_right_side", this.element_).removeClass("hide");
+cah.Game.prototype.optionChanged_ = function(e) {
+  cah.Ajax.build(cah.$.AjaxOperation.CHANGE_GAME_OPTIONS).withGameId(this.id_).withScoreLimit(
+      $(".score_limit", this.optionsElement_).val()).withPlayerLimit(
+      $(".player_limit", this.optionsElement_).val()).withCardSet(
+      $(".card_set", this.optionsElement_).val()).run();
+};
+
+/**
+ * 
+ * @param {object}
+ *          data Event data from server.
+ */
+cah.Game.prototype.optionsChanged = function(data) {
+  this.refreshGameStatus();
 };
 
 // ///////////////////////////////////////////////

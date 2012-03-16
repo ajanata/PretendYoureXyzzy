@@ -136,6 +136,7 @@ public class Constants {
    */
   public enum AjaxOperation {
     ADMIN_SET_VERBOSE_LOG("svl"),
+    CHANGE_GAME_OPTIONS("cgo"),
     CHAT("c"),
     CREATE_GAME("cg"),
     FIRST_LOAD("fl"),
@@ -174,10 +175,13 @@ public class Constants {
    */
   public enum AjaxRequest {
     CARD_ID("cid"),
+    CARD_SET("cs"),
     GAME_ID("gid"),
     MESSAGE("m"),
     NICKNAME("n"),
     OP("o"),
+    PLAYER_LIMIT("pL"),
+    SCORE_LIMIT("sl"),
     SERIAL("s");
 
     private final String field;
@@ -314,6 +318,7 @@ public class Constants {
     GAME_BLACK_RESHUFFLE("gbr"),
     GAME_JUDGE_LEFT("gjl"),
     GAME_LIST_REFRESH("glr"),
+    GAME_OPTIONS_CHANGED("goc"),
     GAME_PLAYER_INFO_CHANGE("gpic"),
     GAME_PLAYER_JOIN("gpj"),
     GAME_PLAYER_LEAVE("gpl"),
@@ -487,10 +492,16 @@ public class Constants {
    * Fields for information about a game.
    */
   public enum GameInfo {
+    @DuplicationAllowed
+    CARD_SET(AjaxRequest.CARD_SET),
     HOST("H"),
     @DuplicationAllowed
     ID(AjaxRequest.GAME_ID),
+    @DuplicationAllowed
+    PLAYER_LIMIT(AjaxRequest.PLAYER_LIMIT),
     PLAYERS("P"),
+    @DuplicationAllowed
+    SCORE_LIMIT(AjaxRequest.SCORE_LIMIT),
     STATE("S");
 
     private final String key;
