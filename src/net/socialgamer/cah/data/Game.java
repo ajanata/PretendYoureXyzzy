@@ -458,7 +458,7 @@ public class Game {
           playerStatus = GamePlayerStatus.JUDGE;
         }
         // TODO win-by-x
-        else if (player.getScore() == scoreGoal) {
+        else if (player.getScore() >= scoreGoal) {
           playerStatus = GamePlayerStatus.WINNER;
         } else {
           playerStatus = GamePlayerStatus.IDLE;
@@ -1191,7 +1191,7 @@ public class Game {
       killRoundTimer();
       final TimerTask task;
       // TODO win-by-x option
-      if (cardPlayer.getScore() == scoreGoal) {
+      if (cardPlayer.getScore() >= scoreGoal) {
         task = new TimerTask() {
           @Override
           public void run() {
