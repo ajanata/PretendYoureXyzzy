@@ -113,6 +113,10 @@ cah.longpoll.done = function(data_list) {
         cah.log.error(cah.$.ErrorCode_msg[errorCode]);
       }
     } else {
+      // FIXME giant hack
+      if (data[cah.$.LongPollResponse.PLAY_TIMER]) {
+        $("#current_timer").text(data[cah.$.LongPollResponse.PLAY_TIMER] / 1000);
+      }
       var event = data[cah.$.LongPollResponse.EVENT];
       if (cah.longpoll.EventHandlers[event]) {
         cah.longpoll.EventHandlers[event](data);
