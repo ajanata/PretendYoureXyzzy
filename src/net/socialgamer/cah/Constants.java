@@ -385,7 +385,7 @@ public class Constants {
     MESSAGE(AjaxRequest.MESSAGE),
     @DuplicationAllowed
     NICKNAME(AjaxRequest.NICKNAME),
-    PLAY_TIMER("pt"),
+    PLAY_TIMER("Pt"),
     @DuplicationAllowed
     PLAYER_INFO(AjaxResponse.PLAYER_INFO),
     /**
