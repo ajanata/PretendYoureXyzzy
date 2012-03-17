@@ -471,7 +471,7 @@ cah.Game.prototype.handCardMouseLeave_ = function(e) {
  * @private
  */
 cah.Game.prototype.roundCardMouseEnter_ = function(e) {
-  $(e.data.card.getElement()).css("z-index", "2").animate({
+  $(e.data.card.getElement()).css("z-index", "201").animate({
     scale : this.roundCardLargeScale_,
     width : this.roundCardLargeSize_,
   }, {
@@ -489,7 +489,7 @@ cah.Game.prototype.roundCardMouseEnter_ = function(e) {
 cah.Game.prototype.roundCardMouseLeave_ = function(e) {
   $(e.data.card.getElement()).animate({
     scale : this.roundCardSmallScale_,
-    "z-index" : 1,
+    "z-index" : 200,
     width : this.roundCardSmallSize_,
   }, {
     duration : 200,
@@ -776,13 +776,6 @@ cah.Game.prototype.playerKickedIdle = function(data) {
 cah.Game.prototype.playerSkipped = function(data) {
   cah.log.status(data[cah.$.LongPollResponse.NICKNAME]
       + " was skipped this round for being idle for too long.");
-};
-
-/**
- * This player was kicked due to being idle.
- */
-cah.Game.prototype.iWasKickedIdle = function() {
-
 };
 
 /**

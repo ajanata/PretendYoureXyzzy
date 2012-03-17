@@ -367,6 +367,10 @@ span.debug {
   z-index: 200;
 }
 
+.game_right_side_cards .card_holder, .game_white_cards_binder {
+  z-index: 200;
+}
+
 .game_white_cards_binder {
   border: 5px solid silver;
   display: inline-block;
