@@ -72,45 +72,50 @@ public abstract class CahServlet extends HttpServlet {
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
 
-    final HttpSession hSession = request.getSession(true);
-    final User user = (User) hSession.getAttribute(SessionAttribute.USER);
+    try {
+      final HttpSession hSession = request.getSession(true);
+      final User user = (User) hSession.getAttribute(SessionAttribute.USER);
 
-    if (verboseDebug()) {
-      // TODO if we have any sort of authentication later, we need to make sure to not log passwords!
-      // I could use getParameterMap, but that returns an array, and getting pretty strings out of
-      // array values is a lot of work.
-      final Map<String, Object> params = new HashMap<String, Object>();
-      final Enumeration<String> paramNames = request.getParameterNames();
-      while (paramNames.hasMoreElements()) {
-        final String name = paramNames.nextElement();
-        params.put(name, request.getParameter(name));
+      if (verboseDebug()) {
+        // TODO if we have any sort of authentication later, we need to make sure to not log passwords!
+        // I could use getParameterMap, but that returns an array, and getting pretty strings out of
+        // array values is a lot of work.
+        final Map<String, Object> params = new HashMap<String, Object>();
+        final Enumeration<String> paramNames = request.getParameterNames();
+        while (paramNames.hasMoreElements()) {
+          final String name = paramNames.nextElement();
+          params.put(name, request.getParameter(name));
+        }
+        log(user, "Request: " + JSONValue.toJSONString(params));
       }
-      log(user, "Request: " + JSONValue.toJSONString(params));
-    }
 
-    final String op = request.getParameter(AjaxRequest.OP.toString());
-    // we don't make sure they have a User object if they are doing either of the requests that
-    // create or check for the User object. That would be silly.
-    final boolean skipSessionUserCheck = op != null
-        && (op.equals(AjaxOperation.REGISTER.toString())
-        || op.equals(AjaxOperation.FIRST_LOAD.toString()));
-    if (hSession.isNew()) {
-      // they should have gotten a session from the index page.
-      // they probably don't have cookies on.
-      returnError(user, response.getWriter(), ErrorCode.NO_SESSION);
-    } else if (!skipSessionUserCheck && hSession.getAttribute(SessionAttribute.USER) == null) {
-      returnError(user, response.getWriter(), ErrorCode.NOT_REGISTERED);
-    } else if (user != null && !user.isValid()) {
-      // user probably pinged out, or possibly kicked by admin
-      hSession.invalidate();
-      returnError(user, response.getWriter(), ErrorCode.SESSION_EXPIRED);
-    } else {
-      try {
-        handleRequest(request, response, hSession);
-      } catch (final AssertionError ae) {
-        log("Assertion failed", ae);
-        log(user, ae.toString());
+      final String op = request.getParameter(AjaxRequest.OP.toString());
+      // we don't make sure they have a User object if they are doing either of the requests that
+      // create or check for the User object. That would be silly.
+      final boolean skipSessionUserCheck = op != null
+          && (op.equals(AjaxOperation.REGISTER.toString())
+          || op.equals(AjaxOperation.FIRST_LOAD.toString()));
+      if (hSession.isNew()) {
+        // they should have gotten a session from the index page.
+        // they probably don't have cookies on.
+        returnError(user, response.getWriter(), ErrorCode.NO_SESSION);
+      } else if (!skipSessionUserCheck && hSession.getAttribute(SessionAttribute.USER) == null) {
+        returnError(user, response.getWriter(), ErrorCode.NOT_REGISTERED);
+      } else if (user != null && !user.isValid()) {
+        // user probably pinged out, or possibly kicked by admin
+        hSession.invalidate();
+        returnError(user, response.getWriter(), ErrorCode.SESSION_EXPIRED);
+      } else {
+        try {
+          handleRequest(request, response, hSession);
+        } catch (final AssertionError ae) {
+          log("Assertion failed", ae);
+          log(user, ae.toString());
+        }
       }
+    } catch (final IllegalStateException ise) {
+      // session invalidated, so pretend they don't have one.
+      returnError(null, response.getWriter(), ErrorCode.NO_SESSION);
     }
   }
 
@@ -145,7 +150,7 @@ public abstract class CahServlet extends HttpServlet {
    * {@link #returnError(User, PrintWriter, ErrorCode, int)} if you know the request serial number.
    * 
    * @param user
-   *          User that caused this error.
+   *          User that caused this error, or {@code null} if user is not known.
    * @param writer
    *          Response writer to send the error data to.
    * @param code
