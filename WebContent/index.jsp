@@ -53,6 +53,10 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>17 March, 1:30 AM UTC:<ul>
+    <li>Fixed AFK timer skipping people who played at least one card for a multiple-PICK card.</li>
+    <li>Increased AFK timeouts to 45 + 15 * PICK seconds and 40 + 7 * PICK * PLAYERS seconds.</li>
+  </ul></li>
   <li>17 March, Midnight UTC:<ul>
     <li>Initial AFK timer support added. This will skip (or kick, if there are not enough players) a
     player that takes longer than 15 + 15 * PICK seconds to play, or skip a judge that takes longer

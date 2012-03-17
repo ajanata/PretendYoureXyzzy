@@ -91,17 +91,17 @@ public class Game {
   private final Object blackCardLock = new Object();
   private WhiteDeck whiteDeck;
   private GameState state;
-  private int maxPlayers = 10;
+  private int maxPlayers = 6;
   private int judgeIndex = 0;
   private final static int ROUND_INTERMISSION = 8 * 1000;
   /**
    * Duration, in milliseconds, for the minimum timeout a player has to choose a card to play.
    * Minimum 10 seconds.
    */
-  private final static int PLAY_TIMEOUT_BASE = 30 * 1000;
+  private final static int PLAY_TIMEOUT_BASE = 45 * 1000;
   /**
    * Duration, in milliseconds, for the additional timeout a player has to choose a card to play,
-   * for each additional card that must be played. For example, on a PICK 2 card, this amount of
+   * for each card that must be played. For example, on a PICK 2 card, two times this amount of
    * time is added to {@code PLAY_TIMEOUT_BASE}.
    */
   private final static int PLAY_TIMEOUT_PER_CARD = 15 * 1000;
@@ -109,13 +109,13 @@ public class Game {
    * Duration, in milliseconds, for the minimum timeout a judge has to choose a winner.
    * Minimum combined of this and 2 * {@code JUDGE_TIMEOUT_PER_CARD} is 10 seconds.
    */
-  private final static int JUDGE_TIMEOUT_BASE = 20 * 1000;
+  private final static int JUDGE_TIMEOUT_BASE = 40 * 1000;
   /**
    * Duration, in milliseconds, for the additional timeout a judge has to choose a winning card,
    * for each additional card that was played in the round. For example, on a PICK 2 card with
    * 3 non-judge players, 6 times this value is added to {@code JUDGE_TIMEOUT_BASE}.
    */
-  private final static int JUDGE_TIMEOUT_PER_CARD = 5 * 1000;
+  private final static int JUDGE_TIMEOUT_PER_CARD = 7 * 1000;
   private final static int MAX_SKIPS_BEFORE_KICK = 2;
   private final Object judgeLock = new Object();
   private Timer nextRoundTimer;
@@ -548,7 +548,7 @@ public class Game {
       }
     }
 
-    final int playTimer = PLAY_TIMEOUT_BASE + (PLAY_TIMEOUT_PER_CARD * (blackCard.getPick() - 1));
+    final int playTimer = PLAY_TIMEOUT_BASE + (PLAY_TIMEOUT_PER_CARD * blackCard.getPick());
 
     final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
@@ -577,13 +577,11 @@ public class Game {
     synchronized (nextRoundTimerLock) {
       killRoundTimer();
 
-      synchronized (players) {
-        for (final Player player : players) {
-          if (getJudge() == player) {
-            continue;
-          }
+      synchronized (roundPlayers) {
+        for (final Player player : roundPlayers) {
           synchronized (playedCards) {
-            if (!playedCards.hasPlayer(player)) {
+            if (!playedCards.hasPlayer(player)
+                || playedCards.getCards(player).size() < blackCard.getPick()) {
               final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
               data.put(LongPollResponse.EVENT, LongPollEvent.HURRY_UP.toString());
               data.put(LongPollResponse.GAME_ID, this.id);
@@ -648,16 +646,14 @@ public class Game {
 
   private void skipIdlePlayers() {
     killRoundTimer();
-    synchronized (players) {
+    synchronized (roundPlayers) {
       final List<User> playersToRemove = new ArrayList<User>();
       final List<Player> playersToUpdateStatus = new ArrayList<Player>();
 
-      for (final Player player : players) {
-        if (getJudge() == player) {
-          continue;
-        }
+      for (final Player player : roundPlayers) {
         synchronized (playedCards) {
-          if (!playedCards.hasPlayer(player)) {
+          if (!playedCards.hasPlayer(player)
+              || playedCards.getCards(player).size() < blackCard.getPick()) {
             player.skipped();
             final HashMap<ReturnableData, Object> data = getEventMap();
 
@@ -671,6 +667,14 @@ public class Game {
               playersToUpdateStatus.add(player);
             }
             broadcastToPlayers(MessageType.GAME_EVENT, data);
+
+            // put their cards back
+            final List<WhiteCard> cards = playedCards.getCards(player);
+            if (cards != null) {
+              playedCards.remove(player);
+              player.getHand().addAll(cards);
+              sendCardsToPlayer(player, cards);
+            }
           }
         }
       }
