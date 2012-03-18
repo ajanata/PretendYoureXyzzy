@@ -53,6 +53,14 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>18 March, 6:40 PM UTC:<ul>
+    <li>Added version 1.2 Cards Against Humanity cards. Game host can choose between original, new,
+    or both at once.<ul>
+      <li>Cards that were slightly reworded in the new version were updated instead of replaced
+      here, so even if you pick original you may get some newly reworded cards.</li>
+    </ul></li>
+    <li>Hopefully fixed a rare crashing issue.</li>
+  </ul></li>
   <li>17 March, 1:30 AM UTC:<ul>
     <li>Fixed AFK timer skipping people who played at least one card for a multiple-PICK card.</li>
     <li>Increased AFK timeouts to 45 + 15 * PICK seconds and 40 + 7 * PICK * PLAYERS seconds.</li>
