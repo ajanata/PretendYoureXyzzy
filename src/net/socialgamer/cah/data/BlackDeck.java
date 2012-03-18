@@ -48,12 +48,18 @@ public class BlackDeck {
    * Create a new black card deck, loading the cards from the database and shuffling them.
    */
   @SuppressWarnings("unchecked")
-  public BlackDeck() {
+  public BlackDeck(final int cardSet) {
     final Session session = HibernateUtil.instance.sessionFactory.openSession();
     final Transaction transaction = session.beginTransaction();
     transaction.begin();
     // TODO option to restrict to only stock cards or allow customs
-    deck = session.createQuery("from BlackCard order by random()").setReadOnly(true).list();
+    String query = "from BlackCard order by random()";
+    if (1 == cardSet) {
+      query = "from BlackCard where in_v1 = true order by random()";
+    } else if (2 == cardSet) {
+      query = "from BlackCard where in_v2 = true order by random()";
+    }
+    deck = session.createQuery(query).setReadOnly(true).list();
     dealt = new ArrayList<BlackCard>();
     discard = new ArrayList<BlackCard>();
     transaction.commit();

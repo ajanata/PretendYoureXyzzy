@@ -286,14 +286,12 @@ HttpSession hSession = request.getSession(true);
       <option value="10" selected="selected">10</option>
     </select>
     <br/>
-    <!--
     <label id="card_set_template_label" for="card_set_template">Use cards from version:</label>
     <select id="card_set_template" class="card_set">
       <option value="1">first</option>
-      <option value="2">second</option>
+      <option value="2" selected="selected">second</option>
       <option value="3">both</option>
     </select>
-    -->
   </div>
 </div>
 

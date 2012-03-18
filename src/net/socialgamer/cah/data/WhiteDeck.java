@@ -48,12 +48,18 @@ public class WhiteDeck {
    * Create a new white card deck, loading the cards from the database and shuffling them.
    */
   @SuppressWarnings("unchecked")
-  public WhiteDeck() {
+  public WhiteDeck(final int cardSet) {
     final Session session = HibernateUtil.instance.sessionFactory.openSession();
     final Transaction transaction = session.beginTransaction();
     transaction.begin();
     // TODO option to restrict to only stock cards or allow customs
-    deck = session.createQuery("from WhiteCard order by random()").setReadOnly(true).list();
+    String query = "from WhiteCard order by random()";
+    if (1 == cardSet) {
+      query = "from WhiteCard where in_v1 = true order by random()";
+    } else if (2 == cardSet) {
+      query = "from WhiteCard where in_v2 = true order by random()";
+    }
+    deck = session.createQuery(query).setReadOnly(true).list();
     dealt = new ArrayList<WhiteCard>();
     discard = new ArrayList<WhiteCard>();
     transaction.commit();

@@ -121,7 +121,7 @@ public class Game {
   private Timer nextRoundTimer;
   private final Object nextRoundTimerLock = new Object();
   private int scoreGoal = 8;
-  private int cardSet = 0;
+  private int cardSet = 2;
 
   /**
    * Create a new game.
@@ -484,8 +484,8 @@ public class Game {
       if (players.size() >= 3) {
         // Pick a random start judge, though the "next" judge will actually go first.
         judgeIndex = (int) (Math.random() * players.size());
-        blackDeck = new BlackDeck();
-        whiteDeck = new WhiteDeck();
+        blackDeck = new BlackDeck(cardSet);
+        whiteDeck = new WhiteDeck(cardSet);
         startNextRound();
         return true;
       } else {
