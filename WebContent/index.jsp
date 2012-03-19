@@ -55,6 +55,8 @@ to, for instance, display the number of connected players.
 <ul>
   <li>19 March, 4:20 AM UTC:<ul>
     <li>Added game passwords.</li>
+    <li>Added Show Game Options button in-game to see the game's options. The host cannot change
+    options while the game is in progress.</li>
   </ul></li>
   <li>18 March, 6:40 PM UTC:<ul>
     <li>Added version 1.2 Cards Against Humanity cards. Game host can choose between original, new,
