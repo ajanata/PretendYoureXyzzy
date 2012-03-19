@@ -231,10 +231,19 @@ cah.Game = function(id) {
    */
   this.showingLastRound_ = false;
 
+  /**
+   * Whether we are showing the options or the game.
+   * 
+   * @type {Boolean}
+   * @private
+   */
+  this.showingOptions_ = true;
+
   $("#leave_game").click(cah.bind(this, this.leaveGameClick_));
   $("#start_game").click(cah.bind(this, this.startGameClick_));
   $(".confirm_card", this.element_).click(cah.bind(this, this.confirmClick_));
   $(".game_show_last_round", this.element_).click(cah.bind(this, this.showLastRoundClick_));
+  $(".game_show_options", this.element_).click(cah.bind(this, this.showOptionsClick_));
   $("select", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
   $("input", this.optionsElement_).blur(cah.bind(this, this.optionChanged_));
 
@@ -279,6 +288,20 @@ cah.Game.prototype.showLastRoundClick_ = function() {
   }
 
   this.showingLastRound_ = !this.showingLastRound_;
+};
+
+/**
+ * Toggle showing the game's options.
+ * 
+ * @private
+ */
+cah.Game.prototype.showOptionsClick_ = function() {
+  if (this.showingOptions_) {
+    this.showOptions_();
+  } else {
+    this.hideOptions_();
+  }
+  this.showingOptions_ = !this.showingOptions_;
 };
 
 /**
@@ -1053,6 +1076,7 @@ cah.Game.prototype.stateChange = function(data) {
  * @private
  */
 cah.Game.prototype.hideOptions_ = function() {
+  $(".game_show_options", this.element_).val("Show Game Options");
   $(".game_options", this.element_).addClass("hide");
   $(".game_right_side", this.element_).removeClass("hide");
 };
@@ -1063,6 +1087,7 @@ cah.Game.prototype.hideOptions_ = function() {
  * @private
  */
 cah.Game.prototype.showOptions_ = function() {
+  $(".game_show_options", this.element_).val("Hide Game Options");
   $(".game_options", this.element_).removeClass("hide");
   $(".game_right_side", this.element_).addClass("hide");
   this.updateOptionsEnabled_();
@@ -1074,7 +1099,7 @@ cah.Game.prototype.showOptions_ = function() {
  * @private
  */
 cah.Game.prototype.updateOptionsEnabled_ = function() {
-  if (this.host_ == cah.nickname) {
+  if (this.host_ == cah.nickname && this.state_ == cah.$.GameState.LOBBY) {
     $("select", this.optionsElement_).removeAttr("disabled");
     $("input", this.optionsElement_).removeAttr("disabled");
     $(".options_host_only", this.optionsElement_).addClass("hide");

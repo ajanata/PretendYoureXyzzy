@@ -187,8 +187,9 @@ HttpSession hSession = request.getSession(true);
     class="hide">
   <div id="game_template" class="game">
     <div class="game_top">
-      <input type="button" class="game_show_last_round" value="Show Last Round"
+      <input type="button" class="game_show_last_round game_menu_bar" value="Show Last Round"
           disabled="disabled" />
+      <input type="button" class="game_show_options game_menu_bar" value="Hide Game Options" />
       <div class="game_message">
         Waiting for server...
       </div>
