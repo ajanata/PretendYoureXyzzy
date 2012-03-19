@@ -122,6 +122,7 @@ public class Game {
   private final Object nextRoundTimerLock = new Object();
   private int scoreGoal = 8;
   private int cardSet = 2;
+  private String password = "";
 
   /**
    * Create a new game.
@@ -339,20 +340,37 @@ public class Game {
     return id;
   }
 
-  public void updateGameSettings(final int scoreLimit, final int playerLimit, final int cardSet1) {
+  public String getPassword() {
+    return password;
+  }
+
+  public void updateGameSettings(final int scoreLimit, final int playerLimit, final int cardSet1,
+      final String password1) {
     this.scoreGoal = scoreLimit;
     this.maxPlayers = playerLimit;
     this.cardSet = cardSet1;
+    this.password = password1;
 
     final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_OPTIONS_CHANGED.toString());
+    data.put(LongPollResponse.GAME_INFO, getInfo(true));
     broadcastToPlayers(MessageType.GAME_EVENT, data);
   }
 
   /**
-   * @return This game's general information: ID, host, state, player list.
+   * @return This game's general information: ID, host, state, player list, etc.
    */
   public Map<GameInfo, Object> getInfo() {
+    return getInfo(false);
+  }
+
+  /**
+   * @param includePassword
+   *          Include the actual password with the information. This should only be
+   *          sent to people in the game.
+   * @return This game's general information: ID, host, state, player list, etc.
+   */
+  public Map<GameInfo, Object> getInfo(final boolean includePassword) {
     final Map<GameInfo, Object> info = new HashMap<GameInfo, Object>();
     info.put(GameInfo.ID, id);
     info.put(GameInfo.HOST, host.toString());
@@ -360,6 +378,10 @@ public class Game {
     info.put(GameInfo.CARD_SET, cardSet);
     info.put(GameInfo.PLAYER_LIMIT, maxPlayers);
     info.put(GameInfo.SCORE_LIMIT, scoreGoal);
+    if (includePassword) {
+      info.put(GameInfo.PASSWORD, password);
+    }
+    info.put(GameInfo.HAS_PASSWORD, password != null && !password.equals(""));
     synchronized (players) {
       final List<String> playerNames = new ArrayList<String>(players.size());
       for (final Player player : players) {

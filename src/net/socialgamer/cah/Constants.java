@@ -180,6 +180,7 @@ public class Constants {
     MESSAGE("m"),
     NICKNAME("n"),
     OP("o"),
+    PASSWORD("pw"),
     PLAYER_LIMIT("pL"),
     SCORE_LIMIT("sl"),
     SERIAL("s");
@@ -282,7 +283,8 @@ public class Constants {
     SERVER_ERROR("serr", "An error occured on the server."),
     SESSION_EXPIRED("se", "Your session has expired. Refresh the page."),
     TOO_MANY_GAMES("tmg", "There are too many games already in progress. Either join " +
-        "an existing game, or wait for one to become available.");
+        "an existing game, or wait for one to become available."),
+    WRONG_PASSWORD("wp", "That password is incorrect.");
 
     private final String code;
     private final String message;
@@ -374,6 +376,8 @@ public class Constants {
     FROM("f"),
     @DuplicationAllowed
     GAME_ID(AjaxResponse.GAME_ID),
+    @DuplicationAllowed
+    GAME_INFO(AjaxResponse.GAME_INFO),
     GAME_STATE("gs"),
     @DuplicationAllowed
     HAND(AjaxResponse.HAND),
@@ -500,9 +504,12 @@ public class Constants {
   public enum GameInfo {
     @DuplicationAllowed
     CARD_SET(AjaxRequest.CARD_SET),
+    HAS_PASSWORD("hp"),
     HOST("H"),
     @DuplicationAllowed
     ID(AjaxRequest.GAME_ID),
+    @DuplicationAllowed
+    PASSWORD(AjaxRequest.PASSWORD),
     @DuplicationAllowed
     PLAYER_LIMIT(AjaxRequest.PLAYER_LIMIT),
     PLAYERS("P"),

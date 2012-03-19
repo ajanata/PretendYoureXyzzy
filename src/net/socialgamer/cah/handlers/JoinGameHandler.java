@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
+import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
@@ -59,6 +60,13 @@ public class JoinGameHandler extends GameHandler {
       final HttpSession session, final User user, final Game game) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
+    final String password = request.getParameter(AjaxRequest.PASSWORD);
+    final String gamePassword = game.getPassword();
+    if (gamePassword != null && !gamePassword.equals("")) {
+      if (password == null || !gamePassword.equals(password)) {
+        return error(ErrorCode.WRONG_PASSWORD);
+      }
+    }
     try {
       game.addPlayer(user);
     } catch (final IllegalStateException e) {

@@ -118,10 +118,15 @@ HttpSession hSession = request.getSession(true);
 	  <div class="gamelist_lobby_left">
 	    Game <span class="gamelist_lobby_id">###</span>
 	    <span class="gamelist_lobby_status">status</span>
-	    <br/>
+      <br/>
+      Goal: <span class="gamelist_lobby_goal"></span>
+      / Cards: <span class="gamelist_lobby_cardset"></span>
+      <br/>
 	    Host: <span class="gamelist_lobby_host">host</span>
 	    <br/>
-	    Players: <span class="gamelist_lobby_players">host, player1, player2</span>
+	    Players (<span class="gamelist_lobby_player_count"></span> of
+      <span class="gamelist_lobby_max_players"></span>):
+      <span class="gamelist_lobby_players">host, player1, player2</span>
 	  </div>
 	  <div class="gamelist_lobby_right">
 	    <input type="button" class="gamelist_lobby_join" value="Join" />
@@ -292,6 +297,10 @@ HttpSession hSession = request.getSession(true);
       <option value="2" selected="selected">second</option>
       <option value="3">both</option>
     </select>
+    <br/>
+    <label id="game_password_template_label" for="game_password_template">Game password:</label>
+    <input type="text" id="game_password_template" class="game_password" />
+    You must click outside the box to apply the password.
   </div>
 </div>
 

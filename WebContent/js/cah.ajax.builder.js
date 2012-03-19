@@ -167,6 +167,17 @@ cah.ajax.Builder.prototype.withScoreLimit = function(scoreLimit) {
 };
 
 /**
+ * @param {string}
+ *          password Password field to use in the request.
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withPassword = function(password) {
+  this.assertNotExecuted_();
+  this.data[cah.$.AjaxRequest.PASSWORD] = password;
+  return this;
+};
+
+/**
  * Assert that the request from this builder has not already run. Throws an exception if it has.
  * 
  * @private

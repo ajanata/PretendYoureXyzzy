@@ -41,10 +41,16 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
         final int scoreLimit = Integer.parseInt(request.getParameter(AjaxRequest.SCORE_LIMIT));
         final int playerLimit = Integer.parseInt(request.getParameter(AjaxRequest.PLAYER_LIMIT));
         final int cardSet = Integer.parseInt(request.getParameter(AjaxRequest.CARD_SET));
-        game.updateGameSettings(scoreLimit, playerLimit, cardSet);
+        String password = request.getParameter(AjaxRequest.PASSWORD);
+        if (password == null) {
+          password = "";
+        }
+        game.updateGameSettings(scoreLimit, playerLimit, cardSet, password);
       } catch (final NumberFormatException nfe) {
         return error(ErrorCode.BAD_REQUEST);
       }
+
+      gameManager.broadcastGameListRefresh();
       return data;
     }
   }

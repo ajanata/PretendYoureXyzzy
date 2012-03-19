@@ -163,6 +163,14 @@ cah.GameListLobby = function(parentElem, data) {
    */
   this.element_ = $("#gamelist_lobby_template").clone()[0];
 
+  /**
+   * This game's data.
+   * 
+   * @type {object}
+   * @private
+   */
+  this.data_ = data;
+
   this.element_.id = "gamelist_lobby_" + this.id_;
   $(parentElem).append(this.element_);
   $(this.element_).removeClass("hide");
@@ -172,13 +180,35 @@ cah.GameListLobby = function(parentElem, data) {
   var statusMessage = cah.$.GameState_msg[data[cah.$.GameInfo.STATE]];
   $(".gamelist_lobby_status", this.element_).text(statusMessage);
   $(".gamelist_lobby_join", this.element_).click(cah.bind(this, this.joinClick));
+  $(".gamelist_lobby_player_count", this.element_).text(data[cah.$.GameInfo.PLAYERS].length);
+  $(".gamelist_lobby_max_players", this.element_).text(data[cah.$.GameInfo.PLAYER_LIMIT]);
+  $(".gamelist_lobby_goal", this.element_).text(data[cah.$.GameInfo.SCORE_LIMIT]);
+  // TODO make this better when we have more card sets
+  var cardset = "All";
+  if (data[cah.$.GameInfo.CARD_SET] == 1) {
+    cardset = "First Edition";
+  } else if (data[cah.$.GameInfo.CARD_SET] == 2) {
+    cardset = "Second Edition";
+  }
+  $(".gamelist_lobby_cardset", this.element_).text(cardset);
+
+  if (data[cah.$.GameInfo.HAS_PASSWORD]) {
+    $(".gamelist_lobby_join", this.element_).val("Join\n(Passworded)");
+  }
 };
 
 /**
  * Event handler for clicking the Join button in a game lobby.
  */
 cah.GameListLobby.prototype.joinClick = function() {
-  cah.Ajax.build(cah.$.AjaxOperation.JOIN_GAME).withGameId(this.id_).run();
+  var password = "";
+  if (this.data_[cah.$.GameInfo.HAS_PASSWORD]) {
+    password = prompt("Enter the game's password.");
+    if (password == null) {
+      password = "";
+    }
+  }
+  cah.Ajax.build(cah.$.AjaxOperation.JOIN_GAME).withGameId(this.id_).withPassword(password).run();
 };
 
 /**
