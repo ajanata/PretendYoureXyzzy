@@ -53,6 +53,9 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>19 March, 4:20 AM UTC:<ul>
+    <li>Added game passwords.</li>
+  </ul></li>
   <li>18 March, 6:40 PM UTC:<ul>
     <li>Added version 1.2 Cards Against Humanity cards. Game host can choose between original, new,
     or both at once.<ul>
