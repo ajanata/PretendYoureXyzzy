@@ -517,6 +517,7 @@ public class Game {
         blackDeck = new BlackDeck(cardSet);
         whiteDeck = new WhiteDeck(cardSet);
         startNextRound();
+        gameManager.broadcastGameListRefresh();
         return true;
       } else {
         return false;
