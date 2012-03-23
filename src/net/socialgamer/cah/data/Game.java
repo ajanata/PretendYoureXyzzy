@@ -77,11 +77,11 @@ public class Game {
   /**
    * All players present in the game.
    */
-  private final List<Player> players = new ArrayList<Player>(10);
+  private final List<Player> players = Collections.synchronizedList(new ArrayList<Player>(10));
   /**
    * Players participating in the current round.
    */
-  private final List<Player> roundPlayers = new ArrayList<Player>(9);
+  private final List<Player> roundPlayers = Collections.synchronizedList(new ArrayList<Player>(9));
   private final PlayerPlayedCardsTracker playedCards = new PlayerPlayedCardsTracker();
   private final ConnectedUsers connectedUsers;
   private final GameManager gameManager;
@@ -117,6 +117,9 @@ public class Game {
    */
   private final static int JUDGE_TIMEOUT_PER_CARD = 7 * 1000;
   private final static int MAX_SKIPS_BEFORE_KICK = 2;
+  /**
+   * Lock object to prevent judging during idle judge detection and vice-versa.
+   */
   private final Object judgeLock = new Object();
   private Timer nextRoundTimer;
   private final Object nextRoundTimerLock = new Object();
@@ -146,6 +149,8 @@ public class Game {
 
   /**
    * Add a player to the game.
+   * 
+   * Synchronizes on {@link #players}.
    * 
    * @param user
    *          Player to add to this game.
@@ -178,6 +183,9 @@ public class Game {
 
   /**
    * Remove a player from the game.
+   * <br/>
+   * Synchronizes on {@link #players}, {@link #playedCards}, {@link #whiteDeck}, and
+   * {@link #nextRoundTimerLock}.
    * 
    * @param user
    *          Player to remove from the game.
@@ -192,33 +200,23 @@ public class Game {
         final Player player = iterator.next();
         if (player.getUser() == user) {
           // If they played this round, remove card from played card list.
-          synchronized (playedCards) {
-            if (playedCards.hasPlayer(player)) {
-              synchronized (whiteDeck) {
-                final List<WhiteCard> cards = playedCards.getCards(player);
-                for (final WhiteCard card : cards) {
-                  whiteDeck.discard(card);
-                }
-              }
-              playedCards.remove(player);
+          final List<WhiteCard> cards = playedCards.remove(player);
+          if (cards != null && cards.size() > 0) {
+            for (final WhiteCard card : cards) {
+              whiteDeck.discard(card);
             }
           }
           // If they are to play this round, remove them from that list.
-          synchronized (roundPlayers) {
-            if (roundPlayers.contains(player)) {
-              roundPlayers.remove(player);
-              if (startJudging()) {
-                judgingState();
-              }
+          if (roundPlayers.remove(player)) {
+            if (startJudging()) {
+              judgingState();
             }
           }
           // If they have a hand, return it to discard pile.
           if (player.getHand().size() > 0) {
-            synchronized (whiteDeck) {
-              final List<WhiteCard> hand = player.getHand();
-              for (final WhiteCard card : hand) {
-                whiteDeck.discard(card);
-              }
+            final List<WhiteCard> hand = player.getHand();
+            for (final WhiteCard card : hand) {
+              whiteDeck.discard(card);
             }
           }
           // If they are judge, return all played cards to hand, and move to next judge.
@@ -284,6 +282,11 @@ public class Game {
     }
   }
 
+  /**
+   * Return all played cards to their respective player's hand.
+   * <br/>
+   * Synchronizes on {@link #playedCards}.
+   */
   private void returnCardsToHand() {
     synchronized (playedCards) {
       for (final Player p : playedCards.playedPlayers()) {
@@ -358,6 +361,9 @@ public class Game {
   }
 
   /**
+   * Get information about this game, without the game's password.
+   * <br/>
+   * Synchronizes on {@link #players}.
    * @return This game's general information: ID, host, state, player list, etc.
    */
   public Map<GameInfo, Object> getInfo() {
@@ -365,6 +371,9 @@ public class Game {
   }
 
   /**
+   * Get information about this game.
+   * <br/>
+   * Synchronizes on {@link #players}.
    * @param includePassword
    *          Include the actual password with the information. This should only be
    *          sent to people in the game.
@@ -393,6 +402,7 @@ public class Game {
   }
 
   /**
+   * Synchronizes on {@link #players}.
    * @return Player information for every player in this game: Name, score, status.
    */
   public List<Map<GamePlayerInfo, Object>> getAllPlayerInfo() {
@@ -451,20 +461,16 @@ public class Game {
         if (getJudge() == player) {
           playerStatus = GamePlayerStatus.JUDGE;
         } else {
-          synchronized (roundPlayers) {
-            if (!roundPlayers.contains(player)) {
-              playerStatus = GamePlayerStatus.IDLE;
-              break;
-            }
+          if (!roundPlayers.contains(player)) {
+            playerStatus = GamePlayerStatus.IDLE;
+            break;
           }
-          synchronized (playedCards) {
-            final List<WhiteCard> playerCards = playedCards.getCards(player);
-            if (playerCards != null && blackCard != null
-                && playerCards.size() == blackCard.getPick()) {
-              playerStatus = GamePlayerStatus.IDLE;
-            } else {
-              playerStatus = GamePlayerStatus.PLAYING;
-            }
+          final List<WhiteCard> playerCards = playedCards.getCards(player);
+          if (playerCards != null && blackCard != null
+              && playerCards.size() == blackCard.getPick()) {
+            playerStatus = GamePlayerStatus.IDLE;
+          } else {
+            playerStatus = GamePlayerStatus.PLAYING;
           }
         }
         break;
@@ -494,6 +500,8 @@ public class Game {
 
   /**
    * Start the game, if there are at least 3 players present. This does not do any access checking!
+   * <br/>
+   * Synchronizes on {@link #players}.
    * 
    * @return True if the game is started. Would only be false if there aren't enough players, or the
    *         game is already started, but hopefully clients would prevent that from happening!
@@ -519,6 +527,8 @@ public class Game {
   /**
    * Move the game into the {@code DEALING} state, and deal cards. The game immediately then moves
    * into the {@code PLAYING} state.
+   * <br/>
+   * Synchronizes on {@link #players}.
    */
   private void dealState() {
     state = GameState.DEALING;
@@ -526,12 +536,10 @@ public class Game {
       for (final Player player : players) {
         final List<WhiteCard> hand = player.getHand();
         final List<WhiteCard> newCards = new LinkedList<WhiteCard>();
-        synchronized (whiteDeck) {
-          while (hand.size() < 10) {
-            final WhiteCard card = getNextWhiteCard();
-            hand.add(card);
-            newCards.add(card);
-          }
+        while (hand.size() < 10) {
+          final WhiteCard card = getNextWhiteCard();
+          hand.add(card);
+          newCards.add(card);
         }
         sendCardsToPlayer(player, newCards);
       }
@@ -542,13 +550,13 @@ public class Game {
   /**
    * Move the game into the {@code PLAYING} state, drawing a new Black Card and dispatching a
    * message to all players.
+   * <br/>
+   * Synchronizes on {@link #players}, {@link #blackCardLock}, and {@link #nextRoundTimerLock}.
    */
   private void playingState() {
     state = GameState.PLAYING;
 
-    synchronized (playedCards) {
-      playedCards.clear();
-    }
+    playedCards.clear();
 
     synchronized (blackCardLock) {
       blackCard = getNextBlackCard();
@@ -594,6 +602,11 @@ public class Game {
     }
   }
 
+  /**
+   * Warn players that have not yet played that they are running out of time to do so.
+   * <br/>
+   * Synchronizes on {@link #nextRoundTimerLock} and {@link #roundPlayers}.
+   */
   private void warnPlayersToPlay() {
     // have to do this all synchronized in case they play while we're processing this
     synchronized (nextRoundTimerLock) {
@@ -601,15 +614,13 @@ public class Game {
 
       synchronized (roundPlayers) {
         for (final Player player : roundPlayers) {
-          synchronized (playedCards) {
-            if (!playedCards.hasPlayer(player)
-                || playedCards.getCards(player).size() < blackCard.getPick()) {
-              final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-              data.put(LongPollResponse.EVENT, LongPollEvent.HURRY_UP.toString());
-              data.put(LongPollResponse.GAME_ID, this.id);
-              final QueuedMessage q = new QueuedMessage(MessageType.GAME_EVENT, data);
-              player.getUser().enqueueMessage(q);
-            }
+          final List<WhiteCard> cards = playedCards.getCards(player);
+          if (cards == null || cards.size() < blackCard.getPick()) {
+            final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+            data.put(LongPollResponse.EVENT, LongPollEvent.HURRY_UP.toString());
+            data.put(LongPollResponse.GAME_ID, this.id);
+            final QueuedMessage q = new QueuedMessage(MessageType.GAME_EVENT, data);
+            player.getUser().enqueueMessage(q);
           }
         }
       }
@@ -653,11 +664,17 @@ public class Game {
 
   private void skipIdleJudge() {
     killRoundTimer();
+    // prevent them from playing a card while we kick them (or us kicking them while they play!)
     synchronized (judgeLock) {
       if (state != GameState.JUDGING) {
         return;
       }
-      getJudge().skipped();
+      // Not sure why this would happen but it has happened before.
+      // I guess they disconnected at the exact wrong time?
+      final Player judge = getJudge();
+      if (judge != null) {
+        judge.skipped();
+      }
       final HashMap<ReturnableData, Object> data = getEventMap();
       data.put(LongPollResponse.EVENT, LongPollEvent.GAME_JUDGE_SKIPPED.toString());
       broadcastToPlayers(MessageType.GAME_EVENT, data);
@@ -668,63 +685,60 @@ public class Game {
 
   private void skipIdlePlayers() {
     killRoundTimer();
+    final List<User> playersToRemove = new ArrayList<User>();
+    final List<Player> playersToUpdateStatus = new ArrayList<Player>();
     synchronized (roundPlayers) {
-      final List<User> playersToRemove = new ArrayList<User>();
-      final List<Player> playersToUpdateStatus = new ArrayList<Player>();
 
       for (final Player player : roundPlayers) {
-        synchronized (playedCards) {
-          if (!playedCards.hasPlayer(player)
-              || playedCards.getCards(player).size() < blackCard.getPick()) {
-            player.skipped();
-            final HashMap<ReturnableData, Object> data = getEventMap();
+        final List<WhiteCard> cards = playedCards.getCards(player);
+        if (cards == null || cards.size() < blackCard.getPick()) {
+          player.skipped();
+          final HashMap<ReturnableData, Object> data = getEventMap();
 
-            if (player.getSkipCount() >= MAX_SKIPS_BEFORE_KICK || playedCards.size() < 2) {
-              data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_KICKED_IDLE.toString());
-              data.put(LongPollResponse.NICKNAME, player.getUser().getNickname());
-              playersToRemove.add(player.getUser());
-            } else {
-              data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_SKIPPED.toString());
-              data.put(LongPollResponse.NICKNAME, player.getUser().getNickname());
-              playersToUpdateStatus.add(player);
-            }
-            broadcastToPlayers(MessageType.GAME_EVENT, data);
+          if (player.getSkipCount() >= MAX_SKIPS_BEFORE_KICK || playedCards.size() < 2) {
+            data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_KICKED_IDLE.toString());
+            data.put(LongPollResponse.NICKNAME, player.getUser().getNickname());
+            playersToRemove.add(player.getUser());
+          } else {
+            data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_SKIPPED.toString());
+            data.put(LongPollResponse.NICKNAME, player.getUser().getNickname());
+            playersToUpdateStatus.add(player);
+          }
+          broadcastToPlayers(MessageType.GAME_EVENT, data);
 
-            // put their cards back
-            final List<WhiteCard> cards = playedCards.getCards(player);
-            if (cards != null) {
-              playedCards.remove(player);
-              player.getHand().addAll(cards);
-              sendCardsToPlayer(player, cards);
-            }
+          // put their cards back
+          final List<WhiteCard> returnCards = playedCards.remove(player);
+          if (returnCards != null) {
+            player.getHand().addAll(returnCards);
+            sendCardsToPlayer(player, returnCards);
           }
         }
       }
+    }
 
-      for (final User user : playersToRemove) {
-        removePlayer(user);
-        final HashMap<ReturnableData, Object> data = getEventMap();
-        data.put(LongPollResponse.EVENT, LongPollEvent.KICKED_FROM_GAME_IDLE.toString());
-        final QueuedMessage q = new QueuedMessage(MessageType.GAME_PLAYER_EVENT, data);
-        user.enqueueMessage(q);
-      }
+    for (final User user : playersToRemove) {
+      removePlayer(user);
+      final HashMap<ReturnableData, Object> data = getEventMap();
+      data.put(LongPollResponse.EVENT, LongPollEvent.KICKED_FROM_GAME_IDLE.toString());
+      final QueuedMessage q = new QueuedMessage(MessageType.GAME_PLAYER_EVENT, data);
+      user.enqueueMessage(q);
+    }
 
-      synchronized (playedCards) {
-        // not sure how much of this check is actually required
-        if (players.size() < 3 || playedCards.size() < 2 || state != GameState.PLAYING) {
-          resetState(true);
-        } else {
-          judgingState();
-        }
+    synchronized (playedCards) {
+      // not sure how much of this check is actually required
+      if (players.size() < 3 || playedCards.size() < 2 || state != GameState.PLAYING) {
+        resetState(true);
+      } else {
+        judgingState();
       }
+    }
 
-      // have to do this after we move to judging state
-      for (final Player player : playersToUpdateStatus) {
-        final HashMap<ReturnableData, Object> data = getEventMap();
-        data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
-        data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(player));
-        broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
-      }
+    // have to do this after we move to judging state
+    for (final Player player : playersToUpdateStatus) {
+      final HashMap<ReturnableData, Object> data = getEventMap();
+      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
+      data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(player));
+      broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
     }
   }
 
@@ -790,12 +804,7 @@ public class Game {
    *          previous game finished.
    */
   private void resetState(final boolean lostPlayer) {
-    synchronized (nextRoundTimerLock) {
-      if (nextRoundTimer != null) {
-        nextRoundTimer.cancel();
-        nextRoundTimer = null;
-      }
-    }
+    killRoundTimer();
     synchronized (players) {
       for (final Player player : players) {
         player.getHand().clear();
@@ -807,12 +816,8 @@ public class Game {
     synchronized (blackCardLock) {
       blackCard = null;
     }
-    synchronized (playedCards) {
-      playedCards.clear();
-    }
-    synchronized (roundPlayers) {
-      roundPlayers.clear();
-    }
+    playedCards.clear();
+    roundPlayers.clear();
     state = GameState.LOBBY;
     final Player judge = getJudge();
     judgeIndex = 0;
@@ -871,12 +876,10 @@ public class Game {
       }
     }
 
-    synchronized (whiteDeck) {
-      synchronized (playedCards) {
-        for (final List<WhiteCard> cards : playedCards.cards()) {
-          for (final WhiteCard card : cards) {
-            whiteDeck.discard(card);
-          }
+    synchronized (playedCards) {
+      for (final List<WhiteCard> cards : playedCards.cards()) {
+        for (final WhiteCard card : cards) {
+          whiteDeck.discard(card);
         }
       }
     }
@@ -886,12 +889,10 @@ public class Game {
       if (judgeIndex >= players.size()) {
         judgeIndex = 0;
       }
-      synchronized (roundPlayers) {
-        roundPlayers.clear();
-        for (final Player player : players) {
-          if (player != getJudge()) {
-            roundPlayers.add(player);
-          }
+      roundPlayers.clear();
+      for (final Player player : players) {
+        if (player != getJudge()) {
+          roundPlayers.add(player);
         }
       }
     }
@@ -941,6 +942,8 @@ public class Game {
   /**
    * Get the {@code Player} object for a given {@code User} object.
    * 
+   * Synchronizes on {@link #players}.
+   * 
    * @param user
    * @return The {@code Player} object representing {@code user} in this game, or {@code null} if
    *         {@code user} is not in this game.
@@ -958,6 +961,8 @@ public class Game {
   }
 
   /**
+   * Synchronizes on {@link #blackCardLock}.
+   * 
    * @return Client data for the current {@code BlackCard}, or {@code null} if there is not a
    *         {@code BlackCard}.
    */
@@ -979,9 +984,7 @@ public class Game {
       return new ArrayList<List<Map<WhiteCardData, Object>>>();
     } else {
       final List<List<WhiteCard>> shuffledPlayedCards;
-      synchronized (playedCards) {
-        shuffledPlayedCards = new ArrayList<List<WhiteCard>>(playedCards.cards());
-      }
+      shuffledPlayedCards = new ArrayList<List<WhiteCard>>(playedCards.cards());
       // list of all sets of cards played, which have data. this looks terrible...
       final List<List<Map<WhiteCardData, Object>>> cardData =
           new ArrayList<List<Map<WhiteCardData, Object>>>(shuffledPlayedCards.size());
@@ -1007,11 +1010,13 @@ public class Game {
     } else if (state != GameState.PLAYING) {
       return new ArrayList<List<Map<WhiteCardData, Object>>>();
     } else {
+      // getPlayerForUser synchronizes on players. This has caused a deadlock in the past.
+      // Good idea to not nest synchronizes if possible anyway.
+      final Player player = getPlayerForUser(user);
       synchronized (playedCards) {
         final List<List<Map<WhiteCardData, Object>>> cardData =
             new ArrayList<List<Map<WhiteCardData, Object>>>(playedCards.size());
         int blankCards = playedCards.size();
-        final Player player = getPlayerForUser(user);
         if (playedCards.hasPlayer(player)) {
           cardData.add(getWhiteCardData(playedCards.getCards(player)));
           blankCards--;
@@ -1069,7 +1074,7 @@ public class Game {
     if (player != null) {
       final List<WhiteCard> hand = player.getHand();
       synchronized (hand) {
-        return getWhiteCardData(player.getHand());
+        return getWhiteCardData(hand);
       }
     } else {
       return null;
@@ -1136,17 +1141,15 @@ public class Game {
         }
       }
       if (playCard != null) {
-        synchronized (playedCards) {
-          playedCards.addCard(player, playCard);
+        playedCards.addCard(player, playCard);
 
-          final HashMap<ReturnableData, Object> data = getEventMap();
-          data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
-          data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(player));
-          broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+        final HashMap<ReturnableData, Object> data = getEventMap();
+        data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
+        data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(player));
+        broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
 
-          if (startJudging()) {
-            judgingState();
-          }
+        if (startJudging()) {
+          judgingState();
         }
         return null;
       } else {
@@ -1180,9 +1183,7 @@ public class Game {
 
       player.resetSkipCount();
 
-      synchronized (playedCards) {
-        cardPlayer = playedCards.getPlayerForId(cardId);
-      }
+      cardPlayer = playedCards.getPlayerForId(cardId);
       if (cardPlayer == null) {
         return ErrorCode.INVALID_CARD;
       }
