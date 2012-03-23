@@ -53,6 +53,16 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>23 March, 7:00 AM UTC:<ul>
+    <li><a href="https://github.com/ajanata/PretendYoureXyzzy/commit/368e890c07d29e1b810821ac6f76c983227ab7c1">
+        Fixed a deadlock which caused the server to grind to a halt occasionally.</a> At least, I
+    fixed one deadlock. I looked over the code a bit more closely to see if there were any other
+    potential deadlocks, and didn't see any. I did go ahead and rework some of the other code to
+    make it less likely. Hopefully this will fix the problems with the server randomly crapping
+    out.</li>
+    <li><a href="https://github.com/ajanata/PretendYoureXyzzy/commit/bc4f0818f18f106e92590c4510210fc28847ef58">
+      Fixed the chat log in Opera.</a></li>
+  </ul></li>
   <li>19 March, 4:20 AM UTC:<ul>
     <li>Added game passwords.</li>
     <li>Added Show Game Options button in-game to see the game's options. The host cannot change
