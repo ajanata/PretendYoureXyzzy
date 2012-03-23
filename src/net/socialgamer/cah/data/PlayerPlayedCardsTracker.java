@@ -37,6 +37,8 @@ import net.socialgamer.cah.db.WhiteCard;
  * Class to track which card(s) have been played by players. Can get the card(s) for a player, and
  * also which player played a given card.
  * 
+ * All methods in this class are synchronized.
+ * 
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class PlayerPlayedCardsTracker {
@@ -57,7 +59,7 @@ public class PlayerPlayedCardsTracker {
    * @param card
    *          The card the player played.
    */
-  public void addCard(final Player player, final WhiteCard card) {
+  public synchronized void addCard(final Player player, final WhiteCard card) {
     List<WhiteCard> cards = playerCardMap.get(player);
     if (cards == null) {
       cards = new ArrayList<WhiteCard>(3);
@@ -74,7 +76,7 @@ public class PlayerPlayedCardsTracker {
    *          Card ID to check.
    * @return The {@code Player} that played the card.
    */
-  public Player getPlayerForId(final int id) {
+  public synchronized Player getPlayerForId(final int id) {
     return reverseIdMap.get(id);
   }
 
@@ -85,7 +87,7 @@ public class PlayerPlayedCardsTracker {
    *          Player to check.
    * @return True if the player has played any cards this round.
    */
-  public boolean hasPlayer(final Player player) {
+  public synchronized boolean hasPlayer(final Player player) {
     return playerCardMap.containsKey(player);
   }
 
@@ -94,7 +96,7 @@ public class PlayerPlayedCardsTracker {
    * @return The list of cards {@code player} has played this round, or {@code null} if they have
    *         not played any cards.
    */
-  public List<WhiteCard> getCards(final Player player) {
+  public synchronized List<WhiteCard> getCards(final Player player) {
     return playerCardMap.get(player);
   }
 
@@ -103,9 +105,9 @@ public class PlayerPlayedCardsTracker {
    * 
    * @param player
    *          Player to remove.
-   * @return The cards the player had played.
+   * @return The cards the player had played, or {@code null} if the player had not played cards.
    */
-  public List<WhiteCard> remove(final Player player) {
+  public synchronized List<WhiteCard> remove(final Player player) {
     final List<WhiteCard> cards = playerCardMap.remove(player);
     if (cards != null && cards.size() > 0) {
       reverseIdMap.remove(cards.get(0).getId());
@@ -116,21 +118,21 @@ public class PlayerPlayedCardsTracker {
   /**
    * @return The number of players that have played this round.
    */
-  public int size() {
+  public synchronized int size() {
     return playerCardMap.size();
   }
 
   /**
    * @return A {@code Set} of all players that have played this round.
    */
-  public Set<Player> playedPlayers() {
+  public synchronized Set<Player> playedPlayers() {
     return playerCardMap.keySet();
   }
 
   /**
    * Clear both the forward and reverse card mappings.
    */
-  public void clear() {
+  public synchronized void clear() {
     playerCardMap.clear();
     reverseIdMap.clear();
   }
@@ -138,7 +140,7 @@ public class PlayerPlayedCardsTracker {
   /**
    * @return A {@code Collection} of all played card lists.
    */
-  public Collection<List<WhiteCard>> cards() {
+  public synchronized Collection<List<WhiteCard>> cards() {
     return playerCardMap.values();
   }
 }
