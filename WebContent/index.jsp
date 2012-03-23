@@ -100,11 +100,6 @@ to, for instance, display the number of connected players.
   you find a major issue, please
   <a href="mailto:ajanata@socialgamer.net?subject=PYZ%20bug">email me</a> with a screenshot and the
   name and version of the browser you are using, and I'll try to fix it.
-	  <ul>
-	    <li>That having been said, the chat area doesn't work right at all in Opera. The game still
-	    plays properly, but no log messages work. This is rather low on my to-do list as Opera isn't
-	    very popular anymore it seems. :(</li>
-	  </ul>
   </li>
   <li>You may not always see your card in the top area after you play it, but it has been played.
   Also, sometimes the card will display in the top area but be small. I have no idea why either of
