@@ -37,6 +37,8 @@ import org.hibernate.Transaction;
 /**
  * Deck of Black Cards.
  * 
+ * This class is thread-safe.
+ * 
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class BlackDeck {
@@ -72,7 +74,7 @@ public class BlackDeck {
    * @throws OutOfCardsException
    *           There are no more cards in the deck.
    */
-  public BlackCard getNextCard() throws OutOfCardsException {
+  public synchronized BlackCard getNextCard() throws OutOfCardsException {
     if (deck.size() == 0) {
       throw new OutOfCardsException();
     }
@@ -88,7 +90,7 @@ public class BlackDeck {
    * @param card
    *          Card to add to discard pile.
    */
-  public void discard(final BlackCard card) {
+  public synchronized void discard(final BlackCard card) {
     if (card != null) {
       discard.add(card);
     }
@@ -97,7 +99,7 @@ public class BlackDeck {
   /**
    * Shuffles the discard pile and puts the cards under the cards remaining in the deck.
    */
-  public void reshuffle() {
+  public synchronized void reshuffle() {
     Collections.shuffle(discard);
     deck.addAll(0, discard);
     discard.clear();

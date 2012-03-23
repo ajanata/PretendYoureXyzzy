@@ -37,6 +37,8 @@ import org.hibernate.Transaction;
 /**
  * Deck of White Cards.
  * 
+ * This class is thread-safe.
+ * 
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class WhiteDeck {
@@ -72,7 +74,7 @@ public class WhiteDeck {
    * @throws OutOfCardsException
    *           There are no more cards in the deck.
    */
-  public WhiteCard getNextCard() throws OutOfCardsException {
+  public synchronized WhiteCard getNextCard() throws OutOfCardsException {
     if (deck.size() == 0) {
       throw new OutOfCardsException();
     }
@@ -88,7 +90,7 @@ public class WhiteDeck {
    * @param card
    *          Card to add to discard pile.
    */
-  public void discard(final WhiteCard card) {
+  public synchronized void discard(final WhiteCard card) {
     if (card != null) {
       discard.add(card);
     }
@@ -97,7 +99,7 @@ public class WhiteDeck {
   /**
    * Shuffles the discard pile and puts the cards under the cards remaining in the deck.
    */
-  public void reshuffle() {
+  public synchronized void reshuffle() {
     Collections.shuffle(discard);
     deck.addAll(0, discard);
     discard.clear();
