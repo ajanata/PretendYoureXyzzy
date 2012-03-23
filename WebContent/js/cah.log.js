@@ -47,7 +47,7 @@ cah.log.status = function(text, opt_class) {
   var scroll = $("#log").prop("scrollHeight") - $("#log").height() - $("#log").prop("scrollTop") <= 5;
 
   var node = $("<span></span><br/>");
-  $(node).text("[" + new Date().toLocaleTimeString() + "] " + text + "\n");
+  $(node[0]).text("[" + new Date().toLocaleTimeString() + "] " + text + "\n");
   if (opt_class) {
     $(node).addClass(opt_class);
   }
