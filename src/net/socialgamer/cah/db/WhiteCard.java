@@ -42,10 +42,16 @@ import net.socialgamer.cah.Constants.WhiteCardData;
 @Entity
 @Table(name = "white_cards")
 public class WhiteCard {
+
   @Id
   @GeneratedValue
-  int id;
-  String text;
+  private int id;
+
+  private String text;
+
+  private boolean in_v1;
+
+  private boolean in_v2;
 
   public int getId() {
     return id;
@@ -65,7 +71,20 @@ public class WhiteCard {
 
   @Override
   public String toString() {
-    return text + " (id:" + id + ")";
+    return text + " (id:" + id + ", v1:" + in_v1 + ", v2:" + in_v2 + ")";
+  }
+
+  @Override
+  public boolean equals(final Object other) {
+    if (!(other instanceof WhiteCard)) {
+      return false;
+    }
+    return ((WhiteCard) other).getId() == id;
+  }
+
+  @Override
+  public int hashCode() {
+    return id;
   }
 
   /**

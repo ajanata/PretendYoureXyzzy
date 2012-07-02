@@ -16,5 +16,6 @@
         
         <mapping class="net.socialgamer.cah.db.BlackCard" />
         <mapping class="net.socialgamer.cah.db.WhiteCard" />
+        <mapping class="net.socialgamer.cah.db.CardSet" />
     </session-factory>
 </hibernate-configuration>

@@ -42,12 +42,20 @@ import net.socialgamer.cah.Constants.BlackCardData;
 @Entity
 @Table(name = "black_cards")
 public class BlackCard {
+
   @Id
   @GeneratedValue
-  int id;
-  String text;
-  int draw;
-  int pick;
+  private int id;
+
+  private String text;
+
+  private int draw;
+
+  private int pick;
+
+  private boolean in_v1;
+
+  private boolean in_v2;
 
   public int getId() {
     return id;
@@ -83,7 +91,21 @@ public class BlackCard {
 
   @Override
   public String toString() {
-    return text + " (id:" + id + ", draw:" + draw + ", pick:" + pick + ")";
+    return text + " (id:" + id + ", draw:" + draw + ", pick:" + pick + ", v1:" + in_v1 + " v2:"
+        + in_v2 + ")";
+  }
+
+  @Override
+  public boolean equals(final Object other) {
+    if (!(other instanceof BlackCard)) {
+      return false;
+    }
+    return ((BlackCard) other).getId() == id;
+  }
+
+  @Override
+  public int hashCode() {
+    return id;
   }
 
   /**
