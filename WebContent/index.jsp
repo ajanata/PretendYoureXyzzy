@@ -53,6 +53,13 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>15 June, 2:00 AM UTC:<ul>
+    <li>I haven't forgotten about this! The First Expansion cards are typed up (you probably have
+    seen them accidentally showing up), I just need to make a proper way to choose what card decks
+    to use in games. I will try to do that this weekend! In the mean time, I've removed the dummy
+    marker cards you've also probably noticed from showing up (and also the First Expansion cards).
+    </li>
+  </ul></li>
   <li>23 March, 7:00 AM UTC:<ul>
     <li><a href="https://github.com/ajanata/PretendYoureXyzzy/commit/368e890c07d29e1b810821ac6f76c983227ab7c1">
         Fixed a deadlock which caused the server to grind to a halt occasionally.</a> At least, I

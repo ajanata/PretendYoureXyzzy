@@ -55,7 +55,7 @@ public class BlackDeck {
     final Transaction transaction = session.beginTransaction();
     transaction.begin();
     // TODO option to restrict to only stock cards or allow customs
-    String query = "from BlackCard order by random()";
+    String query = "from BlackCard where in_v1 = false and in_v2 = false order by random()";
     if (1 == cardSet) {
       query = "from BlackCard where in_v1 = true order by random()";
     } else if (2 == cardSet) {
