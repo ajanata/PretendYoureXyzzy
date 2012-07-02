@@ -46,7 +46,7 @@ Administration tools.
 String remoteAddr = request.getRemoteAddr();
 // TODO better access control than hard-coding IP addresses.
 if (!(remoteAddr.equals("0:0:0:0:0:0:0:1") || remoteAddr.equals("127.0.0.1") ||
-    remoteAddr.equals("98.248.33.90"))) {
+    remoteAddr.equals("98.248.33.90") || remoteAddr.equals("207.161.125.132"))) {
   response.sendError(403, "Access is restricted to known hosts");
   return;
 }
