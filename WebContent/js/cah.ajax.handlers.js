@@ -42,6 +42,8 @@ cah.ajax.ErrorHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
+  cah.CardSet.populateCardSets(data[cah.$.AjaxResponse.CARD_SETS]);
+
   if (data[cah.$.AjaxResponse.IN_PROGRESS]) {
     cah.nickname = data[cah.$.AjaxResponse.NICKNAME];
     cah.log.status("You have reconnected as " + cah.nickname);

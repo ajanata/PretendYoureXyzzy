@@ -52,6 +52,7 @@ HttpSession hSession = request.getSession(true);
 <script type="text/javascript" src="js/cah.log.js"></script>
 <script type="text/javascript" src="js/cah.gamelist.js"></script>
 <script type="text/javascript" src="js/cah.card.js"></script>
+<script type="text/javascript" src="js/cah.cardset.js"></script>
 <script type="text/javascript" src="js/cah.game.js"></script>
 <script type="text/javascript" src="js/cah.longpoll.js"></script>
 <script type="text/javascript" src="js/cah.longpoll.handlers.js"></script>
@@ -292,12 +293,20 @@ HttpSession hSession = request.getSession(true);
       <option value="10" selected="selected">10</option>
     </select>
     <br/>
+    <fieldset>
+      <legend>Card Sets</legend>
+      Select at least one of: <span class="base_card_sets"></span>
+      <br/>
+      Select any number of: <span class="extra_card_sets"></span>
+    </fieldset>
+    <span style="display:none">
     <label id="card_set_template_label" for="card_set_template">Use cards from version:</label>
     <select id="card_set_template" class="card_set">
       <option value="1">first</option>
       <option value="2" selected="selected">second</option>
       <option value="3">both</option>
     </select>
+    </span>
     <br/>
     <label id="game_password_template_label" for="game_password_template">Game password:</label>
     <input type="text" id="game_password_template" class="game_password" />
