@@ -27,6 +27,8 @@ import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.GameManager.MaxGames;
 
+import org.hibernate.Session;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
@@ -52,5 +54,10 @@ public class CahModule extends AbstractModule {
   @MaxGames
   Integer provideMaxGames() {
     return 30;
+  }
+
+  @Provides
+  Session provideHibernateSession() {
+    return HibernateUtil.instance.sessionFactory.openSession();
   }
 }
