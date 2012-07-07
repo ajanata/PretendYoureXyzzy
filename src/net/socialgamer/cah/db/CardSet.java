@@ -1,6 +1,8 @@
 package net.socialgamer.cah.db;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -10,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import net.socialgamer.cah.Constants.CardSetData;
 
 
 @Entity
@@ -23,6 +27,8 @@ public class CardSet {
   private String name;
 
   private boolean active;
+
+  private boolean base_deck;
 
   @ManyToMany
   @JoinTable(
@@ -69,5 +75,26 @@ public class CardSet {
 
   public Set<WhiteCard> getWhiteCards() {
     return whiteCards;
+  }
+
+  public boolean isBaseDeck() {
+    return base_deck;
+  }
+
+  public void setBaseDeck(final boolean baseDeck) {
+    this.base_deck = baseDeck;
+  }
+
+  /**
+   * @return Client representation of this card.
+   */
+  public Map<CardSetData, Object> getClientData() {
+    final Map<CardSetData, Object> cardSetData = new HashMap<CardSetData, Object>();
+    cardSetData.put(CardSetData.ID, getId());
+    cardSetData.put(CardSetData.CARD_SET_NAME, getName());
+    cardSetData.put(CardSetData.BASE_DECK, isBaseDeck());
+    cardSetData.put(CardSetData.BLACK_CARDS_IN_DECK, getBlackCards().size());
+    cardSetData.put(CardSetData.WHITE_CARDS_IN_DECK, getWhiteCards().size());
+    return cardSetData;
   }
 }

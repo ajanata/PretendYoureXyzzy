@@ -88,6 +88,7 @@ if ("edit".equals(actionParam)) {
     if (null != editCardSet) {
       String nameParam = request.getParameter("cardSetName");
       String activeParam = request.getParameter("active");
+      String baseDeckParam = request.getParameter("baseDeck");
       String[] selectedBlackCardsParam = request.getParameterValues("selectedBlackCards");
       String[] selectedWhiteCardsParam = request.getParameterValues("selectedWhiteCards");
       if (null == nameParam || nameParam.isEmpty() || null == selectedBlackCardsParam ||
@@ -99,6 +100,7 @@ if ("edit".equals(actionParam)) {
       } else {
         editCardSet.setName(nameParam);
         editCardSet.setActive("on".equals(activeParam));
+        editCardSet.setBaseDeck("on".equals(baseDeckParam));
         List<Integer> blackCardIds = new ArrayList<Integer>(selectedBlackCardsParam.length);
         for (String bc : selectedBlackCardsParam) {
           blackCardIds.add(Integer.parseInt(bc));
@@ -216,7 +218,7 @@ select {
   <h3><%= message %></h3>
 <% } %>
 <h2>Existing card sets</h2>
-<table>
+<table style="1px solid black">
   <thead>
     <tr>
       <th>Name</th>
@@ -252,7 +254,11 @@ select {
   <br/>
   <label for="active">Active</label>
   <input type="checkbox" name="active" id="active"
-      <%= editCardSet != null && !editCardSet.isActive() ? "" : "checked='checked'" %> />
+      <%= editCardSet != null && editCardSet.isActive() ? "checked='checked'" : "" %> />
+  <br/>
+  <label for="baseDeck" title="This deck is sufficient for playing the game.">Base Deck</label>
+  <input type="checkbox" name="baseDeck" id="baseDeck"
+      <%= editCardSet != null && editCardSet.isBaseDeck() ? "checked='checked'" : "" %> />
   <br/>
   Available Black Cards:
   <br/>
