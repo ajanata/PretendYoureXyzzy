@@ -39,7 +39,7 @@ cah.log = {};
  * @param {string}
  *          text Text to display for this message. Text is added as a TextNode, so HTML is properly
  *          escaped automatically.
- * @param {?string}
+ * @param {string}
  *          opt_class Optional CSS class to use for this message.
  */
 cah.log.status = function(text, opt_class) {
