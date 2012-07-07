@@ -175,7 +175,7 @@ public class Constants {
    */
   public enum AjaxRequest {
     CARD_ID("cid"),
-    CARD_SET("cs"),
+    CARD_SETS("css"),
     GAME_ID("gid"),
     MESSAGE("m"),
     NICKNAME("n"),
@@ -204,6 +204,8 @@ public class Constants {
     BLACK_CARD("bc"),
     @DuplicationAllowed
     CARD_ID(AjaxRequest.CARD_ID),
+    @DuplicationAllowed
+    CARD_SETS(AjaxRequest.CARD_SETS),
     ERROR("e"),
     ERROR_CODE("ec"),
     @DuplicationAllowed
@@ -470,6 +472,33 @@ public class Constants {
   }
 
   /**
+   * Data fields for card sets.
+   */
+  public enum CardSetData {
+    BASE_DECK("bd"),
+    BLACK_CARDS_IN_DECK("bcid"),
+    CARD_SET_NAME("csn"),
+    @DuplicationAllowed
+    ID(WhiteCardData.ID),
+    WHITE_CARDS_IN_DECK("wcid");
+
+    private final String key;
+
+    CardSetData(final String key) {
+      this.key = key;
+    }
+
+    CardSetData(final Enum<?> key) {
+      this.key = key.toString();
+    }
+
+    @Override
+    public String toString() {
+      return key;
+    }
+  }
+
+  /**
    * A game's current state.
    */
   public enum GameState implements Localizable {
@@ -503,7 +532,7 @@ public class Constants {
    */
   public enum GameInfo {
     @DuplicationAllowed
-    CARD_SET(AjaxRequest.CARD_SET),
+    CARD_SETS(AjaxRequest.CARD_SETS),
     HAS_PASSWORD("hp"),
     HOST("H"),
     @DuplicationAllowed

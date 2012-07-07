@@ -30,7 +30,7 @@ cah.$.AjaxRequest.prototype.dummyForAutocomplete = undefined;
 cah.$.AjaxRequest.MESSAGE = "m";
 cah.$.AjaxRequest.CARD_ID = "cid";
 cah.$.AjaxRequest.GAME_ID = "gid";
-cah.$.AjaxRequest.CARD_SET = "cs";
+cah.$.AjaxRequest.CARD_SETS = "css";
 cah.$.AjaxRequest.SERIAL = "s";
 cah.$.AjaxRequest.PLAYER_LIMIT = "pL";
 cah.$.AjaxRequest.PASSWORD = "pw";
@@ -43,6 +43,7 @@ cah.$.AjaxResponse = function() {
 };
 cah.$.AjaxResponse.prototype.dummyForAutocomplete = undefined;
 cah.$.AjaxResponse.WHITE_CARDS = "wc";
+cah.$.AjaxResponse.CARD_SETS = "css";
 cah.$.AjaxResponse.GAME_ID = "gid";
 cah.$.AjaxResponse.HAND = "h";
 cah.$.AjaxResponse.PLAYER_INFO = "pi";
@@ -67,6 +68,16 @@ cah.$.BlackCardData.TEXT = "T";
 cah.$.BlackCardData.PICK = "PK";
 cah.$.BlackCardData.ID = "cid";
 cah.$.BlackCardData.DRAW = "D";
+
+cah.$.CardSetData = function() {
+  // Dummy constructor to make Eclipse auto-complete.
+};
+cah.$.CardSetData.prototype.dummyForAutocomplete = undefined;
+cah.$.CardSetData.CARD_SET_NAME = "csn";
+cah.$.CardSetData.ID = "cid";
+cah.$.CardSetData.WHITE_CARDS_IN_DECK = "wcid";
+cah.$.CardSetData.BLACK_CARDS_IN_DECK = "bcid";
+cah.$.CardSetData.BASE_DECK = "bd";
 
 cah.$.DisconnectReason = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -145,7 +156,7 @@ cah.$.GameInfo.prototype.dummyForAutocomplete = undefined;
 cah.$.GameInfo.HOST = "H";
 cah.$.GameInfo.STATE = "S";
 cah.$.GameInfo.PLAYERS = "P";
-cah.$.GameInfo.CARD_SET = "cs";
+cah.$.GameInfo.CARD_SETS = "css";
 cah.$.GameInfo.ID = "gid";
 cah.$.GameInfo.PLAYER_LIMIT = "pL";
 cah.$.GameInfo.PASSWORD = "pw";

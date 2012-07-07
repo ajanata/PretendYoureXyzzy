@@ -23,18 +23,27 @@
 
 package net.socialgamer.cah.handlers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxResponse;
+import net.socialgamer.cah.Constants.CardSetData;
 import net.socialgamer.cah.Constants.ReconnectNextAction;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.User;
+import net.socialgamer.cah.db.CardSet;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import com.google.inject.Inject;
 
 
 /**
@@ -46,6 +55,13 @@ import net.socialgamer.cah.data.User;
 public class FirstLoadHandler extends Handler {
 
   public static final String OP = AjaxOperation.FIRST_LOAD.toString();
+
+  private final Session hibernateSession;
+
+  @Inject
+  public FirstLoadHandler(final Session hibernateSession) {
+    this.hibernateSession = hibernateSession;
+  }
 
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
@@ -70,6 +86,19 @@ public class FirstLoadHandler extends Handler {
         ret.put(AjaxResponse.NEXT, ReconnectNextAction.NONE.toString());
       }
     }
+
+    // get the list of card sets
+    final Transaction transaction = hibernateSession.beginTransaction();
+    @SuppressWarnings("unchecked")
+    final List<CardSet> cardSets = hibernateSession
+        .createQuery("from CardSet where active = true").setReadOnly(true).list();
+    final List<Map<CardSetData, Object>> cardSetsData = new ArrayList<Map<CardSetData, Object>>(
+        cardSets.size());
+    for (final CardSet cardSet : cardSets) {
+      cardSetsData.add(cardSet.getClientData());
+    }
+    ret.put(AjaxResponse.CARD_SETS, cardSetsData);
+    transaction.commit();
 
     return ret;
   }
