@@ -53,6 +53,15 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>7 July, 10:00 PM UTC:<ul>
+    <li>Proper Card Set support. Currently, only I can define the cards and card sets, but I hope to
+    eventually let users define their own. This leads into the next item...</li>
+    <li><strong>The First Expansion</strong>! Sorry it took so long, I've been quite busy with real
+    work lately. Whenever The Second Expansion rolls around, it will be much easier for me to add
+    since I've put in the proper structure to deal with card sets.</li>
+    <li>I still haven't had time to separate out chat per-game, but that is the next thing on the
+    to-do list.</li>
+  </ul></li>
   <li>15 June, 2:00 AM UTC:<ul>
     <li>I haven't forgotten about this! The First Expansion cards are typed up (you probably have
     seen them accidentally showing up), I just need to make a proper way to choose what card decks
