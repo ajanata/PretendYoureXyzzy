@@ -183,14 +183,13 @@ cah.GameListLobby = function(parentElem, data) {
   $(".gamelist_lobby_player_count", this.element_).text(data[cah.$.GameInfo.PLAYERS].length);
   $(".gamelist_lobby_max_players", this.element_).text(data[cah.$.GameInfo.PLAYER_LIMIT]);
   $(".gamelist_lobby_goal", this.element_).text(data[cah.$.GameInfo.SCORE_LIMIT]);
-  // TODO make this better when we have more card sets
-  var cardset = "All";
-  if (data[cah.$.GameInfo.CARD_SET] == 1) {
-    cardset = "First Edition";
-  } else if (data[cah.$.GameInfo.CARD_SET] == 2) {
-    cardset = "Second Edition";
+  var cardSetNames = [];
+  data[cah.$.GameInfo.CARD_SETS].sort();
+  for ( var key in data[cah.$.GameInfo.CARD_SETS]) {
+    var cardSetId = data[cah.$.GameInfo.CARD_SETS][key];
+    cardSetNames.push(cah.CardSet.list[cardSetId].getName());
   }
-  $(".gamelist_lobby_cardset", this.element_).text(cardset);
+  $(".gamelist_lobby_cardset", this.element_).text(cardSetNames.join(', '));
 
   if (data[cah.$.GameInfo.HAS_PASSWORD]) {
     $(".gamelist_lobby_join", this.element_).val("Join\n(Passworded)");

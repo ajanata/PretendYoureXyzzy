@@ -53,9 +53,7 @@ public class BlackCard {
 
   private int pick;
 
-  private boolean in_v1;
-
-  private boolean in_v2;
+  private String watermark;
 
   public int getId() {
     return id;
@@ -89,10 +87,18 @@ public class BlackCard {
     this.pick = pick;
   }
 
+  public String getWatermark() {
+    return watermark == null ? "" : watermark;
+  }
+
+  public void setWatermark(final String watermark) {
+    this.watermark = watermark;
+  }
+
   @Override
   public String toString() {
-    return text + " (id:" + id + ", draw:" + draw + ", pick:" + pick + ", v1:" + in_v1 + " v2:"
-        + in_v2 + ")";
+    return text + " (id:" + id + ", draw:" + draw + ", pick:" + pick + ", watermark:"
+        + getWatermark() + ")";
   }
 
   @Override
@@ -117,6 +123,7 @@ public class BlackCard {
     cardData.put(BlackCardData.TEXT, text);
     cardData.put(BlackCardData.DRAW, draw);
     cardData.put(BlackCardData.PICK, pick);
+    cardData.put(BlackCardData.WATERMARK, getWatermark());
     return cardData;
   }
 }

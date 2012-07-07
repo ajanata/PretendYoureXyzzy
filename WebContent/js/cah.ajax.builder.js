@@ -134,13 +134,13 @@ cah.ajax.Builder.prototype.withCardId = function(cardId) {
 };
 
 /**
- * @param {number}
- *          cardSet Card set field to use in the request.
+ * @param {Array}
+ *          cardSets List of card set ids to use in the request.
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withCardSet = function(cardSet) {
+cah.ajax.Builder.prototype.withCardSets = function(cardSets) {
   this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.CARD_SET] = cardSet;
+  this.data[cah.$.AjaxRequest.CARD_SETS] = cardSets.join(',');
   return this;
 };
 

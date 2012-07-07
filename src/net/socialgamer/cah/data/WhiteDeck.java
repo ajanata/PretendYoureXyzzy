@@ -25,13 +25,13 @@ package net.socialgamer.cah.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
-import net.socialgamer.cah.HibernateUtil;
+import net.socialgamer.cah.db.CardSet;
 import net.socialgamer.cah.db.WhiteCard;
-
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 
 /**
@@ -49,22 +49,15 @@ public class WhiteDeck {
   /**
    * Create a new white card deck, loading the cards from the database and shuffling them.
    */
-  @SuppressWarnings("unchecked")
-  public WhiteDeck(final int cardSet) {
-    final Session session = HibernateUtil.instance.sessionFactory.openSession();
-    final Transaction transaction = session.beginTransaction();
-    transaction.begin();
-    // TODO option to restrict to only stock cards or allow customs
-    String query = "from WhiteCard where in_v1 = false and in_v2 = false order by random()";
-    if (1 == cardSet) {
-      query = "from WhiteCard where in_v1 = true order by random()";
-    } else if (2 == cardSet) {
-      query = "from WhiteCard where in_v2 = true order by random()";
+  public WhiteDeck(final Set<CardSet> cardSets) {
+    final Set<WhiteCard> allCards = new HashSet<WhiteCard>();
+    for (final CardSet cardSet : cardSets) {
+      allCards.addAll(cardSet.getWhiteCards());
     }
-    deck = session.createQuery(query).setReadOnly(true).list();
-    dealt = new ArrayList<WhiteCard>();
-    discard = new ArrayList<WhiteCard>();
-    transaction.commit();
+    deck = new ArrayList<WhiteCard>(allCards);
+    Collections.shuffle(deck);
+    dealt = new LinkedList<WhiteCard>();
+    discard = new ArrayList<WhiteCard>(deck.size());
   }
 
   /**
@@ -78,7 +71,7 @@ public class WhiteDeck {
     if (deck.size() == 0) {
       throw new OutOfCardsException();
     }
-    // Hibernate is returning an ArrayList, so this is a bit faster.
+    // we have an ArrayList here, so this is faster
     final WhiteCard card = deck.remove(deck.size() - 1);
     dealt.add(card);
     return card;

@@ -148,6 +148,17 @@ cah.card.BaseCard.prototype.setText = function(text) {
 };
 
 /**
+ * Set the "watermark" on the logo on the card. It matters not if the card is face-up or face-down.
+ * 
+ * @param {String}
+ *          watermark Watermark to display on the card.
+ */
+cah.card.BaseCard.prototype.setWatermark = function(watermark) {
+  this.ensureFaceUpElement_();
+  $(".watermark", this.faceUpElem_).text(watermark);
+};
+
+/**
  * Ensure this card has a face-up element, creating one if needed.
  * 
  * @private

@@ -1,7 +1,9 @@
 package net.socialgamer.cah.handlers;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,6 +16,9 @@ import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.User;
+import net.socialgamer.cah.db.CardSet;
+
+import org.hibernate.Session;
 
 import com.google.inject.Inject;
 
@@ -22,9 +27,12 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.CHANGE_GAME_OPTIONS.toString();
 
+  private final Session hibernateSession;
+
   @Inject
-  public ChangeGameOptionHandler(final GameManager gameManager) {
+  public ChangeGameOptionHandler(final GameManager gameManager, final Session hibernateSession) {
     super(gameManager);
+    this.hibernateSession = hibernateSession;
   }
 
   @Override
@@ -40,12 +48,16 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
       try {
         final int scoreLimit = Integer.parseInt(request.getParameter(AjaxRequest.SCORE_LIMIT));
         final int playerLimit = Integer.parseInt(request.getParameter(AjaxRequest.PLAYER_LIMIT));
-        final int cardSet = Integer.parseInt(request.getParameter(AjaxRequest.CARD_SET));
+        final String[] cardSetsParsed = request.getParameter(AjaxRequest.CARD_SETS).split(",");
+        final Set<CardSet> cardSets = new HashSet<CardSet>();
+        for (final String cardSetId : cardSetsParsed) {
+          cardSets.add((CardSet) hibernateSession.load(CardSet.class, Integer.parseInt(cardSetId)));
+        }
         String password = request.getParameter(AjaxRequest.PASSWORD);
         if (password == null) {
           password = "";
         }
-        game.updateGameSettings(scoreLimit, playerLimit, cardSet, password);
+        game.updateGameSettings(scoreLimit, playerLimit, cardSets, password);
       } catch (final NumberFormatException nfe) {
         return error(ErrorCode.BAD_REQUEST);
       }

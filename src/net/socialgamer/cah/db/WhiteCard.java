@@ -49,9 +49,7 @@ public class WhiteCard {
 
   private String text;
 
-  private boolean in_v1;
-
-  private boolean in_v2;
+  private String watermark;
 
   public int getId() {
     return id;
@@ -69,9 +67,17 @@ public class WhiteCard {
     this.text = text;
   }
 
+  public String getWatermark() {
+    return watermark == null ? "" : watermark;
+  }
+
+  public void setWatermark(final String watermark) {
+    this.watermark = watermark;
+  }
+
   @Override
   public String toString() {
-    return text + " (id:" + id + ", v1:" + in_v1 + ", v2:" + in_v2 + ")";
+    return text + " (id:" + id + ", watermark:" + getWatermark() + ")";
   }
 
   @Override
@@ -94,6 +100,7 @@ public class WhiteCard {
     final Map<WhiteCardData, Object> cardData = new HashMap<WhiteCardData, Object>();
     cardData.put(WhiteCardData.ID, id);
     cardData.put(WhiteCardData.TEXT, text);
+    cardData.put(WhiteCardData.WATERMARK, getWatermark());
     return cardData;
   }
 
@@ -104,6 +111,7 @@ public class WhiteCard {
     final Map<WhiteCardData, Object> cardData = new HashMap<WhiteCardData, Object>();
     cardData.put(WhiteCardData.ID, -1);
     cardData.put(WhiteCardData.TEXT, "");
+    cardData.put(WhiteCardData.WATERMARK, "");
     return cardData;
   }
 }

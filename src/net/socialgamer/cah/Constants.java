@@ -275,6 +275,7 @@ public class Constants {
     NO_MSG_SPECIFIED("nms", "No message specified."),
     NO_NICK_SPECIFIED("nns", "No nickname specified."),
     NO_SESSION("ns", "Session not detected. Make sure you have cookies enabled."),
+    NOT_ENOUGH_CARDS("nec", "You must select at least one base card set."),
     NOT_ENOUGH_PLAYERS("nep", "There are not enough players to start the game."),
     NOT_GAME_HOST("ngh", "Only the game host can do that."),
     NOT_IN_THAT_GAME("nitg", "You are not in that game."),
@@ -426,7 +427,8 @@ public class Constants {
   public enum WhiteCardData {
     @DuplicationAllowed
     ID(AjaxRequest.CARD_ID),
-    TEXT("T");
+    TEXT("T"),
+    WATERMARK("W");
 
     private final String key;
 
@@ -453,7 +455,9 @@ public class Constants {
     ID(WhiteCardData.ID),
     PICK("PK"),
     @DuplicationAllowed
-    TEXT(WhiteCardData.TEXT);
+    TEXT(WhiteCardData.TEXT),
+    @DuplicationAllowed
+    WATERMARK(WhiteCardData.WATERMARK);
 
     private final String key;
 

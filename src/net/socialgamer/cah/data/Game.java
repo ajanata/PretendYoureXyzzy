@@ -27,10 +27,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -47,6 +49,7 @@ import net.socialgamer.cah.Constants.WhiteCardData;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.db.BlackCard;
+import net.socialgamer.cah.db.CardSet;
 import net.socialgamer.cah.db.WhiteCard;
 
 import com.google.inject.Inject;
@@ -124,7 +127,7 @@ public class Game {
   private Timer nextRoundTimer;
   private final Object nextRoundTimerLock = new Object();
   private int scoreGoal = 8;
-  private int cardSet = 2;
+  private final Set<CardSet> cardSets = new HashSet<CardSet>();
   private String password = "";
 
   /**
@@ -347,11 +350,12 @@ public class Game {
     return password;
   }
 
-  public void updateGameSettings(final int scoreLimit, final int playerLimit, final int cardSet1,
-      final String password1) {
+  public void updateGameSettings(final int scoreLimit, final int playerLimit,
+      final Set<CardSet> cardSets1, final String password1) {
     this.scoreGoal = scoreLimit;
     this.maxPlayers = playerLimit;
-    this.cardSet = cardSet1;
+    this.cardSets.clear();
+    this.cardSets.addAll(cardSets1);
     this.password = password1;
 
     final HashMap<ReturnableData, Object> data = getEventMap();
@@ -384,7 +388,11 @@ public class Game {
     info.put(GameInfo.ID, id);
     info.put(GameInfo.HOST, host.toString());
     info.put(GameInfo.STATE, state.toString());
-    info.put(GameInfo.CARD_SET, cardSet);
+    final List<Integer> cardSetIds = new ArrayList<Integer>(cardSets.size());
+    for (final CardSet cardSet : cardSets) {
+      cardSetIds.add(cardSet.getId());
+    }
+    info.put(GameInfo.CARD_SETS, cardSetIds);
     info.put(GameInfo.PLAYER_LIMIT, maxPlayers);
     info.put(GameInfo.SCORE_LIMIT, scoreGoal);
     if (includePassword) {
@@ -504,18 +512,19 @@ public class Game {
    * Synchronizes on {@link #players}.
    * 
    * @return True if the game is started. Would only be false if there aren't enough players, or the
-   *         game is already started, but hopefully clients would prevent that from happening!
+   *         game is already started, or doesn't have a base deck, but hopefully clients would
+   *         prevent that from happening!
    */
   public boolean start() {
-    if (state != GameState.LOBBY) {
+    if (state != GameState.LOBBY || !hasBaseDeck()) {
       return false;
     }
     synchronized (players) {
       if (players.size() >= 3) {
         // Pick a random start judge, though the "next" judge will actually go first.
         judgeIndex = (int) (Math.random() * players.size());
-        blackDeck = new BlackDeck(cardSet);
-        whiteDeck = new WhiteDeck(cardSet);
+        blackDeck = new BlackDeck(cardSets);
+        whiteDeck = new WhiteDeck(cardSets);
         startNextRound();
         gameManager.broadcastGameListRefresh();
         return true;
@@ -523,6 +532,15 @@ public class Game {
         return false;
       }
     }
+  }
+
+  public boolean hasBaseDeck() {
+    for (final CardSet cardSet : cardSets) {
+      if (cardSet.isBaseDeck()) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

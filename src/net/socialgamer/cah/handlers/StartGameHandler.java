@@ -66,6 +66,8 @@ public class StartGameHandler extends GameWithPlayerHandler {
         return error(ErrorCode.NOT_GAME_HOST);
       } else if (game.getState() != GameState.LOBBY) {
         return error(ErrorCode.ALREADY_STARTED);
+      } else if (!game.hasBaseDeck()) {
+        return error(ErrorCode.NOT_ENOUGH_CARDS);
       } else if (!game.start()) {
         return error(ErrorCode.NOT_ENOUGH_PLAYERS);
       } else {

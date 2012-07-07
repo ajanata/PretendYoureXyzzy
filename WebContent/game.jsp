@@ -77,7 +77,6 @@ HttpSession hSession = request.getSession(true);
 --%>
 
 <div id="nickbox">
-  Having trouble logging in? Clear your cache.
   Nickname: <input type="text" id="nickname" value="" maxlength="30" />
   <input type="button" id="nicknameconfirm" value="Set" />
   <span id="nickbox_error" class="error"></span>
@@ -144,7 +143,9 @@ HttpSession hSession = request.getSession(true);
 	    </div>
 	    <div class="logo_2 logo_element">
 	    </div>
-	    <div class="logo_3 logo_element">
+	    <div class="logo_3 logo_element watermark_container">
+        <br/>
+        <span class="watermark"></span>
 	    </div>
 	    <div class="logo_text">Pretend You're Xyzzy</div>
 	  </div>
@@ -170,7 +171,9 @@ HttpSession hSession = request.getSession(true);
 	    </div>
 	    <div class="logo_2 logo_element">
 	    </div>
-	    <div class="logo_3 logo_element">
+	    <div class="logo_3 logo_element watermark_container">
+        <br/>
+        <span class="watermark"></span>
 	    </div>
 	    <div class="logo_text">Pretend You're Xyzzy</div>
 	  </div>
@@ -268,49 +271,42 @@ HttpSession hSession = request.getSession(true);
   <div class="game_options" id="game_options_template">
     <span class="options_host_only">Only the game host can change options.</span>
     <br/><br/>
-    Game options:
-    <br/>
-    <label id="score_limit_template_label" for="score_limit_template">Score limit:</label>
-    <select id="score_limit_template" class="score_limit">
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8" selected="selected">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-    </select>
-    <br/>
-    <label id="player_limit_template_label" for="player_limit_template">Player limit:</label>
-    <select id="player_limit_template" class="player_limit">
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10" selected="selected">10</option>
-    </select>
-    <br/>
     <fieldset>
-      <legend>Card Sets</legend>
-      Select at least one of: <span class="base_card_sets"></span>
+      <legend>Game options:</legend>
+      <label id="score_limit_template_label" for="score_limit_template">Score limit:</label>
+      <select id="score_limit_template" class="score_limit">
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8" selected="selected">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
       <br/>
-      Select any number of: <span class="extra_card_sets"></span>
+      <label id="player_limit_template_label" for="player_limit_template">Player limit:</label>
+      <select id="player_limit_template" class="player_limit">
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10" selected="selected">10</option>
+      </select>
+      <br/>
+      <fieldset class="card_sets">
+        <legend>Card Sets</legend>
+        Select at least one of: <span class="base_card_sets"></span>
+        <br/>
+        Select any number of: <span class="extra_card_sets"></span>
+      </fieldset>
+      <br/>
+      <label id="game_password_template_label" for="game_password_template">Game password:</label>
+      <input type="text" id="game_password_template" class="game_password" />
+      You must click outside the box to apply the password.
     </fieldset>
-    <span style="display:none">
-    <label id="card_set_template_label" for="card_set_template">Use cards from version:</label>
-    <select id="card_set_template" class="card_set">
-      <option value="1">first</option>
-      <option value="2" selected="selected">second</option>
-      <option value="3">both</option>
-    </select>
-    </span>
-    <br/>
-    <label id="game_password_template_label" for="game_password_template">Game password:</label>
-    <input type="text" id="game_password_template" class="game_password" />
-    You must click outside the box to apply the password.
   </div>
 </div>
 

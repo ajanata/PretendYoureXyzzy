@@ -114,8 +114,8 @@ body {
 }
 
 .gamelist_lobby {
-  width: 32%;
-  height: 100px;
+  width: 500px;
+  height: 150px;
   float: left;
   border: 1px solid black;
   margin: 4px;
@@ -476,10 +476,17 @@ span.debug {
 
 .blackcard .logo_3 {
   background: white;
+  color: black;
 }
 
 .whitecard .logo_3 {
   background: #c7c8ca;
+  color: black;
+}
+
+.watermark_container {
+  font-size: 5pt;
+  text-align: center;
 }
 
 .logo_text {
@@ -512,7 +519,6 @@ span.debug {
   -o-border-radius: 10px;
   border-radius: 10px;
 }
-
 .blackcard .card_number {
   background: white;
   display: inline-block;
@@ -534,4 +540,8 @@ span.debug {
 .previous_round_close {
   position: absolute;
   right: 0px;
+}
+
+.card_set_label {
+  margin-right: 15px;
 }

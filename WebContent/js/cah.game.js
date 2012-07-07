@@ -76,6 +76,24 @@ cah.Game = function(id) {
   $("#card_set_template", this.optionsElement_).attr("id", "card_set_" + id);
   $("#game_password_template", this.optionsElement_).attr("id", "game_password_" + id);
 
+  for ( var key in cah.CardSet.list) {
+    /** @type {cah.CardSet} */
+    var cardSet = cah.CardSet.list[key];
+    var cardSetElementId = 'card_set_' + this.id_ + '_' + cardSet.getId();
+    var title = cardSet.getBlackCardCount() + ' black card'
+        + (cardSet.getBlackCardCount() == 1 ? '' : 's') + ', ' + cardSet.getWhiteCardCount()
+        + ' white card' + (cardSet.getWhiteCardCount() == 1 ? '' : 's');
+    var html = '<input type="checkbox" id="' + cardSetElementId + '" class="card_set" title="'
+        + title + '" value="' + cardSet.getId() + '" name="card_set" /><label for="'
+        + cardSetElementId + '" title="' + title + '" class="card_set_label">' + cardSet.getName()
+        + '</label>';
+    if (cardSet.isBaseDeck()) {
+      $(".base_card_sets", this.optionsElement_).append(html);
+    } else {
+      $(".extra_card_sets", this.optionsElement_).append(html);
+    }
+  }
+
   $("label", this.optionsElement_).removeAttr("id");
   $(".game_options", this.element_).replaceWith(this.optionsElement_);
 
@@ -246,6 +264,7 @@ cah.Game = function(id) {
   $(".game_show_options", this.element_).click(cah.bind(this, this.showOptionsClick_));
   $("select", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
   $("input", this.optionsElement_).blur(cah.bind(this, this.optionChanged_));
+  $(".card_set", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
 
   $(window).on("resize.game_" + this.id_, cah.bind(this, this.windowResize_));
 };
@@ -320,6 +339,7 @@ cah.Game.prototype.getElement = function() {
 cah.Game.prototype.setBlackCard = function(card) {
   this.blackCard_ = new cah.card.BlackCard(true, card[cah.$.BlackCardData.ID]);
   this.blackCard_.setText(card[cah.$.BlackCardData.TEXT]);
+  this.blackCard_.setWatermark(card[cah.$.BlackCardData.WATERMARK]);
   this.blackCard_.setDraw(card[cah.$.BlackCardData.DRAW]);
   this.blackCard_.setPick(card[cah.$.BlackCardData.PICK]);
 
@@ -344,6 +364,7 @@ cah.Game.prototype.dealtCards = function(cards) {
     var thisCard = cards[index];
     var card = new cah.card.WhiteCard(true, thisCard[cah.$.WhiteCardData.ID]);
     card.setText(thisCard[cah.$.WhiteCardData.TEXT]);
+    card.setWatermark(thisCard[cah.$.WhiteCardData.WATERMARK]);
     this.dealtCard(card);
   }
 };
@@ -412,6 +433,7 @@ cah.Game.prototype.setRoundWhiteCards = function(cardSets) {
       if (id >= 0) {
         card = new cah.card.WhiteCard(true, id);
         card.setText(cardData[cah.$.WhiteCardData.TEXT]);
+        card.setWatermark(cardData[cah.$.WhiteCardData.WATERMARK]);
       } else {
         card = new cah.card.WhiteCard();
       }
@@ -645,35 +667,36 @@ cah.Game.prototype.insertIntoDocument = function() {
  *          data Game data returned from server.
  */
 cah.Game.prototype.updateGameStatus = function(data) {
-  this.host_ = data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.HOST];
+  var gameInfo = data[cah.$.AjaxResponse.GAME_INFO];
+  this.host_ = gameInfo[cah.$.GameInfo.HOST];
 
-  if (this.host_ == cah.nickname
-      && data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.STATE] == cah.$.GameState.LOBBY) {
+  if (this.host_ == cah.nickname && gameInfo[cah.$.GameInfo.STATE] == cah.$.GameState.LOBBY) {
     $("#start_game").show();
   } else {
     $("#start_game").hide();
   }
 
-  if (data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.STATE] == cah.$.GameState.LOBBY) {
+  if (gameInfo[cah.$.GameInfo.STATE] == cah.$.GameState.LOBBY) {
     this.showOptions_();
   } else {
     this.hideOptions_();
   }
 
-  if (data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.STATE] == cah.$.GameState.PLAYING) {
+  if (gameInfo[cah.$.GameInfo.STATE] == cah.$.GameState.PLAYING) {
     // TODO this is the cause of the cards blanking when someone joins or leaves
     // store the last state somewhere too?
     $(".game_white_cards", this.element_).empty();
   }
 
-  $(".score_limit", this.optionsElement_).val(
-      data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.SCORE_LIMIT]);
-  $(".player_limit", this.optionsElement_).val(
-      data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.PLAYER_LIMIT]);
-  $(".card_set", this.optionsElement_).val(
-      data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.CARD_SET]);
-  $(".game_password", this.optionsElement_).val(
-      data[cah.$.AjaxResponse.GAME_INFO][cah.$.GameInfo.PASSWORD]);
+  $(".score_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.SCORE_LIMIT]);
+  $(".player_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.PLAYER_LIMIT]);
+  $(".game_password", this.optionsElement_).val(gameInfo[cah.$.GameInfo.PASSWORD]);
+  var cardSetIds = gameInfo[cah.$.GameInfo.CARD_SETS];// .split(',');
+  $(".card_set", this.optionsElement_).removeAttr("checked");
+  for ( var key in cardSetIds) {
+    var cardSetId = cardSetIds[key];
+    $("#card_set_" + this.id_ + "_" + cardSetId, this.optionsElement_).attr("checked", "checked");
+  }
 
   var playerInfos = data[cah.$.AjaxResponse.PLAYER_INFO];
   for ( var index in playerInfos) {
@@ -1117,10 +1140,14 @@ cah.Game.prototype.updateOptionsEnabled_ = function() {
  * @private
  */
 cah.Game.prototype.optionChanged_ = function(e) {
+  var selectedCardSets = $(".card_sets :checked", this.optionsElement_);
+  var cardSetIds = [];
+  for ( var i = 0; i < selectedCardSets.length; i++) {
+    cardSetIds.push(selectedCardSets[i].value);
+  }
   cah.Ajax.build(cah.$.AjaxOperation.CHANGE_GAME_OPTIONS).withGameId(this.id_).withScoreLimit(
       $(".score_limit", this.optionsElement_).val()).withPlayerLimit(
-      $(".player_limit", this.optionsElement_).val()).withCardSet(
-      $(".card_set", this.optionsElement_).val()).withPassword(
+      $(".player_limit", this.optionsElement_).val()).withCardSets(cardSetIds).withPassword(
       $(".game_password", this.optionsElement_).val()).run();
 };
 
