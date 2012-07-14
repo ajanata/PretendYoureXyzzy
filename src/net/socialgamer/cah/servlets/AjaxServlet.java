@@ -91,6 +91,7 @@ public class AjaxServlet extends CahServlet {
       return;
     }
     final Map<ReturnableData, Object> data = handler.handle(new RequestWrapper(request), hSession);
+    handler.cleanUp();
     data.put(AjaxResponse.SERIAL, serial);
     returnData(user, out, data);
     return;

@@ -23,8 +23,11 @@
 
 package net.socialgamer.cah.handlers;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpSession;
 
@@ -32,6 +35,8 @@ import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
+
+import org.hibernate.Session;
 
 
 /**
@@ -41,6 +46,8 @@ import net.socialgamer.cah.RequestWrapper;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public abstract class Handler {
+  private final Logger logger = Logger.getLogger("net.socialgamer.cah.handlers.Handler");
+
   /**
    * Handle a request.
    * 
@@ -65,5 +72,36 @@ public abstract class Handler {
     data.put(AjaxResponse.ERROR, Boolean.TRUE);
     data.put(AjaxResponse.ERROR_CODE, errorCode.toString());
     return data;
+  }
+
+  /**
+   * Clean up after this Handler. Currently, this means using reflection to see if the concrete
+   * Handler implementation had a field of type Session (Hibernate), and closing it if it does and
+   * did not already close it.
+   */
+  public final void cleanUp() {
+    for (final Field field : this.getClass().getDeclaredFields()) {
+      if (field.getType() == Session.class) {
+        try {
+          // This Handler had a Hibernate Session. Try to close it if it wasn't already closed.
+          // This is extremely dirty but also extremely awesome to not have problems if it is
+          // forgotten.
+          field.setAccessible(true);
+          final Session session = (Session) field.get(this);
+          if (session.isOpen()) {
+            session.close();
+            logger.log(Level.INFO, "Closing unclosed Hibernate Session in "
+                + this.getClass().getName());
+          }
+        } catch (final Exception e) {
+          // Something prevented us from ignoring access control check, so we can't close the
+          // session. Log about it and continue.
+          e.printStackTrace();
+          logger.log(Level.SEVERE, "Unable to reflect and get Hibernate Session from "
+              + this.getClass().getName());
+          logger.log(Level.SEVERE, e.toString());
+        }
+      }
+    }
   }
 }

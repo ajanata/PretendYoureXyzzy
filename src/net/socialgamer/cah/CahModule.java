@@ -56,6 +56,10 @@ public class CahModule extends AbstractModule {
     return 30;
   }
 
+  /**
+   * @return A Hibernate session. Objects which receive a Hibernate session should close the
+   * session when they are done!
+   */
   @Provides
   Session provideHibernateSession() {
     return HibernateUtil.instance.sessionFactory.openSession();
