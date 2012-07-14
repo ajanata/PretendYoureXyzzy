@@ -49,104 +49,106 @@ List<String> messages = new ArrayList<String>();
 
 Session hibernateSession = HibernateUtil.instance.sessionFactory.openSession();
 
-String editParam = request.getParameter("edit");
-CardSet editCardSet = null;
-if (null != editParam) {
-  try {
-    editCardSet = (CardSet)hibernateSession.load(CardSet.class, Integer.parseInt(editParam));
-  } catch (NumberFormatException nfe) {
-    messages.add("Unable to parse or locate requested card set to edit.");
-  }
-}
-
-String deleteParam = request.getParameter("delete");
-if (null != deleteParam) {
-  try {
-    editCardSet = (CardSet)hibernateSession.load(CardSet.class, Integer.parseInt(deleteParam));
-    Transaction t = hibernateSession.beginTransaction();
-    hibernateSession.delete(editCardSet);
-    t.commit();
-    response.sendRedirect("cardsets.jsp");
-    return;
-  } catch (NumberFormatException nfe) {
-    messages.add("Invalid id.");
-  }
-}
-
-
-String actionParam = request.getParameter("action");
-if ("edit".equals(actionParam)) {
-  String idParam = request.getParameter("cardSetId");
-  int id = 0;
-  try {
-    id = Integer.parseInt(idParam);
-    if (-1 == id) {
-      editCardSet = new CardSet();
-    } else {
-      editCardSet = (CardSet)hibernateSession.load(CardSet.class, id);
+// cheap way to make sure we can close the hibernate session at the end of the page
+try {
+  String editParam = request.getParameter("edit");
+  CardSet editCardSet = null;
+  if (null != editParam) {
+    try {
+      editCardSet = (CardSet)hibernateSession.load(CardSet.class, Integer.parseInt(editParam));
+    } catch (NumberFormatException nfe) {
+      messages.add("Unable to parse or locate requested card set to edit.");
     }
-    if (null != editCardSet) {
-      String nameParam = request.getParameter("cardSetName");
-      String activeParam = request.getParameter("active");
-      String baseDeckParam = request.getParameter("baseDeck");
-      String[] selectedBlackCardsParam = request.getParameterValues("selectedBlackCards");
-      String[] selectedWhiteCardsParam = request.getParameterValues("selectedWhiteCards");
-      if (null == nameParam || nameParam.isEmpty() || null == selectedBlackCardsParam ||
-          null == selectedWhiteCardsParam) {
-        messages.add("You didn't specify something.");
-        if (-1 == id) {
-          editCardSet = null;
+  }
+  
+  String deleteParam = request.getParameter("delete");
+  if (null != deleteParam) {
+    try {
+      editCardSet = (CardSet)hibernateSession.load(CardSet.class, Integer.parseInt(deleteParam));
+      Transaction t = hibernateSession.beginTransaction();
+      hibernateSession.delete(editCardSet);
+      t.commit();
+      response.sendRedirect("cardsets.jsp");
+      return;
+    } catch (NumberFormatException nfe) {
+      messages.add("Invalid id.");
+    }
+  }
+  
+  
+  String actionParam = request.getParameter("action");
+  if ("edit".equals(actionParam)) {
+    String idParam = request.getParameter("cardSetId");
+    int id = 0;
+    try {
+      id = Integer.parseInt(idParam);
+      if (-1 == id) {
+        editCardSet = new CardSet();
+      } else {
+        editCardSet = (CardSet)hibernateSession.load(CardSet.class, id);
+      }
+      if (null != editCardSet) {
+        String nameParam = request.getParameter("cardSetName");
+        String activeParam = request.getParameter("active");
+        String baseDeckParam = request.getParameter("baseDeck");
+        String[] selectedBlackCardsParam = request.getParameterValues("selectedBlackCards");
+        String[] selectedWhiteCardsParam = request.getParameterValues("selectedWhiteCards");
+        if (null == nameParam || nameParam.isEmpty() || null == selectedBlackCardsParam ||
+            null == selectedWhiteCardsParam) {
+          messages.add("You didn't specify something.");
+          if (-1 == id) {
+            editCardSet = null;
+          }
+        } else {
+          editCardSet.setName(nameParam);
+          editCardSet.setActive("on".equals(activeParam));
+          editCardSet.setBaseDeck("on".equals(baseDeckParam));
+          List<Integer> blackCardIds = new ArrayList<Integer>(selectedBlackCardsParam.length);
+          for (String bc : selectedBlackCardsParam) {
+            blackCardIds.add(Integer.parseInt(bc));
+          }
+          List<Integer> whiteCardIds = new ArrayList<Integer>(selectedWhiteCardsParam.length);
+          for (String wc : selectedWhiteCardsParam) {
+            whiteCardIds.add(Integer.parseInt(wc));
+          }
+          @SuppressWarnings("unchecked")
+          List<BlackCard> realBlackCards = hibernateSession.createQuery(
+              "from BlackCard where id in (:ids)").setParameterList("ids", blackCardIds).
+              setReadOnly(true).list();
+          @SuppressWarnings("unchecked")
+          List<WhiteCard> realWhiteCards = hibernateSession.createQuery(
+              "from WhiteCard where id in (:ids)").setParameterList("ids", whiteCardIds).
+              setReadOnly(true).list();
+          editCardSet.getBlackCards().clear();
+          editCardSet.getBlackCards().addAll(realBlackCards);
+          editCardSet.getWhiteCards().clear();
+          editCardSet.getWhiteCards().addAll(realWhiteCards);
+          Transaction t = hibernateSession.beginTransaction();
+          hibernateSession.saveOrUpdate(editCardSet);
+          t.commit();
+          hibernateSession.flush();
+          response.sendRedirect("cardsets.jsp");
+          return;
         }
       } else {
-        editCardSet.setName(nameParam);
-        editCardSet.setActive("on".equals(activeParam));
-        editCardSet.setBaseDeck("on".equals(baseDeckParam));
-        List<Integer> blackCardIds = new ArrayList<Integer>(selectedBlackCardsParam.length);
-        for (String bc : selectedBlackCardsParam) {
-          blackCardIds.add(Integer.parseInt(bc));
-        }
-        List<Integer> whiteCardIds = new ArrayList<Integer>(selectedWhiteCardsParam.length);
-        for (String wc : selectedWhiteCardsParam) {
-          whiteCardIds.add(Integer.parseInt(wc));
-        }
-        @SuppressWarnings("unchecked")
-        List<BlackCard> realBlackCards = hibernateSession.createQuery(
-            "from BlackCard where id in (:ids)").setParameterList("ids", blackCardIds).
-            setReadOnly(true).list();
-        @SuppressWarnings("unchecked")
-        List<WhiteCard> realWhiteCards = hibernateSession.createQuery(
-            "from WhiteCard where id in (:ids)").setParameterList("ids", whiteCardIds).
-            setReadOnly(true).list();
-        editCardSet.getBlackCards().clear();
-        editCardSet.getBlackCards().addAll(realBlackCards);
-        editCardSet.getWhiteCards().clear();
-        editCardSet.getWhiteCards().addAll(realWhiteCards);
-        Transaction t = hibernateSession.beginTransaction();
-        hibernateSession.saveOrUpdate(editCardSet);
-        t.commit();
-        hibernateSession.flush();
-        response.sendRedirect("cardsets.jsp");
-        return;
+        messages.add("Unable to find card set with id " + id + ".");
       }
-    } else {
-      messages.add("Unable to find card set with id " + id + ".");
+    } catch (Exception e) {
+      messages.add("Something went wrong. " + e.toString());
     }
-  } catch (Exception e) {
-    messages.add("Something went wrong. " + e.toString());
   }
-}
-
-@SuppressWarnings("unchecked")
-List<CardSet> cardSets = hibernateSession.createQuery("from CardSet order by id")
-    .setReadOnly(true).list();
-
-@SuppressWarnings("unchecked")
-List<BlackCard> blackCards = hibernateSession.createQuery("from BlackCard order by id")
-    .setReadOnly(true).list();
-
-@SuppressWarnings("unchecked")
-List<WhiteCard> whiteCards = hibernateSession.createQuery("from WhiteCard order by id")
-    .setReadOnly(true).list();
+  
+  @SuppressWarnings("unchecked")
+  List<CardSet> cardSets = hibernateSession.createQuery("from CardSet order by id")
+      .setReadOnly(true).list();
+  
+  @SuppressWarnings("unchecked")
+  List<BlackCard> blackCards = hibernateSession.createQuery("from BlackCard order by id")
+      .setReadOnly(true).list();
+  
+  @SuppressWarnings("unchecked")
+  List<WhiteCard> whiteCards = hibernateSession.createQuery("from WhiteCard order by id")
+      .setReadOnly(true).list();
 
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -310,3 +312,8 @@ select {
 </form>
 </body>
 </html>
+<%
+} finally {
+  hibernateSession.close();
+}
+%>
