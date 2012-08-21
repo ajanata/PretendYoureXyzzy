@@ -43,8 +43,11 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.NEW_PLAYER] = function(data) {
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.PLAYER_LEAVE] = function(data) {
   var friendly_reason = "Leaving";
   switch (data[cah.$.LongPollResponse.REASON]) {
+    case cah.$.DisconnectReason.BANNED:
+      friendly_reason = "Banned";
+      break;
     case cah.$.DisconnectReason.KICKED:
-      friendly_reason = "Kicked by server";
+      friendly_reason = "Kicked by server administrator";
       break;
     case cah.$.DisconnectReason.MANUAL:
       friendly_reason = "Leaving";
@@ -63,6 +66,15 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.NOOP] = function(data) {
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.KICKED] = function() {
   cah.log.status("You have been kicked by the server administrator.");
+  cah.longpoll.Resume = false;
+  $("input").attr("disabled", "disabled");
+  $("#menubar_left").empty();
+  $("#main").empty();
+  $("#info_area").empty();
+};
+
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.BANNED] = function() {
+  cah.log.status("You have been banned by the server administrator.");
   cah.longpoll.Resume = false;
   $("input").attr("disabled", "disabled");
   $("#menubar_left").empty();

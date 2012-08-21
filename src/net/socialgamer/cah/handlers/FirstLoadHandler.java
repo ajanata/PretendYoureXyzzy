@@ -99,6 +99,7 @@ public class FirstLoadHandler extends Handler {
     }
     ret.put(AjaxResponse.CARD_SETS, cardSetsData);
     transaction.commit();
+    hibernateSession.close();
 
     return ret;
   }

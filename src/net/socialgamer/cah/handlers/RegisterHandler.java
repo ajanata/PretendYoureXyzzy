@@ -25,10 +25,12 @@ package net.socialgamer.cah.handlers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.CahModule.BanList;
 import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
@@ -55,6 +57,7 @@ public class RegisterHandler extends Handler {
   private static final Pattern validName = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]{2,29}");
 
   private final ConnectedUsers users;
+  private final Set<String> banList;
 
   /**
    * I don't want to have to inject the entire server here, but I couldn't figure out how to
@@ -63,14 +66,19 @@ public class RegisterHandler extends Handler {
    * @param server
    */
   @Inject
-  public RegisterHandler(final ConnectedUsers users) {
+  public RegisterHandler(final ConnectedUsers users, @BanList final Set<String> banList) {
     this.users = users;
+    this.banList = banList;
   }
 
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
       final HttpSession session) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+
+    if (banList.contains(request.getRemoteAddr())) {
+      return error(ErrorCode.BANNED);
+    }
 
     if (request.getParameter(AjaxRequest.NICKNAME) == null) {
       return error(ErrorCode.NO_NICK_SPECIFIED);
@@ -81,8 +89,8 @@ public class RegisterHandler extends Handler {
       } else if (users.hasUser(nick)) {
         return error(ErrorCode.NICK_IN_USE);
       } else {
-        final User user = new User(nick, request.getRemoteHost(),
-            Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteHost()));
+        final User user = new User(nick, request.getRemoteAddr(),
+            Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteAddr()));
         users.newUser(user);
         // There is a findbugs warning on this line:
         // cah/src/net/socialgamer/cah/handlers/RegisterHandler.java:85 Store of non serializable

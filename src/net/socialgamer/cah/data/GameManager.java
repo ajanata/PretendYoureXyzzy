@@ -158,8 +158,8 @@ public class GameManager implements Provider<Integer> {
         nextId = gameId;
       }
       // remove the players from the game
-      final List<User> users = game.getUsers();
-      for (final User user : users) {
+      final List<User> usersToRemove = game.getUsers();
+      for (final User user : usersToRemove) {
         game.removePlayer(user);
       }
 

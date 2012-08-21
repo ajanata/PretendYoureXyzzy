@@ -167,3 +167,11 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JUDGE_SELECT] = function(data) {
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CHANGE_GAME_OPTIONS] = function(data) {
   // pass
 };
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.KICK] = function(data) {
+  // pass
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.BAN] = function(data) {
+  // pass
+};

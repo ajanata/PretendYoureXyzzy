@@ -23,6 +23,12 @@
 
 package net.socialgamer.cah;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.GameManager.MaxGames;
@@ -30,6 +36,7 @@ import net.socialgamer.cah.data.GameManager.MaxGames;
 import org.hibernate.Session;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.BindingAnnotation;
 import com.google.inject.Provides;
 
 
@@ -53,7 +60,7 @@ public class CahModule extends AbstractModule {
   @Provides
   @MaxGames
   Integer provideMaxGames() {
-    return 30;
+    return 60;
   }
 
   /**
@@ -63,5 +70,22 @@ public class CahModule extends AbstractModule {
   @Provides
   Session provideHibernateSession() {
     return HibernateUtil.instance.sessionFactory.openSession();
+  }
+
+  private final static Set<String> banList = Collections.synchronizedSet(new HashSet<String>());
+
+  /**
+   * @return A mutable Set of IP addresses (in String format) which are banned. This Set is
+   * thread-safe.
+   */
+  @Provides
+  @BanList
+  Set<String> provideBanList() {
+    return banList;
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface BanList {
   }
 }

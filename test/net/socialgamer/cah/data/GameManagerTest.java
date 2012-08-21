@@ -36,10 +36,12 @@ import static org.junit.Assert.assertNull;
 import java.util.Collection;
 import java.util.HashMap;
 
+import net.socialgamer.cah.HibernateUtil;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.GameManager.MaxGames;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
+import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,6 +89,12 @@ public class GameManagerTest {
       Integer provideGameId() {
         return gameId;
       }
+
+      @SuppressWarnings("unused")
+      @Provides
+      Session provideSession() {
+        return HibernateUtil.instance.sessionFactory.openSession();
+      }
     });
 
     gameManager = injector.getInstance(GameManager.class);
@@ -108,11 +116,11 @@ public class GameManagerTest {
 
     // fill it up with 3 games
     assertEquals(0, gameManager.get().intValue());
-    gameManager.getGames().put(0, new Game(0, cuMock, gameManager));
+    gameManager.getGames().put(0, new Game(0, cuMock, gameManager, null));
     assertEquals(1, gameManager.get().intValue());
-    gameManager.getGames().put(1, new Game(1, cuMock, gameManager));
+    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, null));
     assertEquals(2, gameManager.get().intValue());
-    gameManager.getGames().put(2, new Game(2, cuMock, gameManager));
+    gameManager.getGames().put(2, new Game(2, cuMock, gameManager, null));
     // make sure it says it can't make any more
     assertEquals(-1, gameManager.get().intValue());
 
@@ -120,13 +128,13 @@ public class GameManagerTest {
     gameManager.destroyGame(1);
     // make sure it re-uses that id
     assertEquals(1, gameManager.get().intValue());
-    gameManager.getGames().put(1, new Game(1, cuMock, gameManager));
+    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, null));
     assertEquals(-1, gameManager.get().intValue());
 
     // remove game 1 out from under it, to make sure it'll fix itself
     gameManager.getGames().remove(1);
     assertEquals(1, gameManager.get().intValue());
-    gameManager.getGames().put(1, new Game(1, cuMock, gameManager));
+    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, null));
     assertEquals(-1, gameManager.get().intValue());
 
     gameManager.destroyGame(2);

@@ -18,8 +18,6 @@ import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.User;
 import net.socialgamer.cah.db.CardSet;
 
-import org.hibernate.Session;
-
 import com.google.inject.Inject;
 
 
@@ -27,12 +25,9 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.CHANGE_GAME_OPTIONS.toString();
 
-  private final Session hibernateSession;
-
   @Inject
-  public ChangeGameOptionHandler(final GameManager gameManager, final Session hibernateSession) {
+  public ChangeGameOptionHandler(final GameManager gameManager) {
     super(gameManager);
-    this.hibernateSession = hibernateSession;
   }
 
   @Override
@@ -51,7 +46,10 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
         final String[] cardSetsParsed = request.getParameter(AjaxRequest.CARD_SETS).split(",");
         final Set<CardSet> cardSets = new HashSet<CardSet>();
         for (final String cardSetId : cardSetsParsed) {
-          cardSets.add((CardSet) hibernateSession.load(CardSet.class, Integer.parseInt(cardSetId)));
+          if (!cardSetId.isEmpty()) {
+            cardSets.add((CardSet) game.getHibernateSession().load(CardSet.class,
+                Integer.parseInt(cardSetId)));
+          }
         }
         String password = request.getParameter(AjaxRequest.PASSWORD);
         if (password == null) {

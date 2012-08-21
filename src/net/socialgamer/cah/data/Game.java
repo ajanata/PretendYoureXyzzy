@@ -52,6 +52,8 @@ import net.socialgamer.cah.db.BlackCard;
 import net.socialgamer.cah.db.CardSet;
 import net.socialgamer.cah.db.WhiteCard;
 
+import org.hibernate.Session;
+
 import com.google.inject.Inject;
 import com.sun.istack.internal.Nullable;
 
@@ -129,6 +131,7 @@ public class Game {
   private int scoreGoal = 8;
   private final Set<CardSet> cardSets = new HashSet<CardSet>();
   private String password = "";
+  private final Session hibernateSession;
 
   /**
    * Create a new game.
@@ -143,11 +146,16 @@ public class Game {
    */
   @Inject
   public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
-      final GameManager gameManager) {
+      final GameManager gameManager, final Session hibernateSession) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
+    this.hibernateSession = hibernateSession;
     state = GameState.LOBBY;
+  }
+
+  public Session getHibernateSession() {
+    return hibernateSession;
   }
 
   /**

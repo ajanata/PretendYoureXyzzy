@@ -109,9 +109,34 @@ function chatsubmit_click() {
   if (text == "") {
     return;
   }
-  // TODO when I get multiple channels working, this needs to know active and pass it
-  cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text).run();
-  cah.log.status("<" + cah.nickname + "> " + text);
+  var cmd = '';
+  if ('/' == text.substring(0, 1)) {
+    cmd = text.substring(1, text.indexOf(' ') >= 0 ? text.indexOf(' ') : undefined);
+    if (text.indexOf(' ') >= 0) {
+      text = text.substring(text.indexOf(' ') + 1);
+    } else {
+      text = '';
+    }
+  }
+  switch (cmd) {
+    case '':
+      // TODO when I get multiple channels working, this needs to know active and pass it
+      cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text).run();
+      cah.log.status("<" + cah.nickname + "> " + text);
+      break;
+    case 'kick':
+      cah.Ajax.build(cah.$.AjaxOperation.KICK).withNickname(text.split(' ')[0]).run();
+      break;
+    case 'ban':
+      // this could also be an IP address
+      cah.Ajax.build(cah.$.AjaxOperation.BAN).withNickname(text.split(' ')[0]).run();
+      break;
+    case 'names':
+      cah.Ajax.build(cah.$.AjaxOperation.NAMES).run();
+      break;
+    default:
+  }
+
   $("#chat").val("");
   $("#chat").focus();
 }

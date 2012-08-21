@@ -53,6 +53,14 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>21 August, 6:00 AM UTC:<ul>
+    <li>Ban list. Only admins can ban.</li>
+    <li>Chat from admins shows up in blue.</li>
+    <li>
+      Currently, the admin list contains just me and a close friend. I am not taking applications.
+    </li>
+    <li>Performance and stability tweaks.</li>
+  </ul></li>
   <li>7 July, 10:00 PM UTC:<ul>
     <li>Proper Card Set support. Currently, only I can define the cards and card sets, but I hope to
     eventually let users define their own. This leads into the next item...</li>

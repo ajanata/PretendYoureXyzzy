@@ -11,6 +11,7 @@ public class Handlers {
   static {
     LIST = new HashMap<String, Class<? extends Handler>>();
     LIST.put(AdminSetVerboseLog.OP, AdminSetVerboseLog.class);
+    LIST.put(BanHandler.OP, BanHandler.class);
     LIST.put(ChangeGameOptionHandler.OP, ChangeGameOptionHandler.class);
     LIST.put(ChatHandler.OP, ChatHandler.class);
     LIST.put(CreateGameHandler.OP, CreateGameHandler.class);
@@ -20,6 +21,7 @@ public class Handlers {
     LIST.put(GetGameInfoHandler.OP, GetGameInfoHandler.class);
     LIST.put(JoinGameHandler.OP, JoinGameHandler.class);
     LIST.put(JudgeSelectHandler.OP, JudgeSelectHandler.class);
+    LIST.put(KickHandler.OP, KickHandler.class);
     LIST.put(LeaveGameHandler.OP, LeaveGameHandler.class);
     LIST.put(LogoutHandler.OP, LogoutHandler.class);
     LIST.put(NamesHandler.OP, NamesHandler.class);

@@ -28,6 +28,9 @@ Administration tools.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.google.inject.Injector" %>
+<%@ page import="com.google.inject.Key" %>
+<%@ page import="com.google.inject.TypeLiteral" %>
+<%@ page import="net.socialgamer.cah.CahModule.BanList" %>
 <%@ page import="net.socialgamer.cah.Constants.DisconnectReason" %>
 <%@ page import="net.socialgamer.cah.Constants.LongPollEvent" %>
 <%@ page import="net.socialgamer.cah.Constants.LongPollResponse" %>
@@ -41,6 +44,7 @@ Administration tools.
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="java.util.Set" %>
 
 <%
 String remoteAddr = request.getRemoteAddr();
@@ -55,6 +59,7 @@ ServletContext servletContext = pageContext.getServletContext();
 Injector injector = (Injector) servletContext.getAttribute(StartupUtils.INJECTOR);
 
 ConnectedUsers connectedUsers = injector.getInstance(ConnectedUsers.class);
+Set<String> banList = injector.getInstance(Key.get(new TypeLiteral<Set<String>>(){}, BanList.class));
 
 // process verbose toggle
 String verboseParam = request.getParameter("verbose");
@@ -84,13 +89,38 @@ if (kickParam != null) {
   return;
 }
 
+// process ban
+String banParam = request.getParameter("ban");
+if (banParam != null) {
+  User user = connectedUsers.getUser(banParam);
+  if (user != null) {
+   Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+   data.put(LongPollResponse.EVENT, LongPollEvent.BANNED.toString());
+   QueuedMessage qm = new QueuedMessage(MessageType.KICKED, data);
+   user.enqueueMessage(qm);
+
+   connectedUsers.removeUser(user, DisconnectReason.BANNED);
+   banList.add(user.getHostName());
+  }
+  response.sendRedirect("admin.jsp");
+  return;
+}
+
+// process unban
+String unbanParam = request.getParameter("unban");
+if (unbanParam != null) {
+  banList.remove(unbanParam);
+  response.sendRedirect("admin.jsp");
+  return;
+}
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>CAH - Admin</title>
+<title>PYX - Admin</title>
 <style type="text/css" media="screen">
 table, th, td {
   border: 1px solid black;
@@ -125,8 +155,8 @@ th, td {
   </tr>
   <tr>  
     <td>In Use</td>
-    <td><% out.print((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
-        / 1024L / 1024L); %></td>
+    <td><%= (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
+        / 1024L / 1024L %></td>
   </tr>
   <tr>  
     <td>Free</td>
@@ -142,6 +172,25 @@ th, td {
   </tr>
 </table>
 <br/>
+Ban list:
+<table>
+  <tr>
+    <th>Host</th>
+    <th>Actions</th>
+  </tr>
+  <%
+  for (String host : banList) {
+    %>
+    <tr>
+      <td><%= host %></td>
+      <td><a href="?unban=<%= host %>">Unban</a></td>
+    </tr>
+    <%
+  }
+  %>
+</table>
+<br/>
+User list:
 <table>
   <tr>
     <th>Username</th>
@@ -154,9 +203,12 @@ th, td {
     // TODO have a ban system. would need to store them somewhere.
 	  %>
 	  <tr>
-	    <td><% out.print(u.getNickname()); %></td>
-	    <td><% out.print(u.getHostName()); %></td>
-	    <td><a href="?kick=<% out.print(u.getNickname()); %>">Kick</a></td>
+	    <td><%= u.getNickname() %></td>
+	    <td><%= u.getHostName() %></td>
+	    <td>
+        <a href="?kick=<%= u.getNickname() %>">Kick</a>
+        <a href="?ban=<%= u.getNickname() %>">Ban</a>
+      </td>
 	  </tr>
 	  <%
   }
@@ -168,7 +220,7 @@ Boolean verboseDebugObj = (Boolean) servletContext.getAttribute(StartupUtils.VER
 boolean verboseDebug = verboseDebugObj != null ? verboseDebugObj.booleanValue() : false;
 %>
 <p>
-  Verbose logging is currently <strong><% out.print(verboseDebug ? "ON" : "OFF"); %></strong>.
+  Verbose logging is currently <strong><%= verboseDebug ? "ON" : "OFF" %></strong>.
   <a href="?verbose=on">Turn on.</a> <a href="?verbose=off">Turn off.</a>
 </p>
 

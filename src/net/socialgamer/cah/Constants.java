@@ -93,6 +93,10 @@ public class Constants {
    */
   public enum DisconnectReason {
     /**
+     * The client was banned by the server administrator.
+     */
+    BANNED("B&"),
+    /**
      * The client was kicked by the server administrator.
      */
     KICKED("k"),
@@ -150,6 +154,7 @@ public class Constants {
    */
   public enum AjaxOperation {
     ADMIN_SET_VERBOSE_LOG("svl"),
+    BAN("b"),
     CHANGE_GAME_OPTIONS("cgo"),
     CHAT("c"),
     CREATE_GAME("cg"),
@@ -162,6 +167,7 @@ public class Constants {
     GET_GAME_INFO("ggi"),
     JOIN_GAME("jg"),
     JUDGE_SELECT("js"),
+    KICK("K"),
     LEAVE_GAME("lg"),
     LOG_OUT("lo"),
     /**
@@ -268,6 +274,8 @@ public class Constants {
     ALREADY_STARTED("as", "The game has already started."),
     BAD_OP("bo", "Invalid operation."),
     BAD_REQUEST("br", "Bad request."),
+    @DuplicationAllowed
+    BANNED(DisconnectReason.BANNED, "Banned."),
     CANNOT_JOIN_ANOTHER_GAME("cjag", "You cannot join another game."),
     DO_NOT_HAVE_CARD("dnhc", "You don't have that card."),
     GAME_FULL("gf", "That game is full. Join another."),
@@ -289,6 +297,8 @@ public class Constants {
     NO_MSG_SPECIFIED("nms", "No message specified."),
     NO_NICK_SPECIFIED("nns", "No nickname specified."),
     NO_SESSION("ns", "Session not detected. Make sure you have cookies enabled."),
+    NO_SUCH_USER("nsu", "No such user."),
+    NOT_ADMIN("na", "You are not an administrator."),
     NOT_ENOUGH_CARDS("nec", "You must select at least one base card set."),
     NOT_ENOUGH_PLAYERS("nep", "There are not enough players to start the game."),
     NOT_GAME_HOST("ngh", "Only the game host can do that."),
@@ -317,6 +327,11 @@ public class Constants {
       this.message = message;
     }
 
+    ErrorCode(final Enum<?> code, final String message) {
+      this.code = code.toString();
+      this.message = message;
+    }
+
     @Override
     public String toString() {
       return code;
@@ -332,6 +347,8 @@ public class Constants {
    * Events that can be returned in a long poll response.
    */
   public enum LongPollEvent {
+    @DuplicationAllowed
+    BANNED(DisconnectReason.BANNED),
     @DuplicationAllowed
     CHAT(AjaxOperation.CHAT),
     GAME_BLACK_RESHUFFLE("gbr"),
