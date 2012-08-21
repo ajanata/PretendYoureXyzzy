@@ -25,6 +25,8 @@ package net.socialgamer.cah;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -39,6 +41,18 @@ import java.lang.annotation.RetentionPolicy;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class Constants {
+  @SuppressWarnings("serial")
+  public static final Set<String> ADMIN_IP_ADDRESSES = new HashSet<String>() {
+    {
+      add("0:0:0:0:0:0:0:1");
+      add("127.0.0.1");
+      // ajanata
+      add("98.248.33.90");
+      // vsTerminus
+      add("207.161.125.132");
+    }
+  };
+
   /**
    * Enums that implement this interface are valid keys for data returned to clients.
    */
@@ -377,6 +391,10 @@ public class Constants {
      * Player a chat message is from.
      */
     FROM("f"),
+    /**
+     * A chat message is from an admin. This is going to be done with IP addresses for now.
+     */
+    FROM_ADMIN("fa"),
     @DuplicationAllowed
     GAME_ID(AjaxResponse.GAME_ID),
     @DuplicationAllowed

@@ -47,6 +47,8 @@ public class User {
 
   private final String hostName;
 
+  private final boolean isAdmin;
+
   /**
    * Reset when this user object is no longer valid, most likely because it pinged out.
    */
@@ -59,10 +61,13 @@ public class User {
    *          The user's nickname.
    * @param hostName
    *          The user's Internet hostname (which will likely just be their IP address).
+   * @param isAdmin
+   *          Whether this user is an admin.
    */
-  public User(final String nickname, final String hostName) {
+  public User(final String nickname, final String hostName, final boolean isAdmin) {
     this.nickname = nickname;
     this.hostName = hostName;
+    this.isAdmin = isAdmin;
     queuedMessages = new PriorityBlockingQueue<QueuedMessage>();
   }
 
@@ -126,6 +131,10 @@ public class User {
     }
     c.trimToSize();
     return c;
+  }
+
+  public boolean isAdmin() {
+    return isAdmin;
   }
 
   /**

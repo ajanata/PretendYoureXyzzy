@@ -257,6 +257,7 @@ cah.$.LongPollResponse.GAME_STATE = "gs";
 cah.$.LongPollResponse.NICKNAME = "n";
 cah.$.LongPollResponse.PLAY_TIMER = "Pt";
 cah.$.LongPollResponse.MESSAGE = "m";
+cah.$.LongPollResponse.FROM_ADMIN = "fa";
 cah.$.LongPollResponse.GAME_INFO = "gi";
 cah.$.LongPollResponse.ERROR = "e";
 cah.$.LongPollResponse.EVENT = "E";

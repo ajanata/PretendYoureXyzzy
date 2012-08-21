@@ -80,6 +80,7 @@ public class ChatHandler extends Handler {
         broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
         broadcastData.put(LongPollResponse.FROM, user.getNickname());
         broadcastData.put(LongPollResponse.MESSAGE, message);
+        broadcastData.put(LongPollResponse.FROM_ADMIN, user.isAdmin());
         // TODO once there are multiple chat channels, put the destination here
         // TODO once there are games and they have their own chat, make it only send to participants
         users.broadcastToAll(MessageType.CHAT, broadcastData);

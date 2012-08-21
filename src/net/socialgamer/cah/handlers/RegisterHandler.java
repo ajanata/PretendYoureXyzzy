@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.AjaxResponse;
@@ -80,7 +81,8 @@ public class RegisterHandler extends Handler {
       } else if (users.hasUser(nick)) {
         return error(ErrorCode.NICK_IN_USE);
       } else {
-        final User user = new User(nick, request.getRemoteHost());
+        final User user = new User(nick, request.getRemoteHost(),
+            Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteHost()));
         users.newUser(user);
         // There is a findbugs warning on this line:
         // cah/src/net/socialgamer/cah/handlers/RegisterHandler.java:85 Store of non serializable

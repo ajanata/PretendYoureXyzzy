@@ -73,9 +73,13 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.KICKED] = function() {
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.CHAT] = function(data) {
   // TODO deal with multiple channels eventually
   // don't display our own chat
+  var clazz = undefined;
+  if (data[cah.$.LongPollResponse.FROM_ADMIN]) {
+    clazz = "admin";
+  }
   if (data[cah.$.LongPollResponse.FROM] != cah.nickname) {
     cah.log.status("<" + data[cah.$.LongPollResponse.FROM] + "> "
-        + data[cah.$.LongPollResponse.MESSAGE]);
+        + data[cah.$.LongPollResponse.MESSAGE], clazz);
   }
 };
 
