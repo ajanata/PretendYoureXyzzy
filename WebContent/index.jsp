@@ -53,6 +53,10 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>29 August, 6:00 AM UTC:<ul>
+    <li>Chat flood protection. You may only chat 5 times in any given 15 second period.</li>
+    <li>Splitting game chat out will happen next, this was just an easy bandage.</li>
+  </ul></li>
   <li>21 August, 6:00 AM UTC:<ul>
     <li>Ban list. Only admins can ban.</li>
     <li>Chat from admins shows up in blue.</li>

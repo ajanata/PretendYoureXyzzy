@@ -25,6 +25,9 @@ package net.socialgamer.cah.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
 
@@ -48,6 +51,8 @@ public class User {
   private final String hostName;
 
   private final boolean isAdmin;
+
+  private final List<Long> lastMessageTimes = Collections.synchronizedList(new LinkedList<Long>());
 
   /**
    * Reset when this user object is no longer valid, most likely because it pinged out.
@@ -223,5 +228,9 @@ public class User {
     if (currentGame == game) {
       currentGame = null;
     }
+  }
+
+  public List<Long> getLastMessageTimes() {
+    return lastMessageTimes;
   }
 }

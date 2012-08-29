@@ -28,6 +28,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.ErrorCode;
@@ -71,11 +72,21 @@ public class ChatHandler extends Handler {
       return error(ErrorCode.NO_MSG_SPECIFIED);
     } else {
       final String message = request.getParameter(AjaxRequest.MESSAGE).trim();
-      if (message.length() > 200) {
+
+      if (user.getLastMessageTimes().size() >= Constants.CHAT_FLOOD_MESSAGE_COUNT) {
+        final Long head = user.getLastMessageTimes().get(0);
+        if (System.currentTimeMillis() - head < Constants.CHAT_FLOOD_TIME) {
+          return error(ErrorCode.TOO_FAST);
+        }
+        user.getLastMessageTimes().remove(0);
+      }
+
+      if (message.length() > Constants.CHAT_MAX_LENGTH) {
         return error(ErrorCode.MESSAGE_TOO_LONG);
       } else if (message.length() == 0) {
         return error(ErrorCode.NO_MSG_SPECIFIED);
       } else {
+        user.getLastMessageTimes().add(System.currentTimeMillis());
         final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
         broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
         broadcastData.put(LongPollResponse.FROM, user.getNickname());

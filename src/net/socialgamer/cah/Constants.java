@@ -41,6 +41,11 @@ import java.util.Set;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class Constants {
+
+  public static final int CHAT_FLOOD_MESSAGE_COUNT = 5;
+  public static final int CHAT_FLOOD_TIME = 15 * 1000;
+  public static final int CHAT_MAX_LENGTH = 200;
+
   @SuppressWarnings("serial")
   public static final Set<String> ADMIN_IP_ADDRESSES = new HashSet<String>() {
     {
@@ -309,6 +314,7 @@ public class Constants {
     OP_NOT_SPECIFIED("ons", "Operation not specified."),
     SERVER_ERROR("serr", "An error occured on the server."),
     SESSION_EXPIRED("se", "Your session has expired. Refresh the page."),
+    TOO_FAST("tf", "You are chatting too fast. Wait a few seconds and try again."),
     TOO_MANY_GAMES("tmg", "There are too many games already in progress. Either join " +
         "an existing game, or wait for one to become available."),
     WRONG_PASSWORD("wp", "That password is incorrect.");
