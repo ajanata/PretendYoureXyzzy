@@ -30,7 +30,7 @@
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
   cah.nickname = data[cah.$.AjaxResponse.NICKNAME];
   cah.log.status("You are connected as " + cah.nickname);
-  $("#nickbox").hide();
+  $("#welcome").hide();
   $("#canvass").show();
 
   cah.ajax.after_registered();
@@ -47,7 +47,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
   if (data[cah.$.AjaxResponse.IN_PROGRESS]) {
     cah.nickname = data[cah.$.AjaxResponse.NICKNAME];
     cah.log.status("You have reconnected as " + cah.nickname);
-    $("#nickbox").hide();
+    $("#welcome").hide();
     $("#canvass").show();
     cah.ajax.after_registered();
 

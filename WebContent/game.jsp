@@ -76,10 +76,38 @@ HttpSession hSession = request.getSession(true);
 </div>
 --%>
 
-<div id="nickbox">
-  Nickname: <input type="text" id="nickname" value="" maxlength="30" />
-  <input type="button" id="nicknameconfirm" value="Set" />
-  <span id="nickbox_error" class="error"></span>
+<div id="welcome">
+  <h1>
+    Pretend You're <dfn style="border-bottom: 1px dotted black"
+    title="Xyzzy is an Artificial Unintelligence bot. You'll be making more sense than him in this game.">
+    Xyzzy</dfn>
+  </h1>
+  <h3>A <a href="http://cardsagainsthumanity.com/">Cards Against Humanity</a> clone.</h3>
+  <p>
+    This webapp is still in development. There will be bugs, but hopefully they won't affect gameplay
+    very much. To assist with development, <strong>all traffic on this server <em>may</em> be
+    logged.</strong>
+  </p>
+  <p>
+    If this is your first time playing, you may wish to read <a href="/">the changelog and list of
+    known issues.</a>
+  </p>
+  <div id="nickbox">
+    Nickname: <input type="text" id="nickname" value="" maxlength="30" />
+    <input type="button" id="nicknameconfirm" value="Set" />
+    <span id="nickbox_error" class="error"></span>
+  </div>
+  <p>
+    Pretend You're Xyzzy is a Cards Against Humanity clone, which is available at
+    <a href="http://www.cardsagainsthumanity.com/">cardsagainsthumanity.com</a>, where you can buy it
+    or download and print it out yourself. It is distributed under a
+    <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons - Attribution -
+    Noncommercial - Share Alike license</a>. This web version is in no way endorsed or sponsored by
+    cardsagainsthumanity.com. You may download the source code to this version from
+    <a href="https://github.com/ajanata/PretendYoureXyzzy">GitHub</a>. For full license
+    information, including information about included libraries, see the
+    <a href="license.html">full license information</a>.
+  </p>
 </div>
 
 <div id="canvas" class="hide">

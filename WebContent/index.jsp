@@ -53,6 +53,9 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>Early September, 2012:<ul>
+    <li>The Second Expansion has been entered.</li>
+  </ul></li>
   <li>29 August, 6:00 AM UTC:<ul>
     <li>Chat flood protection. You may only chat 5 times in any given 15 second period.</li>
     <li>Splitting game chat out will happen next, this was just an easy bandage.</li>
@@ -120,7 +123,7 @@ to, for instance, display the number of connected players.
 </ul>
 <p>Known issues:</p>
 <ul>
-  <li><strong>Do not open the game more than once in the same browser.</strong> Neither instances
+  <li><strong>Do not open the game more than once in the same browser.</strong> Neither instance
   will receive all data from the server, and you will not be able to play. I have an idea on how to
   fix this, but I haven't had time to do so.</li>
   <li>This game was extensively tested in <a href="http://google.com/chrome">Google Chrome</a>.
