@@ -3,6 +3,7 @@
 -- For more information, see http://creativecommons.org/licenses/by-nc-sa/3.0/
 
 -- This file contains the Black Cards and White Cards for Cards Against Humanity, as a script for importing into PostgreSQL. There should be a user named cah.
+-- Includes the First and Second Expansions, as well as the Canadian version cards.
 
 --
 -- PostgreSQL database dump
@@ -10,7 +11,7 @@
 
 -- Dumped from database version 8.4.11
 -- Dumped by pg_dump version 9.1.3
--- Started on 2012-07-07 14:54:57
+-- Started on 2012-09-09 22:06:33
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -304,7 +305,6 @@ COPY black_cards (id, text, draw, pick, creator, in_v1, in_v2, watermark) FROM s
 35  BILLY MAYS HERE FOR _____.  0 1 \N  t t \N
 10  MTV's new reality show features eight washed-up celebrities living with _____.  0 1 \N  t t \N
 83  In his new summer comedy, Rob Schneider is _____ trapped in the body of _____.  0 2 \N  t f \N
-5 _____? There's an app for that  0 1 \N  t t \N
 13  During Picasso's often-overlooked Brown Period, he produced hundreds of paintings of _____. 0 1 \N  t t \N
 2 I got 99 problems but _____ ain't one.  0 1 \N  t t \N
 53  While the United States raced the Soviet Union to the moon, the Mexican government funneled millions of pesos into research on _____. 0 1 \N  t t \N
@@ -346,8 +346,34 @@ COPY black_cards (id, text, draw, pick, creator, in_v1, in_v2, watermark) FROM s
 97  Step 1: _____. Step 2: _____. Step 3: Profit. 0 2 \N  f t 1.2
 98  Life for American Indians was forever changed when the White Man introduced them to _____.  0 1 \N  f t 1.2
 1032  Daddy, why is Mommy crying? 0 1 \N  f f B
+5 _____? There's an app for that. 0 1 \N  t t \N
 1063  And I would have gotten away with it, too, if it hadn't been for ____!  0 1 \N  f f X1
 1064  What brought the orgy to a grinding halt? 0 1 \N  f f X1
+1156  During his midlife crisis, my dad got really into ____. 0 1 \N  f f X2
+1157  ____ would be woefully incomplete without ____. 0 2 \N  f f X2
+1158  My new favorite porn star is Joey "____" McGee. 0 1 \N  f f X2
+1159  Before I run for president, I must destroy all evidence of my involvement with ____.  0 1 \N  f f X2
+1160  This is your captain speaking. Fasten your seatbelts and prepare for ____.  0 1 \N  f f X2
+1161  In his newest and most difficult stunt, David Blaine must escape from ____. 0 1 \N  f f X2
+1162  The Five Stages of Grief: denial, anger, bargaining, ____, acceptance.  0 1 \N  f f X2
+1163  My mom freaked out when she looked at my browser history and found ____.com/____. 0 2 \N  f f X2
+1164  I went from ____ to ____, all thanks to ____. 2 3 \N  f f X2
+1165  Members of New York's social elite are paying thousands of dollars just to experience ____. 0 1 \N  f f X2
+1166  This month's Cosmo: "Spice up your sex life by bringing ____ into the bedroom." 0 1 \N  f f X2
+1167  Little Miss Muffet Sat on a tuffet, Eating her curds and ____.  0 1 \N  f f X2
+1168  If God didn't want us to enjoy ____, he wouldn't have given us ____.  0 2 \N  f f X2
+1169  My country, 'tis of thee, sweet land of ____. 0 1 \N  f f X2
+1170  After months of debate, the Occupy Wall Street General Assembly could only agree on "More ____!"  0 1 \N  f f X2
+1171  I spent my whole life working toward ____, only to have it ruined by ____.  0 2 \N  f f X2
+1172  Next time on Dr. Phil: How to talk to your child about ____.  0 1 \N  f f X2
+1173  Only two things in life are certain: death and ____.  0 1 \N  f f X2
+1174  Everyone down on the ground! We don't want to hurt anyone. We're just here for ____.  0 1 \N  f f X2
+1175  The healing process began when I joined a support group for victims of ____.  0 1 \N  f f X2
+1176  The votes are in, and the new high school mascot is ____. 0 1 \N  f f X2
+1177  Charades was ruined for me forever when my mom had to act out ____. 0 1 \N  f f X2
+1178  Before ____, all we had was ____. 0 2 \N  f f X2
+1179  Tonight on 20/20: What you don't know about ____ could kill you.  0 1 \N  f f X2
+1180  You haven't truly lived until you've experienced ____ and ____ at the same time.  0 2 \N  f f X2
 \.
 
 
@@ -363,6 +389,7 @@ COPY card_set (id, active, name, base_deck) FROM stdin;
 1155  t The First Expansion f
 1151  t First Version t
 1152  t Second Version  t
+1256  t The Second Expansion  f
 \.
 
 
@@ -579,6 +606,31 @@ COPY card_set_black_card (card_set_id, black_card_id) FROM stdin;
 1155  1045
 1155  1047
 1155  1046
+1256  1157
+1256  1156
+1256  1159
+1256  1158
+1256  1161
+1256  1160
+1256  1163
+1256  1162
+1256  1165
+1256  1164
+1256  1167
+1256  1166
+1256  1168
+1256  1169
+1256  1170
+1256  1171
+1256  1172
+1256  1173
+1256  1174
+1256  1175
+1256  1176
+1256  1177
+1256  1178
+1256  1179
+1256  1180
 \.
 
 
@@ -1618,6 +1670,81 @@ COPY card_set_white_card (card_set_id, white_card_id) FROM stdin;
 1155  1078
 1155  1077
 1155  1076
+1256  1221
+1256  1220
+1256  1223
+1256  1222
+1256  1217
+1256  1216
+1256  1219
+1256  1218
+1256  1229
+1256  1228
+1256  1231
+1256  1230
+1256  1225
+1256  1224
+1256  1227
+1256  1226
+1256  1236
+1256  1237
+1256  1238
+1256  1239
+1256  1232
+1256  1233
+1256  1234
+1256  1235
+1256  1244
+1256  1245
+1256  1246
+1256  1247
+1256  1240
+1256  1241
+1256  1242
+1256  1243
+1256  1255
+1256  1254
+1256  1253
+1256  1252
+1256  1251
+1256  1250
+1256  1249
+1256  1248
+1256  1181
+1256  1182
+1256  1183
+1256  1187
+1256  1186
+1256  1185
+1256  1184
+1256  1191
+1256  1190
+1256  1189
+1256  1188
+1256  1195
+1256  1194
+1256  1193
+1256  1192
+1256  1199
+1256  1198
+1256  1197
+1256  1196
+1256  1202
+1256  1203
+1256  1200
+1256  1201
+1256  1206
+1256  1207
+1256  1204
+1256  1205
+1256  1210
+1256  1211
+1256  1208
+1256  1209
+1256  1214
+1256  1215
+1256  1212
+1256  1213
 \.
 
 
@@ -1747,6 +1874,43 @@ COPY white_cards (id, text, creator, in_v1, in_v2, watermark) FROM stdin;
 1081  Beating your wives. \N  f f X1
 1082  Being a dinosaur. \N  f f X1
 1083  Shaft.  \N  f f X1
+1217  A soulful rendition of "Ol' Man River." \N  f f X2
+1218  Intimacy problems.  \N  f f X2
+1219  A sweaty, panting leather daddy.  \N  f f X2
+1220  Spring break! \N  f f X2
+1221  Being awesome at sex. \N  f f X2
+1222  Dining with cardboard cutouts of the cast of "Friends." \N  f f X2
+1223  Another shot of morphine. \N  f f X2
+1226  Bullshit. \N  f f X2
+1227  The Google. \N  f f X2
+1228  Pretty Pretty Princess Dress-Up Board Game®.  \N  f f X2
+1229  The new Radiohead album.  \N  f f X2
+1230  An army of skeletons. \N  f f X2
+1231  A man in yoga pants with a ponytail and feather earrings. \N  f f X2
+1232  Mild autism.  \N  f f X2
+1233  Nunchuck moves. \N  f f X2
+1234  Whipping a disobedient slave. \N  f f X2
+1235  An ether-soaked rag.  \N  f f X2
+1236  A sweet spaceship.  \N  f f X2
+1237  A 55-gallon drum of lube. \N  f f X2
+1238  Special musical guest, Cher.  \N  f f X2
+1239  The human body. \N  f f X2
+1240  Boris the Soviet Love Hammer. \N  f f X2
+1241  The grey nutrient broth that sustains Mitt Romney.  \N  f f X2
+1242  Tiny nipples. \N  f f X2
+1243  Power.  \N  f f X2
+1244  Oncoming traffic. \N  f f X2
+1245  A dollop of sour cream. \N  f f X2
+1246  A slightly shittier parallel universe.  \N  f f X2
+1247  My first kill.  \N  f f X2
+1248  Graphic violence, adult language, and some sexual content.  \N  f f X2
+1249  Fetal alcohol syndrome. \N  f f X2
+1250  The day the birds attacked. \N  f f X2
+1251  One Ring to rule them all.  \N  f f X2
+1252  Grandpa's ashes.  \N  f f X2
+1253  Basic human decency.  \N  f f X2
+1254  A Burmese tiger pit.  \N  f f X2
+1255  Death by Steven Seagal. \N  f f X2
 1002  testtest  \N  f f \N
 1031  End Canadian White Cards  \N  f f \N
 1010  Mr. Dressup.  \N  f f CAN
@@ -1770,6 +1934,42 @@ COPY white_cards (id, text, creator, in_v1, in_v2, watermark) FROM stdin;
 1028  Snotsicles. \N  f f CAN
 1029  Schmirler the Curler. \N  f f CAN
 1030  A Molson muscle.  \N  f f CAN
+1181  A bigger, blacker dick. \N  f f X2
+1182  The mere concept of Applebee's®.  \N  f f X2
+1183  A sad fat dragon with no friends. \N  f f X2
+1184  Catastrophic urethral trauma. \N  f f X2
+1185  Hillary Clinton's death stare.  \N  f f X2
+1186  Existing. \N  f f X2
+1187  A piñata full of scorpions. \N  f f X2
+1188  Mooing. \N  f f X2
+1189  Swiftly achieving orgasm. \N  f f X2
+1190  Daddy's belt. \N  f f X2
+1191  Double penetration. \N  f f X2
+1192  Weapons-grade plutonium.  \N  f f X2
+1193  Some really fucked-up shit. \N  f f X2
+1194  Subduing a grizzly bear and making her your wife. \N  f f X2
+1195  Rising from the grave.  \N  f f X2
+1196  The mixing of the races.  \N  f f X2
+1197  Taking a man's eyes and balls out and putting his eyes where his balls go and then his balls in the eye holes.  \N  f f X2
+1198  Scrotal frostbite.  \N  f f X2
+1199  All of this blood.  \N  f f X2
+1200  Loki, the trickster god.  \N  f f X2
+1201  Whining like a little bitch.  \N  f f X2
+1202  Pumping out a baby every nine months. \N  f f X2
+1203  Tongue. \N  f f X2
+1204  Finding Waldo.  \N  f f X2
+1205  Upgrading homeless people to mobile hotspots. \N  f f X2
+1206  Wearing an octopus for a hat. \N  f f X2
+1207  An unhinged ferris wheel rolling toward the sea.  \N  f f X2
+1208  Living in a trashcan. \N  f f X2
+1209  The corporations. \N  f f X2
+1210  A magic hippie love cloud.  \N  f f X2
+1211  Fuck Mountain.  \N  f f X2
+1212  Survivor's guilt. \N  f f X2
+1213  Me. \N  f f X2
+1214  Getting hilariously gang-banged by the Blue Man Group.  \N  f f X2
+1215  Jeff Goldblum.  \N  f f X2
+1216  Making a friend.  \N  f f X2
 44  German dungeon porn.  \N  t t \N
 40  Praying the gay away. \N  t t \N
 63  Dying.  \N  t t \N
@@ -2250,6 +2450,8 @@ COPY white_cards (id, text, creator, in_v1, in_v2, watermark) FROM stdin;
 1107  Jean-Claude Van Damme.  \N  f f X1
 1108  Just the tip. \N  f f X1
 1109  Mad hacky-sack skills.  \N  f f X1
+1224  Beefin' over turf.  \N  f f X2
+1225  A squadron of moles wearing aviator goggles.  \N  f f X2
 \.
 
 
@@ -2363,7 +2565,7 @@ ALTER TABLE ONLY card_set_white_card
     ADD CONSTRAINT fkc2487272bfd29b4d FOREIGN KEY (white_card_id) REFERENCES white_cards(id);
 
 
--- Completed on 2012-07-07 14:55:01
+-- Completed on 2012-09-09 22:06:38
 
 --
 -- PostgreSQL database dump complete
