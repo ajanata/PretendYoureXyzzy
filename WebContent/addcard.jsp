@@ -66,7 +66,7 @@ if (color != null) {
       if (0 == pick) {
         error += " Pick can't be 0.";
       } else {
-        final Session s = HibernateUtil.instance.sessionFactory.getCurrentSession();
+        final Session s = HibernateUtil.instance.sessionFactory.openSession();
         final Transaction transaction = s.beginTransaction();
         transaction.begin();
         final BlackCard card = new BlackCard();
@@ -86,7 +86,7 @@ if (color != null) {
     if (text == null || "".equals(text)) {
       error = "You didn't specify something.";
     } else {
-      final Session s = HibernateUtil.instance.sessionFactory.getCurrentSession();
+      final Session s = HibernateUtil.instance.sessionFactory.openSession();
       final Transaction transaction = s.beginTransaction();
       transaction.begin();
       final WhiteCard card = new WhiteCard();
