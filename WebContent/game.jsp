@@ -61,6 +61,7 @@ HttpSession hSession = request.getSession(true);
 <script type="text/javascript" src="js/cah.ajax.handlers.js"></script>
 <script type="text/javascript" src="js/cah.app.js"></script>
 <link rel="stylesheet" type="text/css" href="cah.css" media="screen" />
+<jsp:include page="analytics.jsp" />
 </head>
 <body>
 

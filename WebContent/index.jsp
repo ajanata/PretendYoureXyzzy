@@ -34,6 +34,7 @@ to, for instance, display the number of connected players.
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Pretend You're Xyzzy</title>
+<jsp:include page="analytics.jsp" />
 </head>
 <body>
 <h1>
