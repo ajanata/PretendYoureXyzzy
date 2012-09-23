@@ -65,8 +65,7 @@ public class RequestWrapper {
   public String getRemoteAddr() {
     String addr = request.getHeader("X-Forwarded-For");
     if (null != addr) {
-      final String[] addrs = addr.split(",", -1);
-      addr = addrs[addrs.length - 1];
+      addr = addr.split(",")[0].trim();
     } else {
       addr = request.getRemoteAddr();
     }
