@@ -58,16 +58,18 @@ public class RequestWrapper {
   }
 
   /**
+   * If there is an {@code X-Forwarded-For} header, the <strong>last</strong> entry in that list
+   * is returned instead.
    * @see HttpServletRequest#getRemoteAddr()
    */
   public String getRemoteAddr() {
-    return request.getRemoteAddr();
-  }
-
-  /**
-   * @see HttpServletRequest#getRemoteHost()
-   */
-  public String getRemoteHost() {
-    return request.getRemoteHost();
+    String addr = request.getHeader("X-Forwarded-For");
+    if (null != addr) {
+      final String[] addrs = addr.split(",", -1);
+      addr = addrs[addrs.length - 1];
+    } else {
+      addr = request.getRemoteAddr();
+    }
+    return addr;
   }
 }
