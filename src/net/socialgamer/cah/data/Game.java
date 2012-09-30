@@ -55,8 +55,7 @@ import net.socialgamer.cah.db.WhiteCard;
 import org.hibernate.Session;
 
 import com.google.inject.Inject;
-import com.sun.istack.internal.Nullable;
-
+import javax.annotation.Nullable;
 
 /**
  * Game data and logic class. Games are simple finite state machines, with 3 states that wait for

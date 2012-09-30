@@ -1,0 +1,99 @@
+// vim: syntax=groovy
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'jetty'
+apply plugin: 'eclipse'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.0'
+}
+
+webAppDirName = 'WebContent'
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src'
+		}
+		resources {
+			srcDir 'src'
+		}
+	}
+	test {
+		java {
+			srcDir 'test'
+		}
+		resources {
+			srcDir 'test'
+		}
+	}
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+}	
+
+def guice(str) {
+	guiceVersion = "3.0"
+
+	if(str.length() == 0) {
+		return "com.google.inject:guice:${guiceVersion}"
+	}else{
+		return "com.google.inject.extensions:guice-${str}:${guiceVersion}"
+	}
+}
+
+configurations {
+	//http://forums.gradle.org/gradle/topics/means_of_excluding_transitive_dependencies_seems_to_have_changed_between_m3_m8_m9_on_purpose
+	all*.exclude(group: 'javax.jms', module:'jms')
+	all*.exclude(group: "com.sun.jdmk", module:"jmxtools")
+	all*.exclude(group: 'com.sun.jmx', module: 'jmxri')
+}
+
+dependencies {
+	// general/unsorted
+	compile 'commons-collections:commons-collections:3.2' // 3.1 refused to download?
+	compile 'org.objenesis:objenesis:1.2'
+        compile 'cglib:cglib-nodep:2.2.2'
+        compile 'dom4j:dom4j:1.6.1'
+	compile 'org.easymock:easymock:3.1'
+        compile 'org.apache.commons:commons-lang3:3.1'
+        compile 'antlr:antlr:2.7.6'
+	compile 'com.googlecode.json-simple:json-simple:1.1'
+
+	//for @Nullable
+	compile 'com.google.code.findbugs:jsr305:2.0.1'
+
+	// logging
+        compile 'org.slf4j:slf4j-log4j12:1.5.8'
+	compile 'log4j:log4j:1.2.15'
+	compile 'org.slf4j:slf4j-api:1.5.8'
+	
+
+	// guice
+        compile guice(""),guice("spring"),guice("persist"),guice("throwingproviders"), \
+		guice("jmx"),guice("grapher"), guice("servlet"),guice("assistedinject"), \
+		guice("jndi"), guice("multibindings"), guice("struts2")
+
+	//db
+	compile 'javax.persistence:persistence-api:1.0' // WAS eclipselink OSGI jar
+	compile 'javax.transaction:transaction-api:1.1' // WAS org.glassfish javax.transaction
+ 	compile 'postgresql:postgresql:8.4-702.jdbc4' //  Original project was using 703. upgrade?
+	compile 'org.hibernate:hibernate-envers:3.5.6-Final'
+		
+
+	//aop/injection
+	compile 'aopalliance:aopalliance:1.0' // NO idea what version was being used in original project
+        compile 'javassist:javassist:3.9.0.GA' 
+	compile 'javax.inject:javax.inject:1' // NO idea what version was being used in original project
+
+	// We use servlet 3.0 specific features
+	compile 'org.apache.geronimo.specs:geronimo-servlet_3.0_spec:1.0'
+            
+
+
+	// can't find ASM 4. Ignoring for now
+
+}
