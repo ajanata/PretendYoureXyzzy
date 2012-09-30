@@ -31,8 +31,8 @@ sourceSets {
 }
 
 repositories {
-	mavenLocal()
 	mavenCentral()
+	mavenLocal()
 }	
 
 def guice(str) {
@@ -53,8 +53,9 @@ configurations {
 }
 
 dependencies {
+
 	// general/unsorted
-	compile 'commons-collections:commons-collections:3.2' // 3.1 refused to download?
+	compile 'commons-collections:commons-collections:3.2'
 	compile 'org.objenesis:objenesis:1.2'
         compile 'cglib:cglib-nodep:2.2.2'
         compile 'dom4j:dom4j:1.6.1'
