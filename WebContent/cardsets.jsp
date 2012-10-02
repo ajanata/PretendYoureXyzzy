@@ -33,11 +33,13 @@ Administration tools.
 <%@ page import="net.socialgamer.cah.db.BlackCard" %>
 <%@ page import="net.socialgamer.cah.db.CardSet" %>
 <%@ page import="net.socialgamer.cah.db.WhiteCard" %>
+<%@ page import="net.socialgamer.cah.RequestWrapper" %>
 <%@ page import="org.apache.commons.lang3.StringEscapeUtils" %>
 <%@ page import="org.hibernate.Session" %>
 <%@ page import="org.hibernate.Transaction" %>
 <%
-String remoteAddr = request.getRemoteAddr();
+RequestWrapper wrapper = new RequestWrapper(request);
+String remoteAddr = wrapper.getRemoteAddr();
 //TODO better access control than hard-coding IP addresses.
 if (!(remoteAddr.equals("0:0:0:0:0:0:0:1") || remoteAddr.equals("127.0.0.1") ||
     remoteAddr.equals("98.248.33.90") || remoteAddr.equals("207.161.125.132"))) {
