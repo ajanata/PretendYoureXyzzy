@@ -36,8 +36,7 @@ import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
 import com.google.inject.Singleton;
-import com.sun.istack.internal.Nullable;
-
+import javax.annotation.Nullable;
 
 /**
  * Class that holds all users connected to the server, and provides functions to operate on said
