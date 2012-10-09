@@ -30,6 +30,7 @@ Administration tools.
 <%@ page import="com.google.inject.Injector" %>
 <%@ page import="com.google.inject.Key" %>
 <%@ page import="com.google.inject.TypeLiteral" %>
+<%@ page import="net.socialgamer.cah.RequestWrapper" %>
 <%@ page import="net.socialgamer.cah.CahModule.BanList" %>
 <%@ page import="net.socialgamer.cah.Constants.DisconnectReason" %>
 <%@ page import="net.socialgamer.cah.Constants.LongPollEvent" %>
@@ -47,7 +48,8 @@ Administration tools.
 <%@ page import="java.util.Set" %>
 
 <%
-String remoteAddr = request.getRemoteAddr();
+RequestWrapper wrapper = new RequestWrapper(request);
+String remoteAddr = wrapper.getRemoteAddr();
 // TODO better access control than hard-coding IP addresses.
 if (!(remoteAddr.equals("0:0:0:0:0:0:0:1") || remoteAddr.equals("127.0.0.1") ||
     remoteAddr.equals("98.248.33.90") || remoteAddr.equals("207.161.125.132"))) {
