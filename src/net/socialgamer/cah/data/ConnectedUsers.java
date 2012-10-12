@@ -54,6 +54,9 @@ public class ConnectedUsers {
    */
   public static final long PING_TIMEOUT = 45L * 1000L * 1000000L;
 
+  /**
+   * Key (username) must be stored in lower-case to facilitate case-insensitivity in nicks.
+   */
   private final Map<String, User> users = new HashMap<String, User>();
 
   /**
@@ -62,7 +65,7 @@ public class ConnectedUsers {
    * @return True if {@code userName} is a connected user.
    */
   public boolean hasUser(final String userName) {
-    return users.containsKey(userName);
+    return users.containsKey(userName.toLowerCase());
   }
 
   /**
@@ -73,7 +76,7 @@ public class ConnectedUsers {
    */
   public void newUser(final User user) {
     synchronized (users) {
-      users.put(user.getNickname(), user);
+      users.put(user.getNickname().toLowerCase(), user);
       final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
       data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
       data.put(LongPollResponse.NICKNAME, user.getNickname());
@@ -94,7 +97,7 @@ public class ConnectedUsers {
     synchronized (users) {
       if (users.containsValue(user)) {
         user.noLongerVaild();
-        users.remove(user.getNickname());
+        users.remove(user.getNickname().toLowerCase());
         notifyRemoveUser(user, reason);
       }
     }
@@ -108,7 +111,7 @@ public class ConnectedUsers {
    */
   @Nullable
   public User getUser(final String nickname) {
-    return users.get(nickname);
+    return users.get(nickname.toLowerCase());
   }
 
   /**
