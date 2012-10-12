@@ -11,8 +11,8 @@
     <servlet-class>net.socialgamer.cah.servlets.AjaxServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>JavascriptConfig</servlet-name>
-    <servlet-class>net.socialgamer.cah.servlets.JavascriptConfig</servlet-class>
+    <servlet-name>JavascriptConfigServlet</servlet-name>
+    <servlet-class>net.socialgamer.cah.servlets.JavascriptConfigServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>LongPollServlet</servlet-name>
@@ -27,7 +27,7 @@
     <url-pattern>/AjaxServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>JavascriptConfig</servlet-name>
+    <servlet-name>JavascriptConfigServlet</servlet-name>
     <url-pattern>/js/cah.config.js</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

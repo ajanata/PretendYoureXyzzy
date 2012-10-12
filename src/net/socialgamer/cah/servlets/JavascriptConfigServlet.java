@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-public class JavascriptConfig extends HttpServlet {
+public class JavascriptConfigServlet extends HttpServlet {
 
   private static final long serialVersionUID = 4287566906479434127L;
 
