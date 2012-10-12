@@ -36,6 +36,8 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.annotation.Nullable;
+
 import net.socialgamer.cah.Constants.BlackCardData;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.GameInfo;
@@ -55,7 +57,6 @@ import net.socialgamer.cah.db.WhiteCard;
 import org.hibernate.Session;
 
 import com.google.inject.Inject;
-import com.sun.istack.internal.Nullable;
 
 
 /**

@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import net.socialgamer.cah.Constants.DisconnectReason;
 import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
@@ -36,7 +38,6 @@ import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
 import com.google.inject.Singleton;
-import com.sun.istack.internal.Nullable;
 
 
 /**
