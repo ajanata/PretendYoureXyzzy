@@ -316,35 +316,16 @@ HttpSession hSession = request.getSession(true);
       <legend>Game options:</legend>
       <label id="score_limit_template_label" for="score_limit_template">Score limit:</label>
       <select id="score_limit_template" class="score_limit">
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8" selected="selected">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
+        <% int defaultScoreLimit = 8; for (int i = 4; i <= 69; i++) { %>
+          <option <%= i == defaultScoreLimit ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+        <% } %>
       </select>
       <br/>
       <label id="player_limit_template_label" for="player_limit_template">Player limit:</label>
       <select id="player_limit_template" class="player_limit">
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10" selected="selected">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-        <option value="16">16</option>
-        <option value="17">17</option>
-        <option value="18">18</option>
-        <option value="19">19</option>
-        <option value="20">20</option>
+        <% int defaultPlayerLimit = 10; for (int i = 3; i <= 20; i++) { %>
+          <option <%= i == defaultPlayerLimit ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+        <% } %>
       </select>
       Having more than 10 players may get cramped!
       <br/>
