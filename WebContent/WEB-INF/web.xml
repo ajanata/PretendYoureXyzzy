@@ -7,10 +7,6 @@
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
-    <servlet-name>TestServlet</servlet-name>
-    <servlet-class>net.socialgamer.cah.servlets.TestServlet</servlet-class>
-  </servlet>
-  <servlet>
     <servlet-name>LongPollServlet</servlet-name>
     <servlet-class>net.socialgamer.cah.servlets.LongPollServlet</servlet-class>
   </servlet>
@@ -22,10 +18,6 @@
     <servlet-name>Schema</servlet-name>
     <servlet-class>net.socialgamer.cah.servlets.Schema</servlet-class>
   </servlet>
-  <servlet-mapping>
-    <servlet-name>TestServlet</servlet-name>
-    <url-pattern>/TestServlet</url-pattern>
-  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>LongPollServlet</servlet-name>
     <url-pattern>/LongPollServlet</url-pattern>
