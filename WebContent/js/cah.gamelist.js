@@ -96,8 +96,22 @@ cah.GameList.prototype.processUpdate = function(gameData) {
   }
   this.games_ = new Array();
 
+  // Sort the games into two lists, passworded and non-passworded.
+  var passworded = new Array();
+  var notPassworded = new Array();
   for ( var key in gameData[cah.$.AjaxResponse.GAMES]) {
     var game = gameData[cah.$.AjaxResponse.GAMES][key];
+    if (game[cah.$.GameInfo.HAS_PASSWORD]) {
+      passworded.push(game);
+    } else {
+      notPassworded.push(game);
+    }
+  }
+
+  var games = notPassworded.concat(passworded);
+
+  for ( var i = 0; i < games.length; i++) {
+    var game = games[i];
     var lobby = new cah.GameListLobby(this.element_, game);
     this.games_.push(lobby);
   }
