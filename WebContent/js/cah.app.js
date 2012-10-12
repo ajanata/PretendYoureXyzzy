@@ -33,7 +33,9 @@ $(document).ready(function() {
   // see if we already exist on the server so we can resume
   cah.Ajax.build(cah.$.AjaxOperation.FIRST_LOAD).run();
 
-  // TODO see if we have a stored nickname somewhere
+  if ($.cookie("nickname")) {
+    $("#nickname").val($.cookie("nickname"));
+  }
   $("#nicknameconfirm").click(nicknameconfirm_click);
   $("#nickbox").keyup(nickbox_keyup);
   $("#nickbox").focus();
@@ -45,18 +47,8 @@ $(document).ready(function() {
   // have not expressed an interest in being cleared out yet.
   // $(window).bind("beforeunload", window_beforeunload);
   $("#logout").click(logout_click);
-
-  // if (($.browser.mozilla || $.browser.opera) && !$.cookie("browser_dismiss")) {
-  // var name = $.browser.mozilla ? "Firefox" : "Opera";
-  // $("#browser").show();
-  // $("#browser_name").text(name);
-  // $("#browser_ok").click(function() {
-  // $("#browser").hide();
-  // $.cookie("browser_dismiss", true, {
-  // expires : 3650,
-  // });
-  // });
-  // }
+  $("#preferences").click(preferences_click);
+  load_preferences();
 
   if ($.browser.mozilla) {
     // Firefox sucks.
@@ -85,6 +77,9 @@ function nickbox_keyup(e) {
  */
 function nicknameconfirm_click() {
   var nickname = $.trim($("#nickname").val());
+  $.cookie("nickname", nickname, {
+    expires : 365
+  });
   cah.Ajax.build(cah.$.AjaxOperation.REGISTER).withNickname(nickname).run();
 }
 
@@ -119,6 +114,7 @@ function chatsubmit_click() {
     }
   }
   switch (cmd) {
+    // TODO support an /ignore command
     case '':
       // TODO when I get multiple channels working, this needs to know active and pass it
       cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text).run();
@@ -148,6 +144,62 @@ function logout_click() {
   if (confirm("Are you sure you wish to log out?")) {
     cah.Ajax.build(cah.$.AjaxOperation.LOG_OUT).run();
   }
+}
+
+/**
+ * Handle a click event on the preferences button. Shows the preferences modal dialog.
+ */
+function preferences_click() {
+  $("#preferences_dialog").dialog({
+    modal : true,
+    buttons : {
+      Ok : function() {
+        save_preferences();
+        $(this).dialog("close");
+      }
+    }
+  });
+}
+
+function load_preferences() {
+  if ($.cookie("hide_connect_quit")) {
+    $("#hide_connect_quit").attr('checked', 'checked');
+  } else {
+    $("#hide_connect_quit").removeAttr('checked');
+  }
+
+  if ($.cookie("ignore_list")) {
+    $("#ignore_list").val($.cookie("ignore_list"));
+  } else {
+    $("#ignore_list").val("");
+  }
+
+  apply_preferences();
+}
+
+function save_preferences() {
+  if ($("#hide_connect_quit").attr("checked")) {
+    $.cookie("hide_connect_quit", true, {
+      expires : 365
+    });
+  } else {
+    $.removeCookie("hide_connect_quit");
+  }
+
+  $.cookie("ignore_list", $("#ignore_list").val(), {
+    expires : 365
+  });
+
+  apply_preferences();
+}
+
+function apply_preferences() {
+  cah.hideConnectQuit = !!$("#hide_connect_quit").attr("checked");
+
+  cah.ignoreList = {};
+  $($('#ignore_list').val().split('\n')).each(function() {
+    cah.ignoreList[this] = true;
+  });
 }
 
 /**

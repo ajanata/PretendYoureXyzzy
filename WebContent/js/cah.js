@@ -44,6 +44,20 @@ cah.nickname = "";
 cah.currentGames = {};
 
 /**
+ * User's ignore list. Map of nickname -> true. If a nickname is present, it is ignored.
+ * 
+ * @type {Object}
+ */
+cah.ignoreList = {};
+
+/**
+ * Whether to hide connect/disconnect messages.
+ * 
+ * @type {Boolean}
+ */
+cah.hideConnectQuit = false;
+
+/**
  * Binds a function to a "this object". Result is a new function that will do the right thing across
  * contexts.
  * 

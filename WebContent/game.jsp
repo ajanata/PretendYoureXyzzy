@@ -40,9 +40,10 @@ HttpSession hSession = request.getSession(true);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Pretend You're Xyzzy</title>
-<script type="text/javascript" src="js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/QTransform.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
 <script type="text/javascript" src="js/cah.js"></script>
 <script type="text/javascript" src="js/cah.config.js"></script>
 <%-- cah must be first, ajax must be before app. app probably has to be last. --%>
@@ -61,6 +62,7 @@ HttpSession hSession = request.getSession(true);
 <script type="text/javascript" src="js/cah.ajax.handlers.js"></script>
 <script type="text/javascript" src="js/cah.app.js"></script>
 <link rel="stylesheet" type="text/css" href="cah.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="jquery-ui.css" media="screen" />
 <jsp:include page="analytics.jsp" />
 </head>
 <body>
@@ -93,6 +95,15 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues.</a>
   </p>
+  <p>Most recent update: 12 October, 5:00 AM UTC:</p>
+  <ul>
+    <li>User Preferences. Click the button in the top-right corner and you can hide the connect
+    and quit events, and ignore chat from specific users. These settings are remembered for the
+    next time you play the game. The game also remembers what name you used last time you
+    played.</li>
+    <li>Games without a password will sort before games that do, so you can find them easier.</li>
+    <li>Under-the-hood improvements.</li>
+  </ul>
   <div id="nickbox">
     Nickname: <input type="text" id="nickname" value="" maxlength="30" />
     <input type="button" id="nicknameconfirm" value="Set" />
@@ -121,6 +132,7 @@ HttpSession hSession = request.getSession(true);
     </div>
     <div id="menubar_right">
       Current timer duration: <span id="current_timer">0</span> seconds
+      <input type="button" id="preferences" value="User Preferences" />
       <input type="button" id="logout" value="Log out" />
     </div>
   </div>
@@ -347,6 +359,17 @@ HttpSession hSession = request.getSession(true);
       <input type="text" id="game_password_template" class="game_password" />
       You must click outside the box to apply the password.
     </fieldset>
+  </div>
+</div>
+
+<!-- Wrapper for user preferences dialog content. -->
+<div class="hide">
+  <div id="preferences_dialog" title="User Preferences">
+    <label for="hide_connect_quit">Hide connect/quit events: </label>
+    <input type="checkbox" id="hide_connect_quit" />
+    <br />
+    <label for="ignore_list">Ignore list, one name per line:</label>
+    <textarea id="ignore_list" style="width: 95%; height: 75px"></textarea>
   </div>
 </div>
 

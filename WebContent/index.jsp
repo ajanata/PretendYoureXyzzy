@@ -57,6 +57,14 @@ to, for instance, display the number of connected players.
   <li>Early September, 2012:<ul>
     <li>The Second Expansion has been entered.</li>
   </ul></li>
+  <li>12 October, 5:00 AM UTC:<ul>
+    <li>User Preferences. Click the button in the top-right corner and you can hide the connect
+    and quit events, and ignore chat from specific users. These settings are remembered for the
+    next time you play the game. The game also remembers what name you used last time you
+    played.</li>
+    <li>Games without a password will sort before games that do, so you can find them easier.</li>
+    <li>Under-the-hood improvements.</li>
+  </ul></li>
   <li>29 August, 6:00 AM UTC:<ul>
     <li>Chat flood protection. You may only chat 5 times in any given 15 second period.</li>
     <li>Splitting game chat out will happen next, this was just an easy bandage.</li>

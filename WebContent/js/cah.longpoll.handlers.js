@@ -35,19 +35,22 @@ cah.longpoll.ErrorCodeHandlers[cah.$.ErrorCode.NOT_REGISTERED] = function(data) 
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.NEW_PLAYER] = function(data) {
   // don't display our own join
-  if (data[cah.$.LongPollResponse.NICKNAME] != cah.nickname) {
+  if (data[cah.$.LongPollResponse.NICKNAME] != cah.nickname && !cah.hideConnectQuit) {
     cah.log.status(data[cah.$.LongPollResponse.NICKNAME] + " has connected.");
   }
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.PLAYER_LEAVE] = function(data) {
   var friendly_reason = "Leaving";
+  var show = !cah.hideConnectQuit;
   switch (data[cah.$.LongPollResponse.REASON]) {
     case cah.$.DisconnectReason.BANNED:
       friendly_reason = "Banned";
+      show = true;
       break;
     case cah.$.DisconnectReason.KICKED:
       friendly_reason = "Kicked by server administrator";
+      show = true;
       break;
     case cah.$.DisconnectReason.MANUAL:
       friendly_reason = "Leaving";
@@ -56,8 +59,10 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.PLAYER_LEAVE] = function(data) {
       friendly_reason = "Ping timeout";
       break;
   }
-  cah.log.status(data[cah.$.LongPollResponse.NICKNAME] + " has disconnected (" + friendly_reason
-      + ").");
+  if (show) {
+    cah.log.status(data[cah.$.LongPollResponse.NICKNAME] + " has disconnected (" + friendly_reason
+        + ").");
+  }
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.NOOP] = function(data) {
@@ -84,12 +89,15 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.BANNED] = function() {
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.CHAT] = function(data) {
   // TODO deal with multiple channels eventually
-  // don't display our own chat
   var clazz = undefined;
+  var from = data[cah.$.LongPollResponse.FROM];
+  var show = !cah.ignoreList[from];
   if (data[cah.$.LongPollResponse.FROM_ADMIN]) {
     clazz = "admin";
+    show = true;
   }
-  if (data[cah.$.LongPollResponse.FROM] != cah.nickname) {
+  // don't display our own chat
+  if (from != cah.nickname && show) {
     cah.log.status("<" + data[cah.$.LongPollResponse.FROM] + "> "
         + data[cah.$.LongPollResponse.MESSAGE], clazz);
   }
