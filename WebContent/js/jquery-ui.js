@@ -3150,7 +3150,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		this._mouseInit();
 
 		//We're ready to go
-		this.ready = true
+		this.ready = true;
 
 	},
 
@@ -7861,7 +7861,7 @@ $.extend(Datepicker.prototype, {
 		this._attachHandlers(inst);
 		var cover = inst.dpDiv.find('iframe.ui-datepicker-cover'); // IE6- only
 		if( !!cover.length ){ //avoid call to outerXXXX() when not in IE6
-			cover.css({left: -borders[0], top: -borders[1], width: inst.dpDiv.outerWidth(), height: inst.dpDiv.outerHeight()})
+			cover.css({left: -borders[0], top: -borders[1], width: inst.dpDiv.outerWidth(), height: inst.dpDiv.outerHeight()});
 		}
 		inst.dpDiv.find('.' + this._dayOverClass + ' a').mouseover();
 		var numMonths = this._getNumberOfMonths(inst);
