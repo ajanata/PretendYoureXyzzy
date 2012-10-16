@@ -132,7 +132,6 @@ HttpSession hSession = request.getSession(true);
     </div>
     <div id="menubar_right">
       Current timer duration: <span id="current_timer">0</span> seconds
-      <input type="button" id="preferences" value="User Preferences" />
       <input type="button" id="logout" value="Log out" />
     </div>
   </div>
@@ -146,10 +145,26 @@ HttpSession hSession = request.getSession(true);
 <div id="bottom" class="hide">
   <div id="info_area">
   </div>
-  <div id="chat_area">
-    <div id="log"></div>
-    <input type="text" id="chat" maxlength="200" />
-    <input type="button" id="chat_submit" value="Chat" />
+  <div id="tabs">
+    <ul>
+      <li><a href="#tab-preferences" class="tab-button">User Preferences</a></li>
+      <li><a href="#tab-global" class="tab-button" id="button-global">Global Chat</a></li>
+    </ul>
+    <div id="tab-preferences">
+      <input type="button" value="Save" onclick="save_preferences();" />
+      <input type="button" value="Revert" onclick="load_preferences();" />
+      <label for="hide_connect_quit">Hide connect/quit events: </label>
+      <input type="checkbox" id="hide_connect_quit" />
+      <br />
+      <label for="ignore_list">Ignore list, one name per line:</label>
+      <br/>
+      <textarea id="ignore_list" style="width: 200px; height: 150px"></textarea>
+    </div>
+    <div id="tab-global">
+      <div id="log"></div>
+      <input type="text" id="chat" maxlength="200" />
+      <input type="button" id="chat_submit" value="Chat" />
+    </div>
   </div>
 </div>
 
@@ -340,17 +355,6 @@ HttpSession hSession = request.getSession(true);
       <input type="text" id="game_password_template" class="game_password" />
       You must click outside the box to apply the password.
     </fieldset>
-  </div>
-</div>
-
-<!-- Wrapper for user preferences dialog content. -->
-<div class="hide">
-  <div id="preferences_dialog" title="User Preferences">
-    <label for="hide_connect_quit">Hide connect/quit events: </label>
-    <input type="checkbox" id="hide_connect_quit" />
-    <br />
-    <label for="ignore_list">Ignore list, one name per line:</label>
-    <textarea id="ignore_list" style="width: 95%; height: 75px"></textarea>
   </div>
 </div>
 

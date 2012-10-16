@@ -77,10 +77,6 @@ body {
   border: 1px solid black;
   display: inline;
   padding: 5px;
-  /*
-	text-align: center;
-	vertical-align: middle;
-	*/
 }
 
 #canvas {
@@ -88,9 +84,6 @@ body {
   overflow: none;
   position: relative;
   width: 100%;
-  /* * /
-  border: 1px solid red;
-  / * */
 }
 
 #main {
@@ -98,13 +91,11 @@ body {
   width: 100%;
   height: 506px;
   top: 26px;
-  /*bottom: 216px;*/
   border: 1px solid black;
 }
 
 #main_holder {
   width: 100%;
-  height: 100%;
 }
 
 #game_list {
@@ -169,7 +160,7 @@ body {
   border: 1px solid black;
 }
 
-#chat_area {
+#tabs {
   min-height: 100px;
   width: 50%;
   height: 100%;
@@ -179,21 +170,36 @@ body {
   right: 14px;
 }
 
+#tabs .ui-widget {
+  font-height: 16px !important;
+}
+
+.tab-button {
+  font-size: 14px !important;
+}
+
 #log {
   width: 100%;
   height: 198px;
-  border: 1px solid black;
+  border-style: none solid solid none;
+  border-color: black;
+  border-width: 1px;
   position: absolute;
   bottom: 18px;
   right: 0px;
   overflow-y: scroll;
-  min-height: 82px;
+  min-height: 43px;
+  font-size: 16px;
+  font-family: serif;
+}
+
+#tab-preferences input[type='button'] {
+  float: right;
 }
 
 #chat {
   border: 1px solid black;
-  left: -2px;
-  /*right: 46px;*/
+  left: -1px;
   bottom: 0px;
   height: 17px;
   position: absolute;
@@ -209,6 +215,7 @@ body {
   bottom: -1px;
   margin: 0px;
   padding: 0px;
+  font-size: 14px;
 }
 
 span.error {
@@ -277,10 +284,6 @@ span.debug, span.admin {
   right: 0px;
   height: 30%;
   border-top: 1px solid black;
-  /*
-  overflow-x: auto;
-  overflow-y: visible;
-  */
 }
 
 .game_hand_filter {
@@ -351,9 +354,6 @@ span.debug, span.admin {
   position: absolute;
   left: 246px;
   width: 700px;
-  /*
-  overflow-x: auto;
-  */
 }
 
 .game_right_side_box {
@@ -439,12 +439,6 @@ span.debug, span.admin {
   border: 1px solid #231f20;
 }
 
-/*
-.whitecard .logo_element {
-  border: 1px solid white;
-}
-*/
-
 .logo_1 {
   left: 2px;
 }
@@ -519,6 +513,7 @@ span.debug, span.admin {
   -o-border-radius: 10px;
   border-radius: 10px;
 }
+
 .blackcard .card_number {
   background: white;
   display: inline-block;

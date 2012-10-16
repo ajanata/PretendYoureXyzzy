@@ -47,8 +47,11 @@ $(document).ready(function() {
   // have not expressed an interest in being cleared out yet.
   // $(window).bind("beforeunload", window_beforeunload);
   $("#logout").click(logout_click);
-  $("#preferences").click(preferences_click);
+
   load_preferences();
+
+  $("#tabs").tabs();
+  $("#button-global").click();
 
   if ($.browser.mozilla) {
     // Firefox sucks.
@@ -207,14 +210,15 @@ function apply_preferences() {
  * This was tested extensively in Chrome. It may not be pixel-perfect in other browsers.
  */
 function app_resize() {
-  var chatWidth = $("#canvas").width() - 251;
-  $("#chat_area").width(chatWidth);
-  $("#chat").width(chatWidth - 48);
-  var bottomHeight = $(window).height() - $("#main").height() - $("#menubar").height() - 27;
+  var chatWidth = $("#canvas").width() - 257;
+  $("#tabs").width(chatWidth + 'px');
+  $("#log").width((chatWidth + 2) + 'px');
+  $("#chat").width((chatWidth - 42) + 'px');
+  var bottomHeight = $(window).height() - $("#main").height() - $("#menubar").height() - 29;
   $("#bottom").height(bottomHeight);
   $("#info_area").height(bottomHeight);
-  $("#chat_area").height(bottomHeight);
-  $("#log").height(bottomHeight - $("#chat").height() - 1);
+  $("#tabs").height(bottomHeight);
+  $("#log").height(bottomHeight - $("#chat").height() - 40);
   // this is ugly and terrible.
   if ($(window).height() < 650) {
     $("body").css("overflow-y", "auto");
