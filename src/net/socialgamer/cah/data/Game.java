@@ -528,19 +528,25 @@ public class Game {
     if (state != GameState.LOBBY || !hasBaseDeck()) {
       return false;
     }
+    boolean started;
     synchronized (players) {
       if (players.size() >= 3) {
         // Pick a random start judge, though the "next" judge will actually go first.
         judgeIndex = (int) (Math.random() * players.size());
-        blackDeck = new BlackDeck(cardSets);
-        whiteDeck = new WhiteDeck(cardSets);
-        startNextRound();
-        gameManager.broadcastGameListRefresh();
-        return true;
+        started = true;
       } else {
-        return false;
+        started = false;
       }
     }
+    if (started) {
+      // do this stuff outside the players lock; they will lock players again later for much less
+      // time, and not at the same time as trying to lock users, which has caused deadlocks
+      blackDeck = new BlackDeck(cardSets);
+      whiteDeck = new WhiteDeck(cardSets);
+      startNextRound();
+      gameManager.broadcastGameListRefresh();
+    }
+    return started;
   }
 
   public boolean hasBaseDeck() {
