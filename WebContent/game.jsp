@@ -254,7 +254,7 @@ HttpSession hSession = request.getSession(true);
         Waiting for server...
       </div>
     </div>
-    <div style="width:100%; height:100%;">
+    <div style="width:100%; height:472px;">
       <div style="width:100%; height:100%;">
         <div class="game_left_side">
           <div class="game_black_card_wrapper">
