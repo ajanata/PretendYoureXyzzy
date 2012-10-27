@@ -205,6 +205,8 @@ body {
   position: absolute;
   padding: 0px;
   width: 90%;
+  font-family: serif;
+  font-size: 12pt;
 }
 
 #chat_submit {
