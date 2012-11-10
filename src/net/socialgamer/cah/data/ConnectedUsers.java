@@ -26,8 +26,10 @@ package net.socialgamer.cah.data;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -136,21 +138,25 @@ public class ConnectedUsers {
    * and remove users which have not so communicated.
    */
   public void checkForPingTimeouts() {
+    final Set<User> removedUsers = new HashSet<User>();
     synchronized (users) {
       final Iterator<User> iterator = users.values().iterator();
       while (iterator.hasNext()) {
         final User u = iterator.next();
         if (System.nanoTime() - u.getLastHeardFrom() > PING_TIMEOUT) {
-          try {
-            u.noLongerVaild();
-            notifyRemoveUser(u, DisconnectReason.PING_TIMEOUT);
-          } catch (final Exception e) {
-            // TODO log
-            // otherwise ignore
-          } finally {
-            iterator.remove();
-          }
+          removedUsers.add(u);
+          iterator.remove();
         }
+      }
+    }
+    // Do this later to not keep users locked
+    for (final User u : removedUsers) {
+      try {
+        u.noLongerVaild();
+        notifyRemoveUser(u, DisconnectReason.PING_TIMEOUT);
+      } catch (final Exception e) {
+        // TODO log
+        // otherwise ignore
       }
     }
   }
