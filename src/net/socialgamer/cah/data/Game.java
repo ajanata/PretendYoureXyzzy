@@ -363,8 +363,10 @@ public class Game {
       final Set<CardSet> cardSets1, final String password1) {
     this.scoreGoal = scoreLimit;
     this.maxPlayers = playerLimit;
-    this.cardSets.clear();
-    this.cardSets.addAll(cardSets1);
+    synchronized (this.cardSets) {
+      this.cardSets.clear();
+      this.cardSets.addAll(cardSets1);
+    }
     this.password = password1;
 
     final HashMap<ReturnableData, Object> data = getEventMap();
@@ -397,9 +399,12 @@ public class Game {
     info.put(GameInfo.ID, id);
     info.put(GameInfo.HOST, host.toString());
     info.put(GameInfo.STATE, state.toString());
-    final List<Integer> cardSetIds = new ArrayList<Integer>(cardSets.size());
-    for (final CardSet cardSet : cardSets) {
-      cardSetIds.add(cardSet.getId());
+    final List<Integer> cardSetIds;
+    synchronized (cardSets) {
+      cardSetIds = new ArrayList<Integer>(cardSets.size());
+      for (final CardSet cardSet : cardSets) {
+        cardSetIds.add(cardSet.getId());
+      }
     }
     info.put(GameInfo.CARD_SETS, cardSetIds);
     info.put(GameInfo.PLAYER_LIMIT, maxPlayers);
@@ -541,8 +546,10 @@ public class Game {
     if (started) {
       // do this stuff outside the players lock; they will lock players again later for much less
       // time, and not at the same time as trying to lock users, which has caused deadlocks
-      blackDeck = new BlackDeck(cardSets);
-      whiteDeck = new WhiteDeck(cardSets);
+      synchronized (cardSets) {
+        blackDeck = new BlackDeck(cardSets);
+        whiteDeck = new WhiteDeck(cardSets);
+      }
       startNextRound();
       gameManager.broadcastGameListRefresh();
     }
@@ -550,9 +557,11 @@ public class Game {
   }
 
   public boolean hasBaseDeck() {
-    for (final CardSet cardSet : cardSets) {
-      if (cardSet.isBaseDeck()) {
-        return true;
+    synchronized (cardSets) {
+      for (final CardSet cardSet : cardSets) {
+        if (cardSet.isBaseDeck()) {
+          return true;
+        }
       }
     }
     return false;
