@@ -105,8 +105,10 @@ public class User {
    * @throws InterruptedException
    */
   public void waitForNewMessageNotification(final long timeout) throws InterruptedException {
-    synchronized (queuedMessageSynchronization) {
-      queuedMessageSynchronization.wait(timeout);
+    if (timeout > 0) {
+      synchronized (queuedMessageSynchronization) {
+        queuedMessageSynchronization.wait(timeout);
+      }
     }
   }
 
