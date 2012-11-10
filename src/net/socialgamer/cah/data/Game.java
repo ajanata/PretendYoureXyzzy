@@ -974,7 +974,7 @@ public class Game {
     try {
       return blackDeck.getNextCard();
     } catch (final OutOfCardsException e) {
-      whiteDeck.reshuffle();
+      blackDeck.reshuffle();
       final HashMap<ReturnableData, Object> data = getEventMap();
       data.put(LongPollResponse.EVENT, LongPollEvent.GAME_BLACK_RESHUFFLE.toString());
       broadcastToPlayers(MessageType.GAME_EVENT, data);
