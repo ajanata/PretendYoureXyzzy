@@ -1225,7 +1225,9 @@ public class Game {
         return ErrorCode.NOT_YOUR_TURN;
       }
 
-      player.resetSkipCount();
+      if (null != player) {
+        player.resetSkipCount();
+      }
 
       cardPlayer = playedCards.getPlayerForId(cardId);
       if (cardPlayer == null) {
