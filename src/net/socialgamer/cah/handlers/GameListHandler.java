@@ -69,7 +69,10 @@ public class GameListHandler extends Handler {
     final List<Map<GameInfo, Object>> gameInfos =
         new ArrayList<Map<GameInfo, Object>>(games.size());
     for (final Game game : games) {
-      gameInfos.add(game.getInfo());
+      final Map<GameInfo, Object> info = game.getInfo();
+      if (null != info) {
+        gameInfos.add(info);
+      }
     }
     ret.put(AjaxResponse.GAMES, gameInfos);
     ret.put(AjaxResponse.MAX_GAMES, maxGames);

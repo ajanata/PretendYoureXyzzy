@@ -382,6 +382,7 @@ public class Game {
    * Synchronizes on {@link #players}.
    * @return This game's general information: ID, host, state, player list, etc.
    */
+  @Nullable
   public Map<GameInfo, Object> getInfo() {
     return getInfo(false);
   }
@@ -395,9 +396,15 @@ public class Game {
    *          sent to people in the game.
    * @return This game's general information: ID, host, state, player list, etc.
    */
+  @Nullable
   public Map<GameInfo, Object> getInfo(final boolean includePassword) {
     final Map<GameInfo, Object> info = new HashMap<GameInfo, Object>();
     info.put(GameInfo.ID, id);
+    // This is probably happening because the game ceases to exist in the middle of getting the
+    // game list. Just return nothing.
+    if (null == host) {
+      return null;
+    }
     info.put(GameInfo.HOST, host.toString());
     info.put(GameInfo.STATE, state.toString());
     final List<Integer> cardSetIds;
