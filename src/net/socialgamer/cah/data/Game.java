@@ -602,22 +602,26 @@ public class Game {
 
     playedCards.clear();
 
-    synchronized (blackCardLock) {
-      blackCard = getNextBlackCard();
+    BlackCard newBlackCard;
 
-      if (blackCard.getDraw() > 0) {
-        synchronized (players) {
-          for (final Player player : players) {
-            if (getJudge() == player) {
-              continue;
-            }
-            final List<WhiteCard> cards = new ArrayList<WhiteCard>(blackCard.getDraw());
-            for (int i = 0; i < blackCard.getDraw(); i++) {
-              cards.add(getNextWhiteCard());
-            }
-            player.getHand().addAll(cards);
-            sendCardsToPlayer(player, cards);
+    synchronized (blackCardLock) {
+      if (blackCard != null) {
+        blackDeck.discard(blackCard);
+      }
+      newBlackCard = blackCard = getNextBlackCard();
+    }
+    if (newBlackCard.getDraw() > 0) {
+      synchronized (players) {
+        for (final Player player : players) {
+          if (getJudge() == player) {
+            continue;
           }
+          final List<WhiteCard> cards = new ArrayList<WhiteCard>(newBlackCard.getDraw());
+          for (int i = 0; i < newBlackCard.getDraw(); i++) {
+            cards.add(getNextWhiteCard());
+          }
+          player.getHand().addAll(cards);
+          sendCardsToPlayer(player, cards);
         }
       }
     }
