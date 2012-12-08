@@ -42,7 +42,7 @@ RequestWrapper wrapper = new RequestWrapper(request);
 String remoteAddr = wrapper.getRemoteAddr();
 //TODO better access control than hard-coding IP addresses.
 if (!(remoteAddr.equals("0:0:0:0:0:0:0:1") || remoteAddr.equals("127.0.0.1") ||
-    remoteAddr.equals("98.248.33.90") || remoteAddr.equals("207.161.125.132"))) {
+    remoteAddr.equals("98.248.33.90") || remoteAddr.equals("207.161.39.198"))) {
   response.sendError(403, "Access is restricted to known hosts");
   return;
 }
@@ -159,7 +159,7 @@ try {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>PYX - Edit Card Sets</title>
-<script type="text/javascript" src="js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
     $('#addBlackCards').click(function() {
