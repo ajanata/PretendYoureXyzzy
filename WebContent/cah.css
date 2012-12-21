@@ -431,7 +431,7 @@ span.debug, span.admin {
 }
 
 .selected {
-  border: 1px solid #fafcff;
+  color: #fff;
   background:#3c7fb1;
 }
 
