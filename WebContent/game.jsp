@@ -171,18 +171,21 @@ HttpSession hSession = request.getSession(true);
 <!-- Template for game lobbies in the game list. -->
 <div class="hide">
 	<div id="gamelist_lobby_template" class="gamelist_lobby">
-	  <div class="gamelist_lobby_left">
-	    Game <span class="gamelist_lobby_id">###</span>
-	    <span class="gamelist_lobby_status">status</span>
-      <br/>
-      Goal: <span class="gamelist_lobby_goal"></span>
-      / Cards: <span class="gamelist_lobby_cardset"></span>
-      <br/>
-	    Host: <span class="gamelist_lobby_host">host</span>
-	    <br/>
-	    Players (<span class="gamelist_lobby_player_count"></span> of
-      <span class="gamelist_lobby_max_players"></span>):
-      <span class="gamelist_lobby_players">host, player1, player2</span>
+	<div class="gamelist_lobby_left">
+	    	<h3>
+			<span class="gamelist_lobby_host">host</span>'s Game
+			(<span class="gamelist_lobby_player_count"></span>/<span class="gamelist_lobby_max_players"></span>)
+			<span class="gamelist_lobby_status">status</span>
+		</h3>
+		<div>
+		<strong>Players:</strong>
+		<span class="gamelist_lobby_players">host, player1, player2</span>
+		</div>
+		<div><strong>Goal:</strong> <span class="gamelist_lobby_goal"></span></div>
+		<div>
+		<strong>Cards:</strong> <span class="gamelist_lobby_cardset"></span>
+		</div>
+		<div class=hide>Game <span class="gamelist_lobby_id">###</span></div>
 	  </div>
 	  <div class="gamelist_lobby_right">
 	    <input type="button" class="gamelist_lobby_join" value="Join" />
