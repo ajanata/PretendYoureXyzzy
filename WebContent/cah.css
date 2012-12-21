@@ -24,8 +24,17 @@
 body {
   overflow: hidden;
   min-height: 640px;
+  background:#eee;
+  color:#000;
+  font-size:12px;
+  margin:0;
 }
-
+.card, #game_list{
+  font-family: "helvetica neue", helvetica, Arial, sans-serif;
+}
+h2,h3,h4{
+  margin:0 0 .25em;
+}
 /*
 #browser {
   background: rgba(0, 0, 0, .5);
@@ -57,12 +66,11 @@ body {
 */
 
 #menubar {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
+  background:#555;
+  border-bottom:1px solid #333;
+  color:#fff;
   height: 25px;
-  border: 1px solid black;
+  padding:.5em;
 }
 
 #menubar_left {
@@ -87,16 +95,13 @@ body {
 }
 
 #main {
-  position: absolute;
-  width: 100%;
   height: 506px;
-  top: 26px;
-  border: 1px solid black;
+  padding:.5em;
+}
+#welcome{
+  padding:1em;  
 }
 
-#main_holder {
-  width: 100%;
-}
 
 #game_list {
   height: 100%;
@@ -105,21 +110,23 @@ body {
 }
 
 .gamelist_lobby {
+  background:#fff;
+  border-radius:.25em;
   width: 500px;
   height: 150px;
   float: left;
-  border: 1px solid black;
+  border: 1px solid #ccc;
   margin: 4px;
 }
 
 .gamelist_lobby_left {
-  width: 74%;
+  width: 72%;
   height: 100%;
+  padding:.5em 1.5%;
   float: left;
 }
 
 .gamelist_lobby_right {
-  border-left: 1px solid black;
   width: 25%;
   height: 100%;
   float: right;
@@ -128,10 +135,16 @@ body {
 .gamelist_lobby_join {
   width: 100%;
   height: 100%;
+  border:1px solid #aaa;
+  background:linear-gradient(#fff, #ddd) #ddd;
+  border-radius:.25em;
+  text-transform:uppercase;
+  font-weight:700;
 }
 
 .gamelist_lobby_status {
   float: right;
+  font-weight:700;
 }
 
 .gamelist_lobby_status_joinable {
@@ -152,12 +165,11 @@ body {
 
 #info_area {
   width: 250px;
-  height: 100%;
-  border: 0px;
+  height: 100%;  
   position: absolute;
   bottom: 0px;
   min-height: 100px;
-  border: 1px solid black;
+  border: 1px solid #999;
 }
 
 #tabs {
@@ -232,12 +244,11 @@ span.debug, span.admin {
   position: relative;
   width: 200px;
   height: 200px;
-  border: 3px solid gray;
-  padding: 15px;
-  font-family: Arial, Verdana, san-serif;
+  border: 1px solid #999;
+  padding: 15px;  
   font-size: 15pt;
   float: left;
-
+  border-radius:.25em;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
@@ -249,13 +260,16 @@ span.debug, span.admin {
 .blackcard {
   background: #231f20;
   color: white;
+  background-image:linear-gradient(#231f20,#231f20 75%, #333)
 }
 
 .whitecard {
   background: white;
   color: #231f20;
 }
-
+.whitecard, .gamelist_lobby{
+  background-image:linear-gradient(#fff,#fff 75%,#f8f8f8);
+}
 .cah {
   position: absolute;
   bottom: 0px;
@@ -285,7 +299,6 @@ span.debug, span.admin {
   left: 0px;
   right: 0px;
   height: 30%;
-  border-top: 1px solid black;
 }
 
 .game_hand_filter {
@@ -297,11 +310,12 @@ span.debug, span.admin {
 }
 
 .game_hand_filter_text {
-  height: 100%;
   position: absolute;
   top: 50%;
   font-size: 300%;
   margin-top: -30px;
+  background:#eee;
+  padding:.25em;
 }
 
 .game_hand_cards {
@@ -315,7 +329,6 @@ span.debug, span.admin {
 }
 
 .game_top {
-  border-bottom: 2px solid black;
   padding: 5px;
 }
 
@@ -324,7 +337,8 @@ span.debug, span.admin {
 }
 
 .game_message {
-  font-size: 14pt;
+  font-size: 150%;
+  font-weight:bold;
 }
 
 .game_black_card_wrapper {
@@ -375,10 +389,11 @@ span.debug, span.admin {
 }
 
 .game_white_cards_binder {
-  border: 5px solid silver;
+  border: 3px solid silver;
   display: inline-block;
   margin-right: 4px;
   margin-bottom: 4px;
+  border-radius: .25em;
 }
 
 .card_holder {
@@ -402,12 +417,15 @@ span.debug, span.admin {
 }
 
 .scorecard {
+  background:#fff;
   height: 36px;
-  padding: 2px;
-  border-bottom: 1px solid black;
+  padding:.25em .5em;
+  border-bottom: 1px solid #bbb;
   font-size: 11pt;
 }
-
+.scorecard:nth-child(even){
+  background:#f8f8f8;
+}
 .scorecard_status {
   float: right;
   margin-right: 5px;
@@ -418,7 +436,8 @@ span.debug, span.admin {
 }
 
 .selected {
-  border: 3px solid blue;
+  color: #fff;
+  background:#3c7fb1;
 }
 
 .logo {
@@ -541,4 +560,8 @@ span.debug, span.admin {
 
 .card_set_label {
   margin-right: 15px;
+}
+
+.scorecard_score, .scorecard_player{
+  font-weight:700;
 }
