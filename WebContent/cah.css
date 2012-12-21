@@ -559,3 +559,7 @@ span.debug, span.admin {
 .card_set_label {
   margin-right: 15px;
 }
+
+.scorecard_score, .scorecard_player{
+  font-weight:700;
+}
