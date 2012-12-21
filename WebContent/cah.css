@@ -27,6 +27,7 @@ body {
   background:#eee;
   color:#000;
   font-size:12px;
+  margin:0;
 }
 .card, #game_list{
   font-family: "helvetica neue", helvetica, Arial, sans-serif;
@@ -65,11 +66,11 @@ h2,h3,h4{
 */
 
 #menubar {
- /* position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;*/
+  background:#555;
+  border-bottom:1px solid #333;
+  color:#fff;
   height: 25px;
+  padding:.5em;
 }
 
 #menubar_left {
@@ -95,10 +96,11 @@ h2,h3,h4{
 
 #main {
   height: 506px;
-  
-  /*border: 1px solid black;*/
+  padding:.5em;
 }
-
+#welcome{
+  padding:1em;  
+}
 
 
 #game_list {
