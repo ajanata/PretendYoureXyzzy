@@ -24,16 +24,18 @@
 body {
   overflow: hidden;
   min-height: 640px;
-  background:#eee;
-  color:#000;
-  font-size:12px;
-  margin:0;
+  background: #eee;
+  color: #000;
+  font-size: 12px;
+  margin: 0;
 }
-.card, #game_list{
+
+.card, #game_list {
   font-family: "helvetica neue", helvetica, Arial, sans-serif;
 }
-h2,h3,h4{
-  margin:0 0 .25em;
+
+h2,h3,h4 {
+  margin: 0 0 .25em;
 }
 /*
 #browser {
@@ -96,10 +98,11 @@ h2,h3,h4{
 
 #main {
   height: 506px;
-  padding:.5em;
+  padding: .5em;
 }
-#welcome{
-  padding:1em;  
+
+#welcome {
+  padding: 1em;
 }
 
 
@@ -110,8 +113,8 @@ h2,h3,h4{
 }
 
 .gamelist_lobby {
-  background:#fff;
-  border-radius:.25em;
+  background: #fff;
+  border-radius: .25em;
   width: 500px;
   height: 150px;
   float: left;
@@ -122,7 +125,7 @@ h2,h3,h4{
 .gamelist_lobby_left {
   width: 72%;
   height: 100%;
-  padding:.5em 1.5%;
+  padding: .5em 1.5%;
   float: left;
 }
 
@@ -135,16 +138,16 @@ h2,h3,h4{
 .gamelist_lobby_join {
   width: 100%;
   height: 100%;
-  border:1px solid #aaa;
-  background:linear-gradient(#fff, #ddd) #ddd;
-  border-radius:.25em;
-  text-transform:uppercase;
-  font-weight:700;
+  border: 1px solid #aaa;
+  background: linear-gradient(#fff, #ddd) #ddd;
+  border-radius: .25em;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .gamelist_lobby_status {
   float: right;
-  font-weight:700;
+  font-weight: 700;
 }
 
 .gamelist_lobby_status_joinable {
@@ -165,7 +168,7 @@ h2,h3,h4{
 
 #info_area {
   width: 250px;
-  height: 100%;  
+  height: 100%;
   position: absolute;
   bottom: 0px;
   min-height: 100px;
@@ -245,10 +248,10 @@ span.debug, span.admin {
   width: 200px;
   height: 200px;
   border: 1px solid #999;
-  padding: 15px;  
+  padding: 15px;
   font-size: 15pt;
   float: left;
-  border-radius:.25em;
+  border-radius: .25em;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
@@ -267,9 +270,11 @@ span.debug, span.admin {
   background: white;
   color: #231f20;
 }
+
 .whitecard, .gamelist_lobby{
-  background-image:linear-gradient(#fff,#fff 75%,#f8f8f8);
+  background-image: linear-gradient(#fff,#fff 75%,#f8f8f8);
 }
+
 .cah {
   position: absolute;
   bottom: 0px;
@@ -287,9 +292,9 @@ span.debug, span.admin {
   position: relative;
 }
 
-.header {
+.your_hand {
   position: absolute;
-  bottom: 0px;
+  bottom: 10px;
   right: 5px;
 }
 
@@ -423,9 +428,11 @@ span.debug, span.admin {
   border-bottom: 1px solid #bbb;
   font-size: 11pt;
 }
-.scorecard:nth-child(even){
+
+.scorecard:nth-child(even) {
   background:#f8f8f8;
 }
+
 .scorecard_status {
   float: right;
   margin-right: 5px;

@@ -286,7 +286,7 @@ HttpSession hSession = request.getSession(true);
         <div class="game_hand_filter hide">
           <span class="game_hand_filter_text"></span>
         </div>
-        <span class="header">Your Hand</span>
+        <span class="your_hand">Your Hand</span>
         <div class="game_hand_cards">
         </div>
       </div>
@@ -305,7 +305,7 @@ HttpSession hSession = request.getSession(true);
 	<div id="scorecard_template" class="scorecard">
 	  <span class="scorecard_player">PlayerName</span>
 	  <div class="clear"></div>
-	  <span class="scorecard_score">0</span> <span class="scorecard_point_title">Awesome Point</span><span class="scorecard_s">s</span>
+	  <span class="scorecard_score">0</span> <span class="scorecard_point_title">Awesome Point<span class="scorecard_s">s</span></span>
 	  <span class="scorecard_status">Status</span>
 	</div>
 </div>
