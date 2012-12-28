@@ -30,6 +30,9 @@
  */
 
 $(document).ready(function() {
+  // Initialize the logger (i.e. the global chat tab) before anything needs it.
+  cah.log.init();
+
   // see if we already exist on the server so we can resume
   cah.Ajax.build(cah.$.AjaxOperation.FIRST_LOAD).run();
 
@@ -40,8 +43,8 @@ $(document).ready(function() {
   $("#nickbox").keyup(nickbox_keyup);
   $("#nickbox").focus();
 
-  $("#chat").keyup(chat_keyup);
-  $("#chat_submit").click(chatsubmit_click);
+  $(".chat", $("#tab-global")).keyup(chat_keyup);
+  $(".chat_submit", $("#tab-global")).click(chatsubmit_click);
 
   // TODO: have some sort of mechanism to alert the server that we have unloaded the page, but
   // have not expressed an interest in being cleared out yet.
@@ -94,7 +97,7 @@ function nicknameconfirm_click() {
  */
 function chat_keyup(e) {
   if (e.which == 13) {
-    $("#chat_submit").click();
+    $(".chat_submit", $('#tab-global')).click();
     e.preventDefault();
   }
 }
@@ -103,7 +106,7 @@ function chat_keyup(e) {
  * Handle a click even on the chat button. Send the message to the server.
  */
 function chatsubmit_click() {
-  var text = $.trim($("#chat").val());
+  var text = $.trim($(".chat", $("#tab-global")).val());
   if (text == "") {
     return;
   }
@@ -120,7 +123,7 @@ function chatsubmit_click() {
     // TODO support an /ignore command
     case '':
       // TODO when I get multiple channels working, this needs to know active and pass it
-      cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text).run();
+      cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text).withGameId(cah.Game.id_).run();
       cah.log.status("<" + cah.nickname + "> " + text);
       break;
     case 'kick':
@@ -136,8 +139,8 @@ function chatsubmit_click() {
     default:
   }
 
-  $("#chat").val("");
-  $("#chat").focus();
+  $(".chat", $("#tab-global")).val("");
+  $(".chat", $("#tab-global")).focus();
 }
 
 /**
@@ -210,15 +213,18 @@ function apply_preferences() {
  * This was tested extensively in Chrome. It may not be pixel-perfect in other browsers.
  */
 function app_resize() {
+  var chat = $(".chat", $("#tab-global"));
+  var log = cah.log.log;
+
   var chatWidth = $("#canvas").width() - 257;
   $("#tabs").width(chatWidth + 'px');
-  $("#log").width((chatWidth + 2) + 'px');
-  $("#chat").width((chatWidth - 42) + 'px');
+  log.width((chatWidth + 2) + 'px');
+  chat.width((chatWidth - 42) + 'px');
   var bottomHeight = $(window).height() - $("#main").height() - $("#menubar").height() - 29;
   $("#bottom").height(bottomHeight);
   $("#info_area").height(bottomHeight);
   $("#tabs").height(bottomHeight);
-  $("#log").height(bottomHeight - $("#chat").height() - 40);
+  log.height(bottomHeight - chat.height() - 40);
   // this is ugly and terrible.
   if ($(window).height() < 650) {
     $("body").css("overflow-y", "auto");

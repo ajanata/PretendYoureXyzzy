@@ -32,6 +32,13 @@
 cah.log = {};
 
 /**
+ * "Global Chat" tab's chat log
+ */
+cah.log.init = function() {
+  cah.log.log = $('.log', $('#tab-global'));
+};
+
+/**
  * Log a message for the user the see, always, as a status message. This is also used for chat. The
  * current time is displayed with the log message, using the user's locale settings to determine
  * format.
@@ -44,17 +51,18 @@ cah.log = {};
  */
 cah.log.status = function(text, opt_class) {
   // TODO this doesn't work right on some mobile browsers
-  var scroll = $("#log").prop("scrollHeight") - $("#log").height() - $("#log").prop("scrollTop") <= 5;
+  var scroll = (cah.log.log.prop("scrollHeight") - cah.log.log.height() -
+      cah.log.log.prop("scrollTop")) <= 5;
 
   var node = $("<span></span><br/>");
   $(node[0]).text("[" + new Date().toLocaleTimeString() + "] " + text + "\n");
   if (opt_class) {
     $(node).addClass(opt_class);
   }
-  $("#log").append(node);
+  cah.log.log.append(node);
 
   if (scroll) {
-    $("#log").prop("scrollTop", $("#log").prop("scrollHeight"));
+    cah.log.log.prop("scrollTop", cah.log.log.prop("scrollHeight"));
   }
 };
 

@@ -168,9 +168,9 @@ HttpSession hSession = request.getSession(true);
       <textarea id="ignore_list" style="width: 200px; height: 150px"></textarea>
     </div>
     <div id="tab-global">
-      <div id="log"></div>
-      <input type="text" id="chat" maxlength="200" />
-      <input type="button" id="chat_submit" value="Chat" />
+      <div class="log"></div>
+      <input type="text" class="chat" maxlength="200" />
+      <input type="button" class="chat_submit" value="Chat" />
     </div>
   </div>
 </div>
