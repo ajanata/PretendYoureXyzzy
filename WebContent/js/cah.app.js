@@ -44,7 +44,7 @@ $(document).ready(function() {
   $("#nickbox").focus();
 
   $(".chat", $("#tab-global")).keyup(chat_keyup);
-  $(".chat_submit", $("#tab-global")).click(chatsubmit_click);
+  $(".chat_submit", $("#tab-global")).click(chatsubmit_click());
 
   // TODO: have some sort of mechanism to alert the server that we have unloaded the page, but
   // have not expressed an interest in being cleared out yet.
@@ -103,44 +103,47 @@ function chat_keyup(e) {
 }
 
 /**
- * Handle a click even on the chat button. Send the message to the server.
+ * Generate a click handler for the chat submit button.  This parses the line
+ * for any /-commands, then sends the request to the server.
  */
 function chatsubmit_click() {
-  var text = $.trim($(".chat", $("#tab-global")).val());
-  if (text == "") {
-    return;
-  }
-  var cmd = '';
-  if ('/' == text.substring(0, 1)) {
-    cmd = text.substring(1, text.indexOf(' ') >= 0 ? text.indexOf(' ') : undefined);
-    if (text.indexOf(' ') >= 0) {
-      text = text.substring(text.indexOf(' ') + 1);
-    } else {
-      text = '';
+  return function() {
+    var text = $.trim($(".chat", $("#tab-global")).val());
+    if (text == "") {
+      return;
     }
-  }
-  switch (cmd) {
-    // TODO support an /ignore command
-    case '':
-      // TODO when I get multiple channels working, this needs to know active and pass it
-      cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text).withGameId(cah.Game.id_).run();
-      cah.log.status("<" + cah.nickname + "> " + text);
-      break;
-    case 'kick':
-      cah.Ajax.build(cah.$.AjaxOperation.KICK).withNickname(text.split(' ')[0]).run();
-      break;
-    case 'ban':
-      // this could also be an IP address
-      cah.Ajax.build(cah.$.AjaxOperation.BAN).withNickname(text.split(' ')[0]).run();
-      break;
-    case 'names':
-      cah.Ajax.build(cah.$.AjaxOperation.NAMES).run();
-      break;
-    default:
-  }
+    var cmd = '';
+    if ('/' == text.substring(0, 1)) {
+      cmd = text.substring(1, text.indexOf(' ') >= 0 ? text.indexOf(' ') : undefined);
+      if (text.indexOf(' ') >= 0) {
+        text = text.substring(text.indexOf(' ') + 1);
+      } else {
+        text = '';
+      }
+    }
+    switch (cmd) {
+      // TODO support an /ignore command
+      case '':
+        // TODO when I get multiple channels working, this needs to know active and pass it
+        cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text).withGameId(cah.Game.id_).run();
+        cah.log.status("<" + cah.nickname + "> " + text);
+        break;
+      case 'kick':
+        cah.Ajax.build(cah.$.AjaxOperation.KICK).withNickname(text.split(' ')[0]).run();
+        break;
+      case 'ban':
+        // this could also be an IP address
+        cah.Ajax.build(cah.$.AjaxOperation.BAN).withNickname(text.split(' ')[0]).run();
+        break;
+      case 'names':
+        cah.Ajax.build(cah.$.AjaxOperation.NAMES).run();
+        break;
+      default:
+    }
 
-  $(".chat", $("#tab-global")).val("");
-  $(".chat", $("#tab-global")).focus();
+    $(".chat", $("#tab-global")).val("");
+    $(".chat", $("#tab-global")).focus();
+  };
 }
 
 /**
