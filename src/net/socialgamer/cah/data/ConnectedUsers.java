@@ -71,18 +71,24 @@ public class ConnectedUsers {
   }
 
   /**
-   * Add a new user.
-   * 
-   * @param user
-   *          User to add.
+   * Checks to see if a user with the specified nickname already exists, and if not add the user,
+   * as an atomic operation.
+   * @param user User to add. {@code getNickname()} is used to determine the nickname.
+   * @return {@code true} if the user was added, {@code false} if another user with the same name
+   * already existed.
    */
-  public void newUser(final User user) {
+  public boolean checkAndAdd(final User user) {
     synchronized (users) {
-      users.put(user.getNickname().toLowerCase(), user);
-      final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-      data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
-      data.put(LongPollResponse.NICKNAME, user.getNickname());
-      broadcastToAll(MessageType.PLAYER_EVENT, data);
+      if (this.hasUser(user.getNickname())) {
+        return false;
+      } else {
+        users.put(user.getNickname().toLowerCase(), user);
+        final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+        data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
+        data.put(LongPollResponse.NICKNAME, user.getNickname());
+        broadcastToAll(MessageType.PLAYER_EVENT, data);
+        return true;
+      }
     }
   }
 
@@ -188,6 +194,7 @@ public class ConnectedUsers {
    */
   public void broadcastToList(final Collection<User> broadcastTo, final MessageType type,
       final HashMap<ReturnableData, Object> masterData) {
+    // TODO I think this synchronized block is pointless.
     synchronized (users) {
       for (final User u : broadcastTo) {
         @SuppressWarnings("unchecked")
