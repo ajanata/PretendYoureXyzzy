@@ -44,7 +44,7 @@ $(document).ready(function() {
   $("#nickbox").focus();
 
   $(".chat", $("#tab-global")).keyup(chat_keyup);
-  $(".chat_submit", $("#tab-global")).click(chatsubmit_click());
+  $(".chat_submit", $("#tab-global")).click(chatsubmit_click(null, $("#tab-global")));
 
   // TODO: have some sort of mechanism to alert the server that we have unloaded the page, but
   // have not expressed an interest in being cleared out yet.
@@ -105,10 +105,18 @@ function chat_keyup(e) {
 /**
  * Generate a click handler for the chat submit button.  This parses the line
  * for any /-commands, then sends the request to the server.
+ *
+ * @param {number}
+ *          Game ID to use in AJAX requests, or null for global chat
+ * @param {jQuery.HTMLDivElement}
+ *          Parent element, which contains one text-input-box element of class
+ *          "chat", which will be used to source the data.
  */
-function chatsubmit_click() {
+function chatsubmit_click(game_id, parent_element) {
   return function() {
-    var text = $.trim($(".chat", $("#tab-global")).val());
+    var ajax = null;
+
+    var text = $.trim($(".chat", parent_element).val());
     if (text == "") {
       return;
     }
@@ -125,24 +133,31 @@ function chatsubmit_click() {
       // TODO support an /ignore command
       case '':
         // TODO when I get multiple channels working, this needs to know active and pass it
-        cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text).withGameId(cah.Game.id_).run();
+        ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text);
         cah.log.status("<" + cah.nickname + "> " + text);
         break;
       case 'kick':
-        cah.Ajax.build(cah.$.AjaxOperation.KICK).withNickname(text.split(' ')[0]).run();
+        ajax = cah.Ajax.build(cah.$.AjaxOperation.KICK).withNickname(text.split(' ')[0]);
         break;
       case 'ban':
         // this could also be an IP address
-        cah.Ajax.build(cah.$.AjaxOperation.BAN).withNickname(text.split(' ')[0]).run();
+        ajax = cah.Ajax.build(cah.$.AjaxOperation.BAN).withNickname(text.split(' ')[0]);
         break;
       case 'names':
-        cah.Ajax.build(cah.$.AjaxOperation.NAMES).run();
+        ajax = cah.Ajax.build(cah.$.AjaxOperation.NAMES);
         break;
       default:
     }
 
-    $(".chat", $("#tab-global")).val("");
-    $(".chat", $("#tab-global")).focus();
+    if (ajax) {
+      if (game_id !== null) {
+        ajax.withGameId(game_id);
+      }
+      ajax.run();
+    }
+
+    $(".chat", parent_element).val("");
+    $(".chat", parent_element).focus();
   };
 }
 
