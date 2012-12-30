@@ -58,6 +58,17 @@ cah.Game = function(id) {
   this.scoreboardElement_.id = "scoreboard_" + id;
   $(this.scoreboardElement_).removeClass("hide");
 
+  var chatElement = $("#tab-global").clone()[0];
+  /**
+   * The element for the chat room for this game
+   *
+   * @type {HTMLDivElement}
+   * @private
+   */
+  this.chatElement_ = chatElement;
+  chatElement.id = "tab-chat-game_" + this.id_;
+  $(".chat_submit", chatElement).click(chatsubmit_click(this.id_, chatElement));
+
   /**
    * The element for the game options for this game.
    * 
@@ -656,6 +667,16 @@ cah.Game.prototype.insertIntoDocument = function() {
   $("#main_holder").empty().append(this.element_);
   $("#info_area").empty().append(this.scoreboardElement_);
   $("#leave_game").show();
+
+  var linkToChatArea = $("<a>");
+  var gameChatTab = $("<li>");
+  linkToChatArea.attr("href", "#" + this.chatElement_.id);
+  linkToChatArea.text("Chat with game members");
+  gameChatTab.append(linkToChatArea);
+  $("#tabs ul").append(gameChatTab);
+  $("#tabs").append(this.chatElement_);
+  $("#tabs").tabs("refresh");
+
   this.windowResize_();
   // TODO display a loading animation
 };
