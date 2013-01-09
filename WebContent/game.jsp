@@ -95,14 +95,21 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues.</a>
   </p>
-  <p>Most recent update: 12 October, 5:00 AM UTC:</p>
+  <p>Most recent update: 9 January 2013:</p>
   <ul>
-    <li>User Preferences. Click the button in the top-right corner and you can hide the connect
-    and quit events, and ignore chat from specific users. These settings are remembered for the
-    next time you play the game. The game also remembers what name you used last time you
-    played.</li>
-    <li>Games without a password will sort before games that do, so you can find them easier.</li>
-    <li>Under-the-hood improvements.</li>
+    <li>New stylesheet from timsookram.</li>
+    <li>New card sets. The Holiday Pack was added about a month ago, the MLP pack got lost in the
+    server migration and has been restored, and another custom card set has been added from the fine
+    folks over at Very Serious. This card set has a decent amount of in-jokes, though, so you may
+    want to skip it for now. I'll pull out the universally funny cards later into another set.
+      <ul><li>I haven't forgotten about the other card sets that have been sent in. I'll get to
+      those later this week. I did this card set first since it was sent to me in a format that I
+      could import directly into the database.</li></ul>
+    </li>
+    <li>Plugged a hole that would let any especially crafty user pretend to be an administrator.
+    This was done entirely at the firewall and web server level and required no code change to the
+    game itself.</li>
+    <li>Increased maximum game limit from 60 to 75.</li>
   </ul>
   <div id="nickbox">
     Nickname: <input type="text" id="nickname" value="" maxlength="30" />
