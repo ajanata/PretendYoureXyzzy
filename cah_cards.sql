@@ -5,6 +5,7 @@
 -- This file contains the Black Cards and White Cards for Cards Against Humanity, as a script for importing into PostgreSQL. There should be a user named cah.
 -- Includes the First and Second Expansions, as well as the Canadian version cards, and 2012 Holiday Pack.
 -- Also includes r/MLPLounge cards from http://www.reddit.com/r/MLPLounge/comments/10f2t3/cards_against_equinity/
+-- Also includes Very Serious custom card pack.
 
 --
 -- PostgreSQL database dump
@@ -12,7 +13,7 @@
 
 -- Dumped from database version 9.1.6
 -- Dumped by pg_dump version 9.1.3
--- Started on 2012-12-07 18:41:35
+-- Started on 2013-01-08 23:55:59
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -27,8 +28,8 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 161 (class 1259 OID 16572)
--- Dependencies: 1908 1909 1910 1911 6
+-- TOC entry 161 (class 1259 OID 16386)
+-- Dependencies: 1904 1905 1906 1907 5
 -- Name: black_cards; Type: TABLE; Schema: public; Owner: cah; Tablespace: 
 --
 
@@ -56,8 +57,8 @@ COMMENT ON COLUMN black_cards.creator IS 'NULL for default card, non-NULL for us
 
 
 --
--- TOC entry 162 (class 1259 OID 16579)
--- Dependencies: 161 6
+-- TOC entry 162 (class 1259 OID 16393)
+-- Dependencies: 5 161
 -- Name: black_cards_id_seq; Type: SEQUENCE; Schema: public; Owner: cah
 --
 
@@ -86,12 +87,12 @@ ALTER SEQUENCE black_cards_id_seq OWNED BY black_cards.id;
 -- Name: black_cards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cah
 --
 
-SELECT pg_catalog.setval('black_cards_id_seq', 98, true);
+SELECT pg_catalog.setval('black_cards_id_seq', 157, true);
 
 
 --
--- TOC entry 163 (class 1259 OID 16581)
--- Dependencies: 6
+-- TOC entry 163 (class 1259 OID 16395)
+-- Dependencies: 5
 -- Name: card_set; Type: TABLE; Schema: public; Owner: cah; Tablespace: 
 --
 
@@ -106,8 +107,8 @@ CREATE TABLE card_set (
 ALTER TABLE public.card_set OWNER TO cah;
 
 --
--- TOC entry 164 (class 1259 OID 16584)
--- Dependencies: 6
+-- TOC entry 164 (class 1259 OID 16398)
+-- Dependencies: 5
 -- Name: card_set_black_card; Type: TABLE; Schema: public; Owner: cah; Tablespace: 
 --
 
@@ -120,8 +121,8 @@ CREATE TABLE card_set_black_card (
 ALTER TABLE public.card_set_black_card OWNER TO cah;
 
 --
--- TOC entry 165 (class 1259 OID 16587)
--- Dependencies: 6
+-- TOC entry 165 (class 1259 OID 16401)
+-- Dependencies: 5
 -- Name: card_set_white_card; Type: TABLE; Schema: public; Owner: cah; Tablespace: 
 --
 
@@ -134,8 +135,33 @@ CREATE TABLE card_set_white_card (
 ALTER TABLE public.card_set_white_card OWNER TO cah;
 
 --
--- TOC entry 170 (class 1259 OID 16601)
--- Dependencies: 1913 1914 6
+-- TOC entry 168 (class 1259 OID 24580)
+-- Dependencies: 5
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: cah
+--
+
+CREATE SEQUENCE hibernate_sequence
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hibernate_sequence OWNER TO cah;
+
+--
+-- TOC entry 1944 (class 0 OID 0)
+-- Dependencies: 168
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: cah
+--
+
+SELECT pg_catalog.setval('hibernate_sequence', 100002, true);
+
+
+--
+-- TOC entry 166 (class 1259 OID 16404)
+-- Dependencies: 1909 1910 5
 -- Name: white_cards; Type: TABLE; Schema: public; Owner: cah; Tablespace: 
 --
 
@@ -152,8 +178,8 @@ CREATE TABLE white_cards (
 ALTER TABLE public.white_cards OWNER TO cah;
 
 --
--- TOC entry 1944 (class 0 OID 0)
--- Dependencies: 170
+-- TOC entry 1945 (class 0 OID 0)
+-- Dependencies: 166
 -- Name: COLUMN white_cards.creator; Type: COMMENT; Schema: public; Owner: cah
 --
 
@@ -161,8 +187,8 @@ COMMENT ON COLUMN white_cards.creator IS 'NULL for default, non-NULL for user id
 
 
 --
--- TOC entry 171 (class 1259 OID 16606)
--- Dependencies: 6 170
+-- TOC entry 167 (class 1259 OID 16409)
+-- Dependencies: 5 166
 -- Name: white_cards_id_seq; Type: SEQUENCE; Schema: public; Owner: cah
 --
 
@@ -177,8 +203,8 @@ CREATE SEQUENCE white_cards_id_seq
 ALTER TABLE public.white_cards_id_seq OWNER TO cah;
 
 --
--- TOC entry 1945 (class 0 OID 0)
--- Dependencies: 171
+-- TOC entry 1946 (class 0 OID 0)
+-- Dependencies: 167
 -- Name: white_cards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cah
 --
 
@@ -186,16 +212,16 @@ ALTER SEQUENCE white_cards_id_seq OWNED BY white_cards.id;
 
 
 --
--- TOC entry 1946 (class 0 OID 0)
--- Dependencies: 171
+-- TOC entry 1947 (class 0 OID 0)
+-- Dependencies: 167
 -- Name: white_cards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cah
 --
 
-SELECT pg_catalog.setval('white_cards_id_seq', 508, true);
+SELECT pg_catalog.setval('white_cards_id_seq', 621, true);
 
 
 --
--- TOC entry 1912 (class 2604 OID 16608)
+-- TOC entry 1908 (class 2604 OID 16411)
 -- Dependencies: 162 161
 -- Name: id; Type: DEFAULT; Schema: public; Owner: cah
 --
@@ -204,8 +230,8 @@ ALTER TABLE ONLY black_cards ALTER COLUMN id SET DEFAULT nextval('black_cards_id
 
 
 --
--- TOC entry 1915 (class 2604 OID 16609)
--- Dependencies: 171 170
+-- TOC entry 1911 (class 2604 OID 16412)
+-- Dependencies: 167 166
 -- Name: id; Type: DEFAULT; Schema: public; Owner: cah
 --
 
@@ -213,7 +239,7 @@ ALTER TABLE ONLY white_cards ALTER COLUMN id SET DEFAULT nextval('white_cards_id
 
 
 --
--- TOC entry 1934 (class 0 OID 16572)
+-- TOC entry 1930 (class 0 OID 16386)
 -- Dependencies: 161
 -- Data for Name: black_cards; Type: TABLE DATA; Schema: public; Owner: cah
 --
@@ -306,6 +332,7 @@ INSERT INTO black_cards VALUES (10, 'MTV''s new reality show features eight wash
 INSERT INTO black_cards VALUES (83, 'In his new summer comedy, Rob Schneider is _____ trapped in the body of _____.', 0, 2, NULL, true, false, NULL);
 INSERT INTO black_cards VALUES (13, 'During Picasso''s often-overlooked Brown Period, he produced hundreds of paintings of _____.', 0, 1, NULL, true, true, NULL);
 INSERT INTO black_cards VALUES (2, 'I got 99 problems but _____ ain''t one.', 0, 1, NULL, true, true, NULL);
+INSERT INTO black_cards VALUES (1273, 'And that''s how Equestria was made!', 0, 1, NULL, false, false, 'MLP');
 INSERT INTO black_cards VALUES (53, 'While the United States raced the Soviet Union to the moon, the Mexican government funneled millions of pesos into research on _____.', 0, 1, NULL, true, true, NULL);
 INSERT INTO black_cards VALUES (1001, 'test', 0, 1, NULL, false, false, NULL);
 INSERT INTO black_cards VALUES (1003, 'Starting Canadian Black Cards', 0, 1, NULL, false, false, NULL);
@@ -382,7 +409,6 @@ INSERT INTO black_cards VALUES (1265, 'After a wild night of crusading, Appleblo
 INSERT INTO black_cards VALUES (1267, 'After a wild night of partying, Fluttershy awakens to find ____ in her bed.', 0, 1, NULL, false, false, 'MLP');
 INSERT INTO black_cards VALUES (1268, 'After living for thousands of years Celestia can only find pleasure in ____.', 0, 1, NULL, false, false, 'MLP');
 INSERT INTO black_cards VALUES (1270, 'Aloe and Lotus have been experimenting with a radical treatment that utilizes the therapeutic properties of ____.', 0, 1, NULL, false, false, 'MLP');
-INSERT INTO black_cards VALUES (1273, 'And that''s how Equestria was made!', 0, 1, NULL, false, false, 'MLP');
 INSERT INTO black_cards VALUES (1277, 'BUY SOME ____!', 0, 1, NULL, false, false, 'MLP');
 INSERT INTO black_cards VALUES (1279, 'CUTIE MARK CRUSADERS; ____! YAY!', 0, 1, NULL, false, false, 'MLP');
 INSERT INTO black_cards VALUES (1281, 'Daring Do and the quest for ____.', 0, 1, NULL, false, false, 'MLP');
@@ -440,10 +466,69 @@ INSERT INTO black_cards VALUES (1378, 'Zecora is a well known supplier of ____ a
 INSERT INTO black_cards VALUES (1460, 'Every Christmas, my uncle gets drunk and tells the story about ____.', 0, 1, NULL, false, false, '❄');
 INSERT INTO black_cards VALUES (1461, 'What keeps me warm during the cold, cold winter?', 0, 1, NULL, false, false, '❄');
 INSERT INTO black_cards VALUES (1457, 'After blacking out during New Year''s Eve, I was awoken by ____.', 0, 1, NULL, false, false, '❄');
+INSERT INTO black_cards VALUES (99, '____ Jesus is the Jesus of ____.', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (100, '____ ALL THE ____.', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (101, 'There were ALOT of ____ doing ____.', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (102, 'Dogimo would give up ____ to type a six sentence paragraph in a thread.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (103, 'Simple dog ate and vomited ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (104, 'When I was 25, I won an award for ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (105, 'I''m more awesome than a T-rex because of ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (106, '____ in my pants.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (107, 'We need to talk about your whole gallon of ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (108, 'Clean ALL the ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (109, 'The first rule of Jade Club is ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (110, 'The forum nearly broke when ____ posted ____ in The Dead Thread.', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (111, 'A mod war about ____ occurred during ____.', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (112, 'No one likes me after I posted ____ in the TMI thread.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (113, '____ was banned from tinychat because of ____.', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (114, '____ for president!', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (115, 'I did ____, like a fucking adult.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (116, 'Domo travelled across ____ to win the prize of ____.', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (117, 'Roses and her hammer collection defeated an entire squadron of ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (118, 'After Blue posted ____ in chat, I never trusted his links again.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (119, 'Fuck you, I''m a ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (120, 'Cunnilungus and psychiatry brought us to ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (121, 'I CAN ____ ACROSS THE ____.', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (122, '____ is the only thing that matters.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (123, 'I''m an expert on ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (124, 'After I saw ____, I needed ____', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (125, 'I want ____ in my mouflon RIGHT MEOW.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (126, 'Don''t get mad, get ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (127, 'Have fun, don''t be ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (128, 'It''s the end of ____ as we know it.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (129, '____ is my worst habit.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (130, 'Everything''s better with ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (131, 'Yaar''s mother is ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (132, 'What would you taste like?', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (133, 'What have you accomplished today?', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (134, 'What made you happy today?', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (135, 'Why are you frothing with rage?', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (136, 'What mildy annoyed you today?', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (137, 'We''ll always have ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (138, '____ uses ____. It is SUPER EFFECTIVE!', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (139, 'Let''s all rock out to the sounds of ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (140, 'Take ____, it will last longer.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (141, 'You have my bow. AND MY ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (142, 'VS: Where the ____ happens!', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (143, '____? FRY. EYES.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (144, 'A wild ____ appeared! It used ____!', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (145, 'I thought being a ____ was the best thing ever, until I became a ____.', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (146, 'Live long and ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (147, 'There''s a ____ in my soup.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (148, 'I''m under the ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (149, 'If life gives you ____, make ____.', 0, 2, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (150, 'Who needs a bidet when you have ____?', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (151, 'Kill it with ____!', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (152, 'My ____ is too big!', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (153, 'Best drink ever: One part ____, three parts ____, and a splash of ____.', 2, 3, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (154, '____ makes me uncomfortable.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (155, 'Stop, drop, and ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (156, 'Think before you ____.', 0, 1, NULL, false, false, 'VS');
+INSERT INTO black_cards VALUES (157, 'The hills are alive with ____ of ____.', 0, 2, NULL, false, false, 'VS');
 
 
 --
--- TOC entry 1935 (class 0 OID 16581)
+-- TOC entry 1931 (class 0 OID 16395)
 -- Dependencies: 163
 -- Data for Name: card_set; Type: TABLE DATA; Schema: public; Owner: cah
 --
@@ -454,12 +539,13 @@ INSERT INTO card_set VALUES (1155, true, 'The First Expansion', false);
 INSERT INTO card_set VALUES (1151, true, 'First Version', true);
 INSERT INTO card_set VALUES (1152, true, 'Second Version', true);
 INSERT INTO card_set VALUES (1256, true, 'The Second Expansion', false);
-INSERT INTO card_set VALUES (1456, true, '[CUSTOM] r/MLPLounge', false);
 INSERT INTO card_set VALUES (1488, true, '2012 Holiday Pack', false);
+INSERT INTO card_set VALUES (100001, true, '[CUSTOM] r/MLPLounge', false);
+INSERT INTO card_set VALUES (100002, true, '[CUSTOM] Very Serious', false);
 
 
 --
--- TOC entry 1936 (class 0 OID 16584)
+-- TOC entry 1932 (class 0 OID 16398)
 -- Dependencies: 164
 -- Data for Name: card_set_black_card; Type: TABLE DATA; Schema: public; Owner: cah
 --
@@ -695,66 +781,6 @@ INSERT INTO card_set_black_card VALUES (1256, 1177);
 INSERT INTO card_set_black_card VALUES (1256, 1178);
 INSERT INTO card_set_black_card VALUES (1256, 1179);
 INSERT INTO card_set_black_card VALUES (1256, 1180);
-INSERT INTO card_set_black_card VALUES (1456, 1375);
-INSERT INTO card_set_black_card VALUES (1456, 1374);
-INSERT INTO card_set_black_card VALUES (1456, 1373);
-INSERT INTO card_set_black_card VALUES (1456, 1372);
-INSERT INTO card_set_black_card VALUES (1456, 1371);
-INSERT INTO card_set_black_card VALUES (1456, 1370);
-INSERT INTO card_set_black_card VALUES (1456, 1369);
-INSERT INTO card_set_black_card VALUES (1456, 1366);
-INSERT INTO card_set_black_card VALUES (1456, 1365);
-INSERT INTO card_set_black_card VALUES (1456, 1363);
-INSERT INTO card_set_black_card VALUES (1456, 1361);
-INSERT INTO card_set_black_card VALUES (1456, 1359);
-INSERT INTO card_set_black_card VALUES (1456, 1356);
-INSERT INTO card_set_black_card VALUES (1456, 1354);
-INSERT INTO card_set_black_card VALUES (1456, 1355);
-INSERT INTO card_set_black_card VALUES (1456, 1352);
-INSERT INTO card_set_black_card VALUES (1456, 1353);
-INSERT INTO card_set_black_card VALUES (1456, 1350);
-INSERT INTO card_set_black_card VALUES (1456, 1347);
-INSERT INTO card_set_black_card VALUES (1456, 1345);
-INSERT INTO card_set_black_card VALUES (1456, 1262);
-INSERT INTO card_set_black_card VALUES (1456, 1260);
-INSERT INTO card_set_black_card VALUES (1456, 1257);
-INSERT INTO card_set_black_card VALUES (1456, 1270);
-INSERT INTO card_set_black_card VALUES (1456, 1268);
-INSERT INTO card_set_black_card VALUES (1456, 1267);
-INSERT INTO card_set_black_card VALUES (1456, 1264);
-INSERT INTO card_set_black_card VALUES (1456, 1265);
-INSERT INTO card_set_black_card VALUES (1456, 1279);
-INSERT INTO card_set_black_card VALUES (1456, 1277);
-INSERT INTO card_set_black_card VALUES (1456, 1376);
-INSERT INTO card_set_black_card VALUES (1456, 1377);
-INSERT INTO card_set_black_card VALUES (1456, 1275);
-INSERT INTO card_set_black_card VALUES (1456, 1378);
-INSERT INTO card_set_black_card VALUES (1456, 1273);
-INSERT INTO card_set_black_card VALUES (1456, 1306);
-INSERT INTO card_set_black_card VALUES (1456, 1305);
-INSERT INTO card_set_black_card VALUES (1456, 1311);
-INSERT INTO card_set_black_card VALUES (1456, 1309);
-INSERT INTO card_set_black_card VALUES (1456, 1297);
-INSERT INTO card_set_black_card VALUES (1456, 1303);
-INSERT INTO card_set_black_card VALUES (1456, 1301);
-INSERT INTO card_set_black_card VALUES (1456, 1291);
-INSERT INTO card_set_black_card VALUES (1456, 1289);
-INSERT INTO card_set_black_card VALUES (1456, 1295);
-INSERT INTO card_set_black_card VALUES (1456, 1292);
-INSERT INTO card_set_black_card VALUES (1456, 1283);
-INSERT INTO card_set_black_card VALUES (1456, 1281);
-INSERT INTO card_set_black_card VALUES (1456, 1287);
-INSERT INTO card_set_black_card VALUES (1456, 1285);
-INSERT INTO card_set_black_card VALUES (1456, 1329);
-INSERT INTO card_set_black_card VALUES (1456, 1330);
-INSERT INTO card_set_black_card VALUES (1456, 1321);
-INSERT INTO card_set_black_card VALUES (1456, 1323);
-INSERT INTO card_set_black_card VALUES (1456, 1325);
-INSERT INTO card_set_black_card VALUES (1456, 1327);
-INSERT INTO card_set_black_card VALUES (1456, 1313);
-INSERT INTO card_set_black_card VALUES (1456, 1315);
-INSERT INTO card_set_black_card VALUES (1456, 1317);
-INSERT INTO card_set_black_card VALUES (1456, 1319);
 INSERT INTO card_set_black_card VALUES (1488, 1457);
 INSERT INTO card_set_black_card VALUES (1488, 1458);
 INSERT INTO card_set_black_card VALUES (1488, 1459);
@@ -762,10 +788,129 @@ INSERT INTO card_set_black_card VALUES (1488, 1460);
 INSERT INTO card_set_black_card VALUES (1488, 1461);
 INSERT INTO card_set_black_card VALUES (1488, 1462);
 INSERT INTO card_set_black_card VALUES (1488, 1463);
+INSERT INTO card_set_black_card VALUES (100001, 1375);
+INSERT INTO card_set_black_card VALUES (100001, 1374);
+INSERT INTO card_set_black_card VALUES (100001, 1373);
+INSERT INTO card_set_black_card VALUES (100001, 1372);
+INSERT INTO card_set_black_card VALUES (100001, 1371);
+INSERT INTO card_set_black_card VALUES (100001, 1370);
+INSERT INTO card_set_black_card VALUES (100001, 1369);
+INSERT INTO card_set_black_card VALUES (100001, 1366);
+INSERT INTO card_set_black_card VALUES (100001, 1365);
+INSERT INTO card_set_black_card VALUES (100001, 1363);
+INSERT INTO card_set_black_card VALUES (100001, 1361);
+INSERT INTO card_set_black_card VALUES (100001, 1359);
+INSERT INTO card_set_black_card VALUES (100001, 1356);
+INSERT INTO card_set_black_card VALUES (100001, 1354);
+INSERT INTO card_set_black_card VALUES (100001, 1355);
+INSERT INTO card_set_black_card VALUES (100001, 1352);
+INSERT INTO card_set_black_card VALUES (100001, 1353);
+INSERT INTO card_set_black_card VALUES (100001, 1350);
+INSERT INTO card_set_black_card VALUES (100001, 1347);
+INSERT INTO card_set_black_card VALUES (100001, 1345);
+INSERT INTO card_set_black_card VALUES (100001, 1262);
+INSERT INTO card_set_black_card VALUES (100001, 1260);
+INSERT INTO card_set_black_card VALUES (100001, 1257);
+INSERT INTO card_set_black_card VALUES (100001, 1270);
+INSERT INTO card_set_black_card VALUES (100001, 1268);
+INSERT INTO card_set_black_card VALUES (100001, 1267);
+INSERT INTO card_set_black_card VALUES (100001, 1264);
+INSERT INTO card_set_black_card VALUES (100001, 1265);
+INSERT INTO card_set_black_card VALUES (100001, 1279);
+INSERT INTO card_set_black_card VALUES (100001, 1277);
+INSERT INTO card_set_black_card VALUES (100001, 1376);
+INSERT INTO card_set_black_card VALUES (100001, 1377);
+INSERT INTO card_set_black_card VALUES (100001, 1275);
+INSERT INTO card_set_black_card VALUES (100001, 1378);
+INSERT INTO card_set_black_card VALUES (100001, 1273);
+INSERT INTO card_set_black_card VALUES (100001, 1306);
+INSERT INTO card_set_black_card VALUES (100001, 1305);
+INSERT INTO card_set_black_card VALUES (100001, 1311);
+INSERT INTO card_set_black_card VALUES (100001, 1309);
+INSERT INTO card_set_black_card VALUES (100001, 1297);
+INSERT INTO card_set_black_card VALUES (100001, 1303);
+INSERT INTO card_set_black_card VALUES (100001, 1301);
+INSERT INTO card_set_black_card VALUES (100001, 1291);
+INSERT INTO card_set_black_card VALUES (100001, 1289);
+INSERT INTO card_set_black_card VALUES (100001, 1295);
+INSERT INTO card_set_black_card VALUES (100001, 1292);
+INSERT INTO card_set_black_card VALUES (100001, 1283);
+INSERT INTO card_set_black_card VALUES (100001, 1281);
+INSERT INTO card_set_black_card VALUES (100001, 1287);
+INSERT INTO card_set_black_card VALUES (100001, 1285);
+INSERT INTO card_set_black_card VALUES (100001, 1329);
+INSERT INTO card_set_black_card VALUES (100001, 1330);
+INSERT INTO card_set_black_card VALUES (100001, 1321);
+INSERT INTO card_set_black_card VALUES (100001, 1323);
+INSERT INTO card_set_black_card VALUES (100001, 1325);
+INSERT INTO card_set_black_card VALUES (100001, 1327);
+INSERT INTO card_set_black_card VALUES (100001, 1313);
+INSERT INTO card_set_black_card VALUES (100001, 1315);
+INSERT INTO card_set_black_card VALUES (100001, 1317);
+INSERT INTO card_set_black_card VALUES (100001, 1319);
+INSERT INTO card_set_black_card VALUES (100002, 137);
+INSERT INTO card_set_black_card VALUES (100002, 136);
+INSERT INTO card_set_black_card VALUES (100002, 139);
+INSERT INTO card_set_black_card VALUES (100002, 138);
+INSERT INTO card_set_black_card VALUES (100002, 141);
+INSERT INTO card_set_black_card VALUES (100002, 140);
+INSERT INTO card_set_black_card VALUES (100002, 143);
+INSERT INTO card_set_black_card VALUES (100002, 142);
+INSERT INTO card_set_black_card VALUES (100002, 129);
+INSERT INTO card_set_black_card VALUES (100002, 128);
+INSERT INTO card_set_black_card VALUES (100002, 131);
+INSERT INTO card_set_black_card VALUES (100002, 130);
+INSERT INTO card_set_black_card VALUES (100002, 133);
+INSERT INTO card_set_black_card VALUES (100002, 132);
+INSERT INTO card_set_black_card VALUES (100002, 135);
+INSERT INTO card_set_black_card VALUES (100002, 134);
+INSERT INTO card_set_black_card VALUES (100002, 152);
+INSERT INTO card_set_black_card VALUES (100002, 153);
+INSERT INTO card_set_black_card VALUES (100002, 154);
+INSERT INTO card_set_black_card VALUES (100002, 155);
+INSERT INTO card_set_black_card VALUES (100002, 156);
+INSERT INTO card_set_black_card VALUES (100002, 157);
+INSERT INTO card_set_black_card VALUES (100002, 144);
+INSERT INTO card_set_black_card VALUES (100002, 145);
+INSERT INTO card_set_black_card VALUES (100002, 146);
+INSERT INTO card_set_black_card VALUES (100002, 147);
+INSERT INTO card_set_black_card VALUES (100002, 148);
+INSERT INTO card_set_black_card VALUES (100002, 149);
+INSERT INTO card_set_black_card VALUES (100002, 150);
+INSERT INTO card_set_black_card VALUES (100002, 151);
+INSERT INTO card_set_black_card VALUES (100002, 102);
+INSERT INTO card_set_black_card VALUES (100002, 103);
+INSERT INTO card_set_black_card VALUES (100002, 100);
+INSERT INTO card_set_black_card VALUES (100002, 101);
+INSERT INTO card_set_black_card VALUES (100002, 99);
+INSERT INTO card_set_black_card VALUES (100002, 110);
+INSERT INTO card_set_black_card VALUES (100002, 111);
+INSERT INTO card_set_black_card VALUES (100002, 108);
+INSERT INTO card_set_black_card VALUES (100002, 109);
+INSERT INTO card_set_black_card VALUES (100002, 106);
+INSERT INTO card_set_black_card VALUES (100002, 107);
+INSERT INTO card_set_black_card VALUES (100002, 104);
+INSERT INTO card_set_black_card VALUES (100002, 105);
+INSERT INTO card_set_black_card VALUES (100002, 119);
+INSERT INTO card_set_black_card VALUES (100002, 118);
+INSERT INTO card_set_black_card VALUES (100002, 117);
+INSERT INTO card_set_black_card VALUES (100002, 116);
+INSERT INTO card_set_black_card VALUES (100002, 115);
+INSERT INTO card_set_black_card VALUES (100002, 114);
+INSERT INTO card_set_black_card VALUES (100002, 113);
+INSERT INTO card_set_black_card VALUES (100002, 112);
+INSERT INTO card_set_black_card VALUES (100002, 127);
+INSERT INTO card_set_black_card VALUES (100002, 126);
+INSERT INTO card_set_black_card VALUES (100002, 125);
+INSERT INTO card_set_black_card VALUES (100002, 124);
+INSERT INTO card_set_black_card VALUES (100002, 123);
+INSERT INTO card_set_black_card VALUES (100002, 122);
+INSERT INTO card_set_black_card VALUES (100002, 121);
+INSERT INTO card_set_black_card VALUES (100002, 120);
 
 
 --
--- TOC entry 1937 (class 0 OID 16587)
+-- TOC entry 1933 (class 0 OID 16401)
 -- Dependencies: 165
 -- Data for Name: card_set_white_card; Type: TABLE DATA; Schema: public; Owner: cah
 --
@@ -1874,145 +2019,6 @@ INSERT INTO card_set_white_card VALUES (1256, 1214);
 INSERT INTO card_set_white_card VALUES (1256, 1215);
 INSERT INTO card_set_white_card VALUES (1256, 1212);
 INSERT INTO card_set_white_card VALUES (1256, 1213);
-INSERT INTO card_set_white_card VALUES (1456, 1368);
-INSERT INTO card_set_white_card VALUES (1456, 1367);
-INSERT INTO card_set_white_card VALUES (1456, 1364);
-INSERT INTO card_set_white_card VALUES (1456, 1362);
-INSERT INTO card_set_white_card VALUES (1456, 1360);
-INSERT INTO card_set_white_card VALUES (1456, 1358);
-INSERT INTO card_set_white_card VALUES (1456, 1357);
-INSERT INTO card_set_white_card VALUES (1456, 1351);
-INSERT INTO card_set_white_card VALUES (1456, 1348);
-INSERT INTO card_set_white_card VALUES (1456, 1349);
-INSERT INTO card_set_white_card VALUES (1456, 1346);
-INSERT INTO card_set_white_card VALUES (1456, 1344);
-INSERT INTO card_set_white_card VALUES (1456, 1405);
-INSERT INTO card_set_white_card VALUES (1456, 1404);
-INSERT INTO card_set_white_card VALUES (1456, 1407);
-INSERT INTO card_set_white_card VALUES (1456, 1406);
-INSERT INTO card_set_white_card VALUES (1456, 1401);
-INSERT INTO card_set_white_card VALUES (1456, 1400);
-INSERT INTO card_set_white_card VALUES (1456, 1403);
-INSERT INTO card_set_white_card VALUES (1456, 1402);
-INSERT INTO card_set_white_card VALUES (1456, 1397);
-INSERT INTO card_set_white_card VALUES (1456, 1396);
-INSERT INTO card_set_white_card VALUES (1456, 1399);
-INSERT INTO card_set_white_card VALUES (1456, 1398);
-INSERT INTO card_set_white_card VALUES (1456, 1393);
-INSERT INTO card_set_white_card VALUES (1456, 1392);
-INSERT INTO card_set_white_card VALUES (1456, 1395);
-INSERT INTO card_set_white_card VALUES (1456, 1394);
-INSERT INTO card_set_white_card VALUES (1456, 1388);
-INSERT INTO card_set_white_card VALUES (1456, 1389);
-INSERT INTO card_set_white_card VALUES (1456, 1390);
-INSERT INTO card_set_white_card VALUES (1456, 1391);
-INSERT INTO card_set_white_card VALUES (1456, 1384);
-INSERT INTO card_set_white_card VALUES (1456, 1385);
-INSERT INTO card_set_white_card VALUES (1456, 1386);
-INSERT INTO card_set_white_card VALUES (1456, 1387);
-INSERT INTO card_set_white_card VALUES (1456, 1380);
-INSERT INTO card_set_white_card VALUES (1456, 1381);
-INSERT INTO card_set_white_card VALUES (1456, 1382);
-INSERT INTO card_set_white_card VALUES (1456, 1383);
-INSERT INTO card_set_white_card VALUES (1456, 1379);
-INSERT INTO card_set_white_card VALUES (1456, 1307);
-INSERT INTO card_set_white_card VALUES (1456, 1304);
-INSERT INTO card_set_white_card VALUES (1456, 1310);
-INSERT INTO card_set_white_card VALUES (1456, 1308);
-INSERT INTO card_set_white_card VALUES (1456, 1299);
-INSERT INTO card_set_white_card VALUES (1456, 1298);
-INSERT INTO card_set_white_card VALUES (1456, 1296);
-INSERT INTO card_set_white_card VALUES (1456, 1302);
-INSERT INTO card_set_white_card VALUES (1456, 1300);
-INSERT INTO card_set_white_card VALUES (1456, 1290);
-INSERT INTO card_set_white_card VALUES (1456, 1288);
-INSERT INTO card_set_white_card VALUES (1456, 1294);
-INSERT INTO card_set_white_card VALUES (1456, 1293);
-INSERT INTO card_set_white_card VALUES (1456, 1282);
-INSERT INTO card_set_white_card VALUES (1456, 1280);
-INSERT INTO card_set_white_card VALUES (1456, 1286);
-INSERT INTO card_set_white_card VALUES (1456, 1284);
-INSERT INTO card_set_white_card VALUES (1456, 1337);
-INSERT INTO card_set_white_card VALUES (1456, 1336);
-INSERT INTO card_set_white_card VALUES (1456, 1339);
-INSERT INTO card_set_white_card VALUES (1456, 1338);
-INSERT INTO card_set_white_card VALUES (1456, 1341);
-INSERT INTO card_set_white_card VALUES (1456, 1340);
-INSERT INTO card_set_white_card VALUES (1456, 1343);
-INSERT INTO card_set_white_card VALUES (1456, 1342);
-INSERT INTO card_set_white_card VALUES (1456, 1328);
-INSERT INTO card_set_white_card VALUES (1456, 1331);
-INSERT INTO card_set_white_card VALUES (1456, 1333);
-INSERT INTO card_set_white_card VALUES (1456, 1332);
-INSERT INTO card_set_white_card VALUES (1456, 1335);
-INSERT INTO card_set_white_card VALUES (1456, 1334);
-INSERT INTO card_set_white_card VALUES (1456, 1320);
-INSERT INTO card_set_white_card VALUES (1456, 1322);
-INSERT INTO card_set_white_card VALUES (1456, 1324);
-INSERT INTO card_set_white_card VALUES (1456, 1326);
-INSERT INTO card_set_white_card VALUES (1456, 1312);
-INSERT INTO card_set_white_card VALUES (1456, 1314);
-INSERT INTO card_set_white_card VALUES (1456, 1316);
-INSERT INTO card_set_white_card VALUES (1456, 1318);
-INSERT INTO card_set_white_card VALUES (1456, 1263);
-INSERT INTO card_set_white_card VALUES (1456, 1261);
-INSERT INTO card_set_white_card VALUES (1456, 1259);
-INSERT INTO card_set_white_card VALUES (1456, 1258);
-INSERT INTO card_set_white_card VALUES (1456, 1271);
-INSERT INTO card_set_white_card VALUES (1456, 1269);
-INSERT INTO card_set_white_card VALUES (1456, 1266);
-INSERT INTO card_set_white_card VALUES (1456, 1278);
-INSERT INTO card_set_white_card VALUES (1456, 1276);
-INSERT INTO card_set_white_card VALUES (1456, 1274);
-INSERT INTO card_set_white_card VALUES (1456, 1272);
-INSERT INTO card_set_white_card VALUES (1456, 1426);
-INSERT INTO card_set_white_card VALUES (1456, 1427);
-INSERT INTO card_set_white_card VALUES (1456, 1424);
-INSERT INTO card_set_white_card VALUES (1456, 1425);
-INSERT INTO card_set_white_card VALUES (1456, 1430);
-INSERT INTO card_set_white_card VALUES (1456, 1431);
-INSERT INTO card_set_white_card VALUES (1456, 1428);
-INSERT INTO card_set_white_card VALUES (1456, 1429);
-INSERT INTO card_set_white_card VALUES (1456, 1434);
-INSERT INTO card_set_white_card VALUES (1456, 1435);
-INSERT INTO card_set_white_card VALUES (1456, 1432);
-INSERT INTO card_set_white_card VALUES (1456, 1433);
-INSERT INTO card_set_white_card VALUES (1456, 1438);
-INSERT INTO card_set_white_card VALUES (1456, 1439);
-INSERT INTO card_set_white_card VALUES (1456, 1436);
-INSERT INTO card_set_white_card VALUES (1456, 1437);
-INSERT INTO card_set_white_card VALUES (1456, 1411);
-INSERT INTO card_set_white_card VALUES (1456, 1410);
-INSERT INTO card_set_white_card VALUES (1456, 1409);
-INSERT INTO card_set_white_card VALUES (1456, 1408);
-INSERT INTO card_set_white_card VALUES (1456, 1415);
-INSERT INTO card_set_white_card VALUES (1456, 1414);
-INSERT INTO card_set_white_card VALUES (1456, 1413);
-INSERT INTO card_set_white_card VALUES (1456, 1412);
-INSERT INTO card_set_white_card VALUES (1456, 1419);
-INSERT INTO card_set_white_card VALUES (1456, 1418);
-INSERT INTO card_set_white_card VALUES (1456, 1417);
-INSERT INTO card_set_white_card VALUES (1456, 1416);
-INSERT INTO card_set_white_card VALUES (1456, 1423);
-INSERT INTO card_set_white_card VALUES (1456, 1422);
-INSERT INTO card_set_white_card VALUES (1456, 1421);
-INSERT INTO card_set_white_card VALUES (1456, 1420);
-INSERT INTO card_set_white_card VALUES (1456, 1441);
-INSERT INTO card_set_white_card VALUES (1456, 1440);
-INSERT INTO card_set_white_card VALUES (1456, 1443);
-INSERT INTO card_set_white_card VALUES (1456, 1442);
-INSERT INTO card_set_white_card VALUES (1456, 1445);
-INSERT INTO card_set_white_card VALUES (1456, 1444);
-INSERT INTO card_set_white_card VALUES (1456, 1447);
-INSERT INTO card_set_white_card VALUES (1456, 1446);
-INSERT INTO card_set_white_card VALUES (1456, 1449);
-INSERT INTO card_set_white_card VALUES (1456, 1448);
-INSERT INTO card_set_white_card VALUES (1456, 1451);
-INSERT INTO card_set_white_card VALUES (1456, 1450);
-INSERT INTO card_set_white_card VALUES (1456, 1453);
-INSERT INTO card_set_white_card VALUES (1456, 1452);
-INSERT INTO card_set_white_card VALUES (1456, 1455);
-INSERT INTO card_set_white_card VALUES (1456, 1454);
 INSERT INTO card_set_white_card VALUES (1488, 1464);
 INSERT INTO card_set_white_card VALUES (1488, 1465);
 INSERT INTO card_set_white_card VALUES (1488, 1466);
@@ -2036,11 +2042,263 @@ INSERT INTO card_set_white_card VALUES (1488, 1483);
 INSERT INTO card_set_white_card VALUES (1488, 1482);
 INSERT INTO card_set_white_card VALUES (1488, 1481);
 INSERT INTO card_set_white_card VALUES (1488, 1480);
+INSERT INTO card_set_white_card VALUES (100001, 1368);
+INSERT INTO card_set_white_card VALUES (100001, 1367);
+INSERT INTO card_set_white_card VALUES (100001, 1364);
+INSERT INTO card_set_white_card VALUES (100001, 1362);
+INSERT INTO card_set_white_card VALUES (100001, 1360);
+INSERT INTO card_set_white_card VALUES (100001, 1358);
+INSERT INTO card_set_white_card VALUES (100001, 1357);
+INSERT INTO card_set_white_card VALUES (100001, 1351);
+INSERT INTO card_set_white_card VALUES (100001, 1348);
+INSERT INTO card_set_white_card VALUES (100001, 1349);
+INSERT INTO card_set_white_card VALUES (100001, 1346);
+INSERT INTO card_set_white_card VALUES (100001, 1344);
+INSERT INTO card_set_white_card VALUES (100001, 1405);
+INSERT INTO card_set_white_card VALUES (100001, 1404);
+INSERT INTO card_set_white_card VALUES (100001, 1407);
+INSERT INTO card_set_white_card VALUES (100001, 1406);
+INSERT INTO card_set_white_card VALUES (100001, 1401);
+INSERT INTO card_set_white_card VALUES (100001, 1400);
+INSERT INTO card_set_white_card VALUES (100001, 1403);
+INSERT INTO card_set_white_card VALUES (100001, 1402);
+INSERT INTO card_set_white_card VALUES (100001, 1397);
+INSERT INTO card_set_white_card VALUES (100001, 1396);
+INSERT INTO card_set_white_card VALUES (100001, 1399);
+INSERT INTO card_set_white_card VALUES (100001, 1398);
+INSERT INTO card_set_white_card VALUES (100001, 1393);
+INSERT INTO card_set_white_card VALUES (100001, 1392);
+INSERT INTO card_set_white_card VALUES (100001, 1395);
+INSERT INTO card_set_white_card VALUES (100001, 1394);
+INSERT INTO card_set_white_card VALUES (100001, 1388);
+INSERT INTO card_set_white_card VALUES (100001, 1389);
+INSERT INTO card_set_white_card VALUES (100001, 1390);
+INSERT INTO card_set_white_card VALUES (100001, 1391);
+INSERT INTO card_set_white_card VALUES (100001, 1384);
+INSERT INTO card_set_white_card VALUES (100001, 1385);
+INSERT INTO card_set_white_card VALUES (100001, 1386);
+INSERT INTO card_set_white_card VALUES (100001, 1387);
+INSERT INTO card_set_white_card VALUES (100001, 1380);
+INSERT INTO card_set_white_card VALUES (100001, 1381);
+INSERT INTO card_set_white_card VALUES (100001, 1382);
+INSERT INTO card_set_white_card VALUES (100001, 1383);
+INSERT INTO card_set_white_card VALUES (100001, 1379);
+INSERT INTO card_set_white_card VALUES (100001, 1307);
+INSERT INTO card_set_white_card VALUES (100001, 1304);
+INSERT INTO card_set_white_card VALUES (100001, 1310);
+INSERT INTO card_set_white_card VALUES (100001, 1308);
+INSERT INTO card_set_white_card VALUES (100001, 1299);
+INSERT INTO card_set_white_card VALUES (100001, 1298);
+INSERT INTO card_set_white_card VALUES (100001, 1296);
+INSERT INTO card_set_white_card VALUES (100001, 1302);
+INSERT INTO card_set_white_card VALUES (100001, 1300);
+INSERT INTO card_set_white_card VALUES (100001, 1290);
+INSERT INTO card_set_white_card VALUES (100001, 1288);
+INSERT INTO card_set_white_card VALUES (100001, 1294);
+INSERT INTO card_set_white_card VALUES (100001, 1293);
+INSERT INTO card_set_white_card VALUES (100001, 1282);
+INSERT INTO card_set_white_card VALUES (100001, 1280);
+INSERT INTO card_set_white_card VALUES (100001, 1286);
+INSERT INTO card_set_white_card VALUES (100001, 1284);
+INSERT INTO card_set_white_card VALUES (100001, 1337);
+INSERT INTO card_set_white_card VALUES (100001, 1336);
+INSERT INTO card_set_white_card VALUES (100001, 1339);
+INSERT INTO card_set_white_card VALUES (100001, 1338);
+INSERT INTO card_set_white_card VALUES (100001, 1341);
+INSERT INTO card_set_white_card VALUES (100001, 1340);
+INSERT INTO card_set_white_card VALUES (100001, 1343);
+INSERT INTO card_set_white_card VALUES (100001, 1342);
+INSERT INTO card_set_white_card VALUES (100001, 1328);
+INSERT INTO card_set_white_card VALUES (100001, 1331);
+INSERT INTO card_set_white_card VALUES (100001, 1333);
+INSERT INTO card_set_white_card VALUES (100001, 1332);
+INSERT INTO card_set_white_card VALUES (100001, 1335);
+INSERT INTO card_set_white_card VALUES (100001, 1334);
+INSERT INTO card_set_white_card VALUES (100001, 1320);
+INSERT INTO card_set_white_card VALUES (100001, 1322);
+INSERT INTO card_set_white_card VALUES (100001, 1324);
+INSERT INTO card_set_white_card VALUES (100001, 1326);
+INSERT INTO card_set_white_card VALUES (100001, 1312);
+INSERT INTO card_set_white_card VALUES (100001, 1314);
+INSERT INTO card_set_white_card VALUES (100001, 1316);
+INSERT INTO card_set_white_card VALUES (100001, 1318);
+INSERT INTO card_set_white_card VALUES (100001, 1263);
+INSERT INTO card_set_white_card VALUES (100001, 1261);
+INSERT INTO card_set_white_card VALUES (100001, 1259);
+INSERT INTO card_set_white_card VALUES (100001, 1258);
+INSERT INTO card_set_white_card VALUES (100001, 1271);
+INSERT INTO card_set_white_card VALUES (100001, 1269);
+INSERT INTO card_set_white_card VALUES (100001, 1266);
+INSERT INTO card_set_white_card VALUES (100001, 1278);
+INSERT INTO card_set_white_card VALUES (100001, 1276);
+INSERT INTO card_set_white_card VALUES (100001, 1274);
+INSERT INTO card_set_white_card VALUES (100001, 1272);
+INSERT INTO card_set_white_card VALUES (100001, 1426);
+INSERT INTO card_set_white_card VALUES (100001, 1427);
+INSERT INTO card_set_white_card VALUES (100001, 1424);
+INSERT INTO card_set_white_card VALUES (100001, 1425);
+INSERT INTO card_set_white_card VALUES (100001, 1430);
+INSERT INTO card_set_white_card VALUES (100001, 1431);
+INSERT INTO card_set_white_card VALUES (100001, 1428);
+INSERT INTO card_set_white_card VALUES (100001, 1429);
+INSERT INTO card_set_white_card VALUES (100001, 1434);
+INSERT INTO card_set_white_card VALUES (100001, 1435);
+INSERT INTO card_set_white_card VALUES (100001, 1432);
+INSERT INTO card_set_white_card VALUES (100001, 1433);
+INSERT INTO card_set_white_card VALUES (100001, 1438);
+INSERT INTO card_set_white_card VALUES (100001, 1439);
+INSERT INTO card_set_white_card VALUES (100001, 1436);
+INSERT INTO card_set_white_card VALUES (100001, 1437);
+INSERT INTO card_set_white_card VALUES (100001, 1411);
+INSERT INTO card_set_white_card VALUES (100001, 1410);
+INSERT INTO card_set_white_card VALUES (100001, 1409);
+INSERT INTO card_set_white_card VALUES (100001, 1408);
+INSERT INTO card_set_white_card VALUES (100001, 1415);
+INSERT INTO card_set_white_card VALUES (100001, 1414);
+INSERT INTO card_set_white_card VALUES (100001, 1413);
+INSERT INTO card_set_white_card VALUES (100001, 1412);
+INSERT INTO card_set_white_card VALUES (100001, 1419);
+INSERT INTO card_set_white_card VALUES (100001, 1418);
+INSERT INTO card_set_white_card VALUES (100001, 1417);
+INSERT INTO card_set_white_card VALUES (100001, 1416);
+INSERT INTO card_set_white_card VALUES (100001, 1423);
+INSERT INTO card_set_white_card VALUES (100001, 1422);
+INSERT INTO card_set_white_card VALUES (100001, 1421);
+INSERT INTO card_set_white_card VALUES (100001, 1420);
+INSERT INTO card_set_white_card VALUES (100001, 1441);
+INSERT INTO card_set_white_card VALUES (100001, 1440);
+INSERT INTO card_set_white_card VALUES (100001, 1443);
+INSERT INTO card_set_white_card VALUES (100001, 1442);
+INSERT INTO card_set_white_card VALUES (100001, 1445);
+INSERT INTO card_set_white_card VALUES (100001, 1444);
+INSERT INTO card_set_white_card VALUES (100001, 1447);
+INSERT INTO card_set_white_card VALUES (100001, 1446);
+INSERT INTO card_set_white_card VALUES (100001, 1449);
+INSERT INTO card_set_white_card VALUES (100001, 1448);
+INSERT INTO card_set_white_card VALUES (100001, 1451);
+INSERT INTO card_set_white_card VALUES (100001, 1450);
+INSERT INTO card_set_white_card VALUES (100001, 1453);
+INSERT INTO card_set_white_card VALUES (100001, 1452);
+INSERT INTO card_set_white_card VALUES (100001, 1455);
+INSERT INTO card_set_white_card VALUES (100001, 1454);
+INSERT INTO card_set_white_card VALUES (100002, 550);
+INSERT INTO card_set_white_card VALUES (100002, 551);
+INSERT INTO card_set_white_card VALUES (100002, 548);
+INSERT INTO card_set_white_card VALUES (100002, 549);
+INSERT INTO card_set_white_card VALUES (100002, 546);
+INSERT INTO card_set_white_card VALUES (100002, 547);
+INSERT INTO card_set_white_card VALUES (100002, 544);
+INSERT INTO card_set_white_card VALUES (100002, 545);
+INSERT INTO card_set_white_card VALUES (100002, 558);
+INSERT INTO card_set_white_card VALUES (100002, 559);
+INSERT INTO card_set_white_card VALUES (100002, 556);
+INSERT INTO card_set_white_card VALUES (100002, 557);
+INSERT INTO card_set_white_card VALUES (100002, 554);
+INSERT INTO card_set_white_card VALUES (100002, 555);
+INSERT INTO card_set_white_card VALUES (100002, 552);
+INSERT INTO card_set_white_card VALUES (100002, 553);
+INSERT INTO card_set_white_card VALUES (100002, 567);
+INSERT INTO card_set_white_card VALUES (100002, 566);
+INSERT INTO card_set_white_card VALUES (100002, 565);
+INSERT INTO card_set_white_card VALUES (100002, 564);
+INSERT INTO card_set_white_card VALUES (100002, 563);
+INSERT INTO card_set_white_card VALUES (100002, 562);
+INSERT INTO card_set_white_card VALUES (100002, 561);
+INSERT INTO card_set_white_card VALUES (100002, 560);
+INSERT INTO card_set_white_card VALUES (100002, 575);
+INSERT INTO card_set_white_card VALUES (100002, 574);
+INSERT INTO card_set_white_card VALUES (100002, 573);
+INSERT INTO card_set_white_card VALUES (100002, 572);
+INSERT INTO card_set_white_card VALUES (100002, 571);
+INSERT INTO card_set_white_card VALUES (100002, 570);
+INSERT INTO card_set_white_card VALUES (100002, 569);
+INSERT INTO card_set_white_card VALUES (100002, 568);
+INSERT INTO card_set_white_card VALUES (100002, 516);
+INSERT INTO card_set_white_card VALUES (100002, 517);
+INSERT INTO card_set_white_card VALUES (100002, 518);
+INSERT INTO card_set_white_card VALUES (100002, 519);
+INSERT INTO card_set_white_card VALUES (100002, 512);
+INSERT INTO card_set_white_card VALUES (100002, 513);
+INSERT INTO card_set_white_card VALUES (100002, 514);
+INSERT INTO card_set_white_card VALUES (100002, 515);
+INSERT INTO card_set_white_card VALUES (100002, 524);
+INSERT INTO card_set_white_card VALUES (100002, 525);
+INSERT INTO card_set_white_card VALUES (100002, 526);
+INSERT INTO card_set_white_card VALUES (100002, 527);
+INSERT INTO card_set_white_card VALUES (100002, 520);
+INSERT INTO card_set_white_card VALUES (100002, 521);
+INSERT INTO card_set_white_card VALUES (100002, 522);
+INSERT INTO card_set_white_card VALUES (100002, 523);
+INSERT INTO card_set_white_card VALUES (100002, 533);
+INSERT INTO card_set_white_card VALUES (100002, 532);
+INSERT INTO card_set_white_card VALUES (100002, 535);
+INSERT INTO card_set_white_card VALUES (100002, 534);
+INSERT INTO card_set_white_card VALUES (100002, 529);
+INSERT INTO card_set_white_card VALUES (100002, 528);
+INSERT INTO card_set_white_card VALUES (100002, 531);
+INSERT INTO card_set_white_card VALUES (100002, 530);
+INSERT INTO card_set_white_card VALUES (100002, 541);
+INSERT INTO card_set_white_card VALUES (100002, 540);
+INSERT INTO card_set_white_card VALUES (100002, 543);
+INSERT INTO card_set_white_card VALUES (100002, 542);
+INSERT INTO card_set_white_card VALUES (100002, 537);
+INSERT INTO card_set_white_card VALUES (100002, 536);
+INSERT INTO card_set_white_card VALUES (100002, 539);
+INSERT INTO card_set_white_card VALUES (100002, 538);
+INSERT INTO card_set_white_card VALUES (100002, 610);
+INSERT INTO card_set_white_card VALUES (100002, 611);
+INSERT INTO card_set_white_card VALUES (100002, 608);
+INSERT INTO card_set_white_card VALUES (100002, 609);
+INSERT INTO card_set_white_card VALUES (100002, 614);
+INSERT INTO card_set_white_card VALUES (100002, 615);
+INSERT INTO card_set_white_card VALUES (100002, 612);
+INSERT INTO card_set_white_card VALUES (100002, 613);
+INSERT INTO card_set_white_card VALUES (100002, 618);
+INSERT INTO card_set_white_card VALUES (100002, 619);
+INSERT INTO card_set_white_card VALUES (100002, 616);
+INSERT INTO card_set_white_card VALUES (100002, 617);
+INSERT INTO card_set_white_card VALUES (100002, 620);
+INSERT INTO card_set_white_card VALUES (100002, 621);
+INSERT INTO card_set_white_card VALUES (100002, 576);
+INSERT INTO card_set_white_card VALUES (100002, 577);
+INSERT INTO card_set_white_card VALUES (100002, 578);
+INSERT INTO card_set_white_card VALUES (100002, 579);
+INSERT INTO card_set_white_card VALUES (100002, 580);
+INSERT INTO card_set_white_card VALUES (100002, 581);
+INSERT INTO card_set_white_card VALUES (100002, 582);
+INSERT INTO card_set_white_card VALUES (100002, 583);
+INSERT INTO card_set_white_card VALUES (100002, 584);
+INSERT INTO card_set_white_card VALUES (100002, 585);
+INSERT INTO card_set_white_card VALUES (100002, 586);
+INSERT INTO card_set_white_card VALUES (100002, 587);
+INSERT INTO card_set_white_card VALUES (100002, 588);
+INSERT INTO card_set_white_card VALUES (100002, 589);
+INSERT INTO card_set_white_card VALUES (100002, 590);
+INSERT INTO card_set_white_card VALUES (100002, 591);
+INSERT INTO card_set_white_card VALUES (100002, 593);
+INSERT INTO card_set_white_card VALUES (100002, 592);
+INSERT INTO card_set_white_card VALUES (100002, 595);
+INSERT INTO card_set_white_card VALUES (100002, 594);
+INSERT INTO card_set_white_card VALUES (100002, 597);
+INSERT INTO card_set_white_card VALUES (100002, 596);
+INSERT INTO card_set_white_card VALUES (100002, 599);
+INSERT INTO card_set_white_card VALUES (100002, 598);
+INSERT INTO card_set_white_card VALUES (100002, 601);
+INSERT INTO card_set_white_card VALUES (100002, 600);
+INSERT INTO card_set_white_card VALUES (100002, 603);
+INSERT INTO card_set_white_card VALUES (100002, 602);
+INSERT INTO card_set_white_card VALUES (100002, 605);
+INSERT INTO card_set_white_card VALUES (100002, 604);
+INSERT INTO card_set_white_card VALUES (100002, 607);
+INSERT INTO card_set_white_card VALUES (100002, 606);
+INSERT INTO card_set_white_card VALUES (100002, 509);
+INSERT INTO card_set_white_card VALUES (100002, 510);
+INSERT INTO card_set_white_card VALUES (100002, 511);
 
 
 --
--- TOC entry 1938 (class 0 OID 16601)
--- Dependencies: 170
+-- TOC entry 1934 (class 0 OID 16404)
+-- Dependencies: 166
 -- Data for Name: white_cards; Type: TABLE DATA; Schema: public; Owner: cah
 --
 
@@ -2903,10 +3161,123 @@ INSERT INTO white_cards VALUES (1485, 'A visually arresting turtleneck.', NULL, 
 INSERT INTO white_cards VALUES (1486, 'A toxic family environment.', NULL, false, false, '❄');
 INSERT INTO white_cards VALUES (1487, 'Eating an entire snowman.', NULL, false, false, '❄');
 INSERT INTO white_cards VALUES (1480, 'A Hungry-Man™ Frozen Christmas Dinner for One.', NULL, false, false, '❄');
+INSERT INTO white_cards VALUES (509, 'Show me your tits!', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (510, 'Thanking your sex slaves.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (511, 'Dickcheese.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (512, 'Googly eyes on a cock.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (513, 'Typing with your genitals.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (514, 'Pirate hookers.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (515, 'Poopcake.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (516, 'Mandatory Sex Party.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (517, 'A WHOLE GALLON.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (518, 'Games you can play with bricks.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (519, 'Lewhora.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (520, 'Fancy tampons.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (521, 'Very Serious Island.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (522, 'COLLIN.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (523, 'Ferngully.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (524, 'Velociraptor.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (525, 'Thundercunting.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (526, 'Werewolf.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (527, 'Cultist.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (528, 'Vejazzled vagina.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (529, 'HODOR.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (530, 'Simple dog.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (531, 'Butt oranges.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (532, 'Sweater kittens.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (533, 'Baby batter.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (534, 'Meat curtains.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (535, 'Strawberry Shortcake sexing up a Carebear and giving birth to NyanCat.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (536, 'Blowjob Jesus.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (537, 'GOATS.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (538, 'Welcome Taco.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (539, 'Boobs.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (540, 'Moobs.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (541, 'Tinychat.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (542, 'Centaur Therapist Jesus.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (543, 'LOUD NOISES.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (544, 'THE GODDAMN BATMAN.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (545, 'Swinging an axe in the air while cornholing a bear.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (546, 'WIIINES.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (547, 'A Wende head tilt.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (548, 'Chris Gaines.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (549, 'Fuck you, I''m a bear.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (550, 'Doctor Who.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (551, 'EXTERMINATE.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (552, 'Landshark.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (553, 'Bearshark.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (554, 'SCIENCE!!1!', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (555, 'The Great Dildo, Thor.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (556, 'Just the tip!', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (557, 'Daddy foam.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (558, 'PooooooP!', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (559, 'Thundercunt', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (560, 'Buttpirate Pokemon.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (561, 'A really good booby weight.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (562, 'Tubemonster.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (563, 'Bevis.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (564, 'Trouser snakes.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (565, 'A WHOLE GALLON OF BOOBS.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (566, 'Barfstab.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (567, 'LYNCH LUPUS.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (568, 'Drinking on live TV.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (569, 'Shooting heroin into my eyeballs.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (570, 'Skittering ovaries.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (571, 'Ricardo.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (572, 'The Power of Greyskull.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (573, 'The revolution.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (574, 'The establishment.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (575, 'Queer Lesbian Jesus.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (576, 'Hello Kitty.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (577, 'Readying my torch for burnination.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (578, 'Tots.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (579, 'Getting drunk before noon.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (580, 'In a sneaky hate spiral.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (581, 'Clown strippers.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (582, 'KERMIT FLAIL.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (583, 'Certified Breast Maintenance Engineer.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (584, 'A test tube baby.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (585, 'Dancing naked.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (586, 'Moist and Juicy.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (587, 'Orgy.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (588, 'Premature ejaculation.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (589, 'Bounty, the Quicker Picker Upper.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (590, 'Lotion.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (591, 'Rapey dolphin.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (592, 'Werepoo.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (593, 'Handbra.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (594, 'A moose giving birth in Maggly''s yard.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (595, 'More bandaids.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (596, 'Fuckweasel.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (597, 'Curious hands.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (598, 'Spagbag.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (599, 'Tears of manly pain.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (600, 'Cthulu.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (601, 'Surprise penis.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (602, 'SEX.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (603, 'Mr. Tinycheeks.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (604, 'A spoon that is too big.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (605, 'Bleeding Anuses.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (606, 'Not being pregnant.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (607, 'An Olive Ewe.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (608, 'Hookers and blow.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (609, 'Dropbears.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (610, 'Standing next to short people to use them as armrests.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (611, 'Making a random guess in Werewolf that gets you killed later.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (612, 'INTERNET FOREVER!', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (613, 'The jitters you get before a meetup.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (614, 'Shenaniganty.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (615, 'I AM HOW BABIES ARE MADE.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (616, 'Noble whore.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (617, 'Kangaroo stripper.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (618, 'Droopums.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (619, 'Nonni''s mantis.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (620, 'Ginger baby.', NULL, false, false, 'VS');
+INSERT INTO white_cards VALUES (621, 'Drunk foruming.', NULL, false, false, 'VS');
 
 
 --
--- TOC entry 1917 (class 2606 OID 16611)
+-- TOC entry 1913 (class 2606 OID 16414)
 -- Dependencies: 161 161
 -- Name: black_cards_pkey; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
 --
@@ -2916,7 +3287,7 @@ ALTER TABLE ONLY black_cards
 
 
 --
--- TOC entry 1919 (class 2606 OID 16613)
+-- TOC entry 1915 (class 2606 OID 16416)
 -- Dependencies: 161 161
 -- Name: black_cards_text_key; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
 --
@@ -2926,7 +3297,7 @@ ALTER TABLE ONLY black_cards
 
 
 --
--- TOC entry 1923 (class 2606 OID 16615)
+-- TOC entry 1919 (class 2606 OID 16418)
 -- Dependencies: 164 164 164
 -- Name: card_set_black_card_pkey; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
 --
@@ -2936,7 +3307,7 @@ ALTER TABLE ONLY card_set_black_card
 
 
 --
--- TOC entry 1921 (class 2606 OID 16617)
+-- TOC entry 1917 (class 2606 OID 16420)
 -- Dependencies: 163 163
 -- Name: card_set_pkey; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
 --
@@ -2946,7 +3317,7 @@ ALTER TABLE ONLY card_set
 
 
 --
--- TOC entry 1925 (class 2606 OID 16619)
+-- TOC entry 1921 (class 2606 OID 16422)
 -- Dependencies: 165 165 165
 -- Name: card_set_white_card_pkey; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
 --
@@ -2956,8 +3327,8 @@ ALTER TABLE ONLY card_set_white_card
 
 
 --
--- TOC entry 1927 (class 2606 OID 16623)
--- Dependencies: 170 170
+-- TOC entry 1923 (class 2606 OID 16424)
+-- Dependencies: 166 166
 -- Name: white_cards_pkey; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
 --
 
@@ -2966,8 +3337,8 @@ ALTER TABLE ONLY white_cards
 
 
 --
--- TOC entry 1929 (class 2606 OID 16625)
--- Dependencies: 170 170
+-- TOC entry 1925 (class 2606 OID 16426)
+-- Dependencies: 166 166
 -- Name: white_cards_text_key; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
 --
 
@@ -2976,8 +3347,8 @@ ALTER TABLE ONLY white_cards
 
 
 --
--- TOC entry 1930 (class 2606 OID 16636)
--- Dependencies: 161 1916 164
+-- TOC entry 1926 (class 2606 OID 16427)
+-- Dependencies: 1912 161 164
 -- Name: fk513da45c997611f9; Type: FK CONSTRAINT; Schema: public; Owner: cah
 --
 
@@ -2986,8 +3357,8 @@ ALTER TABLE ONLY card_set_black_card
 
 
 --
--- TOC entry 1931 (class 2606 OID 16641)
--- Dependencies: 164 163 1920
+-- TOC entry 1927 (class 2606 OID 16432)
+-- Dependencies: 164 163 1916
 -- Name: fk513da45cb2505f39; Type: FK CONSTRAINT; Schema: public; Owner: cah
 --
 
@@ -2996,8 +3367,8 @@ ALTER TABLE ONLY card_set_black_card
 
 
 --
--- TOC entry 1932 (class 2606 OID 16656)
--- Dependencies: 163 1920 165
+-- TOC entry 1928 (class 2606 OID 16437)
+-- Dependencies: 165 1916 163
 -- Name: fkc2487272b2505f39; Type: FK CONSTRAINT; Schema: public; Owner: cah
 --
 
@@ -3006,8 +3377,8 @@ ALTER TABLE ONLY card_set_white_card
 
 
 --
--- TOC entry 1933 (class 2606 OID 16661)
--- Dependencies: 165 170 1926
+-- TOC entry 1929 (class 2606 OID 16442)
+-- Dependencies: 166 1922 165
 -- Name: fkc2487272bfd29b4d; Type: FK CONSTRAINT; Schema: public; Owner: cah
 --
 
@@ -3015,7 +3386,19 @@ ALTER TABLE ONLY card_set_white_card
     ADD CONSTRAINT fkc2487272bfd29b4d FOREIGN KEY (white_card_id) REFERENCES white_cards(id);
 
 
--- Completed on 2012-12-07 18:41:51
+--
+-- TOC entry 1939 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2013-01-08 23:56:04
 
 --
 -- PostgreSQL database dump complete
