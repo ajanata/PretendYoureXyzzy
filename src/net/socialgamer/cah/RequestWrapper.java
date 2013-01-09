@@ -58,7 +58,7 @@ public class RequestWrapper {
   }
 
   /**
-   * If there is an {@code X-Forwarded-For} header, the <strong>last</strong> entry in that list
+   * If there is an {@code X-Forwarded-For} header, the <strong>first</strong> entry in that list
    * is returned instead.
    * @see HttpServletRequest#getRemoteAddr()
    */
