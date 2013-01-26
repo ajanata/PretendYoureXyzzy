@@ -317,7 +317,7 @@ public class Game {
    * @param masterData
    *          Message data to broadcast.
    */
-  private void broadcastToPlayers(final MessageType type,
+  public void broadcastToPlayers(final MessageType type,
       final HashMap<ReturnableData, Object> masterData) {
     connectedUsers.broadcastToList(playersToUsers(), type, masterData);
   }
