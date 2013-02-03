@@ -42,8 +42,8 @@ import java.util.Set;
  */
 public class Constants {
 
-  public static final int CHAT_FLOOD_MESSAGE_COUNT = 5;
-  public static final int CHAT_FLOOD_TIME = 15 * 1000;
+  public static final int CHAT_FLOOD_MESSAGE_COUNT = 3;
+  public static final int CHAT_FLOOD_TIME = 10 * 1000;
   public static final int CHAT_MAX_LENGTH = 200;
 
   @SuppressWarnings("serial")
