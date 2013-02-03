@@ -205,71 +205,65 @@ public class Game {
    */
   public boolean removePlayer(final User user) {
     boolean wasJudge = false;
-    synchronized (players) {
-      final Iterator<Player> iterator = players.iterator();
-      while (iterator.hasNext()) {
-        HashMap<ReturnableData, Object> data;
-        final Player player = iterator.next();
-        if (player.getUser() == user) {
-          // If they played this round, remove card from played card list.
-          final List<WhiteCard> cards = playedCards.remove(player);
-          if (cards != null && cards.size() > 0) {
-            for (final WhiteCard card : cards) {
-              whiteDeck.discard(card);
-            }
-          }
-          // If they are to play this round, remove them from that list.
-          if (roundPlayers.remove(player)) {
-            if (startJudging()) {
-              judgingState();
-            }
-          }
-          // If they have a hand, return it to discard pile.
-          if (player.getHand().size() > 0) {
-            final List<WhiteCard> hand = player.getHand();
-            for (final WhiteCard card : hand) {
-              whiteDeck.discard(card);
-            }
-          }
-          // If they are judge, return all played cards to hand, and move to next judge.
-          if (getJudge() == player && (state == GameState.PLAYING || state == GameState.JUDGING)) {
-            data = getEventMap();
-            data.put(LongPollResponse.EVENT, LongPollEvent.GAME_JUDGE_LEFT.toString());
-            data.put(LongPollResponse.INTERMISSION, ROUND_INTERMISSION);
-            broadcastToPlayers(MessageType.GAME_EVENT, data);
-            returnCardsToHand();
-            // startNextRound will advance it again.
-            judgeIndex--;
-            // Can't start the next round right here.
-            wasJudge = true;
-          }
-          // If they aren't judge but are earlier in judging order, fix the judge index.
-          else if (players.indexOf(player) < judgeIndex) {
-            judgeIndex--;
-          }
+    final Player player = getPlayerForUser(user);
 
-          // we can't actually remove them until down here because we need to deal with the judge
-          // index stuff first.
-          iterator.remove();
-          user.leaveGame(this);
+    if (null != player) {
+      HashMap<ReturnableData, Object> data;
+      // If they played this round, remove card from played card list.
+      final List<WhiteCard> cards = playedCards.remove(player);
+      if (cards != null && cards.size() > 0) {
+        for (final WhiteCard card : cards) {
+          whiteDeck.discard(card);
+        }
+      }
+      // If they are to play this round, remove them from that list.
+      if (roundPlayers.remove(player)) {
+        if (startJudging()) {
+          judgingState();
+        }
+      }
+      // If they have a hand, return it to discard pile.
+      if (player.getHand().size() > 0) {
+        final List<WhiteCard> hand = player.getHand();
+        for (final WhiteCard card : hand) {
+          whiteDeck.discard(card);
+        }
+      }
+      // If they are judge, return all played cards to hand, and move to next judge.
+      if (getJudge() == player && (state == GameState.PLAYING || state == GameState.JUDGING)) {
+        data = getEventMap();
+        data.put(LongPollResponse.EVENT, LongPollEvent.GAME_JUDGE_LEFT.toString());
+        data.put(LongPollResponse.INTERMISSION, ROUND_INTERMISSION);
+        broadcastToPlayers(MessageType.GAME_EVENT, data);
+        returnCardsToHand();
+        // startNextRound will advance it again.
+        judgeIndex--;
+        // Can't start the next round right here.
+        wasJudge = true;
+      }
+      // If they aren't judge but are earlier in judging order, fix the judge index.
+      else if (players.indexOf(player) < judgeIndex) {
+        judgeIndex--;
+      }
 
-          // do this down here so the person that left doesn't get the notice too
-          data = getEventMap();
-          data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_LEAVE.toString());
-          data.put(LongPollResponse.NICKNAME, user.getNickname());
-          broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+      // we can't actually remove them until down here because we need to deal with the judge
+      // index stuff first.
+      players.remove(player);
+      user.leaveGame(this);
 
-          gameManager.broadcastGameListRefresh();
+      // do this down here so the person that left doesn't get the notice too
+      data = getEventMap();
+      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_LEAVE.toString());
+      data.put(LongPollResponse.NICKNAME, user.getNickname());
+      broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
 
-          if (host == player) {
-            if (players.size() > 0) {
-              host = players.get(0);
-            } else {
-              host = null;
-            }
-          }
+      gameManager.broadcastGameListRefresh();
 
-          break;
+      if (host == player) {
+        if (players.size() > 0) {
+          host = players.get(0);
+        } else {
+          host = null;
         }
       }
       // this seems terrible
@@ -293,6 +287,7 @@ public class Game {
       }
       return players.size() == 0;
     }
+    return false;
   }
 
   /**
