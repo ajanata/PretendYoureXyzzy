@@ -268,7 +268,9 @@ public class Game {
       }
       // this seems terrible
       if (players.size() == 0) {
-        hibernateSession.close();
+        if (null != hibernateSession) {
+          hibernateSession.close();
+        }
         gameManager.destroyGame(id);
       }
       if (players.size() < 3 && state != GameState.LOBBY) {
