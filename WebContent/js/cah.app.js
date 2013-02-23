@@ -103,13 +103,13 @@ function chat_keyup(e) {
 }
 
 /**
- * Generate a click handler for the chat submit button.  This parses the line
- * for any /-commands, then sends the request to the server.
- *
+ * Generate a click handler for the chat submit button. This parses the line for any /-commands,
+ * then sends the request to the server.
+ * 
  * @param {number}
- *          Game ID to use in AJAX requests, or null for global chat
+ *          game_id Game ID to use in AJAX requests, or null for global chat
  * @param {jQuery.HTMLDivElement}
- *          Parent element, which contains one text-input-box element of class
+ *          parent_element Parent element, which contains one text-input-box element of class
  *          "chat", which will be used to source the data.
  */
 function chatsubmit_click(game_id, parent_element) {
@@ -236,17 +236,32 @@ function app_resize() {
 
   var chatWidth = $("#canvas").width() - 257;
   $("#tabs").width(chatWidth + 'px');
-  log.width((chatWidth + 2) + 'px');
-  chat.width((chatWidth - 42) + 'px');
   var bottomHeight = $(window).height() - $("#main").height() - $("#menubar").height() - 29;
   $("#bottom").height(bottomHeight);
   $("#info_area").height(bottomHeight);
   $("#tabs").height(bottomHeight);
-  log.height(bottomHeight - chat.height() - 40);
+
+  // global chat
+  do_app_resize(chat, log);
+  // per-game chats
+  for ( var id in cah.currentGames) {
+    chat = $(".chat", $("#tab-chat-game_" + id));
+    log = $(".log", $("#tab-chat-game_" + id));
+    do_app_resize(chat, log);
+  }
+
   // this is ugly and terrible.
   if ($(window).height() < 650) {
     $("body").css("overflow-y", "auto");
   } else {
     $("body").css("overflow-y", "hidden");
   }
+}
+
+function do_app_resize(chatElement, logElement) {
+  var chatWidth = $("#canvas").width() - 257;
+  logElement.width((chatWidth + 2) + 'px');
+  chatElement.width((chatWidth - 42) + 'px');
+  var bottomHeight = $(window).height() - $("#main").height() - $("#menubar").height() - 29;
+  logElement.height(bottomHeight - chatElement.height() - 40);
 }
