@@ -669,11 +669,11 @@ cah.Game.prototype.insertIntoDocument = function() {
   $("#leave_game").show();
 
   var linkToChatArea = $("<a>");
-  var gameChatTab = $("<li>");
+  this.gameChatTab_ = $("<li>");
   linkToChatArea.attr("href", "#" + this.chatElement_.id);
   linkToChatArea.text("Chat with game members");
-  gameChatTab.append(linkToChatArea);
-  $("#tabs ul").append(gameChatTab);
+  this.gameChatTab_.append(linkToChatArea);
+  $("#tabs ul").append(this.gameChatTab_);
   $("#tabs").append(this.chatElement_);
   $("#tabs").tabs("refresh");
 
@@ -979,6 +979,9 @@ cah.Game.prototype.leaveGameClick_ = function() {
   // game after leaving one
   if (confirm("Are you sure you wish to leave the game?")) {
     cah.Ajax.build(cah.$.AjaxOperation.LEAVE_GAME).withGameId(this.id_).run();
+    $(this.chatElement_).detach();
+    $(this.gameChatTab_).detach();
+    $("#tabs").tabs("refresh");
   }
 };
 
