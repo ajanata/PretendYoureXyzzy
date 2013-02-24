@@ -134,7 +134,7 @@ function chatsubmit_click(game_id, parent_element) {
       case '':
         // TODO when I get multiple channels working, this needs to know active and pass it
         ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text);
-        cah.log.status("<" + cah.nickname + "> " + text);
+        cah.log.status_with_game(game_id, "<" + cah.nickname + "> " + text);
         break;
       case 'kick':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.KICK).withNickname(text.split(' ')[0]);

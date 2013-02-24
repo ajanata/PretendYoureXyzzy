@@ -39,9 +39,9 @@ cah.log.init = function() {
 };
 
 /**
- * Log a message for the user the see, always, as a status message. This is also used for chat. The
- * current time is displayed with the log message, using the user's locale settings to determine
- * format.
+ * Log a message to the global chat window for the user the see, always, as a status message. This
+ * is also used for chat. The current time is displayed with the log message, using the user's
+ * locale settings to determine format.
  * 
  * @param {string}
  *          text Text to display for this message. Text is added as a TextNode, so HTML is properly
@@ -50,19 +50,45 @@ cah.log.init = function() {
  *          opt_class Optional CSS class to use for this message.
  */
 cah.log.status = function(text, opt_class) {
+  cah.log.status_with_game(null, text, opt_class);
+};
+
+/**
+ * Log a message to a single game's chat window, or the global chat window if game_id is null.  This
+ * is also used to support chat.
+ *
+ * This displays the current time with the log message, using the user's locale settings to
+ * determine format.
+ *
+ * @param {integer} game_id ID of the game for which this message should be displayed, or null for
+ *          the global chat window.
+ * @param {string}
+ *          text Text to display for this message. Text is added as a TextNode, so HTML is properly
+ *          escaped automatically.
+ * @param {string}
+ *          opt_class Optional CSS class to use for this message.
+ */
+cah.log.status_with_game = function(game_id, text, opt_class) {
+  var logElement;
+  if (game_id !== null) {
+    logElement = $(".log", cah.currentGames[game_id].chatElement_);
+  } else {
+    logElement = cah.log.log;
+  }
+
   // TODO this doesn't work right on some mobile browsers
-  var scroll = (cah.log.log.prop("scrollHeight") - cah.log.log.height() -
-      cah.log.log.prop("scrollTop")) <= 5;
+  var scroll = (logElement.prop("scrollHeight") - logElement.height() -
+      logElement.prop("scrollTop")) <= 5;
 
   var node = $("<span></span><br/>");
   $(node[0]).text("[" + new Date().toLocaleTimeString() + "] " + text + "\n");
   if (opt_class) {
     $(node).addClass(opt_class);
   }
-  cah.log.log.append(node);
+  logElement.append(node);
 
   if (scroll) {
-    cah.log.log.prop("scrollTop", cah.log.log.prop("scrollHeight"));
+    logElement.prop("scrollTop", logElement.prop("scrollHeight"));
   }
 };
 
@@ -75,6 +101,13 @@ cah.log.status = function(text, opt_class) {
  */
 cah.log.error = function(text) {
   cah.log.status("Error: " + text, "error");
+
+  // Log errors in all windows.
+  for (game_id in cah.currentGames) {
+    if (cah.currentGames.hasOwnProperty(game_id)) {
+      cah.log.status_with_game(game_id, "Error: " + text, "error");
+    }
+  }
 };
 
 /**
