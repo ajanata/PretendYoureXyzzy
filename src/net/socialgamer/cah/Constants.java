@@ -164,6 +164,7 @@ public class Constants {
     CHAT("c"),
     CREATE_GAME("cg"),
     FIRST_LOAD("fl"),
+    GAME_CHAT("GC"),
     GAME_LIST("ggl"),
     /**
      * Get all cards for a particular game: black, hand, and round white cards.

@@ -43,7 +43,7 @@ $(document).ready(function() {
   $("#nickbox").keyup(nickbox_keyup);
   $("#nickbox").focus();
 
-  $(".chat", $("#tab-global")).keyup(chat_keyup);
+  $(".chat", $("#tab-global")).keyup(chat_keyup($(".chat_submit", $("#tab-global"))));
   $(".chat_submit", $("#tab-global")).click(chatsubmit_click(null, $("#tab-global")));
 
   // TODO: have some sort of mechanism to alert the server that we have unloaded the page, but
@@ -92,14 +92,16 @@ function nicknameconfirm_click() {
 /**
  * Handle a key up event in the chat box. If the key was enter, send the message to the server.
  * 
- * @param {jQuery.Event}
- *          e
+ * @param {jQuery.HTMLButtonElement}
+ *          submitButton Submit button for the chat box.
  */
-function chat_keyup(e) {
-  if (e.which == 13) {
-    $(".chat_submit", $('#tab-global')).click();
-    e.preventDefault();
-  }
+function chat_keyup(submitButton) {
+  return function(e) {
+    if (e.which == 13) {
+      $(submitButton).click();
+      e.preventDefault();
+    }
+  };
 }
 
 /**
@@ -132,8 +134,12 @@ function chatsubmit_click(game_id, parent_element) {
     switch (cmd) {
       // TODO support an /ignore command
       case '':
-        // TODO when I get multiple channels working, this needs to know active and pass it
-        ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT).withMessage(text);
+        if (game_id != undefined) {
+          ajax = cah.Ajax.build(cah.$.AjaxOperation.GAME_CHAT).withGameId(game_id);
+        } else {
+          ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT);
+        }
+        ajax = ajax.withMessage(text);
         cah.log.status_with_game(game_id, "<" + cah.nickname + "> " + text);
         break;
       case 'kick':

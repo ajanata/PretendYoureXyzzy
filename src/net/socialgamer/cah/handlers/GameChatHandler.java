@@ -35,9 +35,9 @@ import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
-import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.RequestWrapper;
-import net.socialgamer.cah.data.ConnectedUsers;
+import net.socialgamer.cah.data.Game;
+import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.data.User;
 
@@ -49,24 +49,19 @@ import com.google.inject.Inject;
  * 
  * @author Andy Janata (ajanata@socialgamer.net)
  */
-public class ChatHandler extends Handler {
+public class GameChatHandler extends GameWithPlayerHandler {
 
-  public static final String OP = AjaxOperation.CHAT.toString();
-
-  private final ConnectedUsers users;
+  public static final String OP = AjaxOperation.GAME_CHAT.toString();
 
   @Inject
-  public ChatHandler(final ConnectedUsers users) {
-    this.users = users;
+  public GameChatHandler(final GameManager gameManager) {
+    super(gameManager);
   }
 
   @Override
-  public Map<ReturnableData, Object> handle(final RequestWrapper request,
-      final HttpSession session) {
+  public Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,
+      final HttpSession session, final User user, final Game game) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-
-    final User user = (User) session.getAttribute(SessionAttribute.USER);
-    assert (user != null);
 
     if (request.getParameter(AjaxRequest.MESSAGE) == null) {
       return error(ErrorCode.NO_MSG_SPECIFIED);
@@ -94,8 +89,8 @@ public class ChatHandler extends Handler {
         broadcastData.put(LongPollResponse.FROM, user.getNickname());
         broadcastData.put(LongPollResponse.MESSAGE, message);
         broadcastData.put(LongPollResponse.FROM_ADMIN, user.isAdmin());
-        //        broadcastData.put(LongPollResponse.GAME_ID, -1);
-        users.broadcastToAll(MessageType.CHAT, broadcastData);
+        broadcastData.put(LongPollResponse.GAME_ID, game.getId());
+        game.broadcastToPlayers(MessageType.CHAT, broadcastData);
       }
     }
 

@@ -58,16 +58,18 @@ cah.Game = function(id) {
   this.scoreboardElement_.id = "scoreboard_" + id;
   $(this.scoreboardElement_).removeClass("hide");
 
-  var chatElement = $("#tab-global").clone()[0];
   /**
    * The element for the chat room for this game
-   *
+   * 
    * @type {HTMLDivElement}
    * @private
    */
-  this.chatElement_ = chatElement;
-  chatElement.id = "tab-chat-game_" + this.id_;
-  $(".chat_submit", chatElement).click(chatsubmit_click(this.id_, chatElement));
+  this.chatElement_ = $("#tab-global").clone()[0];
+  this.chatElement_.id = "tab-chat-game_" + this.id_;
+  $(".chat_submit", this.chatElement_).click(chatsubmit_click(this.id_, this.chatElement_));
+  $(".chat", this.chatElement_).keyup(chat_keyup($(".chat_submit", this.chatElement_)));
+  // TODO make it not even copy this in the first place
+  $(".log", this.chatElement_).empty();
 
   /**
    * The element for the game options for this game.
@@ -672,11 +674,13 @@ cah.Game.prototype.insertIntoDocument = function() {
   this.gameChatTab_ = $("<li>");
   linkToChatArea.attr("href", "#" + this.chatElement_.id);
   linkToChatArea.text("Chat with game members");
+  linkToChatArea.addClass("tab-button");
   this.gameChatTab_.append(linkToChatArea);
   $("#tabs ul").append(this.gameChatTab_);
   $("#tabs").append(this.chatElement_);
   $("#tabs").tabs("refresh");
 
+  linkToChatArea.click();
   this.windowResize_();
   // TODO display a loading animation
 };

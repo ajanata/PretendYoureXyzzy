@@ -16,6 +16,7 @@ cah.$.AjaxOperation.CHANGE_GAME_OPTIONS = "cgo";
 cah.$.AjaxOperation.GET_GAME_INFO = "ggi";
 cah.$.AjaxOperation.PLAY_CARD = "pc";
 cah.$.AjaxOperation.CREATE_GAME = "cg";
+cah.$.AjaxOperation.GAME_CHAT = "GC";
 cah.$.AjaxOperation.KICK = "K";
 cah.$.AjaxOperation.ADMIN_SET_VERBOSE_LOG = "svl";
 cah.$.AjaxOperation.GET_CARDS = "gc";

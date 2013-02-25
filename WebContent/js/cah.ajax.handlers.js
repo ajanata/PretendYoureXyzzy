@@ -90,6 +90,10 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CHAT] = function(data) {
   // pass
 };
 
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GAME_CHAT] = function(data) {
+  // pass
+};
+
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LOG_OUT] = function(data) {
   window.location.reload();
 };
