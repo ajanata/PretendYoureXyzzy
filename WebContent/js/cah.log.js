@@ -54,31 +54,38 @@ cah.log.status = function(text, opt_class) {
 };
 
 /**
- * Log a message to a single game's chat window, or the global chat window if game_id is null.  This
+ * Log a message to a single game's chat window, or the global chat window if game_id is null. This
  * is also used to support chat.
- *
+ * 
  * This displays the current time with the log message, using the user's locale settings to
  * determine format.
- *
- * @param {integer} game_id ID of the game for which this message should be displayed, or null for
- *          the global chat window.
+ * 
+ * @param {Number|cah.Game}
+ *          game_or_id ID of the game for which this message should be displayed, or the game object
+ *          itself, or null for the global chat window.
  * @param {string}
  *          text Text to display for this message. Text is added as a TextNode, so HTML is properly
  *          escaped automatically.
  * @param {string}
  *          opt_class Optional CSS class to use for this message.
  */
-cah.log.status_with_game = function(game_id, text, opt_class) {
+cah.log.status_with_game = function(game_or_id, text, opt_class) {
   var logElement;
-  if (game_id !== null) {
-    logElement = $(".log", cah.currentGames[game_id].chatElement_);
-  } else {
+  if (game_or_id === null) {
     logElement = cah.log.log;
+  } else {
+    var game;
+    if (game_or_id instanceof cah.Game) {
+      game = game_or_id;
+    } else {
+      game = cah.currentGames[game_or_id];
+    }
+    logElement = $(".log", game.getChatElement());
   }
 
   // TODO this doesn't work right on some mobile browsers
-  var scroll = (logElement.prop("scrollHeight") - logElement.height() -
-      logElement.prop("scrollTop")) <= 5;
+  var scroll = (logElement.prop("scrollHeight") - logElement.height() - logElement
+      .prop("scrollTop")) <= 5;
 
   var node = $("<span></span><br/>");
   $(node[0]).text("[" + new Date().toLocaleTimeString() + "] " + text + "\n");

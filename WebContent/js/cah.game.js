@@ -357,7 +357,7 @@ cah.Game.prototype.setBlackCard = function(card) {
   this.blackCard_.setPick(card[cah.$.BlackCardData.PICK]);
 
   if (1 != card[cah.$.BlackCardData.PICK] && this.judge_ != cah.nickname) {
-    cah.log.status("Play " + card[cah.$.BlackCardData.PICK]
+    cah.log.status_with_game(this, "Play " + card[cah.$.BlackCardData.PICK]
         + " cards, in the order you wish them to be judged.");
   }
 
@@ -816,7 +816,7 @@ cah.Game.prototype.roundComplete = function(data) {
   var scoreCard = this.scoreCards_[roundWinner];
   $(scoreCard.getElement()).addClass("selected");
   $(".confirm_card", this.element_).attr("disabled", "disabled");
-  cah.log.status("The next round will begin in "
+  cah.log.status_with_game(this, "The next round will begin in "
       + (data[cah.$.LongPollResponse.INTERMISSION] / 1000) + " seconds.");
 
   // update the previous round display
@@ -831,7 +831,8 @@ cah.Game.prototype.roundComplete = function(data) {
  * Notify the user that they are running out of time to play.
  */
 cah.Game.prototype.hurryUp = function() {
-  cah.log.status("Hurry up! You have less than 10 seconds to decide, or you will be skipped.");
+  cah.log.status_with_game(this,
+      "Hurry up! You have less than 10 seconds to decide, or you will be skipped.");
 };
 
 /**
@@ -841,7 +842,7 @@ cah.Game.prototype.hurryUp = function() {
  *          data Event data from server.
  */
 cah.Game.prototype.playerKickedIdle = function(data) {
-  cah.log.status(data[cah.$.LongPollResponse.NICKNAME]
+  cah.log.status_with_game(this, data[cah.$.LongPollResponse.NICKNAME]
       + " was kicked for being idle for too many rounds.");
 };
 
@@ -852,7 +853,7 @@ cah.Game.prototype.playerKickedIdle = function(data) {
  *          data Event data from server.
  */
 cah.Game.prototype.playerSkipped = function(data) {
-  cah.log.status(data[cah.$.LongPollResponse.NICKNAME]
+  cah.log.status_with_game(this, data[cah.$.LongPollResponse.NICKNAME]
       + " was skipped this round for being idle for too long.");
 };
 
@@ -863,7 +864,7 @@ cah.Game.prototype.playerSkipped = function(data) {
  *          deck Deck name which has been reshuffled.
  */
 cah.Game.prototype.reshuffle = function(deck) {
-  cah.log.status("The " + deck + " deck has been reshuffled.");
+  cah.log.status_with_game(this, "The " + deck + " deck has been reshuffled.");
 };
 
 /**
@@ -873,19 +874,19 @@ cah.Game.prototype.reshuffle = function(deck) {
  *          data Event data from the server.
  */
 cah.Game.prototype.judgeLeft = function(data) {
-  cah.log.status("The Card Czar has left the game. Cards played this round are being returned to "
-      + "hands.");
-  cah.log.status("The next round will begin in "
+  cah.log.status_with_game(this,
+      "The Card Czar has left the game. Cards played this round are being returned to hands.");
+  cah.log.status_with_game(this, "The next round will begin in "
       + (data[cah.$.LongPollResponse.INTERMISSION] / 1000) + " seconds.");
-  cah.log.status("(Displayed state will look weird until the next round.)");
+  cah.log.status_with_game(this, "(Displayed state will look weird until the next round.)");
 };
 
 /**
  * The judge was skipped for taking too long.
  */
 cah.Game.prototype.judgeSkipped = function() {
-  cah.log.status("The Card Czar has taken too long to decide and has been skipped. "
-      + "Cards played this round are being returned to hands.");
+  cah.log.status_with_game(this, "The Card Czar has taken too long to decide and has been skipped."
+      + " Cards played this round are being returned to hands.");
 };
 
 /**
@@ -1039,10 +1040,10 @@ cah.Game.prototype.dispose = function() {
  */
 cah.Game.prototype.playerJoin = function(player) {
   if (player != cah.nickname) {
-    cah.log.status(player + " has joined the game.");
+    cah.log.status_with_game(this, player + " has joined the game.");
     this.refreshGameStatus();
   } else {
-    cah.log.status("You have joined the game.");
+    cah.log.status_with_game(this, "You have joined the game.");
   }
 };
 
@@ -1054,10 +1055,10 @@ cah.Game.prototype.playerJoin = function(player) {
  */
 cah.Game.prototype.playerLeave = function(player) {
   if (player != cah.nickname) {
-    cah.log.status(player + " has left the game.");
+    cah.log.status_with_game(this, player + " has left the game.");
     this.refreshGameStatus();
   } else {
-    cah.log.status("You have left the game.");
+    cah.log.status_with_game(this, "You have left the game.");
   }
   var scorecard = this.scoreCards_[player];
   if (scorecard) {
@@ -1186,6 +1187,14 @@ cah.Game.prototype.optionChanged_ = function(e) {
  */
 cah.Game.prototype.optionsChanged = function(data) {
   this.updateGameStatus(data);
+};
+
+/**
+ * @returns This game's chat element.
+ * @type {HTMLDivElement}
+ */
+cah.Game.prototype.getChatElement = function() {
+  return this.chatElement_;
 };
 
 // ///////////////////////////////////////////////
