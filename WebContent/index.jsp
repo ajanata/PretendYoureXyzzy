@@ -54,7 +54,11 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
-  <li>Most recent update: 9 January 2013:<ul>
+  <li>25 February 2013:<ul>
+    <li>Per-game chats. Finally. Global chat is still there. I hope to make it highlight the tab
+    when there is activity at some point.</li>
+  </ul></li>
+  <li>9 January 2013:<ul>
     <li>New stylesheet from timsookram.</li>
     <li>New card sets. The Holiday Pack was added about a month ago, the MLP pack got lost in the
     server migration and has been restored, and another custom card set has been added from the fine
