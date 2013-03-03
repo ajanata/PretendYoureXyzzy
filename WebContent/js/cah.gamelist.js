@@ -80,8 +80,10 @@ cah.GameList.prototype.hide = function() {
  * Query the server to update the game list.
  */
 cah.GameList.prototype.update = function() {
-  // TODO display a loading indicator of some sort
-  cah.Ajax.build(cah.$.AjaxOperation.GAME_LIST).run();
+  if ($(this.element_).is(":visible")) {
+    // TODO display a loading indicator of some sort
+    cah.Ajax.build(cah.$.AjaxOperation.GAME_LIST).run();
+  }
 };
 
 /**
