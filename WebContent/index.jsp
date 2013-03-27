@@ -54,6 +54,13 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>27 March 2013:<ul>
+    <li>The Third Expansion and the PAX East packs, as well as a few more custom cards.</li>
+    <li>Card sets have a description when you hover over them in the options panel.</li>
+    <li>Administrators can send messages that show up in every game chat, so I can do announcements
+    that everybody will see.</li>
+    <li>Increased the game limit to 125.</li>
+  </ul></li>
   <li>25 February 2013:<ul>
     <li>Per-game chats. Finally. Global chat is still there. I hope to make it highlight the tab
     when there is activity at some point.</li>

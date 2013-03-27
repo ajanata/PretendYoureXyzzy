@@ -95,10 +95,13 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues.</a>
   </p>
-  <p>Most recent update: 25 February 2013:</p>
+  <p>Most recent update: 27 March 2013:</p>
   <ul>
-    <li>Per-game chats. Finally. Global chat is still there. I hope to make it highlight the tab
-    when there is activity at some point.</li>
+    <li>The Third Expansion and the PAX East packs, as well as a few more custom cards.</li>
+    <li>Card sets have a description when you hover over them in the options panel.</li>
+    <li>Administrators can send messages that show up in every game chat, so I can do announcements
+    that everybody will see.</li>
+    <li>Increased the game limit to 125.</li>
   </ul>
   <div id="nickbox">
     Nickname: <input type="text" id="nickname" value="" maxlength="30" />
