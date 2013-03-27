@@ -96,10 +96,11 @@ cah.Game = function(id) {
     var title = cardSet.getDescription() + ' ' + cardSet.getBlackCardCount() + ' black card'
         + (cardSet.getBlackCardCount() == 1 ? '' : 's') + ', ' + cardSet.getWhiteCardCount()
         + ' white card' + (cardSet.getWhiteCardCount() == 1 ? '' : 's') + '.';
-    var html = '<input type="checkbox" id="' + cardSetElementId + '" class="card_set" title="'
-        + title + '" value="' + cardSet.getId() + '" name="card_set" /><label for="'
-        + cardSetElementId + '" title="' + title + '" class="card_set_label">' + cardSet.getName()
-        + '</label>';
+    // that space at the beginning matters
+    var html = ' <span class="nowrap"><input type="checkbox" id="' + cardSetElementId
+        + '" class="card_set" title="' + title + '" value="' + cardSet.getId()
+        + '" name="card_set" /><label for="' + cardSetElementId + '" title="' + title
+        + '" class="card_set_label">' + cardSet.getName() + '</label></span>';
     if (cardSet.isBaseDeck()) {
       $(".base_card_sets", this.optionsElement_).append(html);
     } else {

@@ -571,6 +571,10 @@ span.debug, span.admin {
   margin-right: 15px;
 }
 
-.scorecard_score, .scorecard_player{
+.scorecard_score, .scorecard_player {
   font-weight:700;
+}
+
+.nowrap {
+  white-space: nowrap;
 }
