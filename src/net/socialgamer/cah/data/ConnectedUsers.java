@@ -39,6 +39,8 @@ import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Singleton;
 
 
@@ -50,6 +52,8 @@ import com.google.inject.Singleton;
  */
 @Singleton
 public class ConnectedUsers {
+
+  private static final Logger logger = Logger.getLogger(ConnectedUsers.class);
 
   /**
    * Duration of a ping timeout, in nanoseconds.
@@ -82,6 +86,8 @@ public class ConnectedUsers {
       if (this.hasUser(user.getNickname())) {
         return false;
       } else {
+        logger.info(String.format("New user %s from %s (admin=%b)", user.toString(),
+            user.getHostName(), user.isAdmin()));
         users.put(user.getNickname().toLowerCase(), user);
         final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
         data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
@@ -104,6 +110,7 @@ public class ConnectedUsers {
   public void removeUser(final User user, final DisconnectReason reason) {
     synchronized (users) {
       if (users.containsValue(user)) {
+        logger.info(String.format("Removing user %s because %s", user.toString(), reason));
         user.noLongerVaild();
         users.remove(user.getNickname().toLowerCase());
         notifyRemoveUser(user, reason);
@@ -161,8 +168,7 @@ public class ConnectedUsers {
         u.noLongerVaild();
         notifyRemoveUser(u, DisconnectReason.PING_TIMEOUT);
       } catch (final Exception e) {
-        // TODO log
-        // otherwise ignore
+        logger.error("Unable to remove pinged-out user", e);
       }
     }
   }

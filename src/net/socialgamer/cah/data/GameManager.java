@@ -39,6 +39,8 @@ import net.socialgamer.cah.data.Game.TooManyPlayersException;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.BindingAnnotation;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -55,6 +57,7 @@ import com.google.inject.Singleton;
 @Singleton
 @GameId
 public class GameManager implements Provider<Integer> {
+  private static final Logger logger = Logger.getLogger(GameManager.class);
 
   private final int maxGames;
   private final Map<Integer, Game> games = new TreeMap<Integer, Game>();
@@ -125,6 +128,8 @@ public class GameManager implements Provider<Integer> {
       }
       try {
         game.addPlayer(user);
+        logger.info(String.format("Created new game %d by user %s.",
+            game.getId(), user.toString()));
       } catch (final IllegalStateException ise) {
         destroyGame(game.getId());
         throw ise;
@@ -163,6 +168,7 @@ public class GameManager implements Provider<Integer> {
         game.removePlayer(user);
       }
 
+      logger.info(String.format("Destroyed game %d.", game.getId()));
       broadcastGameListRefresh();
     }
   }

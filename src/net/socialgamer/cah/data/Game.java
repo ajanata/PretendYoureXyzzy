@@ -54,6 +54,7 @@ import net.socialgamer.cah.db.BlackCard;
 import net.socialgamer.cah.db.CardSet;
 import net.socialgamer.cah.db.WhiteCard;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import com.google.inject.Inject;
@@ -79,6 +80,8 @@ import com.google.inject.Inject;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class Game {
+  private static final Logger logger = Logger.getLogger(Game.class);
+
   private final int id;
   /**
    * All players present in the game.
@@ -172,6 +175,7 @@ public class Game {
    *           Thrown if {@code user} is already in a game.
    */
   public void addPlayer(final User user) throws TooManyPlayersException, IllegalStateException {
+    logger.info(String.format("%s joined game %d.", user.toString(), id));
     synchronized (players) {
       if (maxPlayers >= 3 && players.size() >= maxPlayers) {
         throw new TooManyPlayersException();
@@ -204,6 +208,7 @@ public class Game {
    * @return True if {@code user} was the last player in the game.
    */
   public boolean removePlayer(final User user) {
+    logger.info(String.format("Removing %s from game %d.", user.toString(), id));
     boolean wasJudge = false;
     final Player player = getPlayerForUser(user);
 
@@ -274,6 +279,8 @@ public class Game {
         gameManager.destroyGame(id);
       }
       if (players.size() < 3 && state != GameState.LOBBY) {
+        logger.info(String.format("Resetting game %d due to too few players after someone left.",
+            id));
         resetState(true);
       } else if (wasJudge) {
         synchronized (nextRoundTimerLock) {
@@ -549,6 +556,7 @@ public class Game {
       }
     }
     if (started) {
+      logger.info(String.format("Starting game %d.", id));
       // do this stuff outside the players lock; they will lock players again later for much less
       // time, and not at the same time as trying to lock users, which has caused deadlocks
       synchronized (cardSets) {
@@ -721,6 +729,7 @@ public class Game {
       if (state != GameState.JUDGING) {
         return;
       }
+      logger.info(String.format("Skipping idle judge in game %d", id));
       // Not sure why this would happen but it has happened before.
       // I guess they disconnected at the exact wrong time?
       final Player judge = getJudge();
@@ -744,6 +753,8 @@ public class Game {
       for (final Player player : roundPlayers) {
         final List<WhiteCard> cards = playedCards.getCards(player);
         if (cards == null || cards.size() < blackCard.getPick()) {
+          logger.info(String.format("Skipping idle player %s in game %d.",
+              player.getUser().toString(), id));
           player.skipped();
           final HashMap<ReturnableData, Object> data = getEventMap();
 
@@ -779,6 +790,9 @@ public class Game {
     synchronized (playedCards) {
       // not sure how much of this check is actually required
       if (players.size() < 3 || playedCards.size() < 2 || state != GameState.PLAYING) {
+        logger.info(String.format(
+            "Resetting game %d due to insufficient players after removing %d idle players.",
+            id, playersToRemove.size()));
         resetState(true);
       } else {
         judgingState();
@@ -856,6 +870,7 @@ public class Game {
    *          previous game finished.
    */
   private void resetState(final boolean lostPlayer) {
+    logger.info(String.format("Resetting game %d to lobby (lostPlayer=%b)", id, lostPlayer));
     killRoundTimer();
     synchronized (players) {
       for (final Player player : players) {
