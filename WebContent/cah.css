@@ -549,6 +549,8 @@ span.debug, span.admin {
   text-align: center;
 }
 
+/* TODO .whitecard .card_number ??? */
+
 .previous_round {
   z-index: 50;
   border: 3px solid black;

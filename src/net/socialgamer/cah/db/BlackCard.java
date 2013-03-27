@@ -63,6 +63,9 @@ public class BlackCard {
     this.id = id;
   }
 
+  /**
+   * @return Card text. HTML is allowed and entities are required.
+   */
   public String getText() {
     return text;
   }

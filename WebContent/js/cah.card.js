@@ -137,14 +137,15 @@ cah.card.BaseCard.prototype.getFaceUp_ = function() {
 };
 
 /**
- * Set the visible text on a card. It matters not if the card is face-up or face-down.
+ * Set the visible text on a card. It matters not if the card is face-up or face-down. HTML is
+ * allowed and entities are required.
  * 
  * @param {string}
- *          text Text to display on the card.
+ *          text HTML to display on the card.
  */
 cah.card.BaseCard.prototype.setText = function(text) {
   this.ensureFaceUpElement_();
-  jQuery(".card_text", this.faceUpElem_).text(text);
+  jQuery(".card_text", this.faceUpElem_).html(text);
 };
 
 /**

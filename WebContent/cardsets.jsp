@@ -235,8 +235,8 @@ select {
   <tbody>
     <% for (CardSet cardSet : cardSets) { %>
       <tr>
-        <td><%= StringEscapeUtils.escapeXml(cardSet.getName()) %></td>
-        <td><a href="?delete=<%= cardSet.getId() %>">Delete</a></td>
+        <td><%= cardSet.getName() %></td>
+        <td><a href="?delete=<%= cardSet.getId() %>" onclick="return confirm('Are you sure?')">Delete</a></td>
         <td><a href="?edit=<%= cardSet.getId() %>">Edit</a></td>
       </tr>
     <% } %>
@@ -255,12 +255,12 @@ select {
     <% } %>
   </h2>
   <label for="cardSetName">Name:</label>
-  <input type="text" name="cardSetName" id="cardSetName"
-      value="<%= editCardSet != null ? editCardSet.getName() : "" %>" />
+  <input type="text" name="cardSetName" id="cardSetName" size="50"
+      value="<%= editCardSet != null ? StringEscapeUtils.escapeXml(editCardSet.getName()) : "" %>" />
   <br/>
   <label for="cardSetDescription">Description:</label>
-  <input type="text" name="cardSetDescription" id="cardSetDescription"
-      value="<%= editCardSet != null ? editCardSet.getDescription() : "" %>" />
+  <input type="text" name="cardSetDescription" id="cardSetDescription" size="50"
+      value="<%= editCardSet != null ? StringEscapeUtils.escapeXml(editCardSet.getDescription()) : "" %>" />
   <br/>
   <label for="active">Active</label>
   <input type="checkbox" name="active" id="active"
@@ -274,7 +274,9 @@ select {
   <br/>
   <select id="allBlackCards" multiple="multiple" style="height:300px">
     <% for (BlackCard blackCard : blackCards) { %>
-      <option value="<%= blackCard.getId() %>"><%= blackCard.toString() %></option>
+      <option value="<%= blackCard.getId() %>">
+        <%= StringEscapeUtils.escapeXml(blackCard.toString()) %>
+      </option>
     <% } %>
   </select>
   <br/>
@@ -287,7 +289,7 @@ select {
     <% if (editCardSet != null) { %>
       <% for (BlackCard blackCard : editCardSet.getBlackCards()) { %>
         <option value="<%= blackCard.getId() %>" id="bc_<%= blackCard.getId() %>">
-          <%= blackCard.toString() %>
+          <%= StringEscapeUtils.escapeXml(blackCard.toString()) %>
         </option>
       <% } %>
     <% } %>
@@ -297,7 +299,9 @@ select {
   <br/>
   <select id="allWhiteCards" multiple="multiple" style="height:300px">
     <% for (WhiteCard whiteCard : whiteCards) { %>
-      <option value="<%= whiteCard.getId() %>"><%= whiteCard.toString() %></option>
+      <option value="<%= whiteCard.getId() %>">
+        <%= StringEscapeUtils.escapeXml(whiteCard.toString()) %>
+      </option>
     <% } %>
   </select>
   <br/>
@@ -310,7 +314,7 @@ select {
     <% if (editCardSet != null) { %>
       <% for (WhiteCard whiteCard : editCardSet.getWhiteCards()) { %>
         <option value="<%= whiteCard.getId() %>" id="wc_<%= whiteCard.getId() %>">
-          <%= whiteCard.toString() %>
+          <%= StringEscapeUtils.escapeXml(whiteCard.toString()) %>
         </option>
       <% } %>
     <% } %>
