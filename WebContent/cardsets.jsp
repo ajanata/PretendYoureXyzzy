@@ -91,6 +91,7 @@ try {
       }
       if (null != editCardSet) {
         String nameParam = request.getParameter("cardSetName");
+        String descriptionParam = request.getParameter("cardSetDescription");
         String activeParam = request.getParameter("active");
         String baseDeckParam = request.getParameter("baseDeck");
         String[] selectedBlackCardsParam = request.getParameterValues("selectedBlackCards");
@@ -103,6 +104,7 @@ try {
           }
         } else {
           editCardSet.setName(nameParam);
+          editCardSet.setDescription(descriptionParam);
           editCardSet.setActive("on".equals(activeParam));
           editCardSet.setBaseDeck("on".equals(baseDeckParam));
           List<Integer> blackCardIds = new ArrayList<Integer>(selectedBlackCardsParam.length);
@@ -255,6 +257,10 @@ select {
   <label for="cardSetName">Name:</label>
   <input type="text" name="cardSetName" id="cardSetName"
       value="<%= editCardSet != null ? editCardSet.getName() : "" %>" />
+  <br/>
+  <label for="cardSetDescription">Description:</label>
+  <input type="text" name="cardSetDescription" id="cardSetDescription"
+      value="<%= editCardSet != null ? editCardSet.getDescription() : "" %>" />
   <br/>
   <label for="active">Active</label>
   <input type="checkbox" name="active" id="active"

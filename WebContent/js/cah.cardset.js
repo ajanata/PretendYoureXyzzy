@@ -41,6 +41,8 @@ cah.CardSet.list = {};
  *          id CardSet's database/wire ID.
  * @param {String}
  *          name CardSet's name.
+ * @param {String}
+ *          description CardSet's description.
  * @param {Boolean}
  *          baseDeck Whether this CardSet can be used as a base deck. At least one base deck must be
  *          used per game.
@@ -51,7 +53,7 @@ cah.CardSet.list = {};
  * @constructor
  * @private
  */
-cah.CardSet = function(id, name, baseDeck, blackCardCount, whiteCardCount) {
+cah.CardSet = function(id, name, description, baseDeck, blackCardCount, whiteCardCount) {
   /**
    * CardSet's database/wire ID.
    * 
@@ -67,6 +69,14 @@ cah.CardSet = function(id, name, baseDeck, blackCardCount, whiteCardCount) {
    * @private
    */
   this.name_ = name;
+
+  /**
+   * CardSet's description.
+   * 
+   * @type {String}
+   * @private
+   */
+  this.description_ = description;
 
   /**
    * Whether this CardSet can be used as a base deck. At least one base deck must be used per game.
@@ -108,6 +118,13 @@ cah.CardSet.prototype.getName = function() {
 };
 
 /**
+ * @returns {String} This CardSet's description.
+ */
+cah.CardSet.prototype.getDescription = function() {
+  return this.description_;
+};
+
+/**
  * @returns {Boolean} Whether this CardSet can be used as the base deck in a game.
  */
 cah.CardSet.prototype.isBaseDeck = function() {
@@ -139,7 +156,9 @@ cah.CardSet.populateCardSets = function(cardSets) {
   for ( var key in cardSets) {
     var cardSetData = cardSets[key];
     var cardSet = new cah.CardSet(cardSetData[cah.$.CardSetData.ID],
-        cardSetData[cah.$.CardSetData.CARD_SET_NAME], cardSetData[cah.$.CardSetData.BASE_DECK],
+        cardSetData[cah.$.CardSetData.CARD_SET_NAME],
+        cardSetData[cah.$.CardSetData.CARD_SET_DESCRIPTION],
+        cardSetData[cah.$.CardSetData.BASE_DECK],
         cardSetData[cah.$.CardSetData.BLACK_CARDS_IN_DECK],
         cardSetData[cah.$.CardSetData.WHITE_CARDS_IN_DECK]);
     cah.CardSet.list[cardSet.getId()] = cardSet;

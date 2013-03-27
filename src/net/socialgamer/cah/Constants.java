@@ -523,6 +523,7 @@ public class Constants {
   public enum CardSetData {
     BASE_DECK("bd"),
     BLACK_CARDS_IN_DECK("bcid"),
+    CARD_SET_DESCRIPTION("csd"),
     CARD_SET_NAME("csn"),
     @DuplicationAllowed
     ID(WhiteCardData.ID),

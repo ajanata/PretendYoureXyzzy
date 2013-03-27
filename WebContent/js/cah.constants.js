@@ -16,8 +16,8 @@ cah.$.AjaxOperation.CHANGE_GAME_OPTIONS = "cgo";
 cah.$.AjaxOperation.GET_GAME_INFO = "ggi";
 cah.$.AjaxOperation.PLAY_CARD = "pc";
 cah.$.AjaxOperation.CREATE_GAME = "cg";
-cah.$.AjaxOperation.GAME_CHAT = "GC";
 cah.$.AjaxOperation.KICK = "K";
+cah.$.AjaxOperation.GAME_CHAT = "GC";
 cah.$.AjaxOperation.ADMIN_SET_VERBOSE_LOG = "svl";
 cah.$.AjaxOperation.GET_CARDS = "gc";
 cah.$.AjaxOperation.JOIN_GAME = "jg";
@@ -77,6 +77,7 @@ cah.$.CardSetData = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.CardSetData.prototype.dummyForAutocomplete = undefined;
+cah.$.CardSetData.CARD_SET_DESCRIPTION = "csd";
 cah.$.CardSetData.CARD_SET_NAME = "csn";
 cah.$.CardSetData.ID = "cid";
 cah.$.CardSetData.WHITE_CARDS_IN_DECK = "wcid";

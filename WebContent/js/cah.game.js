@@ -93,9 +93,9 @@ cah.Game = function(id) {
     /** @type {cah.CardSet} */
     var cardSet = cah.CardSet.list[key];
     var cardSetElementId = 'card_set_' + this.id_ + '_' + cardSet.getId();
-    var title = cardSet.getBlackCardCount() + ' black card'
+    var title = cardSet.getDescription() + ' ' + cardSet.getBlackCardCount() + ' black card'
         + (cardSet.getBlackCardCount() == 1 ? '' : 's') + ', ' + cardSet.getWhiteCardCount()
-        + ' white card' + (cardSet.getWhiteCardCount() == 1 ? '' : 's');
+        + ' white card' + (cardSet.getWhiteCardCount() == 1 ? '' : 's') + '.';
     var html = '<input type="checkbox" id="' + cardSetElementId + '" class="card_set" title="'
         + title + '" value="' + cardSet.getId() + '" name="card_set" /><label for="'
         + cardSetElementId + '" title="' + title + '" class="card_set_label">' + cardSet.getName()

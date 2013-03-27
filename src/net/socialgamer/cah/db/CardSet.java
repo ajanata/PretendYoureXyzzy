@@ -25,9 +25,8 @@ public class CardSet {
   private int id;
 
   private String name;
-
+  private String description;
   private boolean active;
-
   private boolean base_deck;
 
   @ManyToMany
@@ -85,6 +84,14 @@ public class CardSet {
     this.base_deck = baseDeck;
   }
 
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(final String description) {
+    this.description = description;
+  }
+
   /**
    * @return Client representation of this card.
    */
@@ -92,6 +99,7 @@ public class CardSet {
     final Map<CardSetData, Object> cardSetData = new HashMap<CardSetData, Object>();
     cardSetData.put(CardSetData.ID, getId());
     cardSetData.put(CardSetData.CARD_SET_NAME, getName());
+    cardSetData.put(CardSetData.CARD_SET_DESCRIPTION, getDescription());
     cardSetData.put(CardSetData.BASE_DECK, isBaseDeck());
     cardSetData.put(CardSetData.BLACK_CARDS_IN_DECK, getBlackCards().size());
     cardSetData.put(CardSetData.WHITE_CARDS_IN_DECK, getWhiteCards().size());
