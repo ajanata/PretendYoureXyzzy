@@ -30,6 +30,7 @@ cah.$.AjaxRequest = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.AjaxRequest.prototype.dummyForAutocomplete = undefined;
+cah.$.AjaxRequest.WALL = "wall";
 cah.$.AjaxRequest.MESSAGE = "m";
 cah.$.AjaxRequest.CARD_ID = "cid";
 cah.$.AjaxRequest.GAME_ID = "gid";
@@ -163,7 +164,7 @@ cah.$.ErrorCode_msg['na'] = "You are not an administrator.";
 cah.$.ErrorCode_msg['niu'] = "Nickname is already in use.";
 cah.$.ErrorCode_msg['B&'] = "Banned.";
 cah.$.ErrorCode_msg['ad'] = "Access denied.";
-cah.$.ErrorCode_msg['nj'] = "You aren't the judge.";
+cah.$.ErrorCode_msg['nj'] = "You are not the judge.";
 
 cah.$.GameInfo = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -259,6 +260,7 @@ cah.$.LongPollResponse = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.LongPollResponse.prototype.dummyForAutocomplete = undefined;
+cah.$.LongPollResponse.WALL = "wall";
 cah.$.LongPollResponse.WHITE_CARDS = "wc";
 cah.$.LongPollResponse.REASON = "qr";
 cah.$.LongPollResponse.GAME_ID = "gid";

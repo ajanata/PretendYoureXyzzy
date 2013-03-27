@@ -88,7 +88,6 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.BANNED] = function() {
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.CHAT] = function(data) {
-  // TODO deal with multiple channels eventually
   var clazz = undefined;
   var from = data[cah.$.LongPollResponse.FROM];
   var show = !cah.ignoreList[from];
@@ -97,14 +96,20 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.CHAT] = function(data) {
     clazz = "admin";
     show = true;
   }
-  if (cah.$.LongPollResponse.GAME_ID in data) {
-    game = data[cah.$.LongPollResponse.GAME_ID];
-  }
+  if (data[cah.$.LongPollResponse.WALL]) {
+    // treat these specially
+    cah.log.everyWindow(
+        "Global message from " + from + ": " + data[cah.$.LongPollResponse.MESSAGE], clazz);
+  } else {
+    if (cah.$.LongPollResponse.GAME_ID in data) {
+      game = data[cah.$.LongPollResponse.GAME_ID];
+    }
 
-  // don't display our own chat
-  if (from != cah.nickname && show) {
-    cah.log.status_with_game(game, "<" + data[cah.$.LongPollResponse.FROM] + "> "
-        + data[cah.$.LongPollResponse.MESSAGE], clazz);
+    // don't display our own chat
+    if (from != cah.nickname && show) {
+      cah.log.status_with_game(game, "<" + data[cah.$.LongPollResponse.FROM] + "> "
+          + data[cah.$.LongPollResponse.MESSAGE], clazz);
+    }
   }
 };
 

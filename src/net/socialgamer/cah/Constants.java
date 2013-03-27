@@ -209,7 +209,8 @@ public class Constants {
     PASSWORD("pw"),
     PLAYER_LIMIT("pL"),
     SCORE_LIMIT("sl"),
-    SERIAL("s");
+    SERIAL("s"),
+    WALL("wall");
 
     private final String field;
 
@@ -309,7 +310,7 @@ public class Constants {
     NOT_ENOUGH_PLAYERS("nep", "There are not enough players to start the game."),
     NOT_GAME_HOST("ngh", "Only the game host can do that."),
     NOT_IN_THAT_GAME("nitg", "You are not in that game."),
-    NOT_JUDGE("nj", "You aren't the judge."),
+    NOT_JUDGE("nj", "You are not the judge."),
     NOT_REGISTERED("nr", "Not registered. Refresh the page."),
     NOT_YOUR_TURN("nyt", "It is not your turn to play a card."),
     OP_NOT_SPECIFIED("ons", "Operation not specified."),
@@ -443,6 +444,8 @@ public class Constants {
     REASON("qr"),
     ROUND_WINNER("rw"),
     TIMESTAMP("ts"),
+    @DuplicationAllowed
+    WALL(AjaxRequest.WALL),
     @DuplicationAllowed
     WHITE_CARDS(AjaxResponse.WHITE_CARDS),
     WINNING_CARD("WC");

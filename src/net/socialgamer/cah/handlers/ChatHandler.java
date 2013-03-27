@@ -67,9 +67,13 @@ public class ChatHandler extends Handler {
 
     final User user = (User) session.getAttribute(SessionAttribute.USER);
     assert (user != null);
+    final boolean wall = request.getParameter(AjaxRequest.WALL) != null
+        && Boolean.valueOf(request.getParameter(AjaxRequest.WALL));
 
     if (request.getParameter(AjaxRequest.MESSAGE) == null) {
       return error(ErrorCode.NO_MSG_SPECIFIED);
+    } else if (wall && !user.isAdmin()) {
+      return error(ErrorCode.NOT_ADMIN);
     } else {
       final String message = request.getParameter(AjaxRequest.MESSAGE).trim();
 
@@ -93,8 +97,12 @@ public class ChatHandler extends Handler {
         broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
         broadcastData.put(LongPollResponse.FROM, user.getNickname());
         broadcastData.put(LongPollResponse.MESSAGE, message);
-        broadcastData.put(LongPollResponse.FROM_ADMIN, user.isAdmin());
-        //        broadcastData.put(LongPollResponse.GAME_ID, -1);
+        if (user.isAdmin()) {
+          broadcastData.put(LongPollResponse.FROM_ADMIN, true);
+        }
+        if (wall) {
+          broadcastData.put(LongPollResponse.WALL, true);
+        }
         users.broadcastToAll(MessageType.CHAT, broadcastData);
       }
     }

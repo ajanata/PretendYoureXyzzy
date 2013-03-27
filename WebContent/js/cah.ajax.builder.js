@@ -178,6 +178,17 @@ cah.ajax.Builder.prototype.withPassword = function(password) {
 };
 
 /**
+ * @param {boolean}
+ *          wall Whether or not this is a warn-all ("wall").
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withWall = function(wall) {
+  this.assertNotExecuted_();
+  this.data[cah.$.AjaxRequest.WALL] = wall;
+  return this;
+};
+
+/**
  * Assert that the request from this builder has not already run. Throws an exception if it has.
  * 
  * @private

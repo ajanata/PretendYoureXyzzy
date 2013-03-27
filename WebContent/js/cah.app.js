@@ -134,13 +134,16 @@ function chatsubmit_click(game_id, parent_element) {
     switch (cmd) {
       // TODO support an /ignore command
       case '':
-        if (game_id != undefined) {
+        if (game_id !== null) {
           ajax = cah.Ajax.build(cah.$.AjaxOperation.GAME_CHAT).withGameId(game_id);
         } else {
           ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT);
         }
         ajax = ajax.withMessage(text);
         cah.log.status_with_game(game_id, "<" + cah.nickname + "> " + text);
+        break;
+      case 'wall':
+        ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT).withWall(true).withMessage(text);
         break;
       case 'kick':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.KICK).withNickname(text.split(' ')[0]);
@@ -153,12 +156,10 @@ function chatsubmit_click(game_id, parent_element) {
         ajax = cah.Ajax.build(cah.$.AjaxOperation.NAMES);
         break;
       default:
+        cah.log.error("Invalid command.");
     }
 
     if (ajax) {
-      if (game_id !== null) {
-        ajax.withGameId(game_id);
-      }
       ajax.run();
     }
 

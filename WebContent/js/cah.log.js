@@ -100,19 +100,31 @@ cah.log.status_with_game = function(game_or_id, text, opt_class) {
 };
 
 /**
- * Log a message for the user to see, always, as an error message.
+ * Log a message for the user to see, always, in every tab, as an error message.
  * 
  * @param {string}
  *          text Text to display for this message. Text is added as a TextNode, so HTML is properly
  *          escaped automatically.
  */
 cah.log.error = function(text) {
-  cah.log.status("Error: " + text, "error");
+  cah.log.everyWindow("Error: " + text, "error");
+};
 
-  // Log errors in all windows.
+/**
+ * Log a message for the user to see, always, in every tab.
+ * 
+ * @param {string}
+ *          text Text to display for this message. Text is added as a TextNode, so HTML is properly
+ *          escaped automatically.
+ * @param {string}
+ *          opt_class Optional CSS class to use for this message.
+ */
+cah.log.everyWindow = function(text, opt_class) {
+  cah.log.status(text, opt_class);
+
   for (game_id in cah.currentGames) {
     if (cah.currentGames.hasOwnProperty(game_id)) {
-      cah.log.status_with_game(game_id, "Error: " + text, "error");
+      cah.log.status_with_game(game_id, text, opt_class);
     }
   }
 };
