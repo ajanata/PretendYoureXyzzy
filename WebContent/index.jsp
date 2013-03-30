@@ -54,6 +54,12 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>30 March 2013:<ul>
+    <li>Increased the game limit to 200.</li>
+    <li>Tweaking other settings to attempt to increase stability with more than 550 users.</li>
+    <li>Fixed bug where inactive card sets were showing. That was just something stupid on my end.
+    </li>
+  </ul></li>
   <li>27 March 2013:<ul>
     <li>The Third Expansion and the PAX East packs, as well as a few more custom cards.</li>
     <li>Card sets have a description when you hover over them in the options panel.</li>

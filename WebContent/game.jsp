@@ -93,15 +93,18 @@ HttpSession hSession = request.getSession(true);
   </p>
   <p>
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
-    known issues.</a>
+    known issues</a>.
   </p>
-  <p>Most recent update: 27 March 2013:</p>
+  <p>Most recent update: 27 and 30 March 2013:</p>
   <ul>
     <li>The Third Expansion and the PAX East packs, as well as a few more custom cards.</li>
     <li>Card sets have a description when you hover over them in the options panel.</li>
     <li>Administrators can send messages that show up in every game chat, so I can do announcements
     that everybody will see.</li>
-    <li>Increased the game limit to 125.</li>
+    <li>Increased the game limit to 200.</li>
+    <li>Tweaking other settings to attempt to increase stability with more than 550 users.</li>
+    <li>Fixed bug where inactive card sets were showing. That was just something stupid on my end.
+    </li>
   </ul>
   <div id="nickbox">
     Nickname: <input type="text" id="nickname" value="" maxlength="30" />
