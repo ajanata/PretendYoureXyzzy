@@ -314,6 +314,7 @@ public class Constants {
     NOT_REGISTERED("nr", "Not registered. Refresh the page."),
     NOT_YOUR_TURN("nyt", "It is not your turn to play a card."),
     OP_NOT_SPECIFIED("ons", "Operation not specified."),
+    RESERVED_NICK("rn", "That nick is reserved."),
     SERVER_ERROR("serr", "An error occured on the server."),
     SESSION_EXPIRED("se", "Your session has expired. Refresh the page."),
     TOO_FAST("tf", "You are chatting too fast. Wait a few seconds and try again."),

@@ -86,6 +86,8 @@ public class RegisterHandler extends Handler {
       final String nick = request.getParameter(AjaxRequest.NICKNAME).trim();
       if (!validName.matcher(nick).matches()) {
         return error(ErrorCode.INVALID_NICK);
+      } else if ("xyzzy".equalsIgnoreCase(nick)) {
+        return error(ErrorCode.RESERVED_NICK);
       } else {
         final User user = new User(nick, request.getRemoteAddr(),
             Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteAddr()));
