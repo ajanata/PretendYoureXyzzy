@@ -358,6 +358,12 @@ HttpSession hSession = request.getSession(true);
       <br/>
       <label id="game_password_template_label" for="game_password_template">Game password:</label>
       <input type="text" id="game_password_template" class="game_password" />
+      <input type="password" id="game_fake_password_template" class="game_fake_password hide" />
+      <input type="checkbox" id="game_hide_password_template" class="game_hide_password" />
+      <label id="game_hide_password_template_label" for="game_hide_password_template"
+          title="Hides the password from your screen, so people watching your stream can't see it.">
+        Hide password.
+      </label>
       You must click outside the box to apply the password.
     </fieldset>
   </div>

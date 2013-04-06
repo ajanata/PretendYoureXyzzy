@@ -79,15 +79,20 @@ cah.Game = function(id) {
    */
   this.optionsElement_ = $("#game_options_template").clone()[0];
   this.optionsElement_.id = "game_options_" + id;
+  // TODO: It looks like I'm not changing the id on the label elements...
   $("#score_limit_template_label", this.optionsElement_).attr("for", "score_limit_" + id);
   $("#player_limit_template_label", this.optionsElement_).attr("for", "player_limit_" + id);
   $("#card_set_template_label", this.optionsElement_).attr("for", "card_set_" + id);
   $("#game_password_template_label", this.optionsElement_).attr("for", "game_password_" + id);
+  $("#game_hide_password_template_label", this.optionsElement_).attr("for",
+      "game_hide_password_" + id);
 
   $("#score_limit_template", this.optionsElement_).attr("id", "score_limit_" + id);
   $("#player_limit_template", this.optionsElement_).attr("id", "player_limit_" + id);
   $("#card_set_template", this.optionsElement_).attr("id", "card_set_" + id);
   $("#game_password_template", this.optionsElement_).attr("id", "game_password_" + id);
+  $("#game_fake_password_template", this.optionsElement_).attr("id", "game_fake_password_" + id);
+  $("#game_hide_password_template", this.optionsElement_).attr("id", "game_hide_password_" + id);
 
   for ( var key in cah.CardSet.list) {
     /** @type {cah.CardSet} */
@@ -279,6 +284,7 @@ cah.Game = function(id) {
   $("select", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
   $("input", this.optionsElement_).blur(cah.bind(this, this.optionChanged_));
   $(".card_set", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
+  $(".game_hide_password", this.optionsElement_).click(cah.bind(this, this.showOrHidePassword_));
 
   $(window).on("resize.game_" + this.id_, cah.bind(this, this.windowResize_));
 };
@@ -335,6 +341,24 @@ cah.Game.prototype.showOptionsClick_ = function() {
     this.hideOptions_();
   }
   this.showingOptions_ = !this.showingOptions_;
+};
+
+/**
+ * Show or hide the game's password, based on the value of the checkbox.
+ * 
+ * @private
+ */
+cah.Game.prototype.showOrHidePassword_ = function() {
+  if ($(".game_hide_password", this.optionsElement_).attr("checked")) {
+    $(".game_password", this.optionsElement_).hide();
+    $(".game_fake_password", this.optionsElement_).show();
+    $(".game_fake_password", this.optionsElement_).attr("value",
+        $(".game_password", this.optionsElement_).attr("value"));
+    $(".game_fake_password", this.optionsElement_).attr("disabled", "disabled");
+  } else {
+    $(".game_password", this.optionsElement_).show();
+    $(".game_fake_password", this.optionsElement_).hide();
+  }
 };
 
 /**
