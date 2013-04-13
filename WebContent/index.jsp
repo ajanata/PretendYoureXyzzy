@@ -54,6 +54,12 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>13 April 2013:<ul>
+    <li>Added client-side option to hide game password in the game options area. This is useful for
+    streaming the game and not letting people see the password. ;)</li>
+    <li>Added option to "not use" the idle timer. In reality, it just sets it to about 25 days.</li>
+    <li>Internal cleanups.</li>
+  </ul></li>
   <li>30 March 2013:<ul>
     <li>Increased the game limit to 200.</li>
     <li>Tweaking other settings to attempt to increase stability with more than 550 users.</li>
