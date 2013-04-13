@@ -77,6 +77,13 @@ public class LongPollServlet extends CahServlet {
   private static final int MAX_MESSAGES_PER_POLL = 10;
 
   /**
+   * An amount of milliseconds to wait after being notified that the user has at least one message
+   * to deliver, before we actually deliver messages. This will allow multiple messages that arrive
+   * in close proximity to each other to actually be delivered in the same client request.
+   */
+  private static final int WAIT_FOR_MORE_DELAY = 30;
+
+  /**
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    */
   @Override
@@ -104,7 +111,7 @@ public class LongPollServlet extends CahServlet {
         // Delay for a short while in case there will be other messages queued to be delivered.
         // This will certainly happen in some game states. We want to deliver as much to the client
         // in as few round-trips as possible while not waiting too long.
-        Thread.sleep(5);
+        Thread.sleep(WAIT_FOR_MORE_DELAY);
       } catch (final InterruptedException ie) {
         // pass
       }
