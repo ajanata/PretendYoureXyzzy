@@ -210,6 +210,7 @@ public class Constants {
     PLAYER_LIMIT("pL"),
     SCORE_LIMIT("sl"),
     SERIAL("s"),
+    USE_TIMER("ut"),
     WALL("wall");
 
     private final String field;
@@ -595,7 +596,9 @@ public class Constants {
     PLAYERS("P"),
     @DuplicationAllowed
     SCORE_LIMIT(AjaxRequest.SCORE_LIMIT),
-    STATE("S");
+    STATE("S"),
+    @DuplicationAllowed
+    USE_TIMER(AjaxRequest.USE_TIMER);
 
     private final String key;
 

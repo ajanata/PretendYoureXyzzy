@@ -179,6 +179,17 @@ cah.ajax.Builder.prototype.withPassword = function(password) {
 
 /**
  * @param {boolean}
+ *          useTimer Whether or not the game should use the idle timer.
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withUseTimer = function(useTimer) {
+  this.assertNotExecuted_();
+  this.data[cah.$.AjaxRequest.USE_TIMER] = useTimer;
+  return this;
+};
+
+/**
+ * @param {boolean}
  *          wall Whether or not this is a warn-all ("wall").
  * @returns {cah.ajax.Builder} This object.
  */

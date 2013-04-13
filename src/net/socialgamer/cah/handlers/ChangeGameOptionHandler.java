@@ -55,7 +55,14 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
         if (password == null) {
           password = "";
         }
-        game.updateGameSettings(scoreLimit, playerLimit, cardSets, password);
+        // We're not directly assigning this with Boolean.valueOf() because we want to default to
+        // true if it isn't specified, though that should never happen.
+        boolean useTimer = true;
+        final String useTimerString = request.getParameter(AjaxRequest.USE_TIMER);
+        if (null != useTimerString && !"".equals(useTimerString)) {
+          useTimer = Boolean.valueOf(useTimerString);
+        }
+        game.updateGameSettings(scoreLimit, playerLimit, cardSets, password, useTimer);
       } catch (final NumberFormatException nfe) {
         return error(ErrorCode.BAD_REQUEST);
       }

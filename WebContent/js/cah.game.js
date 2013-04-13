@@ -86,6 +86,7 @@ cah.Game = function(id) {
   $("#game_password_template_label", this.optionsElement_).attr("for", "game_password_" + id);
   $("#game_hide_password_template_label", this.optionsElement_).attr("for",
       "game_hide_password_" + id);
+  $("#use_timer_template_label", this.optionsElement_).attr("for", "use_timer_" + id);
 
   $("#score_limit_template", this.optionsElement_).attr("id", "score_limit_" + id);
   $("#player_limit_template", this.optionsElement_).attr("id", "player_limit_" + id);
@@ -93,6 +94,7 @@ cah.Game = function(id) {
   $("#game_password_template", this.optionsElement_).attr("id", "game_password_" + id);
   $("#game_fake_password_template", this.optionsElement_).attr("id", "game_fake_password_" + id);
   $("#game_hide_password_template", this.optionsElement_).attr("id", "game_hide_password_" + id);
+  $("#use_timer_template", this.optionsElement_).attr("id", "use_timer_" + id);
 
   for ( var key in cah.CardSet.list) {
     /** @type {cah.CardSet} */
@@ -283,6 +285,7 @@ cah.Game = function(id) {
   $(".game_show_options", this.element_).click(cah.bind(this, this.showOptionsClick_));
   $("select", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
   $("input", this.optionsElement_).blur(cah.bind(this, this.optionChanged_));
+  $(".use_timer", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
   $(".card_set", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
   $(".game_hide_password", this.optionsElement_).click(cah.bind(this, this.showOrHidePassword_));
 
@@ -741,6 +744,11 @@ cah.Game.prototype.updateGameStatus = function(data) {
   $(".score_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.SCORE_LIMIT]);
   $(".player_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.PLAYER_LIMIT]);
   $(".game_password", this.optionsElement_).val(gameInfo[cah.$.GameInfo.PASSWORD]);
+  if (gameInfo[cah.$.GameInfo.USE_TIMER]) {
+    $(".use_timer", this.optionsElement_).attr("checked", "checked");
+  } else {
+    $(".use_timer", this.optionsElement_).removeAttr("checked");
+  }
   var cardSetIds = gameInfo[cah.$.GameInfo.CARD_SETS];// .split(',');
   $(".card_set", this.optionsElement_).removeAttr("checked");
   for ( var key in cardSetIds) {
@@ -1202,7 +1210,8 @@ cah.Game.prototype.optionChanged_ = function(e) {
   cah.Ajax.build(cah.$.AjaxOperation.CHANGE_GAME_OPTIONS).withGameId(this.id_).withScoreLimit(
       $(".score_limit", this.optionsElement_).val()).withPlayerLimit(
       $(".player_limit", this.optionsElement_).val()).withCardSets(cardSetIds).withPassword(
-      $(".game_password", this.optionsElement_).val()).run();
+      $(".game_password", this.optionsElement_).val()).withUseTimer(
+      !!$('.use_timer', this.optionsElement_).attr('checked')).run();
 };
 
 /**

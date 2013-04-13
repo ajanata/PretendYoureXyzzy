@@ -135,6 +135,7 @@ public class Game {
   private int scoreGoal = 8;
   private final Set<CardSet> cardSets = new HashSet<CardSet>();
   private String password = "";
+  private boolean useTimer = true;
   private final Session hibernateSession;
 
   /**
@@ -364,15 +365,16 @@ public class Game {
     return password;
   }
 
-  public void updateGameSettings(final int scoreLimit, final int playerLimit,
-      final Set<CardSet> cardSets1, final String password1) {
-    this.scoreGoal = scoreLimit;
-    this.maxPlayers = playerLimit;
+  public void updateGameSettings(final int newScoreGoal, final int newMaxPlayers,
+      final Set<CardSet> newCardSets, final String newPassword, final boolean newUseTimer) {
+    this.scoreGoal = newScoreGoal;
+    this.maxPlayers = newMaxPlayers;
     synchronized (this.cardSets) {
       this.cardSets.clear();
-      this.cardSets.addAll(cardSets1);
+      this.cardSets.addAll(newCardSets);
     }
-    this.password = password1;
+    this.password = newPassword;
+    this.useTimer = newUseTimer;
 
     final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_OPTIONS_CHANGED.toString());
@@ -421,6 +423,7 @@ public class Game {
     info.put(GameInfo.CARD_SETS, cardSetIds);
     info.put(GameInfo.PLAYER_LIMIT, maxPlayers);
     info.put(GameInfo.SCORE_LIMIT, scoreGoal);
+    info.put(GameInfo.USE_TIMER, useTimer);
     if (includePassword) {
       info.put(GameInfo.PASSWORD, password);
     }
@@ -638,7 +641,9 @@ public class Game {
       }
     }
 
-    final int playTimer = PLAY_TIMEOUT_BASE + (PLAY_TIMEOUT_PER_CARD * blackCard.getPick());
+    // Perhaps figure out a better way to do this...
+    final int playTimer = useTimer ? PLAY_TIMEOUT_BASE
+        + (PLAY_TIMEOUT_PER_CARD * blackCard.getPick()) : Integer.MAX_VALUE;
 
     final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
@@ -824,8 +829,9 @@ public class Game {
     killRoundTimer();
     state = GameState.JUDGING;
 
-    final int judgeTimer = JUDGE_TIMEOUT_BASE
-        + (JUDGE_TIMEOUT_PER_CARD * playedCards.size() * blackCard.getPick());
+    // Perhaps figure out a better way to do this...
+    final int judgeTimer = useTimer ? JUDGE_TIMEOUT_BASE
+        + (JUDGE_TIMEOUT_PER_CARD * playedCards.size() * blackCard.getPick()) : Integer.MAX_VALUE;
 
     HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
