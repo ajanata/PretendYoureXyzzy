@@ -95,11 +95,7 @@ public abstract class CahServlet extends HttpServlet {
       final boolean skipSessionUserCheck = op != null
           && (op.equals(AjaxOperation.REGISTER.toString())
           || op.equals(AjaxOperation.FIRST_LOAD.toString()));
-      if (hSession.isNew()) {
-        // they should have gotten a session from the index page.
-        // they probably don't have cookies on.
-        returnError(user, response.getWriter(), ErrorCode.NO_SESSION);
-      } else if (!skipSessionUserCheck && hSession.getAttribute(SessionAttribute.USER) == null) {
+      if (!skipSessionUserCheck && hSession.getAttribute(SessionAttribute.USER) == null) {
         returnError(user, response.getWriter(), ErrorCode.NOT_REGISTERED);
       } else if (user != null && !user.isValid()) {
         // user probably pinged out, or possibly kicked by admin
