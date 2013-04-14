@@ -54,6 +54,13 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>14 April 2013:<ul>
+    <li>Fixed the game list sometimes showing the same game over and over, and not loading the list
+    of card sets to display in game options.</li>
+    <li>Made game list cards bigger, and fixed HTML entities displayed in them.</li>
+    <li>Fixed even-numbered rows in the scoreboard not using the correct background color when
+    displaying that the person won.</li>
+  </ul></li>
   <li>13 April 2013:<ul>
     <li>Added client-side option to hide game password in the game options area. This is useful for
     streaming the game and not letting people see the password. ;)</li>

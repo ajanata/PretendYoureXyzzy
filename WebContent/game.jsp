@@ -95,12 +95,17 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues</a>.
   </p>
-  <p>Most recent update: 13 April 2013:</p>
+  <p>Most recent updates: 13 and 14 April 2013:</p>
   <ul>
     <li>Added client-side option to hide game password in the game options area. This is useful for
     streaming the game and not letting people see the password. ;)</li>
     <li>Added option to "not use" the idle timer. In reality, it just sets it to about 25 days.</li>
     <li>Internal cleanups.</li>
+    <li>Fixed the game list sometimes showing the same game over and over, and not loading the list
+    of card sets to display in game options.</li>
+    <li>Made game list cards bigger, and fixed HTML entities displayed in them.</li>
+    <li>Fixed even-numbered rows in the scoreboard not using the correct background color when
+    displaying that the person won.</li>
   </ul>
   <div id="nickbox">
     Nickname: <input type="text" id="nickname" value="" maxlength="30" />
