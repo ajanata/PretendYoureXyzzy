@@ -346,7 +346,10 @@ HttpSession hSession = request.getSession(true);
       Having more than 10 players may get cramped!
       <br/>
       <input type="checkbox" checked="checked" id="use_timer_template" class="use_timer" />
-      <label id="use_timer_template_label" for="use_timer_template">Use idle timer</label>
+      <label id="use_timer_template_label" for="use_timer_template"
+          title="Players will be skipped if they have not played within a reasonable amount of time.">
+          Use idle timer
+      </label>
       <br/>
       <fieldset class="card_sets">
         <legend>Card Sets</legend>

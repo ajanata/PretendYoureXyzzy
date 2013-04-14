@@ -205,7 +205,7 @@ cah.GameListLobby = function(parentElem, data) {
     var cardSetId = data[cah.$.GameInfo.CARD_SETS][key];
     cardSetNames.push(cah.CardSet.list[cardSetId].getName());
   }
-  $(".gamelist_lobby_cardset", this.element_).text(cardSetNames.join(', '));
+  $(".gamelist_lobby_cardset", this.element_).html(cardSetNames.join(', '));
 
   if (data[cah.$.GameInfo.HAS_PASSWORD]) {
     $(".gamelist_lobby_join", this.element_).val("Join\n(Passworded)");
