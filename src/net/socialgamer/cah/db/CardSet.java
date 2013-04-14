@@ -93,7 +93,7 @@ public class CardSet {
   }
 
   /**
-   * @return Client representation of this card.
+   * @return Client representation of this card set.
    */
   public Map<CardSetData, Object> getClientData() {
     final Map<CardSetData, Object> cardSetData = new HashMap<CardSetData, Object>();
