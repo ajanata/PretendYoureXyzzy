@@ -72,6 +72,16 @@ public abstract class CahServlet extends HttpServlet {
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
 
+    final String serialString = request.getParameter(AjaxRequest.SERIAL.toString());
+    int serial = -1;
+    if (null != serialString && !"".equals(serialString)) {
+      try {
+        serial = Integer.parseInt(serialString);
+      } catch (final NumberFormatException e) {
+        // pass
+      }
+    }
+
     try {
       final HttpSession hSession = request.getSession(true);
       final User user = (User) hSession.getAttribute(SessionAttribute.USER);
@@ -96,11 +106,11 @@ public abstract class CahServlet extends HttpServlet {
           && (op.equals(AjaxOperation.REGISTER.toString())
           || op.equals(AjaxOperation.FIRST_LOAD.toString()));
       if (!skipSessionUserCheck && hSession.getAttribute(SessionAttribute.USER) == null) {
-        returnError(user, response.getWriter(), ErrorCode.NOT_REGISTERED);
+        returnError(user, response.getWriter(), ErrorCode.NOT_REGISTERED, serial);
       } else if (user != null && !user.isValid()) {
         // user probably pinged out, or possibly kicked by admin
         hSession.invalidate();
-        returnError(user, response.getWriter(), ErrorCode.SESSION_EXPIRED);
+        returnError(user, response.getWriter(), ErrorCode.SESSION_EXPIRED, serial);
       } else {
         try {
           handleRequest(request, response, hSession);
@@ -111,7 +121,7 @@ public abstract class CahServlet extends HttpServlet {
       }
     } catch (final IllegalStateException ise) {
       // session invalidated, so pretend they don't have one.
-      returnError(null, response.getWriter(), ErrorCode.NO_SESSION);
+      returnError(null, response.getWriter(), ErrorCode.NO_SESSION, serial);
     }
   }
 
@@ -142,22 +152,6 @@ public abstract class CahServlet extends HttpServlet {
       IOException;
 
   /**
-   * Return an error to the client. Prefer to use
-   * {@link #returnError(User, PrintWriter, ErrorCode, int)} if you know the request serial number.
-   * 
-   * @param user
-   *          User that caused this error, or {@code null} if user is not known.
-   * @param writer
-   *          Response writer to send the error data to.
-   * @param code
-   *          Error code to return to client.
-   */
-  protected void returnError(@Nullable final User user, final PrintWriter writer,
-      final ErrorCode code) {
-    returnError(user, writer, code, -1);
-  }
-
-  /**
    * Return an error to the client.
    * 
    * @param user
@@ -175,6 +169,7 @@ public abstract class CahServlet extends HttpServlet {
     final JSONObject ret = new JSONObject();
     ret.put(AjaxResponse.ERROR, Boolean.TRUE);
     ret.put(AjaxResponse.ERROR_CODE, code.toString());
+    ret.put(AjaxResponse.SERIAL, String.valueOf(serial));
     writer.println(ret.toJSONString());
   }
 

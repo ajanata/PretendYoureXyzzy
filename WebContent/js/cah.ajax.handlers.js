@@ -65,8 +65,16 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
   }
 };
 
+// this is kinda hacky, but we need to re-try this operation ONCE if we didn't have a session.
+cah.ajax.hasRetriedFirstLoad_ = false;
 cah.ajax.ErrorHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
-  // pass
+  if (data[cah.$.AjaxResponse.ERROR_CODE] == cah.$.ErrorCode.SESSION_EXPIRED
+      && !cah.ajax.hasRetriedFirstLoad_) {
+    cah.ajax.hasRetriedFirstLoad_ = true;
+    cah.Ajax.build(cah.$.AjaxOperation.FIRST_LOAD).run();
+  } else {
+    cah.ajax.ErrorHandlers[cah.$.AjaxOperation.REGISTER](data);
+  }
 };
 
 /**

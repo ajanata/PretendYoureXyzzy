@@ -70,7 +70,7 @@ public class AjaxServlet extends CahServlet {
       try {
         serial = Integer.parseInt(request.getParameter(AjaxRequest.SERIAL.toString()));
       } catch (final NumberFormatException nfe) {
-        returnError(user, out, ErrorCode.BAD_REQUEST);
+        returnError(user, out, ErrorCode.BAD_REQUEST, -1);
         return;
       }
     }
