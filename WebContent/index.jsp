@@ -188,7 +188,7 @@ to, for instance, display the number of connected players.
   <li>This game was extensively tested in <a href="http://google.com/chrome">Google Chrome</a>.
   It should work in all recent versions of major browsers, but it may not look 100% as intended. If
   you find a major issue, please
-  <a href="mailto:ajanata@socialgamer.net?subject=PYZ%20bug">email me</a> with a screenshot and the
+  <a href="mailto:ajanata@socialgamer.net?subject=PYX%20bug">email me</a> with a screenshot and the
   name and version of the browser you are using, and I'll try to fix it.
   </li>
   <li>You may not always see your card in the top area after you play it, but it has been played.
@@ -236,7 +236,7 @@ to, for instance, display the number of connected players.
 <p>
   If the game seems to be in a weird state, refresh the page and it should take you back to where
   you were. It would be helpful to take a screenshot and
-  <a href="mailto:ajanata@socialgamer.net?subject=PYZ%20bug">email it to me</a> along with a general
+  <a href="mailto:ajanata@socialgamer.net?subject=PYX%20bug">email it to me</a> along with a general
   description of the problem and the time that it happened (include a time zone please!).
 </p>
 <p>
