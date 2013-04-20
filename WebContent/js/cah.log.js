@@ -93,6 +93,10 @@ cah.log.status_with_game = function(game_or_id, text, opt_class) {
     $(node).addClass(opt_class);
   }
   logElement.append(node);
+  // only announce things in our game, or if it has a class (admin or error, likely)
+  if (game_or_id !== null || opt_class) {
+    cah.log.ariaStatus(text);
+  }
 
   if (scroll) {
     logElement.prop("scrollTop", logElement.prop("scrollHeight"));
@@ -126,6 +130,23 @@ cah.log.everyWindow = function(text, opt_class) {
     if (cah.currentGames.hasOwnProperty(game_id)) {
       cah.log.status_with_game(game_id, text, opt_class);
     }
+  }
+};
+
+/**
+ * Set the text of the aria-notification element, which should cause screen readers to read this
+ * text.
+ * 
+ * @param {string}
+ *          text Text to read.
+ */
+cah.log.ariaStatus = function(text) {
+  // TODO we should pull this regex from the java code. it's close enough for now
+  var chatMatch = text.match(/<([a-zA-Z0-9_]+)> (.*)/);
+  if (chatMatch) {
+    $('#aria-notifications').text(chatMatch[1] + ' says ' + chatMatch[2]);
+  } else {
+    $('#aria-notifications').text(text);
   }
 };
 

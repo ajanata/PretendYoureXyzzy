@@ -80,7 +80,7 @@ HttpSession hSession = request.getSession(true);
 --%>
 
 <div id="welcome">
-  <h1>
+  <h1 tabindex="0">
     Pretend You're <dfn style="border-bottom: 1px dotted black"
     title="Xyzzy is an Artificial Unintelligence bot. You'll be making more sense than him in this game.">
     Xyzzy</dfn>
@@ -95,20 +95,28 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues</a>.
   </p>
-  <p>Most recent updates: 13 and 14 April 2013:</p>
+  <p tabindex="0">Most recent update: 20 April 2013:</p>
   <ul>
-    <li>Added client-side option to hide game password in the game options area. This is useful for
-    streaming the game and not letting people see the password. ;)</li>
-    <li>Added option to "not use" the idle timer. In reality, it just sets it to about 25 days.</li>
-    <li>Internal cleanups.</li>
-    <li>Fixed the game list sometimes showing the same game over and over, and not loading the list
-    of card sets to display in game options.</li>
-    <li>Made game list cards bigger, and fixed HTML entities displayed in them.</li>
-    <li>Fixed even-numbered rows in the scoreboard not using the correct background color when
-    displaying that the person won.</li>
+    <li tabindex="0">A bunch of accessibility things for screen readers. If you are not using a
+    screen reader, you don't care about any of this. If you are, tab to the next element for more
+    details.</li>
   </ul>
+  <div style="position:absolute; left:-999999px" tabindex="0" id="screenreader-intro">
+    I have spent a couple hours attempting to make this usable with screen readers. I have probably
+    missed a few things, but I believe the game is actually playable now. You should be able to get
+    to all of the interactive elements using only tab and shift tab, and all toggles should respond
+    to the space bar. To select a card, tab to it and press the space bar. You will have to get to
+    the Confirm Selection button to actually play it. I may eventually remove this requirement if
+    the card is selected with the space bar. The list of games leaves some information that is
+    visible out in an attempt to prevent each game from requiring a minute to read. You can still
+    access that information by navigating through the elements directly. I attempted to make the
+    notifications not be too chatty, but I may have failed. Please let me know if there are any
+    major issues.
+  </div>
   <div id="nickbox">
-    Nickname: <input type="text" id="nickname" value="" maxlength="30" />
+    Nickname:
+    <input type="text" id="nickname" value="" maxlength="30" role="textbox"
+        aria-label="Enter your nickname." />
     <input type="button" id="nicknameconfirm" value="Set" />
     <span id="nickbox_error" class="error"></span>
   </div>
@@ -156,16 +164,16 @@ HttpSession hSession = request.getSession(true);
     <div id="tab-preferences">
       <input type="button" value="Save" onclick="save_preferences();" />
       <input type="button" value="Revert" onclick="load_preferences();" />
-      <label for="hide_connect_quit">Hide connect/quit events: </label>
+      <label for="hide_connect_quit">Hide connect and quit events: </label>
       <input type="checkbox" id="hide_connect_quit" />
       <br />
-      <label for="ignore_list">Ignore list, one name per line:</label>
+      <label for="ignore_list">Chat ignore list, one name per line:</label>
       <br/>
       <textarea id="ignore_list" style="width: 200px; height: 150px"></textarea>
     </div>
     <div id="tab-global">
       <div class="log"></div>
-      <input type="text" class="chat" maxlength="200" />
+      <input type="text" class="chat" maxlength="200" aria-label="Type here to chat." />
       <input type="button" class="chat_submit" value="Chat" />
     </div>
   </div>
@@ -173,7 +181,7 @@ HttpSession hSession = request.getSession(true);
 
 <!-- Template for game lobbies in the game list. -->
 <div class="hide">
-	<div id="gamelist_lobby_template" class="gamelist_lobby">
+	<div id="gamelist_lobby_template" class="gamelist_lobby" tabindex="0">
 	<div class="gamelist_lobby_left">
 	    	<h3>
 			<span class="gamelist_lobby_host">host</span>'s Game
@@ -227,7 +235,7 @@ HttpSession hSession = request.getSession(true);
 <!-- Template for face-up white cards. -->
 <div class="hide">
 	<div id="white_up_template" class="card whitecard">
-	  <span class="card_text">The quick brown fox jumped over the lazy dog.</span>
+	  <span class="card_text" role="button" tabindex="0">The quick brown fox jumped over the lazy dog.</span>
 	  <div class="logo">
 	    <div class="logo_1 logo_element">
 	    </div>
@@ -256,7 +264,7 @@ HttpSession hSession = request.getSession(true);
       <input type="button" class="game_show_last_round game_menu_bar" value="Show Last Round"
           disabled="disabled" />
       <input type="button" class="game_show_options game_menu_bar" value="Hide Game Options" />
-      <div class="game_message">
+      <div class="game_message" role="status">
         Waiting for server...
       </div>
     </div>
@@ -264,8 +272,10 @@ HttpSession hSession = request.getSession(true);
       <div style="width:100%; height:100%;">
         <div class="game_left_side">
           <div class="game_black_card_wrapper">
-            The black card for <span class="game_black_card_round_indicator">this round is</span>:
-            <div class="game_black_card">
+            <span tabindex="0">The black card for
+                <span class="game_black_card_round_indicator">this round is</span>:
+            </span>
+            <div class="game_black_card" tabindex="0">
             </div>
           </div>
           <input type="button" class="confirm_card" value="Confirm Selection" />
@@ -274,7 +284,7 @@ HttpSession hSession = request.getSession(true);
         </div>
         <div class="game_right_side hide">
           <div class="game_right_side_box game_white_card_wrapper">
-            The white cards played this round are:
+            <span tabindex="0">The white cards played this round are:</span>
             <div class="game_white_cards game_right_side_cards">
             </div>
           </div>
@@ -289,7 +299,7 @@ HttpSession hSession = request.getSession(true);
         <div class="game_hand_filter hide">
           <span class="game_hand_filter_text"></span>
         </div>
-        <span class="your_hand">Your Hand</span>
+        <span class="your_hand" tabindex="0">Your Hand</span>
         <div class="game_hand_cards">
         </div>
       </div>
@@ -300,12 +310,13 @@ HttpSession hSession = request.getSession(true);
 <!-- Template for scoreboard container. Holder for design. -->
 <div style="height: 215px; border: 1px solid black;" class="hide">
 	<div id="scoreboard_template" class="scoreboard">
+    <div class="game_message" tabindex="0">Scoreboard</div>
 	</div>
 </div>
 
 <!-- Template for scoreboard score card. Holder for design. -->
 <div class="scoreboard hide" style="height: 215px;">
-	<div id="scorecard_template" class="scorecard">
+	<div id="scorecard_template" class="scorecard" tabindex="0">
 	  <span class="scorecard_player">PlayerName</span>
 	  <div class="clear"></div>
 	  <span class="scorecard_score">0</span> <span class="scorecard_point_title">Awesome Point<span class="scorecard_s">s</span></span>
@@ -343,17 +354,20 @@ HttpSession hSession = request.getSession(true);
       </select>
       <br/>
       <label id="player_limit_template_label" for="player_limit_template">Player limit:</label>
-      <select id="player_limit_template" class="player_limit">
+      <select id="player_limit_template" class="player_limit"
+          aria-label="Player limit. Having more than 10 players may cause issues both for screen readers and traditional browsers.">
         <% int defaultPlayerLimit = 10; for (int i = 3; i <= 20; i++) { %>
           <option <%= i == defaultPlayerLimit ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
         <% } %>
       </select>
       Having more than 10 players may get cramped!
       <br/>
-      <input type="checkbox" checked="checked" id="use_timer_template" class="use_timer" />
+      <input type="checkbox" checked="checked" id="use_timer_template" class="use_timer"
+          title="Players will be skipped if they have not played within a reasonable amount of time."
+          aria-label="Use idle timer. Players will be skipped if they have not played within a reasonable amount of time."/>
       <label id="use_timer_template_label" for="use_timer_template"
           title="Players will be skipped if they have not played within a reasonable amount of time.">
-          Use idle timer
+          Use idle timer.
       </label>
       <br/>
       <fieldset class="card_sets">
@@ -364,10 +378,12 @@ HttpSession hSession = request.getSession(true);
       </fieldset>
       <br/>
       <label id="game_password_template_label" for="game_password_template">Game password:</label>
-      <input type="text" id="game_password_template" class="game_password" />
+      <input type="text" id="game_password_template" class="game_password"
+          aria-label="Game password. You must tab outside of the box to apply the password."/>
       <input type="password" id="game_fake_password_template" class="game_fake_password hide" />
       <input type="checkbox" id="game_hide_password_template" class="game_hide_password" />
       <label id="game_hide_password_template_label" for="game_hide_password_template"
+          aria-label="Hide password from your screen."
           title="Hides the password from your screen, so people watching your stream can't see it.">
         Hide password.
       </label>
@@ -375,6 +391,6 @@ HttpSession hSession = request.getSession(true);
     </fieldset>
   </div>
 </div>
-
+<div style="position:absolute; left:-99999px" role="alert" id="aria-notifications"></div>
 </body>
 </html>

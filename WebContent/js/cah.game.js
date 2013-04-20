@@ -103,11 +103,12 @@ cah.Game = function(id) {
     var title = cardSet.getDescription() + ' ' + cardSet.getBlackCardCount() + ' black card'
         + (cardSet.getBlackCardCount() == 1 ? '' : 's') + ', ' + cardSet.getWhiteCardCount()
         + ' white card' + (cardSet.getWhiteCardCount() == 1 ? '' : 's') + '.';
+    var aria_label = cardSet.getName() + '. ' + title;
     // that space at the beginning matters
     var html = ' <span class="nowrap"><input type="checkbox" id="' + cardSetElementId
         + '" class="card_set" title="' + title + '" value="' + cardSet.getId()
-        + '" name="card_set" /><label for="' + cardSetElementId + '" title="' + title
-        + '" class="card_set_label">' + cardSet.getName() + '</label></span>';
+        + '" name="card_set" aria-label="' + aria_label + '" /><label for="' + cardSetElementId
+        + '" title="' + title + '" class="card_set_label">' + cardSet.getName() + '</label></span>';
     if (cardSet.isBaseDeck()) {
       $(".base_card_sets", this.optionsElement_).append(html);
     } else {
@@ -428,7 +429,8 @@ cah.Game.prototype.dealtCard = function(card) {
   };
   $(element).on("mouseenter.hand", data, cah.bind(this, this.handCardMouseEnter_)).on(
       "mouseleave.hand", data, cah.bind(this, this.handCardMouseLeave_)).on("click.hand", data,
-      cah.bind(this, this.handCardClick_));
+      cah.bind(this, this.handCardClick_)).on("keypress.hand", data,
+      cah.bind(this, this.handCardKeypress_));
 
   this.resizeHandCards_();
 };
@@ -514,7 +516,8 @@ cah.Game.prototype.addRoundWhiteCard_ = function(cards) {
     };
     $(element).on("mouseenter.round", data, cah.bind(this, this.roundCardMouseEnter_)).on(
         "mouseleave.round", data, cah.bind(this, this.roundCardMouseLeave_)).on("click.round",
-        data, cah.bind(this, this.roundCardClick_));
+        data, cah.bind(this, this.roundCardClick_)).on("keypress.round", data,
+        cah.bind(this, this.roundCardKeypress_));
 
   }
   this.roundCards_[cards[0].getServerId()] = cards;
@@ -841,9 +844,11 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
  */
 cah.Game.prototype.roundComplete = function(data) {
   var cards = this.roundCards_[data[cah.$.LongPollResponse.WINNING_CARD]];
+  var ariaText = '';
   for ( var index in cards) {
     var card = cards[index];
     $(".card", card.getElement()).addClass("selected");
+    ariaText += card.getAriaText();
   }
   var roundWinner = data[cah.$.LongPollResponse.ROUND_WINNER];
   var scoreCard = this.scoreCards_[roundWinner];
@@ -858,6 +863,9 @@ cah.Game.prototype.roundComplete = function(data) {
       $(".game_white_card_wrapper .card_holder", this.element_).clone());
   this.lastBlackCard_ = this.blackCard_;
   $(".game_show_last_round", this.element_).removeAttr("disabled");
+
+  // speak it in screen readers
+  cah.log.ariaStatus("The round was won by " + roundWinner + " with " + ariaText);
 };
 
 /**
@@ -942,6 +950,18 @@ cah.Game.prototype.confirmClick_ = function() {
 };
 
 /**
+ * Event handler for pressing a key on a card in the hand.
+ * 
+ * @param e
+ * @private
+ */
+cah.Game.prototype.handCardKeypress_ = function(e) {
+  if (32 == e.which) {
+    this.handCardClick_(e);
+  }
+};
+
+/**
  * Event handler for clicking on a card in the hand.
  * 
  * @param e
@@ -969,10 +989,24 @@ cah.Game.prototype.handCardClick_ = function(e) {
   if (card == this.handSelectedCard_) {
     this.handSelectedCard_ = null;
     $(".confirm_card", this.element_).attr("disabled", "disabled");
+    cah.log.ariaStatus("Deselected card.");
   } else {
     this.handSelectedCard_ = card;
     $(".card", card.getElement()).addClass("selected");
     $(".confirm_card", this.element_).removeAttr("disabled");
+    cah.log.ariaStatus("Selected card.");
+  }
+};
+
+/**
+ * Event handler for pressing a key on a card in the round.
+ * 
+ * @param e
+ * @private
+ */
+cah.Game.prototype.roundCardKeypress_ = function(e) {
+  if (32 == e.which) {
+    this.roundCardClick_(e);
   }
 };
 
@@ -1000,10 +1034,12 @@ cah.Game.prototype.roundCardClick_ = function(e) {
   if (card == this.roundSelectedCard_) {
     this.roundSelectedCard_ = null;
     $(".confirm_card", this.element_).attr("disabled", "disabled");
+    cah.log.ariaStatus("Deselected card.");
   } else {
     this.roundSelectedCard_ = card;
     $(".card", card.getElement()).addClass("selected");
     $(".confirm_card", this.element_).removeAttr("disabled");
+    cah.log.ariaStatus("Selected card.");
   }
 };
 
@@ -1273,7 +1309,7 @@ cah.GameScorePanel = function(player) {
    */
   this.status_ = cah.$.GamePlayerStatus.IDLE;
 
-  jQuery(".scorecard_player", this.element_).text(player);
+  $(".scorecard_player", this.element_).text(player);
   this.update(this.score_, this.status_);
 };
 
@@ -1297,6 +1333,10 @@ cah.GameScorePanel.prototype.update = function(score, status) {
   $(".scorecard_score", this.element_).text(score);
   $(".scorecard_status", this.element_).text(cah.$.GamePlayerStatus_msg[status]);
   $(".scorecard_s", this.element_).text(score == 1 ? "" : "s");
+  $(this.element_).attr(
+      "aria-label",
+      this.player_ + " has " + score + " Awesome Point" + (score == 1 ? "" : "s") + ". "
+          + cah.$.GamePlayerStatus_msg[status]);
 };
 
 /**

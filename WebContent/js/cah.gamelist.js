@@ -210,6 +210,14 @@ cah.GameListLobby = function(parentElem, data) {
   if (data[cah.$.GameInfo.HAS_PASSWORD]) {
     $(".gamelist_lobby_join", this.element_).val("Join\n(Passworded)");
   }
+
+  $(this.element_).attr(
+      "aria-label",
+      data[cah.$.GameInfo.HOST] + "'s game, with " + data[cah.$.GameInfo.PLAYERS].length + " of "
+          + data[cah.$.GameInfo.PLAYER_LIMIT] + " players. " + statusMessage + ". Goal is "
+          + data[cah.$.GameInfo.SCORE_LIMIT] + " Awesome Points. Using " + cardSetNames.length
+          + " card set" + (cardSetNames.length == 1 ? "" : "s") + ". "
+          + (data[cah.$.GameInfo.HAS_PASSWORD] ? "Has" : "Does not have") + " a password.");
 };
 
 /**

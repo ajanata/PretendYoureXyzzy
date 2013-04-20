@@ -54,6 +54,11 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>20 April 2013:<ul>
+    <li>A bunch of accessibility things for screen readers. If you are not using a
+    screen reader, you don't care about any of this. If you are, more information is available on
+    the game page.</li>
+  </ul></li>
   <li>14 April 2013:<ul>
     <li>Fixed the game list sometimes showing the same game over and over, and not loading the list
     of card sets to display in game options.</li>
