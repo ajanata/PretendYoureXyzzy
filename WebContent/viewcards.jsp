@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<%--
+Copyright (c) 2013, Andy Janata
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted
+provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this list of conditions
+  and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice, this list of
+  conditions and the following disclaimer in the documentation and/or other materials provided
+  with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+--%>
+<%--
+Interface to view and search all existing cards and card sets.
+
+@author Andy Janata (ajanata@socialgamer.net)
+--%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.HashSet" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="net.socialgamer.cah.HibernateUtil" %>
+<%@ page import="net.socialgamer.cah.db.BlackCard" %>
+<%@ page import="net.socialgamer.cah.db.CardSet" %>
+<%@ page import="net.socialgamer.cah.db.WhiteCard" %>
+<%@ page import="org.hibernate.Session" %>
+<%@ page import="org.json.simple.JSONValue" %>
+<%
+Session hibernateSession = HibernateUtil.instance.sessionFactory.openSession();
+
+// cheap way to make sure we can close the hibernate session at the end of the page
+try {
+  // load from db  
+  @SuppressWarnings("unchecked")
+  List<CardSet> cardSets = hibernateSession
+      .createQuery("from CardSet where active = true order by id")
+      .setReadOnly(true)
+      .list();
+  
+  // all of the data to send to the client
+  Map<String, Object> data = new HashMap<String, Object>();
+  
+  // mapping of what card sets each card is in
+  Map<Integer, List<Integer>> whiteCardSets = new HashMap<Integer, List<Integer>>();
+  Map<Integer, List<Integer>> blackCardSets = new HashMap<Integer, List<Integer>>();
+  data.put("whiteCardSets", whiteCardSets);
+  data.put("blackCardSets", blackCardSets);
+  
+  // all of the cards that are actually in a card set
+  Set<WhiteCard> whiteCards = new HashSet<WhiteCard>();
+  Set<BlackCard> blackCards = new HashSet<BlackCard>();
+  
+  Map<Integer, Object> cardSetsData = new HashMap<Integer, Object>();
+  data.put("cardSets", cardSetsData);
+  for (CardSet cardSet: cardSets) {
+    Map<String, Object> cardSetData = new HashMap<String, Object>();
+    cardSetData.put("name", cardSet.getName());
+    cardSetData.put("description", cardSet.getDescription());
+
+    List<Integer> whiteCardIds = new ArrayList<Integer>(cardSet.getWhiteCards().size());
+    for (WhiteCard whiteCard: cardSet.getWhiteCards()) {
+      whiteCardIds.add(whiteCard.getId());
+      whiteCards.add(whiteCard);
+      if (!whiteCardSets.containsKey(whiteCard.getId())) {
+        whiteCardSets.put(whiteCard.getId(), new ArrayList<Integer>());
+      }
+      whiteCardSets.get(whiteCard.getId()).add(cardSet.getId());
+    }
+    cardSetData.put("whiteCards", whiteCardIds);
+
+    List<Integer> blackCardIds = new ArrayList<Integer>(cardSet.getBlackCards().size());
+    for (BlackCard blackCard: cardSet.getBlackCards()) {
+      blackCardIds.add(blackCard.getId());
+      blackCards.add(blackCard);
+      if (!blackCardSets.containsKey(blackCard.getId())) {
+        blackCardSets.put(blackCard.getId(), new ArrayList<Integer>());
+      }
+      blackCardSets.get(blackCard.getId()).add(cardSet.getId());
+    }
+    cardSetData.put("blackCards", blackCardIds);
+    
+    cardSetsData.put(cardSet.getId(), cardSetData);
+  }
+  
+  Map<Integer, Object> blackCardsData = new HashMap<Integer, Object>();
+  data.put("blackCards", blackCardsData);
+  for (BlackCard blackCard: blackCards) {
+    Map<String, Object> blackCardData = new HashMap<String, Object>();
+    
+    blackCardData.put("text", blackCard.getText());
+    blackCardData.put("watermark", blackCard.getWatermark());
+    blackCardData.put("draw", blackCard.getDraw());
+    blackCardData.put("pick", blackCard.getPick());
+    
+    blackCardsData.put(blackCard.getId(), blackCardData);
+  }
+  
+  Map<Integer, Object> whiteCardsData = new HashMap<Integer, Object>();
+  data.put("whiteCards", whiteCardsData);
+  for (WhiteCard whiteCard: whiteCards) {
+    Map<String, Object> whiteCardData = new HashMap<String, Object>();
+    
+    whiteCardData.put("text", whiteCard.getText());
+    whiteCardData.put("watermark", whiteCard.getWatermark());
+    
+    whiteCardsData.put(whiteCard.getId(), whiteCardData);
+  }
+  
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Pretend You're Xyzzy: View Cards</title>
+<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/QTransform.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="jquery-ui.css" media="screen" />
+<jsp:include page="analytics.jsp" />
+<script type="text/javascript">
+var data = <%= JSONValue.toJSONString(data) %>;
+</script>
+</head>
+<body>
+
+</body>
+</html>
+<%
+} finally {
+  hibernateSession.close();
+}
+%>
