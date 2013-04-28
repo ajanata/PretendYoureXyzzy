@@ -35,7 +35,7 @@ cah.log = {};
  * "Global Chat" tab's chat log
  */
 cah.log.init = function() {
-  cah.log.log = $('.log', $('#tab-global'));
+  cah.log.log = $('#tab-global .log');
 };
 
 /**
