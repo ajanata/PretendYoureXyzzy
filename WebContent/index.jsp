@@ -54,10 +54,29 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>28 April 2013:<ul>
+    <li tabindex="0">Version 1.3 of the base Cards Against Humanity game.</li>
+    <li tabindex="0">Card sets are grouped by official or custom.</li>
+    <li tabindex="0">You can <a href="viewcards.jsp">view all of the cards in the game</a>,
+    including searching by text and filtering card set.</li>
+  </ul></li>
   <li>20 April 2013:<ul>
     <li>A bunch of accessibility things for screen readers. If you are not using a
-    screen reader, you don't care about any of this. If you are, more information is available on
-    the game page.</li>
+    screen reader, you don't care about any of this. If you are, tab to the next element for more
+    information.
+      <div style="position:absolute; left:-999999px" tabindex="0" id="screenreader-intro">
+      I have spent a couple hours attempting to make this usable with screen readers. I have probably
+      missed a few things, but I believe the game is actually playable now. You should be able to get
+      to all of the interactive elements using only tab and shift tab, and all toggles should respond
+      to the space bar. To select a card, tab to it and press the space bar. You will have to get to
+      the Confirm Selection button to actually play it. I may eventually remove this requirement if
+      the card is selected with the space bar. The list of games leaves some information that is
+      visible out in an attempt to prevent each game from requiring a minute to read. You can still
+      access that information by navigating through the elements directly. I attempted to make the
+      notifications not be too chatty, but I may have failed. Please let me know if there are any
+      major issues.
+      </div>
+    </li>
   </ul></li>
   <li>14 April 2013:<ul>
     <li>Fixed the game list sometimes showing the same game over and over, and not loading the list
