@@ -47,7 +47,7 @@ try {
   // load from db  
   @SuppressWarnings("unchecked")
   List<CardSet> cardSets = hibernateSession
-      .createQuery("from CardSet where active = true order by id")
+      .createQuery("from CardSet where active = true order by weight, id")
       .setReadOnly(true)
       .list();
   
@@ -57,8 +57,6 @@ try {
   // mapping of what card sets each card is in
   Map<Integer, List<Integer>> whiteCardSets = new HashMap<Integer, List<Integer>>();
   Map<Integer, List<Integer>> blackCardSets = new HashMap<Integer, List<Integer>>();
-  data.put("whiteCardSets", whiteCardSets);
-  data.put("blackCardSets", blackCardSets);
   
   // all of the cards that are actually in a card set
   Set<WhiteCard> whiteCards = new HashSet<WhiteCard>();
@@ -105,6 +103,7 @@ try {
     blackCardData.put("watermark", blackCard.getWatermark());
     blackCardData.put("draw", blackCard.getDraw());
     blackCardData.put("pick", blackCard.getPick());
+    blackCardData.put("card_sets", blackCardSets.get(blackCard.getId()));
     
     blackCardsData.put(blackCard.getId(), blackCardData);
   }
@@ -116,6 +115,7 @@ try {
     
     whiteCardData.put("text", whiteCard.getText());
     whiteCardData.put("watermark", whiteCard.getWatermark());
+    whiteCardData.put("card_sets", whiteCardSets.get(whiteCard.getId()));
     
     whiteCardsData.put(whiteCard.getId(), whiteCardData);
   }
@@ -129,16 +129,100 @@ try {
 <title>Pretend You're Xyzzy: View Cards</title>
 <script type="text/javascript" src="js/jquery-1.8.2.js"></script>
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/jquery.tablesorter.js"></script>
 <script type="text/javascript" src="js/QTransform.js"></script>
 <script type="text/javascript" src="js/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="jquery-ui.css" media="screen" />
 <jsp:include page="analytics.jsp" />
 <script type="text/javascript">
 var data = <%= JSONValue.toJSONString(data) %>;
+
+$(document).ready(function() {
+  var cardSetsElem = $('#cardSets'); 
+  for (var id in data.cardSets) {
+    var cardSet = data.cardSets[id];
+    cardSetsElem.append(
+        '<option value="' + id + '" selected="selected">' + cardSet.name + '</option>');
+  }
+  
+  var tableElem = $('#cards');
+  for (var id in data.blackCards) {
+    var card = data.blackCards[id];
+    tableElem.append('<tr id="b' + id + '"><td>Black</td><td>' + card.text + '</td><td>'
+        + card.watermark + '</td><td>' + card.draw + '</td><td>' + card.pick + '</td></tr>');
+  }
+  for (var id in data.whiteCards) {
+    var card = data.whiteCards[id];
+    tableElem.append('<tr id="w' + id + '"><td>White</td><td>' + card.text + '</td><td>'
+        + card.watermark + '</td><td></td><td></td></tr>');
+  }
+
+  $('#search').keyup(filter);
+  $('#cardSets').change(filter);
+  $('#cardTable').tablesorter();
+  // pre-sort by text
+  $('#cardTextColumn').click();
+});
+
+function filter() {
+  // hide everything
+  $('#cards tr').hide();
+  applyFilter(data.blackCards, 'b');
+  applyFilter(data.whiteCards, 'w');
+}
+
+function applyFilter(cardArray, prefix) {
+  var cardSetIds = Array();
+  $('#cardSets option:selected').each(function(index, elem) {
+    cardSetIds[index] = Number(elem.value);
+  });
+  
+  var query = $('#search').val();
+  var regexp = new RegExp(query, 'i');
+  for (var id in cardArray) {
+    var card = cardArray[id];
+    $(cardSetIds).each(function(index, cardSetId) {
+      if ($.inArray(cardSetId, card.card_sets) !== -1 && card.text.match(regexp)) {
+        $('#' + prefix + id).show();
+      }
+    });
+  }
+}
 </script>
+<style type="text/css">
+.sorting {
+  cursor: pointer;
+}
+table td {
+  padding: 5px;
+}
+</style>
 </head>
 <body>
-
+<div style="float: left;">
+  Card sets (hold ctrl or cmd to select multiple):
+  <br/>
+  <select id="cardSets" multiple="multiple" style="height: 150px; width: 400px;">
+  </select>
+</div>
+<div>
+  <label for="search" style="padding-left: 10px;">Search card text:</label>
+  <input type="text" id="search" style="width: 400px;" />
+</div>
+<div style="clear:both"></div>
+<table id="cardTable">
+  <thead>
+    <tr>
+      <th class="sorting" style="width: 75px;">Type</th>
+      <th class="sorting" style="width: 100%" id="cardTextColumn">Text</th>
+      <th class="sorting" style="width: 100px;">Source</th>
+      <th class="sorting" style="width: 75px;">Draw</th>
+      <th class="sorting" style="width: 75px;">Pick</th>
+    </tr>
+  </thead>
+  <tbody id="cards">
+  </tbody>
+</table>
 </body>
 </html>
 <%
