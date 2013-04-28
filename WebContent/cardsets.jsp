@@ -92,11 +92,20 @@ try {
       if (null != editCardSet) {
         String nameParam = request.getParameter("cardSetName");
         String descriptionParam = request.getParameter("cardSetDescription");
+        String weightParam = request.getParameter("cardSetWeight");
         String activeParam = request.getParameter("active");
         String baseDeckParam = request.getParameter("baseDeck");
         String[] selectedBlackCardsParam = request.getParameterValues("selectedBlackCards");
         String[] selectedWhiteCardsParam = request.getParameterValues("selectedWhiteCards");
-        if (null == nameParam || nameParam.isEmpty() || null == selectedBlackCardsParam ||
+        int weight = -1;
+        try {
+          weight = Integer.valueOf(weightParam);
+        } catch (Exception e) {
+          // pass
+        }
+        if (weight <= 0 || weight > 9999) {
+          messages.add("Weight must be a positive integer less than 10000.");
+        } else if (null == nameParam || nameParam.isEmpty() || null == selectedBlackCardsParam ||
             null == selectedWhiteCardsParam) {
           messages.add("You didn't specify something.");
           if (-1 == id) {
@@ -105,6 +114,7 @@ try {
         } else {
           editCardSet.setName(nameParam);
           editCardSet.setDescription(descriptionParam);
+          editCardSet.setWeight(weight);
           editCardSet.setActive("on".equals(activeParam));
           editCardSet.setBaseDeck("on".equals(baseDeckParam));
           List<Integer> blackCardIds = new ArrayList<Integer>(selectedBlackCardsParam.length);
@@ -143,7 +153,7 @@ try {
   }
   
   @SuppressWarnings("unchecked")
-  List<CardSet> cardSets = hibernateSession.createQuery("from CardSet order by id")
+  List<CardSet> cardSets = hibernateSession.createQuery("from CardSet order by weight, id")
       .setReadOnly(true).list();
   
   @SuppressWarnings("unchecked")
@@ -230,6 +240,7 @@ select {
       <th>Name</th>
       <th>Delete</th>
       <th>Edit</th>
+      <th>Weight</th>
     </tr>
   </thead>
   <tbody>
@@ -238,6 +249,7 @@ select {
         <td><%= cardSet.getName() %></td>
         <td><a href="?delete=<%= cardSet.getId() %>" onclick="return confirm('Are you sure?')">Delete</a></td>
         <td><a href="?edit=<%= cardSet.getId() %>">Edit</a></td>
+        <td><%= cardSet.getWeight() %></td>
       </tr>
     <% } %>
   </tbody>
@@ -261,6 +273,10 @@ select {
   <label for="cardSetDescription">Description:</label>
   <input type="text" name="cardSetDescription" id="cardSetDescription" size="50"
       value="<%= editCardSet != null ? StringEscapeUtils.escapeXml(editCardSet.getDescription()) : "" %>" />
+  <br/>
+  <label for="cardSetWeight">Weight:</label>
+  <input type="text" name="cardSetWeight" id="cardSetWeight" size="4"
+      value="<%= editCardSet != null ? editCardSet.getWeight() : "1000" %>" />
   <br/>
   <label for="active">Active</label>
   <input type="checkbox" name="active" id="active"

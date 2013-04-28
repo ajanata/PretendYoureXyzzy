@@ -96,9 +96,9 @@ cah.Game = function(id) {
   $("#game_hide_password_template", this.optionsElement_).attr("id", "game_hide_password_" + id);
   $("#use_timer_template", this.optionsElement_).attr("id", "use_timer_" + id);
 
-  for ( var key in cah.CardSet.list) {
+  for ( var key in cah.CardSet.byWeight) {
     /** @type {cah.CardSet} */
-    var cardSet = cah.CardSet.list[key];
+    var cardSet = cah.CardSet.byWeight[key];
     var cardSetElementId = 'card_set_' + this.id_ + '_' + cardSet.getId();
     var title = cardSet.getDescription() + ' ' + cardSet.getBlackCardCount() + ' black card'
         + (cardSet.getBlackCardCount() == 1 ? '' : 's') + ', ' + cardSet.getWhiteCardCount()

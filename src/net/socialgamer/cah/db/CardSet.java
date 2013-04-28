@@ -28,6 +28,7 @@ public class CardSet {
   private String description;
   private boolean active;
   private boolean base_deck;
+  private int weight;
 
   @ManyToMany
   @JoinTable(
@@ -92,6 +93,14 @@ public class CardSet {
     this.description = description;
   }
 
+  public int getWeight() {
+    return weight;
+  }
+
+  public void setWeight(final int weight) {
+    this.weight = weight;
+  }
+
   /**
    * @return Client representation of this card set.
    */
@@ -100,9 +109,17 @@ public class CardSet {
     cardSetData.put(CardSetData.ID, getId());
     cardSetData.put(CardSetData.CARD_SET_NAME, getName());
     cardSetData.put(CardSetData.CARD_SET_DESCRIPTION, getDescription());
+    cardSetData.put(CardSetData.WEIGHT, getWeight());
     cardSetData.put(CardSetData.BASE_DECK, isBaseDeck());
     cardSetData.put(CardSetData.BLACK_CARDS_IN_DECK, getBlackCards().size());
     cardSetData.put(CardSetData.WHITE_CARDS_IN_DECK, getWhiteCards().size());
     return cardSetData;
+  }
+
+  @Override
+  public String toString() {
+    return String.format(
+        "CardSet[name=%s, base=%b, id=%d, active=%b, weight=%d, black=%d, white=%d]", name,
+        base_deck, id, active, weight, blackCards.size(), whiteCards.size());
   }
 }

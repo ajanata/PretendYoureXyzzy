@@ -80,6 +80,7 @@ cah.$.CardSetData = function() {
 };
 cah.$.CardSetData.prototype.dummyForAutocomplete = undefined;
 cah.$.CardSetData.CARD_SET_DESCRIPTION = "csd";
+cah.$.CardSetData.WEIGHT = "w";
 cah.$.CardSetData.CARD_SET_NAME = "csn";
 cah.$.CardSetData.ID = "cid";
 cah.$.CardSetData.WHITE_CARDS_IN_DECK = "wcid";

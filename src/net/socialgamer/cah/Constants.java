@@ -532,6 +532,7 @@ public class Constants {
     CARD_SET_NAME("csn"),
     @DuplicationAllowed
     ID(WhiteCardData.ID),
+    WEIGHT("w"),
     WHITE_CARDS_IN_DECK("wcid");
 
     private final String key;

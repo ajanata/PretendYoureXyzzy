@@ -91,7 +91,8 @@ public class FirstLoadHandler extends Handler {
     final Transaction transaction = hibernateSession.beginTransaction();
     @SuppressWarnings("unchecked")
     final List<CardSet> cardSets = hibernateSession
-        .createQuery("from CardSet where active = true").setReadOnly(true).list();
+        .createQuery("from CardSet where active = true order by weight, id").setReadOnly(true)
+        .list();
     final List<Map<CardSetData, Object>> cardSetsData = new ArrayList<Map<CardSetData, Object>>(
         cardSets.size());
     for (final CardSet cardSet : cardSets) {

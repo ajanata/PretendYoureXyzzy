@@ -34,6 +34,12 @@ cah.CardSet = {};
 cah.CardSet.list = {};
 
 /**
+ * @type {Object} Key-value map of CardSets. Key is sort weight, value is the same object as the
+ *       by-id map object.
+ */
+cah.CardSet.byWeight = {};
+
+/**
  * Class containing information about a CardSet. Should only be used by utility function in this
  * file that populates cah.CardSet.list during initial load of the game.
  * 
@@ -153,6 +159,7 @@ cah.CardSet.prototype.getWhiteCardCount = function() {
  */
 cah.CardSet.populateCardSets = function(cardSets) {
   cah.CardSet.list = {};
+  cah.CardSet.byWeight = {};
   for ( var key in cardSets) {
     var cardSetData = cardSets[key];
     var cardSet = new cah.CardSet(cardSetData[cah.$.CardSetData.ID],
@@ -162,5 +169,6 @@ cah.CardSet.populateCardSets = function(cardSets) {
         cardSetData[cah.$.CardSetData.BLACK_CARDS_IN_DECK],
         cardSetData[cah.$.CardSetData.WHITE_CARDS_IN_DECK]);
     cah.CardSet.list[cardSet.getId()] = cardSet;
+    cah.CardSet.byWeight[cardSetData[cah.$.CardSetData.WEIGHT]] = cardSet;
   }
 };
