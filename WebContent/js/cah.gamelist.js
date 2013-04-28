@@ -80,9 +80,12 @@ cah.GameList.prototype.hide = function() {
  * Query the server to update the game list.
  */
 cah.GameList.prototype.update = function() {
-  if ($(this.element_).is(":visible")) {
+  if ($(this.element_).is(":visible") && cah.windowActive) {
     // TODO display a loading indicator of some sort
     cah.Ajax.build(cah.$.AjaxOperation.GAME_LIST).run();
+    cah.missedGameListRefresh = false;
+  } else {
+    cah.missedGameListRefresh = true;
   }
 };
 

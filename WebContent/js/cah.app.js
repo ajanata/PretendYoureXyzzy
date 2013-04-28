@@ -65,6 +65,17 @@ $(document).ready(function() {
   app_resize();
 });
 
+$(window).focus(function() {
+  cah.windowActive = true;
+  if (cah.missedGameListRefresh) {
+    cah.GameList.instance.update();
+  }
+});
+
+$(window).blur(function() {
+  cah.windowActive = false;
+});
+
 /**
  * Handle a key up event in the nick box. If the key was enter, try to register with the server.
  * 
