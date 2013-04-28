@@ -67,6 +67,7 @@ try {
   for (CardSet cardSet: cardSets) {
     Map<String, Object> cardSetData = new HashMap<String, Object>();
     cardSetData.put("name", cardSet.getName());
+    cardSetData.put("id", cardSet.getId());
     cardSetData.put("description", cardSet.getDescription());
 
     List<Integer> whiteCardIds = new ArrayList<Integer>(cardSet.getWhiteCards().size());
@@ -91,7 +92,7 @@ try {
     }
     cardSetData.put("blackCards", blackCardIds);
     
-    cardSetsData.put(cardSet.getId(), cardSetData);
+    cardSetsData.put(cardSet.getWeight(), cardSetData);
   }
   
   Map<Integer, Object> blackCardsData = new HashMap<Integer, Object>();
@@ -139,10 +140,10 @@ var data = <%= JSONValue.toJSONString(data) %>;
 
 $(document).ready(function() {
   var cardSetsElem = $('#cardSets'); 
-  for (var id in data.cardSets) {
-    var cardSet = data.cardSets[id];
+  for (var weight in data.cardSets) {
+    var cardSet = data.cardSets[weight];
     cardSetsElem.append(
-        '<option value="' + id + '" selected="selected">' + cardSet.name + '</option>');
+        '<option value="' + cardSet.id + '" selected="selected">' + cardSet.name + '</option>');
   }
   
   var tableElem = $('#cards');
@@ -200,13 +201,16 @@ table td {
 </head>
 <body>
 <div style="float: left;">
-  Card sets (hold ctrl or cmd to select multiple):
+  Show only cards from card sets (hold ctrl or cmd to select multiple):
   <br/>
-  <select id="cardSets" multiple="multiple" style="height: 150px; width: 400px;">
+  <select id="cardSets" multiple="multiple" style="height: 150px; width: 450px;">
   </select>
 </div>
 <div>
-  <label for="search" style="padding-left: 10px;">Search card text:</label>
+  <label for="search" style="padding-left: 10px;"
+      title="Search for text in cards. You can use regular expressions.">
+    Search card text:
+  </label>
   <input type="text" id="search" style="width: 400px;" />
 </div>
 <div style="clear:both"></div>
