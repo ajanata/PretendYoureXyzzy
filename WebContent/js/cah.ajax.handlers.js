@@ -106,7 +106,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LOG_OUT] = function(data) {
   window.location.reload();
 };
 
-cah.ajax.ErrorHandlers[cah.$.AjaxOperation.LOG_OUT] = cah.ajax.SuccessHandlers.logout;
+cah.ajax.ErrorHandlers[cah.$.AjaxOperation.LOG_OUT] = cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LOG_OUT];
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.NAMES] = function(data) {
   cah.log.status("Currently connected: " + data[cah.$.AjaxResponse.NAMES].join(", "));
@@ -131,14 +131,31 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_GAME_INFO] = function(data, req
   }
 };
 
+cah.ajax.ErrorHandlers[cah.$.AjaxOperation.GET_GAME_INFO] = function(data, req) {
+  if (data[cah.$.AjaxResponse.ERROR_CODE] == cah.$.ErrorCode.INVALID_GAME) {
+    cah.log.error("The game has been removed.  Returning to the lobby.");
+    cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LEAVE_GAME](data, req);
+  } else {
+    cah.log.error(cah.$.ErrorCode_msg[data[cah.$.AjaxResponse.ERROR_CODE]]);
+  }
+};
+
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LEAVE_GAME] = function(data, req) {
   var game = cah.currentGames[req[cah.$.AjaxRequest.GAME_ID]];
   if (game) {
     game.dispose();
     delete cah.currentGames[req[cah.$.AjaxRequest.GAME_ID]];
   }
-  cah.GameList.instance.update();
   cah.GameList.instance.show();
+  cah.GameList.instance.update();
+};
+
+cah.ajax.ErrorHandlers[cah.$.AjaxOperation.LEAVE_GAME] = function(data, req) {
+  if (data[cah.$.AjaxResponse.ERROR_CODE] == cah.$.ErrorCode.INVALID_GAME) {
+    cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LEAVE_GAME](data, req);
+  } else {
+    cah.log.error(cah.$.ErrorCode_msg[data[cah.$.AjaxResponse.ERROR_CODE]]);
+  }
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.START_GAME] = function(data, req) {
