@@ -92,6 +92,7 @@ public class Game {
    */
   private final List<Player> roundPlayers = Collections.synchronizedList(new ArrayList<Player>(9));
   private final PlayerPlayedCardsTracker playedCards = new PlayerPlayedCardsTracker();
+  private final List<User> spectators = Collections.synchronizedList(new ArrayList<User>(10));
   private final ConnectedUsers connectedUsers;
   private final GameManager gameManager;
   private Player host;
@@ -101,6 +102,7 @@ public class Game {
   private WhiteDeck whiteDeck;
   private GameState state;
   private int maxPlayers = 6;
+  private int maxSpectators = 6;
   private int judgeIndex = 0;
   private final static int ROUND_INTERMISSION = 8 * 1000;
   /**
@@ -301,6 +303,64 @@ public class Game {
   }
 
   /**
+   * Add a spectator to the game.
+   * 
+   * Synchronizes on {@link #spectators}.
+   * 
+   * @param user
+   *          Spectator to add to this game.
+   * @throws TooManySpectatorsException
+   *           Thrown if this game is at its maximum spectator capacity.
+   * @throws IllegalStateException
+   *           Thrown if {@code user} is already in a game.
+   */
+  public void addSpectator(final User user) throws TooManySpectatorsException,
+      IllegalStateException {
+    logger.info(String.format("%s joined game %d as a spectator.", user.toString(), id));
+    synchronized (spectators) {
+      if (spectators.size() >= maxSpectators) {
+        throw new TooManySpectatorsException();
+      }
+      // this will throw IllegalStateException if the user is already in a game, including this one.
+      user.joinGame(this);
+      spectators.add(user);
+    }
+
+    final HashMap<ReturnableData, Object> data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_SPECTATOR_JOIN.toString());
+    data.put(LongPollResponse.NICKNAME, user.getNickname());
+    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+
+    gameManager.broadcastGameListRefresh();
+  }
+
+  /**
+   * Remove a spectator from the game.
+   * <br/>
+   * Synchronizes on {@link #spectator}.
+   * 
+   * @param user
+   *          Spectator to remove from the game.
+   */
+  public void removeSpectator(final User user) {
+    logger.info(String.format("Removing spectator %s from game %d.", user.toString(), id));
+    synchronized (spectators) {
+      if (!spectators.remove(user)) {
+        return;
+      } // not actually spectating
+      user.leaveGame(this);
+    }
+
+    // do this down here so the person that left doesn't get the notice too
+    final HashMap<ReturnableData, Object> data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_SPECTATOR_LEAVE.toString());
+    data.put(LongPollResponse.NICKNAME, user.getNickname());
+    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+
+    gameManager.broadcastGameListRefresh();
+  }
+
+  /**
    * Return all played cards to their respective player's hand.
    * <br/>
    * Synchronizes on {@link #playedCards}.
@@ -366,9 +426,11 @@ public class Game {
   }
 
   public void updateGameSettings(final int newScoreGoal, final int newMaxPlayers,
+      final int newMaxSpectators,
       final Set<CardSet> newCardSets, final String newPassword, final boolean newUseTimer) {
     this.scoreGoal = newScoreGoal;
     this.maxPlayers = newMaxPlayers;
+    this.maxSpectators = newMaxSpectators;
     synchronized (this.cardSets) {
       this.cardSets.clear();
       this.cardSets.addAll(newCardSets);
@@ -422,6 +484,7 @@ public class Game {
     }
     info.put(GameInfo.CARD_SETS, cardSetIds);
     info.put(GameInfo.PLAYER_LIMIT, maxPlayers);
+    info.put(GameInfo.SPECTATOR_LIMIT, maxSpectators);
     info.put(GameInfo.SCORE_LIMIT, scoreGoal);
     info.put(GameInfo.USE_TIMER, useTimer);
     if (includePassword) {
@@ -434,6 +497,13 @@ public class Game {
         playerNames.add(player.toString());
       }
       info.put(GameInfo.PLAYERS, playerNames);
+    }
+    synchronized (spectators) {
+      final List<String> spectatorNames = new ArrayList<String>(spectators.size());
+      for (final User spectator : spectators) {
+        spectatorNames.add(spectator.toString());
+      }
+      info.put(GameInfo.SPECTATORS, spectatorNames);
     }
     return info;
   }
@@ -1165,6 +1235,9 @@ public class Game {
         users.add(player.getUser());
       }
     }
+    synchronized (spectators) {
+      users.addAll(spectators);
+    }
     return users;
   }
 
@@ -1317,5 +1390,12 @@ public class Game {
    */
   public class TooManyPlayersException extends Exception {
     private static final long serialVersionUID = -6603422097641992017L;
+  }
+
+  /**
+   * Exception to be thrown when there are too many spectators in a game.
+   */
+  public class TooManySpectatorsException extends Exception {
+    private static final long serialVersionUID = -6603422097641992018L;
   }
 }

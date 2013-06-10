@@ -157,6 +157,17 @@ cah.ajax.Builder.prototype.withPlayerLimit = function(playerLimit) {
 
 /**
  * @param {number}
+ *          spectatorLimit Spectator limit field to use in the request.
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withSpectatorLimit = function(spectatorLimit) {
+  this.assertNotExecuted_();
+  this.data[cah.$.AjaxRequest.SPECTATOR_LIMIT] = spectatorLimit;
+  return this;
+};
+
+/**
+ * @param {number}
  *          scoreLimit Score limit field to use in the request.
  * @returns {cah.ajax.Builder} This object.
  */

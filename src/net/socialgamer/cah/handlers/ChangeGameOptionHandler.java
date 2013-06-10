@@ -43,6 +43,7 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
       try {
         final int scoreLimit = Integer.parseInt(request.getParameter(AjaxRequest.SCORE_LIMIT));
         final int playerLimit = Integer.parseInt(request.getParameter(AjaxRequest.PLAYER_LIMIT));
+        final int spectatorLimit = Integer.parseInt(request.getParameter(AjaxRequest.SPECTATOR_LIMIT));
         final String[] cardSetsParsed = request.getParameter(AjaxRequest.CARD_SETS).split(",");
         final Set<CardSet> cardSets = new HashSet<CardSet>();
         for (final String cardSetId : cardSetsParsed) {
@@ -62,7 +63,7 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
         if (null != useTimerString && !"".equals(useTimerString)) {
           useTimer = Boolean.valueOf(useTimerString);
         }
-        game.updateGameSettings(scoreLimit, playerLimit, cardSets, password, useTimer);
+        game.updateGameSettings(scoreLimit, playerLimit, spectatorLimit, cardSets, password, useTimer);
       } catch (final NumberFormatException nfe) {
         return error(ErrorCode.BAD_REQUEST);
       }
