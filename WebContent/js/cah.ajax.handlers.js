@@ -106,7 +106,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LOG_OUT] = function(data) {
   window.location.reload();
 };
 
-cah.ajax.ErrorHandlers[cah.$.AjaxOperation.LOG_OUT] = cah.ajax.SuccessHandlers.logout;
+cah.ajax.ErrorHandlers[cah.$.AjaxOperation.LOG_OUT] = cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LOG_OUT];
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.NAMES] = function(data) {
   cah.log.status("Currently connected: " + data[cah.$.AjaxResponse.NAMES].join(", "));
