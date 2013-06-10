@@ -123,7 +123,7 @@ cah.Ajax.prototype.done = function(data) {
     // "you don't have that card" etc.
     var req = this.pendingRequests_[data[cah.$.AjaxResponse.SERIAL]];
     if (req && cah.ajax.ErrorHandlers[req.getOp()]) {
-      cah.ajax.ErrorHandlers[req.getOp()](data);
+      cah.ajax.ErrorHandlers[req.getOp()](data, req.data);
     } else {
       cah.log.error(cah.$.ErrorCode_msg[data[cah.$.AjaxResponse.ERROR_CODE]]);
     }
