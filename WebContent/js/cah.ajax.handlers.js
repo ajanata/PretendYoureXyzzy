@@ -137,8 +137,9 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LEAVE_GAME] = function(data, req) {
     game.dispose();
     delete cah.currentGames[req[cah.$.AjaxRequest.GAME_ID]];
   }
-  cah.GameList.instance.update();
   cah.GameList.instance.show();
+  cah.GameList.instance.update();
+
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.START_GAME] = function(data, req) {
