@@ -57,6 +57,14 @@ cah.Game = function(id) {
   this.scoreboardElement_ = $("#scoreboard_template").clone()[0];
   this.scoreboardElement_.id = "scoreboard_" + id;
   $(this.scoreboardElement_).removeClass("hide");
+  
+  /**
+   * The first spectator element within the scoreboard.
+   * 
+   * @type {HTMLDivElement}
+   * @private
+   */
+  this.firstSpectatorElement_ = null;
 
   /**
    * The element for the chat room for this game
@@ -786,7 +794,11 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
   if (!panel) {
     // new score panel
     panel = new cah.GameScorePanel(playerName);
-    $(this.scoreboardElement_).append(panel.getElement());
+    if (this.firstSpectatorElement_) {
+    	$(this.firstSpectatorElement_).before(panel.getElement());
+    } else {
+    	$(this.scoreboardElement_).append(panel.getElement());
+    }
     this.scoreCards_[playerName] = panel;
   }
   var oldStatus = panel.getStatus();
@@ -858,6 +870,9 @@ cah.Game.prototype.updateSpectator = function(spectator) {
 	  panel = new cah.GameScorePanel(spectator);
 	  $(this.scoreboardElement_).append(panel.getElement());
 	  this.scoreCards_[spectator] = panel;
+	  if (!this.firstSpectatorElement_) {
+		  this.firstSpectatorElement_ = panel.getElement();
+	  }
 	}
 	panel.update(-1, cah.$.GamePlayerStatus.SPECTATOR);
 	
@@ -1198,6 +1213,9 @@ cah.Game.prototype.spectatorLeave = function(spectator) {
   }
   var scorecard = this.scoreCards_[spectator];
   if (scorecard) {
+	if (this.firstSpectatorElement_ == scorecard.getElement()) {
+		this.firstSpectatorElement_ = this.firstSpectatorElement_.nextSibling;
+	}
     $(scorecard.getElement()).remove();
   }
   delete this.scoreCards_[spectator];
@@ -1407,10 +1425,10 @@ cah.GameScorePanel.prototype.update = function(score, status) {
 	          + cah.$.GamePlayerStatus_msg[status]);
   } else {
 	  $(".scorecard_points", this.element_).removeClass("hide");
-  $(this.element_).attr(
-      "aria-label",
-      this.player_ + " has " + score + " Awesome Point" + (score == 1 ? "" : "s") + ". "
-          + cah.$.GamePlayerStatus_msg[status]);
+	  $(this.element_).attr(
+		      "aria-label",
+		      this.player_ + " has " + score + " Awesome Point" + (score == 1 ? "" : "s") + ". "
+		          + cah.$.GamePlayerStatus_msg[status]);
   }
 };
 
