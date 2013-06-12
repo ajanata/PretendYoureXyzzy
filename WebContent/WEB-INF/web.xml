@@ -6,38 +6,6 @@
     <welcome-file>index.htm</welcome-file>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
-  <servlet>
-    <servlet-name>AjaxServlet</servlet-name>
-    <servlet-class>net.socialgamer.cah.servlets.AjaxServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>JavascriptConfigServlet</servlet-name>
-    <servlet-class>net.socialgamer.cah.servlets.JavascriptConfigServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>LongPollServlet</servlet-name>
-    <servlet-class>net.socialgamer.cah.servlets.LongPollServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>Schema</servlet-name>
-    <servlet-class>net.socialgamer.cah.servlets.Schema</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AjaxServlet</servlet-name>
-    <url-pattern>/AjaxServlet</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>JavascriptConfigServlet</servlet-name>
-    <url-pattern>/js/cah.config.js</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>LongPollServlet</servlet-name>
-    <url-pattern>/LongPollServlet</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>Schema</servlet-name>
-    <url-pattern>/Schema</url-pattern>
-  </servlet-mapping>
   <listener>
     <listener-class>net.socialgamer.cah.StartupUtils</listener-class>
   </listener>
