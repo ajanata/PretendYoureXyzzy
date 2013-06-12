@@ -191,8 +191,8 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.KICKED_FROM_GAME_IDLE] = function
     game.dispose();
     delete cah.currentGames[data[cah.$.LongPollResponse.GAME_ID]];
   }
-  cah.GameList.instance.update();
   cah.GameList.instance.show();
+  cah.GameList.instance.update();
 
   cah.log.error("You were kicked from game " + data[cah.$.LongPollResponse.GAME_ID]
       + " for being idle for too long.");
