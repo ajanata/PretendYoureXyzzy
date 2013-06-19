@@ -31,17 +31,18 @@ cah.$.AjaxRequest = function() {
 };
 cah.$.AjaxRequest.prototype.dummyForAutocomplete = undefined;
 cah.$.AjaxRequest.WALL = "wall";
-cah.$.AjaxRequest.MESSAGE = "m";
-cah.$.AjaxRequest.CARD_ID = "cid";
 cah.$.AjaxRequest.USE_TIMER = "ut";
-cah.$.AjaxRequest.GAME_ID = "gid";
 cah.$.AjaxRequest.CARD_SETS = "css";
-cah.$.AjaxRequest.SERIAL = "s";
-cah.$.AjaxRequest.PLAYER_LIMIT = "pL";
-cah.$.AjaxRequest.PASSWORD = "pw";
+cah.$.AjaxRequest.GAME_ID = "gid";
 cah.$.AjaxRequest.OP = "o";
-cah.$.AjaxRequest.SCORE_LIMIT = "sl";
+cah.$.AjaxRequest.PLAYER_LIMIT = "pL";
 cah.$.AjaxRequest.NICKNAME = "n";
+cah.$.AjaxRequest.SCORE_LIMIT = "sl";
+cah.$.AjaxRequest.CARD_ID = "cid";
+cah.$.AjaxRequest.MESSAGE = "m";
+cah.$.AjaxRequest.BLANKS_LIMIT = "bl";
+cah.$.AjaxRequest.SERIAL = "s";
+cah.$.AjaxRequest.PASSWORD = "pw";
 
 cah.$.AjaxResponse = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -178,6 +179,7 @@ cah.$.GameInfo.HOST = "H";
 cah.$.GameInfo.STATE = "S";
 cah.$.GameInfo.PLAYERS = "P";
 cah.$.GameInfo.USE_TIMER = "ut";
+cah.$.GameInfo.BLANKS_LIMIT = "bl";
 cah.$.GameInfo.CARD_SETS = "css";
 cah.$.GameInfo.ID = "gid";
 cah.$.GameInfo.PLAYER_LIMIT = "pL";

@@ -178,6 +178,17 @@ cah.ajax.Builder.prototype.withPassword = function(password) {
 };
 
 /**
+ * @param {number}
+ *          scoreLimit Score limit field to use in the request.
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withBlanksLimit = function(blanksLimit) {
+  this.assertNotExecuted_();
+  this.data[cah.$.AjaxRequest.BLANKS_LIMIT] = blanksLimit;
+  return this;
+};
+
+/**
  * @param {boolean}
  *          useTimer Whether or not the game should use the idle timer.
  * @returns {cah.ajax.Builder} This object.

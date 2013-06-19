@@ -336,6 +336,15 @@ cah.card.WhiteCard = function(opt_faceUp, opt_id) {
 cah.inherits(cah.card.WhiteCard, cah.card.BaseCard);
 
 /**
+ * Checks if this is a blank card.
+ * 
+ * @returns True if this is a blank card.
+ */
+cah.card.WhiteCard.prototype.isBlankCard = function() {
+  return this.getServerId() == 0;
+};
+
+/**
  * @override
  */
 cah.card.WhiteCard.prototype.getFaceDown_ = function() {

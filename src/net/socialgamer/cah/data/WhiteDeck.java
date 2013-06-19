@@ -49,12 +49,15 @@ public class WhiteDeck {
   /**
    * Create a new white card deck, loading the cards from the database and shuffling them.
    */
-  public WhiteDeck(final Set<CardSet> cardSets) {
+  public WhiteDeck(final Set<CardSet> cardSets, final int numBlanks) {
     final Set<WhiteCard> allCards = new HashSet<WhiteCard>();
     for (final CardSet cardSet : cardSets) {
       allCards.addAll(cardSet.getWhiteCards());
     }
     deck = new ArrayList<WhiteCard>(allCards);
+    for (int i = 0; i < numBlanks; i++) {
+      deck.add(createBlankCard());
+    }
     Collections.shuffle(deck);
     dealt = new LinkedList<WhiteCard>();
     discard = new ArrayList<WhiteCard>(deck.size());
@@ -85,7 +88,12 @@ public class WhiteDeck {
    */
   public synchronized void discard(final WhiteCard card) {
     if (card != null) {
-      discard.add(card);
+      if (isBlankCard(card)) {
+        // create a fresh blank card to ensure player text is cleared
+        discard.add(createBlankCard());
+      } else {
+        discard.add(card);
+      }
     }
   }
 
@@ -96,5 +104,29 @@ public class WhiteDeck {
     Collections.shuffle(discard);
     deck.addAll(0, discard);
     discard.clear();
+  }
+
+  /**
+   * Creates a new blank card.
+   * 
+   * @return A newly created blank card.
+   */
+  private WhiteCard createBlankCard() {
+    final WhiteCard blank = new WhiteCard();
+    blank.setId(0);
+    blank.setText("____");
+    blank.setWatermark("____");
+    return blank;
+  }
+
+  /**
+   * Checks if a particular card is a blank card.
+   * 
+   * @param card
+   *          Card to check.
+   * @return True if the card is a blank card.
+   */
+  public static boolean isBlankCard(final WhiteCard card) {
+    return card.getId() == 0;
   }
 }

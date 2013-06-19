@@ -51,6 +51,7 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
                 Integer.parseInt(cardSetId)));
           }
         }
+        final int blanksLimit = Integer.parseInt(request.getParameter(AjaxRequest.BLANKS_LIMIT));
         String password = request.getParameter(AjaxRequest.PASSWORD);
         if (password == null) {
           password = "";
@@ -62,7 +63,7 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
         if (null != useTimerString && !"".equals(useTimerString)) {
           useTimer = Boolean.valueOf(useTimerString);
         }
-        game.updateGameSettings(scoreLimit, playerLimit, cardSets, password, useTimer);
+        game.updateGameSettings(scoreLimit, playerLimit, cardSets, blanksLimit, password, useTimer);
       } catch (final NumberFormatException nfe) {
         return error(ErrorCode.BAD_REQUEST);
       }

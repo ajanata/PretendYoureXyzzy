@@ -209,6 +209,7 @@ public class Constants {
     PASSWORD("pw"),
     PLAYER_LIMIT("pL"),
     SCORE_LIMIT("sl"),
+    BLANKS_LIMIT("bl"),
     SERIAL("s"),
     USE_TIMER("ut"),
     WALL("wall");
@@ -597,6 +598,8 @@ public class Constants {
     PLAYERS("P"),
     @DuplicationAllowed
     SCORE_LIMIT(AjaxRequest.SCORE_LIMIT),
+    @DuplicationAllowed
+    BLANKS_LIMIT(AjaxRequest.BLANKS_LIMIT),
     STATE("S"),
     @DuplicationAllowed
     USE_TIMER(AjaxRequest.USE_TIMER);
