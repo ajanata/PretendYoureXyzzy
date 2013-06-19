@@ -179,7 +179,7 @@ cah.ajax.Builder.prototype.withPassword = function(password) {
 
 /**
  * @param {number}
- *          scoreLimit Score limit field to use in the request.
+ *          blanksLimit Blanks limit field to use in the request.
  * @returns {cah.ajax.Builder} This object.
  */
 cah.ajax.Builder.prototype.withBlanksLimit = function(blanksLimit) {
