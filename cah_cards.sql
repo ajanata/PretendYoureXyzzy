@@ -814,6 +814,8 @@ INSERT INTO card_set VALUES (100161, true, '[CUSTOM] That Guy With The Glasses',
 INSERT INTO card_set VALUES (100160, true, '[CUSTOM] Ridiculously Stupid', false, '', 504);
 INSERT INTO card_set VALUES (100003, true, '[CUSTOM] Admin''s Picks', false, 'Custom cards that I think are particularly fitting.', 100);
 INSERT INTO card_set VALUES (100017, true, '[CUSTOM] SocialGamer', false, 'Custom cards from the SocialGamer.net community.', 101);
+INSERT INTO card_set VALUES (100217, true, '[CUSTOM] Homestuck', false, 'Custom Deck for the Homestuck Community', 102);
+
 
 
 --
@@ -5764,6 +5766,71 @@ INSERT INTO white_cards VALUES (100213, 'Helplessly giggling at the mention of H
 INSERT INTO white_cards VALUES (100214, 'Not wearing pants.', '1.3');
 INSERT INTO white_cards VALUES (100215, 'Consensual sex.', '1.3');
 INSERT INTO white_cards VALUES (100216, 'Her Majesty, Queen Elizabeth II.', '1.3');
+INSERT INTO white_cards VALUES (100217, 'Andrew Hussies lips', 'HMSTK');
+INSERT INTO white_cards VALUES (100218, 'Eridans Top half', 'HMSTK');
+INSERT INTO white_cards VALUES (100219, 'Eridans Bottom half', 'HMSTK');
+INSERT INTO white_cards VALUES (100220, 'SCIENCE WAND', 'HMSTK');
+INSERT INTO white_cards VALUES (100221, 'Grand Highbloods paint fetish', 'HMSTK');
+INSERT INTO white_cards VALUES (100222, 'Fantrolls', 'HMSTK');
+INSERT INTO white_cards VALUES (100223, 'Hussie Plz', 'HMSTK');
+INSERT INTO white_cards VALUES (100224, 'UPDAAAAAAAAAAATE!!!', 'HMSTK');
+INSERT INTO white_cards VALUES (100225, 'Dirk Striders missing head', 'HMSTK');
+INSERT INTO white_cards VALUES (100226, 'Eridans quadrants', 'HMSTK');
+INSERT INTO white_cards VALUES (100227, 'Forget the paps', 'HMSTK');
+INSERT INTO white_cards VALUES (100228, 'Shooshpap', 'HMSTK');
+INSERT INTO white_cards VALUES (100229, 'Lusus problems', 'HMSTK');
+INSERT INTO white_cards VALUES (100230, 'Pale Date', 'HMSTK');
+INSERT INTO white_cards VALUES (100231, 'FUCKASS!!', 'HMSTK');
+INSERT INTO white_cards VALUES (100232, 'Bonebulge', 'HMSTK');
+INSERT INTO white_cards VALUES (100233, 'Tentabulges', 'HMSTK');
+INSERT INTO white_cards VALUES (100234, 'Nook', 'HMSTK');
+INSERT INTO white_cards VALUES (100235, 'Seedflap', 'HMSTK');
+INSERT INTO white_cards VALUES (100236, 'Tavros missing legs', 'HMSTK');
+INSERT INTO white_cards VALUES (100237, 'Solluxs Glasses', 'HMSTK');
+INSERT INTO white_cards VALUES (100238, 'Fidus Spawn', 'HMSTK');
+INSERT INTO white_cards VALUES (100239, 'Karkat Vantas', 'HMSTK');
+INSERT INTO white_cards VALUES (100240, 'Gamzee Makara', 'HMSTK');
+INSERT INTO white_cards VALUES (100241, 'Aradia Megido', 'HMSTK');
+INSERT INTO white_cards VALUES (100242, 'Tavros Nitram', 'HMSTK');
+INSERT INTO white_cards VALUES (100243, 'Sollux Captor', 'HMSTK');
+INSERT INTO white_cards VALUES (100244, 'Nepeta Leijon', 'HMSTK');
+INSERT INTO white_cards VALUES (100245, 'Kanaya Maryam', 'HMSTK');
+INSERT INTO white_cards VALUES (100246, 'Terezi Pyrope', 'HMSTK');
+INSERT INTO white_cards VALUES (100247, 'Vriska Serket', 'HMSTK');
+INSERT INTO white_cards VALUES (100248, 'Equius Zahhak', 'HMSTK');
+INSERT INTO white_cards VALUES (100249, 'Eridan Ampora', 'HMSTK');
+INSERT INTO white_cards VALUES (100250, 'Feferi Peixes', 'HMSTK');
+INSERT INTO white_cards VALUES (100251, 'John Egbert', 'HMSTK');
+INSERT INTO white_cards VALUES (100252, 'Rose Lalonde', 'HMSTK');
+INSERT INTO white_cards VALUES (100253, 'Dave Strider', 'HMSTK');
+INSERT INTO white_cards VALUES (100254, 'Jade Harley', 'HMSTK');
+INSERT INTO white_cards VALUES (100255, 'What Pumpkin?', 'HMSTK');
+INSERT INTO white_cards VALUES (100256, 'Black flings', 'HMSTK');
+INSERT INTO white_cards VALUES (100257, 'Quadrant flipping', 'HMSTK');
+INSERT INTO white_cards VALUES (100258, 'I am not a homosexual', 'HMSTK');
+INSERT INTO white_cards VALUES (100259, 'CAUCASIAN!!!', 'HMSTK');
+INSERT INTO white_cards VALUES (100260, 'Lord English', 'HMSTK');
+INSERT INTO white_cards VALUES (100261, 'I"M ALREADY HERE!!!', 'HMSTK');
+INSERT INTO white_cards VALUES (100262, 'Trickster Mode', 'HMSTK');
+INSERT INTO white_cards VALUES (100263, 'MS Paint', 'HMSTK');
+INSERT INTO white_cards VALUES (100264, 'Wayward Vagabond', 'HMSTK');
+INSERT INTO white_cards VALUES (100265, 'Please be grub sauce', 'HMSTK');
+INSERT INTO white_cards VALUES (100266, 'What even is grub sauce?', 'HMSTK');
+INSERT INTO white_cards VALUES (100267, 'HONK!', 'HMSTK');
+INSERT INTO white_cards VALUES (100268, 'Gamzees Codpiece', 'HMSTK');
+INSERT INTO white_cards VALUES (100269, 'God Tier', 'HMSTK');
+INSERT INTO white_cards VALUES (100270, 'Getting your cape caught in a door while trying to avoid a raging jadeblood', 'HMSTK');
+INSERT INTO white_cards VALUES (100271, 'Getting thrown off a cliff by a crazy spider bitch', 'HMSTK');
+INSERT INTO white_cards VALUES (100272, 'Going "Clubbing"', 'HMSTK');
+INSERT INTO white_cards VALUES (100273, 'Rainbowbloods', 'HMSTK');
+INSERT INTO white_cards VALUES (100274, 'Accidently killing your girlfriend', 'HMSTK');
+INSERT INTO white_cards VALUES (100275, 'Playing a game that inevitably destroys your planet', 'HMSTK');
+INSERT INTO white_cards VALUES (100276, 'Raging indigos', 'HMSTK');
+INSERT INTO white_cards VALUES (100277, 'Pale whores', 'HMSTK');
+INSERT INTO white_cards VALUES (100278, 'prospitutes', 'HMSTK');
+INSERT INTO white_cards VALUES (100279, 'Auspitice problems', 'HMSTK');
+INSERT INTO white_cards VALUES (100280, 'Hippie trolls', 'HMSTK');
+INSERT INTO white_cards VALUES (100281, 'Douchebag Rufioh Nitram', 'HMSTK');
 
 
 --
