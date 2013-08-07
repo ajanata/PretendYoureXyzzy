@@ -51,6 +51,7 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
                 Integer.parseInt(cardSetId)));
           }
         }
+        final String oldPassword = game.getPassword();
         String password = request.getParameter(AjaxRequest.PASSWORD);
         if (password == null) {
           password = "";
@@ -63,11 +64,16 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
           useTimer = Boolean.valueOf(useTimerString);
         }
         game.updateGameSettings(scoreLimit, playerLimit, cardSets, password, useTimer);
+
+        // only broadcast an update if the password state has changed, because it needs to change
+        // the text on the join button and the sort order
+        if (!password.equals(oldPassword)) {
+          gameManager.broadcastGameListRefresh();
+        }
       } catch (final NumberFormatException nfe) {
         return error(ErrorCode.BAD_REQUEST);
       }
 
-      gameManager.broadcastGameListRefresh();
       return data;
     }
   }
