@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -60,28 +61,28 @@ public class LongPollServlet extends CahServlet {
   /**
    * Minimum amount of time before timing out and returning a no-op, in nanoseconds.
    */
-  private static final long TIMEOUT_BASE = 20 * 1000 * 1000;
+  private static final long TIMEOUT_BASE = TimeUnit.SECONDS.toNanos(20);
   //  private static final long TIMEOUT_BASE = 10 * 1000 * 1000;
 
   /**
    * Randomness factor added to minimum timeout duration, in nanoseconds. The maximum timeout delay
    * will be TIMEOUT_BASE + TIMEOUT_RANDOMNESS - 1.
    */
-  private static final double TIMEOUT_RANDOMNESS = 5 * 1000 * 1000;
+  private static final double TIMEOUT_RANDOMNESS = TimeUnit.SECONDS.toNanos(5);
   //  private static final double TIMEOUT_RANDOMNESS = 0;
 
   /**
    * The maximum number of messages which will be returned to a client during a single poll
    * operation.
    */
-  private static final int MAX_MESSAGES_PER_POLL = 10;
+  private static final int MAX_MESSAGES_PER_POLL = 20;
 
   /**
    * An amount of milliseconds to wait after being notified that the user has at least one message
    * to deliver, before we actually deliver messages. This will allow multiple messages that arrive
    * in close proximity to each other to actually be delivered in the same client request.
    */
-  private static final int WAIT_FOR_MORE_DELAY = 30;
+  private static final int WAIT_FOR_MORE_DELAY = 50;
 
   /**
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -99,9 +100,9 @@ public class LongPollServlet extends CahServlet {
     final User user = (User) hSession.getAttribute(SessionAttribute.USER);
     assert (user != null);
     user.contactedServer();
-    while (!(user.hasQueuedMessages()) && System.nanoTime() < end) {
+    while (!(user.hasQueuedMessages()) && System.nanoTime() - end < 0) {
       try {
-        user.waitForNewMessageNotification((end - System.nanoTime()) / 1000);
+        user.waitForNewMessageNotification(TimeUnit.NANOSECONDS.toMillis(end - System.nanoTime()));
       } catch (final InterruptedException ie) {
         // pass
       }

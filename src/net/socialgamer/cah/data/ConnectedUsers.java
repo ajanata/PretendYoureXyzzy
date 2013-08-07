@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
@@ -58,7 +59,7 @@ public class ConnectedUsers {
   /**
    * Duration of a ping timeout, in nanoseconds.
    */
-  public static final long PING_TIMEOUT = 45L * 1000L * 1000000L;
+  public static final long PING_TIMEOUT = TimeUnit.SECONDS.toNanos(45);
 
   /**
    * Key (username) must be stored in lower-case to facilitate case-insensitivity in nicks.
