@@ -10033,7 +10033,7 @@ COPY white_cards (id, text, watermark) FROM stdin;
 4943	A closed casket funeral.	MrMan
 4944	Scotch.	MrMan
 4945	A really ugly baby.	MrMan
-4946	Dunkenly texting an ex.	MrMan
+4946	Drunkenly texting an ex.	MrMan
 4947	Realizing, too late, that there is no toilet paper left.	MrMan
 4948	Illegal immigrants.	MrMan
 4949	Elder abuse.	MrMan
