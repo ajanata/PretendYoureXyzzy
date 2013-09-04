@@ -948,7 +948,7 @@ COPY black_cards (id, text, draw, pick, watermark) FROM stdin;
 935	The Himalayas are filled with many perils, such as ____.	0	1	MrMan
 936	The road to success is paved with ____.	0	1	MrMan
 937	I work out so I can look good when I'm ____.	0	1	MrMan
-938	What's the time? ____ time!	0	2	MrMan
+938	What's the time? ____ time!	0	1	MrMan
 939	And on his farm he had ____, E-I-E-I-O!	0	1	MrMan
 940	Genius is 10% inspiration and 90% ____.	0	1	MrMan
 941	I will not eat them Sam-I-Am. I will not eat ____.	0	1	MrMan
