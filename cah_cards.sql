@@ -1558,7 +1558,7 @@ COPY card_set (id, active, name, base_deck, description, weight) FROM stdin;
 100051	t	PAX East 2013 Pack &quot;C&quot;	f	PAX East 2013 Pack &quot;C&quot;.	32
 100049	t	PAX East 2013 Pack &quot;A&quot;	f	PAX East 2013 Pack &quot;A&quot;.	30
 100050	t	PAX East 2013 Pack &quot;B&quot;	f	PAX East 2013 Pack &quot;B&quot;.	31
-100001	t	[C] r/MLPLounge	f	http://www.reddit.com/r/mlplounge/	500
+100001	t	[C] Cards Against Equinity	f	http://www.reddit.com/r/mylittlechaos/	500
 100002	t	[C] Very Serious	f	http://forum.verysrs.com/	501
 100157	t	[C] Northernlion	f	http://www.youtube.com/user/Northernlion	502
 100161	t	[C] That Guy With The Glasses	t	http://thatguywiththeglasses.com/	503
