@@ -8423,7 +8423,7 @@ COPY white_cards (id, text, watermark) FROM stdin;
 1435	Ponies wearing clothes.	MLP
 1436	Sloppy clop.	MLP
 1437	Shipping.	MLP
-1438	Ponies with fucking lasers on their heads.	MLP
+1438	Ponies with frickin' laser beams attached to their heads!	MLP
 1439	Shaking Dat Plot.	MLP
 1440	Secretly being a changeling all along.	MLP
 1441	Ponies.	MLP
