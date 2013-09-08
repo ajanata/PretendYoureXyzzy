@@ -1558,23 +1558,23 @@ COPY card_set (id, active, name, base_deck, description, weight) FROM stdin;
 100051	t	PAX East 2013 Pack &quot;C&quot;	f	PAX East 2013 Pack &quot;C&quot;.	32
 100049	t	PAX East 2013 Pack &quot;A&quot;	f	PAX East 2013 Pack &quot;A&quot;.	30
 100050	t	PAX East 2013 Pack &quot;B&quot;	f	PAX East 2013 Pack &quot;B&quot;.	31
-100001	t	[CUSTOM] r/MLPLounge	f	http://www.reddit.com/r/mlplounge/	500
-100002	t	[CUSTOM] Very Serious	f	http://forum.verysrs.com/	501
-100157	t	[CUSTOM] Northernlion	f	http://www.youtube.com/user/Northernlion	502
-100161	t	[CUSTOM] That Guy With The Glasses	t	http://thatguywiththeglasses.com/	503
-100160	t	[CUSTOM] Ridiculously Stupid	f		504
-100003	t	[CUSTOM] Admin's Picks	f	Custom cards that I think are particularly fitting.	100
-100017	t	[CUSTOM] SocialGamer	f	Custom cards from the SocialGamer.net community.	101
-100219	t	[CUSTOM] Golby Fan Club	f		505
-100224	t	[CUSTOM] Anime	t	http://www.desudesbrigade.com/	506
-100233	t	[CUSTOM] Derps Against Humanity	f		520
-100232	t	[CUSTOM] Rooster Teeth	f		519
-100231	t	[CUSTOM] Game Grumps	f		518
-100229	t	[CUSTOM] Vidya	f	by Sl0nderman	517
-100228	t	[CUSTOM] Sodomy Dog's Furry Pack	f		516
-100225	t	[CUSTOM] Mr. Man Collection	f		515
-100234	f	[CUSTOM] Anime Expansion #1	f	http://www.desudesbrigade.com/	507
-100236	f	[CUSTOM] Antisocial Injustice	f		521
+100001	t	[C] Cards Against Equinity	f	http://www.reddit.com/r/mylittlechaos/	500
+100002	t	[C] Very Serious	f	http://forum.verysrs.com/	501
+100157	t	[C] Northernlion	f	http://www.youtube.com/user/Northernlion	502
+100161	t	[C] That Guy With The Glasses	t	http://thatguywiththeglasses.com/	503
+100160	t	[C] Ridiculously Stupid	f		504
+100003	t	[C] Admin's Picks	f	Custom cards that I think are particularly fitting.	100
+100017	t	[C] SocialGamer	f	Custom cards from the SocialGamer.net community.	101
+100219	t	[C] Golby Fan Club	f		505
+100224	t	[C] Anime	t	http://www.desudesbrigade.com/	506
+100233	t	[C] Derps Against Humanity	f		520
+100232	t	[C] Rooster Teeth	f		519
+100231	t	[C] Game Grumps	f		518
+100229	t	[C] Vidya	f	by Sl0nderman	517
+100228	t	[C] Sodomy Dog's Furry Pack	f		516
+100225	t	[C] Mr. Man Collection	f		515
+100234	f	[C] Anime Expansion #1	f	http://www.desudesbrigade.com/	507
+100236	f	[C] Antisocial Injustice	f		521
 \.
 
 
@@ -8423,7 +8423,7 @@ COPY white_cards (id, text, watermark) FROM stdin;
 1435	Ponies wearing clothes.	MLP
 1436	Sloppy clop.	MLP
 1437	Shipping.	MLP
-1438	Ponies with fucking lasers on their heads.	MLP
+1438	Ponies with frickin' laser beams attached to their heads!	MLP
 1439	Shaking Dat Plot.	MLP
 1440	Secretly being a changeling all along.	MLP
 1441	Ponies.	MLP
