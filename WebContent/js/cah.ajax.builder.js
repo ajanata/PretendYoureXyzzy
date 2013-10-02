@@ -200,6 +200,17 @@ cah.ajax.Builder.prototype.withWall = function(wall) {
 };
 
 /**
+ * @param {boolean}
+ *          emote Whether or not this is an emote
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withEmote = function(emote) {
+  this.assertNotExecuted_();
+  this.data[cah.$.AjaxRequest.EMOTE] = emote;
+  return this;
+};
+
+/**
  * Assert that the request from this builder has not already run. Throws an exception if it has.
  * 
  * @private

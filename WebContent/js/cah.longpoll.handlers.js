@@ -107,8 +107,12 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.CHAT] = function(data) {
 
     // don't display our own chat
     if (from != cah.nickname && show) {
-      cah.log.status_with_game(game, "<" + data[cah.$.LongPollResponse.FROM] + "> "
-          + data[cah.$.LongPollResponse.MESSAGE], clazz);
+      var message = data[cah.$.LongPollResponse.MESSAGE];
+      if (data[cah.$.LongPollResponse.EMOTE]) {
+        cah.log.status_with_game(game, "* " + from + " " + message, clazz);
+      } else {
+        cah.log.status_with_game(game, "<" + from + "> " + message, clazz);
+      }
     }
   }
 };

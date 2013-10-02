@@ -146,13 +146,22 @@ function chatsubmit_click(game_id, parent_element) {
       // TODO support an /ignore command
       case '':
         if (game_id !== null) {
-          ajax = cah.Ajax.build(cah.$.AjaxOperation.GAME_CHAT).withGameId(game_id);
+          ajax = cah.Ajax.build(cah.$.AjaxOperation.GAME_CHAT).withGameId(game_id).withEmote(false);
         } else {
-          ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT);
+          ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT).withEmote(false);
         }
         ajax = ajax.withMessage(text);
         cah.log.status_with_game(game_id, "<" + cah.nickname + "> " + text);
         break;
+      case 'me':
+          if (game_id !== null) {
+            ajax = cah.Ajax.build(cah.$.AjaxOperation.GAME_CHAT).withGameId(game_id).withEmote(true);
+          } else {
+            ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT).withEmote(true);
+          }
+          ajax = ajax.withMessage(text);
+          cah.log.status_with_game(game_id, "* " + cah.nickname + " " + text);
+          break;
       case 'wall':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT).withWall(true).withMessage(text);
         break;
