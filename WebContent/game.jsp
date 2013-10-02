@@ -372,7 +372,7 @@ HttpSession hSession = request.getSession(true);
       </fieldset>
       <label id="blanks_limit_label" title="Blank cards allow a player to type in their own answer.">
         Also include <select id="blanks_limit_template" class="blanks_limit">
-        <% for (int i = 0; i <= 10; i++) { %>
+        <% for (int i = 0; i <= 30; i++) { %>
           <option <%= i == 0 ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
         <% } %>
         </select> blank white cards.
