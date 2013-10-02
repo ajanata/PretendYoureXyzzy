@@ -5,11 +5,13 @@ import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
+@WebServlet("/js/cah.config.js")
 public class JavascriptConfigServlet extends HttpServlet {
 
   private static final long serialVersionUID = 4287566906479434127L;

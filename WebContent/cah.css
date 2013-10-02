@@ -387,6 +387,10 @@ span.debug, span.admin {
   width: 700px;
 }
 
+.game_options {
+  z-index: 500;
+}
+
 .game_right_side_box {
   height: 60%;
   margin: 10px;
