@@ -54,6 +54,14 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>7 August 2013:<ul>
+    <li tabindex="0"><strong>The game list will not automatically update all the time now.</strong>
+    You will need to start using the Refresh Games button. The game list will automatically update
+    for new games, removed games, when games become passworded, or when you leave a game.</li>
+    <li tabindex="0">A lot of custom card sets have been added.</li>
+    <li tabindex="0">Cleaned up some error handling.</li>
+    <li tabindex="0">Tried to fix some more of the server crashes.</li>
+  </ul></li>
   <li>28 April 2013:<ul>
     <li tabindex="0">Version 1.3 of the base Cards Against Humanity game.</li>
     <li tabindex="0">Card sets are grouped by official or custom.</li>

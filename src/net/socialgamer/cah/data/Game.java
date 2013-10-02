@@ -196,7 +196,8 @@ public class Game {
     data.put(LongPollResponse.NICKNAME, user.getNickname());
     broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
 
-    gameManager.broadcastGameListRefresh();
+    // Don't do this anymore, it was driving up a crazy amount of traffic.
+    // gameManager.broadcastGameListRefresh();
   }
 
   /**
@@ -264,7 +265,8 @@ public class Game {
       data.put(LongPollResponse.NICKNAME, user.getNickname());
       broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
 
-      gameManager.broadcastGameListRefresh();
+      // Don't do this anymore, it was driving up a crazy amount of traffic.
+      // gameManager.broadcastGameListRefresh();
 
       if (host == player) {
         if (players.size() > 0) {
@@ -432,13 +434,13 @@ public class Game {
       info.put(GameInfo.PASSWORD, password);
     }
     info.put(GameInfo.HAS_PASSWORD, password != null && !password.equals(""));
-    synchronized (players) {
-      final List<String> playerNames = new ArrayList<String>(players.size());
-      for (final Player player : players) {
-        playerNames.add(player.toString());
-      }
-      info.put(GameInfo.PLAYERS, playerNames);
+
+    final Player[] playersCopy = players.toArray(new Player[players.size()]);
+    final List<String> playerNames = new ArrayList<String>(playersCopy.length);
+    for (final Player player : playersCopy) {
+      playerNames.add(player.toString());
     }
+    info.put(GameInfo.PLAYERS, playerNames);
     return info;
   }
 
@@ -448,12 +450,11 @@ public class Game {
    */
   public List<Map<GamePlayerInfo, Object>> getAllPlayerInfo() {
     final List<Map<GamePlayerInfo, Object>> info;
-    synchronized (players) {
-      info = new ArrayList<Map<GamePlayerInfo, Object>>(players.size());
-      for (final Player player : players) {
-        final Map<GamePlayerInfo, Object> playerInfo = getPlayerInfo(player);
-        info.add(playerInfo);
-      }
+    final Player[] playersCopy = players.toArray(new Player[players.size()]);
+    info = new ArrayList<Map<GamePlayerInfo, Object>>(playersCopy.length);
+    for (final Player player : playersCopy) {
+      final Map<GamePlayerInfo, Object> playerInfo = getPlayerInfo(player);
+      info.add(playerInfo);
     }
     return info;
   }
@@ -553,14 +554,13 @@ public class Game {
       return false;
     }
     boolean started;
-    synchronized (players) {
-      if (players.size() >= 3) {
-        // Pick a random start judge, though the "next" judge will actually go first.
-        judgeIndex = (int) (Math.random() * players.size());
-        started = true;
-      } else {
-        started = false;
-      }
+    final int numPlayers = players.size();
+    if (numPlayers >= 3) {
+      // Pick a random start judge, though the "next" judge will actually go first.
+      judgeIndex = (int) (Math.random() * numPlayers);
+      started = true;
+    } else {
+      started = false;
     }
     if (started) {
       logger.info(String.format("Starting game %d.", id));
@@ -591,21 +591,19 @@ public class Game {
    * Move the game into the {@code DEALING} state, and deal cards. The game immediately then moves
    * into the {@code PLAYING} state.
    * <br/>
-   * Synchronizes on {@link #players}.
    */
   private void dealState() {
     state = GameState.DEALING;
-    synchronized (players) {
-      for (final Player player : players) {
-        final List<WhiteCard> hand = player.getHand();
-        final List<WhiteCard> newCards = new LinkedList<WhiteCard>();
-        while (hand.size() < 10) {
-          final WhiteCard card = getNextWhiteCard();
-          hand.add(card);
-          newCards.add(card);
-        }
-        sendCardsToPlayer(player, newCards);
+    final Player[] playersCopy = players.toArray(new Player[players.size()]);
+    for (final Player player : playersCopy) {
+      final List<WhiteCard> hand = player.getHand();
+      final List<WhiteCard> newCards = new LinkedList<WhiteCard>();
+      while (hand.size() < 10) {
+        final WhiteCard card = getNextWhiteCard();
+        hand.add(card);
+        newCards.add(card);
       }
+      sendCardsToPlayer(player, newCards);
     }
     playingState();
   }
@@ -765,15 +763,14 @@ public class Game {
           logger.info(String.format("Skipping idle player %s in game %d.",
               player.getUser().toString(), id));
           player.skipped();
-          final HashMap<ReturnableData, Object> data = getEventMap();
 
+          final HashMap<ReturnableData, Object> data = getEventMap();
+          data.put(LongPollResponse.NICKNAME, player.getUser().getNickname());
           if (player.getSkipCount() >= MAX_SKIPS_BEFORE_KICK || playedCards.size() < 2) {
             data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_KICKED_IDLE.toString());
-            data.put(LongPollResponse.NICKNAME, player.getUser().getNickname());
             playersToRemove.add(player.getUser());
           } else {
             data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_SKIPPED.toString());
-            data.put(LongPollResponse.NICKNAME, player.getUser().getNickname());
             playersToUpdateStatus.add(player);
           }
           broadcastToPlayers(MessageType.GAME_EVENT, data);
@@ -917,6 +914,8 @@ public class Game {
       data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(judge));
       broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
     }
+
+    gameManager.broadcastGameListRefresh();
   }
 
   /**
@@ -1019,19 +1018,16 @@ public class Game {
   /**
    * Get the {@code Player} object for a given {@code User} object.
    * 
-   * Synchronizes on {@link #players}.
-   * 
    * @param user
    * @return The {@code Player} object representing {@code user} in this game, or {@code null} if
    *         {@code user} is not in this game.
    */
   @Nullable
   private Player getPlayerForUser(final User user) {
-    synchronized (players) {
-      for (final Player player : players) {
-        if (player.getUser() == user) {
-          return player;
-        }
+    final Player[] playersCopy = players.toArray(new Player[players.size()]);
+    for (final Player player : playersCopy) {
+      if (player.getUser() == user) {
+        return player;
       }
     }
     return null;
@@ -1163,11 +1159,10 @@ public class Game {
    */
   private List<User> playersToUsers() {
     final List<User> users;
-    synchronized (players) {
-      users = new ArrayList<User>(players.size());
-      for (final Player player : players) {
-        users.add(player.getUser());
-      }
+    final Player[] playersCopy = players.toArray(new Player[players.size()]);
+    users = new ArrayList<User>(playersCopy.length);
+    for (final Player player : playersCopy) {
+      users.add(player.getUser());
     }
     return users;
   }

@@ -95,12 +95,14 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 28 April 2013:</p>
+  <p tabindex="0">Most recent update: 7 August 2013:</p>
   <ul>
-    <li tabindex="0">Version 1.3 of the base Cards Against Humanity game.</li>
-    <li tabindex="0">Card sets are grouped by official or custom.</li>
-    <li tabindex="0">You can <a href="viewcards.jsp">view all of the cards in the game</a>,
-    including searching by text and filtering card set.</li>
+    <li tabindex="0"><strong>The game list will not automatically update all the time now.</strong>
+    You will need to start using the Refresh Games button. The game list will automatically update
+    for new games, removed games, when games become passworded, or when you leave a game.</li>
+    <li tabindex="0">A lot of custom card sets have been added.</li>
+    <li tabindex="0">Cleaned up some error handling.</li>
+    <li tabindex="0">Tried to fix some more of the server crashes.</li>
   </ul>
   <div id="nickbox">
     Nickname:

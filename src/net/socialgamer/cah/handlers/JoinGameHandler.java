@@ -74,7 +74,6 @@ public class JoinGameHandler extends GameHandler {
     } catch (final TooManyPlayersException e) {
       return error(ErrorCode.GAME_FULL);
     }
-    gameManager.broadcastGameListRefresh();
     return data;
   }
 }
