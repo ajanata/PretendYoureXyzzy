@@ -98,21 +98,19 @@ cah.ajax.after_registered = function() {
   // Dirty that we have to do this here... Oh well.
   app_resize();
 
-  if (!cah.ajax.hasAutojoinedGame_) {
-    var hash = window.location.hash.substring(1);
-    if (hash && hash != '') {
-      // TODO find a better place for this if we ever have more than just game=id in the hash.
-      var params = hash.split('&');
-      var options = {};
-      for ( var i in params) {
-        var split = params[i].split('=');
-        var key = split[0];
-        var value = split[1];
-        options[key] = value;
-      }
-      if (options['game']) {
-        cah.ajax.autojoinGameId_ = options['game'];
-      }
+  var hash = window.location.hash.substring(1);
+  if (hash && hash != '') {
+    // TODO find a better place for this if we ever have more than just game=id in the hash.
+    var params = hash.split('&');
+    var options = {};
+    for ( var i in params) {
+      var split = params[i].split('=');
+      var key = split[0];
+      var value = split[1];
+      options[key] = value;
+    }
+    if (options['game']) {
+      cah.ajax.autojoinGameId_ = options['game'];
     }
   }
 };
@@ -138,7 +136,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.NAMES] = function(data) {
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GAME_LIST] = function(data) {
   cah.GameList.instance.processUpdate(data);
 
-  if (cah.ajax.autojoinGameId_) {
+  if (cah.ajax.autojoinGameId_ && !cah.ajax.hasAutojoinedGame_) {
     try {
       cah.GameList.instance.joinGame(cah.ajax.autojoinGameId_);
     } catch (e) {
