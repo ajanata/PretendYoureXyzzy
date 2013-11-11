@@ -379,13 +379,13 @@ HttpSession hSession = request.getSession(true);
       <input type="text" id="game_password_template" class="game_password"
           aria-label="Game password. You must tab outside of the box to apply the password."/>
       <input type="password" id="game_fake_password_template" class="game_fake_password hide" />
+      You must click outside the box to apply the password.
       <input type="checkbox" id="game_hide_password_template" class="game_hide_password" />
       <label id="game_hide_password_template_label" for="game_hide_password_template"
           aria-label="Hide password from your screen."
           title="Hides the password from your screen, so people watching your stream can't see it.">
         Hide password.
       </label>
-      You must click outside the box to apply the password.
     </fieldset>
   </div>
 </div>
