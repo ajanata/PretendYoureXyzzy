@@ -41,6 +41,8 @@ cah.ajax.ErrorHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
   $("#nickname").focus();
 };
 
+// hacky way to avoid joining a game from the hash if the server told us to join a game.
+cah.ajax.hasAutojoinedGame_ = false;
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
   cah.CardSet.populateCardSets(data[cah.$.AjaxResponse.CARD_SETS]);
 
@@ -55,6 +57,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
       case cah.$.ReconnectNextAction.GAME:
         cah.log.status("Reconnecting to game...");
         cah.Game.joinGame(data[cah.$.AjaxResponse.GAME_ID]);
+        cah.ajax.hasAutojoinedGame_ = true;
         break;
       case cah.$.ReconnectNextAction.NONE:
         // pass
@@ -77,6 +80,8 @@ cah.ajax.ErrorHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
   }
 };
 
+// another hack thing to trigger an auto-join after the first game list refresh
+cah.ajax.autojoinGameId_ = undefined;
 /**
  * This should only be called after we have a valid registration with the server, as we start doing
  * long polling here.
@@ -92,6 +97,24 @@ cah.ajax.after_registered = function() {
   cah.longpoll.longPoll();
   // Dirty that we have to do this here... Oh well.
   app_resize();
+
+  if (!cah.ajax.hasAutojoinedGame_) {
+    var hash = window.location.hash.substring(1);
+    if (hash && hash != '') {
+      // TODO find a better place for this if we ever have more than just game=id in the hash.
+      var params = hash.split('&');
+      var options = {};
+      for ( var i in params) {
+        var split = params[i].split('=');
+        var key = split[0];
+        var value = split[1];
+        options[key] = value;
+      }
+      if (options['game']) {
+        cah.ajax.autojoinGameId_ = options['game'];
+      }
+    }
+  }
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CHAT] = function(data) {
@@ -114,6 +137,16 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.NAMES] = function(data) {
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GAME_LIST] = function(data) {
   cah.GameList.instance.processUpdate(data);
+
+  if (cah.ajax.autojoinGameId_) {
+    try {
+      cah.GameList.instance.joinGame(cah.ajax.autojoinGameId_);
+    } catch (e) {
+      cah.log.error(e);
+      cah.updateHash('');
+    }
+    cah.ajax.autojoinGameId_ = undefined;
+  }
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME] = function(data, req) {

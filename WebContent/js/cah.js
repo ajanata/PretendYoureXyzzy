@@ -108,3 +108,16 @@ cah.inherits = function(childCtor, parentCtor) {
   childCtor.prototype = new tempCtor();
   childCtor.prototype.constructor = childCtor;
 };
+
+/**
+ * Updates the hash in the browser's URL for deeplinks.
+ * 
+ * TODO: If we ever want more than just game=id here, this will have to deal with a map somehow.
+ * 
+ * @param {String}
+ *          hash The hash to use in the URL.
+ */
+cah.updateHash = function(hash) {
+  window.location.replace(window.location.protocol + '//' + window.location.host
+      + window.location.pathname.replace(/#$/g, '') + '#' + hash);
+};
