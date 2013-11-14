@@ -856,7 +856,7 @@ cah.Game.prototype.roundComplete = function(data) {
   var scoreCard = this.scoreCards_[roundWinner];
   $(scoreCard.getElement()).addClass("selected");
   $(".confirm_card", this.element_).attr("disabled", "disabled");
-  cah.log.status_with_game(this, "The next round will begin in "
+  cah.log.status_with_game(this, roundWinner + " wins the round.  The next round will begin in "
       + (data[cah.$.LongPollResponse.INTERMISSION] / 1000) + " seconds.");
 
   // update the previous round display
