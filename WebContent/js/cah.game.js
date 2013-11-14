@@ -463,6 +463,24 @@ cah.Game.prototype.removeCardFromHand = function(card) {
 };
 
 /**
+ * Remove all cards from the screen.
+ */
+cah.Game.prototype.removeAllCards = function() {
+  var handCount = this.hand_.length;
+  for ( var i = 0; i < handCount; i++) {
+    this.removeCardFromHand(this.hand_[0]);
+  }
+  this.handSelectedCard_ = null;
+  $(".confirm_card", this.element_).attr("disabled", "disabled");
+  $(".game_black_card", this.element_).empty();
+  for ( var index in this.roundCards_) {
+    $(this.roundCards_[index]).off(".round");
+  }
+  this.roundCards_ = {};
+  $(".game_white_cards", this.element_).empty();
+};
+
+/**
  * Set the round white cards.
  * 
  * @param {Array}
@@ -1160,19 +1178,8 @@ cah.Game.prototype.stateChange = function(data) {
 
   switch (this.state_) {
     case cah.$.GameState.LOBBY:
-      var handCount = this.hand_.length;
-      for ( var i = 0; i < handCount; i++) {
-        this.removeCardFromHand(this.hand_[0]);
-      }
-      this.handSelectedCard_ = null;
+      this.removeAllCards();
       this.judge_ = null;
-      $(".confirm_card", this.element_).attr("disabled", "disabled");
-      $(".game_black_card", this.element_).empty();
-      for ( var index in this.roundCards_) {
-        $(this.roundCards_[index]).off(".round");
-      }
-      this.roundCards_ = {};
-      $(".game_white_cards", this.element_).empty();
 
       this.showOptions_();
 
