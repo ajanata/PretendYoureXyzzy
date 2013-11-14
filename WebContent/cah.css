@@ -579,6 +579,19 @@ span.debug, span.admin {
   font-weight:700;
 }
 
+.checkbox {
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.checkbox input {
+  vertical-align: middle;
+}
+
+.checkbox span {
+  vertical-align: middle;
+}
+
 .nowrap {
   white-space: nowrap;
 }
