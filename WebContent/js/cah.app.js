@@ -163,6 +163,12 @@ function chatsubmit_click(game_id, parent_element) {
         // this could also be an IP address
         ajax = cah.Ajax.build(cah.$.AjaxOperation.BAN).withNickname(text.split(' ')[0]);
         break;
+      case 'score':
+    	ajax = cah.Ajax.build(cah.$.AjaxOperation.SCORE).withMessage(text);
+    	if (game_id != null) {
+    	  ajax = ajax.withGameId(game_id);
+    	}
+    	break;
       case 'names':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.NAMES);
         break;
