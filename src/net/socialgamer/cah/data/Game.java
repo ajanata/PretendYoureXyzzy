@@ -462,7 +462,7 @@ public class Game {
    *          The player for whom to get status.
    * @return Information for {@code player}: Name, score, status.
    */
-  private Map<GamePlayerInfo, Object> getPlayerInfo(final Player player) {
+  public Map<GamePlayerInfo, Object> getPlayerInfo(final Player player) {
     final Map<GamePlayerInfo, Object> playerInfo = new HashMap<GamePlayerInfo, Object>();
     // TODO make sure this can't happen in the first place
     if (player == null) {
@@ -803,10 +803,7 @@ public class Game {
 
     // have to do this after we move to judging state
     for (final Player player : playersToUpdateStatus) {
-      final HashMap<ReturnableData, Object> data = getEventMap();
-      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
-      data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(player));
-      broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+      notifyPlayerInfoChange(player);
     }
   }
 
@@ -830,17 +827,14 @@ public class Game {
     final int judgeTimer = useTimer ? JUDGE_TIMEOUT_BASE
         + (JUDGE_TIMEOUT_PER_CARD * playedCards.size() * blackCard.getPick()) : Integer.MAX_VALUE;
 
-    HashMap<ReturnableData, Object> data = getEventMap();
+    final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
     data.put(LongPollResponse.GAME_STATE, GameState.JUDGING.toString());
     data.put(LongPollResponse.WHITE_CARDS, getWhiteCards());
     data.put(LongPollResponse.PLAY_TIMER, judgeTimer);
     broadcastToPlayers(MessageType.GAME_EVENT, data);
 
-    data = getEventMap();
-    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
-    data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(getJudge()));
-    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+    notifyPlayerInfoChange(getJudge());
 
     synchronized (nextRoundTimerLock) {
       killRoundTimer();
@@ -892,23 +886,17 @@ public class Game {
     final Player judge = getJudge();
     judgeIndex = 0;
 
-    HashMap<ReturnableData, Object> data = getEventMap();
+    final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
     data.put(LongPollResponse.GAME_STATE, GameState.LOBBY.toString());
     broadcastToPlayers(MessageType.GAME_EVENT, data);
 
     if (host != null) {
-      data = getEventMap();
-      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
-      data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(host));
-      broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+      notifyPlayerInfoChange(host);
     }
 
     if (judge != null) {
-      data = getEventMap();
-      data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
-      data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(judge));
-      broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+      notifyPlayerInfoChange(judge);
     }
 
     gameManager.broadcastGameListRefresh();
@@ -1019,7 +1007,7 @@ public class Game {
    *         {@code user} is not in this game.
    */
   @Nullable
-  private Player getPlayerForUser(final User user) {
+  public Player getPlayerForUser(final User user) {
     final Player[] playersCopy = players.toArray(new Player[players.size()]);
     for (final Player player : playersCopy) {
       if (player.getUser() == user) {
@@ -1210,11 +1198,7 @@ public class Game {
       }
       if (playCard != null) {
         playedCards.addCard(player, playCard);
-
-        final HashMap<ReturnableData, Object> data = getEventMap();
-        data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
-        data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(player));
-        broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+        notifyPlayerInfoChange(player);
 
         if (startJudging()) {
           judgingState();
@@ -1226,6 +1210,19 @@ public class Game {
     } else {
       return null;
     }
+  }
+
+  /**
+   * Sends updated player information about a specific player to all players in the game.
+   * 
+   * @param player
+   *          The player whose information has been changed.
+   */
+  public void notifyPlayerInfoChange(final Player player) {
+    final HashMap<ReturnableData, Object> data = getEventMap();
+    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
+    data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(player));
+    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
   }
 
   /**
@@ -1264,22 +1261,15 @@ public class Game {
     }
     final int clientCardId = playedCards.getCards(cardPlayer).get(0).getId();
 
-    HashMap<ReturnableData, Object> data = getEventMap();
+    final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_ROUND_COMPLETE.toString());
     data.put(LongPollResponse.ROUND_WINNER, cardPlayer.getUser().getNickname());
     data.put(LongPollResponse.WINNING_CARD, clientCardId);
     data.put(LongPollResponse.INTERMISSION, ROUND_INTERMISSION);
     broadcastToPlayers(MessageType.GAME_EVENT, data);
 
-    data = getEventMap();
-    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
-    data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(getJudge()));
-    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
-
-    data = getEventMap();
-    data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_INFO_CHANGE.toString());
-    data.put(LongPollResponse.PLAYER_INFO, getPlayerInfo(cardPlayer));
-    broadcastToPlayers(MessageType.GAME_PLAYER_EVENT, data);
+    notifyPlayerInfoChange(getJudge());
+    notifyPlayerInfoChange(cardPlayer);
 
     synchronized (nextRoundTimerLock) {
       killRoundTimer();

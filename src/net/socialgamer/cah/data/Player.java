@@ -73,6 +73,13 @@ public class Player {
   }
 
   /**
+   * Increase the player's score by the specified amount.
+   */
+  public void increaseScore(final int offset) {
+    score += offset;
+  }
+
+  /**
    * Reset the player's score to 0.
    */
   public void resetScore() {

@@ -235,3 +235,14 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.KICK] = function(data) {
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.BAN] = function(data) {
   // pass
 };
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.SCORE] = function(data, req) {
+  var gameId = req[cah.$.AjaxRequest.GAME_ID];
+  var info = data[cah.$.AjaxResponse.PLAYER_INFO];
+  var msg = info[cah.$.GamePlayerInfo.NAME] + " has " + info[cah.$.GamePlayerInfo.SCORE] + " Awesome Points.";
+  if (gameId) {
+    cah.log.status_with_game(gameId, msg);
+  } else {
+    cah.log.status(msg);
+  }
+};
