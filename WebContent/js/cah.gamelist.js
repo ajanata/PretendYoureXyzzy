@@ -38,12 +38,12 @@ cah.GameList = function() {
   this.element_ = $("#game_list")[0];
 
   /**
-   * Array of all game lobby objects.
+   * Map all game lobby objects, id -> game lobby.
    * 
-   * @type {Array[cah.GameListLobby]}
+   * @type {Object}
    * @private
    */
-  this.games_ = new Array();
+  this.games_ = {};
 
   $("#create_game").click(cah.bind(this, this.createGameClick_));
   $("#refresh_games").click(cah.bind(this, this.refreshGamesClick_));
@@ -99,7 +99,7 @@ cah.GameList.prototype.processUpdate = function(gameData) {
   for ( var key in this.games_) {
     this.games_[key].dispose();
   }
-  this.games_ = new Array();
+  this.games_ = {};
 
   // Sort the games into two lists, passworded and non-passworded.
   var passworded = new Array();
@@ -118,13 +118,28 @@ cah.GameList.prototype.processUpdate = function(gameData) {
   for ( var i = 0; i < games.length; i++) {
     var game = games[i];
     var lobby = new cah.GameListLobby(this.element_, game);
-    this.games_.push(lobby);
+    this.games_[game[cah.$.GameInfo.ID]] = lobby;
   }
 
   if (gameData[cah.$.AjaxResponse.GAMES].length < gameData[cah.$.AjaxResponse.MAX_GAMES]) {
     $("#create_game").removeAttr("disabled");
   } else {
     $("#create_game").attr("disabled", "disabled");
+  }
+};
+
+/**
+ * Join the given game.
+ * 
+ * @param {Number}
+ *          id The id of the game to join.
+ */
+cah.GameList.prototype.joinGame = function(id) {
+  var game = this.games_[Number(id)];
+  if (game) {
+    game.join();
+  } else {
+    throw 'Game ' + id + ' does not exist.';
   }
 };
 
@@ -240,6 +255,13 @@ cah.GameListLobby.prototype.joinClick = function() {
     }
   }
   cah.Ajax.build(cah.$.AjaxOperation.JOIN_GAME).withGameId(this.id_).withPassword(password).run();
+};
+
+/**
+ * Join this game, by simulating a click of its join button.
+ */
+cah.GameListLobby.prototype.join = function() {
+  $('.gamelist_lobby_join', this.element_).click();
 };
 
 /**
