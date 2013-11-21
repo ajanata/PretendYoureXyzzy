@@ -45,6 +45,7 @@ public class WhiteDeck {
   private final List<WhiteCard> deck;
   private final List<WhiteCard> dealt;
   private final List<WhiteCard> discard;
+  private int lastBlankCardId = -1;
 
   /**
    * Create a new white card deck, loading the cards from the database and shuffling them.
@@ -89,12 +90,11 @@ public class WhiteDeck {
   public synchronized void discard(final WhiteCard card) {
     if (card != null) {
       if (isBlankCard(card)) {
-        // create a fresh blank card to ensure player text is cleared
-        discard.add(createBlankCard());
-      } else {
-        discard.add(card);
+        card.setText("____"); // clear any player text
       }
+      discard.add(card);
     }
+  }
   }
 
   /**
@@ -113,7 +113,7 @@ public class WhiteDeck {
    */
   private WhiteCard createBlankCard() {
     final WhiteCard blank = new WhiteCard();
-    blank.setId(0);
+    blank.setId(--lastBlankCardId);
     blank.setText("____");
     blank.setWatermark("____");
     return blank;
@@ -127,6 +127,6 @@ public class WhiteDeck {
    * @return True if the card is a blank card.
    */
   public static boolean isBlankCard(final WhiteCard card) {
-    return card.getId() == 0;
+    return card.getId() < -1;
   }
 }

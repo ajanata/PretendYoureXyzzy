@@ -341,7 +341,7 @@ cah.inherits(cah.card.WhiteCard, cah.card.BaseCard);
  * @returns True if this is a blank card.
  */
 cah.card.WhiteCard.prototype.isBlankCard = function() {
-  return this.getServerId() == 0;
+  return this.getServerId() < -1;
 };
 
 /**

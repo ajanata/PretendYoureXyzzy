@@ -476,7 +476,7 @@ cah.Game.prototype.setRoundWhiteCards = function(cardSets) {
       var cardData = cardSets[setIndex][index];
       var card;
       var id = cardData[cah.$.WhiteCardData.ID];
-      if (id >= 0) {
+      if (id != -1) {
         card = new cah.card.WhiteCard(true, id);
         card.setText(cardData[cah.$.WhiteCardData.TEXT]);
         card.setWatermark(cardData[cah.$.WhiteCardData.WATERMARK]);
@@ -947,17 +947,17 @@ cah.Game.prototype.confirmClick_ = function() {
     }
   } else {
     if (this.handSelectedCard_ != null) {
+      var ajax = cah.Ajax.build(cah.$.AjaxOperation.PLAY_CARD).withGameId(this.id_).withCardId(
+          this.handSelectedCard_.getServerId());
       if (this.handSelectedCard_.isBlankCard()) {
     	  // blank card
     	  var text = prompt("What would you like this card to say?", "");
     	  if (text == null || text == '') { return; }
     	  text = $("<div/>").text(text).html();		// html sanitise
     	  this.handSelectedCard_.setText(text);
-          cah.Ajax.build(cah.$.AjaxOperation.PLAY_CARD).withGameId(this.id_).withCardId(0).withMessage(text).run();
-      } else {
-        cah.Ajax.build(cah.$.AjaxOperation.PLAY_CARD).withGameId(this.id_).withCardId(
-          this.handSelectedCard_.getServerId()).run();
+    	  ajax = ajax.withMessage(text);
       }
+      ajax.run();
     }
   }
 };

@@ -1209,8 +1209,6 @@ public class Game {
             playCard = card;
             if (WhiteDeck.isBlankCard(card)) {
               playCard.setText(cardText);
-              // note that since blank cards are indistinguishable to the server, we might end up
-              // removing a different card than the client did.  but this shouldn't break anything.
             }
             // remove the card from their hand. the client will also do so when we return
             // success, so no need to tell it to do so here.
