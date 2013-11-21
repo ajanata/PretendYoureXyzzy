@@ -194,6 +194,7 @@ function chatsubmit_click(game_id, parent_element) {
 function logout_click() {
   if (confirm("Are you sure you wish to log out?")) {
     cah.Ajax.build(cah.$.AjaxOperation.LOG_OUT).run();
+    cah.updateHash('');
   }
 }
 
