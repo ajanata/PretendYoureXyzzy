@@ -62,6 +62,8 @@ public class GameChatHandler extends GameWithPlayerHandler {
   public Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,
       final HttpSession session, final User user, final Game game) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final boolean emote = request.getParameter(AjaxRequest.EMOTE) != null
+        && Boolean.valueOf(request.getParameter(AjaxRequest.EMOTE));
 
     if (request.getParameter(AjaxRequest.MESSAGE) == null) {
       return error(ErrorCode.NO_MSG_SPECIFIED);
@@ -90,6 +92,7 @@ public class GameChatHandler extends GameWithPlayerHandler {
         broadcastData.put(LongPollResponse.MESSAGE, message);
         broadcastData.put(LongPollResponse.FROM_ADMIN, user.isAdmin());
         broadcastData.put(LongPollResponse.GAME_ID, game.getId());
+        broadcastData.put(LongPollResponse.EMOTE, emote);
         game.broadcastToPlayers(MessageType.CHAT, broadcastData);
       }
     }

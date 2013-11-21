@@ -69,6 +69,8 @@ public class ChatHandler extends Handler {
     assert (user != null);
     final boolean wall = request.getParameter(AjaxRequest.WALL) != null
         && Boolean.valueOf(request.getParameter(AjaxRequest.WALL));
+    final boolean emote = request.getParameter(AjaxRequest.EMOTE) != null
+        && Boolean.valueOf(request.getParameter(AjaxRequest.EMOTE));
 
     if (request.getParameter(AjaxRequest.MESSAGE) == null) {
       return error(ErrorCode.NO_MSG_SPECIFIED);
@@ -102,6 +104,9 @@ public class ChatHandler extends Handler {
         }
         if (wall) {
           broadcastData.put(LongPollResponse.WALL, true);
+        }
+        if (emote) {
+          broadcastData.put(LongPollResponse.EMOTE, true);
         }
         users.broadcastToAll(MessageType.CHAT, broadcastData);
       }
