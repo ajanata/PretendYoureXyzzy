@@ -309,6 +309,8 @@ cah.Game.joinGame = function(gameId) {
   var game = new cah.Game(gameId);
   cah.currentGames[gameId] = game;
   game.insertIntoDocument();
+
+  cah.updateHash('game=' + gameId);
 };
 
 /**
@@ -1110,6 +1112,8 @@ cah.Game.prototype.dispose = function() {
   $("#leave_game").unbind().hide();
   $("#start_game").unbind().hide();
   $(window).off("resize.game_" + this.id_);
+
+  cah.updateHash('');
 };
 
 /**

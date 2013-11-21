@@ -582,3 +582,10 @@ span.debug, span.admin {
 .nowrap {
   white-space: nowrap;
 }
+
+.cardnum {
+  position: absolute;
+  right: 10px;
+  bottom: 19px;
+  font-size: 8pt;
+}

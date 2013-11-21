@@ -95,8 +95,12 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 7 August 2013:</p>
+  <p tabindex="0">Most recent update: 3 September 2013:</p>
   <ul>
+    <li tabindex="0">The Box Expansion and PAX Prime 2013 cards have been added. <strong>If you have
+    any spares of these card numbers and are willing to part with them, it would be awesome if you'd
+    <a href="mailto:ajanata@socialgamer.net?subject=13PAX+cards">email me</a> and send them to me,
+    as I was unable to acquire them at PAX:</strong> 29, 30, 33, 34, 35, 36, 37</li>
     <li tabindex="0"><strong>The game list will not automatically update all the time now.</strong>
     You will need to start using the Refresh Games button. The game list will automatically update
     for new games, removed games, when games become passworded, or when you leave a game.</li>
@@ -383,13 +387,13 @@ HttpSession hSession = request.getSession(true);
       <input type="text" id="game_password_template" class="game_password"
           aria-label="Game password. You must tab outside of the box to apply the password."/>
       <input type="password" id="game_fake_password_template" class="game_fake_password hide" />
+      You must click outside the box to apply the password.
       <input type="checkbox" id="game_hide_password_template" class="game_hide_password" />
       <label id="game_hide_password_template_label" for="game_hide_password_template"
           aria-label="Hide password from your screen."
           title="Hides the password from your screen, so people watching your stream can't see it.">
         Hide password.
       </label>
-      You must click outside the box to apply the password.
     </fieldset>
   </div>
 </div>
