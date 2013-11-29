@@ -58,7 +58,7 @@ public class KickHandler extends Handler {
     kickUser.enqueueMessage(qm);
 
     connectedUsers.removeUser(kickUser, DisconnectReason.KICKED);
-    logger.info(String.format("Kicking %s by request of %s", kickUser.getNickname(),
+    logger.warn(String.format("Kicking %s by request of %s", kickUser.getNickname(),
         user.getNickname()));
 
     return new HashMap<ReturnableData, Object>();

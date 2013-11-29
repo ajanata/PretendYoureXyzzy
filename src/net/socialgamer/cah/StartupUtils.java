@@ -29,6 +29,8 @@ import java.util.Timer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
+import org.apache.log4j.PropertyConfigurator;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
@@ -102,6 +104,13 @@ public class StartupUtils extends GuiceServletContextListener {
     context.setAttribute(PING_TIMER_NAME, timer);
     context.setAttribute(INJECTOR, injector);
     context.setAttribute(DATE_NAME, serverStarted);
+
+    reconfigureLogging(contextEvent.getServletContext());
+  }
+
+  public static void reconfigureLogging(final ServletContext context) {
+    PropertyConfigurator.configure(context.getRealPath(
+        "/WEB-INF/log4j.properties"));
   }
 
   @Override
