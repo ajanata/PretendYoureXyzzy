@@ -268,6 +268,7 @@ HttpSession hSession = request.getSession(true);
       <input type="button" class="game_show_last_round game_menu_bar" value="Show Last Round"
           disabled="disabled" />
       <input type="button" class="game_show_options game_menu_bar" value="Hide Game Options" />
+      <label class="game_menu_bar checkbox"><input type="checkbox" class="game_animate_cards" checked="checked" /><span> Animate Cards</span></label>
       <div class="game_message" role="status">
         Waiting for server...
       </div>

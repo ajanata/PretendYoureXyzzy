@@ -544,6 +544,7 @@ cah.Game.prototype.addRoundWhiteCard_ = function(cards) {
  * @private
  */
 cah.Game.prototype.handCardMouseEnter_ = function(e) {
+  if (!$(".game_animate_cards", this.element_).attr("checked")) return;
   $(e.data.card.getElement()).css("z-index", "2").animate({
     scale : this.handCardLargeScale_,
     width : this.handCardLargeSize_,
@@ -577,6 +578,7 @@ cah.Game.prototype.handCardMouseLeave_ = function(e) {
  * @private
  */
 cah.Game.prototype.roundCardMouseEnter_ = function(e) {
+  if (!$(".game_animate_cards", this.element_).attr("checked")) return;
   $(e.data.card.getElement()).css("z-index", "201").animate({
     scale : this.roundCardLargeScale_,
     width : this.roundCardLargeSize_,
