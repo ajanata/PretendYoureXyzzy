@@ -163,6 +163,17 @@ function chatsubmit_click(game_id, parent_element) {
         // this could also be an IP address
         ajax = cah.Ajax.build(cah.$.AjaxOperation.BAN).withNickname(text.split(' ')[0]);
         break;
+      case 'hand':
+    	if (game_id !== null) {
+    	  var game = cah.currentGames[game_id];
+    	  if (game) { 
+    		game.removeAllCards();
+    	  }
+    	  ajax = cah.Ajax.build(cah.$.AjaxOperation.GET_CARDS).withGameId(game_id);
+    	} else {
+    	  cah.log.error("This command only works in a game.");
+    	}
+    	break;
       case 'names':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.NAMES);
         break;
