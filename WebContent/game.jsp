@@ -203,7 +203,7 @@ HttpSession hSession = request.getSession(true);
 	  </div>
 	  <div class="gamelist_lobby_right">
 	    <input type="button" class="gamelist_lobby_join" value="Join" />
-	    <input type="button" class="gamelist_lobby_spectate" value="View" />
+	    <input type="button" class="gamelist_lobby_spectate" value="Spectate" />
 	  </div>
 	</div>
 </div>
