@@ -137,7 +137,17 @@ h2,h3,h4 {
 
 .gamelist_lobby_join {
   width: 100%;
-  height: 100%;
+  height: 75%;
+  border: 1px solid #aaa;
+  background: linear-gradient(#fff, #ddd) #ddd;
+  border-radius: .25em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.gamelist_lobby_spectate {
+  width: 100%;
+  height: 25%;
   border: 1px solid #aaa;
   background: linear-gradient(#fff, #ddd) #ddd;
   border-radius: .25em;
@@ -577,6 +587,19 @@ span.debug, span.admin {
 
 .scorecard_score, .scorecard_player {
   font-weight:700;
+}
+
+.checkbox {
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.checkbox input {
+  vertical-align: middle;
+}
+
+.checkbox span {
+  vertical-align: middle;
 }
 
 .nowrap {

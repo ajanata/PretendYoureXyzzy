@@ -166,6 +166,7 @@ public class GameManager implements Provider<Integer> {
       final List<User> usersToRemove = game.getUsers();
       for (final User user : usersToRemove) {
         game.removePlayer(user);
+        game.removeSpectator(user);
       }
 
       logger.info(String.format("Destroyed game %d.", game.getId()));

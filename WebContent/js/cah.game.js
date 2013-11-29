@@ -59,6 +59,14 @@ cah.Game = function(id) {
   $(this.scoreboardElement_).removeClass("hide");
 
   /**
+   * The first spectator element within the scoreboard.
+   * 
+   * @type {HTMLDivElement}
+   * @private
+   */
+  this.firstSpectatorElement_ = null;
+
+  /**
    * The element for the chat room for this game
    * 
    * @type {HTMLDivElement}
@@ -82,6 +90,7 @@ cah.Game = function(id) {
   // TODO: It looks like I'm not changing the id on the label elements...
   $("#score_limit_template_label", this.optionsElement_).attr("for", "score_limit_" + id);
   $("#player_limit_template_label", this.optionsElement_).attr("for", "player_limit_" + id);
+  $("#spectator_limit_template_label", this.optionsElement_).attr("for", "spectator_limit_" + id);
   $("#card_set_template_label", this.optionsElement_).attr("for", "card_set_" + id);
   $("#game_password_template_label", this.optionsElement_).attr("for", "game_password_" + id);
   $("#game_hide_password_template_label", this.optionsElement_).attr("for",
@@ -90,6 +99,7 @@ cah.Game = function(id) {
 
   $("#score_limit_template", this.optionsElement_).attr("id", "score_limit_" + id);
   $("#player_limit_template", this.optionsElement_).attr("id", "player_limit_" + id);
+  $("#spectator_limit_template", this.optionsElement_).attr("id", "spectator_limit_" + id);
   $("#card_set_template", this.optionsElement_).attr("id", "card_set_" + id);
   $("#game_password_template", this.optionsElement_).attr("id", "game_password_" + id);
   $("#game_fake_password_template", this.optionsElement_).attr("id", "game_fake_password_" + id);
@@ -464,6 +474,24 @@ cah.Game.prototype.removeCardFromHand = function(card) {
 };
 
 /**
+ * Remove all cards from the screen.
+ */
+cah.Game.prototype.removeAllCards = function() {
+  var handCount = this.hand_.length;
+  for ( var i = 0; i < handCount; i++) {
+    this.removeCardFromHand(this.hand_[0]);
+  }
+  this.handSelectedCard_ = null;
+  $(".confirm_card", this.element_).attr("disabled", "disabled");
+  $(".game_black_card", this.element_).empty();
+  for ( var index in this.roundCards_) {
+    $(this.roundCards_[index]).off(".round");
+  }
+  this.roundCards_ = {};
+  $(".game_white_cards", this.element_).empty();
+};
+
+/**
  * Set the round white cards.
  * 
  * @param {Array}
@@ -535,6 +563,9 @@ cah.Game.prototype.addRoundWhiteCard_ = function(cards) {
  * @private
  */
 cah.Game.prototype.handCardMouseEnter_ = function(e) {
+  if (!$(".game_animate_cards", this.element_).attr("checked")) {
+    return;
+  }
   $(e.data.card.getElement()).css("z-index", "2").animate({
     scale : this.handCardLargeScale_,
     width : this.handCardLargeSize_,
@@ -568,6 +599,9 @@ cah.Game.prototype.handCardMouseLeave_ = function(e) {
  * @private
  */
 cah.Game.prototype.roundCardMouseEnter_ = function(e) {
+  if (!$(".game_animate_cards", this.element_).attr("checked")) {
+    return;
+  }
   $(e.data.card.getElement()).css("z-index", "201").animate({
     scale : this.roundCardLargeScale_,
     width : this.roundCardLargeSize_,
@@ -749,6 +783,7 @@ cah.Game.prototype.updateGameStatus = function(data) {
 
   $(".score_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.SCORE_LIMIT]);
   $(".player_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.PLAYER_LIMIT]);
+  $(".spectator_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.SPECTATOR_LIMIT]);
   $(".game_password", this.optionsElement_).val(gameInfo[cah.$.GameInfo.PASSWORD]);
   if (gameInfo[cah.$.GameInfo.USE_TIMER]) {
     $(".use_timer", this.optionsElement_).attr("checked", "checked");
@@ -767,6 +802,11 @@ cah.Game.prototype.updateGameStatus = function(data) {
   for ( var index in playerInfos) {
     this.updateUserStatus(playerInfos[index]);
   }
+
+  var spectators = gameInfo[cah.$.GameInfo.SPECTATORS];
+  for ( var index in spectators) {
+    this.updateSpectator(spectators[index]);
+  }
 };
 
 /**
@@ -782,7 +822,11 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
   if (!panel) {
     // new score panel
     panel = new cah.GameScorePanel(playerName);
-    $(this.scoreboardElement_).append(panel.getElement());
+    if (this.firstSpectatorElement_) {
+      $(this.firstSpectatorElement_).before(panel.getElement());
+    } else {
+      $(this.scoreboardElement_).append(panel.getElement());
+    }
     this.scoreCards_[playerName] = panel;
   }
   var oldStatus = panel.getStatus();
@@ -841,6 +885,32 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
 };
 
 /**
+ * Update a single spectator's info.
+ * 
+ * @param {String}
+ *          spectator The spectator name.
+ */
+cah.Game.prototype.updateSpectator = function(spectator) {
+  var panel = this.scoreCards_[spectator];
+  if (!panel) {
+    // new score panel
+    panel = new cah.GameScorePanel(spectator);
+    $(this.scoreboardElement_).append(panel.getElement());
+    this.scoreCards_[spectator] = panel;
+    if (!this.firstSpectatorElement_) {
+      this.firstSpectatorElement_ = panel.getElement();
+    }
+  }
+  panel.update(-1, cah.$.GamePlayerStatus.SPECTATOR);
+
+  if (spectator == cah.nickname) {
+    $(".game_message", this.element_).text(
+        cah.$.GamePlayerStatus_msg_2[cah.$.GamePlayerStatus.SPECTATOR]);
+    $(".confirm_card", this.element_).attr("disabled", "disabled");
+  }
+};
+
+/**
  * Round has completed. Update display of round cards to show winner.
  * 
  * @param {Object}
@@ -858,7 +928,7 @@ cah.Game.prototype.roundComplete = function(data) {
   var scoreCard = this.scoreCards_[roundWinner];
   $(scoreCard.getElement()).addClass("selected");
   $(".confirm_card", this.element_).attr("disabled", "disabled");
-  cah.log.status_with_game(this, "The next round will begin in "
+  cah.log.status_with_game(this, roundWinner + " wins the round.  The next round will begin in "
       + (data[cah.$.LongPollResponse.INTERMISSION] / 1000) + " seconds.");
 
   // update the previous round display
@@ -1152,6 +1222,45 @@ cah.Game.prototype.playerLeave = function(player) {
 };
 
 /**
+ * A spectator has joined the game.
+ * 
+ * @param {String}
+ *          spectator Spectator that joined.
+ */
+cah.Game.prototype.spectatorJoin = function(spectator) {
+  if (spectator != cah.nickname) {
+    cah.log.status_with_game(this, spectator + " has started spectating the game.");
+    this.refreshGameStatus();
+  } else {
+    cah.log.status_with_game(this, "You have started spectating the game.");
+  }
+  this.updateSpectator(spectator);
+};
+
+/**
+ * A spectator has left the game.
+ * 
+ * @param {String}
+ *          spectator Spectator that left.
+ */
+cah.Game.prototype.spectatorLeave = function(spectator) {
+  if (spectator != cah.nickname) {
+    cah.log.status_with_game(this, spectator + " has stopped spectating the game.");
+    this.refreshGameStatus();
+  } else {
+    cah.log.status_with_game(this, "You have stopped spectating the game.");
+  }
+  var scorecard = this.scoreCards_[spectator];
+  if (scorecard) {
+    if (this.firstSpectatorElement_ == scorecard.getElement()) {
+      this.firstSpectatorElement_ = this.firstSpectatorElement_.nextSibling;
+    }
+    $(scorecard.getElement()).remove();
+  }
+  delete this.scoreCards_[spectator];
+};
+
+/**
  * Refresh game scoreboard, etc.
  */
 cah.Game.prototype.refreshGameStatus = function() {
@@ -1171,20 +1280,10 @@ cah.Game.prototype.stateChange = function(data) {
 
   switch (this.state_) {
     case cah.$.GameState.LOBBY:
-      var handCount = this.hand_.length;
-      for ( var i = 0; i < handCount; i++) {
-        this.removeCardFromHand(this.hand_[0]);
-      }
-      this.handSelectedCard_ = null;
+      this.removeAllCards();
       this.judge_ = null;
-      $(".confirm_card", this.element_).attr("disabled", "disabled");
-      $(".game_black_card", this.element_).empty();
-      for ( var index in this.roundCards_) {
-        $(this.roundCards_[index]).off(".round");
-      }
-      this.roundCards_ = {};
-      $(".game_white_cards", this.element_).empty();
-
+      $(".game_hand_filter", this.element_).addClass("hide"); // in case they were the judge last
+      // round
       this.showOptions_();
 
       break;
@@ -1260,7 +1359,8 @@ cah.Game.prototype.optionChanged_ = function(e) {
   }
   cah.Ajax.build(cah.$.AjaxOperation.CHANGE_GAME_OPTIONS).withGameId(this.id_).withScoreLimit(
       $(".score_limit", this.optionsElement_).val()).withPlayerLimit(
-      $(".player_limit", this.optionsElement_).val()).withCardSets(cardSetIds).withPassword(
+      $(".player_limit", this.optionsElement_).val()).withSpectatorLimit(
+      $(".spectator_limit", this.optionsElement_).val()).withCardSets(cardSetIds).withPassword(
       $(".game_password", this.optionsElement_).val()).withBlanksLimit(
       $(".blanks_limit", this.optionsElement_).val()).withUseTimer(
       !!$('.use_timer', this.optionsElement_).attr('checked')).run();
@@ -1349,10 +1449,16 @@ cah.GameScorePanel.prototype.update = function(score, status) {
   $(".scorecard_score", this.element_).text(score);
   $(".scorecard_status", this.element_).text(cah.$.GamePlayerStatus_msg[status]);
   $(".scorecard_s", this.element_).text(score == 1 ? "" : "s");
-  $(this.element_).attr(
-      "aria-label",
-      this.player_ + " has " + score + " Awesome Point" + (score == 1 ? "" : "s") + ". "
-          + cah.$.GamePlayerStatus_msg[status]);
+  if (score < 0) {
+    $(".scorecard_points", this.element_).addClass("hide");
+    $(this.element_).attr("aria-label", this.player_ + ". " + cah.$.GamePlayerStatus_msg[status]);
+  } else {
+    $(".scorecard_points", this.element_).removeClass("hide");
+    $(this.element_).attr(
+        "aria-label",
+        this.player_ + " has " + score + " Awesome Point" + (score == 1 ? "" : "s") + ". "
+            + cah.$.GamePlayerStatus_msg[status]);
+  }
 };
 
 /**

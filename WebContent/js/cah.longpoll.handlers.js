@@ -128,6 +128,17 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_LEAVE] = function(dat
       data[cah.$.LongPollResponse.NICKNAME], "player leave");
 };
 
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_SPECTATOR_JOIN] = function(data) {
+	  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.spectatorJoin,
+	      data[cah.$.LongPollResponse.NICKNAME],
+	      "spectator join (if you just joined a game this may be OK)");
+	};
+
+	cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_SPECTATOR_LEAVE] = function(data) {
+	  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.spectatorLeave,
+	      data[cah.$.LongPollResponse.NICKNAME], "spectator leave");
+	};
+
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.HAND_DEAL] = function(data) {
   cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.dealtCards,
       data[cah.$.LongPollResponse.HAND], "dealt cards");

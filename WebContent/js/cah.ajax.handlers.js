@@ -151,6 +151,10 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME] = function(data, req) {
   cah.Game.joinGame(req[cah.$.AjaxRequest.GAME_ID]);
 };
 
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.SPECTATE_GAME] = function(data, req) {
+  cah.Game.joinGame(req[cah.$.AjaxRequest.GAME_ID]);
+};
+
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CREATE_GAME] = function(data) {
   cah.Game.joinGame(data[cah.$.AjaxResponse.GAME_ID]);
 };
