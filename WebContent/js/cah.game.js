@@ -1258,6 +1258,7 @@ cah.Game.prototype.stateChange = function(data) {
       }
       this.roundCards_ = {};
       $(".game_white_cards", this.element_).empty();
+      $(".game_hand_filter", this.element_).addClass("hide");		// in case they were the judge last round
 
       this.showOptions_();
 
