@@ -29,9 +29,12 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
+import net.socialgamer.cah.Constants.AjaxRequest;
+import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.Game;
+import net.socialgamer.cah.data.Game.TooManySpectatorsException;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.User;
 
@@ -39,26 +42,39 @@ import com.google.inject.Inject;
 
 
 /**
- * Handler to leave a game.
+ * Handler to spectate a game.
  * 
- * @author Andy Janata (ajanata@socialgamer.net)
+ * @author Gavin Lambert (cah@mirality.co.nz)
  */
-public class LeaveGameHandler extends GameWithPlayerHandler {
+public class SpectateGameHandler extends GameHandler {
 
-  public static final String OP = AjaxOperation.LEAVE_GAME.toString();
+  public static final String OP = AjaxOperation.SPECTATE_GAME.toString();
 
   @Inject
-  public LeaveGameHandler(final GameManager gameManager) {
+  public SpectateGameHandler(final GameManager gameManager) {
     super(gameManager);
   }
 
   @Override
-  public Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,
+  public Map<ReturnableData, Object> handle(final RequestWrapper request,
       final HttpSession session, final User user, final Game game) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
-    game.removePlayer(user);
-    game.removeSpectator(user);
+    final String password = request.getParameter(AjaxRequest.PASSWORD);
+    final String gamePassword = game.getPassword();
+    if (gamePassword != null && !gamePassword.equals("")) {
+      if (password == null || !gamePassword.equals(password)) {
+        return error(ErrorCode.WRONG_PASSWORD);
+      }
+    }
+    try {
+      game.addSpectator(user);
+    } catch (final IllegalStateException e) {
+      return error(ErrorCode.CANNOT_JOIN_ANOTHER_GAME);
+    } catch (final TooManySpectatorsException e) {
+      return error(ErrorCode.GAME_FULL);
+    }
+    gameManager.broadcastGameListRefresh();
     return data;
   }
 }

@@ -172,6 +172,7 @@ public class Constants {
     GET_CARDS("gc"),
     GET_GAME_INFO("ggi"),
     JOIN_GAME("jg"),
+    SPECTATE_GAME("vg"),
     JUDGE_SELECT("js"),
     KICK("K"),
     LEAVE_GAME("lg"),
@@ -208,6 +209,7 @@ public class Constants {
     OP("o"),
     PASSWORD("pw"),
     PLAYER_LIMIT("pL"),
+    SPECTATOR_LIMIT("vL"),
     SCORE_LIMIT("sl"),
     SERIAL("s"),
     USE_TIMER("ut"),
@@ -371,6 +373,8 @@ public class Constants {
     GAME_PLAYER_KICKED_IDLE("gpki"),
     GAME_PLAYER_LEAVE("gpl"),
     GAME_PLAYER_SKIPPED("gps"),
+    GAME_SPECTATOR_JOIN("gvj"),
+    GAME_SPECTATOR_LEAVE("gvl"),
     GAME_ROUND_COMPLETE("grc"),
     GAME_STATE_CHANGE("gsc"),
     GAME_WHITE_RESHUFFLE("gwr"),
@@ -596,6 +600,9 @@ public class Constants {
     PLAYER_LIMIT(AjaxRequest.PLAYER_LIMIT),
     PLAYERS("P"),
     @DuplicationAllowed
+    SPECTATOR_LIMIT(AjaxRequest.SPECTATOR_LIMIT),
+    SPECTATORS("V"),
+    @DuplicationAllowed
     SCORE_LIMIT(AjaxRequest.SCORE_LIMIT),
     STATE("S"),
     @DuplicationAllowed
@@ -648,7 +655,8 @@ public class Constants {
     JUDGE("sj", "Card Czar", "You are the Card Czar."),
     JUDGING("sjj", "Selecting", "Select a winning card."),
     PLAYING("sp", "Playing", "Select a card to play."),
-    WINNER("sw", "Winner!", "You have won!");
+    WINNER("sw", "Winner!", "You have won!"),
+    SPECTATOR("sv", "Spectator", "You are just spectating.");
 
     private final String status;
     private final String message;

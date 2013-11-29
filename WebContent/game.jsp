@@ -183,12 +183,17 @@ HttpSession hSession = request.getSession(true);
 	<div class="gamelist_lobby_left">
 	    	<h3>
 			<span class="gamelist_lobby_host">host</span>'s Game
-			(<span class="gamelist_lobby_player_count"></span>/<span class="gamelist_lobby_max_players"></span>)
+			(<span class="gamelist_lobby_player_count"></span>/<span class="gamelist_lobby_max_players"></span>,
+			<span class="gamelist_lobby_spectator_count"></span>/<span class="gamelist_lobby_max_spectators"></span>)
 			<span class="gamelist_lobby_status">status</span>
 		</h3>
 		<div>
 		<strong>Players:</strong>
 		<span class="gamelist_lobby_players">host, player1, player2</span>
+		</div>
+		<div>
+		<strong>Spectators:</strong>
+		<span class="gamelist_lobby_spectators">spectator1</span>
 		</div>
 		<div><strong>Goal:</strong> <span class="gamelist_lobby_goal"></span></div>
 		<div>
@@ -198,6 +203,7 @@ HttpSession hSession = request.getSession(true);
 	  </div>
 	  <div class="gamelist_lobby_right">
 	    <input type="button" class="gamelist_lobby_join" value="Join" />
+	    <input type="button" class="gamelist_lobby_spectate" value="View" />
 	  </div>
 	</div>
 </div>
@@ -317,7 +323,7 @@ HttpSession hSession = request.getSession(true);
 	<div id="scorecard_template" class="scorecard" tabindex="0">
 	  <span class="scorecard_player">PlayerName</span>
 	  <div class="clear"></div>
-	  <span class="scorecard_score">0</span> <span class="scorecard_point_title">Awesome Point<span class="scorecard_s">s</span></span>
+	  <span class="scorecard_points"><span class="scorecard_score">0</span> <span class="scorecard_point_title">Awesome Point<span class="scorecard_s">s</span></span></span>
 	  <span class="scorecard_status">Status</span>
 	</div>
 </div>
@@ -359,6 +365,15 @@ HttpSession hSession = request.getSession(true);
         <% } %>
       </select>
       Having more than 10 players may get cramped!
+      <br/>
+      <label id="spectator_limit_template_label" for="spectator_limit_template">Spectator limit:</label>
+      <select id="spectator_limit_template" class="spectator_limit"
+          aria-label="Spectator limit.">
+        <% int defaultSpectatorLimit = 10; for (int i = 0; i <= 20; i++) { %>
+          <option <%= i == defaultSpectatorLimit ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+        <% } %>
+      </select>
+      Spectators can watch and chat, but not actually play. Not even as Czar.
       <br/>
       <input type="checkbox" checked="checked" id="use_timer_template" class="use_timer"
           title="Players will be skipped if they have not played within a reasonable amount of time."
