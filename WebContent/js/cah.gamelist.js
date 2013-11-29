@@ -211,11 +211,15 @@ cah.GameListLobby = function(parentElem, data) {
   $(".gamelist_lobby_id", this.element_).text(this.id_);
   $(".gamelist_lobby_host", this.element_).text(data[cah.$.GameInfo.HOST]);
   $(".gamelist_lobby_players", this.element_).text(data[cah.$.GameInfo.PLAYERS].join(", "));
+  $(".gamelist_lobby_spectators", this.element_).text(data[cah.$.GameInfo.SPECTATORS].join(", "));
   var statusMessage = cah.$.GameState_msg[data[cah.$.GameInfo.STATE]];
   $(".gamelist_lobby_status", this.element_).text(statusMessage);
   $(".gamelist_lobby_join", this.element_).click(cah.bind(this, this.joinClick));
+  $(".gamelist_lobby_spectate", this.element_).click(cah.bind(this, this.spectateClick));
   $(".gamelist_lobby_player_count", this.element_).text(data[cah.$.GameInfo.PLAYERS].length);
   $(".gamelist_lobby_max_players", this.element_).text(data[cah.$.GameInfo.PLAYER_LIMIT]);
+  $(".gamelist_lobby_spectator_count", this.element_).text(data[cah.$.GameInfo.SPECTATORS].length);
+  $(".gamelist_lobby_max_spectators", this.element_).text(data[cah.$.GameInfo.SPECTATOR_LIMIT]);
   $(".gamelist_lobby_goal", this.element_).text(data[cah.$.GameInfo.SCORE_LIMIT]);
   var cardSetNames = [];
   data[cah.$.GameInfo.CARD_SETS].sort();
@@ -232,7 +236,8 @@ cah.GameListLobby = function(parentElem, data) {
   $(this.element_).attr(
       "aria-label",
       data[cah.$.GameInfo.HOST] + "'s game, with " + data[cah.$.GameInfo.PLAYERS].length + " of "
-          + data[cah.$.GameInfo.PLAYER_LIMIT] + " players. " + statusMessage + ". Goal is "
+          + data[cah.$.GameInfo.PLAYER_LIMIT] + " players, and " + data[cah.$.GameInfo.SPECTATORS].length
+          + " of " + data[cah.$.GameInfo.SPECTATOR_LIMIT] + "spectators. " + statusMessage + ". Goal is "
           + data[cah.$.GameInfo.SCORE_LIMIT] + " Awesome Points. Using " + cardSetNames.length
           + " card set" + (cardSetNames.length == 1 ? "" : "s") + ". "
           + (data[cah.$.GameInfo.HAS_PASSWORD] ? "Has" : "Does not have") + " a password.");
@@ -260,9 +265,24 @@ cah.GameListLobby.prototype.join = function() {
 };
 
 /**
+ * Event handler for clicking the View button in a game lobby.
+ */
+cah.GameListLobby.prototype.spectateClick = function() {
+  var password = "";
+  if (this.data_[cah.$.GameInfo.HAS_PASSWORD]) {
+    password = prompt("Enter the game's password.");
+    if (password == null) {
+      password = "";
+    }
+  }
+  cah.Ajax.build(cah.$.AjaxOperation.SPECTATE_GAME).withGameId(this.id_).withPassword(password).run();
+};
+
+/**
  * Remove the game lobby from the document and free up resources.
  */
 cah.GameListLobby.prototype.dispose = function() {
   this.parentElem_.removeChild(this.element_);
   $(".gamelist_lobby_join", this.element_).unbind();
+  $(".gamelist_lobby_spectate", this.element_).unbind();
 };
