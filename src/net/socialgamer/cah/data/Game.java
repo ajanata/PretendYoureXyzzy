@@ -36,6 +36,7 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.socialgamer.cah.Constants.BlackCardData;
@@ -1210,6 +1211,7 @@ public class Game {
    *          User whose hand to convert to client data.
    * @return Client representation of {@code user}'s hand.
    */
+  @Nonnull
   public List<Map<WhiteCardData, Object>> getHand(final User user) {
     final Player player = getPlayerForUser(user);
     if (player != null) {
@@ -1218,7 +1220,7 @@ public class Game {
         return getWhiteCardData(hand);
       }
     } else {
-      return null;
+      return new ArrayList<Map<WhiteCardData, Object>>(0);
     }
   }
 

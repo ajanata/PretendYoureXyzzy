@@ -23,7 +23,6 @@
 
 package net.socialgamer.cah.handlers;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,18 +55,13 @@ public class GetCardsHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.GET_CARDS.toString();
 
-  @SuppressWarnings("unchecked")
   @Override
   public Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,
       final HttpSession session, final User user, final Game game) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
     final List<Map<WhiteCardData, Object>> hand = game.getHand(user);
-    if (hand != null) {
-      data.put(AjaxResponse.HAND, hand);
-    } else {
-      data.put(AjaxResponse.HAND, Arrays.asList(new HashMap<WhiteCardData, Object>()));
-    }
+    data.put(AjaxResponse.HAND, hand);
     data.put(AjaxResponse.BLACK_CARD, game.getBlackCard());
     data.put(AjaxResponse.WHITE_CARDS, game.getWhiteCards(user));
     data.put(AjaxResponse.GAME_ID, game.getId());
