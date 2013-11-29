@@ -805,13 +805,15 @@ public class Game {
       if (state != GameState.JUDGING) {
         return;
       }
-      logger.info(String.format("Skipping idle judge in game %d", id));
       // Not sure why this would happen but it has happened before.
       // I guess they disconnected at the exact wrong time?
       final Player judge = getJudge();
+      String judgeName = "[unknown]";
       if (judge != null) {
         judge.skipped();
+        judgeName = judge.getUser().getNickname();
       }
+      logger.info(String.format("Skipping idle judge %s in game %d", judgeName, id));
       final HashMap<ReturnableData, Object> data = getEventMap();
       data.put(LongPollResponse.EVENT, LongPollEvent.GAME_JUDGE_SKIPPED.toString());
       broadcastToPlayers(MessageType.GAME_EVENT, data);
