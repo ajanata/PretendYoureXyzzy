@@ -74,7 +74,6 @@ public class SpectateGameHandler extends GameHandler {
     } catch (final TooManySpectatorsException e) {
       return error(ErrorCode.GAME_FULL);
     }
-    gameManager.broadcastGameListRefresh();
     return data;
   }
 }
