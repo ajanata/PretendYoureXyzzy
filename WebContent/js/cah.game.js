@@ -1020,12 +1020,12 @@ cah.Game.prototype.confirmClick_ = function() {
       var ajax = cah.Ajax.build(cah.$.AjaxOperation.PLAY_CARD).withGameId(this.id_).withCardId(
           this.handSelectedCard_.getServerId());
       if (this.handSelectedCard_.isBlankCard()) {
-    	  // blank card
-    	  var text = prompt("What would you like this card to say?", "");
-    	  if (text == null || text == '') { return; }
-    	  text = $("<div/>").text(text).html();		// html sanitise
-    	  this.handSelectedCard_.setText(text);
-    	  ajax = ajax.withMessage(text);
+        // blank card
+        var text = prompt("What would you like this card to say?", "");
+        if (text == null || text == '') { return; }
+        text = $("<div/>").text(text).html(); // html sanitise
+        this.handSelectedCard_.setText(text);
+        ajax = ajax.withMessage(text);
       }
       ajax.run();
     }

@@ -95,7 +95,6 @@ public class WhiteDeck {
       discard.add(card);
     }
   }
-  }
 
   /**
    * Shuffles the discard pile and puts the cards under the cards remaining in the deck.
