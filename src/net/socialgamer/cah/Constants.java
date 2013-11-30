@@ -203,6 +203,7 @@ public class Constants {
   public enum AjaxRequest {
     CARD_ID("cid"),
     CARD_SETS("css"),
+    EMOTE("me"),
     GAME_ID("gid"),
     MESSAGE("m"),
     NICKNAME("n"),
@@ -414,6 +415,8 @@ public class Constants {
   public enum LongPollResponse implements ReturnableData {
     @DuplicationAllowed
     BLACK_CARD(AjaxResponse.BLACK_CARD),
+    @DuplicationAllowed
+    EMOTE(AjaxRequest.EMOTE),
     @DuplicationAllowed
     ERROR(AjaxResponse.ERROR),
     @DuplicationAllowed
