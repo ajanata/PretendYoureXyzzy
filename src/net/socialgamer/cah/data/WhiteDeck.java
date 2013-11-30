@@ -26,7 +26,6 @@ package net.socialgamer.cah.data;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +42,6 @@ import net.socialgamer.cah.db.WhiteCard;
  */
 public class WhiteDeck {
   private final List<WhiteCard> deck;
-  private final List<WhiteCard> dealt;
   private final List<WhiteCard> discard;
   private int lastBlankCardId = -1;
 
@@ -60,7 +58,6 @@ public class WhiteDeck {
       deck.add(createBlankCard());
     }
     Collections.shuffle(deck);
-    dealt = new LinkedList<WhiteCard>();
     discard = new ArrayList<WhiteCard>(deck.size());
   }
 
@@ -77,7 +74,6 @@ public class WhiteDeck {
     }
     // we have an ArrayList here, so this is faster
     final WhiteCard card = deck.remove(deck.size() - 1);
-    dealt.add(card);
     return card;
   }
 
