@@ -289,6 +289,15 @@ cah.Game = function(id) {
    */
   this.showingOptions_ = true;
 
+  /**
+   * Whether the player can select a card right now or not. This is disabled while waiting for the
+   * server to respond.
+   * 
+   * @type {Boolean}
+   * @private
+   */
+  this.canSelectCard_ = true;
+
   $("#leave_game").click(cah.bind(this, this.leaveGameClick_));
   $("#start_game").click(cah.bind(this, this.startGameClick_));
   $(".confirm_card", this.element_).click(cah.bind(this, this.confirmClick_));
@@ -842,11 +851,6 @@ cah.Game.prototype.updateUserStatus = function(playerInfo) {
     }
 
     if (playerStatus != cah.$.GamePlayerStatus.PLAYING) {
-      if (this.handSelectedCard_ != null) {
-        // we have a card selected, but we're changing state. this almost certainly is an
-        // out-of-order reception of events. remove it from hand, we don't need to do anything else
-        this.removeCardFromHand(this.handSelectedCard_);
-      }
       this.handSelectedCard_ = null;
       $(".selected", $(".game_hand", this.element_)).removeClass("selected");
     }
@@ -1019,6 +1023,7 @@ cah.Game.prototype.confirmClick_ = function() {
           this.handSelectedCard_.getServerId()).run();
     }
   }
+  this.disableCardControls_();
 };
 
 /**
@@ -1040,6 +1045,9 @@ cah.Game.prototype.handCardKeypress_ = function(e) {
  * @private
  */
 cah.Game.prototype.handCardClick_ = function(e) {
+  if (!this.canSelectCard_) {
+    return;
+  }
   // judge can't select a card.
   if (this.judge_ == cah.nickname) {
     return;
@@ -1089,6 +1097,9 @@ cah.Game.prototype.roundCardKeypress_ = function(e) {
  * @private
  */
 cah.Game.prototype.roundCardClick_ = function(e) {
+  if (!this.canSelectCard_) {
+    return;
+  }
   // this player isn't in judging state.
   var scorecard = this.scoreCards_[cah.nickname];
   if (scorecard && scorecard.getStatus() != cah.$.GamePlayerStatus.JUDGING) {
@@ -1160,6 +1171,32 @@ cah.Game.prototype.playCardComplete = function() {
     this.handSelectedCard_ = null;
   }
   $(".confirm_card", this.element_).attr("disabled", "disabled");
+  this.enableCardControls_();
+};
+
+/**
+ * Called when an error ocurred while playing a card.
+ */
+cah.Game.prototype.playCardError = function() {
+  this.enableCardControls_();
+};
+
+/**
+ * Enable playing cards, etc.
+ * 
+ * @private
+ */
+cah.Game.prototype.enableCardControls_ = function() {
+  this.canSelectCard_ = true;
+};
+
+/**
+ * Disable playing cards, etc.
+ * 
+ * @private
+ */
+cah.Game.prototype.disableCardControls_ = function() {
+  this.canSelectCard_ = false;
 };
 
 /**
@@ -1278,6 +1315,7 @@ cah.Game.prototype.stateChange = function(data) {
       break;
 
     case cah.$.GameState.PLAYING:
+      this.enableCardControls_();
       this.hideOptions_();
       this.refreshGameStatus();
       this.setBlackCard(data[cah.$.LongPollResponse.BLACK_CARD]);

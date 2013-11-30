@@ -168,7 +168,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_GAME_INFO] = function(data, req
 
 cah.ajax.ErrorHandlers[cah.$.AjaxOperation.GET_GAME_INFO] = function(data, req) {
   if (data[cah.$.AjaxResponse.ERROR_CODE] == cah.$.ErrorCode.INVALID_GAME) {
-    cah.log.error("The game has been removed.  Returning to the lobby.");
+    cah.log.error("The game has been removed. Returning to the lobby.");
     cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LEAVE_GAME](data, req);
   } else {
     cah.log.error(cah.$.ErrorCode_msg[data[cah.$.AjaxResponse.ERROR_CODE]]);
@@ -224,8 +224,18 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.PLAY_CARD] = function(data, req) {
   }
 };
 
+cah.ajax.ErrorHandlers[cah.$.AjaxOperation.PLAY_CARD] = function(data) {
+  cah.log.error(cah.$.ErrorCode_msg[data[cah.$.AjaxResponse.ERROR_CODE]]);
+
+  var gameId = req[cah.$.AjaxRequest.GAME_ID];
+  var game = cah.currentGames[gameId];
+  if (game) {
+    game.playCardError();
+  }
+};
+
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JUDGE_SELECT] = function(data) {
-  // pass?
+  // pass
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CHANGE_GAME_OPTIONS] = function(data) {
