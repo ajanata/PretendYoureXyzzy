@@ -391,6 +391,14 @@ HttpSession hSession = request.getSession(true);
         Select any number of: <span class="extra_card_sets"></span>
       </fieldset>
       <br/>
+      <label id="blanks_limit_label" title="Blank cards allow a player to type in their own answer.">
+        Also include <select id="blanks_limit_template" class="blanks_limit">
+        <% for (int i = 0; i <= 30; i++) { %>
+          <option <%= i == 0 ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+        <% } %>
+        </select> blank white cards.
+      </label>
+      <br/>
       <label id="game_password_template_label" for="game_password_template">Game password:</label>
       <input type="text" id="game_password_template" class="game_password"
           aria-label="Game password. You must tab outside of the box to apply the password."/>

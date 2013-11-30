@@ -211,6 +211,7 @@ public class Constants {
     PLAYER_LIMIT("pL"),
     SPECTATOR_LIMIT("vL"),
     SCORE_LIMIT("sl"),
+    BLANKS_LIMIT("bl"),
     SERIAL("s"),
     USE_TIMER("ut"),
     WALL("wall");
@@ -604,6 +605,8 @@ public class Constants {
     SPECTATORS("V"),
     @DuplicationAllowed
     SCORE_LIMIT(AjaxRequest.SCORE_LIMIT),
+    @DuplicationAllowed
+    BLANKS_LIMIT(AjaxRequest.BLANKS_LIMIT),
     STATE("S"),
     @DuplicationAllowed
     USE_TIMER(AjaxRequest.USE_TIMER);

@@ -37,6 +37,8 @@ import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.User;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.google.inject.Inject;
 
 
@@ -69,8 +71,13 @@ public class PlayCardHandler extends GameWithPlayerHandler {
     } catch (final NumberFormatException nfe) {
       return error(ErrorCode.INVALID_CARD);
     }
+    String text = request.getParameter(AjaxRequest.MESSAGE);
+    if (text != null && text.contains("<")) {
+      // somebody must be using a hacked client, because this should have been escaped already.
+      text = StringEscapeUtils.escapeXml(text);
+    }
 
-    final ErrorCode ec = game.playCard(user, cardId);
+    final ErrorCode ec = game.playCard(user, cardId, text);
     if (ec != null) {
       return error(ec);
     } else {

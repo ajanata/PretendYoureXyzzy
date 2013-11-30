@@ -102,6 +102,7 @@ public class Game {
   private final Object blackCardLock = new Object();
   private WhiteDeck whiteDeck;
   private GameState state;
+  private int maxBlanks = 0;
   private int maxPlayers = 6;
   private int maxSpectators = 6;
   private int judgeIndex = 0;
@@ -430,8 +431,8 @@ public class Game {
   }
 
   public void updateGameSettings(final int newScoreGoal, final int newMaxPlayers,
-      final int newMaxSpectators,
-      final Set<CardSet> newCardSets, final String newPassword, final boolean newUseTimer) {
+      final int newMaxSpectators, final Set<CardSet> newCardSets, final int newMaxBlanks,
+      final String newPassword, final boolean newUseTimer) {
     this.scoreGoal = newScoreGoal;
     this.maxPlayers = newMaxPlayers;
     this.maxSpectators = newMaxSpectators;
@@ -439,6 +440,7 @@ public class Game {
       this.cardSets.clear();
       this.cardSets.addAll(newCardSets);
     }
+    this.maxBlanks = newMaxBlanks;
     this.password = newPassword;
     this.useTimer = newUseTimer;
 
@@ -487,6 +489,7 @@ public class Game {
       }
     }
     info.put(GameInfo.CARD_SETS, cardSetIds);
+    info.put(GameInfo.BLANKS_LIMIT, maxBlanks);
     info.put(GameInfo.PLAYER_LIMIT, maxPlayers);
     info.put(GameInfo.SPECTATOR_LIMIT, maxSpectators);
     info.put(GameInfo.SCORE_LIMIT, scoreGoal);
@@ -637,7 +640,7 @@ public class Game {
       // time, and not at the same time as trying to lock users, which has caused deadlocks
       synchronized (cardSets) {
         blackDeck = new BlackDeck(cardSets);
-        whiteDeck = new WhiteDeck(cardSets);
+        whiteDeck = new WhiteDeck(cardSets, maxBlanks);
       }
       startNextRound();
       gameManager.broadcastGameListRefresh();
@@ -1261,11 +1264,13 @@ public class Game {
    *          User playing the card.
    * @param cardId
    *          ID of the card to play.
+   * @param cardText
+   *          User text for a blank card.  Ignored for normal cards.
    * @return An {@code ErrorCode} if the play was unsuccessful ({@code user} doesn't have the card,
    *         {@code user} is the judge, etc.), or {@code null} if there was no error and the play
    *         was successful.
    */
-  public ErrorCode playCard(final User user, final int cardId) {
+  public ErrorCode playCard(final User user, final int cardId, final String cardText) {
     final Player player = getPlayerForUser(user);
     if (player != null) {
       player.resetSkipCount();
@@ -1280,6 +1285,9 @@ public class Game {
           final WhiteCard card = iter.next();
           if (card.getId() == cardId) {
             playCard = card;
+            if (WhiteDeck.isBlankCard(card)) {
+              playCard.setText(cardText);
+            }
             // remove the card from their hand. the client will also do so when we return
             // success, so no need to tell it to do so here.
             iter.remove();
