@@ -183,6 +183,7 @@ public class Constants {
     NAMES("gn"),
     PLAY_CARD("pc"),
     REGISTER("r"),
+    SCORE("SC"),
     START_GAME("sg");
 
     private final String op;

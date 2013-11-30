@@ -12,6 +12,7 @@ cah.$.AjaxOperation.SPECTATE_GAME = "vg";
 cah.$.AjaxOperation.LOG_OUT = "lo";
 cah.$.AjaxOperation.JUDGE_SELECT = "js";
 cah.$.AjaxOperation.BAN = "b";
+cah.$.AjaxOperation.SCORE = "SC";
 cah.$.AjaxOperation.GAME_LIST = "ggl";
 cah.$.AjaxOperation.CHANGE_GAME_OPTIONS = "cgo";
 cah.$.AjaxOperation.GET_GAME_INFO = "ggi";

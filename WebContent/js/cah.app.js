@@ -183,6 +183,12 @@ function chatsubmit_click(game_id, parent_element) {
           cah.log.error("This command only works in a game.");
         }
         break;
+      case 'score':
+        ajax = cah.Ajax.build(cah.$.AjaxOperation.SCORE).withMessage(text);
+        if (game_id != null) {
+          ajax = ajax.withGameId(game_id);
+        }
+        break;
       case 'names':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.NAMES);
         break;
