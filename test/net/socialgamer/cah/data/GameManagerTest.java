@@ -35,6 +35,7 @@ import static org.junit.Assert.assertNull;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Timer;
 
 import net.socialgamer.cah.HibernateUtil;
 import net.socialgamer.cah.data.GameManager.GameId;
@@ -64,6 +65,7 @@ public class GameManagerTest {
   private ConnectedUsers cuMock;
   private User userMock;
   private int gameId;
+  private final Timer timer = new Timer("junit-timer", true);
 
   @Before
   public void setUp() throws Exception {
@@ -116,11 +118,11 @@ public class GameManagerTest {
 
     // fill it up with 3 games
     assertEquals(0, gameManager.get().intValue());
-    gameManager.getGames().put(0, new Game(0, cuMock, gameManager, null));
+    gameManager.getGames().put(0, new Game(0, cuMock, gameManager, null, timer));
     assertEquals(1, gameManager.get().intValue());
-    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, null));
+    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, null, timer));
     assertEquals(2, gameManager.get().intValue());
-    gameManager.getGames().put(2, new Game(2, cuMock, gameManager, null));
+    gameManager.getGames().put(2, new Game(2, cuMock, gameManager, null, timer));
     // make sure it says it can't make any more
     assertEquals(-1, gameManager.get().intValue());
 
@@ -128,13 +130,13 @@ public class GameManagerTest {
     gameManager.destroyGame(1);
     // make sure it re-uses that id
     assertEquals(1, gameManager.get().intValue());
-    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, null));
+    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, null, timer));
     assertEquals(-1, gameManager.get().intValue());
 
     // remove game 1 out from under it, to make sure it'll fix itself
     gameManager.getGames().remove(1);
     assertEquals(1, gameManager.get().intValue());
-    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, null));
+    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, null, timer));
     assertEquals(-1, gameManager.get().intValue());
 
     gameManager.destroyGame(2);
@@ -146,7 +148,7 @@ public class GameManagerTest {
   @Test
   public void testCreateGame() {
     cuMock.broadcastToAll(eq(MessageType.GAME_EVENT), anyObject(HashMap.class));
-    expectLastCall().times(6);
+    expectLastCall().times(3);
     cuMock.broadcastToList(anyObject(Collection.class), eq(MessageType.GAME_PLAYER_EVENT),
         anyObject(HashMap.class));
     expectLastCall().times(3);

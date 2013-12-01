@@ -36,6 +36,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Timer;
 
 import net.socialgamer.cah.data.Game.TooManyPlayersException;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
@@ -54,12 +55,13 @@ public class GameTest {
   private Game game;
   private ConnectedUsers cuMock;
   private GameManager gmMock;
+  private final Timer timer = new Timer("junit-timer", true);
 
   @Before
   public void setUp() throws Exception {
     cuMock = createMock(ConnectedUsers.class);
     gmMock = createMock(GameManager.class);
-    game = new Game(0, cuMock, gmMock, null);
+    game = new Game(0, cuMock, gmMock, null, timer);
   }
 
   @SuppressWarnings("unchecked")
@@ -67,8 +69,6 @@ public class GameTest {
   public void testRemovePlayer() throws IllegalStateException, TooManyPlayersException {
     cuMock.broadcastToList(anyObject(Collection.class), eq(MessageType.GAME_PLAYER_EVENT),
         anyObject(HashMap.class));
-    expectLastCall().times(4);
-    gmMock.broadcastGameListRefresh();
     expectLastCall().times(4);
     replay(cuMock);
     gmMock.destroyGame(anyInt());

@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Timer;
 
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.GameManager.GameId;
@@ -39,6 +40,7 @@ import org.hibernate.Session;
 import com.google.inject.AbstractModule;
 import com.google.inject.BindingAnnotation;
 import com.google.inject.Provides;
+import com.google.inject.TypeLiteral;
 
 
 /**
@@ -48,9 +50,25 @@ import com.google.inject.Provides;
  */
 public class CahModule extends AbstractModule {
 
+  private final static Properties properties = new Properties();
+
   @Override
   protected void configure() {
-    bind(Integer.class).annotatedWith(GameId.class).toProvider(GameManager.class);
+    bind(Integer.class)
+        .annotatedWith(GameId.class)
+        .toProvider(GameManager.class);
+    /*
+     * A mutable Set of IP addresses (in String format) which are banned. This Set is
+     * thread-safe.
+     */
+    bind(new TypeLiteral<Set<String>>() {
+    })
+        .annotatedWith(BanList.class)
+        .toInstance(Collections.synchronizedSet(new HashSet<String>()));
+    bind(Timer.class)
+        .toInstance(new Timer("timer-task", true));
+    bind(Properties.class)
+        .toInstance(properties);
   }
 
   /**
@@ -71,11 +89,6 @@ public class CahModule extends AbstractModule {
     return Integer.valueOf((String) properties.get("pyx.server.max_users"));
   }
 
-  @BindingAnnotation
-  @Retention(RetentionPolicy.RUNTIME)
-  public @interface MaxUsers {
-  }
-
   /**
    * @return A Hibernate session. Objects which receive a Hibernate session should close the
    * session when they are done!
@@ -85,27 +98,13 @@ public class CahModule extends AbstractModule {
     return HibernateUtil.instance.sessionFactory.openSession();
   }
 
-  private final static Set<String> banList = Collections.synchronizedSet(new HashSet<String>());
-
-  /**
-   * @return A mutable Set of IP addresses (in String format) which are banned. This Set is
-   * thread-safe.
-   */
-  @Provides
-  @BanList
-  Set<String> provideBanList() {
-    return banList;
-  }
-
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface BanList {
   }
 
-  private final static Properties properties = new Properties();
-
-  @Provides
-  Properties provideProperties() {
-    return properties;
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface MaxUsers {
   }
 }

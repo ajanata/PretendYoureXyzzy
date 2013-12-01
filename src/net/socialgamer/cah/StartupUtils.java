@@ -64,11 +64,6 @@ public class StartupUtils extends GuiceServletContextListener {
   private static final long PING_CHECK_DELAY = 5 * 1000;
 
   /**
-   * Context attribute key name for the disconnected client timer.
-   */
-  private static final String PING_TIMER_NAME = "ping_timer";
-
-  /**
    * Context attribute key name for the time the server was started.
    */
   public static final String DATE_NAME = "started_at";
@@ -86,10 +81,11 @@ public class StartupUtils extends GuiceServletContextListener {
   @Override
   public void contextDestroyed(final ServletContextEvent contextEvent) {
     final ServletContext context = contextEvent.getServletContext();
-    final Timer timer = (Timer) context.getAttribute(PING_TIMER_NAME);
-    assert (timer != null);
+
+    final Injector injector = (Injector) context.getAttribute(INJECTOR);
+    final Timer timer = injector.getInstance(Timer.class);
     timer.cancel();
-    context.removeAttribute(PING_TIMER_NAME);
+
     context.removeAttribute(INJECTOR);
     context.removeAttribute(DATE_NAME);
 
@@ -101,10 +97,9 @@ public class StartupUtils extends GuiceServletContextListener {
     final ServletContext context = contextEvent.getServletContext();
     final Injector injector = getInjector();
     final UserPing ping = injector.getInstance(UserPing.class);
-    final Timer timer = new Timer("PingCheck", true);
+    final Timer timer = injector.getInstance(Timer.class);
     timer.schedule(ping, PING_START_DELAY, PING_CHECK_DELAY);
     serverStarted = new Date();
-    context.setAttribute(PING_TIMER_NAME, timer);
     context.setAttribute(INJECTOR, injector);
     context.setAttribute(DATE_NAME, serverStarted);
 

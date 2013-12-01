@@ -134,12 +134,18 @@ public class Game {
    * Lock object to prevent judging during idle judge detection and vice-versa.
    */
   private final Object judgeLock = new Object();
-  private Timer nextRoundTimer;
-  private final Object nextRoundTimerLock = new Object();
+
+  /**
+   * Lock to prevent missing timer updates.
+   */
+  private final Object roundTimerLock = new Object();
+  private volatile TimerTask lastTimerTask;
+  private final Timer globalTimer;
+
   private int scoreGoal = 8;
   private final Set<CardSet> cardSets = new HashSet<CardSet>();
   private String password = "";
-  private boolean useTimer = true;
+  private boolean useIdleTimer = true;
   private final Session hibernateSession;
 
   /**
@@ -152,14 +158,17 @@ public class Game {
    * @param gameManager
    *          The game manager, for broadcasting game list refresh notices and destroying this game
    *          when everybody leaves.
+   * @param hibernateSession Hibernate session from which to load cards.
+   * @param globalTimer The global timer on which to schedule tasks.
    */
   @Inject
   public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
-      final GameManager gameManager, final Session hibernateSession) {
+      final GameManager gameManager, final Session hibernateSession, final Timer globalTimer) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
     this.hibernateSession = hibernateSession;
+    this.globalTimer = globalTimer;
     state = GameState.LOBBY;
   }
 
@@ -207,7 +216,7 @@ public class Game {
    * Remove a player from the game.
    * <br/>
    * Synchronizes on {@link #players}, {@link #playedCards}, {@link #whiteDeck}, and
-   * {@link #nextRoundTimerLock}.
+   * {@link #roundTimerLock}.
    * 
    * @param user
    *          Player to remove from the game.
@@ -290,15 +299,14 @@ public class Game {
             id));
         resetState(true);
       } else if (wasJudge) {
-        synchronized (nextRoundTimerLock) {
+        synchronized (roundTimerLock) {
           final TimerTask task = new TimerTask() {
             @Override
             public void run() {
               startNextRound();
             }
           };
-          nextRoundTimer = new Timer("judge-left-" + id, true);
-          nextRoundTimer.schedule(task, ROUND_INTERMISSION);
+          rescheduleTimer(task, ROUND_INTERMISSION);
         }
       }
       return players.size() == 0;
@@ -442,7 +450,7 @@ public class Game {
     }
     this.maxBlanks = newMaxBlanks;
     this.password = newPassword;
-    this.useTimer = newUseTimer;
+    this.useIdleTimer = newUseTimer;
 
     final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_OPTIONS_CHANGED.toString());
@@ -493,7 +501,7 @@ public class Game {
     info.put(GameInfo.PLAYER_LIMIT, maxPlayers);
     info.put(GameInfo.SPECTATOR_LIMIT, maxSpectators);
     info.put(GameInfo.SCORE_LIMIT, scoreGoal);
-    info.put(GameInfo.USE_TIMER, useTimer);
+    info.put(GameInfo.USE_TIMER, useIdleTimer);
     if (includePassword) {
       info.put(GameInfo.PASSWORD, password);
     }
@@ -684,7 +692,7 @@ public class Game {
    * Move the game into the {@code PLAYING} state, drawing a new Black Card and dispatching a
    * message to all players.
    * <br/>
-   * Synchronizes on {@link #players}, {@link #blackCardLock}, and {@link #nextRoundTimerLock}.
+   * Synchronizes on {@link #players}, {@link #blackCardLock}, and {@link #roundTimerLock}.
    */
   private void playingState() {
     state = GameState.PLAYING;
@@ -716,7 +724,7 @@ public class Game {
     }
 
     // Perhaps figure out a better way to do this...
-    final int playTimer = useTimer ? PLAY_TIMEOUT_BASE
+    final int playTimer = useIdleTimer ? PLAY_TIMEOUT_BASE
         + (PLAY_TIMEOUT_PER_CARD * blackCard.getPick()) : Integer.MAX_VALUE;
 
     final HashMap<ReturnableData, Object> data = getEventMap();
@@ -727,8 +735,7 @@ public class Game {
 
     broadcastToPlayers(MessageType.GAME_EVENT, data);
 
-    synchronized (nextRoundTimerLock) {
-      killRoundTimer();
+    synchronized (roundTimerLock) {
       final TimerTask task = new TimerTask() {
         @Override
         public void run() {
@@ -736,19 +743,18 @@ public class Game {
         }
       };
       // 10 second warning
-      nextRoundTimer = new Timer("hurry-up-" + id, true);
-      nextRoundTimer.schedule(task, playTimer - 10 * 1000);
+      rescheduleTimer(task, playTimer - 10 * 1000);
     }
   }
 
   /**
    * Warn players that have not yet played that they are running out of time to do so.
    * <br/>
-   * Synchronizes on {@link #nextRoundTimerLock} and {@link #roundPlayers}.
+   * Synchronizes on {@link #roundTimerLock} and {@link #roundPlayers}.
    */
   private void warnPlayersToPlay() {
     // have to do this all synchronized in case they play while we're processing this
-    synchronized (nextRoundTimerLock) {
+    synchronized (roundTimerLock) {
       killRoundTimer();
 
       synchronized (roundPlayers) {
@@ -771,14 +777,13 @@ public class Game {
         }
       };
       // 10 seconds to finish playing
-      nextRoundTimer = new Timer("hurry-up-" + id, true);
-      nextRoundTimer.schedule(task, 10 * 1000);
+      rescheduleTimer(task, 10 * 1000);
     }
   }
 
   private void warnJudgeToJudge() {
     // have to do this all synchronized in case they play while we're processing this
-    synchronized (nextRoundTimerLock) {
+    synchronized (roundTimerLock) {
       killRoundTimer();
 
       if (state == GameState.JUDGING) {
@@ -796,8 +801,7 @@ public class Game {
         }
       };
       // 10 seconds to finish playing
-      nextRoundTimer = new Timer("hurry-up-" + id, true);
-      nextRoundTimer.schedule(task, 10 * 1000);
+      rescheduleTimer(task, 10 * 1000);
     }
   }
 
@@ -886,11 +890,21 @@ public class Game {
   }
 
   private void killRoundTimer() {
-    synchronized (nextRoundTimerLock) {
-      if (nextRoundTimer != null) {
-        nextRoundTimer.cancel();
-        nextRoundTimer = null;
+    synchronized (roundTimerLock) {
+      if (lastTimerTask != null) {
+        logger.trace(String.format("Killing timer task %s", lastTimerTask));
+        lastTimerTask.cancel();
+        lastTimerTask = null;
       }
+    }
+  }
+
+  private void rescheduleTimer(final TimerTask task, final long timeout) {
+    synchronized (roundTimerLock) {
+      killRoundTimer();
+      logger.trace(String.format("Scheduling timer task %s after %d ms", task, timeout));
+      lastTimerTask = task;
+      globalTimer.schedule(task, timeout);
     }
   }
 
@@ -902,7 +916,7 @@ public class Game {
     state = GameState.JUDGING;
 
     // Perhaps figure out a better way to do this...
-    final int judgeTimer = useTimer ? JUDGE_TIMEOUT_BASE
+    final int judgeTimer = useIdleTimer ? JUDGE_TIMEOUT_BASE
         + (JUDGE_TIMEOUT_PER_CARD * playedCards.size() * blackCard.getPick()) : Integer.MAX_VALUE;
 
     final HashMap<ReturnableData, Object> data = getEventMap();
@@ -914,8 +928,7 @@ public class Game {
 
     notifyPlayerInfoChange(getJudge());
 
-    synchronized (nextRoundTimerLock) {
-      killRoundTimer();
+    synchronized (roundTimerLock) {
       final TimerTask task = new TimerTask() {
         @Override
         public void run() {
@@ -923,8 +936,7 @@ public class Game {
         }
       };
       // 10 second warning
-      nextRoundTimer = new Timer("hurry-up-" + id, true);
-      nextRoundTimer.schedule(task, judgeTimer - 10 * 1000);
+      rescheduleTimer(task, judgeTimer - 10 * 1000);
     }
   }
 
@@ -1007,12 +1019,7 @@ public class Game {
    * state.
    */
   private void startNextRound() {
-    synchronized (nextRoundTimerLock) {
-      if (nextRoundTimer != null) {
-        nextRoundTimer.cancel();
-        nextRoundTimer = null;
-      }
-    }
+    killRoundTimer();
 
     synchronized (playedCards) {
       for (final List<WhiteCard> cards : playedCards.cards()) {
@@ -1358,8 +1365,7 @@ public class Game {
     notifyPlayerInfoChange(getJudge());
     notifyPlayerInfoChange(cardPlayer);
 
-    synchronized (nextRoundTimerLock) {
-      killRoundTimer();
+    synchronized (roundTimerLock) {
       final TimerTask task;
       // TODO win-by-x option
       if (cardPlayer.getScore() >= scoreGoal) {
@@ -1377,8 +1383,7 @@ public class Game {
           }
         };
       }
-      nextRoundTimer = new Timer("round-intermission-" + id, true);
-      nextRoundTimer.schedule(task, ROUND_INTERMISSION);
+      rescheduleTimer(task, ROUND_INTERMISSION);
     }
 
     return null;
