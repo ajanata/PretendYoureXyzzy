@@ -2,6 +2,7 @@ package net.socialgamer.cah.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Properties;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -9,6 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.socialgamer.cah.StartupUtils;
+
+import com.google.inject.Injector;
 
 
 @WebServlet("/js/cah.config.js")
@@ -41,9 +46,16 @@ public class JavascriptConfigServlet extends HttpServlet {
   protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
       throws ServletException, IOException {
 
+    // We have to do this every time since it comes from the properties file and that can change...
+    final StringBuilder builder = new StringBuilder(256);
+    final Injector injector = (Injector) getServletContext().getAttribute(StartupUtils.INJECTOR);
+    final String cookieDomain = (String) injector.getInstance(Properties.class).get(
+        "pyx.cookie_domain");
+    builder.append(String.format("cah.COOKIE_DOMAIN = '%s';\n", cookieDomain));
+
     resp.setContentType("text/javascript");
     final PrintWriter out = resp.getWriter();
-    out.println(configString);
+    out.println(configString + builder.toString());
     out.flush();
     out.close();
   }

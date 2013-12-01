@@ -95,6 +95,7 @@ function nickbox_keyup(e) {
 function nicknameconfirm_click() {
   var nickname = $.trim($("#nickname").val());
   $.cookie("nickname", nickname, {
+    domain : cah.COOKIE_DOMAIN,
     expires : 365
   });
   cah.Ajax.build(cah.$.AjaxOperation.REGISTER).withNickname(nickname).run();
@@ -249,6 +250,7 @@ function load_preferences() {
 function save_preferences() {
   if ($("#hide_connect_quit").attr("checked")) {
     $.cookie("hide_connect_quit", true, {
+      domain : cah.COOKIE_DOMAIN,
       expires : 365
     });
   } else {
@@ -256,6 +258,7 @@ function save_preferences() {
   }
 
   $.cookie("ignore_list", $("#ignore_list").val(), {
+    domain : cah.COOKIE_DOMAIN,
     expires : 365
   });
 
