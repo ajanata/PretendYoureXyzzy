@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
 import net.socialgamer.cah.Constants.DisconnectReason;
+import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
@@ -76,16 +77,24 @@ public class ConnectedUsers {
   }
 
   /**
-   * Checks to see if a user with the specified nickname already exists, and if not add the user,
+   * Checks to see if the specified {@code user} is allowed to connect, and if so, add the user,
    * as an atomic operation.
    * @param user User to add. {@code getNickname()} is used to determine the nickname.
-   * @return {@code true} if the user was added, {@code false} if another user with the same name
-   * already existed.
+   * @param maxUsers Maximum number of users allowed to connect. Admins are always allowed to
+   * connect.
+   * @return {@code null} if the user was added, or an {@link ErrorCode} explaining why the user was
+   * rejected.
    */
-  public boolean checkAndAdd(final User user) {
+  public ErrorCode checkAndAdd(final User user, final int maxUsers) {
     synchronized (users) {
       if (this.hasUser(user.getNickname())) {
-        return false;
+        logger.info(String.format("Rejecting existing username %s from %s", user.toString(),
+            user.getHostName()));
+        return ErrorCode.NICK_IN_USE;
+      } else if (users.size() >= maxUsers && !user.isAdmin()) {
+        logger.warn(String.format("Rejecting user %s due to too many users (%d >= %d)",
+            user.toString(), users.size(), maxUsers));
+        return ErrorCode.TOO_MANY_USERS;
       } else {
         logger.info(String.format("New user %s from %s (admin=%b)", user.toString(),
             user.getHostName(), user.isAdmin()));
@@ -94,7 +103,7 @@ public class ConnectedUsers {
         data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
         data.put(LongPollResponse.NICKNAME, user.getNickname());
         broadcastToAll(MessageType.PLAYER_EVENT, data);
-        return true;
+        return null;
       }
     }
   }

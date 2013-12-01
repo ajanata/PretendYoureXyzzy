@@ -326,6 +326,8 @@ public class Constants {
     TOO_FAST("tf", "You are chatting too fast. Wait a few seconds and try again."),
     TOO_MANY_GAMES("tmg", "There are too many games already in progress. Either join " +
         "an existing game, or wait for one to become available."),
+    TOO_MANY_USERS("tmu", "There are too many users connected. Either join another server, or " +
+        "wait for a user to disconnect."),
     WRONG_PASSWORD("wp", "That password is incorrect.");
 
     private final String code;

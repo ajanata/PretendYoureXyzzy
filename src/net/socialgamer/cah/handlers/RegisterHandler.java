@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.CahModule.BanList;
+import net.socialgamer.cah.CahModule.MaxUsers;
 import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
@@ -58,17 +59,14 @@ public class RegisterHandler extends Handler {
 
   private final ConnectedUsers users;
   private final Set<String> banList;
+  private final Integer maxUsers;
 
-  /**
-   * I don't want to have to inject the entire server here, but I couldn't figure out how to
-   * properly bind ConnectedUsers in Guice, so here we are for now.
-   * 
-   * @param server
-   */
   @Inject
-  public RegisterHandler(final ConnectedUsers users, @BanList final Set<String> banList) {
+  public RegisterHandler(final ConnectedUsers users, @BanList final Set<String> banList,
+      @MaxUsers final Integer maxUsers) {
     this.users = users;
     this.banList = banList;
+    this.maxUsers = maxUsers;
   }
 
   @Override
@@ -91,7 +89,8 @@ public class RegisterHandler extends Handler {
       } else {
         final User user = new User(nick, request.getRemoteAddr(),
             Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteAddr()));
-        if (users.checkAndAdd(user)) {
+        final ErrorCode errorCode = users.checkAndAdd(user, maxUsers);
+        if (null == errorCode) {
           // There is a findbugs warning on this line:
           // cah/src/net/socialgamer/cah/handlers/RegisterHandler.java:85 Store of non serializable
           // net.socialgamer.cah.data.User into HttpSession in
@@ -103,7 +102,7 @@ public class RegisterHandler extends Handler {
 
           data.put(AjaxResponse.NICKNAME, nick);
         } else {
-          return error(ErrorCode.NICK_IN_USE);
+          return error(errorCode);
         }
       }
     }
