@@ -54,164 +54,33 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>1 December 2013 Mega-Update:<ul>
+    <li>There are a <strong>lot</strong> of new things this time around. You can view the
+    <a href="https://github.com/ajanata/PretendYoureXyzzy/commits/master">GitHub commit history</a>
+    for full details, but here's a summary:<ul>
+      <li>Spectator mode. The host can pick how many spectators the shall allow. Spectators do not
+      participate in the game at all, even as Card Czar.</li>
+      <li>Fill-in-the-blank White Cards. The host can pick how many of these to shuffle into the
+      deck, and when they are played, you are prompted for the text to put on the card.</li>
+      <li>/me chat command for emotes.</li>
+      <li>Option to disable bouncy cards. We've all had a problem selecting the last card on the
+      line; well now, you can uncheck a box up at the top right and they'll stop bouncing around.</li>
+      <li>/sync chat command to re-sync the current game state without reloading the page. It should
+      be harder to de-sync the client now, as well.</li>
+      <li>Several more bug fixes and back-end improvements.</li>
+    </ul></li>
+    <li>The Fourth Expansion is up.</li>
+    <li>As you have probably noticed in getting here, there is now a meta-lobby which allows you to
+    choose between multiple servers. They should be identical other than the people playing on them:
+    they are backed by the same card database.</li>
+  </ul></li>
   <li>5 September 2013:<ul>
     <li tabindex="0">The Box Expansion and PAX Prime 2013 cards have been added. <strong>If you have
     any spares of these card numbers and are willing to part with them, it would be awesome if you'd
     <a href="mailto:ajanata@socialgamer.net?subject=13PAX+cards">email me</a> and send them to me,
     as I was unable to acquire them at PAX:</strong> 29, 30, 33, 34, 35, 36, 37</li>
   </ul></li>
-  <li>7 August 2013:<ul>
-    <li tabindex="0"><strong>The game list will not automatically update all the time now.</strong>
-    You will need to start using the Refresh Games button. The game list will automatically update
-    for new games, removed games, when games become passworded, or when you leave a game.</li>
-    <li tabindex="0">A lot of custom card sets have been added.</li>
-    <li tabindex="0">Cleaned up some error handling.</li>
-    <li tabindex="0">Tried to fix some more of the server crashes.</li>
-  </ul></li>
-  <li>28 April 2013:<ul>
-    <li tabindex="0">Version 1.3 of the base Cards Against Humanity game.</li>
-    <li tabindex="0">Card sets are grouped by official or custom.</li>
-    <li tabindex="0">You can <a href="viewcards.jsp">view all of the cards in the game</a>,
-    including searching by text and filtering card set.</li>
-  </ul></li>
-  <li>20 April 2013:<ul>
-    <li>A bunch of accessibility things for screen readers. If you are not using a
-    screen reader, you don't care about any of this. If you are, tab to the next element for more
-    information.
-      <div style="position:absolute; left:-999999px" tabindex="0" id="screenreader-intro">
-      I have spent a couple hours attempting to make this usable with screen readers. I have probably
-      missed a few things, but I believe the game is actually playable now. You should be able to get
-      to all of the interactive elements using only tab and shift tab, and all toggles should respond
-      to the space bar. To select a card, tab to it and press the space bar. You will have to get to
-      the Confirm Selection button to actually play it. I may eventually remove this requirement if
-      the card is selected with the space bar. The list of games leaves some information that is
-      visible out in an attempt to prevent each game from requiring a minute to read. You can still
-      access that information by navigating through the elements directly. I attempted to make the
-      notifications not be too chatty, but I may have failed. Please let me know if there are any
-      major issues.
-      </div>
-    </li>
-  </ul></li>
-  <li>14 April 2013:<ul>
-    <li>Fixed the game list sometimes showing the same game over and over, and not loading the list
-    of card sets to display in game options.</li>
-    <li>Made game list cards bigger, and fixed HTML entities displayed in them.</li>
-    <li>Fixed even-numbered rows in the scoreboard not using the correct background color when
-    displaying that the person won.</li>
-  </ul></li>
-  <li>13 April 2013:<ul>
-    <li>Added client-side option to hide game password in the game options area. This is useful for
-    streaming the game and not letting people see the password. ;)</li>
-    <li>Added option to "not use" the idle timer. In reality, it just sets it to about 25 days.</li>
-    <li>Internal cleanups.</li>
-  </ul></li>
-  <li>30 March 2013:<ul>
-    <li>Increased the game limit to 200.</li>
-    <li>Tweaking other settings to attempt to increase stability with more than 550 users.</li>
-    <li>Fixed bug where inactive card sets were showing. That was just something stupid on my end.
-    </li>
-  </ul></li>
-  <li>27 March 2013:<ul>
-    <li>The Third Expansion and the PAX East packs, as well as a few more custom cards.</li>
-    <li>Card sets have a description when you hover over them in the options panel.</li>
-    <li>Administrators can send messages that show up in every game chat, so I can do announcements
-    that everybody will see.</li>
-    <li>Increased the game limit to 125.</li>
-  </ul></li>
-  <li>25 February 2013:<ul>
-    <li>Per-game chats. Finally. Global chat is still there. I hope to make it highlight the tab
-    when there is activity at some point.</li>
-  </ul></li>
-  <li>9 January 2013:<ul>
-    <li>New stylesheet from timsookram.</li>
-    <li>New card sets. The Holiday Pack was added about a month ago, the MLP pack got lost in the
-    server migration and has been restored, and another custom card set has been added from the fine
-    folks over at Very Serious. This card set has a decent amount of in-jokes, though, so you may
-    want to skip it for now. I'll pull out the universally funny cards later into another set.
-      <ul><li>I haven't forgotten about the other card sets that have been sent in. I'll get to
-      those later this week. I did this card set first since it was sent to me in a format that I
-      could import directly into the database.</li></ul>
-    </li>
-    <li>Plugged a hole that would let any especially crafty user pretend to be an administrator.
-    This was done entirely at the firewall and web server level and required no code change to the
-    game itself.</li>
-    <li>Increased maximum game limit from 60 to 75.</li>
-  </ul></li>
-  <li>12 October, 5:00 AM UTC:<ul>
-    <li>User Preferences. Click the button in the top-right corner and you can hide the connect
-    and quit events, and ignore chat from specific users. These settings are remembered for the
-    next time you play the game. The game also remembers what name you used last time you
-    played.</li>
-    <li>Games without a password will sort before games that do, so you can find them easier.</li>
-    <li>Under-the-hood improvements.</li>
-  </ul></li>
-  <li>Early September, 2012:<ul>
-    <li>The Second Expansion has been entered.</li>
-  </ul></li>
-  <li>29 August, 6:00 AM UTC:<ul>
-    <li>Chat flood protection. You may only chat 5 times in any given 15 second period.</li>
-    <li>Splitting game chat out will happen next, this was just an easy bandage.</li>
-  </ul></li>
-  <li>21 August, 6:00 AM UTC:<ul>
-    <li>Ban list. Only admins can ban.</li>
-    <li>Chat from admins shows up in blue.</li>
-    <li>
-      Currently, the admin list contains just me and a close friend. I am not taking applications.
-    </li>
-    <li>Performance and stability tweaks.</li>
-  </ul></li>
-  <li>7 July, 10:00 PM UTC:<ul>
-    <li>Proper Card Set support. Currently, only I can define the cards and card sets, but I hope to
-    eventually let users define their own. This leads into the next item...</li>
-    <li><strong>The First Expansion</strong>! Sorry it took so long, I've been quite busy with real
-    work lately. Whenever The Second Expansion rolls around, it will be much easier for me to add
-    since I've put in the proper structure to deal with card sets.</li>
-    <li>I still haven't had time to separate out chat per-game, but that is the next thing on the
-    to-do list.</li>
-  </ul></li>
-  <li>15 June, 2:00 AM UTC:<ul>
-    <li>I haven't forgotten about this! The First Expansion cards are typed up (you probably have
-    seen them accidentally showing up), I just need to make a proper way to choose what card decks
-    to use in games. I will try to do that this weekend! In the mean time, I've removed the dummy
-    marker cards you've also probably noticed from showing up (and also the First Expansion cards).
-    </li>
-  </ul></li>
-  <li>23 March, 7:00 AM UTC:<ul>
-    <li><a href="https://github.com/ajanata/PretendYoureXyzzy/commit/368e890c07d29e1b810821ac6f76c983227ab7c1">
-        Fixed a deadlock which caused the server to grind to a halt occasionally.</a> At least, I
-    fixed one deadlock. I looked over the code a bit more closely to see if there were any other
-    potential deadlocks, and didn't see any. I did go ahead and rework some of the other code to
-    make it less likely. Hopefully this will fix the problems with the server randomly crapping
-    out.</li>
-    <li><a href="https://github.com/ajanata/PretendYoureXyzzy/commit/bc4f0818f18f106e92590c4510210fc28847ef58">
-      Fixed the chat log in Opera.</a></li>
-  </ul></li>
-  <li>19 March, 4:20 AM UTC:<ul>
-    <li>Added game passwords.</li>
-    <li>Added Show Game Options button in-game to see the game's options. The host cannot change
-    options while the game is in progress.</li>
-  </ul></li>
-  <li>18 March, 6:40 PM UTC:<ul>
-    <li>Added version 1.2 Cards Against Humanity cards. Game host can choose between original, new,
-    or both at once.<ul>
-      <li>Cards that were slightly reworded in the new version were updated instead of replaced
-      here, so even if you pick original you may get some newly reworded cards.</li>
-    </ul></li>
-    <li>Hopefully fixed a rare crashing issue.</li>
-  </ul></li>
-  <li>17 March, 1:30 AM UTC:<ul>
-    <li>Fixed AFK timer skipping people who played at least one card for a multiple-PICK card.</li>
-    <li>Increased AFK timeouts to 45 + 15 * PICK seconds and 40 + 7 * PICK * PLAYERS seconds.</li>
-  </ul></li>
-  <li>17 March, Midnight UTC:<ul>
-    <li>Initial AFK timer support added. This will skip (or kick, if there are not enough players) a
-    player that takes longer than 15 + 15 * PICK seconds to play, or skip a judge that takes longer
-    than 20 + 5 * PICK * PLAYERS seconds to select a winner. If a player is idle for two consecutive
-    rounds, they will be kicked from the game. All of these numbers are adjustable; if the timeouts
-    are too long or too short, please let me know!</li>
-    <li>The game host can specify the Awesome Point goal from 4 to 10.</li>
-    <li>The game host can specify the maximum number of players in a game from 3 to 10.</li>
-  </ul></li>
+  <li><a href="changelog.html">Older entries.</a></li>
 </ul>
 <p>Known issues:</p>
 <ul>
@@ -256,7 +125,6 @@ to, for instance, display the number of connected players.
       for now.</li>
 	  </ul>
   </li>
-  <li>All games and the main lobby share the same chat.</li>
   <li>You can't bet Awesome Points to play another card, and I am unsure if I will add this.</li>
 </ul>
 <p>Future enhancements:</p>

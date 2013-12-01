@@ -95,18 +95,26 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 3 September 2013:</p>
+  <p tabindex="0">Most recent update: 1 December 2013:</p>
   <ul>
-    <li tabindex="0">The Box Expansion and PAX Prime 2013 cards have been added. <strong>If you have
-    any spares of these card numbers and are willing to part with them, it would be awesome if you'd
-    <a href="mailto:ajanata@socialgamer.net?subject=13PAX+cards">email me</a> and send them to me,
-    as I was unable to acquire them at PAX:</strong> 29, 30, 33, 34, 35, 36, 37</li>
-    <li tabindex="0"><strong>The game list will not automatically update all the time now.</strong>
-    You will need to start using the Refresh Games button. The game list will automatically update
-    for new games, removed games, when games become passworded, or when you leave a game.</li>
-    <li tabindex="0">A lot of custom card sets have been added.</li>
-    <li tabindex="0">Cleaned up some error handling.</li>
-    <li tabindex="0">Tried to fix some more of the server crashes.</li>
+    <li>There are a <strong>lot</strong> of new things this time around. You can view the
+    <a href="https://github.com/ajanata/PretendYoureXyzzy/commits/master">GitHub commit history</a>
+    for full details, but here's a summary:<ul>
+      <li>Spectator mode. The host can pick how many spectators the shall allow. Spectators do not
+      participate in the game at all, even as Card Czar.</li>
+      <li>Fill-in-the-blank White Cards. The host can pick how many of these to shuffle into the
+      deck, and when they are played, you are prompted for the text to put on the card.</li>
+      <li>/me chat command for emotes.</li>
+      <li>Option to disable bouncy cards. We've all had a problem selecting the last card on the
+      line; well now, you can uncheck a box up at the top right and they'll stop bouncing around.</li>
+      <li>/sync chat command to re-sync the current game state without reloading the page. It should
+      be harder to de-sync the client now, as well.</li>
+      <li>Several more bug fixes and back-end improvements.</li>
+    </ul></li>
+    <li>The Fourth Expansion is up.</li>
+    <li>As you have probably noticed in getting here, there is now a meta-lobby which allows you to
+    choose between multiple servers. They should be identical other than the people playing on them:
+    they are backed by the same card database.</li>
   </ul>
   <div id="nickbox">
     Nickname:
