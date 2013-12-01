@@ -27,6 +27,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 import net.socialgamer.cah.data.GameManager;
@@ -53,14 +54,26 @@ public class CahModule extends AbstractModule {
   }
 
   /**
-   * TODO Provide a configuration option for this instead of hard-coding it.
-   * 
    * @return The maximum number of games allowed on this server.
    */
   @Provides
   @MaxGames
   Integer provideMaxGames() {
-    return 250;
+    return Integer.valueOf((String) properties.get("pyx.server.max_games"));
+  }
+
+  /**
+   * @return The maximum number of users allowed to connect to this server.
+   */
+  @Provides
+  @MaxUsers
+  Integer provideMaxUsers() {
+    return Integer.valueOf((String) properties.get("pyx.server.max_users"));
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface MaxUsers {
   }
 
   /**
@@ -87,5 +100,12 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface BanList {
+  }
+
+  private final static Properties properties = new Properties();
+
+  @Provides
+  Properties provideProperties() {
+    return properties;
   }
 }

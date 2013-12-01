@@ -23,7 +23,10 @@
 
 package net.socialgamer.cah;
 
+import java.io.File;
+import java.io.FileReader;
 import java.util.Date;
+import java.util.Properties;
 import java.util.Timer;
 
 import javax.servlet.ServletContext;
@@ -106,6 +109,20 @@ public class StartupUtils extends GuiceServletContextListener {
     context.setAttribute(DATE_NAME, serverStarted);
 
     reconfigureLogging(contextEvent.getServletContext());
+    reloadProperties(contextEvent.getServletContext());
+  }
+
+  public static void reloadProperties(final ServletContext context) {
+    final Injector injector = (Injector) context.getAttribute(INJECTOR);
+    final Properties props = injector.getInstance(Properties.class);
+    final File propsFile = new File(context.getRealPath("/WEB-INF/pyx.properties"));
+    try {
+      props.clear();
+      props.load(new FileReader(propsFile));
+    } catch (final Exception e) {
+      // we should probably do something?
+      e.printStackTrace();
+    }
   }
 
   public static void reconfigureLogging(final ServletContext context) {

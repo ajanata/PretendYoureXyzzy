@@ -28,6 +28,7 @@ most useful graph if it is only updated every 15 minutes, but it is still nice t
 @author Andy Janata (ajanata@socialgamer.net)
 --%>
 <%@ page language="java" contentType="text/plain; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="java.util.Properties" %>
 <%@ page import="com.google.inject.Injector" %>
 <%@ page import="net.socialgamer.cah.data.ConnectedUsers" %>
 <%@ page import="net.socialgamer.cah.data.GameManager" %>
@@ -38,8 +39,11 @@ Injector injector = (Injector) servletContext.getAttribute(StartupUtils.INJECTOR
 
 ConnectedUsers users = injector.getInstance(ConnectedUsers.class);
 GameManager games = injector.getInstance(GameManager.class);
+Properties props = injector.getInstance(Properties.class);
 
 out.clear();
 out.println("USERS " + users.getUsers().size());
 out.println("GAMES " + games.getGameList().size());
+out.println("MAX_USERS " + props.get("pyx.server.max_users"));
+out.println("MAX_GAMES " + props.get("pyx.server.max_games"));
 %>

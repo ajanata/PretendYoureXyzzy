@@ -37,7 +37,6 @@ Administration tools.
 <%@ page import="net.socialgamer.cah.Constants.LongPollEvent" %>
 <%@ page import="net.socialgamer.cah.Constants.LongPollResponse" %>
 <%@ page import="net.socialgamer.cah.Constants.ReturnableData" %>
-<%@ page import="net.socialgamer.cah.StartupUtils" %>
 <%@ page import="net.socialgamer.cah.data.ConnectedUsers" %>
 <%@ page import="net.socialgamer.cah.data.QueuedMessage" %>
 <%@ page import="net.socialgamer.cah.data.QueuedMessage.MessageType" %>
@@ -120,6 +119,11 @@ if (unbanParam != null) {
 String reloadLog4j = request.getParameter("reloadLog4j");
 if ("true".equals(reloadLog4j)) {
   StartupUtils.reconfigureLogging(this.getServletContext());
+}
+
+String reloadProps = request.getParameter("reloadProps");
+if ("true".equals(reloadProps)) {
+  StartupUtils.reloadProperties(this.getServletContext());
 }
 
 %>
@@ -234,6 +238,9 @@ boolean verboseDebug = verboseDebugObj != null ? verboseDebugObj.booleanValue() 
 </p>
 <p>
   <a href="?reloadLog4j=true">Reload log4j.properties.</a>
+</p>
+<p>
+  <a href="?reloadProps=true">Reload pyx.properties.</a>
 </p>
 
 </body>
