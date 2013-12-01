@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpSession;
 
@@ -57,10 +58,12 @@ public class FirstLoadHandler extends Handler {
   public static final String OP = AjaxOperation.FIRST_LOAD.toString();
 
   private final Session hibernateSession;
+  private final Properties properties;
 
   @Inject
-  public FirstLoadHandler(final Session hibernateSession) {
+  public FirstLoadHandler(final Session hibernateSession, final Properties properties) {
     this.hibernateSession = hibernateSession;
+    this.properties = properties;
   }
 
   @Override
@@ -91,7 +94,8 @@ public class FirstLoadHandler extends Handler {
     final Transaction transaction = hibernateSession.beginTransaction();
     @SuppressWarnings("unchecked")
     final List<CardSet> cardSets = hibernateSession
-        .createQuery("from CardSet where active = true order by weight, id").setReadOnly(true)
+        .createQuery(CardSet.getCardsetQuery(properties))
+        .setReadOnly(true)
         .list();
     final List<Map<CardSetData, Object>> cardSetsData = new ArrayList<Map<CardSetData, Object>>(
         cardSets.size());

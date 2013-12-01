@@ -50,7 +50,7 @@ public class JavascriptConfigServlet extends HttpServlet {
     final StringBuilder builder = new StringBuilder(256);
     final Injector injector = (Injector) getServletContext().getAttribute(StartupUtils.INJECTOR);
     final String cookieDomain = (String) injector.getInstance(Properties.class).get(
-        "pyx.cookie_domain");
+        "pyx.client.cookie_domain");
     builder.append(String.format("cah.COOKIE_DOMAIN = '%s';\n", cookieDomain));
 
     resp.setContentType("text/javascript");

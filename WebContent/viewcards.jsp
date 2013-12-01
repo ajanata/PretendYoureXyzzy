@@ -31,9 +31,12 @@ Interface to view and search all existing cards and card sets.
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.HashSet" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Properties" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.Set" %>
+<%@ page import="com.google.inject.Injector" %>
 <%@ page import="net.socialgamer.cah.HibernateUtil" %>
+<%@ page import="net.socialgamer.cah.StartupUtils" %>
 <%@ page import="net.socialgamer.cah.db.BlackCard" %>
 <%@ page import="net.socialgamer.cah.db.CardSet" %>
 <%@ page import="net.socialgamer.cah.db.WhiteCard" %>
@@ -42,12 +45,16 @@ Interface to view and search all existing cards and card sets.
 <%
 Session hibernateSession = HibernateUtil.instance.sessionFactory.openSession();
 
+ServletContext servletContext = pageContext.getServletContext();
+Injector injector = (Injector) servletContext.getAttribute(StartupUtils.INJECTOR);
+Properties props = injector.getInstance(Properties.class);
+
 // cheap way to make sure we can close the hibernate session at the end of the page
 try {
-  // load from db  
+  // load from db
   @SuppressWarnings("unchecked")
   List<CardSet> cardSets = hibernateSession
-      .createQuery("from CardSet where active = true order by weight, id")
+      .createQuery(CardSet.getCardsetQuery(props))
       .setReadOnly(true)
       .list();
   
