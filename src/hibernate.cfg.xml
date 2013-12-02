@@ -6,7 +6,7 @@
     <session-factory>
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
         <property name="hibernate.connection.password">a#kHA17Nqp*</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost/cah</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://pyx-master.int.socialgamer.net/cah</property>
         <property name="hibernate.connection.username">cah</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
