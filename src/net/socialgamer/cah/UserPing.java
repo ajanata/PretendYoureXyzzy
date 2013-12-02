@@ -23,8 +23,6 @@
 
 package net.socialgamer.cah;
 
-import java.util.TimerTask;
-
 import net.socialgamer.cah.data.ConnectedUsers;
 
 import com.google.inject.Inject;
@@ -35,7 +33,7 @@ import com.google.inject.Inject;
  * 
  * @author Andy Janata (ajanata@gmail.com)
  */
-public class UserPing extends TimerTask {
+public class UserPing extends SafeTimerTask {
 
   private final ConnectedUsers users;
 
@@ -45,7 +43,7 @@ public class UserPing extends TimerTask {
   }
 
   @Override
-  public void run() {
+  public void process() {
     users.checkForPingAndIdleTimeouts();
   }
 }

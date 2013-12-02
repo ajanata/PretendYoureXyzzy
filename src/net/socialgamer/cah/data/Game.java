@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,6 +48,7 @@ import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.WhiteCardData;
+import net.socialgamer.cah.SafeTimerTask;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.db.BlackCard;
@@ -147,7 +147,7 @@ public class Game {
    * Lock to prevent missing timer updates.
    */
   private final Object roundTimerLock = new Object();
-  private volatile TimerTask lastTimerTask;
+  private volatile SafeTimerTask lastTimerTask;
   private final Timer globalTimer;
 
   private int scoreGoal = 8;
@@ -308,9 +308,9 @@ public class Game {
         resetState(true);
       } else if (wasJudge) {
         synchronized (roundTimerLock) {
-          final TimerTask task = new TimerTask() {
+          final SafeTimerTask task = new SafeTimerTask() {
             @Override
-            public void run() {
+            public void process() {
               startNextRound();
             }
           };
@@ -744,9 +744,9 @@ public class Game {
     broadcastToPlayers(MessageType.GAME_EVENT, data);
 
     synchronized (roundTimerLock) {
-      final TimerTask task = new TimerTask() {
+      final SafeTimerTask task = new SafeTimerTask() {
         @Override
-        public void run() {
+        public void process() {
           warnPlayersToPlay();
         }
       };
@@ -778,9 +778,9 @@ public class Game {
         }
       }
 
-      final TimerTask task = new TimerTask() {
+      final SafeTimerTask task = new SafeTimerTask() {
         @Override
-        public void run() {
+        public void process() {
           skipIdlePlayers();
         }
       };
@@ -802,9 +802,9 @@ public class Game {
         getJudge().getUser().enqueueMessage(q);
       }
 
-      final TimerTask task = new TimerTask() {
+      final SafeTimerTask task = new SafeTimerTask() {
         @Override
-        public void run() {
+        public void process() {
           skipIdleJudge();
         }
       };
@@ -907,7 +907,7 @@ public class Game {
     }
   }
 
-  private void rescheduleTimer(final TimerTask task, final long timeout) {
+  private void rescheduleTimer(final SafeTimerTask task, final long timeout) {
     synchronized (roundTimerLock) {
       killRoundTimer();
       logger.trace(String.format("Scheduling timer task %s after %d ms", task, timeout));
@@ -937,9 +937,9 @@ public class Game {
     notifyPlayerInfoChange(getJudge());
 
     synchronized (roundTimerLock) {
-      final TimerTask task = new TimerTask() {
+      final SafeTimerTask task = new SafeTimerTask() {
         @Override
-        public void run() {
+        public void process() {
           warnJudgeToJudge();
         }
       };
@@ -1374,19 +1374,19 @@ public class Game {
     notifyPlayerInfoChange(cardPlayer);
 
     synchronized (roundTimerLock) {
-      final TimerTask task;
+      final SafeTimerTask task;
       // TODO win-by-x option
       if (cardPlayer.getScore() >= scoreGoal) {
-        task = new TimerTask() {
+        task = new SafeTimerTask() {
           @Override
-          public void run() {
+          public void process() {
             winState();
           }
         };
       } else {
-        task = new TimerTask() {
+        task = new SafeTimerTask() {
           @Override
-          public void run() {
+          public void process() {
             startNextRound();
           }
         };
