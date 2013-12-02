@@ -102,10 +102,18 @@ public class Game {
   private final Object blackCardLock = new Object();
   private WhiteDeck whiteDeck;
   private GameState state;
-  private int maxBlanks = 0;
-  private int maxPlayers = 6;
-  private int maxSpectators = 6;
+
+  // These are the default values new games get.
+  private int blanksInDeck = 0;
+  private int playerLimit = 6;
+  private int spectatorLimit = 0;
+
   private int judgeIndex = 0;
+
+  // All of these delays could be moved to pyx.properties.
+  /**
+   * Time, in milliseconds, to delay before starting a new round.
+   */
   private final static int ROUND_INTERMISSION = 8 * 1000;
   /**
    * Duration, in milliseconds, for the minimum timeout a player has to choose a card to play.
@@ -191,7 +199,7 @@ public class Game {
   public void addPlayer(final User user) throws TooManyPlayersException, IllegalStateException {
     logger.info(String.format("%s joined game %d.", user.toString(), id));
     synchronized (players) {
-      if (maxPlayers >= 3 && players.size() >= maxPlayers) {
+      if (playerLimit >= 3 && players.size() >= playerLimit) {
         throw new TooManyPlayersException();
       }
       // this will throw IllegalStateException if the user is already in a game, including this one.
@@ -330,7 +338,7 @@ public class Game {
       IllegalStateException {
     logger.info(String.format("%s joined game %d as a spectator.", user.toString(), id));
     synchronized (spectators) {
-      if (spectators.size() >= maxSpectators) {
+      if (spectators.size() >= spectatorLimit) {
         throw new TooManySpectatorsException();
       }
       // this will throw IllegalStateException if the user is already in a game, including this one.
@@ -442,13 +450,13 @@ public class Game {
       final int newMaxSpectators, final Set<CardSet> newCardSets, final int newMaxBlanks,
       final String newPassword, final boolean newUseTimer) {
     this.scoreGoal = newScoreGoal;
-    this.maxPlayers = newMaxPlayers;
-    this.maxSpectators = newMaxSpectators;
+    this.playerLimit = newMaxPlayers;
+    this.spectatorLimit = newMaxSpectators;
     synchronized (this.cardSets) {
       this.cardSets.clear();
       this.cardSets.addAll(newCardSets);
     }
-    this.maxBlanks = newMaxBlanks;
+    this.blanksInDeck = newMaxBlanks;
     this.password = newPassword;
     this.useIdleTimer = newUseTimer;
 
@@ -497,9 +505,9 @@ public class Game {
       }
     }
     info.put(GameInfo.CARD_SETS, cardSetIds);
-    info.put(GameInfo.BLANKS_LIMIT, maxBlanks);
-    info.put(GameInfo.PLAYER_LIMIT, maxPlayers);
-    info.put(GameInfo.SPECTATOR_LIMIT, maxSpectators);
+    info.put(GameInfo.BLANKS_LIMIT, blanksInDeck);
+    info.put(GameInfo.PLAYER_LIMIT, playerLimit);
+    info.put(GameInfo.SPECTATOR_LIMIT, spectatorLimit);
     info.put(GameInfo.SCORE_LIMIT, scoreGoal);
     info.put(GameInfo.USE_TIMER, useIdleTimer);
     if (includePassword) {
@@ -648,7 +656,7 @@ public class Game {
       // time, and not at the same time as trying to lock users, which has caused deadlocks
       synchronized (cardSets) {
         blackDeck = new BlackDeck(cardSets);
-        whiteDeck = new WhiteDeck(cardSets, maxBlanks);
+        whiteDeck = new WhiteDeck(cardSets, blanksInDeck);
       }
       startNextRound();
       gameManager.broadcastGameListRefresh();
