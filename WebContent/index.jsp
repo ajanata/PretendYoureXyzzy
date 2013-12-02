@@ -67,6 +67,7 @@ to, for instance, display the number of connected players.
       line; well now, you can uncheck a box up at the top right and they'll stop bouncing around.</li>
       <li>/sync chat command to re-sync the current game state without reloading the page. It should
       be harder to de-sync the client now, as well.</li>
+      <li>Users are removed from the server if they have not done anything for an hour.</li>
       <li>Several more bug fixes and back-end improvements.</li>
     </ul></li>
     <li>The Fourth Expansion is up.</li>
