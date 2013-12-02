@@ -102,6 +102,10 @@ public class Constants {
      */
     BANNED("B&"),
     /**
+     * The client made no user-caused requests within the timeout window.
+     */
+    IDLE_TIMEOUT("it"),
+    /**
      * The client was kicked by the server administrator.
      */
     KICKED("k"),

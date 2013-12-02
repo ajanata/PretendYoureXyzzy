@@ -46,6 +46,8 @@ public class User {
 
   private long lastHeardFrom = 0;
 
+  private long lastUserAction = 0;
+
   private Game currentGame;
 
   private final String hostName;
@@ -175,6 +177,14 @@ public class User {
    */
   public long getLastHeardFrom() {
     return lastHeardFrom;
+  }
+
+  public void userDidSomething() {
+    lastUserAction = System.nanoTime();
+  }
+
+  public long getLastUserAction() {
+    return lastUserAction;
   }
 
   /**

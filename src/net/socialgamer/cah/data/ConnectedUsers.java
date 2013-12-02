@@ -26,10 +26,9 @@ package net.socialgamer.cah.data;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
@@ -60,7 +59,12 @@ public class ConnectedUsers {
   /**
    * Duration of a ping timeout, in nanoseconds.
    */
-  public static final long PING_TIMEOUT = TimeUnit.SECONDS.toNanos(45);
+  public static final long PING_TIMEOUT = TimeUnit.SECONDS.toNanos(90);
+
+  /**
+   * Duration of an idle timeout, in nanoseconds.
+   */
+  public static final long IDLE_TIMEOUT = TimeUnit.MINUTES.toNanos(60);
 
   /**
    * Key (username) must be stored in lower-case to facilitate case-insensitivity in nicks.
@@ -158,25 +162,35 @@ public class ConnectedUsers {
 
   /**
    * Check for any users that have not communicated with the server within the ping timeout delay,
-   * and remove users which have not so communicated.
+   * and remove users which have not so communicated. Also remove clients which are still connected,
+   * but have not actually done anything for a long time.
    */
-  public void checkForPingTimeouts() {
-    final Set<User> removedUsers = new HashSet<User>();
+  public void checkForPingAndIdleTimeouts() {
+    final Map<User, DisconnectReason> removedUsers = new HashMap<User, DisconnectReason>();
     synchronized (users) {
       final Iterator<User> iterator = users.values().iterator();
       while (iterator.hasNext()) {
         final User u = iterator.next();
+        DisconnectReason reason = null;
         if (System.nanoTime() - u.getLastHeardFrom() > PING_TIMEOUT) {
-          removedUsers.add(u);
+          reason = DisconnectReason.PING_TIMEOUT;
+        }
+        else if (!u.isAdmin() && System.nanoTime() - u.getLastUserAction() > IDLE_TIMEOUT) {
+          reason = DisconnectReason.IDLE_TIMEOUT;
+        }
+        if (null != reason) {
+          removedUsers.put(u, reason);
           iterator.remove();
         }
       }
     }
     // Do this later to not keep users locked
-    for (final User u : removedUsers) {
+    for (final Entry<User, DisconnectReason> entry : removedUsers.entrySet()) {
       try {
-        u.noLongerVaild();
-        notifyRemoveUser(u, DisconnectReason.PING_TIMEOUT);
+        entry.getKey().noLongerVaild();
+        notifyRemoveUser(entry.getKey(), entry.getValue());
+        logger.info(String.format("Automatically kicking user %s due to %s", entry.getKey(),
+            entry.getValue()));
       } catch (final Exception e) {
         logger.error("Unable to remove pinged-out user", e);
       }

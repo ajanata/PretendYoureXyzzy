@@ -31,7 +31,7 @@ import com.google.inject.Inject;
 
 
 /**
- * Timer task to check for disconnected clients.
+ * Timer task to check for disconnected and idle clients.
  * 
  * @author Andy Janata (ajanata@gmail.com)
  */
@@ -46,6 +46,6 @@ public class UserPing extends TimerTask {
 
   @Override
   public void run() {
-    users.checkForPingTimeouts();
+    users.checkForPingAndIdleTimeouts();
   }
 }

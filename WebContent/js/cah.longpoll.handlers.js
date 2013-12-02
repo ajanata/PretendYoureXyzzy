@@ -40,6 +40,7 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.NEW_PLAYER] = function(data) {
   }
 };
 
+// TODO Not sure why this isn't done with localizable strings in constants.
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.PLAYER_LEAVE] = function(data) {
   var friendly_reason = "Leaving";
   var show = !cah.hideConnectQuit;
@@ -47,6 +48,9 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.PLAYER_LEAVE] = function(data) {
     case cah.$.DisconnectReason.BANNED:
       friendly_reason = "Banned";
       show = true;
+      break;
+    case cah.$.DisconnectReason.IDLE_TIMEOUT:
+      friendly_reason = "Kicked due to idle";
       break;
     case cah.$.DisconnectReason.KICKED:
       friendly_reason = "Kicked by server administrator";
@@ -133,15 +137,15 @@ cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_PLAYER_LEAVE] = function(dat
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_SPECTATOR_JOIN] = function(data) {
-	  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.spectatorJoin,
-	      data[cah.$.LongPollResponse.NICKNAME],
-	      "spectator join (if you just joined a game this may be OK)");
-	};
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.spectatorJoin,
+      data[cah.$.LongPollResponse.NICKNAME],
+      "spectator join (if you just joined a game this may be OK)");
+};
 
-	cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_SPECTATOR_LEAVE] = function(data) {
-	  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.spectatorLeave,
-	      data[cah.$.LongPollResponse.NICKNAME], "spectator leave");
-	};
+cah.longpoll.EventHandlers[cah.$.LongPollEvent.GAME_SPECTATOR_LEAVE] = function(data) {
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.spectatorLeave,
+      data[cah.$.LongPollResponse.NICKNAME], "spectator leave");
+};
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.HAND_DEAL] = function(data) {
   cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.dealtCards,

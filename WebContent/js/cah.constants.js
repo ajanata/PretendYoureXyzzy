@@ -100,6 +100,7 @@ cah.$.DisconnectReason.BANNED = "B&";
 cah.$.DisconnectReason.PING_TIMEOUT = "pt";
 cah.$.DisconnectReason.KICKED = "k";
 cah.$.DisconnectReason.MANUAL = "man";
+cah.$.DisconnectReason.IDLE_TIMEOUT = "it";
 
 cah.$.ErrorCode = function() {
   // Dummy constructor to make Eclipse auto-complete.

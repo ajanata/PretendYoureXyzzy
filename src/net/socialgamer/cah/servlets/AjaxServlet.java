@@ -65,6 +65,9 @@ public class AjaxServlet extends CahServlet {
       IOException {
     final PrintWriter out = response.getWriter();
     final User user = (User) hSession.getAttribute(SessionAttribute.USER);
+    if (null != user) {
+      user.userDidSomething();
+    }
     int serial = -1;
     if (request.getParameter(AjaxRequest.SERIAL.toString()) != null) {
       try {

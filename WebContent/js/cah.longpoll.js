@@ -28,8 +28,7 @@
  */
 
 cah.longpoll = {};
-cah.longpoll.TIMEOUT = 45 * 1000;
-// cah.longpoll.TIMEOUT = 30 * 1000;
+cah.longpoll.TIMEOUT = 30 * 1000;
 
 /**
  * Backoff when there was an error.
