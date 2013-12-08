@@ -1026,7 +1026,9 @@ cah.Game.prototype.confirmClick_ = function() {
       if (this.handSelectedCard_.isBlankCard()) {
         // blank card
         var text = prompt("What would you like this card to say?", "");
-        if (text == null || text == '') { return; }
+        if (text == null || text == '') {
+          return;
+        }
         text = $("<div/>").text(text).html(); // html sanitise
         this.handSelectedCard_.setText(text);
         ajax = ajax.withMessage(text);
@@ -1380,6 +1382,8 @@ cah.Game.prototype.updateOptionsEnabled_ = function() {
     $("select", this.optionsElement_).attr("disabled", "disabled");
     $("input", this.optionsElement_).attr("disabled", "disabled");
     $(".options_host_only", this.optionsElement_).removeClass("hide");
+    // let all players adjust the "hide password" option themselves
+    $(".game_hide_password", this.optionsElement_).removeAttr("disabled");
   }
 };
 
@@ -1390,6 +1394,11 @@ cah.Game.prototype.updateOptionsEnabled_ = function() {
  * @private
  */
 cah.Game.prototype.optionChanged_ = function(e) {
+  // don't update the server for the 'hide password' option
+  if (e.target.classList.contains('game_hide_password')) {
+    return;
+  }
+
   var selectedCardSets = $(".card_sets :checked", this.optionsElement_);
   var cardSetIds = [];
   for ( var i = 0; i < selectedCardSets.length; i++) {
