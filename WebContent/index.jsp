@@ -54,6 +54,17 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>22 December 2013:<ul>
+    <li>What I have receieved so far of the Holiday Bullshit has been added. I will continue to add
+    cards to this as I receive them.</li>
+    <li>Several custom card sets have been added.</li>
+    <li><strong>No further custom card sets will be accepted.</strong> Minor updates to existing
+    ones may still be submitted, but I do not guarantee I will get to it in a timely manner. It is
+    taking too much of my time to administer the custom cards sets; I'd rather focus the time on
+    implementing a way for players to manage card sets in the game by themselves.</li>
+    <li>Fixed a memory leak introduced in the last update that causes the server to massively slow
+    down after a few days of running.</li>
+  </ul></li>
   <li>1 December 2013 Mega-Update:<ul>
     <li>There are a <strong>lot</strong> of new things this time around. You can view the
     <a href="https://github.com/ajanata/PretendYoureXyzzy/commits/master">GitHub commit history</a>

@@ -95,27 +95,17 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 1 December 2013:</p>
+  <p tabindex="0">Most recent update: 22 December 2013:</p>
   <ul>
-    <li>There are a <strong>lot</strong> of new things this time around. You can view the
-    <a href="https://github.com/ajanata/PretendYoureXyzzy/commits/master">GitHub commit history</a>
-    for full details, but here's a summary:<ul>
-      <li>Spectator mode. The host can pick how many spectators the shall allow. Spectators do not
-      participate in the game at all, even as Card Czar.</li>
-      <li>Fill-in-the-blank White Cards. The host can pick how many of these to shuffle into the
-      deck, and when they are played, you are prompted for the text to put on the card.</li>
-      <li>/me chat command for emotes.</li>
-      <li>Option to disable bouncy cards. We've all had a problem selecting the last card on the
-      line; well now, you can uncheck a box up at the top right and they'll stop bouncing around.</li>
-      <li>/sync chat command to re-sync the current game state without reloading the page. It should
-      be harder to de-sync the client now, as well.</li>
-      <li>Users are removed from the server if they have not done anything for an hour.</li>
-      <li>Several more bug fixes and back-end improvements.</li>
-    </ul></li>
-    <li>The Fourth Expansion is up.</li>
-    <li>As you have probably noticed in getting here, there is now a meta-lobby which allows you to
-    choose between multiple servers. They should be identical other than the people playing on them:
-    they are backed by the same card database.</li>
+    <li>What I have receieved so far of the Holiday Bullshit has been added. I will continue to add
+    cards to this as I receive them.</li>
+    <li>Several custom card sets have been added.</li>
+    <li><strong>No further custom card sets will be accepted.</strong> Minor updates to existing
+    ones may still be submitted, but I do not guarantee I will get to it in a timely manner. It is
+    taking too much of my time to administer the custom cards sets; I'd rather focus the time on
+    implementing a way for players to manage card sets in the game by themselves.</li>
+    <li>Fixed a memory leak introduced in the last update that causes the server to massively slow
+    down after a few days of running.</li>
   </ul>
   <div id="nickbox">
     Nickname:
