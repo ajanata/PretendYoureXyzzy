@@ -23,6 +23,8 @@
 
 package net.socialgamer.cah;
 
+import java.util.Timer;
+
 import net.socialgamer.cah.data.ConnectedUsers;
 
 import com.google.inject.Inject;
@@ -36,14 +38,17 @@ import com.google.inject.Inject;
 public class UserPing extends SafeTimerTask {
 
   private final ConnectedUsers users;
+  private final Timer globalTimer;
 
   @Inject
-  public UserPing(final ConnectedUsers users) {
+  public UserPing(final ConnectedUsers users, final Timer globalTimer) {
     this.users = users;
+    this.globalTimer = globalTimer;
   }
 
   @Override
   public void process() {
     users.checkForPingAndIdleTimeouts();
+    globalTimer.purge();
   }
 }
