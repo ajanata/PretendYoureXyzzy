@@ -59,7 +59,7 @@ import com.google.inject.Singleton;
 public class GameManager implements Provider<Integer> {
   private static final Logger logger = Logger.getLogger(GameManager.class);
 
-  private final int maxGames;
+  private final Provider<Integer> maxGamesProvider;
   private final Map<Integer, Game> games = new TreeMap<Integer, Game>();
   private final Provider<Game> gameProvider;
   private final ConnectedUsers users;
@@ -73,17 +73,22 @@ public class GameManager implements Provider<Integer> {
    * 
    * @param gameProvider
    *          Provider for new {@code Game} instances.
-   * @param maxGames
-   *          Maximum number of games allowed on the server.
+   * @param maxGamesProvider
+   *          Provider for maximum number of games allowed on the server.
    * @param users
    *          Connected user manager.
    */
   @Inject
-  public GameManager(final Provider<Game> gameProvider, @MaxGames final Integer maxGames,
+  public GameManager(final Provider<Game> gameProvider,
+      @MaxGames final Provider<Integer> maxGamesProvider,
       final ConnectedUsers users) {
     this.gameProvider = gameProvider;
-    this.maxGames = maxGames;
+    this.maxGamesProvider = maxGamesProvider;
     this.users = users;
+  }
+
+  private int getMaxGames() {
+    return maxGamesProvider.get();
   }
 
   /**
@@ -94,7 +99,7 @@ public class GameManager implements Provider<Integer> {
    */
   private Game createGame() {
     synchronized (games) {
-      if (games.size() >= maxGames) {
+      if (games.size() >= getMaxGames()) {
         return null;
       }
       final Game game = gameProvider.get();
@@ -194,7 +199,7 @@ public class GameManager implements Provider<Integer> {
   @Override
   public Integer get() {
     synchronized (games) {
-      if (games.size() >= maxGames) {
+      if (games.size() >= getMaxGames()) {
         return -1;
       }
       if (!games.containsKey(nextId) && nextId >= 0) {
@@ -222,6 +227,7 @@ public class GameManager implements Provider<Integer> {
    */
   private int candidateGameId(final int skip) {
     synchronized (games) {
+      final int maxGames = getMaxGames();
       if (games.size() >= maxGames) {
         return -1;
       }
@@ -260,6 +266,7 @@ public class GameManager implements Provider<Integer> {
     }
   }
 
+  // @VisibileForTesting
   Map<Integer, Game> getGames() {
     return games;
   }
