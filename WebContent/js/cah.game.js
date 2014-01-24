@@ -784,12 +784,6 @@ cah.Game.prototype.updateGameStatus = function(data) {
     this.hideOptions_();
   }
 
-  if (gameInfo[cah.$.GameInfo.STATE] == cah.$.GameState.PLAYING) {
-    // TODO this is the cause of the cards blanking when someone joins or leaves
-    // store the last state somewhere too?
-    $(".game_white_cards", this.element_).empty();
-  }
-
   $(".score_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.SCORE_LIMIT]);
   $(".player_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.PLAYER_LIMIT]);
   $(".spectator_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.SPECTATOR_LIMIT]);
@@ -1328,6 +1322,7 @@ cah.Game.prototype.stateChange = function(data) {
       break;
 
     case cah.$.GameState.PLAYING:
+      $(".game_white_cards", this.element_).empty();
       this.enableCardControls_();
       this.hideOptions_();
       this.refreshGameStatus();
