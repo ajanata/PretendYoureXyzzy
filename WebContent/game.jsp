@@ -134,6 +134,7 @@ HttpSession hSession = request.getSession(true);
       <input type="button" id="create_game" class="hide" value="Create Game" />
       <input type="button" id="leave_game" class="hide" value="Leave Game" />
       <input type="button" id="start_game" class="hide" value="Start Game" />
+      <input type="button" id="stop_game" class="hide" value="Stop Game" />
     </div>
     <div id="menubar_right">
       Current timer duration: <span id="current_timer">0</span> seconds
