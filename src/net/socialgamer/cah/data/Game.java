@@ -1007,6 +1007,9 @@ public class Game {
    * @return True if judging should begin.
    */
   private boolean startJudging() {
+    if (state != GameState.PLAYING) {
+      return false;
+    }
     if (playedCards.size() == roundPlayers.size()) {
       boolean startJudging = true;
       for (final List<WhiteCard> cards : playedCards.cards()) {
