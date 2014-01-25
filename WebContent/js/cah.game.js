@@ -301,6 +301,7 @@ cah.Game = function(id) {
 
   $("#leave_game").click(cah.bind(this, this.leaveGameClick_));
   $("#start_game").click(cah.bind(this, this.startGameClick_));
+  $("#stop_game").click(cah.bind(this, this.stopGameClick_));
   $(".confirm_card", this.element_).click(cah.bind(this, this.confirmClick_));
   $(".game_show_last_round", this.element_).click(cah.bind(this, this.showLastRoundClick_));
   $(".game_show_options", this.element_).click(cah.bind(this, this.showOptionsClick_));
@@ -778,6 +779,12 @@ cah.Game.prototype.updateGameStatus = function(data) {
     $("#start_game").hide();
   }
 
+  if (this.host_ == cah.nickname && gameInfo[cah.$.GameInfo.STATE] != cah.$.GameState.LOBBY) {
+    $("#stop_game").show();
+  } else {
+    $("#stop_game").hide();
+  }
+
   if (gameInfo[cah.$.GameInfo.STATE] == cah.$.GameState.LOBBY) {
     this.showOptions_();
   } else {
@@ -1167,6 +1174,15 @@ cah.Game.prototype.startGameComplete = function() {
 };
 
 /**
+ * Event handler for stop game button.
+ * 
+ * @private
+ */
+cah.Game.prototype.stopGameClick_ = function() {
+  cah.Ajax.build(cah.$.AjaxOperation.STOP_GAME).withGameId(this.id_).run();
+};
+
+/**
  * Called when the call to the server to play a card has completed successfully.
  */
 cah.Game.prototype.playCardComplete = function() {
@@ -1214,6 +1230,7 @@ cah.Game.prototype.dispose = function() {
   $(this.scoreboardElement_).remove();
   $("#leave_game").unbind().hide();
   $("#start_game").unbind().hide();
+  $("#stop_game").unbind().hide();
   $(window).off("resize.game_" + this.id_);
 
   cah.updateHash('');
@@ -1316,6 +1333,7 @@ cah.Game.prototype.stateChange = function(data) {
       this.removeAllCards();
       this.judge_ = null;
       $(".game_hand_filter", this.element_).addClass("hide"); // in case they were the judge last
+      $("#stop_game").hide();
       // round
       this.showOptions_();
 

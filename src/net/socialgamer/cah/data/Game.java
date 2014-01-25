@@ -966,7 +966,7 @@ public class Game {
    *          True if because there are no long enough people to play a game, false if because the
    *          previous game finished.
    */
-  private void resetState(final boolean lostPlayer) {
+  public void resetState(final boolean lostPlayer) {
     logger.info(String.format("Resetting game %d to lobby (lostPlayer=%b)", id, lostPlayer));
     killRoundTimer();
     synchronized (players) {

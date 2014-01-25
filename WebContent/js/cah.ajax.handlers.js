@@ -200,6 +200,10 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.START_GAME] = function(data, req) {
   }
 };
 
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.STOP_GAME] = function(data, req) {
+  // pass
+};
+
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_CARDS] = function(data, req) {
   var gameId = req[cah.$.AjaxRequest.GAME_ID];
   var game = cah.currentGames[gameId];

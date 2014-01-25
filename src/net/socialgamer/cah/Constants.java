@@ -188,7 +188,8 @@ public class Constants {
     PLAY_CARD("pc"),
     REGISTER("r"),
     SCORE("SC"),
-    START_GAME("sg");
+    START_GAME("sg"),
+    STOP_GAME("Sg");
 
     private final String op;
 
@@ -289,6 +290,7 @@ public class Constants {
   public enum ErrorCode implements Localizable {
     ACCESS_DENIED("ad", "Access denied."),
     ALREADY_STARTED("as", "The game has already started."),
+    ALREADY_STOPPED("aS", "The game has already stopped."),
     BAD_OP("bo", "Invalid operation."),
     BAD_REQUEST("br", "Bad request."),
     @DuplicationAllowed
