@@ -880,14 +880,16 @@ public class Game {
     }
 
     synchronized (playedCards) {
-      // not sure how much of this check is actually required
-      if (players.size() < 3 || playedCards.size() < 2 || state != GameState.PLAYING) {
-        logger.info(String.format(
-            "Resetting game %d due to insufficient players after removing %d idle players.",
-            id, playersToRemove.size()));
-        resetState(true);
-      } else {
-        judgingState();
+      if (state == GameState.PLAYING || playersToRemove.size() == 0) {
+        // not sure how much of this check is actually required
+        if (players.size() < 3 || playedCards.size() < 2) {
+          logger.info(String.format(
+              "Resetting game %d due to insufficient players after removing %d idle players.",
+              id, playersToRemove.size()));
+          resetState(true);
+        } else {
+          judgingState();
+        }
       }
     }
 
