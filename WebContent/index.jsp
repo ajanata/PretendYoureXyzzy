@@ -54,8 +54,17 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>26 January 2014:<ul>
+    <li>Several bugs have been fixed:<ul>
+      <li><strong>Games should no longer reset when an idle player is kicked.</strong></li>
+      <li>The judge should no longer have to re-judge when a player leaves during judging.</li>
+      <li>The playing field should no longer visibly blank out when a player joins or leaves.</li>
+    </ul></li>
+    <li>The game host has a "stop game" button. If this is abused, it may be changed to only work
+    in the first few rounds of a game.</li>
+  </ul></li>
   <li>22 December 2013:<ul>
-    <li>What I have receieved so far of the Holiday Bullshit has been added. I will continue to add
+    <li>What I have received so far of the Holiday Bullshit has been added. I will continue to add
     cards to this as I receive them.</li>
     <li>Several custom card sets have been added.</li>
     <li><strong>No further custom card sets will be accepted.</strong> Minor updates to existing

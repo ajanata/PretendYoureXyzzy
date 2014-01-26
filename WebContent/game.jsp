@@ -95,17 +95,19 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 22 December 2013:</p>
+  <p tabindex="0">Most recent update: 26 January 2014:</p>
   <ul>
-    <li>What I have receieved so far of the Holiday Bullshit has been added. I will continue to add
-    cards to this as I receive them.</li>
-    <li>Several custom card sets have been added.</li>
+    <li>Several bugs have been fixed:<ul>
+      <li><strong>Games should no longer reset when an idle player is kicked.</strong></li>
+      <li>The judge should no longer have to re-judge when a player leaves during judging.</li>
+      <li>The playing field should no longer visibly blank out when a player joins or leaves.</li>
+    </ul></li>
+    <li>The game host has a "stop game" button. If this is abused, it may be changed to only work
+    in the first few rounds of a game.</li>
     <li><strong>No further custom card sets will be accepted.</strong> Minor updates to existing
     ones may still be submitted, but I do not guarantee I will get to it in a timely manner. It is
     taking too much of my time to administer the custom cards sets; I'd rather focus the time on
     implementing a way for players to manage card sets in the game by themselves.</li>
-    <li>Fixed a memory leak introduced in the last update that causes the server to massively slow
-    down after a few days of running.</li>
   </ul>
   <div id="nickbox">
     Nickname:
