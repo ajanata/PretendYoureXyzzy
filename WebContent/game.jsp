@@ -55,6 +55,7 @@ HttpSession hSession = request.getSession(true);
 <script type="text/javascript" src="js/cah.card.js"></script>
 <script type="text/javascript" src="js/cah.cardset.js"></script>
 <script type="text/javascript" src="js/cah.game.js"></script>
+<script type="text/javascript" src="js/cah.preferences.js"></script>
 <script type="text/javascript" src="js/cah.longpoll.js"></script>
 <script type="text/javascript" src="js/cah.longpoll.handlers.js"></script>
 <script type="text/javascript" src="js/cah.ajax.js"></script>
@@ -66,18 +67,6 @@ HttpSession hSession = request.getSession(true);
 <jsp:include page="analytics.jsp" />
 </head>
 <body>
-
-<%--
-<div id="browser" class="hide">
-  <div id="browser_inner">
-	  <p>Pretend You're Xyzzy is known to have graphical glitches in
-	  <span id="browser_name">$BROWSER_NAME</span>. The game should work,
-	  but it looks much better in <a href="http://google.com/chrome/">Google Chrome.</a></p>
-	  <p>We will not bug you about this again after you dismiss this dialog.</p>
-	  <input type="button" id="browser_ok" value="Okay, I Understand" />
-  </div>
-</div>
---%>
 
 <div id="welcome">
   <h1 tabindex="0">
@@ -104,6 +93,10 @@ HttpSession hSession = request.getSession(true);
     </ul></li>
     <li>The game host has a "stop game" button. If this is abused, it may be changed to only work
     in the first few rounds of a game.</li>
+    <li>You can filter which games to display based on what card sets they are using. Under the
+    Game List Filters tab, you can assign each card set to one of three statuses: Banned, Neutral,
+    and Required. If a game uses <strong>any</strong> of your banned sets, it will not be shown. If
+    a game does not use <strong>all</strong> of your required sets, it also will not be shown.</li>
     <li><strong>No further custom card sets will be accepted.</strong> Minor updates to existing
     ones may still be submitted, but I do not guarantee I will get to it in a timely manner. It is
     taking too much of my time to administer the custom cards sets; I'd rather focus the time on
@@ -159,17 +152,58 @@ HttpSession hSession = request.getSession(true);
   <div id="tabs">
     <ul>
       <li><a href="#tab-preferences" class="tab-button">User Preferences</a></li>
+      <li><a href="#tab-gamelist-filters" class="tab-button">Game List Filters</a></li>
       <li><a href="#tab-global" class="tab-button" id="button-global">Global Chat</a></li>
     </ul>
     <div id="tab-preferences">
-      <input type="button" value="Save" onclick="save_preferences();" />
-      <input type="button" value="Revert" onclick="load_preferences();" />
+      <input type="button" value="Save" onclick="cah.Preferences.save();" />
+      <input type="button" value="Revert" onclick="cah.Preferences.load();" />
       <label for="hide_connect_quit">Hide connect and quit events: </label>
       <input type="checkbox" id="hide_connect_quit" />
       <br />
       <label for="ignore_list">Chat ignore list, one name per line:</label>
       <br/>
       <textarea id="ignore_list" style="width: 200px; height: 150px"></textarea>
+    </div>
+    <div id="tab-gamelist-filters">
+      You will have to click Refresh Games after saving any changes here.
+      <div style="text-align: right; width:100%">
+        <input type="button" value="Save" onclick="cah.Preferences.save();" />
+        <input type="button" value="Revert" onclick="cah.Preferences.load();" />
+      </div>
+      <fieldset>
+        <legend>Card set filters</legend>
+        <div class="cardset_filter_list">
+          <span title="Any game which uses at least one of these card sets will not be shown in the game list.">
+            Do not show any games with these card sets:
+          </span>
+          <select id="cardsets_banned" multiple="multiple"></select>
+          <div class="buttons">
+            <input type="button" id="banned_remove" value="Remove --&gt;"
+              onclick="cah.Preferences.transferCardSets('banned', 'neutral')" />
+          </div>
+        </div>
+        <div class="cardset_filter_list">
+          <span>Do not require or ban these card sets:</span>
+          <select id="cardsets_neutral" multiple="multiple"></select>
+          <div class="buttons">
+            <input type="button" id="banned_add" value="&lt;-- Ban"
+                onclick="cah.Preferences.transferCardSets('neutral', 'banned')" />
+            <input type="button" id="required_add" value="Require --&gt;"
+                onclick="cah.Preferences.transferCardSets('neutral', 'required')" />
+          </div>
+        </div>
+        <div class="cardset_filter_list">
+          <span title="Any game that does not use all of these card sets will not be shown in the game list.">
+            Only show games with these card sets:
+          </span>
+          <select id="cardsets_required" multiple="multiple"></select>
+          <div class="buttons">
+            <input type="button" id="required_remove" value="&lt;-- Remove"
+                onclick="cah.Preferences.transferCardSets('required', 'neutral')" />
+          </div>
+        </div>
+      </fieldset>
     </div>
     <div id="tab-global">
       <div class="log"></div>

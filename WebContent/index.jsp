@@ -62,6 +62,10 @@ to, for instance, display the number of connected players.
     </ul></li>
     <li>The game host has a "stop game" button. If this is abused, it may be changed to only work
     in the first few rounds of a game.</li>
+    <li>You can filter which games to display based on what card sets they are using. Under the
+    Game List Filters tab, you can assign each card set to one of three statuses: Banned, Neutral,
+    and Required. If a game uses <strong>any</strong> of your banned sets, it will not be shown. If
+    a game does not use <strong>all</strong> of your required sets, it also will not be shown.</li>
   </ul></li>
   <li>22 December 2013:<ul>
     <li>What I have received so far of the Holiday Bullshit has been added. I will continue to add

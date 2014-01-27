@@ -115,8 +115,32 @@ cah.GameList.prototype.processUpdate = function(gameData) {
 
   var games = notPassworded.concat(passworded);
 
+  var bannedSets = cah.Preferences.getBannedCardSetIds();
+  var requiredSets = cah.Preferences.getRequiredCardSetIds();
+
   for ( var i = 0; i < games.length; i++) {
     var game = games[i];
+
+    var hasBanned = false;
+    $(bannedSets).each(function(index, value) {
+      if (-1 !== $.inArray(value, game[cah.$.GameInfo.CARD_SETS])) {
+        hasBanned = true;
+        return false;
+      }
+    });
+
+    var missingRequired = false;
+    $(requiredSets).each(function(index, value) {
+      if (-1 === $.inArray(value, game[cah.$.GameInfo.CARD_SETS])) {
+        missingRequired = true;
+        return false;
+      }
+    });
+
+    if (hasBanned || missingRequired) {
+      continue;
+    }
+
     var lobby = new cah.GameListLobby(this.element_, game);
     this.games_[game[cah.$.GameInfo.ID]] = lobby;
   }
@@ -236,10 +260,11 @@ cah.GameListLobby = function(parentElem, data) {
   $(this.element_).attr(
       "aria-label",
       data[cah.$.GameInfo.HOST] + "'s game, with " + data[cah.$.GameInfo.PLAYERS].length + " of "
-          + data[cah.$.GameInfo.PLAYER_LIMIT] + " players, and " + data[cah.$.GameInfo.SPECTATORS].length
-          + " of " + data[cah.$.GameInfo.SPECTATOR_LIMIT] + "spectators. " + statusMessage + ". Goal is "
-          + data[cah.$.GameInfo.SCORE_LIMIT] + " Awesome Points. Using " + cardSetNames.length
-          + " card set" + (cardSetNames.length == 1 ? "" : "s") + ". "
+          + data[cah.$.GameInfo.PLAYER_LIMIT] + " players, and "
+          + data[cah.$.GameInfo.SPECTATORS].length + " of " + data[cah.$.GameInfo.SPECTATOR_LIMIT]
+          + "spectators. " + statusMessage + ". Goal is " + data[cah.$.GameInfo.SCORE_LIMIT]
+          + " Awesome Points. Using " + cardSetNames.length + " card set"
+          + (cardSetNames.length == 1 ? "" : "s") + ". "
           + (data[cah.$.GameInfo.HAS_PASSWORD] ? "Has" : "Does not have") + " a password.");
 };
 
@@ -275,7 +300,8 @@ cah.GameListLobby.prototype.spectateClick = function() {
       password = "";
     }
   }
-  cah.Ajax.build(cah.$.AjaxOperation.SPECTATE_GAME).withGameId(this.id_).withPassword(password).run();
+  cah.Ajax.build(cah.$.AjaxOperation.SPECTATE_GAME).withGameId(this.id_).withPassword(password)
+      .run();
 };
 
 /**

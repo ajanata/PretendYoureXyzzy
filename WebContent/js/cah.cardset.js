@@ -56,10 +56,12 @@ cah.CardSet.byWeight = {};
  *          blackCardCount The number of black cards in this CardSet
  * @param {Number}
  *          whiteCardCount The number of white cards in this CardSet.
+ * @param {Number}
+ *          weight The sort weight of this CardSet.
  * @constructor
  * @private
  */
-cah.CardSet = function(id, name, description, baseDeck, blackCardCount, whiteCardCount) {
+cah.CardSet = function(id, name, description, baseDeck, blackCardCount, whiteCardCount, weight) {
   /**
    * CardSet's database/wire ID.
    * 
@@ -107,6 +109,14 @@ cah.CardSet = function(id, name, description, baseDeck, blackCardCount, whiteCar
    * @private
    */
   this.whiteCardCount_ = whiteCardCount;
+
+  /**
+   * The sort weight of this CardSet.
+   * 
+   * @type {Number}
+   * @private
+   */
+  this.weight_ = weight;
 };
 
 /**
@@ -152,6 +162,13 @@ cah.CardSet.prototype.getWhiteCardCount = function() {
 };
 
 /**
+ * @returns {Number} The sort weight of this CardSet.
+ */
+cah.CardSet.prototype.getWeight = function() {
+  return this.weight_;
+};
+
+/**
  * Populate the internal list of CardSets from data provided by the server.
  * 
  * @param {Array}
@@ -167,8 +184,11 @@ cah.CardSet.populateCardSets = function(cardSets) {
         cardSetData[cah.$.CardSetData.CARD_SET_DESCRIPTION],
         cardSetData[cah.$.CardSetData.BASE_DECK],
         cardSetData[cah.$.CardSetData.BLACK_CARDS_IN_DECK],
-        cardSetData[cah.$.CardSetData.WHITE_CARDS_IN_DECK]);
+        cardSetData[cah.$.CardSetData.WHITE_CARDS_IN_DECK], cardSetData[cah.$.CardSetData.WEIGHT]);
     cah.CardSet.list[cardSet.getId()] = cardSet;
     cah.CardSet.byWeight[cardSetData[cah.$.CardSetData.WEIGHT]] = cardSet;
   }
+
+  // not sure if there's a better way to call this...
+  cah.Preferences.updateCardSetFilters();
 };

@@ -51,7 +51,7 @@ $(document).ready(function() {
   // $(window).bind("beforeunload", window_beforeunload);
   $("#logout").click(logout_click);
 
-  load_preferences();
+  cah.Preferences.load();
 
   $("#tabs").tabs();
   $("#button-global").click();
@@ -232,47 +232,108 @@ function preferences_click() {
 }
 
 function load_preferences() {
-  if ($.cookie("hide_connect_quit")) {
-    $("#hide_connect_quit").attr('checked', 'checked');
-  } else {
-    $("#hide_connect_quit").removeAttr('checked');
-  }
-
-  if ($.cookie("ignore_list")) {
-    $("#ignore_list").val($.cookie("ignore_list"));
-  } else {
-    $("#ignore_list").val("");
-  }
-
-  apply_preferences();
+  // FIXME remove these after making sure everything calls the new way.
+  debugger;
+  cah.Preferences.load();
 }
 
 function save_preferences() {
-  if ($("#hide_connect_quit").attr("checked")) {
-    $.cookie("hide_connect_quit", true, {
-      domain : cah.COOKIE_DOMAIN,
-      expires : 365
-    });
-  } else {
-    $.removeCookie("hide_connect_quit");
-  }
-
-  $.cookie("ignore_list", $("#ignore_list").val(), {
-    domain : cah.COOKIE_DOMAIN,
-    expires : 365
-  });
-
-  apply_preferences();
+  // FIXME remove these after making sure everything calls the new way.
+  debugger;
+  cah.Preferences.save();
 }
 
 function apply_preferences() {
-  cah.hideConnectQuit = !!$("#hide_connect_quit").attr("checked");
-
-  cah.ignoreList = {};
-  $($('#ignore_list').val().split('\n')).each(function() {
-    cah.ignoreList[this] = true;
-  });
+  // FIXME remove these after making sure everything calls the new way.
+  debugger;
+  cah.Preferences.apply();
 }
+
+/**
+ * Add selected items from sourceList to destList, ignoring duplicates.
+ */
+cah.transferItems = function(sourceListId, destListId, idPrefix) {
+  cah.transferItems(sourceListId, destListId, idPrefix, function(a, b) {
+    return Number(a.value) - Number(b.value);
+  });
+};
+
+cah.transferItems = function(sourceListId, destListId, idPrefix, sortFunc) {
+  $('#' + sourceListId + ' option').filter(':selected').each(function() {
+    var existing = $('#' + idPrefix + '_' + this.value);
+    if (existing.length == 0) {
+      cah.addItem(destListId, this.value, this.text, idPrefix);
+    }
+  });
+  $('#' + destListId + ' option').sort(sortFunc).appendTo('#' + destListId);
+
+  cah.removeItems(sourceListId);
+};
+
+/**
+ * Add an item to a list.
+ * 
+ * @param listId
+ *          {String} Id of the select element.
+ * @param value
+ *          {String} Value attribute of the item to insert into the list.
+ * @param text
+ *          {String} The display text to insert into the list.
+ * @param idPrefix
+ *          {String} The prefix for the id of the item to insert into the list.
+ */
+cah.addItem = function(listId, value, text, idPrefix) {
+  $('#' + listId).append(
+      '<option value="' + value + '" id="' + idPrefix + '_' + value + '">' + text + '</option>');
+};
+
+/**
+ * Remove selected items from list.
+ * 
+ * @param listId
+ *          {String} Id of the list from which to remove selected items.
+ */
+cah.removeItems = function(listId) {
+  $('#' + listId + ' option').filter(':selected').each(function() {
+    this.parentElement.removeChild(this);
+  });
+};
+
+/**
+ * Set a cookie.
+ * 
+ * @param {String}
+ *          name The name of the cookie.
+ * @param {Any}
+ *          value The value of the cookie.
+ */
+cah.setCookie = function(name, value) {
+  return $.cookie(name, value, {
+    // domain : cah.COOKIE_DOMAIN,
+    expires : 365
+  });
+};
+
+/**
+ * Remove a cookie.
+ * 
+ * @param {String}
+ *          name The name of the cookie.
+ */
+cah.removeCookie = function(name) {
+  $.removeCookie(name);
+};
+
+/**
+ * Get a cookie.
+ * 
+ * @param {String}
+ *          name The name of the cookie.
+ * @returns The value of the cookie, or {@code undefined} if the cookie is not set.
+ */
+cah.getCookie = function(name) {
+  return $.cookie(name);
+};
 
 /**
  * Handle a window resize event. Resize the chat and info areas to fit vertically and horizontally.
