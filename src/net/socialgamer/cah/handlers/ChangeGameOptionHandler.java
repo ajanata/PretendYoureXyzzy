@@ -1,7 +1,10 @@
 package net.socialgamer.cah.handlers;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,6 +21,11 @@ import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.User;
 import net.socialgamer.cah.db.CardSet;
 
+import org.hibernate.FetchMode;
+import org.hibernate.Session;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Restrictions;
+
 import com.google.inject.Inject;
 
 
@@ -25,9 +33,12 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.CHANGE_GAME_OPTIONS.toString();
 
+  private final Session hibernateSession;
+
   @Inject
-  public ChangeGameOptionHandler(final GameManager gameManager) {
+  public ChangeGameOptionHandler(final GameManager gameManager, final Session hibernateSession) {
     super(gameManager);
+    this.hibernateSession = hibernateSession;
   }
 
   @Override
@@ -43,15 +54,18 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
       try {
         final int scoreLimit = Integer.parseInt(request.getParameter(AjaxRequest.SCORE_LIMIT));
         final int playerLimit = Integer.parseInt(request.getParameter(AjaxRequest.PLAYER_LIMIT));
-        final int spectatorLimit = Integer.parseInt(request.getParameter(AjaxRequest.SPECTATOR_LIMIT));
+        final int spectatorLimit = Integer.parseInt(request
+            .getParameter(AjaxRequest.SPECTATOR_LIMIT));
+
         final String[] cardSetsParsed = request.getParameter(AjaxRequest.CARD_SETS).split(",");
-        final Set<CardSet> cardSets = new HashSet<CardSet>();
+        final Set<Integer> cardSetIds = new HashSet<Integer>();
         for (final String cardSetId : cardSetsParsed) {
           if (!cardSetId.isEmpty()) {
-            cardSets.add((CardSet) game.getHibernateSession().load(CardSet.class,
-                Integer.parseInt(cardSetId)));
+            cardSetIds.add(Integer.parseInt(cardSetId));
           }
         }
+        final List<CardSet> cardSets = getCardSets(cardSetIds);
+
         final int blanksLimit = Integer.parseInt(request.getParameter(AjaxRequest.BLANKS_LIMIT));
         final String oldPassword = game.getPassword();
         String password = request.getParameter(AjaxRequest.PASSWORD);
@@ -65,7 +79,8 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
         if (null != useTimerString && !"".equals(useTimerString)) {
           useTimer = Boolean.valueOf(useTimerString);
         }
-        game.updateGameSettings(scoreLimit, playerLimit, spectatorLimit, cardSets, blanksLimit, password, useTimer);
+        game.updateGameSettings(scoreLimit, playerLimit, spectatorLimit, cardSets, blanksLimit,
+            password, useTimer);
 
         // only broadcast an update if the password state has changed, because it needs to change
         // the text on the join button and the sort order
@@ -74,9 +89,25 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
         }
       } catch (final NumberFormatException nfe) {
         return error(ErrorCode.BAD_REQUEST);
+      } finally {
+        hibernateSession.close();
       }
 
       return data;
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private final List<CardSet> getCardSets(final Collection<Integer> cardSetIds) {
+    if (cardSetIds.isEmpty()) {
+      return Collections.emptyList();
+    } else {
+      return hibernateSession.createCriteria(CardSet.class)
+          .add(Restrictions.in("id", cardSetIds))
+          .setFetchMode("whiteCards", FetchMode.JOIN)
+          .setFetchMode("blackCards", FetchMode.JOIN)
+          .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
+          .list();
     }
   }
 }

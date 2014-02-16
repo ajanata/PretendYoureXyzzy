@@ -78,7 +78,6 @@ public class FirstLoadHandler extends Handler {
     } else {
       // They already have a session in progress, we need to figure out what they were doing
       // and tell the client where to continue from.
-      // Right now we just tell them what their name is.
       ret.put(AjaxResponse.IN_PROGRESS, Boolean.TRUE);
       ret.put(AjaxResponse.NICKNAME, user.getNickname());
 
@@ -90,22 +89,24 @@ public class FirstLoadHandler extends Handler {
       }
     }
 
-    // get the list of card sets
-    final Transaction transaction = hibernateSession.beginTransaction();
-    @SuppressWarnings("unchecked")
-    final List<CardSet> cardSets = hibernateSession
-        .createQuery(CardSet.getCardsetQuery(properties))
-        .setReadOnly(true)
-        .list();
-    final List<Map<CardSetData, Object>> cardSetsData = new ArrayList<Map<CardSetData, Object>>(
-        cardSets.size());
-    for (final CardSet cardSet : cardSets) {
-      cardSetsData.add(cardSet.getClientData());
+    try {
+      // get the list of card sets
+      final Transaction transaction = hibernateSession.beginTransaction();
+      @SuppressWarnings("unchecked")
+      final List<CardSet> cardSets = hibernateSession
+          .createQuery(CardSet.getCardsetQuery(properties))
+          .setReadOnly(true)
+          .list();
+      final List<Map<CardSetData, Object>> cardSetsData =
+          new ArrayList<Map<CardSetData, Object>>(cardSets.size());
+      for (final CardSet cardSet : cardSets) {
+        cardSetsData.add(cardSet.getClientMetadata(hibernateSession));
+      }
+      ret.put(AjaxResponse.CARD_SETS, cardSetsData);
+      transaction.commit();
+    } finally {
+      hibernateSession.close();
     }
-    ret.put(AjaxResponse.CARD_SETS, cardSetsData);
-    transaction.commit();
-    hibernateSession.close();
-
     return ret;
   }
 

@@ -56,7 +56,6 @@ import net.socialgamer.cah.db.CardSet;
 import net.socialgamer.cah.db.WhiteCard;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
 
 import com.google.inject.Inject;
 
@@ -154,7 +153,6 @@ public class Game {
   private final Set<CardSet> cardSets = new HashSet<CardSet>();
   private String password = "";
   private boolean useIdleTimer = true;
-  private final Session hibernateSession;
 
   /**
    * Create a new game.
@@ -171,17 +169,12 @@ public class Game {
    */
   @Inject
   public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
-      final GameManager gameManager, final Session hibernateSession, final Timer globalTimer) {
+      final GameManager gameManager, final Timer globalTimer) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
-    this.hibernateSession = hibernateSession;
     this.globalTimer = globalTimer;
     state = GameState.LOBBY;
-  }
-
-  public Session getHibernateSession() {
-    return hibernateSession;
   }
 
   /**
@@ -297,9 +290,6 @@ public class Game {
       }
       // this seems terrible
       if (players.size() == 0) {
-        if (null != hibernateSession) {
-          hibernateSession.close();
-        }
         gameManager.destroyGame(id);
       }
       if (players.size() < 3 && state != GameState.LOBBY) {
@@ -446,8 +436,19 @@ public class Game {
     return password;
   }
 
+  /**
+   * 
+   * @param newScoreGoal
+   * @param newMaxPlayers
+   * @param newMaxSpectators
+   * @param newCardSets Card sets to use in this game. These should be fully loaded from the
+   * database, as there might not be a {@link org.hibernate.Session} from which to load the cards.
+   * @param newMaxBlanks
+   * @param newPassword
+   * @param newUseTimer
+   */
   public void updateGameSettings(final int newScoreGoal, final int newMaxPlayers,
-      final int newMaxSpectators, final Set<CardSet> newCardSets, final int newMaxBlanks,
+      final int newMaxSpectators, final List<CardSet> newCardSets, final int newMaxBlanks,
       final String newPassword, final boolean newUseTimer) {
     this.scoreGoal = newScoreGoal;
     this.playerLimit = newMaxPlayers;

@@ -16,6 +16,10 @@ import javax.persistence.Table;
 
 import net.socialgamer.cah.Constants.CardSetData;
 
+import org.hibernate.Session;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 
 @Entity
 @Table(name = "card_set")
@@ -36,6 +40,7 @@ public class CardSet {
       name = "card_set_black_card",
       joinColumns = { @JoinColumn(name = "card_set_id") },
       inverseJoinColumns = { @JoinColumn(name = "black_card_id") })
+  @LazyCollection(LazyCollectionOption.TRUE)
   private final Set<BlackCard> blackCards;
 
   @ManyToMany
@@ -43,6 +48,7 @@ public class CardSet {
       name = "card_set_white_card",
       joinColumns = { @JoinColumn(name = "card_set_id") },
       inverseJoinColumns = { @JoinColumn(name = "white_card_id") })
+  @LazyCollection(LazyCollectionOption.TRUE)
   private final Set<WhiteCard> whiteCards;
 
   public CardSet() {
@@ -103,17 +109,42 @@ public class CardSet {
   }
 
   /**
+   * Get the JSON representation of this card set's metadata. This method will cause lazy-loading of
+   * the card collections.
    * @return Client representation of this card set.
    */
-  public Map<CardSetData, Object> getClientData() {
+  public Map<CardSetData, Object> getClientMetadata() {
+    final Map<CardSetData, Object> cardSetData = getCommonClientMetadata();
+    cardSetData.put(CardSetData.BLACK_CARDS_IN_DECK, getBlackCards().size());
+    cardSetData.put(CardSetData.WHITE_CARDS_IN_DECK, getWhiteCards().size());
+    return cardSetData;
+  }
+
+  /**
+   * Get the JSON representation of this card set's metadata. This method will not cause
+   * lazy-loading of the card collections.
+   * @return Client representation of this card set.
+   */
+  public Map<CardSetData, Object> getClientMetadata(final Session hibernateSession) {
+    final Map<CardSetData, Object> cardSetData = getCommonClientMetadata();
+    final Number blackCount = (Number) hibernateSession
+        .createQuery("select count(*) from CardSet cs join cs.blackCards where cs.id = :id")
+        .setParameter("id", id).uniqueResult();
+    cardSetData.put(CardSetData.BLACK_CARDS_IN_DECK, blackCount);
+    final Number whiteCount = (Number) hibernateSession
+        .createQuery("select count(*) from CardSet cs join cs.whiteCards where cs.id = :id")
+        .setParameter("id", id).uniqueResult();
+    cardSetData.put(CardSetData.WHITE_CARDS_IN_DECK, whiteCount);
+    return cardSetData;
+  }
+
+  private Map<CardSetData, Object> getCommonClientMetadata() {
     final Map<CardSetData, Object> cardSetData = new HashMap<CardSetData, Object>();
     cardSetData.put(CardSetData.ID, getId());
     cardSetData.put(CardSetData.CARD_SET_NAME, getName());
     cardSetData.put(CardSetData.CARD_SET_DESCRIPTION, getDescription());
     cardSetData.put(CardSetData.WEIGHT, getWeight());
     cardSetData.put(CardSetData.BASE_DECK, isBaseDeck());
-    cardSetData.put(CardSetData.BLACK_CARDS_IN_DECK, getBlackCards().size());
-    cardSetData.put(CardSetData.WHITE_CARDS_IN_DECK, getWhiteCards().size());
     return cardSetData;
   }
 
