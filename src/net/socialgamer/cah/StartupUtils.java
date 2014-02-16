@@ -27,7 +27,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Date;
 import java.util.Properties;
-import java.util.Timer;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -83,8 +84,9 @@ public class StartupUtils extends GuiceServletContextListener {
     final ServletContext context = contextEvent.getServletContext();
 
     final Injector injector = (Injector) context.getAttribute(INJECTOR);
-    final Timer timer = injector.getInstance(Timer.class);
-    timer.cancel();
+    final ScheduledThreadPoolExecutor timer = injector
+        .getInstance(ScheduledThreadPoolExecutor.class);
+    timer.shutdownNow();
 
     context.removeAttribute(INJECTOR);
     context.removeAttribute(DATE_NAME);
@@ -97,8 +99,9 @@ public class StartupUtils extends GuiceServletContextListener {
     final ServletContext context = contextEvent.getServletContext();
     final Injector injector = getInjector();
     final UserPing ping = injector.getInstance(UserPing.class);
-    final Timer timer = injector.getInstance(Timer.class);
-    timer.schedule(ping, PING_START_DELAY, PING_CHECK_DELAY);
+    final ScheduledThreadPoolExecutor timer = injector
+        .getInstance(ScheduledThreadPoolExecutor.class);
+    timer.scheduleAtFixedRate(ping, PING_START_DELAY, PING_CHECK_DELAY, TimeUnit.MILLISECONDS);
     serverStarted = new Date();
     context.setAttribute(INJECTOR, injector);
     context.setAttribute(DATE_NAME, serverStarted);

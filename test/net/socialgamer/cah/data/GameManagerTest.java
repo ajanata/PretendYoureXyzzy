@@ -35,7 +35,7 @@ import static org.junit.Assert.assertNull;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Timer;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import net.socialgamer.cah.HibernateUtil;
 import net.socialgamer.cah.data.GameManager.GameId;
@@ -65,7 +65,7 @@ public class GameManagerTest {
   private ConnectedUsers cuMock;
   private User userMock;
   private int gameId;
-  private final Timer timer = new Timer("junit-timer", true);
+  private final ScheduledThreadPoolExecutor timer = new ScheduledThreadPoolExecutor(1);
 
   @Before
   public void setUp() throws Exception {

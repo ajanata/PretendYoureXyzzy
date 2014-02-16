@@ -33,7 +33,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -146,8 +148,8 @@ public class Game {
    * Lock to prevent missing timer updates.
    */
   private final Object roundTimerLock = new Object();
-  private volatile SafeTimerTask lastTimerTask;
-  private final Timer globalTimer;
+  private volatile ScheduledFuture<?> lastScheduledFuture;
+  private final ScheduledThreadPoolExecutor globalTimer;
 
   private int scoreGoal = 8;
   private final Set<CardSet> cardSets = new HashSet<CardSet>();
@@ -169,7 +171,7 @@ public class Game {
    */
   @Inject
   public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
-      final GameManager gameManager, final Timer globalTimer) {
+      final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
@@ -902,10 +904,10 @@ public class Game {
 
   private void killRoundTimer() {
     synchronized (roundTimerLock) {
-      if (lastTimerTask != null) {
-        logger.trace(String.format("Killing timer task %s", lastTimerTask));
-        lastTimerTask.cancel();
-        lastTimerTask = null;
+      if (null != lastScheduledFuture) {
+        logger.trace(String.format("Killing timer task %s", lastScheduledFuture));
+        lastScheduledFuture.cancel(false);
+        lastScheduledFuture = null;
       }
     }
   }
@@ -914,8 +916,7 @@ public class Game {
     synchronized (roundTimerLock) {
       killRoundTimer();
       logger.trace(String.format("Scheduling timer task %s after %d ms", task, timeout));
-      lastTimerTask = task;
-      globalTimer.schedule(task, timeout);
+      lastScheduledFuture = globalTimer.schedule(task, timeout, TimeUnit.MILLISECONDS);
     }
   }
 

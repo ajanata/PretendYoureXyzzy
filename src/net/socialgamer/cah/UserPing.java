@@ -23,7 +23,7 @@
 
 package net.socialgamer.cah;
 
-import java.util.Timer;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import net.socialgamer.cah.data.ConnectedUsers;
 
@@ -38,10 +38,10 @@ import com.google.inject.Inject;
 public class UserPing extends SafeTimerTask {
 
   private final ConnectedUsers users;
-  private final Timer globalTimer;
+  private final ScheduledThreadPoolExecutor globalTimer;
 
   @Inject
-  public UserPing(final ConnectedUsers users, final Timer globalTimer) {
+  public UserPing(final ConnectedUsers users, final ScheduledThreadPoolExecutor globalTimer) {
     this.users = users;
     this.globalTimer = globalTimer;
   }

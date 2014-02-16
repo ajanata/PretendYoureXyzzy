@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Timer;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import net.socialgamer.cah.data.Game.TooManyPlayersException;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
@@ -55,7 +55,7 @@ public class GameTest {
   private Game game;
   private ConnectedUsers cuMock;
   private GameManager gmMock;
-  private final Timer timer = new Timer("junit-timer", true);
+  private final ScheduledThreadPoolExecutor timer = new ScheduledThreadPoolExecutor(1);
 
   @Before
   public void setUp() throws Exception {

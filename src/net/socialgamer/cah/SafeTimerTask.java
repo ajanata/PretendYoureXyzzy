@@ -1,11 +1,9 @@
 package net.socialgamer.cah;
 
-import java.util.TimerTask;
-
 import org.apache.log4j.Logger;
 
 
-public abstract class SafeTimerTask extends TimerTask {
+public abstract class SafeTimerTask implements Runnable {
 
   private static final Logger logger = Logger.getLogger(SafeTimerTask.class);
 

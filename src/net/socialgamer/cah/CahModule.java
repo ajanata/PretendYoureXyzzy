@@ -29,7 +29,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Timer;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.GameManager.GameId;
@@ -65,10 +67,24 @@ public class CahModule extends AbstractModule {
     })
         .annotatedWith(BanList.class)
         .toInstance(Collections.synchronizedSet(new HashSet<String>()));
-    bind(Timer.class)
-        .toInstance(new Timer("timer-task", true));
     bind(Properties.class)
         .toInstance(properties);
+
+    final ScheduledThreadPoolExecutor threadPool =
+        new ScheduledThreadPoolExecutor(2 * Runtime.getRuntime().availableProcessors(),
+            new ThreadFactory() {
+              final AtomicInteger threadCount = new AtomicInteger();
+
+              @Override
+              public Thread newThread(final Runnable r) {
+                final Thread t = new Thread(r);
+                t.setDaemon(true);
+                t.setName("timer-task-" + threadCount.incrementAndGet());
+                return t;
+              }
+            });
+    threadPool.setRemoveOnCancelPolicy(true);
+    bind(ScheduledThreadPoolExecutor.class).toInstance(threadPool);
   }
 
   /**
