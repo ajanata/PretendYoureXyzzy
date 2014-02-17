@@ -356,9 +356,12 @@ span.debug, span.admin {
   bottom: 0px;
   height: 100%;
   width: 99%;
-  cursor: pointer;
   padding-left: 2px;
   min-width: 750px;
+}
+
+.game_hand_cards .card {
+  cursor: pointer;
 }
 
 .game_top {
