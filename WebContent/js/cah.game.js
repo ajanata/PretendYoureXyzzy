@@ -576,7 +576,7 @@ cah.Game.prototype.handCardMouseEnter_ = function(e) {
   if (!$(".game_animate_cards", this.element_).attr("checked")) {
     return;
   }
-  $(e.data.card.getElement()).css("z-index", "2").animate({
+  $(e.data.card.getElement()).css("z-index", "400").animate({
     scale : this.handCardLargeScale_,
     width : this.handCardLargeSize_,
   }, {
