@@ -54,6 +54,13 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>17 February 2014:<ul>
+    <li>Some minor bugfixes, including one which should prevent the entire server from dying if a
+    single background task gets stuck.</li>
+    <li>Some minor performance improvements.</li>
+    <li><a href="http://houseofcardsagainsthumanity.com/">House of Cards Against Humanity</a> has
+    been entered and will be enabled during a low-traffic period in the next few days.</li>
+  </ul></li>
   <li>26 January 2014:<ul>
     <li>Several bugs have been fixed:<ul>
       <li><strong>Games should no longer reset when an idle player is kicked.</strong></li>

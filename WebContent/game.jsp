@@ -84,19 +84,13 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 26 January 2014:</p>
+  <p tabindex="0">Most recent update: 17 February 2014:</p>
   <ul>
-    <li>Several bugs have been fixed:<ul>
-      <li><strong>Games should no longer reset when an idle player is kicked.</strong></li>
-      <li>The judge should no longer have to re-judge when a player leaves during judging.</li>
-      <li>The playing field should no longer visibly blank out when a player joins or leaves.</li>
-    </ul></li>
-    <li>The game host has a "stop game" button. If this is abused, it may be changed to only work
-    in the first few rounds of a game.</li>
-    <li>You can filter which games to display based on what card sets they are using. Under the
-    Game List Filters tab, you can assign each card set to one of three statuses: Banned, Neutral,
-    and Required. If a game uses <strong>any</strong> of your banned sets, it will not be shown. If
-    a game does not use <strong>all</strong> of your required sets, it also will not be shown.</li>
+    <li>Some minor bugfixes, including one which should prevent the entire server from dying if a
+    single background task gets stuck.</li>
+    <li>Some minor performance improvements.</li>
+    <li><a href="http://houseofcardsagainsthumanity.com/">House of Cards Against Humanity</a> has
+    been entered and will be enabled during a low-traffic period in the next few days.</li>
     <li><strong>No further custom card sets will be accepted.</strong> Minor updates to existing
     ones may still be submitted, but I do not guarantee I will get to it in a timely manner. It is
     taking too much of my time to administer the custom cards sets; I'd rather focus the time on
