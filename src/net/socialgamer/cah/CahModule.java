@@ -83,7 +83,8 @@ public class CahModule extends AbstractModule {
                 return t;
               }
             });
-    threadPool.setRemoveOnCancelPolicy(true);
+    // TODO: once I get 1.7 on my servers, uncomment this
+    //    threadPool.setRemoveOnCancelPolicy(true);
     bind(ScheduledThreadPoolExecutor.class).toInstance(threadPool);
   }
 
