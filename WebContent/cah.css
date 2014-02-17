@@ -406,6 +406,7 @@ span.debug, span.admin {
 }
 
 .game_options {
+  background: #eee;
   z-index: 500;
 }
 
