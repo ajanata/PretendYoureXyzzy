@@ -24,6 +24,7 @@
 package net.socialgamer.cah.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -47,7 +48,7 @@ public class BlackDeck {
   /**
    * Create a new black card deck, loading the cards from the database and shuffling them.
    */
-  public BlackDeck(final Set<CardSet> cardSets) {
+  public BlackDeck(final Collection<CardSet> cardSets) {
     final Set<BlackCard> allCards = new HashSet<BlackCard>();
     for (final CardSet cardSet : cardSets) {
       allCards.addAll(cardSet.getBlackCards());

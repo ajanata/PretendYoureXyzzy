@@ -24,6 +24,7 @@
 package net.socialgamer.cah.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -48,7 +49,7 @@ public class WhiteDeck {
   /**
    * Create a new white card deck, loading the cards from the database and shuffling them.
    */
-  public WhiteDeck(final Set<CardSet> cardSets, final int numBlanks) {
+  public WhiteDeck(final Collection<CardSet> cardSets, final int numBlanks) {
     final Set<WhiteCard> allCards = new HashSet<WhiteCard>();
     for (final CardSet cardSet : cardSets) {
       allCards.addAll(cardSet.getWhiteCards());

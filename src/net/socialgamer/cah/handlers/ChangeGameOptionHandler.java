@@ -1,10 +1,7 @@
 package net.socialgamer.cah.handlers;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,12 +16,6 @@ import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.User;
-import net.socialgamer.cah.db.CardSet;
-
-import org.hibernate.FetchMode;
-import org.hibernate.Session;
-import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.Restrictions;
 
 import com.google.inject.Inject;
 
@@ -33,12 +24,9 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.CHANGE_GAME_OPTIONS.toString();
 
-  private final Session hibernateSession;
-
   @Inject
-  public ChangeGameOptionHandler(final GameManager gameManager, final Session hibernateSession) {
+  public ChangeGameOptionHandler(final GameManager gameManager) {
     super(gameManager);
-    this.hibernateSession = hibernateSession;
   }
 
   @Override
@@ -64,7 +52,6 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
             cardSetIds.add(Integer.parseInt(cardSetId));
           }
         }
-        final List<CardSet> cardSets = getCardSets(cardSetIds);
 
         final int blanksLimit = Integer.parseInt(request.getParameter(AjaxRequest.BLANKS_LIMIT));
         final String oldPassword = game.getPassword();
@@ -79,7 +66,7 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
         if (null != useTimerString && !"".equals(useTimerString)) {
           useTimer = Boolean.valueOf(useTimerString);
         }
-        game.updateGameSettings(scoreLimit, playerLimit, spectatorLimit, cardSets, blanksLimit,
+        game.updateGameSettings(scoreLimit, playerLimit, spectatorLimit, cardSetIds, blanksLimit,
             password, useTimer);
 
         // only broadcast an update if the password state has changed, because it needs to change
@@ -89,25 +76,9 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
         }
       } catch (final NumberFormatException nfe) {
         return error(ErrorCode.BAD_REQUEST);
-      } finally {
-        hibernateSession.close();
       }
 
       return data;
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  private final List<CardSet> getCardSets(final Collection<Integer> cardSetIds) {
-    if (cardSetIds.isEmpty()) {
-      return Collections.emptyList();
-    } else {
-      return hibernateSession.createCriteria(CardSet.class)
-          .add(Restrictions.in("id", cardSetIds))
-          .setFetchMode("whiteCards", FetchMode.JOIN)
-          .setFetchMode("blackCards", FetchMode.JOIN)
-          .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
-          .list();
     }
   }
 }

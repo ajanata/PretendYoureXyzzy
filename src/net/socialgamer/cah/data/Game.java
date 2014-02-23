@@ -25,6 +25,7 @@ package net.socialgamer.cah.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -58,8 +59,10 @@ import net.socialgamer.cah.db.CardSet;
 import net.socialgamer.cah.db.WhiteCard;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 
 /**
@@ -98,6 +101,7 @@ public class Game {
   private final ConnectedUsers connectedUsers;
   private final GameManager gameManager;
   private Player host;
+  private final Provider<Session> sessionProvider;
   private BlackDeck blackDeck;
   private BlackCard blackCard;
   private final Object blackCardLock = new Object();
@@ -152,7 +156,7 @@ public class Game {
   private final ScheduledThreadPoolExecutor globalTimer;
 
   private int scoreGoal = 8;
-  private final Set<CardSet> cardSets = new HashSet<CardSet>();
+  private final Set<Integer> cardSetIds = new HashSet<Integer>();
   private String password = "";
   private boolean useIdleTimer = true;
 
@@ -171,11 +175,14 @@ public class Game {
    */
   @Inject
   public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
-      final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer) {
+      final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer,
+      final Provider<Session> sessionProvider) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
     this.globalTimer = globalTimer;
+    this.sessionProvider = sessionProvider;
+
     state = GameState.LOBBY;
   }
 
@@ -438,26 +445,15 @@ public class Game {
     return password;
   }
 
-  /**
-   * 
-   * @param newScoreGoal
-   * @param newMaxPlayers
-   * @param newMaxSpectators
-   * @param newCardSets Card sets to use in this game. These should be fully loaded from the
-   * database, as there might not be a {@link org.hibernate.Session} from which to load the cards.
-   * @param newMaxBlanks
-   * @param newPassword
-   * @param newUseTimer
-   */
   public void updateGameSettings(final int newScoreGoal, final int newMaxPlayers,
-      final int newMaxSpectators, final List<CardSet> newCardSets, final int newMaxBlanks,
+      final int newMaxSpectators, final Collection<Integer> newCardSetIds, final int newMaxBlanks,
       final String newPassword, final boolean newUseTimer) {
     this.scoreGoal = newScoreGoal;
     this.playerLimit = newMaxPlayers;
     this.spectatorLimit = newMaxSpectators;
-    synchronized (this.cardSets) {
-      this.cardSets.clear();
-      this.cardSets.addAll(newCardSets);
+    synchronized (this.cardSetIds) {
+      this.cardSetIds.clear();
+      this.cardSetIds.addAll(newCardSetIds);
     }
     this.blanksInDeck = newMaxBlanks;
     this.password = newPassword;
@@ -500,14 +496,11 @@ public class Game {
     }
     info.put(GameInfo.HOST, host.toString());
     info.put(GameInfo.STATE, state.toString());
-    final List<Integer> cardSetIds;
-    synchronized (cardSets) {
-      cardSetIds = new ArrayList<Integer>(cardSets.size());
-      for (final CardSet cardSet : cardSets) {
-        cardSetIds.add(cardSet.getId());
-      }
+    final List<Integer> cardSetIdsCopy;
+    synchronized (this.cardSetIds) {
+      cardSetIdsCopy = new ArrayList<Integer>(this.cardSetIds);
     }
-    info.put(GameInfo.CARD_SETS, cardSetIds);
+    info.put(GameInfo.CARD_SETS, cardSetIdsCopy);
     info.put(GameInfo.BLANKS_LIMIT, blanksInDeck);
     info.put(GameInfo.PLAYER_LIMIT, playerLimit);
     info.put(GameInfo.SPECTATOR_LIMIT, spectatorLimit);
@@ -657,9 +650,24 @@ public class Game {
       logger.info(String.format("Starting game %d.", id));
       // do this stuff outside the players lock; they will lock players again later for much less
       // time, and not at the same time as trying to lock users, which has caused deadlocks
-      synchronized (cardSets) {
-        blackDeck = new BlackDeck(cardSets);
-        whiteDeck = new WhiteDeck(cardSets, blanksInDeck);
+      synchronized (cardSetIds) {
+        Session session = null;
+        try {
+          session = sessionProvider.get();
+          @SuppressWarnings("unchecked")
+          final List<CardSet> cardSets = session.createQuery("from CardSet where id in (:ids)")
+              .setParameterList("ids", cardSetIds).list();
+
+          blackDeck = new BlackDeck(cardSets);
+          whiteDeck = new WhiteDeck(cardSets, blanksInDeck);
+        } catch (final Exception e) {
+          logger.error(String.format("Unable to load cards to start game %d", id), e);
+          return false;
+        } finally {
+          if (null != session) {
+            session.close();
+          }
+        }
       }
       startNextRound();
       gameManager.broadcastGameListRefresh();
@@ -668,14 +676,28 @@ public class Game {
   }
 
   public boolean hasBaseDeck() {
-    synchronized (cardSets) {
-      for (final CardSet cardSet : cardSets) {
-        if (cardSet.isBaseDeck()) {
-          return true;
+    synchronized (cardSetIds) {
+      if (cardSetIds.isEmpty()) {
+        return false;
+      }
+
+      Session session = null;
+      try {
+        session = sessionProvider.get();
+        final Number baseDeckCount = (Number) session
+            .createQuery("select count(*) from CardSet where id in (:ids) and base_deck = true")
+            .setParameterList("ids", cardSetIds).uniqueResult();
+
+        return baseDeckCount.intValue() > 0;
+      } catch (final Exception e) {
+        logger.error(String.format("Unable to determine if game %d has base deck", id), e);
+        return false;
+      } finally {
+        if (null != session) {
+          session.close();
         }
       }
     }
-    return false;
   }
 
   /**
