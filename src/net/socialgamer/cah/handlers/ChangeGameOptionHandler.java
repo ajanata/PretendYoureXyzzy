@@ -1,9 +1,7 @@
 package net.socialgamer.cah.handlers;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,6 +13,7 @@ import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
+import net.socialgamer.cah.data.GameOptions;
 import net.socialgamer.cah.data.User;
 
 import com.google.inject.Inject;
@@ -40,49 +39,17 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
       return error(ErrorCode.ALREADY_STARTED);
     } else {
       try {
-        final int scoreLimit = Integer.parseInt(request.getParameter(AjaxRequest.SCORE_LIMIT));
-        final int playerLimit = Integer.parseInt(request.getParameter(AjaxRequest.PLAYER_LIMIT));
-        final int spectatorLimit = Integer.parseInt(request
-            .getParameter(AjaxRequest.SPECTATOR_LIMIT));
-
-        final String[] cardSetsParsed = request.getParameter(AjaxRequest.CARD_SETS).split(",");
-        final Set<Integer> cardSetIds = new HashSet<Integer>();
-        for (final String cardSetId : cardSetsParsed) {
-          if (!cardSetId.isEmpty()) {
-            cardSetIds.add(Integer.parseInt(cardSetId));
-          }
-        }
-
-        final int blanksLimit = Integer.parseInt(request.getParameter(AjaxRequest.BLANKS_LIMIT));
+        final String value = request.getParameter(AjaxRequest.GAME_OPTIONS);
+        final GameOptions options = GameOptions.deserialize(value);
         final String oldPassword = game.getPassword();
-        String password = request.getParameter(AjaxRequest.PASSWORD);
-        if (password == null) {
-          password = "";
-        }
-        // We're not directly assigning this with Boolean.valueOf() because we want to default to
-        // true if it isn't specified, though that should never happen.
-        boolean useTimer = true;
-        final String useTimerString = request.getParameter(AjaxRequest.USE_TIMER);
-        if (null != useTimerString && !"".equals(useTimerString)) {
-          useTimer = Boolean.valueOf(useTimerString);
-        }
-        // make sure the new settings are in the valid range
-        if (scoreLimit < Game.MIN_SCORE_LIMIT || scoreLimit > Game.MAX_SCORE_LIMIT
-            || playerLimit < Game.MIN_PLAYER_LIMIT || playerLimit > Game.MAX_PLAYER_LIMIT
-            || spectatorLimit < Game.MIN_SPECTATOR_LIMIT
-            || spectatorLimit > Game.MAX_SPECTATOR_LIMIT
-            || blanksLimit < Game.MIN_BLANK_CARD_LIMIT || blanksLimit > Game.MAX_BLANK_CARD_LIMIT) {
-          return error(ErrorCode.BAD_REQUEST);
-        }
-        game.updateGameSettings(scoreLimit, playerLimit, spectatorLimit, cardSetIds, blanksLimit,
-            password, useTimer);
+        game.updateGameSettings(options);
 
         // only broadcast an update if the password state has changed, because it needs to change
         // the text on the join button and the sort order
-        if (!password.equals(oldPassword)) {
+        if (!game.getPassword().equals(oldPassword)) {
           gameManager.broadcastGameListRefresh();
         }
-      } catch (final NumberFormatException nfe) {
+      } catch (final Exception e) {
         return error(ErrorCode.BAD_REQUEST);
       }
 

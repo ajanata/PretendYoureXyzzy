@@ -134,46 +134,13 @@ cah.ajax.Builder.prototype.withCardId = function(cardId) {
 };
 
 /**
- * @param {Array}
- *          cardSets List of card set ids to use in the request.
+ * @param {Object}
+ *          options Game options to use in the request.
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withCardSets = function(cardSets) {
+cah.ajax.Builder.prototype.withGameOptions = function(options) {
   this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.CARD_SETS] = cardSets.join(',');
-  return this;
-};
-
-/**
- * @param {number}
- *          playerLimit Player limit field to use in the request.
- * @returns {cah.ajax.Builder} This object.
- */
-cah.ajax.Builder.prototype.withPlayerLimit = function(playerLimit) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.PLAYER_LIMIT] = playerLimit;
-  return this;
-};
-
-/**
- * @param {number}
- *          spectatorLimit Spectator limit field to use in the request.
- * @returns {cah.ajax.Builder} This object.
- */
-cah.ajax.Builder.prototype.withSpectatorLimit = function(spectatorLimit) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.SPECTATOR_LIMIT] = spectatorLimit;
-  return this;
-};
-
-/**
- * @param {number}
- *          scoreLimit Score limit field to use in the request.
- * @returns {cah.ajax.Builder} This object.
- */
-cah.ajax.Builder.prototype.withScoreLimit = function(scoreLimit) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.SCORE_LIMIT] = scoreLimit;
+  this.data[cah.$.AjaxRequest.GAME_OPTIONS] = $.toJSON(options);
   return this;
 };
 
@@ -185,28 +152,6 @@ cah.ajax.Builder.prototype.withScoreLimit = function(scoreLimit) {
 cah.ajax.Builder.prototype.withPassword = function(password) {
   this.assertNotExecuted_();
   this.data[cah.$.AjaxRequest.PASSWORD] = password;
-  return this;
-};
-
-/**
- * @param {number}
- *          blanksLimit Blanks limit field to use in the request.
- * @returns {cah.ajax.Builder} This object.
- */
-cah.ajax.Builder.prototype.withBlanksLimit = function(blanksLimit) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.BLANKS_LIMIT] = blanksLimit;
-  return this;
-};
-
-/**
- * @param {boolean}
- *          useTimer Whether or not the game should use the idle timer.
- * @returns {cah.ajax.Builder} This object.
- */
-cah.ajax.Builder.prototype.withUseTimer = function(useTimer) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.USE_TIMER] = useTimer;
   return this;
 };
 

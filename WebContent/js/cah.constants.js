@@ -34,20 +34,15 @@ cah.$.AjaxRequest = function() {
 };
 cah.$.AjaxRequest.prototype.dummyForAutocomplete = undefined;
 cah.$.AjaxRequest.WALL = "wall";
-cah.$.AjaxRequest.USE_TIMER = "ut";
-cah.$.AjaxRequest.CARD_SETS = "css";
+cah.$.AjaxRequest.MESSAGE = "m";
+cah.$.AjaxRequest.CARD_ID = "cid";
 cah.$.AjaxRequest.GAME_ID = "gid";
 cah.$.AjaxRequest.EMOTE = "me";
-cah.$.AjaxRequest.OP = "o";
-cah.$.AjaxRequest.PLAYER_LIMIT = "pL";
-cah.$.AjaxRequest.NICKNAME = "n";
-cah.$.AjaxRequest.SCORE_LIMIT = "sl";
-cah.$.AjaxRequest.CARD_ID = "cid";
-cah.$.AjaxRequest.MESSAGE = "m";
-cah.$.AjaxRequest.BLANKS_LIMIT = "bl";
-cah.$.AjaxRequest.SPECTATOR_LIMIT = "vL";
+cah.$.AjaxRequest.GAME_OPTIONS = "go";
 cah.$.AjaxRequest.SERIAL = "s";
 cah.$.AjaxRequest.PASSWORD = "pw";
+cah.$.AjaxRequest.OP = "o";
+cah.$.AjaxRequest.NICKNAME = "n";
 
 cah.$.AjaxResponse = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -59,6 +54,7 @@ cah.$.AjaxResponse.GAME_ID = "gid";
 cah.$.AjaxResponse.HAND = "h";
 cah.$.AjaxResponse.PLAYER_INFO = "pi";
 cah.$.AjaxResponse.BLACK_CARD = "bc";
+cah.$.AjaxResponse.GAME_OPTIONS = "go";
 cah.$.AjaxResponse.IN_PROGRESS = "ip";
 cah.$.AjaxResponse.GAMES = "gl";
 cah.$.AjaxResponse.NICKNAME = "n";
@@ -188,16 +184,22 @@ cah.$.GameInfo.prototype.dummyForAutocomplete = undefined;
 cah.$.GameInfo.HOST = "H";
 cah.$.GameInfo.STATE = "S";
 cah.$.GameInfo.PLAYERS = "P";
-cah.$.GameInfo.USE_TIMER = "ut";
-cah.$.GameInfo.BLANKS_LIMIT = "bl";
-cah.$.GameInfo.CARD_SETS = "css";
 cah.$.GameInfo.SPECTATORS = "V";
-cah.$.GameInfo.SPECTATOR_LIMIT = "vL";
 cah.$.GameInfo.ID = "gid";
-cah.$.GameInfo.PLAYER_LIMIT = "pL";
-cah.$.GameInfo.PASSWORD = "pw";
+cah.$.GameInfo.GAME_OPTIONS = "go";
 cah.$.GameInfo.HAS_PASSWORD = "hp";
-cah.$.GameInfo.SCORE_LIMIT = "sl";
+
+cah.$.GameOptionData = function() {
+  // Dummy constructor to make Eclipse auto-complete.
+};
+cah.$.GameOptionData.prototype.dummyForAutocomplete = undefined;
+cah.$.GameOptionData.USE_TIMER = "ut";
+cah.$.GameOptionData.CARD_SETS = "css";
+cah.$.GameOptionData.BLANKS_LIMIT = "bl";
+cah.$.GameOptionData.SPECTATOR_LIMIT = "vL";
+cah.$.GameOptionData.PLAYER_LIMIT = "pL";
+cah.$.GameOptionData.PASSWORD = "pw";
+cah.$.GameOptionData.SCORE_LIMIT = "sl";
 
 cah.$.GamePlayerInfo = function() {
   // Dummy constructor to make Eclipse auto-complete.

@@ -43,6 +43,7 @@ HttpSession hSession = request.getSession(true);
 <title>Pretend You're Xyzzy</title>
 <script type="text/javascript" src="js/jquery-1.8.2.js"></script>
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/jquery.json.js"></script>
 <script type="text/javascript" src="js/QTransform.js"></script>
 <script type="text/javascript" src="js/jquery-ui.js"></script>
 <script type="text/javascript" src="js/cah.js"></script>

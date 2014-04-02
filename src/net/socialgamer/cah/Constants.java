@@ -208,19 +208,14 @@ public class Constants {
    */
   public enum AjaxRequest {
     CARD_ID("cid"),
-    CARD_SETS("css"),
     EMOTE("me"),
     GAME_ID("gid"),
+    GAME_OPTIONS("go"),
     MESSAGE("m"),
     NICKNAME("n"),
     OP("o"),
     PASSWORD("pw"),
-    PLAYER_LIMIT("pL"),
-    SPECTATOR_LIMIT("vL"),
-    SCORE_LIMIT("sl"),
-    BLANKS_LIMIT("bl"),
     SERIAL("s"),
-    USE_TIMER("ut"),
     WALL("wall");
 
     private final String field;
@@ -242,13 +237,14 @@ public class Constants {
     BLACK_CARD("bc"),
     @DuplicationAllowed
     CARD_ID(AjaxRequest.CARD_ID),
-    @DuplicationAllowed
-    CARD_SETS(AjaxRequest.CARD_SETS),
+    CARD_SETS("css"),
     ERROR("e"),
     ERROR_CODE("ec"),
     @DuplicationAllowed
     GAME_ID(AjaxRequest.GAME_ID),
     GAME_INFO("gi"),
+    @DuplicationAllowed
+    GAME_OPTIONS(AjaxRequest.GAME_OPTIONS),
     GAMES("gl"),
     HAND("h"),
     /**
@@ -601,27 +597,15 @@ public class Constants {
    * Fields for information about a game.
    */
   public enum GameInfo {
-    @DuplicationAllowed
-    CARD_SETS(AjaxRequest.CARD_SETS),
-    HAS_PASSWORD("hp"),
     HOST("H"),
     @DuplicationAllowed
     ID(AjaxRequest.GAME_ID),
     @DuplicationAllowed
-    PASSWORD(AjaxRequest.PASSWORD),
-    @DuplicationAllowed
-    PLAYER_LIMIT(AjaxRequest.PLAYER_LIMIT),
+    GAME_OPTIONS(AjaxRequest.GAME_OPTIONS),
+    HAS_PASSWORD("hp"),
     PLAYERS("P"),
-    @DuplicationAllowed
-    SPECTATOR_LIMIT(AjaxRequest.SPECTATOR_LIMIT),
     SPECTATORS("V"),
-    @DuplicationAllowed
-    SCORE_LIMIT(AjaxRequest.SCORE_LIMIT),
-    @DuplicationAllowed
-    BLANKS_LIMIT(AjaxRequest.BLANKS_LIMIT),
-    STATE("S"),
-    @DuplicationAllowed
-    USE_TIMER(AjaxRequest.USE_TIMER);
+    STATE("S");
 
     private final String key;
 
@@ -630,6 +614,36 @@ public class Constants {
     }
 
     GameInfo(final Enum<?> key) {
+      this.key = key.toString();
+    }
+
+    @Override
+    public String toString() {
+      return key;
+    }
+  }
+
+  /**
+   * Fields for options about a game.
+   */
+  public enum GameOptionData {
+    BLANKS_LIMIT("bl"),
+    @DuplicationAllowed
+    CARD_SETS(AjaxResponse.CARD_SETS),
+    @DuplicationAllowed
+    PASSWORD(AjaxRequest.PASSWORD),
+    PLAYER_LIMIT("pL"),
+    SPECTATOR_LIMIT("vL"),
+    SCORE_LIMIT("sl"),
+    USE_TIMER("ut");
+
+    private final String key;
+
+    GameOptionData(final String key) {
+      this.key = key;
+    }
+
+    GameOptionData(final Enum<?> key) {
       this.key = key.toString();
     }
 
