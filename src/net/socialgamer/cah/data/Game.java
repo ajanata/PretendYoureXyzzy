@@ -322,6 +322,34 @@ public class Game {
   }
 
   /**
+   * Change the game host to a different user.
+   * 
+   * @param newHost
+   *          The user that should be the new host.
+   * @return  True if the host was changed successfully; false if not.
+   */
+  public boolean changeHost(final User user) {
+    final Player newHost = getPlayerForUser(user);
+    if (newHost == null) {
+      return false;
+    }
+
+    final Player oldHost = host;
+    if (oldHost == newHost) {
+      return true;
+    }
+    host = newHost;
+
+    if (oldHost != null) {
+      notifyPlayerInfoChange(oldHost);
+    }
+    notifyPlayerInfoChange(newHost);
+    notifyGameOptionsChanged();
+
+    return true;
+  }
+
+  /**
    * Add a spectator to the game.
    * 
    * Synchronizes on {@link #spectators}.
@@ -922,6 +950,68 @@ public class Game {
     for (final Player player : playersToUpdateStatus) {
       notifyPlayerInfoChange(player);
     }
+  }
+
+  /**
+   * Skip an idle player, via an explicit request.
+   * 
+   * @param target
+   *          The player to be skipped.
+   * @return  True if the player was skipped.
+   */
+  public boolean skipPlayer(final User target) {
+    final Player player = getPlayerForUser(target);
+    if (player == null) {
+      return false;
+    }
+
+    if (player == getJudge()) {
+      skipIdleJudge();
+    } else {
+      synchronized (roundPlayers) {
+        if (state != GameState.PLAYING) {
+          return false; // not playing
+        }
+
+        final List<WhiteCard> cards = playedCards.getCards(player);
+        if (cards != null && cards.size() >= blackCard.getPick()) {
+          return false; // player already played
+        }
+        if (!roundPlayers.contains(player)) {
+          return false; // player not in this round (newly joined or already skipped)
+        }
+
+        logger.info(String.format("Skipping player %s in game %d (requested).",
+            player.getUser().toString(), id));
+        //player.skipped();  // don't do this for the moment
+
+        final HashMap<ReturnableData, Object> data = getEventMap();
+        data.put(LongPollResponse.NICKNAME, player.getUser().getNickname());
+        data.put(LongPollResponse.EVENT, LongPollEvent.GAME_PLAYER_SKIPPED.toString());
+        broadcastToPlayers(MessageType.GAME_EVENT, data);
+
+        // put their cards back
+        final List<WhiteCard> returnCards = playedCards.remove(player);
+        if (returnCards != null) {
+          player.getHand().addAll(returnCards);
+          sendCardsToPlayer(player, returnCards);
+        }
+        roundPlayers.remove(player);
+      }
+
+      notifyPlayerInfoChange(player);
+      if (startJudging()) {
+        judgingState();
+      } else if (roundPlayers.size() < 2) {
+        // not enough players left to judge
+        logger.info(String.format(
+            "Skipping judging on game %d due to insufficient played cards after manual skip.",
+            id));
+        returnCardsToHand();
+        startNextRound();
+      }
+    }
+    return true;
   }
 
   private void killRoundTimer() {
