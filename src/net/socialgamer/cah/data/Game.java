@@ -508,7 +508,7 @@ public class Game {
     if (null == host) {
       return null;
     }
-    info.put(GameInfo.HOST, host.toString());
+    info.put(GameInfo.HOST, host.getUser().getNickname());
     info.put(GameInfo.STATE, state.toString());
     final List<Integer> cardSetIdsCopy;
     synchronized (this.cardSetIds) {
@@ -528,14 +528,14 @@ public class Game {
     final Player[] playersCopy = players.toArray(new Player[players.size()]);
     final List<String> playerNames = new ArrayList<String>(playersCopy.length);
     for (final Player player : playersCopy) {
-      playerNames.add(player.toString());
+      playerNames.add(player.getUser().getNickname());
     }
     info.put(GameInfo.PLAYERS, playerNames);
 
     final User[] spectatorsCopy = spectators.toArray(new User[spectators.size()]);
     final List<String> spectatorNames = new ArrayList<String>(spectatorsCopy.length);
     for (final User spectator : spectatorsCopy) {
-      spectatorNames.add(spectator.toString());
+      spectatorNames.add(spectator.getNickname());
     }
     info.put(GameInfo.SPECTATORS, spectatorNames);
 
@@ -555,6 +555,12 @@ public class Game {
       info.add(playerInfo);
     }
     return info;
+  }
+
+  public final List<Player> getPlayers() {
+    final List<Player> copy = new ArrayList<Player>(players.size());
+    copy.addAll(players);
+    return copy;
   }
 
   /**
@@ -661,7 +667,9 @@ public class Game {
       started = false;
     }
     if (started) {
-      logger.info(String.format("Starting game %d.", id));
+      logger.info(String.format("Starting game %d with card sets %s, %d blanks, %d max players, " +
+          "%d max spectators, %d score limit, players %s.",
+          id, cardSetIds, blanksInDeck, playerLimit, spectatorLimit, scoreGoal, players));
       // do this stuff outside the players lock; they will lock players again later for much less
       // time, and not at the same time as trying to lock users, which has caused deadlocks
       synchronized (cardSetIds) {
@@ -885,8 +893,7 @@ public class Game {
       for (final Player player : roundPlayers) {
         final List<WhiteCard> cards = playedCards.getCards(player);
         if (cards == null || cards.size() < blackCard.getPick()) {
-          logger.info(String.format("Skipping idle player %s in game %d.",
-              player.getUser().toString(), id));
+          logger.info(String.format("Skipping idle player %s in game %d.", player, id));
           player.skipped();
 
           final HashMap<ReturnableData, Object> data = getEventMap();

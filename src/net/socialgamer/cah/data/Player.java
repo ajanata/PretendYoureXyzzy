@@ -116,6 +116,6 @@ public class Player {
 
   @Override
   public String toString() {
-    return user.toString();
+    return String.format("%s (%dp, %ds)", user.toString(), score, skipCount);
   }
 }

@@ -33,8 +33,6 @@ import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
 
-import org.apache.log4j.Logger;
-
 
 /**
  * Implementations of this interface MUST also have a public static final String OP. There will be
@@ -43,7 +41,6 @@ import org.apache.log4j.Logger;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public abstract class Handler {
-  protected final Logger logger = Logger.getLogger("net.socialgamer.cah.handlers.Handler");
 
   /**
    * Handle a request.

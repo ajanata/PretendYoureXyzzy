@@ -37,6 +37,8 @@ import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.User;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 
 
@@ -44,6 +46,8 @@ import com.google.inject.Inject;
  * Handler to stop a game.
  */
 public class StopGameHandler extends GameWithPlayerHandler {
+
+  protected final Logger logger = Logger.getLogger(GameWithPlayerHandler.class);
 
   public static final String OP = AjaxOperation.STOP_GAME.toString();
 
@@ -62,6 +66,8 @@ public class StopGameHandler extends GameWithPlayerHandler {
     } else if (game.getState() == GameState.LOBBY) {
       return error(ErrorCode.ALREADY_STOPPED);
     } else {
+      logger.info(String.format("Game %d stopped by host %s. Players: %s", game.getId(), user,
+          game.getPlayers()));
       game.resetState(false);
       return data;
     }
