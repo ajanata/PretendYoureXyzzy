@@ -29,6 +29,7 @@ created for the user now.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page import="net.socialgamer.cah.data.Game" %>
 <%
 // Ensure a session exists for the user.
 @SuppressWarnings("unused")
@@ -84,13 +85,15 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 17 February 2014:</p>
+  <p tabindex="0">Most recent update: 7 April 2014:</p>
   <ul>
+    <li>Exploits avoiding the maximum limits for game options have been fixed. No more games with
+    9001 blank white cards.</li>
     <li>Some minor bugfixes, including one which should prevent the entire server from dying if a
     single background task gets stuck.</li>
     <li>Some minor performance improvements.</li>
-    <li><a href="http://houseofcardsagainsthumanity.com/">House of Cards Against Humanity</a> has
-    been entered and will be enabled during a low-traffic period in the next few days.</li>
+    <li><a href="http://houseofcardsagainsthumanity.com/">House of Cards Against Humanity</a> is now
+    available.</li>
     <li><strong>No further custom card sets will be accepted.</strong> Minor updates to existing
     ones may still be submitted, but I do not guarantee I will get to it in a timely manner. It is
     taking too much of my time to administer the custom cards sets; I'd rather focus the time on
@@ -383,16 +386,20 @@ HttpSession hSession = request.getSession(true);
       <legend>Game options:</legend>
       <label id="score_limit_template_label" for="score_limit_template">Score limit:</label>
       <select id="score_limit_template" class="score_limit">
-        <% int defaultScoreLimit = 8; for (int i = 4; i <= 69; i++) { %>
-          <option <%= i == defaultScoreLimit ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+        <%
+          for (int i = Game.MIN_SCORE_LIMIT; i <= Game.MAX_SCORE_LIMIT; i++) {
+        %>
+          <option <%= i == Game.DEFAULT_SCORE_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
         <% } %>
       </select>
       <br/>
       <label id="player_limit_template_label" for="player_limit_template">Player limit:</label>
       <select id="player_limit_template" class="player_limit"
           aria-label="Player limit. Having more than 10 players may cause issues both for screen readers and traditional browsers.">
-        <% int defaultPlayerLimit = 10; for (int i = 3; i <= 20; i++) { %>
-          <option <%= i == defaultPlayerLimit ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+        <%
+          for (int i = Game.MIN_PLAYER_LIMIT; i <= Game.MAX_PLAYER_LIMIT; i++) {
+        %>
+          <option <%= i == Game.DEFAULT_PLAYER_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
         <% } %>
       </select>
       Having more than 10 players may get cramped!
@@ -400,8 +407,10 @@ HttpSession hSession = request.getSession(true);
       <label id="spectator_limit_template_label" for="spectator_limit_template">Spectator limit:</label>
       <select id="spectator_limit_template" class="spectator_limit"
           aria-label="Spectator limit.">
-        <% int defaultSpectatorLimit = 10; for (int i = 0; i <= 20; i++) { %>
-          <option <%= i == defaultSpectatorLimit ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+        <%
+          for (int i = Game.MIN_SPECTATOR_LIMIT; i <= Game.MAX_SPECTATOR_LIMIT; i++) {
+        %>
+          <option <%= i == Game.DEFAULT_SPECTATOR_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
         <% } %>
       </select>
       Spectators can watch and chat, but not actually play. Not even as Czar.
@@ -423,8 +432,10 @@ HttpSession hSession = request.getSession(true);
       <br/>
       <label id="blanks_limit_label" title="Blank cards allow a player to type in their own answer.">
         Also include <select id="blanks_limit_template" class="blanks_limit">
-        <% for (int i = 0; i <= 30; i++) { %>
-          <option <%= i == 0 ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+        <%
+          for (int i = Game.MIN_BLANK_CARD_LIMIT; i <= Game.MAX_BLANK_CARD_LIMIT; i++) {
+        %>
+          <option <%= i == Game.DEFAULT_BLANK_CARD_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
         <% } %>
         </select> blank white cards.
       </label>

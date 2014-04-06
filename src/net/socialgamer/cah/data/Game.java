@@ -87,6 +87,20 @@ import com.google.inject.Provider;
 public class Game {
   private static final Logger logger = Logger.getLogger(Game.class);
 
+  // TODO move these out to pyx.properties
+  public static final int MIN_SCORE_LIMIT = 4;
+  public static final int DEFAULT_SCORE_LIMIT = 8;
+  public static final int MAX_SCORE_LIMIT = 69;
+  public static final int MIN_PLAYER_LIMIT = 3;
+  public static final int DEFAULT_PLAYER_LIMIT = 10;
+  public static final int MAX_PLAYER_LIMIT = 20;
+  public static final int MIN_SPECTATOR_LIMIT = 0;
+  public static final int DEFAULT_SPECTATOR_LIMIT = 10;
+  public static final int MAX_SPECTATOR_LIMIT = 20;
+  public static final int MIN_BLANK_CARD_LIMIT = 0;
+  public static final int DEFAULT_BLANK_CARD_LIMIT = 0;
+  public static final int MAX_BLANK_CARD_LIMIT = 30;
+
   private final int id;
   /**
    * All players present in the game.
@@ -109,9 +123,9 @@ public class Game {
   private GameState state;
 
   // These are the default values new games get.
-  private int blanksInDeck = 0;
-  private int playerLimit = 6;
-  private int spectatorLimit = 0;
+  private int blanksInDeck = DEFAULT_BLANK_CARD_LIMIT;
+  private int playerLimit = DEFAULT_PLAYER_LIMIT;
+  private int spectatorLimit = DEFAULT_SPECTATOR_LIMIT;
 
   private int judgeIndex = 0;
 
@@ -155,7 +169,7 @@ public class Game {
   private volatile ScheduledFuture<?> lastScheduledFuture;
   private final ScheduledThreadPoolExecutor globalTimer;
 
-  private int scoreGoal = 8;
+  private int scoreGoal = DEFAULT_SCORE_LIMIT;
   private final Set<Integer> cardSetIds = new HashSet<Integer>();
   private String password = "";
   private boolean useIdleTimer = true;

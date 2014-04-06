@@ -54,12 +54,16 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
-  <li>17 February 2014:<ul>
+  <li>7 April 2014:<ul>
+    <li>Exploits avoiding the maximum limits for game options have been fixed. No more games with
+    9001 blank white cards.</li>
+  </ul></li>
+  <li>23 February 2014:<ul>
     <li>Some minor bugfixes, including one which should prevent the entire server from dying if a
     single background task gets stuck.</li>
     <li>Some minor performance improvements.</li>
-    <li><a href="http://houseofcardsagainsthumanity.com/">House of Cards Against Humanity</a> has
-    been entered and will be enabled during a low-traffic period in the next few days.</li>
+    <li><a href="http://houseofcardsagainsthumanity.com/">House of Cards Against Humanity</a> is now
+    available.</li>
   </ul></li>
   <li>26 January 2014:<ul>
     <li>Several bugs have been fixed:<ul>

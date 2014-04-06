@@ -66,6 +66,14 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
         if (null != useTimerString && !"".equals(useTimerString)) {
           useTimer = Boolean.valueOf(useTimerString);
         }
+        // make sure the new settings are in the valid range
+        if (scoreLimit < Game.MIN_SCORE_LIMIT || scoreLimit > Game.MAX_SCORE_LIMIT
+            || playerLimit < Game.MIN_PLAYER_LIMIT || playerLimit > Game.MAX_PLAYER_LIMIT
+            || spectatorLimit < Game.MIN_SPECTATOR_LIMIT
+            || spectatorLimit > Game.MAX_SPECTATOR_LIMIT
+            || blanksLimit < Game.MIN_BLANK_CARD_LIMIT || blanksLimit > Game.MAX_BLANK_CARD_LIMIT) {
+          return error(ErrorCode.BAD_REQUEST);
+        }
         game.updateGameSettings(scoreLimit, playerLimit, spectatorLimit, cardSetIds, blanksLimit,
             password, useTimer);
 
