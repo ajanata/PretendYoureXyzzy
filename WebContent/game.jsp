@@ -29,7 +29,7 @@ created for the user now.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
-<%@ page import="net.socialgamer.cah.data.Game" %>
+<%@ page import="net.socialgamer.cah.data.GameOptions" %>
 <%
 // Ensure a session exists for the user.
 @SuppressWarnings("unused")
@@ -388,9 +388,9 @@ HttpSession hSession = request.getSession(true);
       <label id="score_limit_template_label" for="score_limit_template">Score limit:</label>
       <select id="score_limit_template" class="score_limit">
         <%
-          for (int i = Game.MIN_SCORE_LIMIT; i <= Game.MAX_SCORE_LIMIT; i++) {
+          for (int i = GameOptions.MIN_SCORE_LIMIT; i <= GameOptions.MAX_SCORE_LIMIT; i++) {
         %>
-          <option <%= i == Game.DEFAULT_SCORE_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+          <option <%= i == GameOptions.DEFAULT_SCORE_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
         <% } %>
       </select>
       <br/>
@@ -398,9 +398,9 @@ HttpSession hSession = request.getSession(true);
       <select id="player_limit_template" class="player_limit"
           aria-label="Player limit. Having more than 10 players may cause issues both for screen readers and traditional browsers.">
         <%
-          for (int i = Game.MIN_PLAYER_LIMIT; i <= Game.MAX_PLAYER_LIMIT; i++) {
+          for (int i = GameOptions.MIN_PLAYER_LIMIT; i <= GameOptions.MAX_PLAYER_LIMIT; i++) {
         %>
-          <option <%= i == Game.DEFAULT_PLAYER_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+          <option <%= i == GameOptions.DEFAULT_PLAYER_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
         <% } %>
       </select>
       Having more than 10 players may get cramped!
@@ -409,9 +409,9 @@ HttpSession hSession = request.getSession(true);
       <select id="spectator_limit_template" class="spectator_limit"
           aria-label="Spectator limit.">
         <%
-          for (int i = Game.MIN_SPECTATOR_LIMIT; i <= Game.MAX_SPECTATOR_LIMIT; i++) {
+          for (int i = GameOptions.MIN_SPECTATOR_LIMIT; i <= GameOptions.MAX_SPECTATOR_LIMIT; i++) {
         %>
-          <option <%= i == Game.DEFAULT_SPECTATOR_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+          <option <%= i == GameOptions.DEFAULT_SPECTATOR_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
         <% } %>
       </select>
       Spectators can watch and chat, but not actually play. Not even as Czar.
@@ -434,9 +434,9 @@ HttpSession hSession = request.getSession(true);
       <label id="blanks_limit_label" title="Blank cards allow a player to type in their own answer.">
         Also include <select id="blanks_limit_template" class="blanks_limit">
         <%
-          for (int i = Game.MIN_BLANK_CARD_LIMIT; i <= Game.MAX_BLANK_CARD_LIMIT; i++) {
+          for (int i = GameOptions.MIN_BLANK_CARD_LIMIT; i <= GameOptions.MAX_BLANK_CARD_LIMIT; i++) {
         %>
-          <option <%= i == Game.DEFAULT_BLANK_CARD_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+          <option <%= i == GameOptions.DEFAULT_BLANK_CARD_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
         <% } %>
         </select> blank white cards.
       </label>
