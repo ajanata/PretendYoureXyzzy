@@ -289,6 +289,9 @@ public class Constants {
    */
   public enum ErrorCode implements Localizable {
     ACCESS_DENIED("ad", "Access denied."),
+    ACCOUNT_IS_REGISTERED("air", "That nickname is registered. Please provide its password."),
+    ACCOUNT_NOT_REGISTERED("anr",
+        "That nickname is not registered. Please register or do not user a password."),
     ALREADY_STARTED("as", "The game has already started."),
     ALREADY_STOPPED("aS", "The game has already stopped."),
     BAD_OP("bo", "Invalid operation."),

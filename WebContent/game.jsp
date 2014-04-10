@@ -100,10 +100,18 @@ HttpSession hSession = request.getSession(true);
     implementing a way for players to manage card sets in the game by themselves.</li>
   </ul>
   <div id="nickbox">
-    Nickname:
+    <label for="nickname">Nickname:</label>
     <input type="text" id="nickname" value="" maxlength="30" role="textbox"
         aria-label="Enter your nickname." />
+    <label for="password">Password (optional):</label>
+    <input type="password" id="password" value="" maxlength="128" role="textbox"
+        aria=label="Enter your password, if you have one." />
     <input type="button" id="nicknameconfirm" value="Set" />
+    <br/>
+    Enter your password if you have registered your nickname, otherwise leave it blank.
+    <br/>
+    TODO account registration
+    <br/>
     <span id="nickbox_error" class="error"></span>
   </div>
   <p>

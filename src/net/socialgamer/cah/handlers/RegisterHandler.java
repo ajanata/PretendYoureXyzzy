@@ -32,7 +32,6 @@ import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.CahModule.BanList;
 import net.socialgamer.cah.CahModule.MaxUsers;
-import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.AjaxResponse;
@@ -42,6 +41,9 @@ import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
+import net.socialgamer.cah.db.Account;
+
+import org.hibernate.Session;
 
 import com.google.inject.Inject;
 
@@ -60,13 +62,15 @@ public class RegisterHandler extends Handler {
   private final ConnectedUsers users;
   private final Set<String> banList;
   private final Integer maxUsers;
+  private final Session hibernateSession;
 
   @Inject
   public RegisterHandler(final ConnectedUsers users, @BanList final Set<String> banList,
-      @MaxUsers final Integer maxUsers) {
+      @MaxUsers final Integer maxUsers, final Session session) {
     this.users = users;
     this.banList = banList;
     this.maxUsers = maxUsers;
+    this.hibernateSession = session;
   }
 
   @Override
@@ -87,8 +91,22 @@ public class RegisterHandler extends Handler {
       } else if ("xyzzy".equalsIgnoreCase(nick)) {
         return error(ErrorCode.RESERVED_NICK);
       } else {
-        final User user = new User(nick, request.getRemoteAddr(),
-            Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteAddr()));
+        final String password = request.getParameter(AjaxRequest.PASSWORD);
+        final Account account = Account.getAccount(hibernateSession, nick);
+        if (null != account) {
+          if (null == password || password.isEmpty()) {
+            return error(ErrorCode.ACCOUNT_IS_REGISTERED);
+          } else if (!account.getPassword().equals(password)) {
+            // FIXME hash incoming password
+            // wrong password
+            return error(ErrorCode.WRONG_PASSWORD);
+          }
+        } else if (null != password && !password.isEmpty()) {
+          // no account found
+          return error(ErrorCode.ACCOUNT_NOT_REGISTERED);
+        }
+
+        final User user = new User(nick, request.getRemoteAddr(), account);
         final ErrorCode errorCode = users.checkAndAdd(user, maxUsers);
         if (null == errorCode) {
           // There is a findbugs warning on this line:

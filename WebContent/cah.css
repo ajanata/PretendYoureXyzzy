@@ -85,7 +85,7 @@ h2,h3,h4 {
 
 #nickbox {
   border: 1px solid black;
-  display: inline;
+  display: inline-block;
   padding: 5px;
 }
 

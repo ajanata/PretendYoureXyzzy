@@ -41,7 +41,7 @@ $(document).ready(function() {
   }
   $("#nicknameconfirm").click(nicknameconfirm_click);
   $("#nickbox").keyup(nickbox_keyup);
-  $("#nickbox").focus();
+  $("#nickname").focus();
 
   $(".chat", $("#tab-global")).keyup(chat_keyup($(".chat_submit", $("#tab-global"))));
   $(".chat_submit", $("#tab-global")).click(chatsubmit_click(null, $("#tab-global")));
@@ -94,11 +94,12 @@ function nickbox_keyup(e) {
  */
 function nicknameconfirm_click() {
   var nickname = $.trim($("#nickname").val());
+  var password = $.trim($("#password").val());
   $.cookie("nickname", nickname, {
     domain : cah.COOKIE_DOMAIN,
     expires : 365
   });
-  cah.Ajax.build(cah.$.AjaxOperation.REGISTER).withNickname(nickname).run();
+  cah.Ajax.build(cah.$.AjaxOperation.REGISTER).withNickname(nickname).withPassword(password).run();
 }
 
 /**

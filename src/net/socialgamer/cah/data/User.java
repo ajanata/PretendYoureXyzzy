@@ -30,6 +30,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
+import javax.annotation.Nullable;
+
+import net.socialgamer.cah.db.Account;
+
 
 /**
  * A user connected to the server.
@@ -52,7 +56,8 @@ public class User {
 
   private final String hostName;
 
-  private final boolean isAdmin;
+  @Nullable
+  private final Account account;
 
   private final List<Long> lastMessageTimes = Collections.synchronizedList(new LinkedList<Long>());
 
@@ -68,13 +73,13 @@ public class User {
    *          The user's nickname.
    * @param hostName
    *          The user's Internet hostname (which will likely just be their IP address).
-   * @param isAdmin
-   *          Whether this user is an admin.
+   * @param account
+   *          The user's account, if the nickname is registered.
    */
-  public User(final String nickname, final String hostName, final boolean isAdmin) {
+  public User(final String nickname, final String hostName, @Nullable final Account account) {
     this.nickname = nickname;
     this.hostName = hostName;
-    this.isAdmin = isAdmin;
+    this.account = account;
     queuedMessages = new PriorityBlockingQueue<QueuedMessage>();
   }
 
@@ -143,7 +148,7 @@ public class User {
   }
 
   public boolean isAdmin() {
-    return isAdmin;
+    return null != account && account.isRoot();
   }
 
   /**
