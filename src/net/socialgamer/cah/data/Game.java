@@ -59,10 +59,8 @@ import net.socialgamer.cah.db.CardSet;
 import net.socialgamer.cah.db.WhiteCard;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 
 /**
@@ -115,7 +113,7 @@ public class Game {
   private final ConnectedUsers connectedUsers;
   private final GameManager gameManager;
   private Player host;
-  private final Provider<Session> sessionProvider;
+  private final CardSets cardSets;
   private BlackDeck blackDeck;
   private BlackCard blackCard;
   private final Object blackCardLock = new Object();
@@ -184,18 +182,18 @@ public class Game {
    * @param gameManager
    *          The game manager, for broadcasting game list refresh notices and destroying this game
    *          when everybody leaves.
-   * @param hibernateSession Hibernate session from which to load cards.
    * @param globalTimer The global timer on which to schedule tasks.
+   * @param cardSets The card-set manager.
    */
   @Inject
   public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
       final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer,
-      final Provider<Session> sessionProvider) {
+      final CardSets cardSets) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
     this.globalTimer = globalTimer;
-    this.sessionProvider = sessionProvider;
+    this.cardSets = cardSets;
 
     state = GameState.LOBBY;
   }
@@ -672,25 +670,15 @@ public class Game {
           id, cardSetIds, blanksInDeck, playerLimit, spectatorLimit, scoreGoal, players));
       // do this stuff outside the players lock; they will lock players again later for much less
       // time, and not at the same time as trying to lock users, which has caused deadlocks
+      Set<CardSet> sets;
       synchronized (cardSetIds) {
-        Session session = null;
-        try {
-          session = sessionProvider.get();
-          @SuppressWarnings("unchecked")
-          final List<CardSet> cardSets = session.createQuery("from CardSet where id in (:ids)")
-              .setParameterList("ids", cardSetIds).list();
-
-          blackDeck = new BlackDeck(cardSets);
-          whiteDeck = new WhiteDeck(cardSets, blanksInDeck);
-        } catch (final Exception e) {
-          logger.error(String.format("Unable to load cards to start game %d", id), e);
-          return false;
-        } finally {
-          if (null != session) {
-            session.close();
-          }
-        }
+        sets = cardSets.findById(options.cardSetIds);
       }
+
+
+        blackDeck = new BlackDeck(sets);
+        whiteDeck = new WhiteDeck(sets, blanksInDeck);
+
       startNextRound();
       gameManager.broadcastGameListRefresh();
     }
@@ -698,28 +686,16 @@ public class Game {
   }
 
   public boolean hasBaseDeck() {
+    Set<CardSet> sets;
     synchronized (cardSetIds) {
-      if (cardSetIds.isEmpty()) {
-        return false;
-      }
-
-      Session session = null;
-      try {
-        session = sessionProvider.get();
-        final Number baseDeckCount = (Number) session
-            .createQuery("select count(*) from CardSet where id in (:ids) and base_deck = true")
-            .setParameterList("ids", cardSetIds).uniqueResult();
-
-        return baseDeckCount.intValue() > 0;
-      } catch (final Exception e) {
-        logger.error(String.format("Unable to determine if game %d has base deck", id), e);
-        return false;
-      } finally {
-        if (null != session) {
-          session.close();
-        }
+      sets = cardSets.findById(cardSetIds);
+    }
+    for (final CardSet set : sets) {
+      if (set.isBaseDeck()) {
+        return true;
       }
     }
+    return false;
   }
 
   /**

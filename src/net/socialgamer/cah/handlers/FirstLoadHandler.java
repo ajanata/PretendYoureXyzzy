@@ -23,11 +23,9 @@
 
 package net.socialgamer.cah.handlers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.servlet.http.HttpSession;
 
@@ -38,11 +36,8 @@ import net.socialgamer.cah.Constants.ReconnectNextAction;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.RequestWrapper;
+import net.socialgamer.cah.data.CardSets;
 import net.socialgamer.cah.data.User;
-import net.socialgamer.cah.db.CardSet;
-
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import com.google.inject.Inject;
 
@@ -57,13 +52,11 @@ public class FirstLoadHandler extends Handler {
 
   public static final String OP = AjaxOperation.FIRST_LOAD.toString();
 
-  private final Session hibernateSession;
-  private final Properties properties;
+  private final CardSets cardSets;
 
   @Inject
-  public FirstLoadHandler(final Session hibernateSession, final Properties properties) {
-    this.hibernateSession = hibernateSession;
-    this.properties = properties;
+  public FirstLoadHandler(final CardSets cardSets) {
+    this.cardSets = cardSets;
   }
 
   @Override
@@ -78,6 +71,7 @@ public class FirstLoadHandler extends Handler {
     } else {
       // They already have a session in progress, we need to figure out what they were doing
       // and tell the client where to continue from.
+      // Right now we just tell them what their name is.
       ret.put(AjaxResponse.IN_PROGRESS, Boolean.TRUE);
       ret.put(AjaxResponse.NICKNAME, user.getNickname());
 
@@ -89,24 +83,8 @@ public class FirstLoadHandler extends Handler {
       }
     }
 
-    try {
-      // get the list of card sets
-      final Transaction transaction = hibernateSession.beginTransaction();
-      @SuppressWarnings("unchecked")
-      final List<CardSet> cardSets = hibernateSession
-          .createQuery(CardSet.getCardsetQuery(properties))
-          .setReadOnly(true)
-          .list();
-      final List<Map<CardSetData, Object>> cardSetsData =
-          new ArrayList<Map<CardSetData, Object>>(cardSets.size());
-      for (final CardSet cardSet : cardSets) {
-        cardSetsData.add(cardSet.getClientMetadata(hibernateSession));
-      }
-      ret.put(AjaxResponse.CARD_SETS, cardSetsData);
-      transaction.commit();
-    } finally {
-      hibernateSession.close();
-    }
+    final List<Map<CardSetData, Object>> cardSetsData = cardSets.getClientMetadata();
+    ret.put(AjaxResponse.CARD_SETS, cardSetsData);
     return ret;
   }
 

@@ -33,6 +33,8 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
+import net.socialgamer.cah.data.CardSets;
+
 import org.apache.log4j.PropertyConfigurator;
 
 import com.google.inject.Guice;
@@ -108,6 +110,7 @@ public class StartupUtils extends GuiceServletContextListener {
 
     reconfigureLogging(contextEvent.getServletContext());
     reloadProperties(contextEvent.getServletContext());
+    reloadCardSets(contextEvent.getServletContext());
   }
 
   public static void reloadProperties(final ServletContext context) {
@@ -126,6 +129,14 @@ public class StartupUtils extends GuiceServletContextListener {
   public static void reconfigureLogging(final ServletContext context) {
     PropertyConfigurator.configure(context.getRealPath(
         "/WEB-INF/log4j.properties"));
+  }
+
+  public static void reloadCardSets(final ServletContext context) {
+    final Injector injector = (Injector) context.getAttribute(INJECTOR);
+    final CardSets cardSets = injector.getInstance(CardSets.class);
+
+    // get the list of card sets
+    cardSets.reloadAll();
   }
 
   @Override
