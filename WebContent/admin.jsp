@@ -123,6 +123,10 @@ String reloadProps = request.getParameter("reloadProps");
 if ("true".equals(reloadProps)) {
   StartupUtils.reloadProperties(this.getServletContext());
 }
+String reloadCards = request.getParameter("reloadCards");
+if ("true".equals(reloadCards)) {
+  StartupUtils.reloadCardSets(this.getServletContext());
+}
 
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -239,6 +243,9 @@ boolean verboseDebug = verboseDebugObj != null ? verboseDebugObj.booleanValue() 
 </p>
 <p>
   <a href="?reloadProps=true">Reload pyx.properties.</a>
+</p>
+<p>
+  <a href="?reloadCards=true">Reload card sets.</a>
 </p>
 
 </body>
