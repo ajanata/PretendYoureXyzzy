@@ -216,6 +216,13 @@
           </batchtest>
       </junit>
   </target>
+
+  <target name="package" depends="build.modules" description="create war file">
+      <war destfile="cah.war">
+          <classes dir="build/classes" />
+          <fileset dir="WebContent" />
+      </war>
+  </target>
   
   <target name="clean.module.cah" description="cleanup module">
     <delete dir="${cah.output.dir}"/>
