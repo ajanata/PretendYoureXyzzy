@@ -180,7 +180,7 @@
   </path>
   
   
-  <target name="compile.module.cah" depends="compile.module.cah.production,compile.module.cah.tests" description="Compile module cah"/>
+  <target name="compile.module.cah" depends="compile.module.cah.production" description="Compile module cah"/>
   
   <target name="compile.module.cah.production" description="Compile module cah; production classes">
     <mkdir dir="${cah.output.dir}"/>
@@ -204,7 +204,18 @@
     </copy>
   </target>
   
-  <target name="compile.module.cah.tests" depends="compile.module.cah.production" description="compile module cah; test classes" unless="skip.tests"/>
+  <target name="test" depends="compile.module.cah.production" description="test classes" unless="skip.tests">
+      <junit printsummary="on">
+          <classpath refid="cah.module.production.classpath"/>
+          <classpath path="${cah.output.dir}"/>
+
+          <batchtest>
+              <fileset dir="${module.cah.basedir}/test">
+                  <include name="**/*Test*.java" />
+              </fileset>
+          </batchtest>
+      </junit>
+  </target>
   
   <target name="clean.module.cah" description="cleanup module">
     <delete dir="${cah.output.dir}"/>
@@ -218,6 +229,6 @@
   <target name="clean" depends="clean.module.cah" description="cleanup all"/>
   
   <target name="build.modules" depends="init, clean, compile.module.cah" description="build all modules"/>
-  
+
   <target name="all" depends="build.modules" description="build all"/>
 </project>
