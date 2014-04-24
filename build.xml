@@ -178,8 +178,22 @@
       <include name="test"/>
     </dirset>
   </path>
-  
-  
+
+  <!-- additional taskdefs for tomcat specific targets -->
+  <path id="catalina-ant-classpath">
+      <fileset dir="${tomcat.library.path}" />
+      <fileset dir="${tomcat.bin.path}" />
+  </path>
+
+  <taskdef name="catalina-deploy" classname="org.apache.catalina.ant.DeployTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-list" classname="org.apache.catalina.ant.ListTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-reload" classname="org.apache.catalina.ant.ReloadTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-findleaks" classname="org.apache.catalina.ant.FindLeaksTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-resources" classname="org.apache.catalina.ant.ResourcesTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-start" classname="org.apache.catalina.ant.StartTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-stop" classname="org.apache.catalina.ant.StopTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-undeploy" classname="org.apache.catalina.ant.UndeployTask" classpathref="catalina-ant-classpath"/>
+
   <target name="compile.module.cah" depends="compile.module.cah.production" description="Compile module cah"/>
   
   <target name="compile.module.cah.production" description="Compile module cah; production classes">
@@ -204,7 +218,7 @@
     </copy>
   </target>
   
-  <target name="test" depends="compile.module.cah.production" description="test classes" unless="skip.tests">
+  <target name="test" depends="compile.module.cah" description="test classes" unless="skip.tests">
       <junit printsummary="on">
           <classpath refid="cah.module.production.classpath"/>
           <classpath path="${cah.output.dir}"/>
@@ -218,12 +232,33 @@
   </target>
 
   <target name="package" depends="build.modules" description="create war file">
-      <war destfile="cah.war">
+      <war destfile="${war.file}">
           <classes dir="build/classes" />
           <fileset dir="WebContent" />
       </war>
   </target>
-  
+
+  <target name="deploy" depends="package" description="deploy war package to tomcat">
+      <catalina-deploy url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}"
+                       path="/${webapp.name}" war="file:${war.file}"/>
+  </target>
+
+
+  <target name="undeploy" description="deploy war package to tomcat">
+      <catalina-undeploy url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}"
+                         path="/${webapp.name}" failonerror="false"/>
+  </target>
+
+  <target name="start-webapp" description="enable application on server">
+      <catalina-start url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}"
+                      path="/${webapp.name}" />
+  </target>
+
+  <target name="stop-webapp" description="disable application on server">
+      <catalina-stop url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}"
+                     path="/${webapp.name}" failonerror="false"/>
+  </target>
+
   <target name="clean.module.cah" description="cleanup module">
     <delete dir="${cah.output.dir}"/>
     <delete dir="${cah.testoutput.dir}"/>
