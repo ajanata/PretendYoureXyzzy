@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
  *   and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
  *   conditions and the following disclaimer in the documentation and/or other materials provided
  *   with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -24,14 +24,14 @@
 /**
  * Display the list of games on the server, and enable the player to join a game. This is a
  * singleton.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  * @constructor
  */
 cah.GameList = function() {
   /**
    * The game list DOM element.
-   * 
+   *
    * @type {HTMLDivElement}
    * @private
    */
@@ -39,20 +39,29 @@ cah.GameList = function() {
 
   /**
    * Map all game lobby objects, id -> game lobby.
-   * 
+   *
    * @type {Object}
    * @private
    */
   this.games_ = {};
 
+  /**
+   * Regular Expression for simple filtering of game list.
+   *
+   * @type {RegExp}
+   * @private
+   */
+  this.filter_ = null;
+
   $("#create_game").click(cah.bind(this, this.createGameClick_));
   $("#refresh_games").click(cah.bind(this, this.refreshGamesClick_));
+  $("#filter_games").keydown(cah.bind(this, this.filterGamesChange_));
 };
 
 $(document).ready(function() {
   /**
    * The singleton instance of GameList.
-   * 
+   *
    * @type {cah.GameList}
    */
   cah.GameList.instance = new cah.GameList();
@@ -65,6 +74,7 @@ cah.GameList.prototype.show = function() {
   $(this.element_).show();
   $("#create_game").show();
   $("#refresh_games").show();
+  $("#filter_games").show();
 };
 
 /**
@@ -74,6 +84,7 @@ cah.GameList.prototype.hide = function() {
   $(this.element_).hide();
   $("#create_game").hide();
   $("#refresh_games").hide();
+  $("#filter_games").hide();
 };
 
 /**
@@ -91,7 +102,7 @@ cah.GameList.prototype.update = function() {
 
 /**
  * Update the list of games with fresh data from the server.
- * 
+ *
  * @param {Object}
  *          gameData The game data returned by the server.
  */
@@ -150,11 +161,13 @@ cah.GameList.prototype.processUpdate = function(gameData) {
   } else {
     $("#create_game").attr("disabled", "disabled");
   }
+
+  this.applyFilter();
 };
 
 /**
  * Join the given game.
- * 
+ *
  * @param {Number}
  *          id The id of the game to join.
  */
@@ -168,8 +181,31 @@ cah.GameList.prototype.joinGame = function(id) {
 };
 
 /**
+ * Sets the current game filter regular expression
+ */
+cah.GameList.prototype.setFilter = function (filterRegExp) {
+  this.filter_ = new RegExp(filterRegExp || '.', 'i');
+};
+
+/**
+ * Filters the visibility of the current game list by regular expression
+ */
+cah.GameList.prototype.applyFilter = function (filterRegExp) {
+  if (filterRegExp) this.setFilter(filterRegExp);
+
+  var filter = this.filter_
+    , gamelist = $('.gamelist_lobby').show();
+
+  if (filter && filter.test) {
+    gamelist.filter(function (i) {
+      return !filter.test($(this).text());
+    }).hide();
+  }
+};
+
+/**
  * Event handler for the clicking the Create Game button.
- * 
+ *
  * @private
  */
 cah.GameList.prototype.createGameClick_ = function() {
@@ -178,18 +214,27 @@ cah.GameList.prototype.createGameClick_ = function() {
 
 /**
  * Event handler for clicking the Refresh Games button.
- * 
+ *
  * @private
  */
 cah.GameList.prototype.refreshGamesClick_ = function() {
   this.update();
 };
 
+/**
+ * Event handler for typing in the filter games input.
+ *
+ * @private
+ */
+cah.GameList.prototype.filterGamesChange_ = function() {
+  this.applyFilter($('#filter_games').val());
+};
+
 // ///////////////////////////////////////////////
 
 /**
  * A single entry in the game list.
- * 
+ *
  * @param {HTMLElement}
  *          parentElem Element under which to display this.
  * @param {Object}
@@ -199,7 +244,7 @@ cah.GameList.prototype.refreshGamesClick_ = function() {
 cah.GameListLobby = function(parentElem, data) {
   /**
    * The game id represented by this lobby.
-   * 
+   *
    * @type {number}
    * @private
    */
@@ -207,7 +252,7 @@ cah.GameListLobby = function(parentElem, data) {
 
   /**
    * The element we live under.
-   * 
+   *
    * @type {HTMLElement}
    * @private
    */
@@ -215,7 +260,7 @@ cah.GameListLobby = function(parentElem, data) {
 
   /**
    * This game lobby's dom element.
-   * 
+   *
    * @type {HTMLDivElement}
    * @private
    */
@@ -223,7 +268,7 @@ cah.GameListLobby = function(parentElem, data) {
 
   /**
    * This game's data.
-   * 
+   *
    * @type {object}
    * @private
    */
