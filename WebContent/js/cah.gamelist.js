@@ -228,6 +228,8 @@ cah.GameListLobby = function(parentElem, data) {
    * @private
    */
   this.data_ = data;
+  
+  var options = data[cah.$.GameInfo.GAME_OPTIONS];
 
   this.element_.id = "gamelist_lobby_" + this.id_;
   $(parentElem).append(this.element_);
@@ -241,14 +243,15 @@ cah.GameListLobby = function(parentElem, data) {
   $(".gamelist_lobby_join", this.element_).click(cah.bind(this, this.joinClick));
   $(".gamelist_lobby_spectate", this.element_).click(cah.bind(this, this.spectateClick));
   $(".gamelist_lobby_player_count", this.element_).text(data[cah.$.GameInfo.PLAYERS].length);
-  $(".gamelist_lobby_max_players", this.element_).text(data[cah.$.GameInfo.PLAYER_LIMIT]);
+  $(".gamelist_lobby_max_players", this.element_).text(options[cah.$.GameOptionData.PLAYER_LIMIT]);
   $(".gamelist_lobby_spectator_count", this.element_).text(data[cah.$.GameInfo.SPECTATORS].length);
-  $(".gamelist_lobby_max_spectators", this.element_).text(data[cah.$.GameInfo.SPECTATOR_LIMIT]);
-  $(".gamelist_lobby_goal", this.element_).text(data[cah.$.GameInfo.SCORE_LIMIT]);
+  $(".gamelist_lobby_max_spectators", this.element_).text(options[cah.$.GameOptionData.SPECTATOR_LIMIT]);
+  $(".gamelist_lobby_goal", this.element_).text(options[cah.$.GameOptionData.SCORE_LIMIT]);
+  var cardSets = options[cah.$.GameOptionData.CARD_SETS];
   var cardSetNames = [];
-  data[cah.$.GameInfo.CARD_SETS].sort();
-  for ( var key in data[cah.$.GameInfo.CARD_SETS]) {
-    var cardSetId = data[cah.$.GameInfo.CARD_SETS][key];
+  cardSets.sort();
+  for (var key in cardSets) {
+    var cardSetId = cardSets[key];
     cardSetNames.push(cah.CardSet.list[cardSetId].getName());
   }
   $(".gamelist_lobby_cardset", this.element_).html(cardSetNames.join(', '));
@@ -260,11 +263,10 @@ cah.GameListLobby = function(parentElem, data) {
   $(this.element_).attr(
       "aria-label",
       data[cah.$.GameInfo.HOST] + "'s game, with " + data[cah.$.GameInfo.PLAYERS].length + " of "
-          + data[cah.$.GameInfo.PLAYER_LIMIT] + " players, and "
-          + data[cah.$.GameInfo.SPECTATORS].length + " of " + data[cah.$.GameInfo.SPECTATOR_LIMIT]
-          + "spectators. " + statusMessage + ". Goal is " + data[cah.$.GameInfo.SCORE_LIMIT]
-          + " Awesome Points. Using " + cardSetNames.length + " card set"
-          + (cardSetNames.length == 1 ? "" : "s") + ". "
+          + options[cah.$.GameOptionData.PLAYER_LIMIT] + " players, and " + data[cah.$.GameInfo.SPECTATORS].length
+          + " of " + options[cah.$.GameOptionData.SPECTATOR_LIMIT] + "spectators. " + statusMessage + ". Goal is "
+          + options[cah.$.GameOptionData.SCORE_LIMIT] + " Awesome Points. Using " + cardSetNames.length
+          + " card set" + (cardSetNames.length == 1 ? "" : "s") + ". "
           + (data[cah.$.GameInfo.HAS_PASSWORD] ? "Has" : "Does not have") + " a password.");
 };
 

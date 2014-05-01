@@ -771,6 +771,7 @@ cah.Game.prototype.insertIntoDocument = function() {
  */
 cah.Game.prototype.updateGameStatus = function(data) {
   var gameInfo = data[cah.$.AjaxResponse.GAME_INFO];
+  var options = gameInfo[cah.$.AjaxResponse.GAME_OPTIONS];
   this.host_ = gameInfo[cah.$.GameInfo.HOST];
 
   if (this.host_ == cah.nickname && gameInfo[cah.$.GameInfo.STATE] == cah.$.GameState.LOBBY) {
@@ -791,22 +792,22 @@ cah.Game.prototype.updateGameStatus = function(data) {
     this.hideOptions_();
   }
 
-  $(".score_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.SCORE_LIMIT]);
-  $(".player_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.PLAYER_LIMIT]);
-  $(".spectator_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.SPECTATOR_LIMIT]);
-  $(".game_password", this.optionsElement_).val(gameInfo[cah.$.GameInfo.PASSWORD]);
-  if (gameInfo[cah.$.GameInfo.USE_TIMER]) {
+  $(".score_limit", this.optionsElement_).val(options[cah.$.GameOptionData.SCORE_LIMIT]);
+  $(".player_limit", this.optionsElement_).val(options[cah.$.GameOptionData.PLAYER_LIMIT]);
+  $(".spectator_limit", this.optionsElement_).val(options[cah.$.GameOptionData.SPECTATOR_LIMIT]);
+  $(".game_password", this.optionsElement_).val(options[cah.$.GameOptionData.PASSWORD]);
+  if (options[cah.$.GameOptionData.USE_TIMER]) {
     $(".use_timer", this.optionsElement_).attr("checked", "checked");
   } else {
     $(".use_timer", this.optionsElement_).removeAttr("checked");
   }
-  var cardSetIds = gameInfo[cah.$.GameInfo.CARD_SETS];// .split(',');
+  var cardSetIds = options[cah.$.GameOptionData.CARD_SETS];// .split(',');
   $(".card_set", this.optionsElement_).removeAttr("checked");
   for ( var key in cardSetIds) {
     var cardSetId = cardSetIds[key];
     $("#card_set_" + this.id_ + "_" + cardSetId, this.optionsElement_).attr("checked", "checked");
   }
-  $(".blanks_limit", this.optionsElement_).val(gameInfo[cah.$.GameInfo.BLANKS_LIMIT]);
+  $(".blanks_limit", this.optionsElement_).val(options[cah.$.GameOptionData.BLANKS_LIMIT]);
 
   var playerInfos = data[cah.$.AjaxResponse.PLAYER_INFO];
   for ( var index in playerInfos) {
@@ -1417,13 +1418,16 @@ cah.Game.prototype.optionChanged_ = function(e) {
   for ( var i = 0; i < selectedCardSets.length; i++) {
     cardSetIds.push(selectedCardSets[i].value);
   }
-  cah.Ajax.build(cah.$.AjaxOperation.CHANGE_GAME_OPTIONS).withGameId(this.id_).withScoreLimit(
-      $(".score_limit", this.optionsElement_).val()).withPlayerLimit(
-      $(".player_limit", this.optionsElement_).val()).withSpectatorLimit(
-      $(".spectator_limit", this.optionsElement_).val()).withCardSets(cardSetIds).withPassword(
-      $(".game_password", this.optionsElement_).val()).withBlanksLimit(
-      $(".blanks_limit", this.optionsElement_).val()).withUseTimer(
-      !!$('.use_timer', this.optionsElement_).attr('checked')).run();
+  var options = {};
+  options[cah.$.GameOptionData.CARD_SETS] = cardSetIds.join(',');
+  options[cah.$.GameOptionData.SCORE_LIMIT] = $(".score_limit", this.optionsElement_).val();
+  options[cah.$.GameOptionData.PLAYER_LIMIT] = $(".player_limit", this.optionsElement_).val();
+  options[cah.$.GameOptionData.SPECTATOR_LIMIT] = $(".spectator_limit", this.optionsElement_).val();
+  options[cah.$.GameOptionData.PASSWORD] = $(".game_password", this.optionsElement_).val();
+  options[cah.$.GameOptionData.BLANKS_LIMIT] = $(".blanks_limit", this.optionsElement_).val();
+  options[cah.$.GameOptionData.USE_TIMER] = !!$('.use_timer', this.optionsElement_).attr('checked');
+  
+  cah.Ajax.build(cah.$.AjaxOperation.CHANGE_GAME_OPTIONS).withGameId(this.id_).withGameOptions(options).run();
 };
 
 /**
