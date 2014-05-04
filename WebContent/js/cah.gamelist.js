@@ -55,7 +55,7 @@ cah.GameList = function() {
 
   $("#create_game").click(cah.bind(this, this.createGameClick_));
   $("#refresh_games").click(cah.bind(this, this.refreshGamesClick_));
-  $("#filter_games").keydown(cah.bind(this, this.filterGamesChange_));
+  $("#filter_games").keyup(cah.bind(this, this.filterGamesChange_));
 };
 
 $(document).ready(function() {
@@ -184,14 +184,18 @@ cah.GameList.prototype.joinGame = function(id) {
  * Sets the current game filter regular expression
  */
 cah.GameList.prototype.setFilter = function (filterRegExp) {
-  this.filter_ = new RegExp(filterRegExp || '.', 'i');
+  try {
+    this.filter_ = new RegExp(filterRegExp || '.', 'i');
+  } catch (err) {
+    //console.log('Invalid filter: ' + String(filterRegExp))
+  }
 };
 
 /**
  * Filters the visibility of the current game list by regular expression
  */
 cah.GameList.prototype.applyFilter = function (filterRegExp) {
-  if (filterRegExp) this.setFilter(filterRegExp);
+  if (filterRegExp || filterRegExp === '') this.setFilter(filterRegExp);
 
   var filter = this.filter_
     , gamelist = $('.gamelist_lobby').show();
