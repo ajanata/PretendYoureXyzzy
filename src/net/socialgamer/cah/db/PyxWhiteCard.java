@@ -23,15 +23,12 @@
 
 package net.socialgamer.cah.db;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import net.socialgamer.cah.Constants.WhiteCardData;
+import net.socialgamer.cah.data.WhiteCard;
 
 
 /**
@@ -41,7 +38,7 @@ import net.socialgamer.cah.Constants.WhiteCardData;
  */
 @Entity
 @Table(name = "white_cards")
-public class WhiteCard {
+public class PyxWhiteCard extends WhiteCard {
 
   @Id
   @GeneratedValue
@@ -51,6 +48,7 @@ public class WhiteCard {
 
   private String watermark;
 
+  @Override
   public int getId() {
     return id;
   }
@@ -62,6 +60,7 @@ public class WhiteCard {
   /**
    * @return Card text. HTML is allowed and entities are required.
    */
+  @Override
   public String getText() {
     return text;
   }
@@ -70,6 +69,7 @@ public class WhiteCard {
     this.text = text;
   }
 
+  @Override
   public String getWatermark() {
     return watermark == null ? "" : watermark;
   }
@@ -79,42 +79,7 @@ public class WhiteCard {
   }
 
   @Override
-  public String toString() {
-    return text + " (id:" + id + ", watermark:" + getWatermark() + ")";
-  }
-
-  @Override
-  public boolean equals(final Object other) {
-    if (!(other instanceof WhiteCard)) {
-      return false;
-    }
-    return ((WhiteCard) other).getId() == id;
-  }
-
-  @Override
-  public int hashCode() {
-    return id;
-  }
-
-  /**
-   * @return Client representation of this card.
-   */
-  public Map<WhiteCardData, Object> getClientData() {
-    final Map<WhiteCardData, Object> cardData = new HashMap<WhiteCardData, Object>();
-    cardData.put(WhiteCardData.ID, id);
-    cardData.put(WhiteCardData.TEXT, text);
-    cardData.put(WhiteCardData.WATERMARK, getWatermark());
-    return cardData;
-  }
-
-  /**
-   * @return Client representation of a blank White Card.
-   */
-  public static Map<WhiteCardData, Object> getBlankCardClientData() {
-    final Map<WhiteCardData, Object> cardData = new HashMap<WhiteCardData, Object>();
-    cardData.put(WhiteCardData.ID, -1);
-    cardData.put(WhiteCardData.TEXT, "");
-    cardData.put(WhiteCardData.WATERMARK, "");
-    return cardData;
+  public boolean isWriteIn() {
+    return false;
   }
 }

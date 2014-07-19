@@ -30,9 +30,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.socialgamer.cah.db.BlackCard;
-import net.socialgamer.cah.db.CardSet;
-
 
 /**
  * Deck of Black Cards.

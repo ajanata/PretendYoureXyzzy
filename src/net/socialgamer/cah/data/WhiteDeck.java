@@ -30,9 +30,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.socialgamer.cah.db.CardSet;
-import net.socialgamer.cah.db.WhiteCard;
-
 
 /**
  * Deck of White Cards.
@@ -55,7 +52,7 @@ public class WhiteDeck {
       allCards.addAll(cardSet.getWhiteCards());
     }
     deck = new ArrayList<WhiteCard>(allCards);
-    for (int i = 0; i < numBlanks; i++) {
+    for (int i = 0; i < numBlanks && i < GameOptions.MAX_BLANK_CARD_LIMIT; i++) {
       deck.add(createBlankCard());
     }
     Collections.shuffle(deck);
@@ -87,7 +84,8 @@ public class WhiteDeck {
   public synchronized void discard(final WhiteCard card) {
     if (card != null) {
       if (isBlankCard(card)) {
-        card.setText("____"); // clear any player text
+        // clear any player text
+        ((BlankWhiteCard) card).clear();
       }
       discard.add(card);
     }
@@ -108,10 +106,7 @@ public class WhiteDeck {
    * @return A newly created blank card.
    */
   private WhiteCard createBlankCard() {
-    final WhiteCard blank = new WhiteCard();
-    blank.setId(--lastBlankCardId);
-    blank.setText("____");
-    blank.setWatermark("____");
+    final WhiteCard blank = new BlankWhiteCard(--lastBlankCardId);
     return blank;
   }
 
@@ -123,6 +118,6 @@ public class WhiteDeck {
    * @return True if the card is a blank card.
    */
   public static boolean isBlankCard(final WhiteCard card) {
-    return card.getId() < -1;
+    return card instanceof BlankWhiteCard;
   }
 }

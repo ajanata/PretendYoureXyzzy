@@ -23,15 +23,12 @@
 
 package net.socialgamer.cah.db;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import net.socialgamer.cah.Constants.BlackCardData;
+import net.socialgamer.cah.data.BlackCard;
 
 
 /**
@@ -41,7 +38,7 @@ import net.socialgamer.cah.Constants.BlackCardData;
  */
 @Entity
 @Table(name = "black_cards")
-public class BlackCard {
+public class PyxBlackCard extends BlackCard {
 
   @Id
   @GeneratedValue
@@ -55,6 +52,7 @@ public class BlackCard {
 
   private String watermark;
 
+  @Override
   public int getId() {
     return id;
   }
@@ -66,6 +64,7 @@ public class BlackCard {
   /**
    * @return Card text. HTML is allowed and entities are required.
    */
+  @Override
   public String getText() {
     return text;
   }
@@ -74,6 +73,7 @@ public class BlackCard {
     this.text = text;
   }
 
+  @Override
   public int getDraw() {
     return draw;
   }
@@ -82,6 +82,7 @@ public class BlackCard {
     this.draw = draw;
   }
 
+  @Override
   public int getPick() {
     return pick;
   }
@@ -90,43 +91,12 @@ public class BlackCard {
     this.pick = pick;
   }
 
+  @Override
   public String getWatermark() {
     return watermark == null ? "" : watermark;
   }
 
   public void setWatermark(final String watermark) {
     this.watermark = watermark;
-  }
-
-  @Override
-  public String toString() {
-    return text + " (id:" + id + ", draw:" + draw + ", pick:" + pick + ", watermark:"
-        + getWatermark() + ")";
-  }
-
-  @Override
-  public boolean equals(final Object other) {
-    if (!(other instanceof BlackCard)) {
-      return false;
-    }
-    return ((BlackCard) other).getId() == id;
-  }
-
-  @Override
-  public int hashCode() {
-    return id;
-  }
-
-  /**
-   * @return Client representation of this card.
-   */
-  public Map<BlackCardData, Object> getClientData() {
-    final Map<BlackCardData, Object> cardData = new HashMap<BlackCardData, Object>();
-    cardData.put(BlackCardData.ID, id);
-    cardData.put(BlackCardData.TEXT, text);
-    cardData.put(BlackCardData.DRAW, draw);
-    cardData.put(BlackCardData.PICK, pick);
-    cardData.put(BlackCardData.WATERMARK, getWatermark());
-    return cardData;
   }
 }

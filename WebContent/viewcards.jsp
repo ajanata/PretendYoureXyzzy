@@ -37,13 +37,13 @@ Interface to view and search all existing cards and card sets.
 <%@ page import="com.google.inject.Injector" %>
 <%@ page import="net.socialgamer.cah.HibernateUtil" %>
 <%@ page import="net.socialgamer.cah.StartupUtils" %>
-<%@ page import="net.socialgamer.cah.db.BlackCard" %>
-<%@ page import="net.socialgamer.cah.db.CardSet" %>
-<%@ page import="net.socialgamer.cah.db.WhiteCard" %>
+<%@ page import="net.socialgamer.cah.db.PyxBlackCard" %>
+<%@ page import="net.socialgamer.cah.db.PyxCardSet" %>
+<%@ page import="net.socialgamer.cah.db.PyxWhiteCard" %>
 <%@ page import="org.hibernate.Session" %>
 <%@ page import="org.json.simple.JSONValue" %>
 <%
-Session hibernateSession = HibernateUtil.instance.sessionFactory.openSession();
+  Session hibernateSession = HibernateUtil.instance.sessionFactory.openSession();
 
 ServletContext servletContext = pageContext.getServletContext();
 Injector injector = (Injector) servletContext.getAttribute(StartupUtils.INJECTOR);
@@ -53,8 +53,8 @@ Properties props = injector.getInstance(Properties.class);
 try {
   // load from db
   @SuppressWarnings("unchecked")
-  List<CardSet> cardSets = hibernateSession
-      .createQuery(CardSet.getCardsetQuery(props))
+  List<PyxCardSet> cardSets = hibernateSession
+      .createQuery(PyxCardSet.getCardsetQuery(props))
       .setReadOnly(true)
       .list();
   
@@ -66,19 +66,19 @@ try {
   Map<Integer, List<Integer>> blackCardSets = new HashMap<Integer, List<Integer>>();
   
   // all of the cards that are actually in a card set
-  Set<WhiteCard> whiteCards = new HashSet<WhiteCard>();
-  Set<BlackCard> blackCards = new HashSet<BlackCard>();
+  Set<PyxWhiteCard> whiteCards = new HashSet<PyxWhiteCard>();
+  Set<PyxBlackCard> blackCards = new HashSet<PyxBlackCard>();
   
   Map<Integer, Object> cardSetsData = new HashMap<Integer, Object>();
   data.put("cardSets", cardSetsData);
-  for (CardSet cardSet: cardSets) {
+  for (PyxCardSet cardSet: cardSets) {
     Map<String, Object> cardSetData = new HashMap<String, Object>();
     cardSetData.put("name", cardSet.getName());
     cardSetData.put("id", cardSet.getId());
     cardSetData.put("description", cardSet.getDescription());
 
     List<Integer> whiteCardIds = new ArrayList<Integer>(cardSet.getWhiteCards().size());
-    for (WhiteCard whiteCard: cardSet.getWhiteCards()) {
+    for (PyxWhiteCard whiteCard: cardSet.getWhiteCards()) {
       whiteCardIds.add(whiteCard.getId());
       whiteCards.add(whiteCard);
       if (!whiteCardSets.containsKey(whiteCard.getId())) {
@@ -89,7 +89,7 @@ try {
     cardSetData.put("whiteCards", whiteCardIds);
 
     List<Integer> blackCardIds = new ArrayList<Integer>(cardSet.getBlackCards().size());
-    for (BlackCard blackCard: cardSet.getBlackCards()) {
+    for (PyxBlackCard blackCard: cardSet.getBlackCards()) {
       blackCardIds.add(blackCard.getId());
       blackCards.add(blackCard);
       if (!blackCardSets.containsKey(blackCard.getId())) {
@@ -104,7 +104,7 @@ try {
   
   Map<Integer, Object> blackCardsData = new HashMap<Integer, Object>();
   data.put("blackCards", blackCardsData);
-  for (BlackCard blackCard: blackCards) {
+  for (PyxBlackCard blackCard: blackCards) {
     Map<String, Object> blackCardData = new HashMap<String, Object>();
     
     blackCardData.put("text", blackCard.getText());
@@ -118,7 +118,7 @@ try {
   
   Map<Integer, Object> whiteCardsData = new HashMap<Integer, Object>();
   data.put("whiteCards", whiteCardsData);
-  for (WhiteCard whiteCard: whiteCards) {
+  for (PyxWhiteCard whiteCard: whiteCards) {
     Map<String, Object> whiteCardData = new HashMap<String, Object>();
     
     whiteCardData.put("text", whiteCard.getText());
@@ -127,7 +127,6 @@ try {
     
     whiteCardsData.put(whiteCard.getId(), whiteCardData);
   }
-  
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

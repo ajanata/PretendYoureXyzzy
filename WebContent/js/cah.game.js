@@ -430,6 +430,7 @@ cah.Game.prototype.dealtCards = function(cards) {
     var card = new cah.card.WhiteCard(true, thisCard[cah.$.WhiteCardData.ID]);
     card.setText(thisCard[cah.$.WhiteCardData.TEXT]);
     card.setWatermark(thisCard[cah.$.WhiteCardData.WATERMARK]);
+    card.setIsBlankCard(thisCard[cah.$.WhiteCardData.WRITE_IN]);
     this.dealtCard(card);
   }
 };
@@ -1426,8 +1427,9 @@ cah.Game.prototype.optionChanged_ = function(e) {
   options[cah.$.GameOptionData.PASSWORD] = $(".game_password", this.optionsElement_).val();
   options[cah.$.GameOptionData.BLANKS_LIMIT] = $(".blanks_limit", this.optionsElement_).val();
   options[cah.$.GameOptionData.USE_TIMER] = !!$('.use_timer', this.optionsElement_).attr('checked');
-  
-  cah.Ajax.build(cah.$.AjaxOperation.CHANGE_GAME_OPTIONS).withGameId(this.id_).withGameOptions(options).run();
+
+  cah.Ajax.build(cah.$.AjaxOperation.CHANGE_GAME_OPTIONS).withGameId(this.id_).withGameOptions(
+      options).run();
 };
 
 /**

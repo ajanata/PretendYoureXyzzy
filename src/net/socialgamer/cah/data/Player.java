@@ -26,7 +26,7 @@ package net.socialgamer.cah.data;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.socialgamer.cah.db.WhiteCard;
+import net.socialgamer.cah.data.WhiteCard;
 
 
 /**

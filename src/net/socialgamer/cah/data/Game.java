@@ -51,9 +51,6 @@ import net.socialgamer.cah.Constants.WhiteCardData;
 import net.socialgamer.cah.SafeTimerTask;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
-import net.socialgamer.cah.db.BlackCard;
-import net.socialgamer.cah.db.CardSet;
-import net.socialgamer.cah.db.WhiteCard;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -648,8 +645,8 @@ public class Game {
         try {
           session = sessionProvider.get();
           @SuppressWarnings("unchecked")
-          final List<CardSet> cardSets = session.createQuery("from CardSet where id in (:ids)")
-              .setParameterList("ids", options.cardSetIds).list();
+          final List<CardSet> cardSets = session.createQuery("from PyxCardSet where id in (:ids)")
+              .setParameterList("ids", options.getPyxCardSetIds()).list();
 
           blackDeck = new BlackDeck(cardSets);
           whiteDeck = new WhiteDeck(cardSets, options.blanksInDeck);
@@ -678,8 +675,8 @@ public class Game {
       try {
         session = sessionProvider.get();
         final Number baseDeckCount = (Number) session
-            .createQuery("select count(*) from CardSet where id in (:ids) and base_deck = true")
-            .setParameterList("ids", options.cardSetIds).uniqueResult();
+            .createQuery("select count(*) from PyxCardSet where id in (:ids) and base_deck = true")
+            .setParameterList("ids", options.getPyxCardSetIds()).uniqueResult();
 
         return baseDeckCount.intValue() > 0;
       } catch (final Exception e) {
@@ -1187,14 +1184,14 @@ public class Game {
       synchronized (playedCards) {
         final List<List<Map<WhiteCardData, Object>>> cardData =
             new ArrayList<List<Map<WhiteCardData, Object>>>(playedCards.size());
-        int blankCards = playedCards.size();
+        int faceDownCards = playedCards.size();
         if (playedCards.hasPlayer(player)) {
           cardData.add(getWhiteCardData(playedCards.getCards(player)));
-          blankCards--;
+          faceDownCards--;
         }
         // TODO make this figure out how many blank cards in each spot, for multi-play cards
-        while (blankCards-- > 0) {
-          cardData.add(Arrays.asList(WhiteCard.getBlankCardClientData()));
+        while (faceDownCards-- > 0) {
+          cardData.add(Arrays.asList(WhiteCard.getFaceDownCardClientData()));
         }
         return cardData;
       }
@@ -1310,7 +1307,7 @@ public class Game {
           if (card.getId() == cardId) {
             playCard = card;
             if (WhiteDeck.isBlankCard(card)) {
-              playCard.setText(cardText);
+              ((BlankWhiteCard) playCard).setText(cardText);
             }
             // remove the card from their hand. the client will also do so when we return
             // success, so no need to tell it to do so here.

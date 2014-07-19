@@ -30,16 +30,16 @@ Administration tools.
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="net.socialgamer.cah.HibernateUtil" %>
-<%@ page import="net.socialgamer.cah.db.BlackCard" %>
-<%@ page import="net.socialgamer.cah.db.CardSet" %>
-<%@ page import="net.socialgamer.cah.db.WhiteCard" %>
+<%@ page import="net.socialgamer.cah.db.PyxBlackCard" %>
+<%@ page import="net.socialgamer.cah.db.PyxCardSet" %>
+<%@ page import="net.socialgamer.cah.db.PyxWhiteCard" %>
 <%@ page import="net.socialgamer.cah.Constants" %>
 <%@ page import="net.socialgamer.cah.RequestWrapper" %>
 <%@ page import="org.apache.commons.lang3.StringEscapeUtils" %>
 <%@ page import="org.hibernate.Session" %>
 <%@ page import="org.hibernate.Transaction" %>
 <%
-RequestWrapper wrapper = new RequestWrapper(request);
+  RequestWrapper wrapper = new RequestWrapper(request);
 if (!Constants.ADMIN_IP_ADDRESSES.contains(wrapper.getRemoteAddr())) {
   response.sendError(403, "Access is restricted to known hosts");
   return;
@@ -52,10 +52,10 @@ Session hibernateSession = HibernateUtil.instance.sessionFactory.openSession();
 // cheap way to make sure we can close the hibernate session at the end of the page
 try {
   String editParam = request.getParameter("edit");
-  CardSet editCardSet = null;
+  PyxCardSet editCardSet = null;
   if (null != editParam) {
     try {
-      editCardSet = (CardSet)hibernateSession.load(CardSet.class, Integer.parseInt(editParam));
+      editCardSet = (PyxCardSet)hibernateSession.load(PyxCardSet.class, Integer.parseInt(editParam));
     } catch (NumberFormatException nfe) {
       messages.add("Unable to parse or locate requested card set to edit.");
     }
@@ -64,7 +64,7 @@ try {
   String deleteParam = request.getParameter("delete");
   if (null != deleteParam) {
     try {
-      editCardSet = (CardSet)hibernateSession.load(CardSet.class, Integer.parseInt(deleteParam));
+      editCardSet = (PyxCardSet)hibernateSession.load(PyxCardSet.class, Integer.parseInt(deleteParam));
       Transaction t = hibernateSession.beginTransaction();
       hibernateSession.delete(editCardSet);
       t.commit();
@@ -83,9 +83,9 @@ try {
     try {
       id = Integer.parseInt(idParam);
       if (-1 == id) {
-        editCardSet = new CardSet();
+        editCardSet = new PyxCardSet();
       } else {
-        editCardSet = (CardSet)hibernateSession.load(CardSet.class, id);
+        editCardSet = (PyxCardSet)hibernateSession.load(PyxCardSet.class, id);
       }
       if (null != editCardSet) {
         String nameParam = request.getParameter("cardSetName");
@@ -124,11 +124,11 @@ try {
             whiteCardIds.add(Integer.parseInt(wc));
           }
           @SuppressWarnings("unchecked")
-          List<BlackCard> realBlackCards = hibernateSession.createQuery(
+          List<PyxBlackCard> realBlackCards = hibernateSession.createQuery(
               "from BlackCard where id in (:ids)").setParameterList("ids", blackCardIds).
               setReadOnly(true).list();
           @SuppressWarnings("unchecked")
-          List<WhiteCard> realWhiteCards = hibernateSession.createQuery(
+          List<PyxWhiteCard> realWhiteCards = hibernateSession.createQuery(
               "from WhiteCard where id in (:ids)").setParameterList("ids", whiteCardIds).
               setReadOnly(true).list();
           editCardSet.getBlackCards().clear();
@@ -151,17 +151,16 @@ try {
   }
   
   @SuppressWarnings("unchecked")
-  List<CardSet> cardSets = hibernateSession.createQuery("from CardSet order by weight, id")
+  List<PyxCardSet> cardSets = hibernateSession.createQuery("from CardSet order by weight, id")
       .setReadOnly(true).list();
   
   @SuppressWarnings("unchecked")
-  List<BlackCard> blackCards = hibernateSession.createQuery("from BlackCard order by id")
+  List<PyxBlackCard> blackCards = hibernateSession.createQuery("from BlackCard order by id")
       .setReadOnly(true).list();
   
   @SuppressWarnings("unchecked")
-  List<WhiteCard> whiteCards = hibernateSession.createQuery("from WhiteCard order by id")
+  List<PyxWhiteCard> whiteCards = hibernateSession.createQuery("from WhiteCard order by id")
       .setReadOnly(true).list();
-
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -228,9 +227,13 @@ select {
 </style>
 </head>
 <body>
-<% for (String message : messages) { %>
-  <h3><%= message %></h3>
-<% } %>
+<%
+  for (String message : messages) {
+%>
+  <h3><%=message%></h3>
+<%
+  }
+%>
 <h2>Existing card sets</h2>
 <table style="1px solid black">
   <thead>
@@ -242,56 +245,70 @@ select {
     </tr>
   </thead>
   <tbody>
-    <% for (CardSet cardSet : cardSets) { %>
+    <%
+      for (PyxCardSet cardSet : cardSets) {
+    %>
       <tr>
-        <td><%= cardSet.getName() %></td>
-        <td><a href="?delete=<%= cardSet.getId() %>" onclick="return confirm('Are you sure?')">Delete</a></td>
-        <td><a href="?edit=<%= cardSet.getId() %>">Edit</a></td>
-        <td><%= cardSet.getWeight() %></td>
+        <td><%=cardSet.getName()%></td>
+        <td><a href="?delete=<%=cardSet.getId()%>" onclick="return confirm('Are you sure?')">Delete</a></td>
+        <td><a href="?edit=<%=cardSet.getId()%>">Edit</a></td>
+        <td><%=cardSet.getWeight()%></td>
       </tr>
-    <% } %>
+    <%
+      }
+    %>
   </tbody>
 </table>
 <a href="cardsets.jsp">Create New</a>
 <form action="cardsets.jsp" method="post" id="editForm">
   <input type="hidden" name="action" value="edit" />
   <input type="hidden" name="cardSetId"
-      value="<%= editCardSet != null ? editCardSet.getId() : -1 %>" />
+      value="<%=editCardSet != null ? editCardSet.getId() : -1%>" />
   <h2>
-    <% if (editCardSet != null) { %>
-      Editing <span style="text-decoration:italic"><%= editCardSet.getName() %></span>
-    <% } else { %>
+    <%
+      if (editCardSet != null) {
+    %>
+      Editing <span style="text-decoration:italic"><%=editCardSet.getName()%></span>
+    <%
+      } else {
+    %>
       Creating new card set
-    <% } %>
+    <%
+      }
+    %>
   </h2>
   <label for="cardSetName">Name:</label>
   <input type="text" name="cardSetName" id="cardSetName" size="50"
-      value="<%= editCardSet != null ? StringEscapeUtils.escapeXml(editCardSet.getName()) : "" %>" />
+      value="<%=editCardSet != null ? StringEscapeUtils.escapeXml(editCardSet.getName()) : ""%>" />
   <br/>
   <label for="cardSetDescription">Description:</label>
   <input type="text" name="cardSetDescription" id="cardSetDescription" size="50"
-      value="<%= editCardSet != null ? StringEscapeUtils.escapeXml(editCardSet.getDescription()) : "" %>" />
+      value="<%=editCardSet != null ? StringEscapeUtils.escapeXml(editCardSet.getDescription()) : ""%>" />
   <br/>
   <label for="cardSetWeight">Weight:</label>
   <input type="text" name="cardSetWeight" id="cardSetWeight" size="4"
-      value="<%= editCardSet != null ? editCardSet.getWeight() : "1000" %>" />
+      value="<%=editCardSet != null ? editCardSet.getWeight() : "1000"%>" />
   <br/>
   <label for="active">Active</label>
   <input type="checkbox" name="active" id="active"
-      <%= editCardSet != null && editCardSet.isActive() ? "checked='checked'" : "" %> />
+      <%=editCardSet != null && editCardSet.isActive() ? "checked='checked'" : ""%> />
   <br/>
   <label for="baseDeck" title="This deck is sufficient for playing the game.">Base Deck</label>
   <input type="checkbox" name="baseDeck" id="baseDeck"
-      <%= editCardSet != null && editCardSet.isBaseDeck() ? "checked='checked'" : "" %> />
+      <%=editCardSet != null && editCardSet.isBaseDeck() ? "checked='checked'" : ""%> />
   <br/>
   Available Black Cards:
   <br/>
   <select id="allBlackCards" multiple="multiple" style="height:300px">
-    <% for (BlackCard blackCard : blackCards) { %>
-      <option value="<%= blackCard.getId() %>">
-        <%= StringEscapeUtils.escapeXml(blackCard.toString()) %>
+    <%
+      for (PyxBlackCard blackCard : blackCards) {
+    %>
+      <option value="<%=blackCard.getId()%>">
+        <%=StringEscapeUtils.escapeXml(blackCard.toString())%>
       </option>
-    <% } %>
+    <%
+      }
+    %>
   </select>
   <br/>
   <input type="button" id="addBlackCards" value="Add Black Cards" />
@@ -300,23 +317,35 @@ select {
   Black Cards in Card Set:
   <br/>
   <select id="selectedBlackCards" name="selectedBlackCards" multiple="multiple">
-    <% if (editCardSet != null) { %>
-      <% for (BlackCard blackCard : editCardSet.getBlackCards()) { %>
-        <option value="<%= blackCard.getId() %>" id="bc_<%= blackCard.getId() %>">
-          <%= StringEscapeUtils.escapeXml(blackCard.toString()) %>
+    <%
+      if (editCardSet != null) {
+    %>
+      <%
+        for (PyxBlackCard blackCard : editCardSet.getBlackCards()) {
+      %>
+        <option value="<%=blackCard.getId()%>" id="bc_<%=blackCard.getId()%>">
+          <%=StringEscapeUtils.escapeXml(blackCard.toString())%>
         </option>
-      <% } %>
-    <% } %>
+      <%
+        }
+      %>
+    <%
+      }
+    %>
   </select>
   <br/>
   Available White Cards:
   <br/>
   <select id="allWhiteCards" multiple="multiple" style="height:300px">
-    <% for (WhiteCard whiteCard : whiteCards) { %>
-      <option value="<%= whiteCard.getId() %>">
-        <%= StringEscapeUtils.escapeXml(whiteCard.toString()) %>
+    <%
+      for (PyxWhiteCard whiteCard : whiteCards) {
+    %>
+      <option value="<%=whiteCard.getId()%>">
+        <%=StringEscapeUtils.escapeXml(whiteCard.toString())%>
       </option>
-    <% } %>
+    <%
+      }
+    %>
   </select>
   <br/>
   <input type="button" id="addWhiteCards" value="Add White Cards" />
@@ -325,8 +354,12 @@ select {
   White Cards in Card Set:
   <br/>
   <select id="selectedWhiteCards" name="selectedWhiteCards" multiple="multiple">
-    <% if (editCardSet != null) { %>
-      <% for (WhiteCard whiteCard : editCardSet.getWhiteCards()) { %>
+    <%
+      if (editCardSet != null) {
+    %>
+      <%
+        for (PyxWhiteCard whiteCard : editCardSet.getWhiteCards()) {
+      %>
         <option value="<%= whiteCard.getId() %>" id="wc_<%= whiteCard.getId() %>">
           <%= StringEscapeUtils.escapeXml(whiteCard.toString()) %>
         </option>

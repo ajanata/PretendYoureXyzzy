@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.socialgamer.cah.db.WhiteCard;
+import net.socialgamer.cah.data.WhiteCard;
 
 
 /**

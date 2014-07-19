@@ -134,4 +134,16 @@ public class GameOptions {
     return options;
   }
 
+  /**
+   * @return Selected card set IDs which are local to PYX, for querying the database.
+   */
+  public Set<Integer> getPyxCardSetIds() {
+    final Set<Integer> pyxCardSetIds = new HashSet<Integer>();
+    for (final Integer cardSetId : cardSetIds) {
+      if (cardSetId > 0) {
+        pyxCardSetIds.add(cardSetId);
+      }
+    }
+    return pyxCardSetIds;
+  }
 }

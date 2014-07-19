@@ -332,8 +332,25 @@ cah.card.BlackCard.prototype.updateCardInfo_ = function() {
  */
 cah.card.WhiteCard = function(opt_faceUp, opt_id) {
   cah.card.BaseCard.call(this, opt_faceUp, opt_id);
+
+  /**
+   * Whether this is a fill-in blank card or not.
+   * 
+   * @type {boolean}
+   */
+  this.isBlankCard_ = false;
 };
 cah.inherits(cah.card.WhiteCard, cah.card.BaseCard);
+
+/**
+ * Set this card's flag indicating if it is a fill-in blank card.
+ * 
+ * @param {boolean}
+ *          blank Whether this is a fill-in blank card or not.
+ */
+cah.card.WhiteCard.prototype.setIsBlankCard = function(blank) {
+  this.isBlankCard_ = blank;
+};
 
 /**
  * Checks if this is a blank card.
@@ -341,7 +358,7 @@ cah.inherits(cah.card.WhiteCard, cah.card.BaseCard);
  * @returns True if this is a blank card.
  */
 cah.card.WhiteCard.prototype.isBlankCard = function() {
-  return this.getServerId() < -1;
+  return this.isBlankCard_;
 };
 
 /**

@@ -488,7 +488,8 @@ public class Constants {
     @DuplicationAllowed
     ID(AjaxRequest.CARD_ID),
     TEXT("T"),
-    WATERMARK("W");
+    WATERMARK("W"),
+    WRITE_IN("wi");
 
     private final String key;
 

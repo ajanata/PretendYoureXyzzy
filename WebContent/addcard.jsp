@@ -28,14 +28,14 @@ Administration tools.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="net.socialgamer.cah.HibernateUtil" %>
-<%@ page import="net.socialgamer.cah.db.BlackCard" %>
-<%@ page import="net.socialgamer.cah.db.WhiteCard" %>
+<%@ page import="net.socialgamer.cah.db.PyxBlackCard" %>
+<%@ page import="net.socialgamer.cah.db.PyxWhiteCard" %>
 <%@ page import="net.socialgamer.cah.Constants" %>
 <%@ page import="net.socialgamer.cah.RequestWrapper" %>
 <%@ page import="org.hibernate.Session" %>
 <%@ page import="org.hibernate.Transaction" %>
 <%
-RequestWrapper wrapper = new RequestWrapper(request);
+  RequestWrapper wrapper = new RequestWrapper(request);
 if (!Constants.ADMIN_IP_ADDRESSES.contains(wrapper.getRemoteAddr())) {
   response.sendError(403, "Access is restricted to known hosts");
   return;
@@ -71,7 +71,7 @@ if (color != null) {
         final Session s = HibernateUtil.instance.sessionFactory.openSession();
         final Transaction transaction = s.beginTransaction();
         transaction.begin();
-        final BlackCard card = new BlackCard();
+        final PyxBlackCard card = new PyxBlackCard();
         card.setText(text);
         card.setPick(pick);
         card.setDraw(draw);
@@ -92,7 +92,7 @@ if (color != null) {
       final Session s = HibernateUtil.instance.sessionFactory.openSession();
       final Transaction transaction = s.beginTransaction();
       transaction.begin();
-      final WhiteCard card = new WhiteCard();
+      final PyxWhiteCard card = new PyxWhiteCard();
       card.setText(text);
       card.setWatermark(watermark);
       s.save(card);
@@ -100,10 +100,9 @@ if (color != null) {
       s.close();
       status = "Saved '" + text + "'.";
       field = "white";
-    }    
+    }
   }
 }
-
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

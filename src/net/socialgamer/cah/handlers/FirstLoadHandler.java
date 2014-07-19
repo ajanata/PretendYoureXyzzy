@@ -39,7 +39,7 @@ import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.User;
-import net.socialgamer.cah.db.CardSet;
+import net.socialgamer.cah.db.PyxCardSet;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -93,13 +93,13 @@ public class FirstLoadHandler extends Handler {
       // get the list of card sets
       final Transaction transaction = hibernateSession.beginTransaction();
       @SuppressWarnings("unchecked")
-      final List<CardSet> cardSets = hibernateSession
-          .createQuery(CardSet.getCardsetQuery(properties))
+      final List<PyxCardSet> cardSets = hibernateSession
+          .createQuery(PyxCardSet.getCardsetQuery(properties))
           .setReadOnly(true)
           .list();
       final List<Map<CardSetData, Object>> cardSetsData =
           new ArrayList<Map<CardSetData, Object>>(cardSets.size());
-      for (final CardSet cardSet : cardSets) {
+      for (final PyxCardSet cardSet : cardSets) {
         cardSetsData.add(cardSet.getClientMetadata(hibernateSession));
       }
       ret.put(AjaxResponse.CARD_SETS, cardSetsData);

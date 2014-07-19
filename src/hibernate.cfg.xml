@@ -14,8 +14,8 @@
         <property name="show_sql">false</property>
         <property name="format_sql">false</property>
         
-        <mapping class="net.socialgamer.cah.db.BlackCard" />
-        <mapping class="net.socialgamer.cah.db.WhiteCard" />
-        <mapping class="net.socialgamer.cah.db.CardSet" />
+        <mapping class="net.socialgamer.cah.db.PyxBlackCard" />
+        <mapping class="net.socialgamer.cah.db.PyxWhiteCard" />
+        <mapping class="net.socialgamer.cah.db.PyxCardSet" />
     </session-factory>
 </hibernate-configuration>
