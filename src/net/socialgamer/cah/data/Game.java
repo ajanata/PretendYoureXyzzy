@@ -652,7 +652,7 @@ public class Game {
               .setParameterList("ids", options.cardSetIds).list();
 
           blackDeck = new BlackDeck(cardSets);
-          whiteDeck = new WhiteDeck(cardSets, blanksInDeck);
+          whiteDeck = new WhiteDeck(cardSets, options.blanksInDeck);
         } catch (final Exception e) {
           logger.error(String.format("Unable to load cards to start game %d", id), e);
           return false;
