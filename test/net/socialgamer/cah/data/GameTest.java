@@ -61,7 +61,7 @@ public class GameTest {
   public void setUp() throws Exception {
     cuMock = createMock(ConnectedUsers.class);
     gmMock = createMock(GameManager.class);
-    game = new Game(0, cuMock, gmMock, timer, null);
+    game = new Game(0, cuMock, gmMock, timer, null, null);
   }
 
   @SuppressWarnings("unchecked")

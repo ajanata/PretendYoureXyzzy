@@ -33,6 +33,9 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
+import net.socialgamer.cah.cardcast.CardcastModule;
+import net.socialgamer.cah.cardcast.CardcastService;
+
 import org.apache.log4j.PropertyConfigurator;
 
 import com.google.inject.Guice;
@@ -108,6 +111,7 @@ public class StartupUtils extends GuiceServletContextListener {
 
     reconfigureLogging(contextEvent.getServletContext());
     reloadProperties(contextEvent.getServletContext());
+    CardcastService.hackSslVerifier();
   }
 
   public static void reloadProperties(final ServletContext context) {
@@ -130,6 +134,6 @@ public class StartupUtils extends GuiceServletContextListener {
 
   @Override
   protected Injector getInjector() {
-    return Guice.createInjector(new CahModule());
+    return Guice.createInjector(new CahModule(), new CardcastModule());
   }
 }

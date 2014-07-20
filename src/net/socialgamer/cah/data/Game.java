@@ -49,6 +49,7 @@ import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.WhiteCardData;
 import net.socialgamer.cah.SafeTimerTask;
+import net.socialgamer.cah.cardcast.CardcastService;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
@@ -144,6 +145,7 @@ public class Game {
   private final Object roundTimerLock = new Object();
   private volatile ScheduledFuture<?> lastScheduledFuture;
   private final ScheduledThreadPoolExecutor globalTimer;
+  private final Provider<CardcastService> cardcastServiceProvider;
 
   /**
    * Create a new game.
@@ -161,12 +163,14 @@ public class Game {
   @Inject
   public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
       final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer,
-      final Provider<Session> sessionProvider) {
+      final Provider<Session> sessionProvider,
+      final Provider<CardcastService> cardcastServiceProvider) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
     this.globalTimer = globalTimer;
     this.sessionProvider = sessionProvider;
+    this.cardcastServiceProvider = cardcastServiceProvider;
 
     state = GameState.LOBBY;
   }
@@ -647,6 +651,9 @@ public class Game {
           @SuppressWarnings("unchecked")
           final List<CardSet> cardSets = session.createQuery("from PyxCardSet where id in (:ids)")
               .setParameterList("ids", options.getPyxCardSetIds()).list();
+
+          // FIXME hardcode hack for testing GBTXA
+          cardSets.add(cardcastServiceProvider.get().loadSet("GBTXA"));
 
           blackDeck = new BlackDeck(cardSets);
           whiteDeck = new WhiteDeck(cardSets, options.blanksInDeck);
