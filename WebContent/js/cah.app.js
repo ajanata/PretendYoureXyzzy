@@ -193,6 +193,29 @@ function chatsubmit_click(game_id, parent_element) {
       case 'names':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.NAMES);
         break;
+      case 'addcardcast':
+        if (game_id !== null) {
+          ajax = cah.Ajax.build(cah.$.AjaxOperation.CARDCAST_ADD_CARDSET).withCardcastId(
+              text.split(' ')[0]).withGameId(game_id);
+        } else {
+          cah.log.error("This command only works in a game.");
+        }
+        break;
+      case 'removecardcast':
+        if (game_id !== null) {
+          ajax = cah.Ajax.build(cah.$.AjaxOperation.CARDCAST_REMOVE_CARDSET).withCardcastId(
+              text.split(' ')[0]).withGameId(game_id);
+        } else {
+          cah.log.error("This command only works in a game.");
+        }
+        break;
+      case 'listcardcast':
+        if (game_id !== null) {
+          ajax = cah.Ajax.build(cah.$.AjaxOperation.CARDCAST_LIST_CARDSETS).withGameId(game_id);
+        } else {
+          cah.log.error("This command only works in a game.");
+        }
+        break;
       default:
         cah.log.error("Invalid command.");
     }

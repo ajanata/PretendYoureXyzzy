@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
  *   and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
  *   conditions and the following disclaimer in the documentation and/or other materials provided
  *   with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -32,12 +32,12 @@ import java.util.Set;
 /**
  * Constants needed on both the CAH server and client. This file is examined with reflection to
  * produce a Javascript version for the client to use.
- * 
+ *
  * All of the enums in here take a string in their constructor to define the over-the-wire value to
  * be used to represent that enum value. This allows for verbose names while debugging, and short
  * names to reduce traffic and latency, by only having to change it in one place for both the server
  * and client.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class Constants {
@@ -52,9 +52,9 @@ public class Constants {
       add("0:0:0:0:0:0:0:1");
       add("127.0.0.1");
       // ajanata
-      add("98.248.33.90");
+      add("64.13.172.41");
       // vsTerminus
-      add("207.161.39.198");
+      add("207.161.130.75");
     }
   };
 
@@ -66,7 +66,7 @@ public class Constants {
 
   /**
    * Enums that implement this interface have a user-visible string associated with them.
-   * 
+   *
    * There presently is not support for localization, but the name fits.
    */
   public interface Localizable {
@@ -78,7 +78,7 @@ public class Constants {
 
   /**
    * Enums that implement this interface have two user-visible strings associated with them.
-   * 
+   *
    * There presently is not support for localization, but the name fits.
    */
   public interface DoubleLocalizable {
@@ -132,7 +132,7 @@ public class Constants {
 
   /**
    * The next thing the client should do during reconnect phase.
-   * 
+   *
    * Leaving these as longer strings as they are only used once per client.
    */
   public enum ReconnectNextAction {
@@ -164,6 +164,9 @@ public class Constants {
   public enum AjaxOperation {
     ADMIN_SET_VERBOSE_LOG("svl"),
     BAN("b"),
+    CARDCAST_ADD_CARDSET("cac"),
+    CARDCAST_LIST_CARDSETS("clc"),
+    CARDCAST_REMOVE_CARDSET("crc"),
     CHANGE_GAME_OPTIONS("cgo"),
     CHAT("c"),
     CREATE_GAME("cg"),
@@ -208,6 +211,7 @@ public class Constants {
    */
   public enum AjaxRequest {
     CARD_ID("cid"),
+    CARDCAST_ID("cci"),
     EMOTE("me"),
     GAME_ID("gid"),
     GAME_OPTIONS("go"),
@@ -292,6 +296,9 @@ public class Constants {
     @DuplicationAllowed
     BANNED(DisconnectReason.BANNED, "Banned."),
     CANNOT_JOIN_ANOTHER_GAME("cjag", "You cannot join another game."),
+    CARDCAST_CANNOT_FIND("ccf", "Cannot find Cardcast deck with given ID. If you just added this"
+        + " deck to Cardcast, wait a few minutes and try again."),
+    CARDCAST_INVALID_ID("cii", "Invalid Cardcast ID. Must be exactly 5 characters."),
     DO_NOT_HAVE_CARD("dnhc", "You don't have that card."),
     GAME_FULL("gf", "That game is full. Join another."),
     INVALID_CARD("ic", "Invalid card specified."),
@@ -369,6 +376,10 @@ public class Constants {
     @DuplicationAllowed
     BANNED(DisconnectReason.BANNED),
     @DuplicationAllowed
+    CARDCAST_ADD_CARDSET(AjaxOperation.CARDCAST_ADD_CARDSET),
+    @DuplicationAllowed
+    CARDCAST_REMOVE_CARDSET(AjaxOperation.CARDCAST_REMOVE_CARDSET),
+    @DuplicationAllowed
     CHAT(AjaxOperation.CHAT),
     GAME_BLACK_RESHUFFLE("gbr"),
     GAME_JUDGE_LEFT("gjl"),
@@ -420,6 +431,7 @@ public class Constants {
   public enum LongPollResponse implements ReturnableData {
     @DuplicationAllowed
     BLACK_CARD(AjaxResponse.BLACK_CARD),
+    CARDCAST_DECK_INFO("cdi"),
     @DuplicationAllowed
     EMOTE(AjaxRequest.EMOTE),
     @DuplicationAllowed

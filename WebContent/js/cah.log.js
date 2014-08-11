@@ -68,8 +68,10 @@ cah.log.status = function(text, opt_class) {
  *          escaped automatically.
  * @param {string}
  *          opt_class Optional CSS class to use for this message.
+ * @param {boolean}
+ *          opt_allow_html Allow HTML to be used.
  */
-cah.log.status_with_game = function(game_or_id, text, opt_class) {
+cah.log.status_with_game = function(game_or_id, text, opt_class, opt_allow_html) {
   var logElement;
   if (game_or_id === null) {
     logElement = cah.log.log;
@@ -88,7 +90,12 @@ cah.log.status_with_game = function(game_or_id, text, opt_class) {
       .prop("scrollTop")) <= 5;
 
   var node = $("<span></span><br/>");
-  $(node[0]).text("[" + new Date().toLocaleTimeString() + "] " + text + "\n");
+  var full_msg = "[" + new Date().toLocaleTimeString() + "] " + text + "\n";
+  if (opt_allow_html) {
+    $(node[0]).html(full_msg);
+  } else {
+    $(node[0]).text(full_msg);
+  }
   if (opt_class) {
     $(node).addClass(opt_class);
   }

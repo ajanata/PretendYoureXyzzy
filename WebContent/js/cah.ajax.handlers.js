@@ -257,10 +257,27 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.BAN] = function(data) {
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.SCORE] = function(data, req) {
   var gameId = req[cah.$.AjaxRequest.GAME_ID];
   var info = data[cah.$.AjaxResponse.PLAYER_INFO];
-  var msg = info[cah.$.GamePlayerInfo.NAME] + " has " + info[cah.$.GamePlayerInfo.SCORE] + " Awesome Points.";
+  var msg = info[cah.$.GamePlayerInfo.NAME] + " has " + info[cah.$.GamePlayerInfo.SCORE]
+      + " Awesome Points.";
   if (gameId) {
     cah.log.status_with_game(gameId, msg);
   } else {
     cah.log.status(msg);
+  }
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CARDCAST_ADD_CARDSET] = function(data) {
+  // pass
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CARDCAST_REMOVE_CARDSET] = function(data) {
+  // pass
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CARDCAST_LIST_CARDSETS] = function(data, req) {
+  var gameId = req[cah.$.AjaxRequest.GAME_ID];
+  var game = cah.currentGames[gameId];
+  if (game) {
+    game.listCardcastDecks(data[cah.$.AjaxResponse.CARD_SETS]);
   }
 };

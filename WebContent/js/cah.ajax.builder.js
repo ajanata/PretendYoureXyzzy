@@ -178,6 +178,17 @@ cah.ajax.Builder.prototype.withEmote = function(emote) {
 };
 
 /**
+ * @param {string}
+ *          id The Cardcast ID of the deck to add.
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withCardcastId = function(id) {
+  this.assertNotExecuted_();
+  this.data[cah.$.AjaxRequest.CARDCAST_ID] = id;
+  return this;
+};
+
+/**
  * Assert that the request from this builder has not already run. Throws an exception if it has.
  * 
  * @private

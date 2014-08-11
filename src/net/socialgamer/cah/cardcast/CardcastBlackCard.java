@@ -9,12 +9,15 @@ public class CardcastBlackCard extends BlackCard {
   private final String text;
   private final int draw;
   private final int pick;
+  private final String deckId;
 
-  public CardcastBlackCard(final int id, final String text, final int draw, final int pick) {
+  public CardcastBlackCard(final int id, final String text, final int draw, final int pick,
+      final String deckId) {
     this.id = id;
     this.text = text;
     this.draw = draw;
     this.pick = pick;
+    this.deckId = deckId;
   }
 
   @Override
@@ -29,7 +32,7 @@ public class CardcastBlackCard extends BlackCard {
 
   @Override
   public String getWatermark() {
-    return "CC";
+    return deckId;
   }
 
   @Override

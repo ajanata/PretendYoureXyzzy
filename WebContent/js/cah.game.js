@@ -325,6 +325,7 @@ cah.Game = function(id) {
 cah.Game.joinGame = function(gameId) {
   cah.Ajax.build(cah.$.AjaxOperation.GET_GAME_INFO).withGameId(gameId).run();
   cah.Ajax.build(cah.$.AjaxOperation.GET_CARDS).withGameId(gameId).run();
+  cah.Ajax.build(cah.$.AjaxOperation.CARDCAST_LIST_CARDSETS).withGameId(gameId).run();
   cah.GameList.instance.hide();
   var game = new cah.Game(gameId);
   cah.currentGames[gameId] = game;
@@ -489,7 +490,7 @@ cah.Game.prototype.removeCardFromHand = function(card) {
  */
 cah.Game.prototype.removeAllCards = function() {
   var handCount = this.hand_.length;
-  for ( var i = 0; i < handCount; i++) {
+  for (var i = 0; i < handCount; i++) {
     this.removeCardFromHand(this.hand_[0]);
   }
   this.handSelectedCard_ = null;
@@ -762,6 +763,57 @@ cah.Game.prototype.insertIntoDocument = function() {
   linkToChatArea.click();
   this.windowResize_();
   // TODO display a loading animation
+};
+
+/**
+ * Display a message that a Cardcast deck has been added to the game.
+ * 
+ * @param {object}
+ *          data Payload from server.
+ */
+cah.Game.prototype.addCardcastDeck = function(data) {
+  this.displayCardcastDeckMessage_(data[cah.$.LongPollResponse.CARDCAST_DECK_INFO], "Added");
+};
+
+/**
+ * Display a message that a Cardcast deck has been removed from the game.
+ * 
+ * @param {object}
+ *          data Payload from server.
+ */
+cah.Game.prototype.removeCardcastDeck = function(data) {
+  this.displayCardcastDeckMessage_(data[cah.$.LongPollResponse.CARDCAST_DECK_INFO], "Removed");
+};
+
+/**
+ * Display a list of currently in-use Cardcast decks.
+ * 
+ * @param {array}
+ *          data Array of CardSetDatas.
+ */
+cah.Game.prototype.listCardcastDecks = function(cardSets) {
+  for ( var key in cardSets) {
+    var cardSetData = cardSets[key];
+    this.displayCardcastDeckMessage_(cardSetData, "In use");
+  }
+};
+
+/**
+ * Display a message about a Cardcast deck.
+ * 
+ * @param {object}
+ *          deckInfo The CardSetData of the deck.
+ * @param {string}
+ *          verb Verb to display at the beginning of the message: "Added", "Removed", "In use", etc.
+ * @private
+ */
+cah.Game.prototype.displayCardcastDeckMessage_ = function(deckInfo, verb) {
+  var code = (-1 * deckInfo[cah.$.CardSetData.ID]).toString(36).toUpperCase();
+  var str = verb + ": Cardcast deck '" + deckInfo[cah.$.CardSetData.CARD_SET_NAME]
+      + "' (code: <a target='_blank' href='http://www.cardcastgame.com/browse/deck/" + code + "'> "
+      + code + "</a>), with " + deckInfo[cah.$.CardSetData.BLACK_CARDS_IN_DECK]
+      + " black cards and " + deckInfo[cah.$.CardSetData.WHITE_CARDS_IN_DECK] + " white cards.";
+  cah.log.status_with_game(this, str, undefined, true);
 };
 
 /**
@@ -1416,7 +1468,7 @@ cah.Game.prototype.optionChanged_ = function(e) {
 
   var selectedCardSets = $(".card_sets :checked", this.optionsElement_);
   var cardSetIds = [];
-  for ( var i = 0; i < selectedCardSets.length; i++) {
+  for (var i = 0; i < selectedCardSets.length; i++) {
     cardSetIds.push(selectedCardSets[i].value);
   }
   var options = {};

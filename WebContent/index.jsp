@@ -54,6 +54,17 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>11 August 2014:<ul>
+    <li>Loading decks from <a href="http://www.cardcastgame.com/">Cardcast</a> is now supported in a
+    preview release. See <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Cardcast">the
+    wiki</a> for instructions. A better UI will hopefully happen before too long, but you can see
+    how long it took to get any sort of custom deck loading implemented...</li>
+    <li>Please go make your own card sets there! It's a really cool site.</li>
+    <li><strong>If you submitted a card set which is currently hosted locally on PYX, please add it
+    to Cardcast and let me know when you have done so, so that I may remove it from the local list
+    to de-clutter the page.</strong> I will list Cardcast codes for previously-hosted decks for a
+    period of time so that users may continue to find them.</li>
+  </ul></li>
   <li>7 April 2014:<ul>
     <li>Exploits avoiding the maximum limits for game options have been fixed. No more games with
     9001 blank white cards.</li>

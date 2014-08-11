@@ -86,19 +86,17 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 7 April 2014:</p>
+  <p tabindex="0">Most recent update: 11 August 2014:</p>
   <ul>
-    <li>Exploits avoiding the maximum limits for game options have been fixed. No more games with
-    9001 blank white cards.</li>
-    <li>Some minor bugfixes, including one which should prevent the entire server from dying if a
-    single background task gets stuck.</li>
-    <li>Some minor performance improvements.</li>
-    <li><a href="http://houseofcardsagainsthumanity.com/">House of Cards Against Humanity</a> is now
-    available.</li>
-    <li><strong>No further custom card sets will be accepted.</strong> Minor updates to existing
-    ones may still be submitted, but I do not guarantee I will get to it in a timely manner. It is
-    taking too much of my time to administer the custom cards sets; I'd rather focus the time on
-    implementing a way for players to manage card sets in the game by themselves.</li>
+    <li>Loading decks from <a href="http://www.cardcastgame.com/">Cardcast</a> is now supported in a
+    preview release. See <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Cardcast">the
+    wiki</a> for instructions. A better UI will hopefully happen before too long, but you can see
+    how long it took to get any sort of custom deck loading implemented...</li>
+    <li>Please go make your own card sets there! It's a really cool site.</li>
+    <li><strong>If you submitted a card set which is currently hosted locally on PYX, please add it
+    to Cardcast and let me know when you have done so, so that I may remove it from the local list
+    to de-clutter the page.</strong> I will list Cardcast codes for previously-hosted decks for a
+    period of time so that users may continue to find them.</li>
   </ul>
   <div id="nickbox">
     Nickname:

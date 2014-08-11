@@ -405,7 +405,7 @@ span.debug, span.admin {
 .game_right_side, .game_options {
   position: absolute;
   left: 246px;
-  width: 700px;
+  width: 1000px;
 }
 
 .game_options {

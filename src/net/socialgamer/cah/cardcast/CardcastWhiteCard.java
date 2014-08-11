@@ -7,10 +7,12 @@ public class CardcastWhiteCard extends WhiteCard {
 
   private final int id;
   private final String text;
+  private final String deckId;
 
-  public CardcastWhiteCard(final int id, final String text) {
+  public CardcastWhiteCard(final int id, final String text, final String deckId) {
     this.id = id;
     this.text = text;
+    this.deckId = deckId;
   }
 
   @Override
@@ -25,7 +27,7 @@ public class CardcastWhiteCard extends WhiteCard {
 
   @Override
   public String getWatermark() {
-    return "CC";
+    return deckId;
   }
 
   @Override

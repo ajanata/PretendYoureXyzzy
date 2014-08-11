@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
  *   and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
  *   conditions and the following disclaimer in the documentation and/or other materials provided
  *   with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -27,10 +27,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -49,6 +51,7 @@ import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.WhiteCardData;
 import net.socialgamer.cah.SafeTimerTask;
+import net.socialgamer.cah.cardcast.CardcastDeck;
 import net.socialgamer.cah.cardcast.CardcastService;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
@@ -64,19 +67,19 @@ import com.google.inject.Provider;
  * Game data and logic class. Games are simple finite state machines, with 3 states that wait for
  * user input, and 3 transient states that it quickly passes through on the way back to a waiting
  * state:
- * 
+ *
  * ......Lobby.----------->.Dealing.(transient).-------->.Playing
  * .......^........................^.........................|....................
  * .......|.v----.Win.(transient).<+------.Judging.<---------+....................
  * .....Reset.(transient)
- * 
+ *
  * Lobby is the default state. When the game host sends a start game event, the game moves to the
  * Dealing state, where it deals out cards to every player and automatically moves into the Playing
  * state. After all players have played a card, the game moves to Judging and waits for the judge to
  * pick a card. The game either moves to Win, if a player reached the win goal, or Dealing
  * otherwise. Win moves through Reset to reset the game back to default state. The game also
  * immediately moves through Reset at any point there are fewer than 3 players in the game.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class Game {
@@ -103,6 +106,7 @@ public class Game {
   private WhiteDeck whiteDeck;
   private GameState state;
   private final GameOptions options = new GameOptions();
+  private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<String>());
 
   private int judgeIndex = 0;
 
@@ -149,7 +153,7 @@ public class Game {
 
   /**
    * Create a new game.
-   * 
+   *
    * @param id
    *          The game's ID.
    * @param connectedUsers
@@ -177,9 +181,9 @@ public class Game {
 
   /**
    * Add a player to the game.
-   * 
+   *
    * Synchronizes on {@link #players}.
-   * 
+   *
    * @param user
    *          Player to add to this game.
    * @throws TooManyPlayersException
@@ -216,7 +220,7 @@ public class Game {
    * <br/>
    * Synchronizes on {@link #players}, {@link #playedCards}, {@link #whiteDeck}, and
    * {@link #roundTimerLock}.
-   * 
+   *
    * @param user
    *          Player to remove from the game.
    * @return True if {@code user} was the last player in the game.
@@ -312,9 +316,9 @@ public class Game {
 
   /**
    * Add a spectator to the game.
-   * 
+   *
    * Synchronizes on {@link #spectators}.
-   * 
+   *
    * @param user
    *          Spectator to add to this game.
    * @throws TooManySpectatorsException
@@ -346,7 +350,7 @@ public class Game {
    * Remove a spectator from the game.
    * <br/>
    * Synchronizes on {@link #spectator}.
-   * 
+   *
    * @param user
    *          Spectator to remove from the game.
    */
@@ -387,7 +391,7 @@ public class Game {
 
   /**
    * Broadcast a message to all players in this game.
-   * 
+   *
    * @param type
    *          Type of message to broadcast. This determines the order the messages are returned by
    *          priority.
@@ -401,7 +405,7 @@ public class Game {
 
   /**
    * Sends updated player information about a specific player to all players in the game.
-   * 
+   *
    * @param player
    *          The player whose information has been changed.
    */
@@ -460,6 +464,10 @@ public class Game {
   public void updateGameSettings(final GameOptions newOptions) {
     this.options.update(newOptions);
     notifyGameOptionsChanged();
+  }
+
+  public Set<String> getCardcastDeckIds() {
+    return cardcastDeckIds;
   }
 
   /**
@@ -536,7 +544,7 @@ public class Game {
 
   /**
    * Get player information for a single player.
-   * 
+   *
    * @param player
    *          The player for whom to get status.
    * @return Information for {@code player}: Name, score, status.
@@ -556,7 +564,7 @@ public class Game {
 
   /**
    * Determine the player status for a given player, based on game state.
-   * 
+   *
    * @param player
    *          Player for whom to get the state.
    * @return The state of {@code player}, one of {@code HOST}, {@code IDLE}, {@code JUDGE},
@@ -619,7 +627,7 @@ public class Game {
    * Start the game, if there are at least 3 players present. This does not do any access checking!
    * <br/>
    * Synchronizes on {@link #players}.
-   * 
+   *
    * @return True if the game is started. Would only be false if there aren't enough players, or the
    *         game is already started, or doesn't have a base deck, but hopefully clients would
    *         prevent that from happening!
@@ -652,8 +660,23 @@ public class Game {
           final List<CardSet> cardSets = session.createQuery("from PyxCardSet where id in (:ids)")
               .setParameterList("ids", options.getPyxCardSetIds()).list();
 
-          // FIXME hardcode hack for testing GBTXA
-          cardSets.add(cardcastServiceProvider.get().loadSet("GBTXA"));
+          // Not injecting the service itself because we might need to assisted inject it later
+          // with card id stuff.
+          // also TODO maybe make card ids longs instead of ints
+          final CardcastService service = cardcastServiceProvider.get();
+
+          // Avoid ConcurrentModificationException
+          for (final String cardcastId : cardcastDeckIds.toArray(new String[0])) {
+            // Ideally, we can assume that anything in that set is going to load, but it is entirely
+            // possible that the cache has expired and we can't re-load it for some reason, so
+            // let's be safe.
+            final CardcastDeck cardcastDeck = service.loadSet(cardcastId);
+            if (null == cardcastDeck) {
+              // TODO better way to indicate this to the user
+              logger.error(String.format("Unable to load %s from Cardcast", cardcastId));
+              return false;
+            }
+          }
 
           blackDeck = new BlackDeck(cardSets);
           whiteDeck = new WhiteDeck(cardSets, options.blanksInDeck);
@@ -979,9 +1002,9 @@ public class Game {
 
   /**
    * Reset the game state to a lobby.
-   * 
+   *
    * TODO change the message sent to the client if the game reset due to insufficient players.
-   * 
+   *
    * @param lostPlayer
    *          True if because there are no long enough people to play a game, false if because the
    *          previous game finished.
@@ -1025,7 +1048,7 @@ public class Game {
   /**
    * Check to see if judging should begin, based on the number of players that have played and the
    * number of cards they have played.
-   * 
+   *
    * @return True if judging should begin.
    */
   private boolean startJudging() {
@@ -1081,7 +1104,7 @@ public class Game {
   /**
    * @return A HashMap to use for events dispatched from this game, with the game id already set.
    */
-  private HashMap<ReturnableData, Object> getEventMap() {
+  public HashMap<ReturnableData, Object> getEventMap() {
     final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
     data.put(LongPollResponse.GAME_ID, id);
     return data;
@@ -1119,7 +1142,7 @@ public class Game {
 
   /**
    * Get the {@code Player} object for a given {@code User} object.
-   * 
+   *
    * @param user
    * @return The {@code Player} object representing {@code user} in this game, or {@code null} if
    *         {@code user} is not in this game.
@@ -1137,7 +1160,7 @@ public class Game {
 
   /**
    * Synchronizes on {@link #blackCardLock}.
-   * 
+   *
    * @return Client data for the current {@code BlackCard}, or {@code null} if there is not a
    *         {@code BlackCard}.
    */
@@ -1177,7 +1200,6 @@ public class Game {
    * @return The white cards the specified user can see, i.e., theirs and face-down cards for
    *         everyone else.
    */
-  @SuppressWarnings("unchecked")
   public List<List<Map<WhiteCardData, Object>>> getWhiteCards(final User user) {
     // if we're in judge mode, return all of the cards and ignore which user is asking
     if (state == GameState.JUDGING) {
@@ -1207,7 +1229,7 @@ public class Game {
 
   /**
    * Convert a list of {@code WhiteCard}s to data suitable for sending to a client.
-   * 
+   *
    * @param cards
    *          Cards to convert to client data.
    * @return Client representation of {@code cards}.
@@ -1223,7 +1245,7 @@ public class Game {
 
   /**
    * Send a list of {@code WhiteCard}s to a player.
-   * 
+   *
    * @param player
    *          Player to send the cards to.
    * @param cards
@@ -1239,7 +1261,7 @@ public class Game {
 
   /**
    * Get a client data representation of a user's hand.
-   * 
+   *
    * @param user
    *          User whose hand to convert to client data.
    * @return Client representation of {@code user}'s hand.
@@ -1287,7 +1309,7 @@ public class Game {
 
   /**
    * Play a card.
-   * 
+   *
    * @param user
    *          User playing the card.
    * @param cardId
@@ -1343,7 +1365,7 @@ public class Game {
    * The judge has selected a card. The {@code cardId} passed in may be any white cards's ID for
    * black cards that have multiple selection, however only the first card in the set's ID will be
    * passed around to clients.
-   * 
+   *
    * @param user
    *          Judge user.
    * @param cardId

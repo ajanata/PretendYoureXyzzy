@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -68,6 +69,8 @@ public class CardcastService {
    */
   private static final long VALID_SET_CACHE_LIFETIME = TimeUnit.MINUTES.toMillis(15);
 
+  private static final Pattern validIdPattern = Pattern.compile("[A-Z0-9]{5}");
+
   private static final Map<String, SoftReference<CardcastCacheEntry>> cache = Collections
       .synchronizedMap(new HashMap<String, SoftReference<CardcastCacheEntry>>());
 
@@ -97,9 +100,17 @@ public class CardcastService {
   }
 
   public CardcastDeck loadSet(final String setId) {
+    if (!validIdPattern.matcher(setId).matches()) {
+      return null;
+    }
     final CardcastCacheEntry cached = checkCache(setId);
-    if (null != cached && cached.expires < System.currentTimeMillis()) {
+    if (null != cached && cached.expires > System.currentTimeMillis()) {
+      LOG.info(String.format("Using cache: %s=%s", setId, cached.deck));
       return cached.deck;
+    } else if (null != cached) {
+      LOG.info(String.format("Cache stale: %s", setId));
+    } else {
+      LOG.info(String.format("Cache miss: %s", setId));
     }
 
     try {
@@ -145,7 +156,7 @@ public class CardcastService {
             final int pick = strs.size() - 1;
             final int draw = (pick >= 3 ? pick - 1 : 0);
             final CardcastBlackCard card = new CardcastBlackCard(cardIdProvider.get(), text, draw,
-                pick);
+                pick, setId);
             deck.getBlackCards().add(card);
           }
         }
@@ -162,7 +173,7 @@ public class CardcastService {
               strs.add((String) o);
             }
             final String text = StringUtils.join(strs, "");
-            final CardcastWhiteCard card = new CardcastWhiteCard(cardIdProvider.get(), text);
+            final CardcastWhiteCard card = new CardcastWhiteCard(cardIdProvider.get(), text, setId);
             deck.getWhiteCards().add(card);
           }
         }
