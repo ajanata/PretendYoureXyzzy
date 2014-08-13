@@ -54,10 +54,10 @@ public class CardcastRemoveCardsetHandler extends GameWithPlayerHandler {
         return error(ErrorCode.CARDCAST_INVALID_ID);
       }
 
+      // Remove it from the set regardless if it loads or not.
+      game.getCardcastDeckIds().remove(deckId);
       final CardcastDeck deck = cardcastService.loadSet(deckId);
       if (null == deck) {
-        // Remove it from the set anyway.
-        game.getCardcastDeckIds().remove(deckId);
         return error(ErrorCode.CARDCAST_CANNOT_FIND);
       }
 
