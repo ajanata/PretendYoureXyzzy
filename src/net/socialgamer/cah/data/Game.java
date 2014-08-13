@@ -676,6 +676,7 @@ public class Game {
               logger.error(String.format("Unable to load %s from Cardcast", cardcastId));
               return false;
             }
+            cardSets.add(cardcastDeck);
           }
 
           blackDeck = new BlackDeck(cardSets);
