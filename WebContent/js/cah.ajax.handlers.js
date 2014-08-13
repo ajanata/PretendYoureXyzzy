@@ -264,3 +264,11 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.SCORE] = function(data, req) {
     cah.log.status(msg);
   }
 };
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GAME_HOST] = function(data) {
+  // pass
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GAME_SKIP] = function(data) {
+  // pass
+};

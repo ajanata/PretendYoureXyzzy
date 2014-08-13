@@ -17,7 +17,9 @@ public class Handlers {
     LIST.put(CreateGameHandler.OP, CreateGameHandler.class);
     LIST.put(FirstLoadHandler.OP, FirstLoadHandler.class);
     LIST.put(GameChatHandler.OP, GameChatHandler.class);
+    LIST.put(GameHostHandler.OP, GameHostHandler.class);
     LIST.put(GameListHandler.OP, GameListHandler.class);
+    LIST.put(GameSkipHandler.OP, GameSkipHandler.class);
     LIST.put(GetCardsHandler.OP, GetCardsHandler.class);
     LIST.put(GetGameInfoHandler.OP, GetGameInfoHandler.class);
     LIST.put(JoinGameHandler.OP, JoinGameHandler.class);

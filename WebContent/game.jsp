@@ -423,7 +423,7 @@ HttpSession hSession = request.getSession(true);
           aria-label="Use idle timer. Players will be skipped if they have not played within a reasonable amount of time."/>
       <label id="use_timer_template_label" for="use_timer_template"
           title="Players will be skipped if they have not played within a reasonable amount of time.">
-          Use idle timer.
+          Use idle timer. (Or the host can <code>/skip</code> or <code>/kick</code> idle players manually.)
       </label>
       <br/>
       <fieldset class="card_sets">

@@ -169,7 +169,9 @@ public class Constants {
     CREATE_GAME("cg"),
     FIRST_LOAD("fl"),
     GAME_CHAT("GC"),
+    GAME_HOST("GH"),
     GAME_LIST("ggl"),
+    GAME_SKIP("GS"),
     /**
      * Get all cards for a particular game: black, hand, and round white cards.
      */
