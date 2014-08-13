@@ -52,7 +52,7 @@ public class Constants {
       add("0:0:0:0:0:0:0:1");
       add("127.0.0.1");
       // ajanata
-      add("64.13.172.41");
+      add("50.131.149.255");
       // vsTerminus
       add("207.161.130.75");
     }

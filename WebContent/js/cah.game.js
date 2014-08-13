@@ -792,6 +792,10 @@ cah.Game.prototype.removeCardcastDeck = function(data) {
  *          data Array of CardSetDatas.
  */
 cah.Game.prototype.listCardcastDecks = function(cardSets) {
+  cah.log.status_with_game(this, "The following <a target='_blank'"
+      + " href='http://www.cardcastgame.com'>Cardcast</a> decks are in use in this game (<a"
+      + " target='_blank' href='https://github.com/ajanata/PretendYoureXyzzy/wiki/Cardcast'>"
+      + "instructions</a>):", 'admin', true);
   for ( var key in cardSets) {
     var cardSetData = cardSets[key];
     this.displayCardcastDeckMessage_(cardSetData, "In use");
@@ -813,7 +817,7 @@ cah.Game.prototype.displayCardcastDeckMessage_ = function(deckInfo, verb) {
       + "' (code: <a target='_blank' href='http://www.cardcastgame.com/browse/deck/" + code + "'> "
       + code + "</a>), with " + deckInfo[cah.$.CardSetData.BLACK_CARDS_IN_DECK]
       + " black cards and " + deckInfo[cah.$.CardSetData.WHITE_CARDS_IN_DECK] + " white cards.";
-  cah.log.status_with_game(this, str, undefined, true);
+  cah.log.status_with_game(this, str, 'admin', true);
 };
 
 /**
