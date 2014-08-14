@@ -646,9 +646,9 @@ public class Game {
       started = false;
     }
     if (started) {
-      logger.info(String.format("Starting game %d with card sets %s, %d blanks, %d max players, " +
-          "%d max spectators, %d score limit, players %s.",
-          id, options.cardSetIds, options.blanksInDeck, options.playerLimit,
+      logger.info(String.format("Starting game %d with card sets %s, Cardcast %s, %d blanks, %d " +
+          "max players, %d max spectators, %d score limit, players %s.",
+          id, options.cardSetIds, cardcastDeckIds, options.blanksInDeck, options.playerLimit,
           options.spectatorLimit, options.scoreGoal, players));
       // do this stuff outside the players lock; they will lock players again later for much less
       // time, and not at the same time as trying to lock users, which has caused deadlocks
