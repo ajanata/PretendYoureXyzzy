@@ -170,7 +170,20 @@ public class CardcastService {
             // The white cards should only ever have one element in text, but let's be safe.
             final List<String> strs = new ArrayList<String>(texts.size());
             for (final Object o : texts) {
-              strs.add((String) o);
+              final String cardCastString = (String) o;
+              final StringBuilder pyxString = new StringBuilder();
+
+              // Cardcast's recommended format is to not capitalize the first letter
+              pyxString.append(cardCastString.substring(0, 1).toUpperCase());
+              pyxString.append(cardCastString.substring(1));
+
+              // Cardcast's recommended format is to not include a period
+              if (Character.isLetterOrDigit(cardCastString.charAt(cardCastString.length() - 1))) {
+                pyxString.append('.');
+              }
+
+              // Cardcast's white cards are now formatted consistently with pyx cards
+              strs.add(pyxString.toString());
             }
             final String text = StringUtils.join(strs, "");
             final CardcastWhiteCard card = new CardcastWhiteCard(cardIdProvider.get(), text, setId);
