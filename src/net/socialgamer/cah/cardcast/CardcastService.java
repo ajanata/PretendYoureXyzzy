@@ -99,16 +99,6 @@ public class CardcastService {
     return soft.get();
   }
 
-  private static String sanitizeWhite(final String input) {
-    final StringBuilder sb = new StringBuilder();
-    sb.append(input.substring(0, 1).toUpperCase());
-    sb.append(input.substring(1));
-    if (Character.isLetterOrDigit(input.charAt(input.length() - 1))) {
-      sb.append('.');
-    }
-    return sb.toString();
-  }
-
   public CardcastDeck loadSet(final String setId) {
     if (!validIdPattern.matcher(setId).matches()) {
       return null;
