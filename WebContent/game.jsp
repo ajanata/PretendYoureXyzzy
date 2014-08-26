@@ -216,14 +216,16 @@ HttpSession hSession = request.getSession(true);
 	<div id="gamelist_lobby_template" class="gamelist_lobby" tabindex="0">
 	<div class="gamelist_lobby_left">
 	    	<h3>
-			<span class="gamelist_lobby_host">host</span>'s Game
+	    	<span class="gamelist_lobby_game_name">game name</span>
 			(<span class="gamelist_lobby_player_count"></span>/<span class="gamelist_lobby_max_players"></span>,
 			<span class="gamelist_lobby_spectator_count"></span>/<span class="gamelist_lobby_max_spectators"></span>)
 			<span class="gamelist_lobby_status">status</span>
 		</h3>
 		<div>
-		<strong>Players:</strong>
-		<span class="gamelist_lobby_players">host, player1, player2</span>
+		<strong>Host:</strong>
+		<span class="gamelist_lobby_host">host</span><br/>
+		<strong>Other Players:</strong>
+		<span class="gamelist_lobby_players">player1, player2</span>
 		</div>
 		<div>
 		<strong>Spectators:</strong>
@@ -440,6 +442,11 @@ HttpSession hSession = request.getSession(true);
         <% } %>
         </select> blank white cards.
       </label>
+      <br/>
+      <label id="game_name_template_label" for="game_name_template">Game name:</label>
+      <input type="text" id="game_name_template" class="game_name" maxlength="30"
+          aria-label="Game password. You must tab outside of the box to apply the name."/>
+      You must click outside the box to apply the name.
       <br/>
       <label id="game_password_template_label" for="game_password_template">Game password:</label>
       <input type="text" id="game_password_template" class="game_password"

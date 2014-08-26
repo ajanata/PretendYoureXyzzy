@@ -204,6 +204,7 @@ cah.$.GameOptionData.prototype.dummyForAutocomplete = undefined;
 cah.$.GameOptionData.USE_TIMER = "ut";
 cah.$.GameOptionData.CARD_SETS = "css";
 cah.$.GameOptionData.BLANKS_LIMIT = "bl";
+cah.$.GameOptionData.GAME_NAME = "gn";
 cah.$.GameOptionData.SPECTATOR_LIMIT = "vL";
 cah.$.GameOptionData.PLAYER_LIMIT = "pL";
 cah.$.GameOptionData.PASSWORD = "pw";

@@ -58,7 +58,20 @@ public class GameOptions {
   public int spectatorLimit = DEFAULT_SPECTATOR_LIMIT;
   public int scoreGoal = DEFAULT_SCORE_LIMIT;
   public final Set<Integer> cardSetIds = new HashSet<Integer>();
+
+  /**
+   * if specified, this name is presented to other players in the game index
+   */
+  public String gameName = "";
+
+  /**
+   * the password needed to join the game
+   */
   public String password = "";
+
+  /**
+   * true if players should be kicked out when idle
+   */
   public boolean useIdleTimer = true;
 
   /**
@@ -76,6 +89,7 @@ public class GameOptions {
       this.cardSetIds.addAll(newOptions.cardSetIds);
     }
     this.blanksInDeck = newOptions.blanksInDeck;
+    this.gameName = newOptions.gameName;
     this.password = newOptions.password;
     this.useIdleTimer = newOptions.useIdleTimer;
   }
@@ -97,6 +111,9 @@ public class GameOptions {
     info.put(GameOptionData.SPECTATOR_LIMIT, spectatorLimit);
     info.put(GameOptionData.SCORE_LIMIT, scoreGoal);
     info.put(GameOptionData.USE_TIMER, useIdleTimer);
+    if (gameName != null) {
+      info.put(GameOptionData.GAME_NAME, gameName);
+    }
     if (includePassword) {
       info.put(GameOptionData.PASSWORD, password);
     }
@@ -129,6 +146,7 @@ public class GameOptions {
     options.scoreGoal = Math.max(MIN_SCORE_LIMIT, Math.min(MAX_SCORE_LIMIT,
         json.getInteger(GameOptionData.SCORE_LIMIT, options.scoreGoal)));
     options.useIdleTimer = json.getBoolean(GameOptionData.USE_TIMER, options.useIdleTimer);
+    options.gameName = json.getString(GameOptionData.GAME_NAME, options.gameName);
     options.password = json.getString(GameOptionData.PASSWORD, options.password);
 
     return options;

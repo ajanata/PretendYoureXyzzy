@@ -192,7 +192,7 @@ public class Game {
    *           Thrown if {@code user} is already in a game.
    */
   public void addPlayer(final User user) throws TooManyPlayersException, IllegalStateException {
-    logger.info(String.format("%s joined game %d.", user.toString(), id));
+    logger.info(String.format("%s joined game %d (%s).", user.toString(), id, options.gameName));
     synchronized (players) {
       if (options.playerLimit >= 3 && players.size() >= options.playerLimit) {
         throw new TooManyPlayersException();
@@ -226,7 +226,8 @@ public class Game {
    * @return True if {@code user} was the last player in the game.
    */
   public boolean removePlayer(final User user) {
-    logger.info(String.format("Removing %s from game %d.", user.toString(), id));
+    logger.info(String.format("Removing %s from game %d (%s).", user.toString(), id,
+        options.gameName));
     boolean wasJudge = false;
     final Player player = getPlayerForUser(user);
 
@@ -328,7 +329,8 @@ public class Game {
    */
   public void addSpectator(final User user) throws TooManySpectatorsException,
       IllegalStateException {
-    logger.info(String.format("%s joined game %d as a spectator.", user.toString(), id));
+    logger.info(String.format("%s joined game %d (%s) as a spectator.", user.toString(), id,
+        options.gameName));
     synchronized (spectators) {
       if (spectators.size() >= options.spectatorLimit) {
         throw new TooManySpectatorsException();
@@ -355,7 +357,8 @@ public class Game {
    *          Spectator to remove from the game.
    */
   public void removeSpectator(final User user) {
-    logger.info(String.format("Removing spectator %s from game %d.", user.toString(), id));
+    logger.info(String.format("Removing spectator %s from game %d (%s).", user.toString(), id,
+        options.gameName));
     synchronized (spectators) {
       if (!spectators.remove(user)) {
         return;
