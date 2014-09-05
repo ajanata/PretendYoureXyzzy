@@ -54,6 +54,14 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>7 September 2014:<ul>
+  	<li>Game names can now be customized.  When the field is blank, it will show "Host's Game"
+  	dynamically based on the current host.  Otherwise the text you enter will be shown instead.</li>
+  	<li>Cardcast decks are now shown in the game list, so you can see before you join.</li>
+  	<li>Cards imported from Cardcast are now adjusted to be consistent with Pyx's standard for
+  	punctuation and capitalization.</li>
+  	<li>The /removecardcast command now properly removes a deck.</li>
+  </ul></li>
   <li>11 August 2014:<ul>
     <li>Loading decks from <a href="http://www.cardcastgame.com/">Cardcast</a> is now supported in a
     preview release. See <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Cardcast">the
