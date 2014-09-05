@@ -235,6 +235,9 @@ HttpSession hSession = request.getSession(true);
 		<div>
 		<strong>Cards:</strong> <span class="gamelist_lobby_cardset"></span>
 		</div>
+		<div>
+		<strong>Cardcast Decks:</strong> <span class="gamelist_lobby_cardcastdecks"></span>
+		</div>
 		<div class="hide">Game <span class="gamelist_lobby_id">###</span></div>
 	  </div>
 	  <div class="gamelist_lobby_right">

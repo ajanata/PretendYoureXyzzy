@@ -193,6 +193,7 @@ cah.$.GameInfo.HOST = "H";
 cah.$.GameInfo.STATE = "S";
 cah.$.GameInfo.PLAYERS = "P";
 cah.$.GameInfo.SPECTATORS = "V";
+cah.$.GameInfo.CARDCAST_DECK_IDS = "cdi";
 cah.$.GameInfo.ID = "gid";
 cah.$.GameInfo.GAME_OPTIONS = "go";
 cah.$.GameInfo.HAS_PASSWORD = "hp";

@@ -615,6 +615,7 @@ public class Constants {
     ID(AjaxRequest.GAME_ID),
     @DuplicationAllowed
     GAME_OPTIONS(AjaxRequest.GAME_OPTIONS),
+    CARDCAST_DECK_IDS("cdi"),
     HAS_PASSWORD("hp"),
     PLAYERS("P"),
     SPECTATORS("V"),

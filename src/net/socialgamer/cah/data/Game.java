@@ -521,6 +521,13 @@ public class Game {
     }
     info.put(GameInfo.SPECTATORS, spectatorNames);
 
+    final String[] ccDeckIdsCopy = cardcastDeckIds.toArray(new String[cardcastDeckIds.size()]);
+    final List<String> ccDeckIdCodes = new ArrayList<String>(ccDeckIdsCopy.length);
+    for (final String ccDeckId : ccDeckIdsCopy) {
+      ccDeckIdCodes.add(ccDeckId); // TODO: can we put the name here instead?
+    }
+    info.put(GameInfo.CARDCAST_DECK_IDS, ccDeckIdCodes);
+
     return info;
   }
 
