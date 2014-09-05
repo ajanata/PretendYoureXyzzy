@@ -173,13 +173,19 @@ public class CardcastService {
               final String cardCastString = (String) o;
               final StringBuilder pyxString = new StringBuilder();
 
-              // Cardcast's recommended format is to not capitalize the first letter
-              pyxString.append(cardCastString.substring(0, 1).toUpperCase());
-              pyxString.append(cardCastString.substring(1));
+              if (cardCastString.charAt(0) == '"') {
+                pyxString.append('"').append(StringUtils.capitalize(cardCastString).substring(1));
+              } else {
+                pyxString.append(StringUtils.capitalize(cardCastString));
+              }
 
               // Cardcast's recommended format is to not include a period
               if (Character.isLetterOrDigit(cardCastString.charAt(cardCastString.length() - 1))) {
                 pyxString.append('.');
+              } else if ((cardCastString.length() >= 2)
+                  && (cardCastString.charAt(cardCastString.length() - 1) == '"')
+                  && (Character.isLetterOrDigit(cardCastString.charAt(cardCastString.length() - 2)))) {
+                pyxString.insert(cardCastString.length() - 1, '.');
               }
 
               // Cardcast's white cards are now formatted consistently with pyx cards
