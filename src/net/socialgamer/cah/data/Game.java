@@ -108,6 +108,8 @@ public class Game {
   private final GameOptions options = new GameOptions();
   private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<String>());
 
+  private final Map<String, String> cardcastDeckNames = new HashMap<String, String>();
+
   private int judgeIndex = 0;
 
   // All of these delays could be moved to pyx.properties.
@@ -474,6 +476,17 @@ public class Game {
   }
 
   /**
+   * Adds the card cast deck to this game.
+   *
+   * @param cardcastId the deck ID to load
+   */
+  public void addCardcastDeck(final CardcastDeck cardcastDeck) {
+    final String cardcastId = cardcastDeck.getCode();
+    cardcastDeckIds.add(cardcastId);
+    cardcastDeckNames.put(cardcastId, cardcastDeck.getName());
+  }
+
+  /**
    * Get information about this game, without the game's password.
    * <br/>
    * Synchronizes on {@link #players}.
@@ -524,7 +537,13 @@ public class Game {
     final String[] ccDeckIdsCopy = cardcastDeckIds.toArray(new String[cardcastDeckIds.size()]);
     final List<String> ccDeckIdCodes = new ArrayList<String>(ccDeckIdsCopy.length);
     for (final String ccDeckId : ccDeckIdsCopy) {
-      ccDeckIdCodes.add(ccDeckId); // TODO: can we put the name here instead?
+      String name = cardcastDeckNames.get(ccDeckId);
+      if (name == null) {
+        name = "Unknown Deck [" + ccDeckId + "]";
+      } else {
+        name += " [" + ccDeckId + "]";
+      }
+      ccDeckIdCodes.add(name);
     }
     info.put(GameInfo.CARDCAST_DECK_IDS, ccDeckIdCodes);
 
@@ -687,6 +706,7 @@ public class Game {
               return false;
             }
             cardSets.add(cardcastDeck);
+            cardcastDeckNames.put(cardcastId, cardcastDeck.getName());
           }
 
           blackDeck = new BlackDeck(cardSets);

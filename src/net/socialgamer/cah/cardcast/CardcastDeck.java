@@ -29,6 +29,15 @@ public class CardcastDeck extends CardSet {
     return name;
   }
 
+  /**
+   * Gets the 5-character cardcast code for this deck.
+   *
+   * @return the cardcast code
+   */
+  public String getCode() {
+    return code;
+  }
+
   @Override
   public String getDescription() {
     return description;

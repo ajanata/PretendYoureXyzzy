@@ -64,7 +64,7 @@ public class CardcastAddCardsetHandler extends GameWithPlayerHandler {
       map.put(LongPollResponse.CARDCAST_DECK_INFO, deck.getClientMetadata());
       game.broadcastToPlayers(MessageType.GAME_EVENT, map);
 
-      game.getCardcastDeckIds().add(deckId);
+      game.addCardcastDeck(deck);
 
       return data;
     }
