@@ -812,7 +812,7 @@ cah.Game.prototype.listCardcastDecks = function(cardSets) {
  * @private
  */
 cah.Game.prototype.displayCardcastDeckMessage_ = function(deckInfo, verb) {
-  var code = (-1 * deckInfo[cah.$.CardSetData.ID]).toString(36).toUpperCase();
+  var code = ("00000" + (-1 * deckInfo[cah.$.CardSetData.ID]).toString(36).toUpperCase()).slice(-5);
   var str = verb + ": Cardcast deck '" + deckInfo[cah.$.CardSetData.CARD_SET_NAME]
       + "' (code: <a target='_blank' href='http://www.cardcastgame.com/browse/deck/" + code + "'> "
       + code + "</a>), with " + deckInfo[cah.$.CardSetData.BLACK_CARDS_IN_DECK]
