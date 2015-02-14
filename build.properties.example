@@ -1,0 +1,5 @@
+hibernate.url=jdbc:postgresql://localhost/pyx
+hibernate.username=pyx
+hibernate.password=CorrectHorseBatteryStaple
+hibernate.sql.show=true
+hibernate.sql.format=true

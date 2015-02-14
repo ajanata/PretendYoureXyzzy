@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>net.socialgamer</groupId>
+  <artifactId>pyx</artifactId>
+  <version>0.5.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>pyx</name>
+
+  <scm>
+    <url>https://github.com/ajanata/PretendYoureXyzzy</url>
+  </scm>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <developers>
+    <developer>
+      <id>ajanata</id>
+      <name>Andy Janata</name>
+      <email>ajanata@gmail.com</email>
+    </developer>
+  </developers>
+
+  <build>
+    <finalName>ROOT</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.1</version>
+        <executions>
+          <execution>
+            <id>update-js-constants</id>
+            <phase>package</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>net.socialgamer.cah.UpdateJsConstants</mainClass>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+          <executable>${java.home}/bin</executable>
+
+          <!-- false = true and true = false... http://jira.codehaus.org/browse/MCOMPILER-209 -->
+          <useIncrementalCompilation>false</useIncrementalCompilation>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>1.3.1</version>
+        <executions>
+          <execution>
+            <id>enforce-files-exist</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireFilesExist>
+                  <files>
+                    <file>build.properties</file>
+                  </files>
+                </requireFilesExist>
+              </rules>
+              <fail>true</fail>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Read database credentials etc. from file. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>properties-maven-plugin</artifactId>
+        <version>1.0-alpha-2</version>
+        <executions>
+          <execution>
+            <id>read-build-properties</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>read-project-properties</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>read-report-properties</id>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>read-project-properties</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <files>
+            <file>build.properties</file>
+          </files>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.4</version>
+
+        <!-- for exploded war -->
+        <!--
+        <executions>
+          <execution>
+            <id>default-war</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>war-exploded</id>
+            <phase>package</phase>
+            <goals>
+              <goal>exploded</goal>
+            </goals>
+          </execution>
+        </executions>
+        -->
+
+        <configuration>
+          <webResources>
+            <resource>
+              <directory>src/main/resources</directory>
+              <filtering>false</filtering>
+            </resource>
+            <resource>
+              <directory>src/main/filtered-resources</directory>
+              <filtering>true</filtering>
+            </resource>
+            <resource>
+              <directory>WebContent</directory>
+              <filtering>false</filtering>
+            </resource>
+          </webResources>
+
+          <!-- Web XML is in a filtered folder due to the DTD -->
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+
+          <!-- Pack classes into a jar -->
+          <archiveClasses>true</archiveClasses>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>9.1.2.v20140210</version>
+
+        <configuration>
+          <!-- Uncomment this to enable JMX in Jetty for debugging. -->
+          <!-- <jettyXml>${appserver.web-inf.dir}/jetty-jmx.xml</jettyXml> -->
+          <webApp>
+            <!--<defaultsDescriptor>${project.basedir}/jetty-defaults.xml</defaultsDescriptor> -->
+            <descriptor>${project.build.directory}/${project.build.artifact.name}/WEB-INF/web.xml</descriptor>
+            <resourceBases>
+              <!-- Non-filtered -->
+              <resource>src/main/resources</resource>
+              <!-- Filtered -->
+              <resource>${project.build.directory}/ROOT</resource>
+            </resourceBases>
+          </webApp>
+          <scanTargets>
+            <scanTarget>src/main/filtered-resources</scanTarget>
+          </scanTargets>
+          <scanIntervalSeconds>0</scanIntervalSeconds>
+          <reload>manual</reload>
+          <webAppSourceDirectory>WebContent</webAppSourceDirectory>
+          <stopPort>8081</stopPort>
+          <stopKey>STOP</stopKey>
+        </configuration>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <!--This plugin's configuration is used to store Eclipse m2e settings 
+          only. It has no influence on the Maven build itself. -->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>
+                      org.codehaus.mojo
+                    </groupId>
+                    <artifactId>
+                      properties-maven-plugin
+                    </artifactId>
+                    <versionRange>
+                      [1.0-alpha-2,)
+                    </versionRange>
+                    <goals>
+                      <goal>
+                        read-project-properties
+                      </goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute></execute>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject.extensions</groupId>
+      <artifactId>guice-assistedinject</artifactId>
+      <version>3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject.extensions</groupId>
+      <artifactId>guice-servlet</artifactId>
+      <version>3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>3.6.10.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.6.1</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+    </dependency>
+    <dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>8.4-702.jdbc3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.easymock</groupId>
+      <artifactId>easymock</artifactId>
+      <version>3.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>1.3.2</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>

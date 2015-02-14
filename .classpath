@@ -1,71 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0">
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
 		<attributes>
-			<attribute name="owner.project.facets" value="jst.web"/>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
-	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax.persistence.jar">
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
 		<attributes>
-			<attribute name="javadoc_location" value="http://docs.oracle.com/javaee/6/api/"/>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/hibernate3.jar">
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/Libraries/hibernate-distribution-3.6.9.Final/documentation/javadocs"/>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-lang3-3.1.jar">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
 		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/json_simple-1.1.jar">
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/guice-3.0.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/easymock-3.1.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/objenesis-1.2.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/asm-4.0.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/cglib-nodep-2.2.2.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jsr305-2.0.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_67">
-		<attributes>
-			<attribute name="owner.project.facets" value="java"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="output" path="build/classes"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
