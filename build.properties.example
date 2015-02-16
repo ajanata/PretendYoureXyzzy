@@ -1,5 +1,17 @@
-hibernate.url=jdbc:postgresql://localhost/pyx
+# for production use, use postgres
+#hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+#hibernate.driver_class=org.postgresql.Driver
+#hibernate.url=jdbc:postgresql://localhost/pyx
+
+# for local use, you can also use sqlite
+hibernate.dialect=net.socialgamer.cah.hibernate.SqliteDialect
+hibernate.driver_class=org.sqlite.JDBC
+hibernate.url=jdbc:sqlite:pyx.sqlite
+
+# these likely need specified even with sqlite, even though they don't matter
 hibernate.username=pyx
 hibernate.password=CorrectHorseBatteryStaple
-hibernate.sql.show=true
-hibernate.sql.format=true
+
+# debugging information
+hibernate.sql.show=false
+hibernate.sql.format=false

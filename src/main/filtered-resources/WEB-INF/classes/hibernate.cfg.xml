@@ -4,11 +4,11 @@
 		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.dialect">${hibernate.dialect}</property>
+        <property name="hibernate.connection.driver_class">${hibernate.driver_class}</property>
         <property name="hibernate.connection.url">${hibernate.url}</property>
         <property name="hibernate.connection.username">${hibernate.username}</property>
         <property name="hibernate.connection.password">${hibernate.password}</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
         
         <property name="show_sql">${hibernate.sql.show}</property>

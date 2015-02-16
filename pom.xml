@@ -17,6 +17,13 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+  
+  <repositories>
+    <repository>
+      <id>hibernatesqlite-maven</id>
+      <url>https://hibernate-sqlite.googlecode.com/svn/trunk/mavenrepo</url>
+    </repository>
+  </repositories>
 
   <developers>
     <developer>
@@ -263,6 +270,11 @@
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>3.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.8.7</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
