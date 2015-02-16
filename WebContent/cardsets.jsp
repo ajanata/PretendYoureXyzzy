@@ -125,11 +125,11 @@ try {
           }
           @SuppressWarnings("unchecked")
           List<PyxBlackCard> realBlackCards = hibernateSession.createQuery(
-              "from BlackCard where id in (:ids)").setParameterList("ids", blackCardIds).
+              "from PyxBlackCard where id in (:ids)").setParameterList("ids", blackCardIds).
               setReadOnly(true).list();
           @SuppressWarnings("unchecked")
           List<PyxWhiteCard> realWhiteCards = hibernateSession.createQuery(
-              "from WhiteCard where id in (:ids)").setParameterList("ids", whiteCardIds).
+              "from PyxWhiteCard where id in (:ids)").setParameterList("ids", whiteCardIds).
               setReadOnly(true).list();
           editCardSet.getBlackCards().clear();
           editCardSet.getBlackCards().addAll(realBlackCards);
@@ -151,15 +151,15 @@ try {
   }
   
   @SuppressWarnings("unchecked")
-  List<PyxCardSet> cardSets = hibernateSession.createQuery("from CardSet order by weight, id")
+  List<PyxCardSet> cardSets = hibernateSession.createQuery("from PyxCardSet order by weight, id")
       .setReadOnly(true).list();
   
   @SuppressWarnings("unchecked")
-  List<PyxBlackCard> blackCards = hibernateSession.createQuery("from BlackCard order by id")
+  List<PyxBlackCard> blackCards = hibernateSession.createQuery("from PyxBlackCard order by id")
       .setReadOnly(true).list();
   
   @SuppressWarnings("unchecked")
-  List<PyxWhiteCard> whiteCards = hibernateSession.createQuery("from WhiteCard order by id")
+  List<PyxWhiteCard> whiteCards = hibernateSession.createQuery("from PyxWhiteCard order by id")
       .setReadOnly(true).list();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
