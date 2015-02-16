@@ -28,6 +28,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.socialgamer.cah.data.Game;
+
 
 /**
  * Constants needed on both the CAH server and client. This file is examined with reflection to
@@ -52,7 +54,7 @@ public class Constants {
       add("0:0:0:0:0:0:0:1");
       add("127.0.0.1");
       // ajanata
-      add("50.131.149.255");
+      add("73.202.162.31");
       // vsTerminus
       add("207.161.130.75");
     }
@@ -284,6 +286,24 @@ public class Constants {
     }
   }
 
+  public enum ErrorInformation implements ReturnableData {
+    BLACK_CARDS_PRESENT("bcp"),
+    BLACK_CARDS_REQUIRED("bcr"),
+    WHITE_CARDS_PRESENT("wcp"),
+    WHITE_CARDS_REQUIRED("wcr");
+
+    private final String code;
+
+    ErrorInformation(final String code) {
+      this.code = code;
+    }
+
+    @Override
+    public String toString() {
+      return code;
+    }
+  }
+
   /**
    * Client request and long poll response errors.
    */
@@ -321,7 +341,9 @@ public class Constants {
     NO_SESSION("ns", "Session not detected. Make sure you have cookies enabled."),
     NO_SUCH_USER("nsu", "No such user."),
     NOT_ADMIN("na", "You are not an administrator."),
-    NOT_ENOUGH_CARDS("nec", "You must select at least one base card set."),
+    NOT_ENOUGH_CARDS("nec", "You must add card sets containing at least "
+        + Game.MINIMUM_BLACK_CARDS + " black cards and " + Game.MINIMUM_WHITE_CARDS_PER_PLAYER
+        + " times the player limit white cards."),
     NOT_ENOUGH_PLAYERS("nep", "There are not enough players to start the game."),
     NOT_GAME_HOST("ngh", "Only the game host can do that."),
     NOT_IN_THAT_GAME("nitg", "You are not in that game."),

@@ -110,6 +110,19 @@ public class Game {
 
   private int judgeIndex = 0;
 
+  /**
+   * The minimum number of black cards that must be added to a game for it to be able to start.
+   */
+  public final static int MINIMUM_BLACK_CARDS = 50;
+
+  /**
+   * The minimum number of white cards per player limit slots that must be added to a game for it to
+   * be able to start.
+   *
+   * We need 20 * maxPlayers cards. This allows black cards up to "draw 9" to work correctly.
+   */
+  public final static int MINIMUM_WHITE_CARDS_PER_PLAYER = 20;
+
   // All of these delays could be moved to pyx.properties.
   /**
    * Time, in milliseconds, to delay before starting a new round.
@@ -629,95 +642,122 @@ public class Game {
    * Synchronizes on {@link #players}.
    *
    * @return True if the game is started. Would only be false if there aren't enough players, or the
-   *         game is already started, or doesn't have a base deck, but hopefully clients would
-   *         prevent that from happening!
+   *         game is already started, or doesn't have a enough, but hopefully callers and clients
+   *         would prevent that from happening!
    */
   public boolean start() {
-    if (state != GameState.LOBBY || !hasBaseDeck()) {
-      return false;
-    }
-    boolean started;
-    final int numPlayers = players.size();
-    if (numPlayers >= 3) {
-      // Pick a random start judge, though the "next" judge will actually go first.
-      judgeIndex = (int) (Math.random() * numPlayers);
-      started = true;
-    } else {
-      started = false;
-    }
-    if (started) {
-      logger.info(String.format("Starting game %d with card sets %s, Cardcast %s, %d blanks, %d " +
-          "max players, %d max spectators, %d score limit, players %s.",
-          id, options.cardSetIds, cardcastDeckIds, options.blanksInDeck, options.playerLimit,
-          options.spectatorLimit, options.scoreGoal, players));
-      // do this stuff outside the players lock; they will lock players again later for much less
-      // time, and not at the same time as trying to lock users, which has caused deadlocks
-      synchronized (options.cardSetIds) {
-        Session session = null;
-        try {
-          session = sessionProvider.get();
-          @SuppressWarnings("unchecked")
-          final List<CardSet> cardSets = session.createQuery("from PyxCardSet where id in (:ids)")
-              .setParameterList("ids", options.getPyxCardSetIds()).list();
-
-          // Not injecting the service itself because we might need to assisted inject it later
-          // with card id stuff.
-          // also TODO maybe make card ids longs instead of ints
-          final CardcastService service = cardcastServiceProvider.get();
-
-          // Avoid ConcurrentModificationException
-          for (final String cardcastId : cardcastDeckIds.toArray(new String[0])) {
-            // Ideally, we can assume that anything in that set is going to load, but it is entirely
-            // possible that the cache has expired and we can't re-load it for some reason, so
-            // let's be safe.
-            final CardcastDeck cardcastDeck = service.loadSet(cardcastId);
-            if (null == cardcastDeck) {
-              // TODO better way to indicate this to the user
-              logger.error(String.format("Unable to load %s from Cardcast", cardcastId));
-              return false;
-            }
-            cardSets.add(cardcastDeck);
-          }
-
-          blackDeck = new BlackDeck(cardSets);
-          whiteDeck = new WhiteDeck(cardSets, options.blanksInDeck);
-        } catch (final Exception e) {
-          logger.error(String.format("Unable to load cards to start game %d", id), e);
-          return false;
-        } finally {
-          if (null != session) {
-            session.close();
-          }
-        }
+    Session session = null;
+    try {
+      session = sessionProvider.get();
+      if (state != GameState.LOBBY || !hasEnoughCards(session)) {
+        return false;
       }
-      startNextRound();
-      gameManager.broadcastGameListRefresh();
+      boolean started;
+      final int numPlayers = players.size();
+      if (numPlayers >= 3) {
+        // Pick a random start judge, though the "next" judge will actually go first.
+        judgeIndex = (int) (Math.random() * numPlayers);
+        started = true;
+      } else {
+        started = false;
+      }
+      if (started) {
+        logger.info(String.format("Starting game %d with card sets %s, Cardcast %s, %d blanks, %d "
+            +
+            "max players, %d max spectators, %d score limit, players %s.",
+            id, options.cardSetIds, cardcastDeckIds, options.blanksInDeck, options.playerLimit,
+            options.spectatorLimit, options.scoreGoal, players));
+        // do this stuff outside the players lock; they will lock players again later for much less
+        // time, and not at the same time as trying to lock users, which has caused deadlocks
+        synchronized (options.cardSetIds) {
+          blackDeck = loadBlackDeck(session);
+          whiteDeck = loadWhiteDeck(session);
+        }
+        startNextRound();
+        gameManager.broadcastGameListRefresh();
+      }
+      return started;
+    } finally {
+      if (null != session) {
+        session.close();
+      }
     }
-    return started;
   }
 
-  public boolean hasBaseDeck() {
+  private List<CardSet> loadCardSets(final Session session) {
     synchronized (options.cardSetIds) {
-      if (options.cardSetIds.isEmpty()) {
-        return false;
-      }
-
-      Session session = null;
       try {
-        session = sessionProvider.get();
-        final Number baseDeckCount = (Number) session
-            .createQuery("select count(*) from PyxCardSet where id in (:ids) and base_deck = true")
-            .setParameterList("ids", options.getPyxCardSetIds()).uniqueResult();
+        final List<CardSet> cardSets = new ArrayList<>();
 
-        return baseDeckCount.intValue() > 0;
-      } catch (final Exception e) {
-        logger.error(String.format("Unable to determine if game %d has base deck", id), e);
-        return false;
-      } finally {
-        if (null != session) {
-          session.close();
+        if (!options.getPyxCardSetIds().isEmpty()) {
+          @SuppressWarnings("unchecked")
+          final List<CardSet> pyxCardSets = session
+              .createQuery("from PyxCardSet where id in (:ids)")
+              .setParameterList("ids", options.getPyxCardSetIds()).list();
+          cardSets.addAll(pyxCardSets);
         }
+
+        // Not injecting the service itself because we might need to assisted inject it later
+        // with card id stuff.
+        // also TODO maybe make card ids longs instead of ints
+        final CardcastService service = cardcastServiceProvider.get();
+
+        // Avoid ConcurrentModificationException
+        for (final String cardcastId : cardcastDeckIds.toArray(new String[0])) {
+          // Ideally, we can assume that anything in that set is going to load, but it is entirely
+          // possible that the cache has expired and we can't re-load it for some reason, so
+          // let's be safe.
+          final CardcastDeck cardcastDeck = service.loadSet(cardcastId);
+          if (null == cardcastDeck) {
+            // TODO better way to indicate this to the user
+            logger.error(String.format("Unable to load %s from Cardcast", cardcastId));
+            return null;
+          }
+          cardSets.add(cardcastDeck);
+        }
+
+        return cardSets;
+      } catch (final Exception e) {
+        logger.error(String.format("Unable to load cards for game %d", id), e);
+        return null;
       }
+    }
+  }
+
+  public BlackDeck loadBlackDeck(final Session session) {
+    return new BlackDeck(loadCardSets(session));
+  }
+
+  public WhiteDeck loadWhiteDeck(final Session session) {
+    return new WhiteDeck(loadCardSets(session), options.blanksInDeck);
+  }
+
+  public int getRequiredWhiteCardCount() {
+    return MINIMUM_WHITE_CARDS_PER_PLAYER * options.playerLimit;
+  }
+
+  /**
+   * Determine if there are sufficient cards in the selected card sets to start the game.
+   * <p>This could be done more efficiently as we're ending up loading the decks multiple times
+   * with different Sessions, so caching wouldn't help local decks.
+   */
+  public boolean hasEnoughCards(final Session session) {
+    synchronized (options.cardSetIds) {
+      if (options.cardSetIds.isEmpty() && cardcastDeckIds.isEmpty()) {
+        return false;
+      }
+
+      final BlackDeck tempBlackDeck = loadBlackDeck(session);
+      if (tempBlackDeck.totalCount() < MINIMUM_BLACK_CARDS) {
+        return false;
+      }
+
+      final WhiteDeck tempWhiteDeck = loadWhiteDeck(session);
+      if (tempWhiteDeck.totalCount() < getRequiredWhiteCardCount()) {
+        return false;
+      }
+
+      return true;
     }
   }
 

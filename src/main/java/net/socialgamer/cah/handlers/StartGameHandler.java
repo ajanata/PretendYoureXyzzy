@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
  *   and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
  *   conditions and the following disclaimer in the documentation and/or other materials provided
  *   with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -30,6 +30,7 @@ import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.ErrorCode;
+import net.socialgamer.cah.Constants.ErrorInformation;
 import net.socialgamer.cah.Constants.GameState;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
@@ -37,6 +38,7 @@ import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.User;
 
+import org.hibernate.Session;
 import org.hibernate.exception.JDBCConnectionException;
 
 import com.google.inject.Inject;
@@ -44,16 +46,19 @@ import com.google.inject.Inject;
 
 /**
  * Handler to start a game.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class StartGameHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.START_GAME.toString();
 
+  private final Session hibernateSession;
+
   @Inject
-  public StartGameHandler(final GameManager gameManager) {
+  public StartGameHandler(final GameManager gameManager, final Session session) {
     super(gameManager);
+    this.hibernateSession = session;
   }
 
   @Override
@@ -66,8 +71,14 @@ public class StartGameHandler extends GameWithPlayerHandler {
         return error(ErrorCode.NOT_GAME_HOST);
       } else if (game.getState() != GameState.LOBBY) {
         return error(ErrorCode.ALREADY_STARTED);
-      } else if (!game.hasBaseDeck()) {
-        return error(ErrorCode.NOT_ENOUGH_CARDS);
+      } else if (!game.hasEnoughCards(hibernateSession)) {
+        data.put(ErrorInformation.BLACK_CARDS_PRESENT, game.loadBlackDeck(hibernateSession)
+            .totalCount());
+        data.put(ErrorInformation.BLACK_CARDS_REQUIRED, Game.MINIMUM_BLACK_CARDS);
+        data.put(ErrorInformation.WHITE_CARDS_PRESENT, game.loadWhiteDeck(hibernateSession)
+            .totalCount());
+        data.put(ErrorInformation.WHITE_CARDS_REQUIRED, game.getRequiredWhiteCardCount());
+        return error(ErrorCode.NOT_ENOUGH_CARDS, data);
       } else if (!game.start()) {
         return error(ErrorCode.NOT_ENOUGH_PLAYERS);
       } else {
@@ -75,6 +86,8 @@ public class StartGameHandler extends GameWithPlayerHandler {
       }
     } catch (final JDBCConnectionException jce) {
       return error(ErrorCode.SERVER_ERROR);
+    } finally {
+      hibernateSession.close();
     }
   }
 }

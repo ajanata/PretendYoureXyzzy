@@ -235,7 +235,7 @@ cah.$.ErrorCode_msg['ig'] = "Invalid game specified.";
 cah.$.ErrorCode_msg['nns'] = "No nickname specified.";
 cah.$.ErrorCode_msg['cii'] = "Invalid Cardcast ID. Must be exactly 5 characters.";
 cah.$.ErrorCode_msg['ngh'] = "Only the game host can do that.";
-cah.$.ErrorCode_msg['nec'] = "You must select at least one base card set.";
+cah.$.ErrorCode_msg['nec'] = "You must add card sets containing at least 50 black cards and 20 times the player limit white cards.";
 cah.$.ErrorCode_msg['serr'] = "An error occured on the server.";
 cah.$.ErrorCode_msg['ccf'] = "Cannot find Cardcast deck with given ID. If you just added this deck to Cardcast, wait a few minutes and try again.";
 cah.$.ErrorCode_msg['nsu'] = "No such user.";
@@ -249,6 +249,15 @@ cah.$.ErrorCode_msg['niu'] = "Nickname is already in use.";
 cah.$.ErrorCode_msg['B&'] = "Banned.";
 cah.$.ErrorCode_msg['ad'] = "Access denied.";
 cah.$.ErrorCode_msg['nj'] = "You are not the judge.";
+
+cah.$.ErrorInformation = function() {
+  // Dummy constructor to make Eclipse auto-complete.
+};
+cah.$.ErrorInformation.prototype.dummyForAutocomplete = undefined;
+cah.$.ErrorInformation.WHITE_CARDS_REQUIRED = "wcr";
+cah.$.ErrorInformation.WHITE_CARDS_PRESENT = "wcp";
+cah.$.ErrorInformation.BLACK_CARDS_REQUIRED = "bcr";
+cah.$.ErrorInformation.BLACK_CARDS_PRESENT = "bcp";
 
 cah.$.AjaxResponse = function() {
   // Dummy constructor to make Eclipse auto-complete.

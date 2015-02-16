@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
  *   and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
  *   conditions and the following disclaimer in the documentation and/or other materials provided
  *   with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -33,9 +33,9 @@ import java.util.Set;
 
 /**
  * Deck of Black Cards.
- * 
+ *
  * This class is thread-safe.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class BlackDeck {
@@ -57,7 +57,7 @@ public class BlackDeck {
 
   /**
    * Get the next card from the top of deck.
-   * 
+   *
    * @return The next card.
    * @throws OutOfCardsException
    *           There are no more cards in the deck.
@@ -73,7 +73,7 @@ public class BlackDeck {
 
   /**
    * Add a card to the discard pile.
-   * 
+   *
    * @param card
    *          Card to add to discard pile.
    */
@@ -90,5 +90,9 @@ public class BlackDeck {
     Collections.shuffle(discard);
     deck.addAll(0, discard);
     discard.clear();
+  }
+
+  public synchronized int totalCount() {
+    return deck.size() + discard.size();
   }
 }
