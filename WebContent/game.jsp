@@ -66,6 +66,7 @@ HttpSession hSession = request.getSession(true);
 <script type="text/javascript" src="js/cah.app.js"></script>
 <link rel="stylesheet" type="text/css" href="cah.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="jquery-ui.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="nightui.css" media="screen" />
 <jsp:include page="analytics.jsp" />
 </head>
 <body>
@@ -100,11 +101,12 @@ HttpSession hSession = request.getSession(true);
   </ul>
   <div id="nickbox">
     Nickname:
-    <input type="text" id="nickname" value="" maxlength="30" role="textbox"
+    <input type="text" id="nickname" class="span3" value="" maxlength="30" placeholder="Nick" role="textbox"
         aria-label="Enter your nickname." />
-    <input type="button" id="nicknameconfirm" value="Set" />
+    <input type="button" class="btn" id="nicknameconfirm" value="Set" />
     <span id="nickbox_error" class="error"></span>
   </div>
+  <p></p>
   <p>
     Pretend You're Xyzzy is a Cards Against Humanity clone, which is available at
     <a href="http://www.cardsagainsthumanity.com/">cardsagainsthumanity.com</a>, where you can buy it
@@ -121,20 +123,20 @@ HttpSession hSession = request.getSession(true);
 <div id="canvas" class="hide">
   <div id="menubar">
     <div id="menubar_left">
-      <input type="button" id="refresh_games" class="hide" value="Refresh Games" />
-      <input type="button" id="create_game" class="hide" value="Create Game" />
-      <input type="text" id="filter_games" class="hide" placeholder="Filter games by keyword" />
+      <input type="button" id="refresh_games" class="hide btn btn-info" value="Refresh Games" />
+      <input type="button" id="create_game" class="hide btn btn-primary" value="Create Game" />
+      <input type="text" id="filter_games" class="hide search-query" placeholder="Filter games by keyword" />
 
-      <input type="button" id="leave_game" class="hide" value="Leave Game" />
-      <input type="button" id="start_game" class="hide" value="Start Game" />
-      <input type="button" id="stop_game" class="hide" value="Stop Game" />
+      <input type="button" id="leave_game" class="hide btn btn-danger" value="Leave Game" />
+      <input type="button" id="start_game" class="hide btn btn-success" value="Start Game" />
+      <input type="button" id="stop_game" class="hide btn btn-danger" value="Stop Game" />
     </div>
     <div id="menubar_right">
       Current timer duration: <span id="current_timer">0</span> seconds
-      <input type="button" id="view_cards" value="View Cards"
+      <input type="button" class="btn btn-info" id="view_cards" value="View Cards"
           title="Open a new window to view all cards in the game."
           onclick="window.open('viewcards.jsp', 'viewcards');" />
-      <input type="button" id="logout" value="Log out" />
+      <input type="button" class="btn btn-danger" id="logout" value="Log out" />
     </div>
   </div>
   <div id="main">
@@ -154,8 +156,8 @@ HttpSession hSession = request.getSession(true);
       <li><a href="#tab-global" class="tab-button" id="button-global">Global Chat</a></li>
     </ul>
     <div id="tab-preferences">
-      <input type="button" value="Save" onclick="cah.Preferences.save();" />
-      <input type="button" value="Revert" onclick="cah.Preferences.load();" />
+      <input type="button" class="btn btn-info" value="Save" onclick="cah.Preferences.save();" />
+      <input type="button" class="btn btn-warning" value="Revert" onclick="cah.Preferences.load();" />
       <label for="hide_connect_quit">Hide connect and quit events: </label>
       <input type="checkbox" id="hide_connect_quit" />
       <br />
@@ -166,18 +168,18 @@ HttpSession hSession = request.getSession(true);
     <div id="tab-gamelist-filters">
       You will have to click Refresh Games after saving any changes here.
       <div style="text-align: right; width:100%">
-        <input type="button" value="Save" onclick="cah.Preferences.save();" />
-        <input type="button" value="Revert" onclick="cah.Preferences.load();" />
+        <input type="button" value="Save" class="btn btn-primary" onclick="cah.Preferences.save();" />
+        <input type="button" value="Revert" class="btn btn-warning" onclick="cah.Preferences.load();" />
       </div>
       <fieldset>
-        <legend>Card set filters</legend>
+        <legend class="l6g">Card set filters:</legend>
         <div class="cardset_filter_list">
           <span title="Any game which uses at least one of these card sets will not be shown in the game list.">
             Do not show any games with these card sets:
           </span>
           <select id="cardsets_banned" multiple="multiple"></select>
           <div class="buttons">
-            <input type="button" id="banned_remove" value="Remove --&gt;"
+            <input type="button" class="btn btn-warning" id="banned_remove" value="Remove --&gt;"
               onclick="cah.Preferences.transferCardSets('banned', 'neutral')" />
           </div>
         </div>
@@ -185,9 +187,9 @@ HttpSession hSession = request.getSession(true);
           <span>Do not require or ban these card sets:</span>
           <select id="cardsets_neutral" multiple="multiple"></select>
           <div class="buttons">
-            <input type="button" id="banned_add" value="&lt;-- Ban"
+            <input type="button" id="banned_add" class="btn btn-error" value="&lt;-- Ban"
                 onclick="cah.Preferences.transferCardSets('neutral', 'banned')" />
-            <input type="button" id="required_add" value="Require --&gt;"
+            <input type="button" id="required_add" class="btn btn-primary" value="Require --&gt;"
                 onclick="cah.Preferences.transferCardSets('neutral', 'required')" />
           </div>
         </div>
@@ -197,7 +199,7 @@ HttpSession hSession = request.getSession(true);
           </span>
           <select id="cardsets_required" multiple="multiple"></select>
           <div class="buttons">
-            <input type="button" id="required_remove" value="&lt;-- Remove"
+            <input type="button" id="required_remove" class="btn btn-success" value="&lt;-- Remove"
                 onclick="cah.Preferences.transferCardSets('required', 'neutral')" />
           </div>
         </div>
@@ -206,7 +208,7 @@ HttpSession hSession = request.getSession(true);
     <div id="tab-global">
       <div class="log"></div>
       <input type="text" class="chat" maxlength="200" aria-label="Type here to chat." />
-      <input type="button" class="chat_submit" value="Chat" />
+      <input type="button" class="chat_submit btn btn-info" value="Chat" />
     </div>
   </div>
 </div>
@@ -215,12 +217,12 @@ HttpSession hSession = request.getSession(true);
 <div class="hide">
 	<div id="gamelist_lobby_template" class="gamelist_lobby" tabindex="0">
 	<div class="gamelist_lobby_left">
-	    	<h3>
+	    	<h4>
 			<span class="gamelist_lobby_host">host</span>'s Game
 			(<span class="gamelist_lobby_player_count"></span>/<span class="gamelist_lobby_max_players"></span>,
 			<span class="gamelist_lobby_spectator_count"></span>/<span class="gamelist_lobby_max_spectators"></span>)
 			<span class="gamelist_lobby_status">status</span>
-		</h3>
+		</h4>
 		<div>
 		<strong>Players:</strong>
 		<span class="gamelist_lobby_players">host, player1, player2</span>
@@ -236,8 +238,8 @@ HttpSession hSession = request.getSession(true);
 		<div class="hide">Game <span class="gamelist_lobby_id">###</span></div>
 	  </div>
 	  <div class="gamelist_lobby_right">
-	    <input type="button" class="gamelist_lobby_join" value="Join" />
-	    <input type="button" class="gamelist_lobby_spectate" value="Spectate" />
+	    <input type="button" class="gamelist_lobby_join btn btn-primary" value="Join" />
+	    <input type="button" class="gamelist_lobby_spectate btn btn-success" value="Spectate" />
 	  </div>
 	</div>
 </div>
@@ -299,9 +301,9 @@ HttpSession hSession = request.getSession(true);
     class="hide">
   <div id="game_template" class="game">
     <div class="game_top">
-      <input type="button" class="game_show_last_round game_menu_bar" value="Show Last Round"
+      <input type="button" class="game_show_last_round game_menu_bar btn btn-info" value="Show Last Round"
           disabled="disabled" />
-      <input type="button" class="game_show_options game_menu_bar" value="Hide Game Options" />
+      <input type="button" class="game_show_options game_menu_bar btn btn-primary" value="Hide Game Options" />
       <label class="game_menu_bar checkbox"><input type="checkbox" class="game_animate_cards" checked="checked" /><span> Animate Cards</span></label>
       <div class="game_message" role="status">
         Waiting for server...
@@ -317,7 +319,7 @@ HttpSession hSession = request.getSession(true);
             <div class="game_black_card" tabindex="0">
             </div>
           </div>
-          <input type="button" class="confirm_card" value="Confirm Selection" />
+          <input type="button" class="confirm_card btn btn-primary" value="Confirm Selection" />
         </div>
         <div class="game_options">
         </div>
@@ -384,7 +386,7 @@ HttpSession hSession = request.getSession(true);
     <span class="options_host_only">Only the game host can change options.</span>
     <br/><br/>
     <fieldset>
-      <legend>Game options:</legend>
+      <legend class="l6g">Game options:</legend>
       <label id="score_limit_template_label" for="score_limit_template">Score limit:</label>
       <select id="score_limit_template" class="score_limit">
         <%
@@ -424,10 +426,11 @@ HttpSession hSession = request.getSession(true);
           Use idle timer.
       </label>
       <br/>
-      <fieldset class="card_sets">
-        <legend>Card Sets</legend>
-        <span class="base_card_sets"></span>
-        <span class="extra_card_sets"></span>
+  <fieldset class="card_sets">
+        <legend class="l6g">Card Sets:</legend>
+        Select at least one of: <span class="base_card_sets carddisplayer"></span>
+        <br/>
+        Select any number of: <span class="extra_card_sets carddisplayer"></span>
       </fieldset>
       <br/>
       <label id="blanks_limit_label" title="Blank cards allow a player to type in their own answer.">
@@ -441,7 +444,7 @@ HttpSession hSession = request.getSession(true);
       </label>
       <br/>
       <label id="game_password_template_label" for="game_password_template">Game password:</label>
-      <input type="text" id="game_password_template" class="game_password"
+      <input type="text" id="game_password_template" class="game_password span2"
           aria-label="Game password. You must tab outside of the box to apply the password."/>
       <input type="password" id="game_fake_password_template" class="game_fake_password hide" />
       You must click outside the box to apply the password.
