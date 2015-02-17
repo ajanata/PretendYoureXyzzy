@@ -428,9 +428,9 @@ HttpSession hSession = request.getSession(true);
       <br/>
   <fieldset class="card_sets">
         <legend class="l6g">Card Sets:</legend>
-        Select at least one of: <span class="base_card_sets carddisplayer"></span>
+        <span class="base_card_sets carddisplayer"></span>
         <br/>
-        Select any number of: <span class="extra_card_sets carddisplayer"></span>
+        <span class="extra_card_sets carddisplayer"></span>
       </fieldset>
       <br/>
       <label id="blanks_limit_label" title="Blank cards allow a player to type in their own answer.">
