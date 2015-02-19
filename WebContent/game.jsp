@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <%--
 Copyright (c) 2012, Andy Janata
 All rights reserved.
@@ -35,13 +34,12 @@ created for the user now.
 @SuppressWarnings("unused")
 HttpSession hSession = request.getSession(true);
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Pretend You're Xyzzy</title>
-<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+<script type="text/javascript" src="js/jquery-2.1.3.js"></script>
+<script type="text/javascript" src="js/jquery-migrate.js"></script>
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/jquery.json.js"></script>
 <script type="text/javascript" src="js/QTransform.js"></script>
@@ -64,9 +62,21 @@ HttpSession hSession = request.getSession(true);
 <script type="text/javascript" src="js/cah.ajax.builder.js"></script>
 <script type="text/javascript" src="js/cah.ajax.handlers.js"></script>
 <script type="text/javascript" src="js/cah.app.js"></script>
-<link rel="stylesheet" type="text/css" href="cah.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="jquery-ui.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="nightui.css" media="screen" />
+<script type="text/javascript">
+      function changeCSS(cssFile, cssLinkIndex) {
+ 
+        var oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
+ 
+        var newlink = document.createElement("link");
+        newlink.setAttribute("rel", "stylesheet");
+        newlink.setAttribute("type", "text/css");
+        newlink.setAttribute("href", cssFile);
+ 
+        document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
+      }
+    </script>
+<link rel="stylesheet" type="text/css" href="altstyle/default/cah.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="stylechooser.css" media="screen" />
 <jsp:include page="analytics.jsp" />
 </head>
 <body>
@@ -130,12 +140,14 @@ HttpSession hSession = request.getSession(true);
       <input type="button" id="leave_game" class="hide btn btn-danger" value="Leave Game" />
       <input type="button" id="start_game" class="hide btn btn-success" value="Start Game" />
       <input type="button" id="stop_game" class="hide btn btn-danger" value="Stop Game" />
+	 
     </div>
     <div id="menubar_right">
       Current timer duration: <span id="current_timer">0</span> seconds
       <input type="button" class="btn btn-info" id="view_cards" value="View Cards"
           title="Open a new window to view all cards in the game."
           onclick="window.open('viewcards.jsp', 'viewcards');" />
+		  
       <input type="button" class="btn btn-danger" id="logout" value="Log out" />
     </div>
   </div>
@@ -158,12 +170,25 @@ HttpSession hSession = request.getSession(true);
     <div id="tab-preferences">
       <input type="button" class="btn btn-info" value="Save" onclick="cah.Preferences.save();" />
       <input type="button" class="btn btn-warning" value="Revert" onclick="cah.Preferences.load();" />
+<div class="dropdown">
+<!-- Reference Button :P <input type="button" value="Old Style [ DOES NOT WORK ]" class="btn btn-warning" onclick="changeCSS('oldcah.css', 0);" /> -->
+  <button class="lgbtn lbtn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+    Style Chooser [Beta!]
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+    <li role="presentation"><a role="menuitem" onclick="changeCSS('oldcah.css', 0);" tabindex="-1" href="#">Legacy</a></li>
+    <li role="presentation"><a role="menuitem" onclick="changeCSS('newcah.css', 0);" tabindex="-1" href="#">New</a></li>
+  </ul>
+</div>
       <label for="hide_connect_quit">Hide connect and quit events: </label>
       <input type="checkbox" id="hide_connect_quit" />
       <br />
       <label for="ignore_list">Chat ignore list, one name per line:</label>
       <br/>
       <textarea id="ignore_list" style="width: 200px; height: 150px"></textarea>
+	  
+
     </div>
     <div id="tab-gamelist-filters">
       You will have to click Refresh Games after saving any changes here.
@@ -191,6 +216,9 @@ HttpSession hSession = request.getSession(true);
                 onclick="cah.Preferences.transferCardSets('neutral', 'banned')" />
             <input type="button" id="required_add" class="btn btn-primary" value="Require --&gt;"
                 onclick="cah.Preferences.transferCardSets('neutral', 'required')" />
+
+
+	  
           </div>
         </div>
         <div class="cardset_filter_list">
@@ -207,8 +235,8 @@ HttpSession hSession = request.getSession(true);
     </div>
     <div id="tab-global">
       <div class="log"></div>
-      <input type="text" class="chat" maxlength="200" aria-label="Type here to chat." />
-      <input type="button" class="chat_submit btn btn-info" value="Chat" />
+      <input type="text" class="chat" maxlength="250" aria-label="Type here to chat." /> 
+      <input type="button" class="chat_submit btn btn-primary" value="Chat" />
     </div>
   </div>
 </div>
@@ -349,7 +377,8 @@ HttpSession hSession = request.getSession(true);
 </div>
 
 <!-- Template for scoreboard container. Holder for design. -->
-<div style="height: 215px; border: 1px solid black;" class="hide">
+<!--<div style="height: 215px; border: 1px solid black;" class="hide">-->
+<div style="container" class="hide">
 	<div id="scoreboard_template" class="scoreboard">
     <div class="game_message" tabindex="0">Scoreboard</div>
 	</div>
@@ -382,7 +411,7 @@ HttpSession hSession = request.getSession(true);
 
 <!-- Template for game options. -->
 <div class="hide">
-  <div class="game_options" id="game_options_template">
+  <div class="game_options well" id="game_options_template">
     <span class="options_host_only">Only the game host can change options.</span>
     <br/><br/>
     <fieldset>
@@ -428,9 +457,8 @@ HttpSession hSession = request.getSession(true);
       <br/>
   <fieldset class="card_sets">
         <legend class="l6g">Card Sets:</legend>
-        <span class="base_card_sets carddisplayer"></span>
-        <br/>
-        <span class="extra_card_sets carddisplayer"></span>
+       <span class="base_card_sets carddisplayer"></span>
+<span class="extra_card_sets carddisplayer"></span>
       </fieldset>
       <br/>
       <label id="blanks_limit_label" title="Blank cards allow a player to type in their own answer.">
@@ -458,5 +486,17 @@ HttpSession hSession = request.getSession(true);
   </div>
 </div>
 <div style="position:absolute; left:-99999px" role="alert" id="aria-notifications"></div>
+<script type="text/javascript" src="js/nightui-btst.js"></script>
+<script type="text/javascript">
+$( ".game_right_side" ).hover(function() {
+	$( this ).style.zIndex = "1000";
+	$( ".game_hand_cards" ).style.zIndex = "0";
+	}
+
+$( ".game_hand_cards" ).hover(function() {
+	$( this ).style.zIndex = "1000";
+	$( ".game_right_side" ).style.zIndex = "0";
+	}
+</script>
 </body>
 </html>

@@ -46,7 +46,7 @@ public class Constants {
 
   public static final int CHAT_FLOOD_MESSAGE_COUNT = 5;
   public static final int CHAT_FLOOD_TIME = 10 * 1000;
-  public static final int CHAT_MAX_LENGTH = 200;
+  public static final int CHAT_MAX_LENGTH = 250;
 
   @SuppressWarnings("serial")
   public static final Set<String> ADMIN_IP_ADDRESSES = new HashSet<String>() {

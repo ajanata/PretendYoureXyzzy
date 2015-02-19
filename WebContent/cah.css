@@ -30,6 +30,14 @@ body {
   margin: 0;
 }
 
+.carddisplayer {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    line-height: .8;
+    color: #333;
+    background-color: #fff;
+}
+
 .card, #game_list {
   font-family: "helvetica neue", helvetica, Arial, sans-serif;
 }
@@ -114,16 +122,17 @@ h2,h3,h4 {
 
 .gamelist_lobby {
   background: #fff;
-  border-radius: .25em;
-  width: 575px;
-  height: 175px;
+  border-radius: .1em;
+  min-width: 575px;
+  width: 33.333333%;
+  height: 40%;
   float: left;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   margin: 4px;
 }
 
 .gamelist_lobby_left {
-  width: 77%;
+  width: 80%;
   font-size: 12px;
   height: 100%;
   padding: .5em 1.5%;
@@ -138,17 +147,18 @@ h2,h3,h4 {
 
 .gamelist_lobby_join {
   width: 100%;
-  height: 75%;
+  height: 75.5%;
+  font-weight: 700;
   border: 0px solid #aaa;
   /*  border-radius: .25em; */
-  text-transform: uppercase;
+  text-transform: camelcase;
 }
 
 .gamelist_lobby_spectate {
   width: 100%;
-  height: 25%;
+  height: 25.1%;
  /* border-radius: .25em;*/
-  text-transform: uppercase;
+  text-transform: camelcase;
   font-weight: 700;
 }
 
@@ -245,7 +255,7 @@ h2,h3,h4 {
   position: absolute;
   padding: 0px;
   width: 90%;
-  font-family: sans-serif;
+  font-family: serif;
   font-size: 12pt;
 }
 
@@ -259,6 +269,7 @@ h2,h3,h4 {
   padding: 0px;
   font-size: 14px;
 }
+
 
 span.error {
   color: red;
@@ -406,7 +417,7 @@ span.debug, span.admin {
 }
 
 .game_options {
-  background: #eee;
+  background: #fff;
   z-index: 500;
 }
 
@@ -631,3 +642,4 @@ span.debug, span.admin {
   bottom: 19px;
   font-size: 8pt;
 }
+
