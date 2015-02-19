@@ -111,7 +111,7 @@ HttpSession hSession = request.getSession(true);
   </ul>
   <div id="nickbox">
     Nickname:
-    <input type="text" id="nickname" class="span3" value="" maxlength="30" placeholder="Nick" role="textbox"
+    <input type="text" id="nickname" class="span3" value="" maxlength="30" placeholder="Xyzzy" role="textbox"
         aria-label="Enter your nickname." />
     <input type="button" class="btn" id="nicknameconfirm" value="Set" />
     <span id="nickbox_error" class="error"></span>
