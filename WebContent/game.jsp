@@ -133,7 +133,7 @@ HttpSession hSession = request.getSession(true);
 <div id="canvas" class="hide">
   <div id="menubar">
     <div id="menubar_left">
-      <input type="button" id="refresh_games" class="hide btn btn-info" value="Refresh Games" />
+      <input type="button" id="refresh_games" class="hide btn btn-success" value="Refresh Games" />
       <input type="button" id="create_game" class="hide btn btn-primary" value="Create Game" />
       <input type="text" id="filter_games" class="hide search-query" placeholder="Filter games by keyword" />
 
