@@ -196,16 +196,16 @@ cah.ajax.ErrorHandlers[cah.$.AjaxOperation.LEAVE_GAME] = function(data, req) {
 cah.ajax.ErrorHandlers[cah.$.AjaxOperation.START_GAME] = function(data, req) {
   if (data[cah.$.AjaxResponse.ERROR_CODE] == cah.$.ErrorCode.NOT_ENOUGH_CARDS) {
     var msg = "With current settings, the game requires "
-        + data[cah.$.ErrorInformation.BLACK_CARDS_REQUIRED] + " black cards and "
-        + data[cah.$.ErrorInformation.WHITE_CARDS_REQUIRED] + " white cards, but only has "
-        + data[cah.$.ErrorInformation.BLACK_CARDS_PRESENT] + " black cards and "
-        + data[cah.$.ErrorInformation.WHITE_CARDS_PRESENT] + " white cards.";
+      + data[cah.$.ErrorInformation.BLACK_CARDS_REQUIRED]
+      + " black cards and " + data[cah.$.ErrorInformation.WHITE_CARDS_REQUIRED]
+      + " white cards, but only has " + data[cah.$.ErrorInformation.BLACK_CARDS_PRESENT]
+      + " black cards and " + data[cah.$.ErrorInformation.WHITE_CARDS_PRESENT] + " white cards.";
 
     cah.log.status_with_game(req[cah.$.AjaxRequest.GAME_ID], msg, "error");
   } else {
     cah.log.error(cah.$.ErrorCode_msg[data[cah.$.AjaxResponse.ERROR_CODE]]);
   }
-};
+}
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.START_GAME] = function(data, req) {
   var game = cah.currentGames[data[cah.$.AjaxRequest.GAME_ID]];
