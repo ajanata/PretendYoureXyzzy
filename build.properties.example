@@ -1,3 +1,8 @@
+pyx.cookie_domain=.localhost
+pyx.max_users=100
+pyx.max_games=25
+pyx.include_inactive_cardsets=true
+
 # for production use, use postgres
 #hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 #hibernate.driver_class=org.postgresql.Driver
