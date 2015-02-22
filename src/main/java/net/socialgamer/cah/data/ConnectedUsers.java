@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
  *   and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
  *   conditions and the following disclaimer in the documentation and/or other materials provided
  *   with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -33,6 +33,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
+import net.socialgamer.cah.CahModule.BroadcastConnectsAndDisconnects;
+import net.socialgamer.cah.CahModule.MaxUsers;
 import net.socialgamer.cah.Constants.DisconnectReason;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.LongPollEvent;
@@ -42,13 +44,15 @@ import net.socialgamer.cah.data.QueuedMessage.MessageType;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 
 /**
  * Class that holds all users connected to the server, and provides functions to operate on said
  * list.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 @Singleton
@@ -71,6 +75,17 @@ public class ConnectedUsers {
    */
   private final Map<String, User> users = new HashMap<String, User>();
 
+  final Provider<Boolean> broadcastConnectsAndDisconnectsProvider;
+  final Provider<Integer> maxUsersProvider;
+
+  @Inject
+  public ConnectedUsers(
+      @BroadcastConnectsAndDisconnects final Provider<Boolean> broadcastConnectsAndDisconnectsProvider,
+      @MaxUsers final Provider<Integer> maxUsersProvider) {
+    this.broadcastConnectsAndDisconnectsProvider = broadcastConnectsAndDisconnectsProvider;
+    this.maxUsersProvider = maxUsersProvider;
+  }
+
   /**
    * @param userName
    *          User name to check.
@@ -84,12 +99,11 @@ public class ConnectedUsers {
    * Checks to see if the specified {@code user} is allowed to connect, and if so, add the user,
    * as an atomic operation.
    * @param user User to add. {@code getNickname()} is used to determine the nickname.
-   * @param maxUsers Maximum number of users allowed to connect. Admins are always allowed to
-   * connect.
    * @return {@code null} if the user was added, or an {@link ErrorCode} explaining why the user was
    * rejected.
    */
-  public ErrorCode checkAndAdd(final User user, final int maxUsers) {
+  public ErrorCode checkAndAdd(final User user) {
+    final int maxUsers = maxUsersProvider.get();
     synchronized (users) {
       if (this.hasUser(user.getNickname())) {
         logger.info(String.format("Rejecting existing username %s from %s", user.toString(),
@@ -103,10 +117,12 @@ public class ConnectedUsers {
         logger.info(String.format("New user %s from %s (admin=%b)", user.toString(),
             user.getHostName(), user.isAdmin()));
         users.put(user.getNickname().toLowerCase(), user);
-        final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-        data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
-        data.put(LongPollResponse.NICKNAME, user.getNickname());
-        broadcastToAll(MessageType.PLAYER_EVENT, data);
+        if (broadcastConnectsAndDisconnectsProvider.get()) {
+          final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+          data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
+          data.put(LongPollResponse.NICKNAME, user.getNickname());
+          broadcastToAll(MessageType.PLAYER_EVENT, data);
+        }
         return null;
       }
     }
@@ -115,7 +131,7 @@ public class ConnectedUsers {
   /**
    * Remove a user from the user list, and mark them as invalid so the next time they make a request
    * they can be informed.
-   * 
+   *
    * @param user
    *          User to remove.
    * @param reason
@@ -123,7 +139,7 @@ public class ConnectedUsers {
    */
   public void removeUser(final User user, final DisconnectReason reason) {
     synchronized (users) {
-      if (users.containsValue(user)) {
+      if (users.containsKey(user.getNickname())) {
         logger.info(String.format("Removing user %s because %s", user.toString(), reason));
         user.noLongerVaild();
         users.remove(user.getNickname().toLowerCase());
@@ -134,7 +150,7 @@ public class ConnectedUsers {
 
   /**
    * Get the User for the specified nickname, or null if no such user exists.
-   * 
+   *
    * @param nickname
    * @return User, or null.
    */
@@ -145,7 +161,7 @@ public class ConnectedUsers {
 
   /**
    * Broadcast to all remaining users that a user has left.
-   * 
+   *
    * @param user
    *          User that has left.
    * @param reason
@@ -153,11 +169,13 @@ public class ConnectedUsers {
    */
   private void notifyRemoveUser(final User user, final DisconnectReason reason) {
     // Games are informed about the user leaving when the user object is marked invalid.
-    final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-    data.put(LongPollResponse.EVENT, LongPollEvent.PLAYER_LEAVE.toString());
-    data.put(LongPollResponse.NICKNAME, user.getNickname());
-    data.put(LongPollResponse.REASON, reason.toString());
-    broadcastToAll(MessageType.PLAYER_EVENT, data);
+    if (broadcastConnectsAndDisconnectsProvider.get()) {
+      final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+      data.put(LongPollResponse.EVENT, LongPollEvent.PLAYER_LEAVE.toString());
+      data.put(LongPollResponse.NICKNAME, user.getNickname());
+      data.put(LongPollResponse.REASON, reason.toString());
+      broadcastToAll(MessageType.PLAYER_EVENT, data);
+    }
   }
 
   /**
@@ -199,7 +217,7 @@ public class ConnectedUsers {
 
   /**
    * Broadcast a message to all connected players.
-   * 
+   *
    * @param type
    *          Type of message to broadcast. This determines the order the messages are returned by
    *          priority.
@@ -213,7 +231,7 @@ public class ConnectedUsers {
 
   /**
    * Broadcast a message to a specified subset of connected players.
-   * 
+   *
    * @param broadcastTo
    *          List of users to broadcast the message to.
    * @param type

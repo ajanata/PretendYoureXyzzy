@@ -2,7 +2,6 @@ package net.socialgamer.cah.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Properties;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -11,9 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.socialgamer.cah.CahModule.CookieDomain;
 import net.socialgamer.cah.StartupUtils;
 
 import com.google.inject.Injector;
+import com.google.inject.Key;
 
 
 @WebServlet("/js/cah.config.js")
@@ -48,9 +49,9 @@ public class JavascriptConfigServlet extends HttpServlet {
 
     // We have to do this every time since it comes from the properties file and that can change...
     final StringBuilder builder = new StringBuilder(256);
+    // Ideally we'd figure out how to make this Servlet itself injectable but I don't have time.
     final Injector injector = (Injector) getServletContext().getAttribute(StartupUtils.INJECTOR);
-    final String cookieDomain = (String) injector.getInstance(Properties.class).get(
-        "pyx.client.cookie_domain");
+    final String cookieDomain = injector.getInstance(Key.get(String.class, CookieDomain.class));
     builder.append(String.format("cah.COOKIE_DOMAIN = '%s';\n", cookieDomain));
 
     resp.setContentType("text/javascript");

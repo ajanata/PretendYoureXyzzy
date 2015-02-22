@@ -158,7 +158,12 @@ HttpSession hSession = request.getSession(true);
     <div id="tab-preferences">
       <input type="button" value="Save" onclick="cah.Preferences.save();" />
       <input type="button" value="Revert" onclick="cah.Preferences.load();" />
-      <label for="hide_connect_quit">Hide connect and quit events: </label>
+      <label for="hide_connect_quit">
+        <dfn style="border-bottom: 1px dotted black"
+          title="Even with this unselected, you might not see these events if the server is configured to not send them.">
+            Hide connect and quit events:
+        </dfn>
+      </label>
       <input type="checkbox" id="hide_connect_quit" />
       <br />
       <label for="ignore_list">Chat ignore list, one name per line:</label>

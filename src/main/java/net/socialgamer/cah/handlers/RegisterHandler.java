@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
  *   and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
  *   conditions and the following disclaimer in the documentation and/or other materials provided
  *   with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -31,7 +31,6 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.CahModule.BanList;
-import net.socialgamer.cah.CahModule.MaxUsers;
 import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
@@ -48,7 +47,7 @@ import com.google.inject.Inject;
 
 /**
  * Handler to register a name with the server and get connected.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class RegisterHandler extends Handler {
@@ -59,14 +58,11 @@ public class RegisterHandler extends Handler {
 
   private final ConnectedUsers users;
   private final Set<String> banList;
-  private final Integer maxUsers;
 
   @Inject
-  public RegisterHandler(final ConnectedUsers users, @BanList final Set<String> banList,
-      @MaxUsers final Integer maxUsers) {
+  public RegisterHandler(final ConnectedUsers users, @BanList final Set<String> banList) {
     this.users = users;
     this.banList = banList;
-    this.maxUsers = maxUsers;
   }
 
   @Override
@@ -89,7 +85,7 @@ public class RegisterHandler extends Handler {
       } else {
         final User user = new User(nick, request.getRemoteAddr(),
             Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteAddr()));
-        final ErrorCode errorCode = users.checkAndAdd(user, maxUsers);
+        final ErrorCode errorCode = users.checkAndAdd(user);
         if (null == errorCode) {
           // There is a findbugs warning on this line:
           // cah/src/net/socialgamer/cah/handlers/RegisterHandler.java:85 Store of non serializable

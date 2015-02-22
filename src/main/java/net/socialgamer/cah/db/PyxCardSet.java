@@ -2,7 +2,6 @@ package net.socialgamer.cah.db;
 
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -134,8 +133,8 @@ public class PyxCardSet extends CardSet {
     return cardSetData;
   }
 
-  public static String getCardsetQuery(final Properties properties) {
-    if (Boolean.valueOf(properties.getProperty("pyx.server.include_inactive_cardsets"))) {
+  public static String getCardsetQuery(final boolean includeInactive) {
+    if (includeInactive) {
       return "from PyxCardSet order by weight, id";
     } else {
       return "from PyxCardSet where active = true order by weight, id";

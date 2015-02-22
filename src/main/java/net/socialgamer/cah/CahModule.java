@@ -93,7 +93,9 @@ public class CahModule extends AbstractModule {
   @Provides
   @MaxGames
   Integer provideMaxGames() {
-    return Integer.valueOf((String) properties.get("pyx.server.max_games"));
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.server.max_games", "20"));
+    }
   }
 
   /**
@@ -102,7 +104,35 @@ public class CahModule extends AbstractModule {
   @Provides
   @MaxUsers
   Integer provideMaxUsers() {
-    return Integer.valueOf((String) properties.get("pyx.server.max_users"));
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.server.max_users", "100"));
+    }
+  }
+
+  @Provides
+  @BroadcastConnectsAndDisconnects
+  Boolean provideBroadcastConnectsAndDisconnects() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty(
+          "pyx.server.broadcast_connects_and_disconnects", "true"));
+    }
+  }
+
+  @Provides
+  @CookieDomain
+  String getCookieDomain() {
+    synchronized (properties) {
+      return properties.getProperty("pyx.client.cookie_domain", ".localhost");
+    }
+  }
+
+  @Provides
+  @IncludeInactiveCardsets
+  Boolean getIncludeInactiveCardsets() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties
+          .getProperty("pyx.server.include_inactive_cardsets", "false"));
+    }
   }
 
   /**
@@ -122,5 +152,20 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface MaxUsers {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface BroadcastConnectsAndDisconnects {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface CookieDomain {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface IncludeInactiveCardsets {
   }
 }
