@@ -86,17 +86,32 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="/">the changelog and list of
     known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 11 August 2014:</p>
+  <p tabindex="0">Most recent update: 21 February 2015:</p>
   <ul>
-    <li>Loading decks from <a href="http://www.cardcastgame.com/">Cardcast</a> is now supported in a
-    preview release. See <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Cardcast">the
-    wiki</a> for instructions. A better UI will hopefully happen before too long, but you can see
-    how long it took to get any sort of custom deck loading implemented...</li>
-    <li>Please go make your own card sets there! It's a really cool site.</li>
-    <li><strong>If you submitted a card set which is currently hosted locally on PYX, please add it
-    to Cardcast and let me know when you have done so, so that I may remove it from the local list
-    to de-clutter the page.</strong> I will list Cardcast codes for previously-hosted decks for a
-    period of time so that users may continue to find them.</li>
+    <li>Servers now run in Amazon Web Services. This is going to cost me more, but at least it
+    should be more stable and not take down my other stuff when it does go down...<ul>
+      <li>I am still tweaking server settings in AWS. It likely is going to be unstable for another
+      week or two while I fine-tune cost and performance.</li></ul></li>
+    <li>Card set filters are fixed.</li>
+    <li><pre>/removecardcast</pre> is fixed.</li>
+    <li>Connect and disconnect notices are disabled server-wide. This was a major source of
+    bandwidth and processing time.</li>
+    <li><strong>You can start a game without using any local card sets.</strong>You must have at
+    least 50 black cards and (20 times player limit) white cards to be able to start a game.</li>
+    <li>Several other back-end performance and code maintainability improvements.</li>
+    <li><strong>Custom card sets will be removed from local storage in the near future.</strong>You
+    will have to use Cardcast to use custom card sets. If a card set you want is not already in
+    Cardcast, you can attempt to extract it from
+    <a href='https://github.com/ajanata/PretendYoureXyzzy/blob/737b468/cah_cards.sql'>the last
+    version of the database dump which contains them</a> and add it to Cardcast yourself; I will be
+    unable to provide help in doing so.</li>
+    <li>At roughly the same time, all officially released Cards Against Humanity sets which are not
+    already in the system will be added as local decks.</li>
+    <li>Remaining known issues and high priority features:<ul>
+      <li>Leaving a game as a spectator doesn't work right.</li>
+      <li>Game owners still can't kick players from their game.</li>
+      <li>Actually saw a deadlock the other night, so that needs fixed.</li>
+    </ul></li>
   </ul>
   <div id="nickbox">
     Nickname:

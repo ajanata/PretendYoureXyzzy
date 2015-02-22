@@ -54,6 +54,32 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>21 February 2015:<ul>
+    <li>Servers now run in Amazon Web Services. This is going to cost me more, but at least it
+    should be more stable and not take down my other stuff when it does go down...<ul>
+      <li>I am still tweaking server settings in AWS. It likely is going to be unstable for another
+      week or two while I fine-tune cost and performance.</li></ul></li>
+    <li>Card set filters are fixed.</li>
+    <li><pre>/removecardcast</pre> is fixed.</li>
+    <li>Connect and disconnect notices are disabled server-wide. This was a major source of
+    bandwidth and processing time.</li>
+    <li><strong>You can start a game without using any local card sets.</strong>You must have at
+    least 50 black cards and (20 times player limit) white cards to be able to start a game.</li>
+    <li>Several other back-end performance and code maintainability improvements.</li>
+    <li><strong>Custom card sets will be removed from local storage in the near future.</strong>You
+    will have to use Cardcast to use custom card sets. If a card set you want is not already in
+    Cardcast, you can attempt to extract it from
+    <a href='https://github.com/ajanata/PretendYoureXyzzy/blob/737b468/cah_cards.sql'>the last
+    version of the database dump which contains them</a> and add it to Cardcast yourself; I will be
+    unable to provide help in doing so.</li>
+    <li>At roughly the same time, all officially released Cards Against Humanity sets which are not
+    already in the system will be added as local decks.</li>
+    <li>Remaining known issues and high priority features:<ul>
+      <li>Leaving a game as a spectator doesn't work right.</li>
+      <li>Game owners still can't kick players from their game.</li>
+      <li>Actually saw a deadlock the other night, so that needs fixed.</li>
+    </ul></li>
+  </ul></li>
   <li>11 August 2014:<ul>
     <li>Loading decks from <a href="http://www.cardcastgame.com/">Cardcast</a> is now supported in a
     preview release. See <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Cardcast">the
@@ -64,68 +90,6 @@ to, for instance, display the number of connected players.
     to Cardcast and let me know when you have done so, so that I may remove it from the local list
     to de-clutter the page.</strong> I will list Cardcast codes for previously-hosted decks for a
     period of time so that users may continue to find them.</li>
-  </ul></li>
-  <li>7 April 2014:<ul>
-    <li>Exploits avoiding the maximum limits for game options have been fixed. No more games with
-    9001 blank white cards.</li>
-  </ul></li>
-  <li>23 February 2014:<ul>
-    <li>Some minor bugfixes, including one which should prevent the entire server from dying if a
-    single background task gets stuck.</li>
-    <li>Some minor performance improvements.</li>
-    <li><a href="http://houseofcardsagainsthumanity.com/">House of Cards Against Humanity</a> is now
-    available.</li>
-  </ul></li>
-  <li>26 January 2014:<ul>
-    <li>Several bugs have been fixed:<ul>
-      <li><strong>Games should no longer reset when an idle player is kicked.</strong></li>
-      <li>The judge should no longer have to re-judge when a player leaves during judging.</li>
-      <li>The playing field should no longer visibly blank out when a player joins or leaves.</li>
-    </ul></li>
-    <li>The game host has a "stop game" button. If this is abused, it may be changed to only work
-    in the first few rounds of a game.</li>
-    <li>You can filter which games to display based on what card sets they are using. Under the
-    Game List Filters tab, you can assign each card set to one of three statuses: Banned, Neutral,
-    and Required. If a game uses <strong>any</strong> of your banned sets, it will not be shown. If
-    a game does not use <strong>all</strong> of your required sets, it also will not be shown.</li>
-  </ul></li>
-  <li>22 December 2013:<ul>
-    <li>What I have received so far of the Holiday Bullshit has been added. I will continue to add
-    cards to this as I receive them.</li>
-    <li>Several custom card sets have been added.</li>
-    <li><strong>No further custom card sets will be accepted.</strong> Minor updates to existing
-    ones may still be submitted, but I do not guarantee I will get to it in a timely manner. It is
-    taking too much of my time to administer the custom cards sets; I'd rather focus the time on
-    implementing a way for players to manage card sets in the game by themselves.</li>
-    <li>Fixed a memory leak introduced in the last update that causes the server to massively slow
-    down after a few days of running.</li>
-  </ul></li>
-  <li>1 December 2013 Mega-Update:<ul>
-    <li>There are a <strong>lot</strong> of new things this time around. You can view the
-    <a href="https://github.com/ajanata/PretendYoureXyzzy/commits/master">GitHub commit history</a>
-    for full details, but here's a summary:<ul>
-      <li>Spectator mode. The host can pick how many spectators the shall allow. Spectators do not
-      participate in the game at all, even as Card Czar.</li>
-      <li>Fill-in-the-blank White Cards. The host can pick how many of these to shuffle into the
-      deck, and when they are played, you are prompted for the text to put on the card.</li>
-      <li>/me chat command for emotes.</li>
-      <li>Option to disable bouncy cards. We've all had a problem selecting the last card on the
-      line; well now, you can uncheck a box up at the top right and they'll stop bouncing around.</li>
-      <li>/sync chat command to re-sync the current game state without reloading the page. It should
-      be harder to de-sync the client now, as well.</li>
-      <li>Users are removed from the server if they have not done anything for an hour.</li>
-      <li>Several more bug fixes and back-end improvements.</li>
-    </ul></li>
-    <li>The Fourth Expansion is up.</li>
-    <li>As you have probably noticed in getting here, there is now a meta-lobby which allows you to
-    choose between multiple servers. They should be identical other than the people playing on them:
-    they are backed by the same card database.</li>
-  </ul></li>
-  <li>5 September 2013:<ul>
-    <li tabindex="0">The Box Expansion and PAX Prime 2013 cards have been added. <strong>If you have
-    any spares of these card numbers and are willing to part with them, it would be awesome if you'd
-    <a href="mailto:ajanata@socialgamer.net?subject=13PAX+cards">email me</a> and send them to me,
-    as I was unable to acquire them at PAX:</strong> 29, 30, 33, 34, 35, 36, 37</li>
   </ul></li>
   <li><a href="changelog.html">Older entries.</a></li>
 </ul>
