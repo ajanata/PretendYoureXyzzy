@@ -96,27 +96,23 @@ public class GameManagerTest {
         bind(ScheduledThreadPoolExecutor.class).toInstance(threadPool);
       }
 
-      @SuppressWarnings("unused")
       @Provides
       @MaxGames
       Integer provideMaxGames() {
         return 3;
       }
 
-      @SuppressWarnings("unused")
       @Provides
       @GameId
       Integer provideGameId() {
         return gameId;
       }
 
-      @SuppressWarnings("unused")
       @Provides
       Session provideSession() {
         return HibernateUtil.instance.sessionFactory.openSession();
       }
 
-      @SuppressWarnings("unused")
       @Provides
       @CardcastCardId
       Integer provideCardcastCardId() {
