@@ -98,6 +98,7 @@ public class FirstLoadHandler extends Handler {
       final List<PyxCardSet> cardSets = hibernateSession
           .createQuery(PyxCardSet.getCardsetQuery(includeInactiveCardsetsProvider.get()))
           .setReadOnly(true)
+          .setCacheable(true)
           .list();
       final List<Map<CardSetData, Object>> cardSetsData =
           new ArrayList<Map<CardSetData, Object>>(cardSets.size());

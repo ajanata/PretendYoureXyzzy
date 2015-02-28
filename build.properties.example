@@ -21,3 +21,16 @@ hibernate.password=CorrectHorseBatteryStaple
 # debugging information
 hibernate.sql.show=false
 hibernate.sql.format=false
+
+# second-level hibernate cache.
+# vastly reduces database load at expense of data potentially being stale.
+# use an in-memory cache provider. this is not suitable for long-term use, however I am using it for
+# my servers for the time being -- better than nothing
+#hibernate.cache.use_second_level_cache=true
+#hibernate.cache.use_query_cache=true
+#hibernate.cache.provider_class=org.hibernate.cache.HashtableCacheProvider
+
+# to turn it off, use these settings instead. you will hit the db a lot more often.
+hibernate.cache.use_second_level_cache=false
+hibernate.cache.use_query_cache=false
+hibernate.cache.provider_class=org.hibernate.cache.NoCacheProvider
