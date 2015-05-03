@@ -50,11 +50,11 @@ import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.WhiteCardData;
-import net.socialgamer.cah.SafeTimerTask;
 import net.socialgamer.cah.cardcast.CardcastDeck;
 import net.socialgamer.cah.cardcast.CardcastService;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
+import net.socialgamer.cah.task.SafeTimerTask;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;

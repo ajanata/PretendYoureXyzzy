@@ -44,8 +44,8 @@ import net.socialgamer.cah.data.Game;
  */
 public class Constants {
 
-  public static final int CHAT_FLOOD_MESSAGE_COUNT = 5;
-  public static final int CHAT_FLOOD_TIME = 10 * 1000;
+  public static final int CHAT_FLOOD_MESSAGE_COUNT = 6;
+  public static final int CHAT_FLOOD_TIME = 30 * 1000;
   public static final int CHAT_MAX_LENGTH = 200;
 
   @SuppressWarnings("serial")
