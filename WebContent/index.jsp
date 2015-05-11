@@ -54,6 +54,16 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>3 May 2015:<ul>
+    <li>The game list automatically updates once per minute now, instead of several times per
+    second. You can still click the Refresh Games button in the top left corner at any time.</li>
+    <li>Chat flood protection has been made more strict.</li>
+    <li>Other back-end changes to attempt to get the AWS bill in control.</li>
+    <li><strong>All locally-stored custom card sets have been removed.</strong> You must use
+    Cardcast for custom card sets now.</li>
+    <li>The 5th and 6th Expansions, PAX Prime 2014 Panel, 10 Days or Whatever of Kwanzaa,
+    and Science packs have all been added.</li>
+  </ul></li>
   <li>21 February 2015:<ul>
     <li>Servers now run in Amazon Web Services. This is going to cost me more, but at least it
     should be more stable and not take down my other stuff when it does go down...<ul>

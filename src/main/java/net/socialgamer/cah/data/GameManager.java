@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
  *   and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
  *   conditions and the following disclaimer in the documentation and/or other materials provided
  *   with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -27,17 +27,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import net.socialgamer.cah.Constants.LongPollEvent;
-import net.socialgamer.cah.Constants.LongPollResponse;
-import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.Game.TooManyPlayersException;
 import net.socialgamer.cah.data.GameManager.GameId;
-import net.socialgamer.cah.data.QueuedMessage.MessageType;
+import net.socialgamer.cah.task.BroadcastGameListUpdateTask;
 
 import org.apache.log4j.Logger;
 
@@ -49,9 +45,9 @@ import com.google.inject.Singleton;
 
 /**
  * Manage games for the server.
- * 
+ *
  * This is also a Guice provider for game ids.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 @Singleton
@@ -62,7 +58,8 @@ public class GameManager implements Provider<Integer> {
   private final Provider<Integer> maxGamesProvider;
   private final Map<Integer, Game> games = new TreeMap<Integer, Game>();
   private final Provider<Game> gameProvider;
-  private final ConnectedUsers users;
+  private final BroadcastGameListUpdateTask broadcastUpdate;
+
   /**
    * Potential next game id.
    */
@@ -70,7 +67,7 @@ public class GameManager implements Provider<Integer> {
 
   /**
    * Create a new game manager.
-   * 
+   *
    * @param gameProvider
    *          Provider for new {@code Game} instances.
    * @param maxGamesProvider
@@ -81,10 +78,10 @@ public class GameManager implements Provider<Integer> {
   @Inject
   public GameManager(final Provider<Game> gameProvider,
       @MaxGames final Provider<Integer> maxGamesProvider,
-      final ConnectedUsers users) {
+      final BroadcastGameListUpdateTask broadcastUpdate) {
     this.gameProvider = gameProvider;
     this.maxGamesProvider = maxGamesProvider;
-    this.users = users;
+    this.broadcastUpdate = broadcastUpdate;
   }
 
   private int getMaxGames() {
@@ -94,7 +91,7 @@ public class GameManager implements Provider<Integer> {
   /**
    * Creates a new game, if there are free game slots. Returns {@code null} if there are already the
    * maximum number of games in progress.
-   * 
+   *
    * @return Newly created game, or {@code null} if the maximum number of games are in progress.
    */
   private Game createGame() {
@@ -114,11 +111,11 @@ public class GameManager implements Provider<Integer> {
   /**
    * Creates a new game and puts the specified user into the game, if there are free game slots.
    * Returns {@code null} if there are already the maximum number of games in progress.
-   * 
+   *
    * Creating the game and adding the user are done atomically with respect to another game getting
    * created, or even getting the list of active games. It is impossible for another user to join
    * the game before the requesting user.
-   * 
+   *
    * @param user
    *          User to place into the game.
    * @return Newly created game, or {@code null} if the maximum number of games are in progress.
@@ -150,10 +147,10 @@ public class GameManager implements Provider<Integer> {
   /**
    * This probably will not be used very often in the server: Games should normally be deleted when
    * all players leave it. I'm putting this in if only to help with testing.
-   * 
+   *
    * Destroys a game immediately. This will almost certainly cause errors on the client for any
    * players left in the game. If {@code gameId} isn't valid, this method silently returns.
-   * 
+   *
    * @param gameId
    *          ID of game to destroy.
    */
@@ -183,17 +180,15 @@ public class GameManager implements Provider<Integer> {
    * Broadcast an event to all users that they should refresh the game list.
    */
   public void broadcastGameListRefresh() {
-    final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
-    broadcastData.put(LongPollResponse.EVENT, LongPollEvent.GAME_LIST_REFRESH.toString());
-    users.broadcastToAll(MessageType.GAME_EVENT, broadcastData);
+    broadcastUpdate.needsUpdate();
   }
 
   /**
    * Get an unused game ID, or -1 if the maximum number of games are in progress. This should not be
    * called in such a case, though!
-   * 
+   *
    * TODO: make this not suck
-   * 
+   *
    * @return Next game id, or {@code -1} if the maximum number of games are in progress.
    */
   @Override
@@ -220,7 +215,7 @@ public class GameManager implements Provider<Integer> {
 
   /**
    * Try to guess a good candidate for the next game id.
-   * 
+   *
    * @param skip
    *          An id to skip over.
    * @return A guess for the next game id.
@@ -255,7 +250,7 @@ public class GameManager implements Provider<Integer> {
 
   /**
    * Gets the game with the specified id, or {@code null} if there is no game with that id.
-   * 
+   *
    * @param id
    *          Id of game to retrieve.
    * @return The Game, or {@code null} if there is no game with that id.

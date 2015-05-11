@@ -1,4 +1,4 @@
-package net.socialgamer.cah;
+package net.socialgamer.cah.task;
 
 import org.apache.log4j.Logger;
 

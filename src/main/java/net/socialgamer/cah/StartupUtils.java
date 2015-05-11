@@ -35,6 +35,8 @@ import javax.servlet.ServletContextEvent;
 
 import net.socialgamer.cah.cardcast.CardcastModule;
 import net.socialgamer.cah.cardcast.CardcastService;
+import net.socialgamer.cah.task.BroadcastGameListUpdateTask;
+import net.socialgamer.cah.task.UserPingTask;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -71,6 +73,16 @@ public class StartupUtils extends GuiceServletContextListener {
   private static final long PING_CHECK_DELAY = 5 * 1000;
 
   /**
+   * Delay before the "update game list" broadcast timer is started, in milliseconds.
+   */
+  private static final long BROADCAST_UPDATE_START_DELAY = TimeUnit.SECONDS.toMillis(60);
+
+  /**
+   * Delay between invocations of the "update game list" broadcast timer, in milliseconds.
+   */
+  private static final long BROADCAST_UPDATE_DELAY = TimeUnit.SECONDS.toMillis(60);
+
+  /**
    * Context attribute key name for the time the server was started.
    */
   public static final String DATE_NAME = "started_at";
@@ -104,10 +116,18 @@ public class StartupUtils extends GuiceServletContextListener {
   public void contextInitialized(final ServletContextEvent contextEvent) {
     final ServletContext context = contextEvent.getServletContext();
     final Injector injector = getInjector();
-    final UserPing ping = injector.getInstance(UserPing.class);
+
     final ScheduledThreadPoolExecutor timer = injector
         .getInstance(ScheduledThreadPoolExecutor.class);
+
+    final UserPingTask ping = injector.getInstance(UserPingTask.class);
     timer.scheduleAtFixedRate(ping, PING_START_DELAY, PING_CHECK_DELAY, TimeUnit.MILLISECONDS);
+
+    final BroadcastGameListUpdateTask broadcastUpdate = injector
+        .getInstance(BroadcastGameListUpdateTask.class);
+    timer.scheduleAtFixedRate(broadcastUpdate, BROADCAST_UPDATE_START_DELAY,
+        BROADCAST_UPDATE_DELAY, TimeUnit.MILLISECONDS);
+
     serverStarted = new Date();
     context.setAttribute(INJECTOR, injector);
     context.setAttribute(DATE_NAME, serverStarted);

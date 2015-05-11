@@ -242,6 +242,7 @@ select {
       <th>Delete</th>
       <th>Edit</th>
       <th>Weight</th>
+      <th>Active</th>
     </tr>
   </thead>
   <tbody>
@@ -253,6 +254,7 @@ select {
         <td><a href="?delete=<%=cardSet.getId()%>" onclick="return confirm('Are you sure?')">Delete</a></td>
         <td><a href="?edit=<%=cardSet.getId()%>">Edit</a></td>
         <td><%=cardSet.getWeight()%></td>
+        <td><%=cardSet.isActive()%></td>
       </tr>
     <%
       }
