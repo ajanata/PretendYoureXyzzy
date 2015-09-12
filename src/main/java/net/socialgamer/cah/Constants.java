@@ -54,7 +54,7 @@ public class Constants {
       add("0:0:0:0:0:0:0:1");
       add("127.0.0.1");
       // ajanata
-      add("73.202.162.31");
+      add("73.222.116.50");
       // vsTerminus
       add("207.161.130.75");
     }
