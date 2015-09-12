@@ -171,6 +171,10 @@ public class CardcastService {
             final List<String> strs = new ArrayList<String>(texts.size());
             for (final Object o : texts) {
               final String cardCastString = (String) o;
+              if (cardCastString.isEmpty()) {
+                // skip blank segments
+                continue;
+              }
               final StringBuilder pyxString = new StringBuilder();
 
               // Cardcast's recommended format is to not capitalize the first letter
@@ -186,8 +190,12 @@ public class CardcastService {
               strs.add(pyxString.toString());
             }
             final String text = StringUtils.join(strs, "");
-            final CardcastWhiteCard card = new CardcastWhiteCard(cardIdProvider.get(), text, setId);
-            deck.getWhiteCards().add(card);
+            // don't add blank cards, they don't do anything
+            if (!text.isEmpty()) {
+              final CardcastWhiteCard card = new CardcastWhiteCard(cardIdProvider.get(), text,
+                  setId);
+              deck.getWhiteCards().add(card);
+            }
           }
         }
       }
