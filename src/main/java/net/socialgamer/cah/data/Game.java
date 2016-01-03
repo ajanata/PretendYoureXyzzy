@@ -859,7 +859,7 @@ public class Game {
 
     if(FINITE_PLAYTIMES.contains(tm))
     {
-      factor = Double.valueOf(tm.substring(0, tm.length() - 2));
+      factor = Double.valueOf(tm.substring(0, tm.length() - 1));
     }
 
     final long retval = Math.round(base * factor);
