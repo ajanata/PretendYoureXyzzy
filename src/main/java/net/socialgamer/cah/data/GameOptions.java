@@ -59,7 +59,7 @@ public class GameOptions {
   public int scoreGoal = DEFAULT_SCORE_LIMIT;
   public final Set<Integer> cardSetIds = new HashSet<Integer>();
   public String password = "";
-  public boolean useIdleTimer = true;
+  public String timerMultiplier = "1.0x";
 
   /**
    * Update the options in-place (so that the Game doesn't need more locks).
@@ -77,7 +77,7 @@ public class GameOptions {
     }
     this.blanksInDeck = newOptions.blanksInDeck;
     this.password = newOptions.password;
-    this.useIdleTimer = newOptions.useIdleTimer;
+    this.timerMultiplier = newOptions.timerMultiplier;
   }
 
   /**
@@ -96,7 +96,7 @@ public class GameOptions {
     info.put(GameOptionData.PLAYER_LIMIT, playerLimit);
     info.put(GameOptionData.SPECTATOR_LIMIT, spectatorLimit);
     info.put(GameOptionData.SCORE_LIMIT, scoreGoal);
-    info.put(GameOptionData.USE_TIMER, useIdleTimer);
+    info.put(GameOptionData.TIMER_MULTIPLIER, timerMultiplier);
     if (includePassword) {
       info.put(GameOptionData.PASSWORD, password);
     }
@@ -128,7 +128,7 @@ public class GameOptions {
         json.getInteger(GameOptionData.SPECTATOR_LIMIT, options.spectatorLimit)));
     options.scoreGoal = Math.max(MIN_SCORE_LIMIT, Math.min(MAX_SCORE_LIMIT,
         json.getInteger(GameOptionData.SCORE_LIMIT, options.scoreGoal)));
-    options.useIdleTimer = json.getBoolean(GameOptionData.USE_TIMER, options.useIdleTimer);
+    options.timerMultiplier = json.getString(GameOptionData.TIMER_MULTIPLIER, options.timerMultiplier);
     options.password = json.getString(GameOptionData.PASSWORD, options.password);
 
     return options;

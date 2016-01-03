@@ -427,13 +427,28 @@ HttpSession hSession = request.getSession(true);
       </select>
       Spectators can watch and chat, but not actually play. Not even as Czar.
       <br/>
-      <input type="checkbox" checked="checked" id="use_timer_template" class="use_timer"
-          title="Players will be skipped if they have not played within a reasonable amount of time."
-          aria-label="Use idle timer. Players will be skipped if they have not played within a reasonable amount of time."/>
-      <label id="use_timer_template_label" for="use_timer_template"
-          title="Players will be skipped if they have not played within a reasonable amount of time.">
-          Use idle timer.
+      <label id="timer_multiplier_template_label" for="timer_multiplier_template"
+          title="Players will be skipped if they have not played within a reasonable amount of time. This is the multiplier to apply to the default timeouts, or Unlimited to disable timeouts.">
+          Idle timer multiplier:
       </label>
+      <select id="timer_multiplier_template" class="timer_multiplier"
+          title="Players will be skipped if they have not played within a reasonable amount of time. This is the multiplier to apply to the default timeouts, or Unlimited to disable timeouts."
+          aria-label="Players will be skipped if they have not played within a reasonable amount of time. This is the multiplier to apply to the default timeouts, or Unlimited to disable timeouts.">
+      	<option value="0.25x">0.25x</option>
+      	<option value="0.5x">0.5x</option>
+      	<option value="0.75x">0.75x</option>
+      	<option selected="selected" value="1x">1x</option>
+      	<option value="1.25x">1.25x</option>
+      	<option value="1.5x">1.5x</option>
+      	<option value="1.75x">1.75x</option>
+      	<option value="2x">2x</option>
+      	<option value="2.5x">2.5x</option>
+      	<option value="3x">3x</option>
+      	<option value="4x">4x</option>
+      	<option value="5x">5x</option>
+      	<option value="10x">10x</option>
+      	<option value="Unlimited">Unlimited</option>
+      </select>
       <br/>
       <fieldset class="card_sets">
         <legend>Card Sets</legend>
