@@ -41,11 +41,12 @@ HttpSession hSession = request.getSession(true);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Pretend You're Xyzzy</title>
-<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="js/jquery-migrate-1.2.1.js"></script>
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/jquery.json.js"></script>
 <script type="text/javascript" src="js/QTransform.js"></script>
-<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/cah.js"></script>
 <script type="text/javascript" src="js/cah.config.js"></script>
 <%-- cah must be first, ajax must be before app. app probably has to be last. --%>
@@ -65,7 +66,7 @@ HttpSession hSession = request.getSession(true);
 <script type="text/javascript" src="js/cah.ajax.handlers.js"></script>
 <script type="text/javascript" src="js/cah.app.js"></script>
 <link rel="stylesheet" type="text/css" href="cah.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="jquery-ui.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="jquery-ui.min.css" media="screen" />
 <jsp:include page="analytics.jsp" />
 </head>
 <body>
