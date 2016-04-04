@@ -3,17 +3,19 @@
 -- For more information, see http://creativecommons.org/licenses/by-nc-sa/3.0/
 
 -- This file contains the Black Cards and White Cards for Cards Against Humanity, as a script for importing into PostgreSQL. There should be a user named cah.
--- Includes the First, Second, Third, and Fourth Expansions, as well as the Canadian version cards, 2012 Holiday Pack, and PAX East 2013 and 13PAX packs.
+-- Includes the First, Second, Third, Fourth, Fifth, and Sixth Expansions, the Box Expansion,
+-- Canadian version cards, 2012 Holiday Pack, 2013 Holiday Bullshit, 2014 Ten Days or Whatever of Kwanzaa,
+-- PAX East 2013 packs, PAX Prime 13 cards, PAX East 2014 cards and Panel Pack, House of Cards Against Humanity,
+-- 90s Nostalgia Pack, The Science Pack, and possibly more that I don't have listed.
 -- 2013 Holiday Bullshit and House of Cards Against Humanity.
--- Also includes a lot of custom card sets.
 
 --
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.1.15
+-- Dumped from database version 9.3.6
 -- Dumped by pg_dump version 9.4.1
--- Started on 2015-02-15 12:23:11
+-- Started on 2016-04-03 21:52:48
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -23,7 +25,7 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --
--- TOC entry 169 (class 3079 OID 11677)
+-- TOC entry 178 (class 3079 OID 11756)
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
@@ -31,8 +33,8 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 1943 (class 0 OID 0)
--- Dependencies: 169
+-- TOC entry 1993 (class 0 OID 0)
+-- Dependencies: 178
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
@@ -46,8 +48,8 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 161 (class 1259 OID 16471)
--- Name: black_cards; Type: TABLE; Schema: public; Owner: cah; Tablespace: 
+-- TOC entry 170 (class 1259 OID 16393)
+-- Name: black_cards; Type: TABLE; Schema: public; Owner: pyx; Tablespace: 
 --
 
 CREATE TABLE black_cards (
@@ -59,11 +61,11 @@ CREATE TABLE black_cards (
 );
 
 
-ALTER TABLE black_cards OWNER TO cah;
+ALTER TABLE black_cards OWNER TO pyx;
 
 --
--- TOC entry 162 (class 1259 OID 16476)
--- Name: black_cards_id_seq; Type: SEQUENCE; Schema: public; Owner: cah
+-- TOC entry 171 (class 1259 OID 16398)
+-- Name: black_cards_id_seq; Type: SEQUENCE; Schema: public; Owner: pyx
 --
 
 CREATE SEQUENCE black_cards_id_seq
@@ -74,20 +76,20 @@ CREATE SEQUENCE black_cards_id_seq
     CACHE 1;
 
 
-ALTER TABLE black_cards_id_seq OWNER TO cah;
+ALTER TABLE black_cards_id_seq OWNER TO pyx;
 
 --
--- TOC entry 1944 (class 0 OID 0)
--- Dependencies: 162
--- Name: black_cards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cah
+-- TOC entry 1994 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: black_cards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: pyx
 --
 
 ALTER SEQUENCE black_cards_id_seq OWNED BY black_cards.id;
 
 
 --
--- TOC entry 163 (class 1259 OID 16478)
--- Name: card_set; Type: TABLE; Schema: public; Owner: cah; Tablespace: 
+-- TOC entry 172 (class 1259 OID 16400)
+-- Name: card_set; Type: TABLE; Schema: public; Owner: pyx; Tablespace: 
 --
 
 CREATE TABLE card_set (
@@ -100,11 +102,11 @@ CREATE TABLE card_set (
 );
 
 
-ALTER TABLE card_set OWNER TO cah;
+ALTER TABLE card_set OWNER TO pyx;
 
 --
--- TOC entry 164 (class 1259 OID 16485)
--- Name: card_set_black_card; Type: TABLE; Schema: public; Owner: cah; Tablespace: 
+-- TOC entry 173 (class 1259 OID 16407)
+-- Name: card_set_black_card; Type: TABLE; Schema: public; Owner: pyx; Tablespace: 
 --
 
 CREATE TABLE card_set_black_card (
@@ -113,11 +115,11 @@ CREATE TABLE card_set_black_card (
 );
 
 
-ALTER TABLE card_set_black_card OWNER TO cah;
+ALTER TABLE card_set_black_card OWNER TO pyx;
 
 --
--- TOC entry 165 (class 1259 OID 16488)
--- Name: card_set_white_card; Type: TABLE; Schema: public; Owner: cah; Tablespace: 
+-- TOC entry 174 (class 1259 OID 16410)
+-- Name: card_set_white_card; Type: TABLE; Schema: public; Owner: pyx; Tablespace: 
 --
 
 CREATE TABLE card_set_white_card (
@@ -126,11 +128,11 @@ CREATE TABLE card_set_white_card (
 );
 
 
-ALTER TABLE card_set_white_card OWNER TO cah;
+ALTER TABLE card_set_white_card OWNER TO pyx;
 
 --
--- TOC entry 166 (class 1259 OID 16491)
--- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: cah
+-- TOC entry 175 (class 1259 OID 16413)
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: pyx
 --
 
 CREATE SEQUENCE hibernate_sequence
@@ -141,11 +143,11 @@ CREATE SEQUENCE hibernate_sequence
     CACHE 1;
 
 
-ALTER TABLE hibernate_sequence OWNER TO cah;
+ALTER TABLE hibernate_sequence OWNER TO pyx;
 
 --
--- TOC entry 167 (class 1259 OID 16493)
--- Name: white_cards; Type: TABLE; Schema: public; Owner: cah; Tablespace: 
+-- TOC entry 176 (class 1259 OID 16415)
+-- Name: white_cards; Type: TABLE; Schema: public; Owner: pyx; Tablespace: 
 --
 
 CREATE TABLE white_cards (
@@ -155,11 +157,11 @@ CREATE TABLE white_cards (
 );
 
 
-ALTER TABLE white_cards OWNER TO cah;
+ALTER TABLE white_cards OWNER TO pyx;
 
 --
--- TOC entry 168 (class 1259 OID 16496)
--- Name: white_cards_id_seq; Type: SEQUENCE; Schema: public; Owner: cah
+-- TOC entry 177 (class 1259 OID 16418)
+-- Name: white_cards_id_seq; Type: SEQUENCE; Schema: public; Owner: pyx
 --
 
 CREATE SEQUENCE white_cards_id_seq
@@ -170,37 +172,37 @@ CREATE SEQUENCE white_cards_id_seq
     CACHE 1;
 
 
-ALTER TABLE white_cards_id_seq OWNER TO cah;
+ALTER TABLE white_cards_id_seq OWNER TO pyx;
 
 --
--- TOC entry 1945 (class 0 OID 0)
--- Dependencies: 168
--- Name: white_cards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cah
+-- TOC entry 1995 (class 0 OID 0)
+-- Dependencies: 177
+-- Name: white_cards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: pyx
 --
 
 ALTER SEQUENCE white_cards_id_seq OWNED BY white_cards.id;
 
 
 --
--- TOC entry 1806 (class 2604 OID 16498)
--- Name: id; Type: DEFAULT; Schema: public; Owner: cah
+-- TOC entry 1850 (class 2604 OID 16420)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: pyx
 --
 
 ALTER TABLE ONLY black_cards ALTER COLUMN id SET DEFAULT nextval('black_cards_id_seq'::regclass);
 
 
 --
--- TOC entry 1808 (class 2604 OID 16499)
--- Name: id; Type: DEFAULT; Schema: public; Owner: cah
+-- TOC entry 1852 (class 2604 OID 16421)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: pyx
 --
 
 ALTER TABLE ONLY white_cards ALTER COLUMN id SET DEFAULT nextval('white_cards_id_seq'::regclass);
 
 
 --
--- TOC entry 1928 (class 0 OID 16471)
--- Dependencies: 161
--- Data for Name: black_cards; Type: TABLE DATA; Schema: public; Owner: cah
+-- TOC entry 1978 (class 0 OID 16393)
+-- Dependencies: 170
+-- Data for Name: black_cards; Type: TABLE DATA; Schema: public; Owner: pyx
 --
 
 INSERT INTO black_cards VALUES (16, 'Who stole the cookies from the cookie jar?', 0, 1, NULL);
@@ -554,6 +556,7 @@ INSERT INTO black_cards VALUES (524, '____ ruined many people''s childhood.', 0,
 INSERT INTO black_cards VALUES (525, '____ and ____ are the new hot couple.', 0, 2, 'RS');
 INSERT INTO black_cards VALUES (526, 'Who needs college when you have ____.', 0, 1, 'RS');
 INSERT INTO black_cards VALUES (527, 'When short on money, you can always ____.', 0, 1, 'RS');
+INSERT INTO black_cards VALUES (8393, 'Hello, I''m a ____.', 0, 1, 'TGWTG');
 INSERT INTO black_cards VALUES (528, 'What will Xyzzy take over the world with?', 0, 1, 'RS');
 INSERT INTO black_cards VALUES (529, 'The next pokemon will combine ____ and ____.', 0, 2, 'RS');
 INSERT INTO black_cards VALUES (530, 'Who is GLaDOS''s next test subject?', 0, 1, 'RS');
@@ -1137,6 +1140,7 @@ INSERT INTO black_cards VALUES (5197, 'In Kingdom Hearts, Donald Duck will be re
 INSERT INTO black_cards VALUES (5198, '&gt;walk into gamestop<br>&gt;see ____<br>&gt;walk out', 0, 1, 'Vidya');
 INSERT INTO black_cards VALUES (5150, '____ is a lie.', 0, 1, 'Vidya');
 INSERT INTO black_cards VALUES (1376, 'Without any warning, Pinkie Pie burst into a song about ____.', 0, 1, 'CAE');
+INSERT INTO black_cards VALUES (8394, 'Here There Be ____.', 0, 1, 'TGWTG');
 INSERT INTO black_cards VALUES (5199, 'Because of the lastest school shooting, ____ is being blamed for making kids too violent.', 0, 1, 'Vidya');
 INSERT INTO black_cards VALUES (5200, 'Here lies ____: peperony and chease', 0, 1, 'Vidya');
 INSERT INTO black_cards VALUES (5201, 'Throwaway round: Get rid of those shit cards you don''t want. Thanks for all the suggestions, /v/', 0, 1, 'Vidya');
@@ -1215,8 +1219,6 @@ INSERT INTO black_cards VALUES (8389, 'Birdemic 3: ____', 0, 1, 'TGWTG');
 INSERT INTO black_cards VALUES (8390, 'E Rod has a new dance move called ____.', 0, 1, 'TGWTG');
 INSERT INTO black_cards VALUES (8391, 'Even Kyle thinks ____ is pretentious.', 0, 1, 'TGWTG');
 INSERT INTO black_cards VALUES (8392, 'Florida''s new crazy is about ____.', 0, 1, 'TGWTG');
-INSERT INTO black_cards VALUES (8393, 'Hello, I''m a ____.', 0, 1, 'TGWTG');
-INSERT INTO black_cards VALUES (8394, 'Here There Be ____.', 0, 1, 'TGWTG');
 INSERT INTO black_cards VALUES (8395, 'Hey kids, I''m Nash, and I couldn''t make ____ up if I tried.', 0, 1, 'TGWTG');
 INSERT INTO black_cards VALUES (8396, 'Hey Nash, whatcha playin''?', 0, 1, 'TGWTG');
 INSERT INTO black_cards VALUES (8397, 'How is Bennett going to creep out Ask That Guy this time? ', 0, 1, 'TGWTG');
@@ -1302,6 +1304,7 @@ INSERT INTO black_cards VALUES (8476, 'What would you do if Ohm really did just 
 INSERT INTO black_cards VALUES (8477, '____ has invaded!', 0, 1, 'NL');
 INSERT INTO black_cards VALUES (8478, 'We''re having technical difficulties due to ____.', 0, 1, 'NL');
 INSERT INTO black_cards VALUES (8479, 'JSmithOTI is referred to as a Scumlord, but his friends call him ____.', 0, 1, 'NL');
+INSERT INTO black_cards VALUES (8573, 'Barry entertains himself by watching old episodes of ____.', 0, 1, 'GG');
 INSERT INTO black_cards VALUES (8480, 'Ohmwrecker is known for his MLG online play. What people don''t know is that he''s also MLG at ____.', 0, 1, 'NL');
 INSERT INTO black_cards VALUES (8481, 'Follow MichaelALFox on Twitter and you can see pictures of ____.', 0, 1, 'NL');
 INSERT INTO black_cards VALUES (8482, 'After Mars, ____ is the next furthest planet from the sun.', 0, 1, 'NL');
@@ -1396,7 +1399,6 @@ INSERT INTO black_cards VALUES (8570, 'And there it was...Kirby had finally met 
 INSERT INTO black_cards VALUES (8672, 'It took hours to edit ____ into the video.', 0, 1, 'DAH');
 INSERT INTO black_cards VALUES (8571, 'Arin believes that the most important part of any video game is ____.', 0, 1, 'GG');
 INSERT INTO black_cards VALUES (8572, 'Arin has an adverse reaction to ____.', 0, 1, 'GG');
-INSERT INTO black_cards VALUES (8573, 'Barry entertains himself by watching old episodes of ____.', 0, 1, 'GG');
 INSERT INTO black_cards VALUES (8574, 'Barry, add ____ into the video!', 0, 1, 'GG');
 INSERT INTO black_cards VALUES (8575, 'Barry, we need a replay on ____.', 0, 1, 'GG');
 INSERT INTO black_cards VALUES (8576, 'BARRY! SHOW ____ AGAIN!', 0, 1, 'GG');
@@ -2228,77 +2230,150 @@ INSERT INTO black_cards VALUES (100568, 'Like ____, State Farm is there.<span cl
 INSERT INTO black_cards VALUES (100569, 'Bob Ross''s little-known first show was called "The Joy of ____."<span class="cardnum">8 / 10</span>', 0, 1, 'PANEL');
 INSERT INTO black_cards VALUES (100570, 'During my first game of D&amp;D, I accidentally summoned ____.<span class="cardnum">7 / 10</span>', 0, 1, 'PANEL');
 INSERT INTO black_cards VALUES (100571, 'Buzzfeed presents: 10 pictures of ____ that look like ____.<span class="cardnum">6 / 10</span>', 0, 2, 'PANEL');
+INSERT INTO black_cards VALUES (100582, 'Buzzfeed presents: 10 pictures of ____ that look like ____. <span class="cardnum">6/10</span>', 0, 2, '14PAX');
+INSERT INTO black_cards VALUES (100583, 'During my first game of D&amp;D, I accidentally summoned ____. <span class="cardnum">7/10</span>', 0, 1, '14PAX');
+INSERT INTO black_cards VALUES (100584, 'Bob Ross''s little-known first show was called "The Joy of ____." <span class="cardnum">8/10</span>', 0, 1, '14PAX');
+INSERT INTO black_cards VALUES (100585, 'Like ____, State Farm is there. <span class="cardnum">9/10</span>', 0, 1, '14PAX');
+INSERT INTO black_cards VALUES (100586, 'The Discovery Channel presents: ____ week. <span class="cardnum">10/10</span>', 0, 1, '14PAX');
+INSERT INTO black_cards VALUES (9550, 'And today''s soup is Cream of ____.', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9551, 'Now in bookstores: "The Audacity of ____," by Barack Obama.', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9552, 'WHOOO! God <i>damn</i> I love ____!', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9553, 'Do you lack energy? Does it sometimes feel like the whole world is ____?<br/><br/>Zoloft&reg;.', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9554, 'Hi, this is Jim from accounting. We noticed a $1,200 charge labeled "____." Can you explain?', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9555, 'Well if ____ is good enough for ____, it''s good enough for me.', 0, 2, 'X5');
+INSERT INTO black_cards VALUES (9556, 'Yo'' mama so fat she ____!', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9557, 'What killed my boner?', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9558, 'Don''t forget! Beginning this week, Casual Friday will officially become "____ Friday."', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9559, 'In his farewell address, George Washington famously warned Americans about the dangers of ____.', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9560, 'Having the worst day EVER. #____', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9561, 'Get ready for the movie of the summer! One cop plays by the book. The other''s only interested in one thing: ____.', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9562, 'What''s making things awkward in the sauna?', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9563, 'Life''s pretty tough in the fast lane. That''s why I never leave the house without ____.', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9564, 'Patient presents with ____. Likely a result of ____.', 0, 2, 'X5');
+INSERT INTO black_cards VALUES (9565, 'Hi MTV! My name is Kendra, I live in Malibu, I''m into ____, and I love to have a good time.', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9566, 'Help me doctor, I''ve got ____ in my butt!', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9567, 'Why am I broke?', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9568, 'I don''t mean to brag, but they call me the Michael Jordan of ____.', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9569, 'Heed my voice, mortals! I am the god of ____, and I will not tolerate ____!', 0, 2, 'X5');
+INSERT INTO black_cards VALUES (9570, 'Here at the Academy for Gifted Children, we allow students to explore ____ at their own pace.', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9571, 'Well what do you have to say for yourself, Casey? This is the third time you''ve been sent to the principal''s office for ____.', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9572, 'In his new action comedy, Jackie Chan must fend off ninjas while also dealing with ____.', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9573, 'Armani suit: $1,000. Dinner for two at that swanky restaurant: $300. The look on her face when you surprise her with ____: priceless.', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9574, 'Do the Dew&reg; with our most extreme flavor yet! Get ready for Mountain Dew ____!', 0, 1, 'X5');
+INSERT INTO black_cards VALUES (9575, 'Today on Buzzfeed: 10 Pictures of ____ That Look Like ____!', 0, 2, 'KWNZA');
+INSERT INTO black_cards VALUES (9576, 'Why am I so tired?', 0, 1, 'KWNZA');
+INSERT INTO black_cards VALUES (9577, 'Dear Mom and Dad, Camp is fun. I like capture the flag. Yesterday, one of the older kids taught me about ____. I love you,<br/>Casey', 0, 1, 'KWNZA');
+INSERT INTO black_cards VALUES (9578, 'Honey, Mommy and Daddy love you very much. But apparently Mommy loves ____ more than she loves Daddy.', 0, 1, 'KWNZA');
+INSERT INTO black_cards VALUES (9579, 'Behold the Four Horsemen of the Apocalypse! War, Famine, Death, and ____.', 0, 1, 'KWNZA');
+INSERT INTO black_cards VALUES (9580, 'A curse upon thee! Many years from now, just when you think you''re safe, ____ shall turn into ____.', 0, 2, 'KWNZA');
+INSERT INTO black_cards VALUES (9581, 'I work my ass off all day for this family, and this is what I come home to? ____!?', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9582, 'I have a strict policy. First date, dinner. Second date, kiss. Third date, ____.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9583, 'When I was a kid, we used to play Cowboys and ____.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9584, 'This is America. If you don''t work hard, you don''t succeed. I don''t care if you''re black, white, purple, or ____.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9585, 'You Won''t Believe These 15 Hilarious ____ Bloopers!', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9586, 'James is a lonely boy. But when he discovers a secret door in his attic, he meets a magical new friend: ____.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9587, 'Don''t worry, kid. It gets better. I''ve been living with ____ for 20 years.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9588, 'My grandfather worked his way up from nothing. When he came to this country, all he had was the shoes on his feet and ____.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9589, 'Behind every powerful man is ____.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9590, 'You are not alone. Millions of Americans struggle with ____ every day.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9591, 'Come to Dubai, where you can relax in our world-famous spas, experience the nightlife, or simply enjoy ____ by the poolside.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9592, '"This is maddness!"<br/><br/>"<i>No.</i> THIS IS ____!"', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9593, 'Listen, Gary, I like you. But if you want that corner office, you''re going to have to show me ____.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9594, 'I went to the desert and ate of the peyote cactus. Turns out my spirit animal is ____.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9595, 'And would you like those buffalo wings mild, hot, or ____?', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9596, 'The six things I could never do without: oxygen, facebook, chocolate, netflix, friends, and ____ LOL!', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9597, 'Why won''t you make love to me anymore? Is it ____?', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9598, 'Puberty is a time of change. You might notice hair growing in new places. You might develop an interest in ____. This is normal.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9599, 'I''m sorry, Mrs. Chen, but there was nothing we could do. At 4:15 this morning, your son succumbed to ____.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9600, 'I''m Miss Tennessee, and if I could make the world better by changing one thing, I would get rid of ____.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9601, 'Tonight, we will have sex. And afterwards, if you''d like, a little bit of ____.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9602, 'Everybody join hands and close your eyes. Do you sense that? That''s the presence of ____ in this room.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9603, 'To become a true Yanomamo warrior, you must prove that you can withstand ____ without crying out.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9604, 'Y''all ready to get this thing started? I''m Nick Cannon, and this is <i>America''s Got</i> ____.', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9605, 'If you had to describe me, the Card Czar, using only one of the cards in your hard, which one would it be?', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9606, 'In line with our predictions, we find a robust correlation between ____ and ____ (<i>p</i> &lt; .05).', 0, 2, 'SCI');
+INSERT INTO black_cards VALUES (9607, 'In what''s being hailed as a major breakthrough, scientists have synthesized ____ in the lab.', 0, 1, 'SCI');
+INSERT INTO black_cards VALUES (9608, 'A study published in <i>Nature</i> this week found that ____ is good for you in small doses.', 0, 1, 'SCI');
+INSERT INTO black_cards VALUES (9609, 'In an attempt to recreate conditions just after the Big Bang, physicists at the LHC are observing collisions between ____ and ____.', 0, 2, 'SCI');
+INSERT INTO black_cards VALUES (9610, 'What really killed the dinosaurs?', 0, 1, 'SCI');
+INSERT INTO black_cards VALUES (9611, 'Hey there, Young Scientists! Put on your labcoats and strap on your safety goggles, because today we''re learning about ____!', 0, 1, 'SCI');
+INSERT INTO black_cards VALUES (9612, 'Today on <i>Mythbusters</i>, we find out how long ____ can withstand ____.', 0, 2, 'SCI');
 
 
 --
--- TOC entry 1946 (class 0 OID 0)
--- Dependencies: 162
--- Name: black_cards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cah
+-- TOC entry 1996 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: black_cards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pyx
 --
 
-SELECT pg_catalog.setval('black_cards_id_seq', 9549, true);
+SELECT pg_catalog.setval('black_cards_id_seq', 9612, true);
 
 
 --
--- TOC entry 1930 (class 0 OID 16478)
--- Dependencies: 163
--- Data for Name: card_set; Type: TABLE DATA; Schema: public; Owner: cah
+-- TOC entry 1980 (class 0 OID 16400)
+-- Dependencies: 172
+-- Data for Name: card_set; Type: TABLE DATA; Schema: public; Owner: pyx
 --
 
-INSERT INTO card_set VALUES (100017, true, '[C] SocialGamer', false, 'Custom cards from the SocialGamer.net community.', 101);
-INSERT INTO card_set VALUES (100157, true, '[C] Northernlion', false, 'http://www.youtube.com/user/Northernlion', 502);
-INSERT INTO card_set VALUES (100160, true, '[C] Ridiculously Stupid', false, '', 504);
-INSERT INTO card_set VALUES (100161, true, '[C] That Guy With The Glasses', true, 'http://thatguywiththeglasses.com/', 503);
-INSERT INTO card_set VALUES (100219, true, '[C] Golby Fan Club', false, '', 505);
 INSERT INTO card_set VALUES (1151, true, 'First Version', true, 'The original version of the Cards Against Humanity base game.', 1);
 INSERT INTO card_set VALUES (1152, true, 'Second Version', true, 'The updated version of the Cards Against Humanity base game.', 2);
 INSERT INTO card_set VALUES (100211, true, 'Third Version', true, 'Another updated version of the Cards Against Humanity base game.', 3);
 INSERT INTO card_set VALUES (1155, true, 'The First Expansion', false, 'The official First Expansion.', 10);
 INSERT INTO card_set VALUES (1256, true, 'The Second Expansion', false, 'The official Second Expansion.', 11);
-INSERT INTO card_set VALUES (100224, true, '[C] Anime', true, 'http://www.desudesbrigade.com/', 506);
 INSERT INTO card_set VALUES (1153, true, 'Canadian', false, 'Cards included in Canadian orders.', 20);
 INSERT INTO card_set VALUES (1154, true, 'Misprint Replacement Bonus Cards', false, 'Bonus cards included with replacements for misprinted cards.', 21);
-INSERT INTO card_set VALUES (100225, true, '[C] Mr. Man Collection', false, '', 515);
 INSERT INTO card_set VALUES (1488, true, '2012 Holiday Pack', false, 'The 2012 Holiday Pack.', 22);
 INSERT INTO card_set VALUES (100154, true, 'The Third Expansion', false, 'The official Third Expansion.', 12);
-INSERT INTO card_set VALUES (100228, true, '[C] Sodomy Dog''s Furry Pack', false, '', 516);
 INSERT INTO card_set VALUES (100051, true, 'PAX East 2013 Pack &quot;C&quot;', false, 'PAX East 2013 Pack &quot;C&quot;.', 32);
 INSERT INTO card_set VALUES (100049, true, 'PAX East 2013 Pack &quot;A&quot;', false, 'PAX East 2013 Pack &quot;A&quot;.', 30);
 INSERT INTO card_set VALUES (100050, true, 'PAX East 2013 Pack &quot;B&quot;', false, 'PAX East 2013 Pack &quot;B&quot;.', 31);
-INSERT INTO card_set VALUES (100229, true, '[C] Vidya', false, 'by Sl0nderman', 517);
-INSERT INTO card_set VALUES (100231, true, '[C] Game Grumps', false, '', 518);
-INSERT INTO card_set VALUES (100257, true, 'Box Expansion', false, 'The Expansion Box Box Expansion.', 18);
-INSERT INTO card_set VALUES (100002, true, '[C] Very Serious', false, 'http://forum.verysrs.com/', 501);
-INSERT INTO card_set VALUES (100003, true, '[C] Admin''s Picks', false, 'Custom cards that I think are particularly fitting.', 100);
-INSERT INTO card_set VALUES (100232, true, '[C] Rooster Teeth', false, '', 519);
-INSERT INTO card_set VALUES (100233, true, '[C] Derps Against Humanity', false, '', 520);
 INSERT INTO card_set VALUES (100312, true, 'PAX Prime 2013', false, 'PAX Prime 2013', 33);
 INSERT INTO card_set VALUES (100415, true, 'The Fourth Expansion', false, 'The official Fourth Expansion.', 13);
-INSERT INTO card_set VALUES (100236, true, '[C] Antisocial Injustice', false, '', 521);
 INSERT INTO card_set VALUES (100422, true, '2013 Holiday Bullshit', false, 'http://www.holidaybullshit.com/', 23);
-INSERT INTO card_set VALUES (100453, true, 'Polish Translation [Needs Review]', true, 'I need somebody to examine this set on /viewcards.jsp and ensure that I didn''t screw up the character encoding.', 50);
-INSERT INTO card_set VALUES (100444, true, '[C] FiMFiction.net', false, 'For FiMFiction.net users, by Cola_Bubble_Gum.', 500);
-INSERT INTO card_set VALUES (100234, true, '[C] Anime Expansion #1', false, 'http://www.desudesbrigade.com/', 507);
-INSERT INTO card_set VALUES (100443, true, '[C] Imgur', false, '', 522);
-INSERT INTO card_set VALUES (100445, true, '[C] /tg/', false, '/tg/', 523);
-INSERT INTO card_set VALUES (100447, true, '[C] RagingPsyfag''s Pack of Shenanigans', false, '', 525);
-INSERT INTO card_set VALUES (100448, true, '[C] Cards Against Homestuck', false, '', 526);
-INSERT INTO card_set VALUES (100449, true, '[C] Doctor Who', false, '', 527);
-INSERT INTO card_set VALUES (100450, true, '[C] Khaos WolfKat', false, '', 528);
-INSERT INTO card_set VALUES (100451, true, '[C] RPAnons', false, '', 529);
-INSERT INTO card_set VALUES (100452, true, '[C] Eurovision Song Contest', false, '', 530);
-INSERT INTO card_set VALUES (100001, true, '[C] Cards Against Equinity', false, 'My Little Pony themed expansion from the reddit MLP communities.', 499);
-INSERT INTO card_set VALUES (100446, true, '[C] xkcd', false, '', 524);
 INSERT INTO card_set VALUES (100485, true, 'House of Cards Against Humanity', false, 'House of Cards pack. http://www.houseofcardsagainsthumanity.com/', 40);
 INSERT INTO card_set VALUES (100560, true, 'PAX East 2014', false, 'The "oatmeal" cards from PAX East 2014.', 34);
 INSERT INTO card_set VALUES (100532, true, 'PAX East 2014 Panel Pack', false, 'These cards were proposed during the CAH panel at PAX East 2014, printed up overnight, and distributed to panel attendees the next day.', 35);
-INSERT INTO card_set VALUES (100531, true, '90s Nostalgia Pack', false, '', 19);
+INSERT INTO card_set VALUES (100017, false, '[C] SocialGamer', false, 'Custom cards from the SocialGamer.net community.', 101);
+INSERT INTO card_set VALUES (100157, false, '[C] Northernlion', false, 'http://www.youtube.com/user/Northernlion', 502);
+INSERT INTO card_set VALUES (100160, false, '[C] Ridiculously Stupid', false, '', 504);
+INSERT INTO card_set VALUES (100161, false, '[C] That Guy With The Glasses', true, 'http://thatguywiththeglasses.com/', 503);
+INSERT INTO card_set VALUES (100219, false, '[C] Golby Fan Club', false, '', 505);
+INSERT INTO card_set VALUES (100224, false, '[C] Anime', true, 'http://www.desudesbrigade.com/', 506);
+INSERT INTO card_set VALUES (100225, false, '[C] Mr. Man Collection', false, '', 515);
+INSERT INTO card_set VALUES (100228, false, '[C] Sodomy Dog''s Furry Pack', false, '', 516);
+INSERT INTO card_set VALUES (100229, false, '[C] Vidya', false, 'by Sl0nderman', 517);
+INSERT INTO card_set VALUES (100231, false, '[C] Game Grumps', false, '', 518);
+INSERT INTO card_set VALUES (100002, false, '[C] Very Serious', false, 'http://forum.verysrs.com/', 501);
+INSERT INTO card_set VALUES (100003, false, '[C] Admin''s Picks', false, 'Custom cards that I think are particularly fitting.', 100);
+INSERT INTO card_set VALUES (100232, false, '[C] Rooster Teeth', false, '', 519);
+INSERT INTO card_set VALUES (100233, false, '[C] Derps Against Humanity', false, '', 520);
+INSERT INTO card_set VALUES (100236, false, '[C] Antisocial Injustice', false, '', 521);
+INSERT INTO card_set VALUES (100444, false, '[C] FiMFiction.net', false, 'For FiMFiction.net users, by Cola_Bubble_Gum.', 500);
+INSERT INTO card_set VALUES (100234, false, '[C] Anime Expansion #1', false, 'http://www.desudesbrigade.com/', 507);
+INSERT INTO card_set VALUES (100443, false, '[C] Imgur', false, '', 522);
+INSERT INTO card_set VALUES (100445, false, '[C] /tg/', false, '/tg/', 523);
+INSERT INTO card_set VALUES (100447, false, '[C] RagingPsyfag''s Pack of Shenanigans', false, '', 525);
+INSERT INTO card_set VALUES (100448, false, '[C] Cards Against Homestuck', false, '', 526);
+INSERT INTO card_set VALUES (100449, false, '[C] Doctor Who', false, '', 527);
+INSERT INTO card_set VALUES (100450, false, '[C] Khaos WolfKat', false, '', 528);
+INSERT INTO card_set VALUES (100451, false, '[C] RPAnons', false, '', 529);
+INSERT INTO card_set VALUES (100452, false, '[C] Eurovision Song Contest', false, '', 530);
+INSERT INTO card_set VALUES (100001, false, '[C] Cards Against Equinity', false, 'My Little Pony themed expansion from the reddit MLP communities.', 499);
+INSERT INTO card_set VALUES (100446, false, '[C] xkcd', false, '', 524);
+INSERT INTO card_set VALUES (100257, true, 'Box Expansion', false, 'The Expansion Box Box Expansion.', 19);
+INSERT INTO card_set VALUES (100587, true, 'PAX Prime 2014 Panel Pack', false, 'These cards were proposed during the CAH panel at PAX Prime 2014, printed up overnight, and distributed to panel attendees the next day.', 36);
+INSERT INTO card_set VALUES (100589, true, '2014 Ten Days or Whatever of Kwanzaa', false, 'http://holidaybullshit.com/', 24);
+INSERT INTO card_set VALUES (100588, true, 'The Fifth Expansion', false, 'The official Fifth Expansion.', 14);
+INSERT INTO card_set VALUES (100590, true, 'The Sixth Expansion', false, 'The official Sixth Expansion.', 15);
+INSERT INTO card_set VALUES (100591, true, 'The Science Pack', false, '', 42);
+INSERT INTO card_set VALUES (100531, true, '90s Nostalgia Pack', false, '', 41);
+INSERT INTO card_set VALUES (100453, false, 'Polish Translation [Needs Review]', true, 'I need somebody to examine this set on /viewcards.jsp and ensure that I didn''t screw up the character encoding.', 99);
 
 
 --
--- TOC entry 1931 (class 0 OID 16485)
--- Dependencies: 164
--- Data for Name: card_set_black_card; Type: TABLE DATA; Schema: public; Owner: cah
+-- TOC entry 1981 (class 0 OID 16407)
+-- Dependencies: 173
+-- Data for Name: card_set_black_card; Type: TABLE DATA; Schema: public; Owner: pyx
 --
 
 INSERT INTO card_set_black_card VALUES (1151, 1);
@@ -4597,12 +4672,80 @@ INSERT INTO card_set_black_card VALUES (100560, 100555);
 INSERT INTO card_set_black_card VALUES (100017, 100230);
 INSERT INTO card_set_black_card VALUES (100017, 100563);
 INSERT INTO card_set_black_card VALUES (100017, 100564);
+INSERT INTO card_set_black_card VALUES (100587, 100582);
+INSERT INTO card_set_black_card VALUES (100587, 100583);
+INSERT INTO card_set_black_card VALUES (100587, 100586);
+INSERT INTO card_set_black_card VALUES (100587, 100584);
+INSERT INTO card_set_black_card VALUES (100587, 100585);
+INSERT INTO card_set_black_card VALUES (100588, 9565);
+INSERT INTO card_set_black_card VALUES (100588, 9564);
+INSERT INTO card_set_black_card VALUES (100588, 9567);
+INSERT INTO card_set_black_card VALUES (100588, 9566);
+INSERT INTO card_set_black_card VALUES (100588, 9561);
+INSERT INTO card_set_black_card VALUES (100588, 9560);
+INSERT INTO card_set_black_card VALUES (100588, 9563);
+INSERT INTO card_set_black_card VALUES (100588, 9562);
+INSERT INTO card_set_black_card VALUES (100588, 9557);
+INSERT INTO card_set_black_card VALUES (100588, 9556);
+INSERT INTO card_set_black_card VALUES (100588, 9559);
+INSERT INTO card_set_black_card VALUES (100588, 9558);
+INSERT INTO card_set_black_card VALUES (100588, 9553);
+INSERT INTO card_set_black_card VALUES (100588, 9552);
+INSERT INTO card_set_black_card VALUES (100588, 9555);
+INSERT INTO card_set_black_card VALUES (100588, 9554);
+INSERT INTO card_set_black_card VALUES (100588, 9550);
+INSERT INTO card_set_black_card VALUES (100588, 9551);
+INSERT INTO card_set_black_card VALUES (100588, 9574);
+INSERT INTO card_set_black_card VALUES (100588, 9572);
+INSERT INTO card_set_black_card VALUES (100588, 9573);
+INSERT INTO card_set_black_card VALUES (100588, 9570);
+INSERT INTO card_set_black_card VALUES (100588, 9571);
+INSERT INTO card_set_black_card VALUES (100588, 9568);
+INSERT INTO card_set_black_card VALUES (100588, 9569);
+INSERT INTO card_set_black_card VALUES (100589, 9580);
+INSERT INTO card_set_black_card VALUES (100589, 9578);
+INSERT INTO card_set_black_card VALUES (100589, 9579);
+INSERT INTO card_set_black_card VALUES (100589, 9576);
+INSERT INTO card_set_black_card VALUES (100589, 9577);
+INSERT INTO card_set_black_card VALUES (100589, 9575);
+INSERT INTO card_set_black_card VALUES (100590, 9599);
+INSERT INTO card_set_black_card VALUES (100590, 9598);
+INSERT INTO card_set_black_card VALUES (100590, 9597);
+INSERT INTO card_set_black_card VALUES (100590, 9596);
+INSERT INTO card_set_black_card VALUES (100590, 9595);
+INSERT INTO card_set_black_card VALUES (100590, 9594);
+INSERT INTO card_set_black_card VALUES (100590, 9593);
+INSERT INTO card_set_black_card VALUES (100590, 9592);
+INSERT INTO card_set_black_card VALUES (100590, 9591);
+INSERT INTO card_set_black_card VALUES (100590, 9590);
+INSERT INTO card_set_black_card VALUES (100590, 9589);
+INSERT INTO card_set_black_card VALUES (100590, 9588);
+INSERT INTO card_set_black_card VALUES (100590, 9587);
+INSERT INTO card_set_black_card VALUES (100590, 9586);
+INSERT INTO card_set_black_card VALUES (100590, 9585);
+INSERT INTO card_set_black_card VALUES (100590, 9584);
+INSERT INTO card_set_black_card VALUES (100590, 9601);
+INSERT INTO card_set_black_card VALUES (100590, 9582);
+INSERT INTO card_set_black_card VALUES (100590, 9600);
+INSERT INTO card_set_black_card VALUES (100590, 9583);
+INSERT INTO card_set_black_card VALUES (100590, 9603);
+INSERT INTO card_set_black_card VALUES (100590, 9602);
+INSERT INTO card_set_black_card VALUES (100590, 9581);
+INSERT INTO card_set_black_card VALUES (100590, 9605);
+INSERT INTO card_set_black_card VALUES (100590, 9604);
+INSERT INTO card_set_black_card VALUES (100591, 9607);
+INSERT INTO card_set_black_card VALUES (100591, 9606);
+INSERT INTO card_set_black_card VALUES (100591, 9609);
+INSERT INTO card_set_black_card VALUES (100591, 9608);
+INSERT INTO card_set_black_card VALUES (100591, 9611);
+INSERT INTO card_set_black_card VALUES (100591, 9610);
+INSERT INTO card_set_black_card VALUES (100591, 9612);
 
 
 --
--- TOC entry 1932 (class 0 OID 16488)
--- Dependencies: 165
--- Data for Name: card_set_white_card; Type: TABLE DATA; Schema: public; Owner: cah
+-- TOC entry 1982 (class 0 OID 16410)
+-- Dependencies: 174
+-- Data for Name: card_set_white_card; Type: TABLE DATA; Schema: public; Owner: pyx
 --
 
 INSERT INTO card_set_white_card VALUES (1151, 1);
@@ -10811,21 +10954,223 @@ INSERT INTO card_set_white_card VALUES (100560, 100542);
 INSERT INTO card_set_white_card VALUES (100560, 100541);
 INSERT INTO card_set_white_card VALUES (100560, 100540);
 INSERT INTO card_set_white_card VALUES (100017, 100561);
+INSERT INTO card_set_white_card VALUES (100587, 100580);
+INSERT INTO card_set_white_card VALUES (100587, 100581);
+INSERT INTO card_set_white_card VALUES (100587, 100578);
+INSERT INTO card_set_white_card VALUES (100587, 100579);
+INSERT INTO card_set_white_card VALUES (100587, 100577);
+INSERT INTO card_set_white_card VALUES (100588, 22212);
+INSERT INTO card_set_white_card VALUES (100588, 22213);
+INSERT INTO card_set_white_card VALUES (100588, 22214);
+INSERT INTO card_set_white_card VALUES (100588, 22215);
+INSERT INTO card_set_white_card VALUES (100588, 22208);
+INSERT INTO card_set_white_card VALUES (100588, 22209);
+INSERT INTO card_set_white_card VALUES (100588, 22210);
+INSERT INTO card_set_white_card VALUES (100588, 22211);
+INSERT INTO card_set_white_card VALUES (100588, 22220);
+INSERT INTO card_set_white_card VALUES (100588, 22221);
+INSERT INTO card_set_white_card VALUES (100588, 22222);
+INSERT INTO card_set_white_card VALUES (100588, 22223);
+INSERT INTO card_set_white_card VALUES (100588, 22216);
+INSERT INTO card_set_white_card VALUES (100588, 22217);
+INSERT INTO card_set_white_card VALUES (100588, 22218);
+INSERT INTO card_set_white_card VALUES (100588, 22219);
+INSERT INTO card_set_white_card VALUES (100588, 22229);
+INSERT INTO card_set_white_card VALUES (100588, 22228);
+INSERT INTO card_set_white_card VALUES (100588, 22231);
+INSERT INTO card_set_white_card VALUES (100588, 22230);
+INSERT INTO card_set_white_card VALUES (100588, 22225);
+INSERT INTO card_set_white_card VALUES (100588, 22224);
+INSERT INTO card_set_white_card VALUES (100588, 22227);
+INSERT INTO card_set_white_card VALUES (100588, 22226);
+INSERT INTO card_set_white_card VALUES (100588, 22237);
+INSERT INTO card_set_white_card VALUES (100588, 22236);
+INSERT INTO card_set_white_card VALUES (100588, 22238);
+INSERT INTO card_set_white_card VALUES (100588, 22233);
+INSERT INTO card_set_white_card VALUES (100588, 22232);
+INSERT INTO card_set_white_card VALUES (100588, 22235);
+INSERT INTO card_set_white_card VALUES (100588, 22234);
+INSERT INTO card_set_white_card VALUES (100588, 22165);
+INSERT INTO card_set_white_card VALUES (100588, 22164);
+INSERT INTO card_set_white_card VALUES (100588, 22167);
+INSERT INTO card_set_white_card VALUES (100588, 22166);
+INSERT INTO card_set_white_card VALUES (100588, 22169);
+INSERT INTO card_set_white_card VALUES (100588, 22168);
+INSERT INTO card_set_white_card VALUES (100588, 22171);
+INSERT INTO card_set_white_card VALUES (100588, 22170);
+INSERT INTO card_set_white_card VALUES (100588, 22173);
+INSERT INTO card_set_white_card VALUES (100588, 22172);
+INSERT INTO card_set_white_card VALUES (100588, 22175);
+INSERT INTO card_set_white_card VALUES (100588, 22174);
+INSERT INTO card_set_white_card VALUES (100588, 22178);
+INSERT INTO card_set_white_card VALUES (100588, 22179);
+INSERT INTO card_set_white_card VALUES (100588, 22176);
+INSERT INTO card_set_white_card VALUES (100588, 22177);
+INSERT INTO card_set_white_card VALUES (100588, 22182);
+INSERT INTO card_set_white_card VALUES (100588, 22183);
+INSERT INTO card_set_white_card VALUES (100588, 22180);
+INSERT INTO card_set_white_card VALUES (100588, 22181);
+INSERT INTO card_set_white_card VALUES (100588, 22186);
+INSERT INTO card_set_white_card VALUES (100588, 22187);
+INSERT INTO card_set_white_card VALUES (100588, 22184);
+INSERT INTO card_set_white_card VALUES (100588, 22185);
+INSERT INTO card_set_white_card VALUES (100588, 22190);
+INSERT INTO card_set_white_card VALUES (100588, 22191);
+INSERT INTO card_set_white_card VALUES (100588, 22188);
+INSERT INTO card_set_white_card VALUES (100588, 22189);
+INSERT INTO card_set_white_card VALUES (100588, 22195);
+INSERT INTO card_set_white_card VALUES (100588, 22194);
+INSERT INTO card_set_white_card VALUES (100588, 22193);
+INSERT INTO card_set_white_card VALUES (100588, 22192);
+INSERT INTO card_set_white_card VALUES (100588, 22199);
+INSERT INTO card_set_white_card VALUES (100588, 22198);
+INSERT INTO card_set_white_card VALUES (100588, 22197);
+INSERT INTO card_set_white_card VALUES (100588, 22196);
+INSERT INTO card_set_white_card VALUES (100588, 22203);
+INSERT INTO card_set_white_card VALUES (100588, 22202);
+INSERT INTO card_set_white_card VALUES (100588, 22201);
+INSERT INTO card_set_white_card VALUES (100588, 22200);
+INSERT INTO card_set_white_card VALUES (100588, 22207);
+INSERT INTO card_set_white_card VALUES (100588, 22206);
+INSERT INTO card_set_white_card VALUES (100588, 22205);
+INSERT INTO card_set_white_card VALUES (100588, 22204);
+INSERT INTO card_set_white_card VALUES (100589, 22246);
+INSERT INTO card_set_white_card VALUES (100589, 22247);
+INSERT INTO card_set_white_card VALUES (100589, 22244);
+INSERT INTO card_set_white_card VALUES (100589, 22245);
+INSERT INTO card_set_white_card VALUES (100589, 22242);
+INSERT INTO card_set_white_card VALUES (100589, 22243);
+INSERT INTO card_set_white_card VALUES (100589, 22240);
+INSERT INTO card_set_white_card VALUES (100589, 22241);
+INSERT INTO card_set_white_card VALUES (100589, 22254);
+INSERT INTO card_set_white_card VALUES (100589, 22255);
+INSERT INTO card_set_white_card VALUES (100589, 22252);
+INSERT INTO card_set_white_card VALUES (100589, 22253);
+INSERT INTO card_set_white_card VALUES (100589, 22250);
+INSERT INTO card_set_white_card VALUES (100589, 22251);
+INSERT INTO card_set_white_card VALUES (100589, 22248);
+INSERT INTO card_set_white_card VALUES (100589, 22249);
+INSERT INTO card_set_white_card VALUES (100589, 22262);
+INSERT INTO card_set_white_card VALUES (100589, 22261);
+INSERT INTO card_set_white_card VALUES (100589, 22260);
+INSERT INTO card_set_white_card VALUES (100589, 22259);
+INSERT INTO card_set_white_card VALUES (100589, 22258);
+INSERT INTO card_set_white_card VALUES (100589, 22257);
+INSERT INTO card_set_white_card VALUES (100589, 22256);
+INSERT INTO card_set_white_card VALUES (100589, 22239);
+INSERT INTO card_set_white_card VALUES (100590, 22337);
+INSERT INTO card_set_white_card VALUES (100590, 22336);
+INSERT INTO card_set_white_card VALUES (100590, 22263);
+INSERT INTO card_set_white_card VALUES (100590, 22271);
+INSERT INTO card_set_white_card VALUES (100590, 22270);
+INSERT INTO card_set_white_card VALUES (100590, 22269);
+INSERT INTO card_set_white_card VALUES (100590, 22268);
+INSERT INTO card_set_white_card VALUES (100590, 22267);
+INSERT INTO card_set_white_card VALUES (100590, 22266);
+INSERT INTO card_set_white_card VALUES (100590, 22265);
+INSERT INTO card_set_white_card VALUES (100590, 22264);
+INSERT INTO card_set_white_card VALUES (100590, 22298);
+INSERT INTO card_set_white_card VALUES (100590, 22299);
+INSERT INTO card_set_white_card VALUES (100590, 22296);
+INSERT INTO card_set_white_card VALUES (100590, 22297);
+INSERT INTO card_set_white_card VALUES (100590, 22302);
+INSERT INTO card_set_white_card VALUES (100590, 22303);
+INSERT INTO card_set_white_card VALUES (100590, 22300);
+INSERT INTO card_set_white_card VALUES (100590, 22301);
+INSERT INTO card_set_white_card VALUES (100590, 22290);
+INSERT INTO card_set_white_card VALUES (100590, 22291);
+INSERT INTO card_set_white_card VALUES (100590, 22288);
+INSERT INTO card_set_white_card VALUES (100590, 22289);
+INSERT INTO card_set_white_card VALUES (100590, 22294);
+INSERT INTO card_set_white_card VALUES (100590, 22295);
+INSERT INTO card_set_white_card VALUES (100590, 22292);
+INSERT INTO card_set_white_card VALUES (100590, 22293);
+INSERT INTO card_set_white_card VALUES (100590, 22283);
+INSERT INTO card_set_white_card VALUES (100590, 22282);
+INSERT INTO card_set_white_card VALUES (100590, 22281);
+INSERT INTO card_set_white_card VALUES (100590, 22280);
+INSERT INTO card_set_white_card VALUES (100590, 22287);
+INSERT INTO card_set_white_card VALUES (100590, 22286);
+INSERT INTO card_set_white_card VALUES (100590, 22285);
+INSERT INTO card_set_white_card VALUES (100590, 22284);
+INSERT INTO card_set_white_card VALUES (100590, 22275);
+INSERT INTO card_set_white_card VALUES (100590, 22274);
+INSERT INTO card_set_white_card VALUES (100590, 22273);
+INSERT INTO card_set_white_card VALUES (100590, 22272);
+INSERT INTO card_set_white_card VALUES (100590, 22279);
+INSERT INTO card_set_white_card VALUES (100590, 22278);
+INSERT INTO card_set_white_card VALUES (100590, 22277);
+INSERT INTO card_set_white_card VALUES (100590, 22276);
+INSERT INTO card_set_white_card VALUES (100590, 22328);
+INSERT INTO card_set_white_card VALUES (100590, 22329);
+INSERT INTO card_set_white_card VALUES (100590, 22330);
+INSERT INTO card_set_white_card VALUES (100590, 22331);
+INSERT INTO card_set_white_card VALUES (100590, 22332);
+INSERT INTO card_set_white_card VALUES (100590, 22333);
+INSERT INTO card_set_white_card VALUES (100590, 22334);
+INSERT INTO card_set_white_card VALUES (100590, 22335);
+INSERT INTO card_set_white_card VALUES (100590, 22320);
+INSERT INTO card_set_white_card VALUES (100590, 22321);
+INSERT INTO card_set_white_card VALUES (100590, 22322);
+INSERT INTO card_set_white_card VALUES (100590, 22323);
+INSERT INTO card_set_white_card VALUES (100590, 22324);
+INSERT INTO card_set_white_card VALUES (100590, 22325);
+INSERT INTO card_set_white_card VALUES (100590, 22326);
+INSERT INTO card_set_white_card VALUES (100590, 22327);
+INSERT INTO card_set_white_card VALUES (100590, 22313);
+INSERT INTO card_set_white_card VALUES (100590, 22312);
+INSERT INTO card_set_white_card VALUES (100590, 22315);
+INSERT INTO card_set_white_card VALUES (100590, 22314);
+INSERT INTO card_set_white_card VALUES (100590, 22317);
+INSERT INTO card_set_white_card VALUES (100590, 22316);
+INSERT INTO card_set_white_card VALUES (100590, 22319);
+INSERT INTO card_set_white_card VALUES (100590, 22318);
+INSERT INTO card_set_white_card VALUES (100590, 22305);
+INSERT INTO card_set_white_card VALUES (100590, 22304);
+INSERT INTO card_set_white_card VALUES (100590, 22307);
+INSERT INTO card_set_white_card VALUES (100590, 22306);
+INSERT INTO card_set_white_card VALUES (100590, 22309);
+INSERT INTO card_set_white_card VALUES (100590, 22308);
+INSERT INTO card_set_white_card VALUES (100590, 22311);
+INSERT INTO card_set_white_card VALUES (100590, 22310);
+INSERT INTO card_set_white_card VALUES (100591, 22360);
+INSERT INTO card_set_white_card VALUES (100591, 22358);
+INSERT INTO card_set_white_card VALUES (100591, 22359);
+INSERT INTO card_set_white_card VALUES (100591, 22356);
+INSERT INTO card_set_white_card VALUES (100591, 22357);
+INSERT INTO card_set_white_card VALUES (100591, 22354);
+INSERT INTO card_set_white_card VALUES (100591, 22355);
+INSERT INTO card_set_white_card VALUES (100591, 22352);
+INSERT INTO card_set_white_card VALUES (100591, 22353);
+INSERT INTO card_set_white_card VALUES (100591, 22351);
+INSERT INTO card_set_white_card VALUES (100591, 22350);
+INSERT INTO card_set_white_card VALUES (100591, 22349);
+INSERT INTO card_set_white_card VALUES (100591, 22348);
+INSERT INTO card_set_white_card VALUES (100591, 22347);
+INSERT INTO card_set_white_card VALUES (100591, 22346);
+INSERT INTO card_set_white_card VALUES (100591, 22345);
+INSERT INTO card_set_white_card VALUES (100591, 22344);
+INSERT INTO card_set_white_card VALUES (100591, 22343);
+INSERT INTO card_set_white_card VALUES (100591, 22342);
+INSERT INTO card_set_white_card VALUES (100591, 22341);
+INSERT INTO card_set_white_card VALUES (100591, 22340);
+INSERT INTO card_set_white_card VALUES (100591, 22339);
+INSERT INTO card_set_white_card VALUES (100591, 22338);
 
 
 --
--- TOC entry 1947 (class 0 OID 0)
--- Dependencies: 166
--- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: cah
+-- TOC entry 1997 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: pyx
 --
 
-SELECT pg_catalog.setval('hibernate_sequence', 100576, true);
+SELECT pg_catalog.setval('hibernate_sequence', 100591, true);
 
 
 --
--- TOC entry 1934 (class 0 OID 16493)
--- Dependencies: 167
--- Data for Name: white_cards; Type: TABLE DATA; Schema: public; Owner: cah
+-- TOC entry 1984 (class 0 OID 16415)
+-- Dependencies: 176
+-- Data for Name: white_cards; Type: TABLE DATA; Schema: public; Owner: pyx
 --
 
 INSERT INTO white_cards VALUES (282, 'Michelle Obama''s arms.', NULL);
@@ -14783,6 +15128,7 @@ INSERT INTO white_cards VALUES (18555, 'Fapping to Billie Piper portraying a cal
 INSERT INTO white_cards VALUES (18556, 'A furry writing BAD WOLF everywhere.', 'DW');
 INSERT INTO white_cards VALUES (18557, 'Being used as a plot device by Steven Moffat.', 'DW');
 INSERT INTO white_cards VALUES (18558, 'A Costco-sized bag of Jelly Babies.', 'DW');
+INSERT INTO white_cards VALUES (18608, 'A REALLY cool cape and tights', 'KHAOS');
 INSERT INTO white_cards VALUES (18559, 'A global simulcast that forces Whovians to see the sunlight for the first time in ages.', 'DW');
 INSERT INTO white_cards VALUES (18560, 'THE END OF TIME ITSELF!', 'DW');
 INSERT INTO white_cards VALUES (18561, 'Finding Autons oddly attractive.', 'DW');
@@ -14893,7 +15239,6 @@ INSERT INTO white_cards VALUES (18604, 'Outrunning The Flash!', 'KHAOS');
 INSERT INTO white_cards VALUES (18605, 'Getting caught in Spiderman''s sticky, sticky... web.', 'KHAOS');
 INSERT INTO white_cards VALUES (18606, 'Getting caught between Green Lantern creating an anvil and Sinestro creating a hammer.', 'KHAOS');
 INSERT INTO white_cards VALUES (18607, 'Pissing in the suit', 'KHAOS');
-INSERT INTO white_cards VALUES (18608, 'A REALLY cool cape and tights', 'KHAOS');
 INSERT INTO white_cards VALUES (18609, 'Content.', 'KHAOS');
 INSERT INTO white_cards VALUES (100454, 'The Hollaad Tonnel.', 'SG');
 INSERT INTO white_cards VALUES (100460, '25 shitty jokes about House of Cards.', 'HOCAH');
@@ -15247,6 +15592,7 @@ INSERT INTO white_cards VALUES (100472, 'Strangling a dog to make a point to the
 INSERT INTO white_cards VALUES (100473, 'A childless marriage.', 'HOCAH');
 INSERT INTO white_cards VALUES (100549, 'Ser Jorah Mormont''s cerulean-blue balls.<span class="cardnum">17 / 27</span>', '14PAX');
 INSERT INTO white_cards VALUES (100550, 'The old gods.<span class="cardnum">18 / 27</span>', '14PAX');
+INSERT INTO white_cards VALUES (18277, 'The Felt.', 'MSPA');
 INSERT INTO white_cards VALUES (100551, 'Stuffing my balls into a Sega Genesis and pressing the power button.<span class="cardnum">19 / 27</span>', '14PAX');
 INSERT INTO white_cards VALUES (100468, 'Getting eaten out while on the phone with Dad.', 'HOCAH');
 INSERT INTO white_cards VALUES (100469, 'Making it look like a suicide.', 'HOCAH');
@@ -15369,7 +15715,6 @@ INSERT INTO white_cards VALUES (18273, 'The Exiles.', 'MSPA');
 INSERT INTO white_cards VALUES (18274, 'Fat Vriska.', 'MSPA');
 INSERT INTO white_cards VALUES (18275, 'Faygo.', 'MSPA');
 INSERT INTO white_cards VALUES (18276, 'Feferi Peixes.', 'MSPA');
-INSERT INTO white_cards VALUES (18277, 'The Felt.', 'MSPA');
 INSERT INTO white_cards VALUES (18278, 'Fiduspawn.', 'MSPA');
 INSERT INTO white_cards VALUES (18279, 'Fifty fucking Nepetas.', 'MSPA');
 INSERT INTO white_cards VALUES (18280, 'Filling all of your quadrants.', 'MSPA');
@@ -15984,20 +16329,222 @@ INSERT INTO white_cards VALUES (22160, 'Syrenka ladacznica.', 'Pol');
 INSERT INTO white_cards VALUES (22161, 'Zużyte majtki.', 'Pol');
 INSERT INTO white_cards VALUES (22162, 'Bijcie masterczułki.', 'Pol');
 INSERT INTO white_cards VALUES (22163, 'Krucjata lezbijek.', 'Pol');
+INSERT INTO white_cards VALUES (100577, 'A neck beard that is 10% cheese. <span class="cardnum">1/10</span>', '14PAX');
+INSERT INTO white_cards VALUES (100578, 'Pelvic sorcery. <span class="cardnum">2/10</span>', '14PAX');
+INSERT INTO white_cards VALUES (100579, 'Pooping as quietly as possible. <span class="cardnum">3/10</span>', '14PAX');
+INSERT INTO white_cards VALUES (100580, 'The beautiful sport of Turkish oil wrestling. <span class="cardnum">4/10</span>', '14PAX');
+INSERT INTO white_cards VALUES (100581, 'No survivors. <span class="cardnum">5/10</span>', '14PAX');
+INSERT INTO white_cards VALUES (22164, 'The black half of Barack Obama.', 'X5');
+INSERT INTO white_cards VALUES (22165, 'The white half of Barack Obama.', 'X5');
+INSERT INTO white_cards VALUES (22166, 'Free ice cream, yo.', 'X5');
+INSERT INTO white_cards VALUES (22167, 'A face full of horse cum.', 'X5');
+INSERT INTO white_cards VALUES (22168, 'Getting caught by the police and going to jail.', 'X5');
+INSERT INTO white_cards VALUES (22169, 'My dead son''s baseball glove.', 'X5');
+INSERT INTO white_cards VALUES (22170, 'Ejaculating live bees and the bees are angry.', 'X5');
+INSERT INTO white_cards VALUES (22171, 'Western standards of beauty.', 'X5');
+INSERT INTO white_cards VALUES (22172, 'Getting eaten alive by Guy Fieri.', 'X5');
+INSERT INTO white_cards VALUES (22173, 'Blowjobs for everyone.', 'X5');
+INSERT INTO white_cards VALUES (22174, 'Blackface.', 'X5');
+INSERT INTO white_cards VALUES (22175, 'Butt stuff.', 'X5');
+INSERT INTO white_cards VALUES (22176, 'Some shit-hot guitar licks.', 'X5');
+INSERT INTO white_cards VALUES (22177, 'Social justice warriors with flamethrowers of compassion.', 'X5');
+INSERT INTO white_cards VALUES (22178, 'Deez nuts.', 'X5');
+INSERT INTO white_cards VALUES (22179, 'An unforgettable quincea&ntilde;era.', 'X5');
+INSERT INTO white_cards VALUES (22180, 'September 11th, 2001.', 'X5');
+INSERT INTO white_cards VALUES (22181, 'Daddy''s credit card.', 'X5');
+INSERT INTO white_cards VALUES (22182, 'A one-way ticket to Gary, Indiana.', 'X5');
+INSERT INTO white_cards VALUES (22183, 'An uninterrupted history of imperialism and exploitation.', 'X5');
+INSERT INTO white_cards VALUES (22184, 'P.F. Chang himself.', 'X5');
+INSERT INTO white_cards VALUES (22185, 'Cutting off a flamingo''s legs with garden shears.', 'X5');
+INSERT INTO white_cards VALUES (22186, 'A giant powdery manbaby.', 'X5');
+INSERT INTO white_cards VALUES (22187, 'Anal fissures like you wouldn''t believe.', 'X5');
+INSERT INTO white_cards VALUES (22188, 'Not believing in giraffes.', 'X5');
+INSERT INTO white_cards VALUES (22189, 'Getting drive-by shot.', 'X5');
+INSERT INTO white_cards VALUES (22190, 'A team of lawyers.', 'X5');
+INSERT INTO white_cards VALUES (22191, 'AIDS monkeys.', 'X5');
+INSERT INTO white_cards VALUES (22192, 'Wearing glasses and sounding smart.', 'X5');
+INSERT INTO white_cards VALUES (22193, 'Slowly easing down onto a cucumber.', 'X5');
+INSERT INTO white_cards VALUES (22194, 'A whole new kind of porn.', 'X5');
+INSERT INTO white_cards VALUES (22195, '40 acres and a mule.', 'X5');
+INSERT INTO white_cards VALUES (22196, 'An inability to form meaningful relationships.', 'X5');
+INSERT INTO white_cards VALUES (22197, 'Boring vaginal sex.', 'X5');
+INSERT INTO white_cards VALUES (22198, 'Genghis Khan''s DNA.', 'X5');
+INSERT INTO white_cards VALUES (22199, 'The tiger that killed my father.', 'X5');
+INSERT INTO white_cards VALUES (22200, 'My boyfriend''s stupid penis.', 'X5');
+INSERT INTO white_cards VALUES (22201, 'Changing a person''s mind with logic and facts.', 'X5');
+INSERT INTO white_cards VALUES (22202, 'Child support payments.', 'X5');
+INSERT INTO white_cards VALUES (22203, 'The passage of time.', 'X5');
+INSERT INTO white_cards VALUES (22204, 'Going to a high school reunion on ketamine.', 'X5');
+INSERT INTO white_cards VALUES (22205, 'A reason not to commit suicide.', 'X5');
+INSERT INTO white_cards VALUES (22206, 'Russion super-tuberculosis.', 'X5');
+INSERT INTO white_cards VALUES (22207, 'A mouthful of potato salad.', 'X5');
+INSERT INTO white_cards VALUES (22208, 'All these decorative pillows.', 'X5');
+INSERT INTO white_cards VALUES (22209, 'Figuring out how to have sex with a dolphin.', 'X5');
+INSERT INTO white_cards VALUES (22210, 'Being worshipped as the one true God.', 'X5');
+INSERT INTO white_cards VALUES (22211, 'The basic suffering that pervades all of existence.', 'X5');
+INSERT INTO white_cards VALUES (22212, 'The ghost of Marlon Brando.', 'X5');
+INSERT INTO white_cards VALUES (22213, 'Out-of-this-world bazongas.', 'X5');
+INSERT INTO white_cards VALUES (22214, 'Ancient Athenian boy-fucking.', 'X5');
+INSERT INTO white_cards VALUES (22215, 'A crazy little thing called love.', 'X5');
+INSERT INTO white_cards VALUES (22216, 'A zero-risk way to make $2,000 from home.', 'X5');
+INSERT INTO white_cards VALUES (22217, 'Seeing my village burned and my family slaughtered before my eyes.', 'X5');
+INSERT INTO white_cards VALUES (22218, 'Being paralyzed from the neck down.', 'X5');
+INSERT INTO white_cards VALUES (22219, 'Backwards knees.', 'X5');
+INSERT INTO white_cards VALUES (22220, 'Having been dead for a while.', 'X5');
+INSERT INTO white_cards VALUES (22221, 'My first period.', 'X5');
+INSERT INTO white_cards VALUES (22222, 'Vegetarian options.', 'X5');
+INSERT INTO white_cards VALUES (22223, 'The Abercrombie &amp; Fitch lifestyle.', 'X5');
+INSERT INTO white_cards VALUES (22224, 'The unbelievable world of mushrooms.', 'X5');
+INSERT INTO white_cards VALUES (22225, 'Being nine years old.', 'X5');
+INSERT INTO white_cards VALUES (22226, 'The eight gay warlocks who dictate the rules of fashion.', 'X5');
+INSERT INTO white_cards VALUES (22227, 'The swim team, all at once.', 'X5');
+INSERT INTO white_cards VALUES (22228, 'Denzel.', 'X5');
+INSERT INTO white_cards VALUES (22229, 'Unrelenting gential punishment.', 'X5');
+INSERT INTO white_cards VALUES (22230, 'Mom''s new boyfriend.', 'X5');
+INSERT INTO white_cards VALUES (22231, 'A disappointing salad.', 'X5');
+INSERT INTO white_cards VALUES (22232, 'A powered exoskeleton.', 'X5');
+INSERT INTO white_cards VALUES (22233, 'Ennui.', 'X5');
+INSERT INTO white_cards VALUES (22234, 'Oil!', 'X5');
+INSERT INTO white_cards VALUES (22235, 'Giant sperm from outer space.', 'X5');
+INSERT INTO white_cards VALUES (22236, 'Doing the right stuff to her nipples.', 'X5');
+INSERT INTO white_cards VALUES (22237, 'Too much cocaine.', 'X5');
+INSERT INTO white_cards VALUES (22238, 'Seeing things from Hitler''s perspective.', 'X5');
+INSERT INTO white_cards VALUES (22239, 'All the poop inside of my body.', 'KWNZA');
+INSERT INTO white_cards VALUES (22240, 'A vague fear of something called ISIS.', 'KWNZA');
+INSERT INTO white_cards VALUES (22241, 'The diminishing purity of the white race.', 'KWNZA');
+INSERT INTO white_cards VALUES (22242, 'Ebola.', 'KWNZA');
+INSERT INTO white_cards VALUES (22243, 'Trying to feel something, anything.', 'KWNZA');
+INSERT INTO white_cards VALUES (22244, 'Small-town cops with M4 assault rifles.', 'KWNZA');
+INSERT INTO white_cards VALUES (22245, 'The 9,000 children who starved to death today.', 'KWNZA');
+INSERT INTO white_cards VALUES (22246, 'The transience of all things.', 'KWNZA');
+INSERT INTO white_cards VALUES (22247, 'A protracted siege.', 'KWNZA');
+INSERT INTO white_cards VALUES (22248, '200 years of slavery.', 'KWNZA');
+INSERT INTO white_cards VALUES (22249, 'Harnessing the miraculous power of the atom to slaughter 200,000 Japanese people.', 'KWNZA');
+INSERT INTO white_cards VALUES (22250, 'Rock music and premarital sex.', 'KWNZA');
+INSERT INTO white_cards VALUES (22251, 'This groovy new thing called LSD.', 'KWNZA');
+INSERT INTO white_cards VALUES (22252, 'Blockbuster late fees up the wazoo.', 'KWNZA');
+INSERT INTO white_cards VALUES (22253, 'The Bowflex Revolution.', 'KWNZA');
+INSERT INTO white_cards VALUES (22254, 'Reading an entire book.', 'KWNZA');
+INSERT INTO white_cards VALUES (22255, 'What remains of my penis.', 'KWNZA');
+INSERT INTO white_cards VALUES (22256, 'Rising sea levels consistent with scientific predictions.', 'KWNZA');
+INSERT INTO white_cards VALUES (22257, 'Being replaced by a robot.', 'KWNZA');
+INSERT INTO white_cards VALUES (22258, 'The events depicted in James Cameron''s <i>Avatar</i>.', 'KWNZA');
+INSERT INTO white_cards VALUES (22259, 'Building a ladder of hot dogs to the moon.', 'KWNZA');
+INSERT INTO white_cards VALUES (22260, 'The Great Lizard Uprising of 2352.', 'KWNZA');
+INSERT INTO white_cards VALUES (22261, 'A cloud of ash that darkens the Earth for a thousand years.', 'KWNZA');
+INSERT INTO white_cards VALUES (22262, 'The dying breath of the last human.', 'KWNZA');
+INSERT INTO white_cards VALUES (22263, 'A bass drop so huge it tears the starry vault asunder to reveal the face of God.', 'X6');
+INSERT INTO white_cards VALUES (22264, 'Growing up chained to a radiator in perpetual darkness.', 'X6');
+INSERT INTO white_cards VALUES (22265, 'Shitting all over the floor like a bad, bad girl.', 'X6');
+INSERT INTO white_cards VALUES (22266, 'A buttload of candy.', 'X6');
+INSERT INTO white_cards VALUES (22267, 'Sucking all of the milk out of a yak.', 'X6');
+INSERT INTO white_cards VALUES (22268, 'Bullets.', 'X6');
+INSERT INTO white_cards VALUES (22269, 'A man who is so cool that he rides on a motorcycle.', 'X6');
+INSERT INTO white_cards VALUES (22270, 'Sudden penis loss.', 'X6');
+INSERT INTO white_cards VALUES (22271, 'Getting all offended.', 'X6');
+INSERT INTO white_cards VALUES (22272, 'Crying and shitting and eating spaghetti.', 'X6');
+INSERT INTO white_cards VALUES (22273, 'One unforgettable night of passion.', 'X6');
+INSERT INTO white_cards VALUES (22274, 'Being popular and good at sports.', 'X6');
+INSERT INTO white_cards VALUES (22275, 'Filling a man''s anus with concrete.', 'X6');
+INSERT INTO white_cards VALUES (22276, 'Two whales fucking the shit out of each other.', 'X6');
+INSERT INTO white_cards VALUES (22277, 'Cool, relatable cancer teens.', 'X6');
+INSERT INTO white_cards VALUES (22278, 'The amount of gay I am.', 'X6');
+INSERT INTO white_cards VALUES (22279, 'A possible Muslim.', 'X6');
+INSERT INTO white_cards VALUES (22280, 'Unsheathing my massive horse cock.', 'X6');
+INSERT INTO white_cards VALUES (22281, 'A bowl of gourds.', 'X6');
+INSERT INTO white_cards VALUES (22282, 'The male gaze.', 'X6');
+INSERT INTO white_cards VALUES (22283, 'The power of the Dark Side.', 'X6');
+INSERT INTO white_cards VALUES (22284, 'Ripping a dog in half.', 'X6');
+INSERT INTO white_cards VALUES (22285, 'A constant need for validation.', 'X6');
+INSERT INTO white_cards VALUES (22286, 'Meaningless sex.', 'X6');
+INSERT INTO white_cards VALUES (22287, 'Such a big boy.', 'X6');
+INSERT INTO white_cards VALUES (22288, 'Throwing stones at a man until he dies.', 'X6');
+INSERT INTO white_cards VALUES (22289, 'Cancer.', 'X6');
+INSERT INTO white_cards VALUES (22290, 'Like a million alligators.', 'X6');
+INSERT INTO white_cards VALUES (22291, 'Eating together like a god damn family for once.', 'X6');
+INSERT INTO white_cards VALUES (22292, 'Cute boys.', 'X6');
+INSERT INTO white_cards VALUES (22293, 'Pussy.', 'X6');
+INSERT INTO white_cards VALUES (22294, 'Being a terrible mother.', 'X6');
+INSERT INTO white_cards VALUES (22295, 'Never having sex again.', 'X6');
+INSERT INTO white_cards VALUES (22296, 'A pizza guy who fucked up.', 'X6');
+INSERT INTO white_cards VALUES (22297, 'A whole lotta woman.', 'X6');
+INSERT INTO white_cards VALUES (22298, 'The all-new Nissan Pathfinder with 0.9% APR financing!', 'X6');
+INSERT INTO white_cards VALUES (22299, 'A peyote-fueled vision quest.', 'X6');
+INSERT INTO white_cards VALUES (22300, 'Kale.', 'X6');
+INSERT INTO white_cards VALUES (22301, 'Breastfeeding a ten year old.', 'X6');
+INSERT INTO white_cards VALUES (22302, 'Crippling social anxiety.', 'X6');
+INSERT INTO white_cards VALUES (22303, 'Immortality cream.', 'X6');
+INSERT INTO white_cards VALUES (22304, 'Texas.', 'X6');
+INSERT INTO white_cards VALUES (22305, 'Teaching a girl how to handjob the penis.', 'X6');
+INSERT INTO white_cards VALUES (22306, 'A turd.', 'X6');
+INSERT INTO white_cards VALUES (22307, 'Shapes and colors.', 'X6');
+INSERT INTO white_cards VALUES (22308, 'Whatever you wish, mother.', 'X6');
+INSERT INTO white_cards VALUES (22309, 'The haunting stare of an Iraqi child.', 'X6');
+INSERT INTO white_cards VALUES (22310, 'Robots who just want to party.', 'X6');
+INSERT INTO white_cards VALUES (22311, 'A self-microwaving burrito.', 'X6');
+INSERT INTO white_cards VALUES (22312, 'Forgetting grandma''s first name.', 'X6');
+INSERT INTO white_cards VALUES (22313, 'Our new Buffalo Chicken Dippers&reg;!', 'X6');
+INSERT INTO white_cards VALUES (22314, 'Treasures beyond your wildest dreams.', 'X6');
+INSERT INTO white_cards VALUES (22315, 'Getting shot out of a cannon.', 'X6');
+INSERT INTO white_cards VALUES (22316, 'The sweet song of sword against sword and the braying of mighty war beasts.', 'X6');
+INSERT INTO white_cards VALUES (22317, 'Walking into a glass door.', 'X6');
+INSERT INTO white_cards VALUES (22318, 'The color "puce."', 'X6');
+INSERT INTO white_cards VALUES (22319, 'Every ounce of charisma left in Mick Jagger''s tired body.', 'X6');
+INSERT INTO white_cards VALUES (22320, 'The eighth graders.', 'X6');
+INSERT INTO white_cards VALUES (22321, 'Setting my balls on fire and cartwheeling to Ohio.', 'X6');
+INSERT INTO white_cards VALUES (22322, 'The dentist.', 'X6');
+INSERT INTO white_cards VALUES (22323, 'Gwyneth Paltrow''s opinions.', 'X6');
+INSERT INTO white_cards VALUES (22324, 'Turning the rivers red with the boold of infidels.', 'X6');
+INSERT INTO white_cards VALUES (22325, 'Rabies.', 'X6');
+INSERT INTO white_cards VALUES (22326, 'Important news about Taylor Swift.', 'X6');
+INSERT INTO white_cards VALUES (22327, 'Ejaculating inside another man''s wife.', 'X6');
+INSERT INTO white_cards VALUES (22328, 'Owls, the perfect predator.', 'X6');
+INSERT INTO white_cards VALUES (22329, 'Being John Malkovich.', 'X6');
+INSERT INTO white_cards VALUES (22330, 'Bathing in moonsblood and dancing around the ancient oak.', 'X6');
+INSERT INTO white_cards VALUES (22331, 'An oppressed people with a vibrant culture.', 'X6');
+INSERT INTO white_cards VALUES (22332, 'An overwhelming variety of cheeses.', 'X6');
+INSERT INTO white_cards VALUES (22333, 'Reading the entire End-User License Agreement.', 'X6');
+INSERT INTO white_cards VALUES (22334, 'Morpheus.', 'X6');
+INSERT INTO white_cards VALUES (22335, 'Peeing into a girl''s butt to make a baby.', 'X6');
+INSERT INTO white_cards VALUES (22336, 'Generally having no idea what''s going on.', 'X6');
+INSERT INTO white_cards VALUES (22337, 'No longer finding any Cards Against Humanity card funny.', 'X6');
+INSERT INTO white_cards VALUES (22338, 'A supermassive black hole.', 'SCI');
+INSERT INTO white_cards VALUES (22339, 'Reconciling quantum theory with general relativity.', 'SCI');
+INSERT INTO white_cards VALUES (22340, 'Electroejaculating a capuchin monkey.', 'SCI');
+INSERT INTO white_cards VALUES (22341, 'Insufficient serotonin.', 'SCI');
+INSERT INTO white_cards VALUES (22342, 'Evolving a labyrinthine vagina.', 'SCI');
+INSERT INTO white_cards VALUES (22343, 'Getting really worried about global warming for a few seconds.', 'SCI');
+INSERT INTO white_cards VALUES (22344, 'Infinity.', 'SCI');
+INSERT INTO white_cards VALUES (22345, 'Oxytocin release via manual stimulation of the nipples.', 'SCI');
+INSERT INTO white_cards VALUES (22346, 'Uranus.', 'SCI');
+INSERT INTO white_cards VALUES (22347, 'Being knowledgeable in a narrow domain that nobody understands or cares about.', 'SCI');
+INSERT INTO white_cards VALUES (22348, 'Achieving reproductive success.', 'SCI');
+INSERT INTO white_cards VALUES (22349, 'Slowly evaporating.', 'SCI');
+INSERT INTO white_cards VALUES (22350, 'The quiet majesty of the sea turtle.', 'SCI');
+INSERT INTO white_cards VALUES (22351, 'A 0.7 waist-to-hip ratio.', 'SCI');
+INSERT INTO white_cards VALUES (22352, 'Fun and interesting facts about rocks.', 'SCI');
+INSERT INTO white_cards VALUES (22353, 'Photosynthesis.', 'SCI');
+INSERT INTO white_cards VALUES (22354, 'Developing secondary sex characteristics.', 'SCI');
+INSERT INTO white_cards VALUES (22355, 'Failing the Turing test.', 'SCI');
+INSERT INTO white_cards VALUES (22356, 'Explosive decompression.', 'SCI');
+INSERT INTO white_cards VALUES (22357, 'Driving into a tornado to learn about tornadoes.', 'SCI');
+INSERT INTO white_cards VALUES (22358, 'David Attenborough watching us mate.', 'SCI');
+INSERT INTO white_cards VALUES (22359, '3.7 billion years of evolution.', 'SCI');
+INSERT INTO white_cards VALUES (22360, 'The Sun engulfing the Earth.', 'SCI');
 
 
 --
--- TOC entry 1948 (class 0 OID 0)
--- Dependencies: 168
--- Name: white_cards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cah
+-- TOC entry 1998 (class 0 OID 0)
+-- Dependencies: 177
+-- Name: white_cards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pyx
 --
 
-SELECT pg_catalog.setval('white_cards_id_seq', 22163, true);
+SELECT pg_catalog.setval('white_cards_id_seq', 22360, true);
 
 
 --
--- TOC entry 1810 (class 2606 OID 16501)
--- Name: black_cards_pkey; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
+-- TOC entry 1854 (class 2606 OID 16423)
+-- Name: black_cards_pkey; Type: CONSTRAINT; Schema: public; Owner: pyx; Tablespace: 
 --
 
 ALTER TABLE ONLY black_cards
@@ -16005,8 +16552,8 @@ ALTER TABLE ONLY black_cards
 
 
 --
--- TOC entry 1812 (class 2606 OID 16503)
--- Name: black_cards_text_key; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
+-- TOC entry 1856 (class 2606 OID 16425)
+-- Name: black_cards_text_key; Type: CONSTRAINT; Schema: public; Owner: pyx; Tablespace: 
 --
 
 ALTER TABLE ONLY black_cards
@@ -16014,8 +16561,8 @@ ALTER TABLE ONLY black_cards
 
 
 --
--- TOC entry 1816 (class 2606 OID 16505)
--- Name: card_set_black_card_pkey; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
+-- TOC entry 1860 (class 2606 OID 16427)
+-- Name: card_set_black_card_pkey; Type: CONSTRAINT; Schema: public; Owner: pyx; Tablespace: 
 --
 
 ALTER TABLE ONLY card_set_black_card
@@ -16023,8 +16570,8 @@ ALTER TABLE ONLY card_set_black_card
 
 
 --
--- TOC entry 1814 (class 2606 OID 16507)
--- Name: card_set_pkey; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
+-- TOC entry 1858 (class 2606 OID 16429)
+-- Name: card_set_pkey; Type: CONSTRAINT; Schema: public; Owner: pyx; Tablespace: 
 --
 
 ALTER TABLE ONLY card_set
@@ -16032,8 +16579,8 @@ ALTER TABLE ONLY card_set
 
 
 --
--- TOC entry 1818 (class 2606 OID 16509)
--- Name: card_set_white_card_pkey; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
+-- TOC entry 1862 (class 2606 OID 16431)
+-- Name: card_set_white_card_pkey; Type: CONSTRAINT; Schema: public; Owner: pyx; Tablespace: 
 --
 
 ALTER TABLE ONLY card_set_white_card
@@ -16041,8 +16588,8 @@ ALTER TABLE ONLY card_set_white_card
 
 
 --
--- TOC entry 1820 (class 2606 OID 16511)
--- Name: white_cards_pkey; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
+-- TOC entry 1864 (class 2606 OID 16433)
+-- Name: white_cards_pkey; Type: CONSTRAINT; Schema: public; Owner: pyx; Tablespace: 
 --
 
 ALTER TABLE ONLY white_cards
@@ -16050,8 +16597,8 @@ ALTER TABLE ONLY white_cards
 
 
 --
--- TOC entry 1822 (class 2606 OID 16513)
--- Name: white_cards_text_key; Type: CONSTRAINT; Schema: public; Owner: cah; Tablespace: 
+-- TOC entry 1866 (class 2606 OID 16435)
+-- Name: white_cards_text_key; Type: CONSTRAINT; Schema: public; Owner: pyx; Tablespace: 
 --
 
 ALTER TABLE ONLY white_cards
@@ -16059,8 +16606,8 @@ ALTER TABLE ONLY white_cards
 
 
 --
--- TOC entry 1823 (class 2606 OID 16514)
--- Name: fk513da45c997611f9; Type: FK CONSTRAINT; Schema: public; Owner: cah
+-- TOC entry 1867 (class 2606 OID 16436)
+-- Name: fk513da45c997611f9; Type: FK CONSTRAINT; Schema: public; Owner: pyx
 --
 
 ALTER TABLE ONLY card_set_black_card
@@ -16068,8 +16615,8 @@ ALTER TABLE ONLY card_set_black_card
 
 
 --
--- TOC entry 1824 (class 2606 OID 16519)
--- Name: fk513da45cb2505f39; Type: FK CONSTRAINT; Schema: public; Owner: cah
+-- TOC entry 1868 (class 2606 OID 16441)
+-- Name: fk513da45cb2505f39; Type: FK CONSTRAINT; Schema: public; Owner: pyx
 --
 
 ALTER TABLE ONLY card_set_black_card
@@ -16077,8 +16624,8 @@ ALTER TABLE ONLY card_set_black_card
 
 
 --
--- TOC entry 1825 (class 2606 OID 16524)
--- Name: fkc2487272b2505f39; Type: FK CONSTRAINT; Schema: public; Owner: cah
+-- TOC entry 1869 (class 2606 OID 16446)
+-- Name: fkc2487272b2505f39; Type: FK CONSTRAINT; Schema: public; Owner: pyx
 --
 
 ALTER TABLE ONLY card_set_white_card
@@ -16086,8 +16633,8 @@ ALTER TABLE ONLY card_set_white_card
 
 
 --
--- TOC entry 1826 (class 2606 OID 16529)
--- Name: fkc2487272bfd29b4d; Type: FK CONSTRAINT; Schema: public; Owner: cah
+-- TOC entry 1870 (class 2606 OID 16451)
+-- Name: fkc2487272bfd29b4d; Type: FK CONSTRAINT; Schema: public; Owner: pyx
 --
 
 ALTER TABLE ONLY card_set_white_card
@@ -16095,7 +16642,7 @@ ALTER TABLE ONLY card_set_white_card
 
 
 --
--- TOC entry 1942 (class 0 OID 0)
+-- TOC entry 1992 (class 0 OID 0)
 -- Dependencies: 6
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
@@ -16106,7 +16653,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2015-02-15 12:23:17
+-- Completed on 2016-04-03 21:53:00
 
 --
 -- PostgreSQL database dump complete
