@@ -670,7 +670,7 @@ public class Constants {
     PLAYER_LIMIT("pL"),
     SPECTATOR_LIMIT("vL"),
     SCORE_LIMIT("sl"),
-    USE_TIMER("ut");
+    TIMER_MULTIPLIER("tm");
 
     private final String key;
 
