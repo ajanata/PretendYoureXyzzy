@@ -1,3 +1,0 @@
-Pretend You're Xyzzy, a Cards Against Humanity clone, server and web client. See WebContent/license.html for full details.
-
-Note: This project has only been tested in Tomcat 7 and is known to not work in Tomcat 6 without some finagling. Currently, the only automated way to build is is using the Eclipse project.
