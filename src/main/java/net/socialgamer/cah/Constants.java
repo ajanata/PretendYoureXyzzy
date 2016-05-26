@@ -54,7 +54,7 @@ public class Constants {
       add("0:0:0:0:0:0:0:1");
       add("127.0.0.1");
       // ajanata
-      add("73.202.162.31");
+      add("73.222.116.50");
       // vsTerminus
       add("207.161.130.75");
     }
@@ -670,7 +670,7 @@ public class Constants {
     PLAYER_LIMIT("pL"),
     SPECTATOR_LIMIT("vL"),
     SCORE_LIMIT("sl"),
-    USE_TIMER("ut");
+    TIMER_MULTIPLIER("tm");
 
     private final String key;
 

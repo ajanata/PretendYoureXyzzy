@@ -33,12 +33,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.apache.log4j.Logger;
+import org.hibernate.Session;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import net.socialgamer.cah.Constants.BlackCardData;
 import net.socialgamer.cah.Constants.ErrorCode;
@@ -55,12 +62,6 @@ import net.socialgamer.cah.cardcast.CardcastService;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.task.SafeTimerTask;
-
-import org.apache.log4j.Logger;
-import org.hibernate.Session;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 
 /**
@@ -151,6 +152,14 @@ public class Game {
    */
   private final static int JUDGE_TIMEOUT_PER_CARD = 7 * 1000;
   private final static int MAX_SKIPS_BEFORE_KICK = 2;
+  private final static Set<String> FINITE_PLAYTIMES;
+  static
+  {
+    final Set<String> finitePlaytimes = new TreeSet<String>(Arrays.asList(
+        new String[]{"0.25x", "0.5x", "0.75x", "1x", "1.25x", "1.5x", "1.75x", "2x", "2.5x", "3x", "4x", "5x", "10x"}));
+    FINITE_PLAYTIMES = Collections.unmodifiableSet(finitePlaytimes);
+  }
+
   /**
    * Lock object to prevent judging during idle judge detection and vice-versa.
    */
@@ -818,8 +827,7 @@ public class Game {
     }
 
     // Perhaps figure out a better way to do this...
-    final int playTimer = options.useIdleTimer ? PLAY_TIMEOUT_BASE
-        + (PLAY_TIMEOUT_PER_CARD * blackCard.getPick()) : Integer.MAX_VALUE;
+    final int playTimer = calculateTime(PLAY_TIMEOUT_BASE + (PLAY_TIMEOUT_PER_CARD * blackCard.getPick()));
 
     final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
@@ -839,6 +847,28 @@ public class Game {
       // 10 second warning
       rescheduleTimer(task, playTimer - 10 * 1000);
     }
+  }
+
+  private int calculateTime(final int base) {
+    double factor = 1.0d;
+    final String tm = options.timerMultiplier;
+
+    if(tm.equals("Unlimited")) {
+      return Integer.MAX_VALUE;
+    }
+
+    if(FINITE_PLAYTIMES.contains(tm))
+    {
+      factor = Double.valueOf(tm.substring(0, tm.length() - 1));
+    }
+
+    final long retval = Math.round(base * factor);
+
+    if(retval > Integer.MAX_VALUE) {
+      return Integer.MAX_VALUE;
+    }
+
+    return (int) retval;
   }
 
   /**
@@ -1010,8 +1040,7 @@ public class Game {
     state = GameState.JUDGING;
 
     // Perhaps figure out a better way to do this...
-    final int judgeTimer = options.useIdleTimer ? JUDGE_TIMEOUT_BASE
-        + (JUDGE_TIMEOUT_PER_CARD * playedCards.size() * blackCard.getPick()) : Integer.MAX_VALUE;
+    final int judgeTimer = calculateTime(JUDGE_TIMEOUT_BASE + (JUDGE_TIMEOUT_PER_CARD * playedCards.size() * blackCard.getPick()));
 
     final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_STATE_CHANGE.toString());
