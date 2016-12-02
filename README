@@ -1,3 +1,9 @@
 Pretend You're Xyzzy, a Cards Against Humanity clone, server and web client. See WebContent/license.html for full details.
 
 Note: This project has only been tested in Tomcat 7 and is known to not work in Tomcat 6 without some finagling. Currently, the only automated way to build is is using the Eclipse project.
+
+1. Install Eclipse, Java EE version.
+2. Add the plugin http://findbugs.cs.umd.edu/eclipse/
+3. Link the JDK system library to the default JRE
+4. Install Tomcat 7.  Configure the server in eclipse and link the project Tomcat library to the server.
+5. Clone the repository and import as an existing project into eclipse.

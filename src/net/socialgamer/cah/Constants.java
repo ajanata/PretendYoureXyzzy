@@ -645,6 +645,7 @@ public class Constants {
     CARD_SETS(AjaxResponse.CARD_SETS),
     @DuplicationAllowed
     PASSWORD(AjaxRequest.PASSWORD),
+    GAME_NAME("gn"),
     PLAYER_LIMIT("pL"),
     SPECTATOR_LIMIT("vL"),
     SCORE_LIMIT("sl"),

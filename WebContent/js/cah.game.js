@@ -92,6 +92,7 @@ cah.Game = function(id) {
   $("#player_limit_template_label", this.optionsElement_).attr("for", "player_limit_" + id);
   $("#spectator_limit_template_label", this.optionsElement_).attr("for", "spectator_limit_" + id);
   $("#card_set_template_label", this.optionsElement_).attr("for", "card_set_" + id);
+  $("#game_name_template_label", this.optionsElement_).attr("for", "game_name_" + id);
   $("#game_password_template_label", this.optionsElement_).attr("for", "game_password_" + id);
   $("#game_hide_password_template_label", this.optionsElement_).attr("for",
       "game_hide_password_" + id);
@@ -101,6 +102,7 @@ cah.Game = function(id) {
   $("#player_limit_template", this.optionsElement_).attr("id", "player_limit_" + id);
   $("#spectator_limit_template", this.optionsElement_).attr("id", "spectator_limit_" + id);
   $("#card_set_template", this.optionsElement_).attr("id", "card_set_" + id);
+  $("#game_name_template", this.optionsElement_).attr("id", "game_name_" + id);
   $("#game_password_template", this.optionsElement_).attr("id", "game_password_" + id);
   $("#game_fake_password_template", this.optionsElement_).attr("id", "game_fake_password_" + id);
   $("#game_hide_password_template", this.optionsElement_).attr("id", "game_hide_password_" + id);
@@ -852,6 +854,7 @@ cah.Game.prototype.updateGameStatus = function(data) {
   $(".score_limit", this.optionsElement_).val(options[cah.$.GameOptionData.SCORE_LIMIT]);
   $(".player_limit", this.optionsElement_).val(options[cah.$.GameOptionData.PLAYER_LIMIT]);
   $(".spectator_limit", this.optionsElement_).val(options[cah.$.GameOptionData.SPECTATOR_LIMIT]);
+  $(".game_name", this.optionsElement_).val(options[cah.$.GameOptionData.GAME_NAME]);
   $(".game_password", this.optionsElement_).val(options[cah.$.GameOptionData.PASSWORD]);
   if (options[cah.$.GameOptionData.USE_TIMER]) {
     $(".use_timer", this.optionsElement_).attr("checked", "checked");
@@ -1478,8 +1481,9 @@ cah.Game.prototype.optionChanged_ = function(e) {
   var options = {};
   options[cah.$.GameOptionData.CARD_SETS] = cardSetIds.join(',');
   options[cah.$.GameOptionData.SCORE_LIMIT] = $(".score_limit", this.optionsElement_).val();
-  options[cah.$.GameOptionData.PLAYER_LIMIT] = $(".player_limit", this.optionsElement_).val();
   options[cah.$.GameOptionData.SPECTATOR_LIMIT] = $(".spectator_limit", this.optionsElement_).val();
+  options[cah.$.GameOptionData.PLAYER_LIMIT] = $(".player_limit", this.optionsElement_).val();
+  options[cah.$.GameOptionData.GAME_NAME] = $(".game_name", this.optionsElement_).val();
   options[cah.$.GameOptionData.PASSWORD] = $(".game_password", this.optionsElement_).val();
   options[cah.$.GameOptionData.BLANKS_LIMIT] = $(".blanks_limit", this.optionsElement_).val();
   options[cah.$.GameOptionData.USE_TIMER] = !!$('.use_timer', this.optionsElement_).attr('checked');

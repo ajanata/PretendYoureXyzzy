@@ -24,14 +24,14 @@
 /**
  * Display the list of games on the server, and enable the player to join a game. This is a
  * singleton.
- *
+ * 
  * @author Andy Janata (ajanata@socialgamer.net)
  * @constructor
  */
 cah.GameList = function() {
   /**
    * The game list DOM element.
-   *
+   * 
    * @type {HTMLDivElement}
    * @private
    */
@@ -39,7 +39,7 @@ cah.GameList = function() {
 
   /**
    * Map all game lobby objects, id -> game lobby.
-   *
+   * 
    * @type {Object}
    * @private
    */
@@ -47,7 +47,7 @@ cah.GameList = function() {
 
   /**
    * Regular Expression for simple filtering of game list.
-   *
+   * 
    * @type {RegExp}
    * @private
    */
@@ -61,7 +61,7 @@ cah.GameList = function() {
 $(document).ready(function() {
   /**
    * The singleton instance of GameList.
-   *
+   * 
    * @type {cah.GameList}
    */
   cah.GameList.instance = new cah.GameList();
@@ -102,7 +102,7 @@ cah.GameList.prototype.update = function() {
 
 /**
  * Update the list of games with fresh data from the server.
- *
+ * 
  * @param {Object}
  *          gameData The game data returned by the server.
  */
@@ -129,7 +129,7 @@ cah.GameList.prototype.processUpdate = function(gameData) {
   var bannedSets = cah.Preferences.getBannedCardSetIds();
   var requiredSets = cah.Preferences.getRequiredCardSetIds();
 
-  for ( var i = 0; i < games.length; i++) {
+  for (var i = 0; i < games.length; i++) {
     var game = games[i];
 
     var hasBanned = false;
@@ -167,7 +167,7 @@ cah.GameList.prototype.processUpdate = function(gameData) {
 
 /**
  * Join the given game.
- *
+ * 
  * @param {Number}
  *          id The id of the game to join.
  */
@@ -183,25 +183,26 @@ cah.GameList.prototype.joinGame = function(id) {
 /**
  * Sets the current game filter regular expression
  */
-cah.GameList.prototype.setFilter = function (filterRegExp) {
+cah.GameList.prototype.setFilter = function(filterRegExp) {
   try {
     this.filter_ = new RegExp(filterRegExp || '.', 'i');
   } catch (err) {
-    //console.log('Invalid filter: ' + String(filterRegExp))
+    // console.log('Invalid filter: ' + String(filterRegExp))
   }
 };
 
 /**
  * Filters the visibility of the current game list by regular expression
  */
-cah.GameList.prototype.applyFilter = function (filterRegExp) {
-  if (filterRegExp || filterRegExp === '') this.setFilter(filterRegExp);
+cah.GameList.prototype.applyFilter = function(filterRegExp) {
+  if (filterRegExp || filterRegExp === '') {
+    this.setFilter(filterRegExp);
+  }
 
-  var filter = this.filter_
-    , gamelist = $('.gamelist_lobby').show();
+  var filter = this.filter_, gamelist = $('.gamelist_lobby').show();
 
   if (filter && filter.test) {
-    gamelist.filter(function (i) {
+    gamelist.filter(function(i) {
       return !filter.test($(this).text());
     }).hide();
   }
@@ -209,7 +210,7 @@ cah.GameList.prototype.applyFilter = function (filterRegExp) {
 
 /**
  * Event handler for the clicking the Create Game button.
- *
+ * 
  * @private
  */
 cah.GameList.prototype.createGameClick_ = function() {
@@ -218,7 +219,7 @@ cah.GameList.prototype.createGameClick_ = function() {
 
 /**
  * Event handler for clicking the Refresh Games button.
- *
+ * 
  * @private
  */
 cah.GameList.prototype.refreshGamesClick_ = function() {
@@ -227,7 +228,7 @@ cah.GameList.prototype.refreshGamesClick_ = function() {
 
 /**
  * Event handler for typing in the filter games input.
- *
+ * 
  * @private
  */
 cah.GameList.prototype.filterGamesChange_ = function() {
@@ -238,7 +239,7 @@ cah.GameList.prototype.filterGamesChange_ = function() {
 
 /**
  * A single entry in the game list.
- *
+ * 
  * @param {HTMLElement}
  *          parentElem Element under which to display this.
  * @param {Object}
@@ -248,7 +249,7 @@ cah.GameList.prototype.filterGamesChange_ = function() {
 cah.GameListLobby = function(parentElem, data) {
   /**
    * The game id represented by this lobby.
-   *
+   * 
    * @type {number}
    * @private
    */
@@ -256,7 +257,7 @@ cah.GameListLobby = function(parentElem, data) {
 
   /**
    * The element we live under.
-   *
+   * 
    * @type {HTMLElement}
    * @private
    */
@@ -264,7 +265,7 @@ cah.GameListLobby = function(parentElem, data) {
 
   /**
    * This game lobby's dom element.
-   *
+   * 
    * @type {HTMLDivElement}
    * @private
    */
@@ -272,20 +273,34 @@ cah.GameListLobby = function(parentElem, data) {
 
   /**
    * This game's data.
-   *
+   * 
    * @type {object}
    * @private
    */
   this.data_ = data;
-  
+
   var options = data[cah.$.GameInfo.GAME_OPTIONS];
+
+  // the game name, which will be "<Host>'s Game" if unset
+  var gameName = options[cah.$.GameOptionData.GAME_NAME];
+  if (gameName.length == 0) {
+    gameName = data[cah.$.GameInfo.HOST] + "'s Game";
+  }
+
+  // array to hold players for display, which is players with the host removed
+  var playersArray = data[cah.$.GameInfo.PLAYERS].slice(0);
+  var hostIndex = playersArray.indexOf(data[cah.$.GameInfo.HOST]);
+  if (hostIndex > -1) {
+    playersArray.splice(hostIndex, 1);
+  }
 
   this.element_.id = "gamelist_lobby_" + this.id_;
   $(parentElem).append(this.element_);
   $(this.element_).removeClass("hide");
   $(".gamelist_lobby_id", this.element_).text(this.id_);
+  $(".gamelist_lobby_game_name", this.element_).text(gameName);
   $(".gamelist_lobby_host", this.element_).text(data[cah.$.GameInfo.HOST]);
-  $(".gamelist_lobby_players", this.element_).text(data[cah.$.GameInfo.PLAYERS].join(", "));
+  $(".gamelist_lobby_players", this.element_).text(playersArray.join(", "));
   $(".gamelist_lobby_spectators", this.element_).text(data[cah.$.GameInfo.SPECTATORS].join(", "));
   var statusMessage = cah.$.GameState_msg[data[cah.$.GameInfo.STATE]];
   $(".gamelist_lobby_status", this.element_).text(statusMessage);
@@ -294,12 +309,13 @@ cah.GameListLobby = function(parentElem, data) {
   $(".gamelist_lobby_player_count", this.element_).text(data[cah.$.GameInfo.PLAYERS].length);
   $(".gamelist_lobby_max_players", this.element_).text(options[cah.$.GameOptionData.PLAYER_LIMIT]);
   $(".gamelist_lobby_spectator_count", this.element_).text(data[cah.$.GameInfo.SPECTATORS].length);
-  $(".gamelist_lobby_max_spectators", this.element_).text(options[cah.$.GameOptionData.SPECTATOR_LIMIT]);
+  $(".gamelist_lobby_max_spectators", this.element_).text(
+      options[cah.$.GameOptionData.SPECTATOR_LIMIT]);
   $(".gamelist_lobby_goal", this.element_).text(options[cah.$.GameOptionData.SCORE_LIMIT]);
   var cardSets = options[cah.$.GameOptionData.CARD_SETS];
   var cardSetNames = [];
   cardSets.sort();
-  for (var key in cardSets) {
+  for ( var key in cardSets) {
     var cardSetId = cardSets[key];
     cardSetNames.push(cah.CardSet.list[cardSetId].getName());
   }
@@ -311,11 +327,12 @@ cah.GameListLobby = function(parentElem, data) {
 
   $(this.element_).attr(
       "aria-label",
-      data[cah.$.GameInfo.HOST] + "'s game, with " + data[cah.$.GameInfo.PLAYERS].length + " of "
-          + options[cah.$.GameOptionData.PLAYER_LIMIT] + " players, and " + data[cah.$.GameInfo.SPECTATORS].length
-          + " of " + options[cah.$.GameOptionData.SPECTATOR_LIMIT] + "spectators. " + statusMessage + ". Goal is "
-          + options[cah.$.GameOptionData.SCORE_LIMIT] + " Awesome Points. Using " + cardSetNames.length
-          + " card set" + (cardSetNames.length == 1 ? "" : "s") + ". "
+      gameName + ", with " + data[cah.$.GameInfo.PLAYERS].length + " of "
+          + options[cah.$.GameOptionData.PLAYER_LIMIT] + " players, and "
+          + data[cah.$.GameInfo.SPECTATORS].length + " of "
+          + options[cah.$.GameOptionData.SPECTATOR_LIMIT] + "spectators. " + statusMessage
+          + ". Goal is " + options[cah.$.GameOptionData.SCORE_LIMIT] + " Awesome Points. Using "
+          + cardSetNames.length + " card set" + (cardSetNames.length == 1 ? "" : "s") + ". "
           + (data[cah.$.GameInfo.HAS_PASSWORD] ? "Has" : "Does not have") + " a password.");
 };
 
