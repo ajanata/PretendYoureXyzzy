@@ -62,7 +62,7 @@ cah.$.GameInfo.STATE = "S";
 cah.$.GameInfo.ID = "gid";
 cah.$.GameInfo.HAS_PASSWORD = "hp";
 
-cah.$.GameState = function() {
+cah.$.AjaxRequest = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.GameState.prototype.dummyForAutocomplete = undefined;
@@ -78,7 +78,7 @@ cah.$.GameState_msg['j'] = "In Progress";
 cah.$.GameState_msg['l'] = "Not Started";
 cah.$.GameState_msg['ro'] = "In Progress";
 
-cah.$.CardSetData = function() {
+cah.$.AjaxResponse = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.CardSetData.prototype.dummyForAutocomplete = undefined;
@@ -109,7 +109,7 @@ cah.$.WhiteCardData.TEXT = "T";
 cah.$.WhiteCardData.ID = "cid";
 cah.$.WhiteCardData.WATERMARK = "W";
 
-cah.$.LongPollResponse = function() {
+cah.$.CardSetData = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.LongPollResponse.prototype.dummyForAutocomplete = undefined;
@@ -137,7 +137,7 @@ cah.$.LongPollResponse.ERROR = "e";
 cah.$.LongPollResponse.INTERMISSION = "i";
 cah.$.LongPollResponse.REASON = "qr";
 
-cah.$.LongPollEvent = function() {
+cah.$.DisconnectReason = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.LongPollEvent.prototype.dummyForAutocomplete = undefined;
@@ -259,7 +259,7 @@ cah.$.ErrorInformation.WHITE_CARDS_REQUIRED = "wcr";
 cah.$.ErrorInformation.BLACK_CARDS_REQUIRED = "bcr";
 cah.$.ErrorInformation.BLACK_CARDS_PRESENT = "bcp";
 
-cah.$.AjaxResponse = function() {
+cah.$.GameInfo = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.AjaxResponse.prototype.dummyForAutocomplete = undefined;
@@ -282,7 +282,7 @@ cah.$.AjaxResponse.CARD_ID = "cid";
 cah.$.AjaxResponse.ERROR = "e";
 cah.$.AjaxResponse.CARD_SETS = "css";
 
-cah.$.AjaxRequest = function() {
+cah.$.GameOptionData = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.AjaxRequest.prototype.dummyForAutocomplete = undefined;
@@ -298,7 +298,7 @@ cah.$.AjaxRequest.CARD_ID = "cid";
 cah.$.AjaxRequest.CARDCAST_ID = "cci";
 cah.$.AjaxRequest.GAME_ID = "gid";
 
-cah.$.AjaxOperation = function() {
+cah.$.GamePlayerInfo = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.AjaxOperation.prototype.dummyForAutocomplete = undefined;
@@ -335,7 +335,7 @@ cah.$.ReconnectNextAction.prototype.dummyForAutocomplete = undefined;
 cah.$.ReconnectNextAction.GAME = "game";
 cah.$.ReconnectNextAction.NONE = "none";
 
-cah.$.DisconnectReason = function() {
+cah.$.WhiteCardData = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.DisconnectReason.prototype.dummyForAutocomplete = undefined;
@@ -344,4 +344,3 @@ cah.$.DisconnectReason.BANNED = "B&";
 cah.$.DisconnectReason.IDLE_TIMEOUT = "it";
 cah.$.DisconnectReason.KICKED = "k";
 cah.$.DisconnectReason.MANUAL = "man";
-
