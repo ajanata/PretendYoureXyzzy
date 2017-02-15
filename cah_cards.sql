@@ -2290,7 +2290,7 @@ INSERT INTO black_cards VALUES (9601, 'Tonight, we will have sex. And afterwards
 INSERT INTO black_cards VALUES (9602, 'Everybody join hands and close your eyes. Do you sense that? That''s the presence of ____ in this room.', 0, 1, 'X6');
 INSERT INTO black_cards VALUES (9603, 'To become a true Yanomamo warrior, you must prove that you can withstand ____ without crying out.', 0, 1, 'X6');
 INSERT INTO black_cards VALUES (9604, 'Y''all ready to get this thing started? I''m Nick Cannon, and this is <i>America''s Got</i> ____.', 0, 1, 'X6');
-INSERT INTO black_cards VALUES (9605, 'If you had to describe me, the Card Czar, using only one of the cards in your hard, which one would it be?', 0, 1, 'X6');
+INSERT INTO black_cards VALUES (9605, 'If you had to describe me, the Card Czar, using only one of the cards in your hand, which one would it be?', 0, 1, 'X6');
 INSERT INTO black_cards VALUES (9606, 'In line with our predictions, we find a robust correlation between ____ and ____ (<i>p</i> &lt; .05).', 0, 2, 'SCI');
 INSERT INTO black_cards VALUES (9607, 'In what''s being hailed as a major breakthrough, scientists have synthesized ____ in the lab.', 0, 1, 'SCI');
 INSERT INTO black_cards VALUES (9608, 'A study published in <i>Nature</i> this week found that ____ is good for you in small doses.', 0, 1, 'SCI');

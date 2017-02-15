@@ -141,7 +141,7 @@ to, for instance, display the number of connected players.
 	    <li>While judging, only one card will be highlighted. It does not matter which card in a group
 	    you click, the game will figure it out.</li>
 	    <li>I know that when you have a lot of players, especially with Pick 2 or Pick 3, it gets very
-      hard to read, and cards overlap (and underlap) your hard, and are hard to click sometimes.
+      hard to read, and cards overlap (and underlap) your hand, and are hard to click sometimes.
       I'll work on this soon. You can resize the window to try to help if you're having problems
       for now.</li>
 	  </ul>
