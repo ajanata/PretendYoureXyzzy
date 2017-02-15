@@ -140,7 +140,8 @@ public class CardcastService {
         cacheMissingSet(setId);
         return null;
       }
-      final CardcastDeck deck = new CardcastDeck(name, setId, description);
+      final CardcastDeck deck = new CardcastDeck(StringEscapeUtils.escapeXml11(name), setId,
+          StringEscapeUtils.escapeXml11(description));
 
       // load up the cards
       final JSONArray blacks = (JSONArray) cards.get("calls");
