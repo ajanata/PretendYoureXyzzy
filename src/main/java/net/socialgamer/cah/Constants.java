@@ -330,7 +330,7 @@ public class Constants {
     /**
      * TODO this probably should be pulled in from a static inside the ChatHandler.
      */
-    MESSAGE_TOO_LONG("mtl", "Messages cannot be longer than 200 characters."),
+    MESSAGE_TOO_LONG("mtl", "Messages cannot be longer than " + CHAT_MAX_LENGTH + " characters."),
     NICK_IN_USE("niu", "Nickname is already in use."),
     NO_CARD_SPECIFIED("ncs", "No card specified."),
     NO_GAME_SPECIFIED("ngs", "No game specified."),
