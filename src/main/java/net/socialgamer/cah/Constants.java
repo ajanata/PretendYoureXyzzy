@@ -44,7 +44,7 @@ import net.socialgamer.cah.data.Game;
  */
 public class Constants {
 
-  public static final int CHAT_FLOOD_MESSAGE_COUNT = 6;
+  public static final int CHAT_FLOOD_MESSAGE_COUNT = 4;
   public static final int CHAT_FLOOD_TIME = 30 * 1000;
   public static final int CHAT_MAX_LENGTH = 200;
 
@@ -54,9 +54,7 @@ public class Constants {
       add("0:0:0:0:0:0:0:1");
       add("127.0.0.1");
       // ajanata
-      add("73.222.116.50");
-      // vsTerminus
-      add("207.161.130.75");
+      add("107.218.154.202");
     }
   };
 
