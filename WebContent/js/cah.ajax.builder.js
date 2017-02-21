@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -97,6 +97,17 @@ cah.ajax.Builder.prototype.run = function() {
 cah.ajax.Builder.prototype.withNickname = function(nickname) {
   this.assertNotExecuted_();
   this.data[cah.$.AjaxRequest.NICKNAME] = nickname;
+  return this;
+};
+
+/**
+ * @param {string}
+ *          persistentId Persistent ID to use in the request.
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withPersistentId = function(persistentId) {
+  this.assertNotExecuted_();
+  this.data[cah.$.AjaxRequest.PERSISTENT_ID] = persistentId;
   return this;
 };
 

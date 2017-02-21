@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -39,6 +39,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.socialgamer.cah.CahModule.UniqueId;
 import net.socialgamer.cah.HibernateUtil;
 import net.socialgamer.cah.cardcast.CardcastModule.CardcastCardId;
 import net.socialgamer.cah.data.GameManager.GameId;
@@ -118,6 +119,12 @@ public class GameManagerTest {
       Integer provideCardcastCardId() {
         return 0;
       }
+
+      @Provides
+      @UniqueId
+      String provideUniqueId() {
+        return "1";
+      }
     });
 
     gameManager = injector.getInstance(GameManager.class);
@@ -136,11 +143,11 @@ public class GameManagerTest {
 
     // fill it up with 3 games
     assertEquals(0, gameManager.get().intValue());
-    gameManager.getGames().put(0, new Game(0, cuMock, gameManager, timer, null, null));
+    gameManager.getGames().put(0, new Game(0, cuMock, gameManager, timer, null, null, null));
     assertEquals(1, gameManager.get().intValue());
-    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, timer, null, null));
+    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, timer, null, null, null));
     assertEquals(2, gameManager.get().intValue());
-    gameManager.getGames().put(2, new Game(2, cuMock, gameManager, timer, null, null));
+    gameManager.getGames().put(2, new Game(2, cuMock, gameManager, timer, null, null, null));
     // make sure it says it can't make any more
     assertEquals(-1, gameManager.get().intValue());
 
@@ -148,13 +155,13 @@ public class GameManagerTest {
     gameManager.destroyGame(1);
     // make sure it re-uses that id
     assertEquals(1, gameManager.get().intValue());
-    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, timer, null, null));
+    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, timer, null, null, null));
     assertEquals(-1, gameManager.get().intValue());
 
     // remove game 1 out from under it, to make sure it'll fix itself
     gameManager.getGames().remove(1);
     assertEquals(1, gameManager.get().intValue());
-    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, timer, null, null));
+    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, timer, null, null, null));
     assertEquals(-1, gameManager.get().intValue());
 
     gameManager.destroyGame(2);

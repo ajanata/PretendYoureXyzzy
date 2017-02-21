@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -41,12 +41,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.log4j.Logger;
-import org.hibernate.Session;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
+import net.socialgamer.cah.CahModule.UniqueId;
 import net.socialgamer.cah.Constants.BlackCardData;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.GameInfo;
@@ -62,6 +57,12 @@ import net.socialgamer.cah.cardcast.CardcastService;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.task.SafeTimerTask;
+
+import org.apache.log4j.Logger;
+import org.hibernate.Session;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 
 /**
@@ -172,6 +173,8 @@ public class Game {
   private volatile ScheduledFuture<?> lastScheduledFuture;
   private final ScheduledThreadPoolExecutor globalTimer;
   private final Provider<CardcastService> cardcastServiceProvider;
+  private final Provider<String> uniqueIdProvider;
+  private String currentUniqueId;
 
   /**
    * Create a new game.
@@ -190,13 +193,15 @@ public class Game {
   public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
       final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer,
       final Provider<Session> sessionProvider,
-      final Provider<CardcastService> cardcastServiceProvider) {
+      final Provider<CardcastService> cardcastServiceProvider,
+      @UniqueId final Provider<String> uniqueIdProvider) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
     this.globalTimer = globalTimer;
     this.sessionProvider = sessionProvider;
     this.cardcastServiceProvider = cardcastServiceProvider;
+    this.uniqueIdProvider = uniqueIdProvider;
 
     state = GameState.LOBBY;
   }
@@ -651,8 +656,8 @@ public class Game {
    * Synchronizes on {@link #players}.
    *
    * @return True if the game is started. Would only be false if there aren't enough players, or the
-   *         game is already started, or doesn't have a enough, but hopefully callers and clients
-   *         would prevent that from happening!
+   *         game is already started, or doesn't have enough cards, but hopefully callers and
+   *         clients would prevent that from happening!
    */
   public boolean start() {
     Session session = null;
@@ -671,11 +676,11 @@ public class Game {
         started = false;
       }
       if (started) {
+        currentUniqueId = uniqueIdProvider.get();
         logger.info(String.format("Starting game %d with card sets %s, Cardcast %s, %d blanks, %d "
-            +
-            "max players, %d max spectators, %d score limit, players %s.",
+            + "max players, %d max spectators, %d score limit, players %s, unique %s.",
             id, options.cardSetIds, cardcastDeckIds, options.blanksInDeck, options.playerLimit,
-            options.spectatorLimit, options.scoreGoal, players));
+            options.spectatorLimit, options.scoreGoal, players, currentUniqueId));
         // do this stuff outside the players lock; they will lock players again later for much less
         // time, and not at the same time as trying to lock users, which has caused deadlocks
         synchronized (options.cardSetIds) {

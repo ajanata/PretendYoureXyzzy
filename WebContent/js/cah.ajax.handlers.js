@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -29,6 +29,10 @@
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
   cah.nickname = data[cah.$.AjaxResponse.NICKNAME];
+  if (!cah.noPersistentId) {
+    cah.persistentId = data[cah.$.AjaxResponse.PERSISTENT_ID];
+    cah.setCookie("persistent_id", cah.persistentId);
+  }
   cah.log.status("You are connected as " + cah.nickname);
   $("#welcome").hide();
   $("#canvass").show();

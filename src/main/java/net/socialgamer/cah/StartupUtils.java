@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
+import net.socialgamer.cah.CahModule.ServerStarted;
 import net.socialgamer.cah.cardcast.CardcastModule;
 import net.socialgamer.cah.cardcast.CardcastService;
 import net.socialgamer.cah.task.BroadcastGameListUpdateTask;
@@ -43,6 +44,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.servlet.GuiceServletContextListener;
 
 
@@ -92,11 +94,6 @@ public class StartupUtils extends GuiceServletContextListener {
    */
   public static final String VERBOSE_DEBUG = "verbose_debug";
 
-  /**
-   * The time the server was started.
-   */
-  private Date serverStarted;
-
   @Override
   public void contextDestroyed(final ServletContextEvent contextEvent) {
     final ServletContext context = contextEvent.getServletContext();
@@ -128,9 +125,8 @@ public class StartupUtils extends GuiceServletContextListener {
     timer.scheduleAtFixedRate(broadcastUpdate, BROADCAST_UPDATE_START_DELAY,
         BROADCAST_UPDATE_DELAY, TimeUnit.MILLISECONDS);
 
-    serverStarted = new Date();
     context.setAttribute(INJECTOR, injector);
-    context.setAttribute(DATE_NAME, serverStarted);
+    context.setAttribute(DATE_NAME, injector.getInstance(Key.get(Date.class, ServerStarted.class)));
 
     reconfigureLogging(contextEvent.getServletContext());
     reloadProperties(contextEvent.getServletContext());

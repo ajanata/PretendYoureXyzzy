@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -94,11 +94,12 @@ function nickbox_keyup(e) {
  */
 function nicknameconfirm_click() {
   var nickname = $.trim($("#nickname").val());
-  $.cookie("nickname", nickname, {
-    domain : cah.COOKIE_DOMAIN,
-    expires : 365
-  });
-  cah.Ajax.build(cah.$.AjaxOperation.REGISTER).withNickname(nickname).run();
+  cah.setCookie("nickname", nickname);
+  var builder = cah.Ajax.build(cah.$.AjaxOperation.REGISTER).withNickname(nickname);
+  if (!cah.noPersistentId && cah.persistentId) {
+    builder.withPersistentId(cah.persistentId);
+  }
+  builder.run();
 }
 
 /**
@@ -332,7 +333,7 @@ cah.removeItems = function(listId) {
  */
 cah.setCookie = function(name, value) {
   return $.cookie(name, value, {
-    // domain : cah.COOKIE_DOMAIN,
+    domain : cah.COOKIE_DOMAIN,
     expires : 365
   });
 };
@@ -344,7 +345,9 @@ cah.setCookie = function(name, value) {
  *          name The name of the cookie.
  */
 cah.removeCookie = function(name) {
-  $.removeCookie(name);
+  $.removeCookie(name, {
+    domain : cah.COOKIE_DOMAIN
+  });
 };
 
 /**

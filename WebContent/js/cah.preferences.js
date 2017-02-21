@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Andy Janata
+ * Copyright (c) 2014-2017, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -31,6 +31,7 @@ cah.Preferences = {};
 
 cah.Preferences.apply = function() {
   cah.hideConnectQuit = !!$("#hide_connect_quit").attr("checked");
+  cah.noPersistentId = !!$("#no_persistent_id").attr("checked");
 
   cah.ignoreList = {};
   $($('#ignore_list').val().split('\n')).each(function() {
@@ -45,6 +46,14 @@ cah.Preferences.load = function() {
     $("#hide_connect_quit").attr('checked', 'checked');
   } else {
     $("#hide_connect_quit").removeAttr('checked');
+  }
+
+  if ($.cookie("no_persistent_id")) {
+    $("#no_persistent_id").attr('checked', 'checked');
+    cah.persistentId = null;
+  } else {
+    $("#no_persistent_id").removeAttr('checked');
+    cah.persistentId = $.cookie("persistent_id");
   }
 
   if ($.cookie("ignore_list")) {
@@ -64,6 +73,14 @@ cah.Preferences.save = function() {
     cah.setCookie("hide_connect_quit", true);
   } else {
     cah.removeCookie("hide_connect_quit");
+  }
+
+  if ($("#no_persistent_id").attr("checked")) {
+    cah.setCookie("no_persistent_id", true);
+    cah.removeCookie("persistent_id");
+    cah.persistentId = null;
+  } else {
+    cah.removeCookie("no_persistent_id");
   }
 
   cah.setCookie("ignore_list", $("#ignore_list").val());

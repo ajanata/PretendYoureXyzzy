@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -23,6 +23,8 @@
 
 package net.socialgamer.cah.data;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -41,12 +43,15 @@ import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
+import net.socialgamer.cah.metrics.GeoIP;
+import net.socialgamer.cah.metrics.Metrics;
 
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import com.maxmind.geoip2.model.CityResponse;
 
 
 /**
@@ -77,13 +82,18 @@ public class ConnectedUsers {
 
   final Provider<Boolean> broadcastConnectsAndDisconnectsProvider;
   final Provider<Integer> maxUsersProvider;
+  final GeoIP geoIp;
+  final Metrics metrics;
 
   @Inject
   public ConnectedUsers(
       @BroadcastConnectsAndDisconnects final Provider<Boolean> broadcastConnectsAndDisconnectsProvider,
-      @MaxUsers final Provider<Integer> maxUsersProvider) {
+      @MaxUsers final Provider<Integer> maxUsersProvider, final GeoIP geoIp,
+      final Metrics metrics) {
     this.broadcastConnectsAndDisconnectsProvider = broadcastConnectsAndDisconnectsProvider;
     this.maxUsersProvider = maxUsersProvider;
+    this.geoIp = geoIp;
+    this.metrics = metrics;
   }
 
   /**
@@ -107,7 +117,7 @@ public class ConnectedUsers {
     synchronized (users) {
       if (this.hasUser(user.getNickname())) {
         logger.info(String.format("Rejecting existing username %s from %s", user.toString(),
-            user.getHostName()));
+            user.getHostname()));
         return ErrorCode.NICK_IN_USE;
       } else if (users.size() >= maxUsers && !user.isAdmin()) {
         logger.warn(String.format("Rejecting user %s due to too many users (%d >= %d)",
@@ -115,7 +125,7 @@ public class ConnectedUsers {
         return ErrorCode.TOO_MANY_USERS;
       } else {
         logger.info(String.format("New user %s from %s (admin=%b)", user.toString(),
-            user.getHostName(), user.isAdmin()));
+            user.getHostname(), user.isAdmin()));
         users.put(user.getNickname().toLowerCase(), user);
         if (broadcastConnectsAndDisconnectsProvider.get()) {
           final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
@@ -123,6 +133,17 @@ public class ConnectedUsers {
           data.put(LongPollResponse.NICKNAME, user.getNickname());
           broadcastToAll(MessageType.PLAYER_EVENT, data);
         }
+        // log them in the metrics
+        CityResponse geo = null;
+        try {
+          final InetAddress addr = InetAddress.getByName(user.getHostname());
+          geo = geoIp.getInfo(addr);
+        } catch (final UnknownHostException e) {
+          logger.warn(String.format("Unable to get address for user %s (hostname: %s)",
+              user.getNickname(), user.getHostname()), e);
+        }
+        metrics.newUser(user.getPersistentId(), user.getSessionId(), geo);
+
         return null;
       }
     }

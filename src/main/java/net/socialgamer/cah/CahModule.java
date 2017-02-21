@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -26,9 +26,11 @@ package net.socialgamer.cah;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,6 +38,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.GameManager.MaxGames;
+import net.socialgamer.cah.data.User;
+import net.socialgamer.cah.metrics.Metrics;
+import net.socialgamer.cah.metrics.NoOpMetrics;
+import net.socialgamer.cah.metrics.UniqueIds;
 
 import org.hibernate.Session;
 
@@ -43,6 +49,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.BindingAnnotation;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
 
 
 /**
@@ -67,8 +74,13 @@ public class CahModule extends AbstractModule {
     })
         .annotatedWith(BanList.class)
         .toInstance(Collections.synchronizedSet(new HashSet<String>()));
-    bind(Properties.class)
-        .toInstance(properties);
+
+    bind(Properties.class).toInstance(properties);
+    bind(Metrics.class).to(NoOpMetrics.class);
+    bind(Date.class).annotatedWith(ServerStarted.class).toInstance(new Date());
+    bind(String.class).annotatedWith(UniqueId.class).toProvider(UniqueIds.class);
+
+    install(new FactoryModuleBuilder().build(User.Factory.class));
 
     final ScheduledThreadPoolExecutor threadPool =
         new ScheduledThreadPoolExecutor(2 * Runtime.getRuntime().availableProcessors(),
@@ -85,6 +97,12 @@ public class CahModule extends AbstractModule {
             });
     threadPool.setRemoveOnCancelPolicy(true);
     bind(ScheduledThreadPoolExecutor.class).toInstance(threadPool);
+  }
+
+  @Provides
+  @UserPersistentId
+  String provideUserPersistentId() {
+    return UUID.randomUUID().toString();
   }
 
   /**
@@ -167,5 +185,20 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface IncludeInactiveCardsets {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface ServerStarted {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface UniqueId {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface UserPersistentId {
   }
 }

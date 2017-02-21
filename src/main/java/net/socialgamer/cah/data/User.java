@@ -1,16 +1,16 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
  *   and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
  *   conditions and the following disclaimer in the documentation and/or other materials provided
  *   with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -30,10 +30,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
+import net.socialgamer.cah.CahModule.UniqueId;
+
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 
 /**
  * A user connected to the server.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class User {
@@ -50,9 +55,13 @@ public class User {
 
   private Game currentGame;
 
-  private final String hostName;
+  private final String hostname;
 
   private final boolean isAdmin;
+
+  private final String persistentId;
+
+  private final String sessionId;
 
   private final List<Long> lastMessageTimes = Collections.synchronizedList(new LinkedList<Long>());
 
@@ -63,24 +72,40 @@ public class User {
 
   /**
    * Create a new user.
-   * 
+   *
    * @param nickname
    *          The user's nickname.
-   * @param hostName
+   * @param hostname
    *          The user's Internet hostname (which will likely just be their IP address).
    * @param isAdmin
    *          Whether this user is an admin.
+   * @param persistentId
+   *          This user's persistent (cross-session) ID.
+   * @param sessionId
+   *          The unique ID of this session for this server instance.
    */
-  public User(final String nickname, final String hostName, final boolean isAdmin) {
+  @Inject
+  public User(@Assisted("nickname") final String nickname,
+      @Assisted("hostname") final String hostname,
+      @Assisted final boolean isAdmin,
+      @Assisted("persistentId") final String persistentId,
+      @UniqueId final String sessionId) {
     this.nickname = nickname;
-    this.hostName = hostName;
+    this.hostname = hostname;
     this.isAdmin = isAdmin;
+    this.persistentId = persistentId;
+    this.sessionId = sessionId;
     queuedMessages = new PriorityBlockingQueue<QueuedMessage>();
+  }
+
+  public interface Factory {
+    User create(@Assisted("nickname") String nickname, @Assisted("hostname") String hostname,
+        boolean isAdmin, @Assisted("persistentId") String persistentId);
   }
 
   /**
    * Enqueue a new message to be delivered to the user.
-   * 
+   *
    * @param message
    *          Message to enqueue.
    */
@@ -100,7 +125,7 @@ public class User {
 
   /**
    * Wait for a new message to be queued.
-   * 
+   *
    * @see java.lang.Object#wait(long timeout)
    * @param timeout
    *          Maximum time to wait in milliseconds.
@@ -117,7 +142,7 @@ public class User {
   /**
    * This method blocks if there are no messages to return, or perhaps if the queue is being
    * modified by another thread.
-   * 
+   *
    * @return The next message in the queue, or null if interrupted.
    */
   public QueuedMessage getNextQueuedMessage() {
@@ -146,6 +171,14 @@ public class User {
     return isAdmin;
   }
 
+  public String getSessionId() {
+    return sessionId;
+  }
+
+  public String getPersistentId() {
+    return persistentId;
+  }
+
   /**
    * @return The user's nickname.
    */
@@ -156,8 +189,8 @@ public class User {
   /**
    * @return The user's Internet hostname, or IP address.
    */
-  public String getHostName() {
-    return hostName;
+  public String getHostname() {
+    return hostname;
   }
 
   @Override
@@ -213,9 +246,9 @@ public class User {
 
   /**
    * Marks a given game as this user's active game.
-   * 
+   *
    * This should only be called from Game itself.
-   * 
+   *
    * @param game
    *          Game in which this user is playing.
    * @throws IllegalStateException
@@ -230,9 +263,9 @@ public class User {
 
   /**
    * Marks the user as no longer participating in a game.
-   * 
+   *
    * This should only be called from Game itself.
-   * 
+   *
    * @param game
    *          Game from which to remove the user.
    */

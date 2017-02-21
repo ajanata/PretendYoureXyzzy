@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -56,6 +56,20 @@ cah.ignoreList = {};
  * @type {Boolean}
  */
 cah.hideConnectQuit = false;
+
+/**
+ * Whether to ignore the persistent ID the server gives us.
+ * 
+ * @type {Boolean}
+ */
+cah.noPersistentId = false;
+
+/**
+ * Our persistent ID.
+ * 
+ * @type {string}
+ */
+cah.persistentId = null;
 
 /**
  * Whether the game's browser window has focus, so we don't update the game list when we're not

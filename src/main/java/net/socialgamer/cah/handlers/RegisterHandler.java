@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpSession;
 
 import net.socialgamer.cah.CahModule.BanList;
+import net.socialgamer.cah.CahModule.UserPersistentId;
 import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
@@ -42,7 +43,10 @@ import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 
 /**
@@ -58,11 +62,17 @@ public class RegisterHandler extends Handler {
 
   private final ConnectedUsers users;
   private final Set<String> banList;
+  private final User.Factory userFactory;
+  private final Provider<String> persistentIdProvider;
 
   @Inject
-  public RegisterHandler(final ConnectedUsers users, @BanList final Set<String> banList) {
+  public RegisterHandler(final ConnectedUsers users, @BanList final Set<String> banList,
+      final User.Factory userFactory,
+      @UserPersistentId final Provider<String> persistentIdProvider) {
     this.users = users;
     this.banList = banList;
+    this.userFactory = userFactory;
+    this.persistentIdProvider = persistentIdProvider;
   }
 
   @Override
@@ -83,8 +93,13 @@ public class RegisterHandler extends Handler {
       } else if ("xyzzy".equalsIgnoreCase(nick)) {
         return error(ErrorCode.RESERVED_NICK);
       } else {
-        final User user = new User(nick, request.getRemoteAddr(),
-            Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteAddr()));
+        String persistentId = request.getParameter(AjaxRequest.PERSISTENT_ID);
+        if (StringUtils.isBlank(persistentId)) {
+          persistentId = persistentIdProvider.get();
+        }
+
+        final User user = userFactory.create(nick, request.getRemoteAddr(),
+            Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteAddr()), persistentId);
         final ErrorCode errorCode = users.checkAndAdd(user);
         if (null == errorCode) {
           // There is a findbugs warning on this line:
@@ -97,6 +112,7 @@ public class RegisterHandler extends Handler {
           session.setAttribute(SessionAttribute.USER, user);
 
           data.put(AjaxResponse.NICKNAME, nick);
+          data.put(AjaxResponse.PERSISTENT_ID, persistentId);
         } else {
           return error(errorCode);
         }

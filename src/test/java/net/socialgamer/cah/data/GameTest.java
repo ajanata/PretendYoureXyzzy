@@ -1,16 +1,16 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
  *   and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
  *   conditions and the following disclaimer in the documentation and/or other materials provided
  *   with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -47,7 +47,7 @@ import org.junit.Test;
 
 /**
  * Tests for {@code Game}.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class GameTest {
@@ -61,7 +61,7 @@ public class GameTest {
   public void setUp() throws Exception {
     cuMock = createMock(ConnectedUsers.class);
     gmMock = createMock(GameManager.class);
-    game = new Game(0, cuMock, gmMock, timer, null, null);
+    game = new Game(0, cuMock, gmMock, timer, null, null, null);
   }
 
   @SuppressWarnings("unchecked")
@@ -75,8 +75,8 @@ public class GameTest {
     expectLastCall().once();
     replay(gmMock);
 
-    final User user1 = new User("test1", "test.lan", false);
-    final User user2 = new User("test2", "test.lan", false);
+    final User user1 = new User("test1", "test.lan", false, "1", "1");
+    final User user2 = new User("test2", "test.lan", false, "2", "2");
     game.addPlayer(user1);
     game.addPlayer(user2);
 

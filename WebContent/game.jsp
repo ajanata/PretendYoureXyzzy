@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%--
-Copyright (c) 2012, Andy Janata
+Copyright (c) 2012-2017, Andy Janata
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -73,7 +73,7 @@ HttpSession hSession = request.getSession(true);
 
 <div id="welcome">
   <h1 tabindex="0">
-    Pretend You're <dfn style="border-bottom: 1px dotted black"
+    Pretend You're <dfn
     title="Xyzzy is an Artificial Unintelligence bot. You'll be making more sense than him in this game.">
     Xyzzy</dfn>
   </h1>
@@ -164,7 +164,7 @@ HttpSession hSession = request.getSession(true);
       <input type="button" value="Save" onclick="cah.Preferences.save();" />
       <input type="button" value="Revert" onclick="cah.Preferences.load();" />
       <label for="hide_connect_quit">
-        <dfn style="border-bottom: 1px dotted black"
+        <dfn
           title="Even with this unselected, you might not see these events if the server is configured to not send them.">
             Hide connect and quit events:
         </dfn>
@@ -174,6 +174,13 @@ HttpSession hSession = request.getSession(true);
       <label for="ignore_list">Chat ignore list, one name per line:</label>
       <br/>
       <textarea id="ignore_list" style="width: 200px; height: 150px"></textarea>
+      <br/>
+      <label for="no_persistent_id">
+        <dfn title="Even with this selected, your card plays for a single session will be tracked.">
+          Opt-out of card play tracking between sessions:
+        </dfn>
+      </label>
+      <input type="checkbox" id="no_persistent_id" />
     </div>
     <div id="tab-gamelist-filters">
       You will have to click Refresh Games after saving any changes here.

@@ -35,7 +35,7 @@
   </developers>
 
   <build>
-    <finalName>ROOT</finalName>
+    <finalName>ZY</finalName>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -177,7 +177,7 @@
               <!-- Non-filtered -->
               <resource>src/main/resources</resource>
               <!-- Filtered -->
-              <resource>${project.build.directory}/ROOT</resource>
+              <resource>${project.build.directory}/ZY</resource>
             </resourceBases>
           </webApp>
           <scanTargets>
@@ -342,6 +342,16 @@
       <artifactId>javassist</artifactId>
       <version>3.19.0-GA</version>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-clients</artifactId>
+      <version>0.10.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.maxmind.geoip2</groupId>
+      <artifactId>geoip2</artifactId>
+      <version>2.8.0</version>
     </dependency>
   </dependencies>
 </project>

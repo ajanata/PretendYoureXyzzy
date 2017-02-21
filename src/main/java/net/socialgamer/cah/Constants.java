@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -219,6 +219,7 @@ public class Constants {
     NICKNAME("n"),
     OP("o"),
     PASSWORD("pw"),
+    PERSISTENT_ID("pid"),
     SERIAL("s"),
     WALL("wall");
 
@@ -263,6 +264,8 @@ public class Constants {
     NEXT("next"),
     @DuplicationAllowed
     NICKNAME(AjaxRequest.NICKNAME),
+    @DuplicationAllowed
+    PERSISTENT_ID(AjaxRequest.PERSISTENT_ID),
     PLAYER_INFO("pi"),
     @DuplicationAllowed
     SERIAL(AjaxRequest.SERIAL),
