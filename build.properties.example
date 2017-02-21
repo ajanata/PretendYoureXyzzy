@@ -36,6 +36,7 @@ hibernate.cache.use_query_cache=false
 hibernate.cache.provider_class=org.hibernate.cache.NoCacheProvider
 
 # Metrics implementation.
+# FIXME: this isn't used. Change the binding in CahModule.
 pyx.metrics.impl=net.socialgamer.cah.metrics.NoOpMetrics
 
 # GeoIP database for analytics. If unset, will not be used.
