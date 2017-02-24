@@ -48,7 +48,7 @@ public class KafkaMetrics implements Metrics {
   private static final Logger LOG = Logger.getLogger(KafkaMetrics.class);
 
   @Override
-  public void serverStarted(final String startupId) {
+  public void serverStart(final String startupId) {
     LOG.trace(String.format("serverStarted(%s)", startupId));
   }
 
@@ -73,7 +73,7 @@ public class KafkaMetrics implements Metrics {
   }
 
   @Override
-  public void roundJudged(final String gameId, final String judgeSessionId,
+  public void roundComplete(final String gameId, final String judgeSessionId,
       final String winnerSessionId,
       final Map<User, List<WhiteCard>> cards) {
     LOG.trace(String.format("roundJudged(%s, %s, %s, %s)", gameId, judgeSessionId, winnerSessionId,

@@ -135,7 +135,7 @@ public class StartupUtils extends GuiceServletContextListener {
     CardcastService.hackSslVerifier();
 
     // log that the server (re-)started to metrics logging (to flush all old games and users)
-    injector.getInstance(Metrics.class).serverStarted(
+    injector.getInstance(Metrics.class).serverStart(
         injector.getInstance(Key.get(String.class, UniqueId.class)));
   }
 

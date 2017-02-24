@@ -42,7 +42,7 @@ import com.maxmind.geoip2.model.CityResponse;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public interface Metrics {
-  void serverStarted(String startupId);
+  void serverStart(String startupId);
 
   void newUser(String persistentId, String sessionId, @Nullable CityResponse geoIp,
       String agentName, String agentType, String agentOs, String agentLanguage);
@@ -51,7 +51,7 @@ public interface Metrics {
 
   // The card data is way too complicated to dictate the format it should be in, so let
   // implementations deal with the structured data.
-  void roundJudged(String gameId, String judgeSessionId, String winnerSessionId,
+  void roundComplete(String gameId, String judgeSessionId, String winnerSessionId,
       Map<User, List<WhiteCard>> cards);
 
   void gameStart(String gameId, Collection<CardSet> decks, int blanks, int maxPlayers,

@@ -1512,7 +1512,7 @@ public class Game {
       rescheduleTimer(task, ROUND_INTERMISSION);
     }
 
-    metrics.roundJudged(currentUniqueId, user.getSessionId(), cardPlayer.getUser().getSessionId(),
+    metrics.roundComplete(currentUniqueId, user.getSessionId(), cardPlayer.getUser().getSessionId(),
         playedCards.cardsByUser());
 
     return null;
