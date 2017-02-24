@@ -45,6 +45,7 @@ import net.socialgamer.cah.cardcast.CardcastModule.CardcastCardId;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.GameManager.MaxGames;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
+import net.socialgamer.cah.metrics.Metrics;
 
 import org.hibernate.Session;
 import org.junit.After;
@@ -70,11 +71,13 @@ public class GameManagerTest {
   private User userMock;
   private int gameId;
   private final ScheduledThreadPoolExecutor timer = new ScheduledThreadPoolExecutor(1);
+  private Metrics metricsMock;
 
   @Before
   public void setUp() throws Exception {
     cuMock = createMock(ConnectedUsers.class);
     userMock = createMock(User.class);
+    metricsMock = createMock(Metrics.class);
 
     injector = Guice.createInjector(new AbstractModule() {
       @Override
@@ -143,11 +146,14 @@ public class GameManagerTest {
 
     // fill it up with 3 games
     assertEquals(0, gameManager.get().intValue());
-    gameManager.getGames().put(0, new Game(0, cuMock, gameManager, timer, null, null, null));
+    gameManager.getGames().put(0,
+        new Game(0, cuMock, gameManager, timer, null, null, null, metricsMock));
     assertEquals(1, gameManager.get().intValue());
-    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, timer, null, null, null));
+    gameManager.getGames().put(1,
+        new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock));
     assertEquals(2, gameManager.get().intValue());
-    gameManager.getGames().put(2, new Game(2, cuMock, gameManager, timer, null, null, null));
+    gameManager.getGames().put(2,
+        new Game(2, cuMock, gameManager, timer, null, null, null, metricsMock));
     // make sure it says it can't make any more
     assertEquals(-1, gameManager.get().intValue());
 
@@ -155,13 +161,15 @@ public class GameManagerTest {
     gameManager.destroyGame(1);
     // make sure it re-uses that id
     assertEquals(1, gameManager.get().intValue());
-    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, timer, null, null, null));
+    gameManager.getGames().put(1,
+        new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock));
     assertEquals(-1, gameManager.get().intValue());
 
     // remove game 1 out from under it, to make sure it'll fix itself
     gameManager.getGames().remove(1);
     assertEquals(1, gameManager.get().intValue());
-    gameManager.getGames().put(1, new Game(1, cuMock, gameManager, timer, null, null, null));
+    gameManager.getGames().put(1,
+        new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock));
     assertEquals(-1, gameManager.get().intValue());
 
     gameManager.destroyGame(2);

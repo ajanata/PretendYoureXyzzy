@@ -30,6 +30,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
+import net.sf.uadetector.ReadableUserAgent;
+import net.sf.uadetector.service.UADetectorServiceFactory;
 import net.socialgamer.cah.CahModule.UniqueId;
 
 import com.google.inject.Inject;
@@ -63,6 +65,10 @@ public class User {
 
   private final String sessionId;
 
+  private final String clientLanguage;
+
+  private final ReadableUserAgent agent;
+
   private final List<Long> lastMessageTimes = Collections.synchronizedList(new LinkedList<Long>());
 
   /**
@@ -89,18 +95,24 @@ public class User {
       @Assisted("hostname") final String hostname,
       @Assisted final boolean isAdmin,
       @Assisted("persistentId") final String persistentId,
-      @UniqueId final String sessionId) {
+      @UniqueId final String sessionId,
+      @Assisted("clientLanguage") final String clientLanguage,
+      @Assisted("clientAgent") final String clientAgent) {
     this.nickname = nickname;
     this.hostname = hostname;
     this.isAdmin = isAdmin;
     this.persistentId = persistentId;
     this.sessionId = sessionId;
+    this.clientLanguage = clientLanguage;
+    agent = UADetectorServiceFactory.getResourceModuleParser().parse(clientAgent);
     queuedMessages = new PriorityBlockingQueue<QueuedMessage>();
   }
 
   public interface Factory {
     User create(@Assisted("nickname") String nickname, @Assisted("hostname") String hostname,
-        boolean isAdmin, @Assisted("persistentId") String persistentId);
+        boolean isAdmin, @Assisted("persistentId") String persistentId,
+        @Assisted("clientLanguage") String clientLanguage,
+        @Assisted("clientAgent") String clientAgent);
   }
 
   /**
@@ -193,6 +205,22 @@ public class User {
     return hostname;
   }
 
+  public String getAgentName() {
+    return agent.getName();
+  }
+
+  public String getAgentType() {
+    return agent.getDeviceCategory().getName();
+  }
+
+  public String getAgentOs() {
+    return agent.getOperatingSystem().getName();
+  }
+
+  public String getAgentLanguage() {
+    return clientLanguage.split(",")[0];
+  }
+
   @Override
   public String toString() {
     return getNickname();
@@ -230,7 +258,7 @@ public class User {
   /**
    * Mark this user as no longer valid, probably because they pinged out.
    */
-  public void noLongerVaild() {
+  public void noLongerValid() {
     if (currentGame != null) {
       currentGame.removePlayer(this);
     }

@@ -44,6 +44,7 @@ import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpHeaders;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -99,7 +100,9 @@ public class RegisterHandler extends Handler {
         }
 
         final User user = userFactory.create(nick, request.getRemoteAddr(),
-            Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteAddr()), persistentId);
+            Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteAddr()), persistentId,
+            request.getHeader(HttpHeaders.ACCEPT_LANGUAGE),
+            request.getHeader(HttpHeaders.USER_AGENT));
         final ErrorCode errorCode = users.checkAndAdd(user);
         if (null == errorCode) {
           // There is a findbugs warning on this line:

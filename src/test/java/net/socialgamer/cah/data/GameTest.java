@@ -40,6 +40,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import net.socialgamer.cah.data.Game.TooManyPlayersException;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
+import net.socialgamer.cah.metrics.Metrics;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,13 +56,15 @@ public class GameTest {
   private Game game;
   private ConnectedUsers cuMock;
   private GameManager gmMock;
+  private Metrics metricsMock;
   private final ScheduledThreadPoolExecutor timer = new ScheduledThreadPoolExecutor(1);
 
   @Before
   public void setUp() throws Exception {
     cuMock = createMock(ConnectedUsers.class);
     gmMock = createMock(GameManager.class);
-    game = new Game(0, cuMock, gmMock, timer, null, null, null);
+    metricsMock = createMock(Metrics.class);
+    game = new Game(0, cuMock, gmMock, timer, null, null, null, metricsMock);
   }
 
   @SuppressWarnings("unchecked")
@@ -75,8 +78,8 @@ public class GameTest {
     expectLastCall().once();
     replay(gmMock);
 
-    final User user1 = new User("test1", "test.lan", false, "1", "1");
-    final User user2 = new User("test2", "test.lan", false, "2", "2");
+    final User user1 = new User("test1", "test.lan", false, "1", "1", "en-US", "JUnit");
+    final User user2 = new User("test2", "test.lan", false, "2", "2", "en-US", "JUnit");
     game.addPlayer(user1);
     game.addPlayer(user2);
 

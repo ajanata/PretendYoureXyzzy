@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2017, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -24,6 +24,7 @@
 package net.socialgamer.cah.handlers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -34,6 +35,7 @@ import net.socialgamer.cah.Constants.ErrorInformation;
 import net.socialgamer.cah.Constants.GameState;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
+import net.socialgamer.cah.data.CardSet;
 import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.User;
@@ -72,11 +74,10 @@ public class StartGameHandler extends GameWithPlayerHandler {
       } else if (game.getState() != GameState.LOBBY) {
         return error(ErrorCode.ALREADY_STARTED);
       } else if (!game.hasEnoughCards(hibernateSession)) {
-        data.put(ErrorInformation.BLACK_CARDS_PRESENT, game.loadBlackDeck(hibernateSession)
-            .totalCount());
+        final List<CardSet> cardSets = game.loadCardSets(hibernateSession);
+        data.put(ErrorInformation.BLACK_CARDS_PRESENT, game.loadBlackDeck(cardSets).totalCount());
         data.put(ErrorInformation.BLACK_CARDS_REQUIRED, Game.MINIMUM_BLACK_CARDS);
-        data.put(ErrorInformation.WHITE_CARDS_PRESENT, game.loadWhiteDeck(hibernateSession)
-            .totalCount());
+        data.put(ErrorInformation.WHITE_CARDS_PRESENT, game.loadWhiteDeck(cardSets).totalCount());
         data.put(ErrorInformation.WHITE_CARDS_REQUIRED, game.getRequiredWhiteCardCount());
         return error(ErrorCode.NOT_ENOUGH_CARDS, data);
       } else if (!game.start()) {

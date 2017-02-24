@@ -23,7 +23,15 @@
 
 package net.socialgamer.cah.metrics;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Nullable;
+
+import net.socialgamer.cah.data.CardSet;
+import net.socialgamer.cah.data.User;
+import net.socialgamer.cah.data.WhiteCard;
 
 import com.maxmind.geoip2.model.CityResponse;
 
@@ -34,5 +42,18 @@ import com.maxmind.geoip2.model.CityResponse;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public interface Metrics {
-  void newUser(String persistentId, String sessionId, @Nullable CityResponse geoIp);
+  void serverStarted(String startupId);
+
+  void newUser(String persistentId, String sessionId, @Nullable CityResponse geoIp,
+      String agentName, String agentType, String agentOs, String agentLanguage);
+
+  void userDisconnect(String sessionId);
+
+  // The card data is way too complicated to dictate the format it should be in, so let
+  // implementations deal with the structured data.
+  void roundJudged(String gameId, String judgeSessionId, String winnerSessionId,
+      Map<User, List<WhiteCard>> cards);
+
+  void gameStart(String gameId, Collection<CardSet> decks, int blanks, int maxPlayers,
+      int scoreGoal, boolean hasPassword);
 }

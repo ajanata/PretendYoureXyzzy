@@ -142,7 +142,8 @@ public class ConnectedUsers {
           logger.warn(String.format("Unable to get address for user %s (hostname: %s)",
               user.getNickname(), user.getHostname()), e);
         }
-        metrics.newUser(user.getPersistentId(), user.getSessionId(), geo);
+        metrics.newUser(user.getPersistentId(), user.getSessionId(), geo, user.getAgentName(),
+            user.getAgentType(), user.getAgentOs(), user.getAgentLanguage());
 
         return null;
       }
@@ -162,7 +163,7 @@ public class ConnectedUsers {
     synchronized (users) {
       if (users.containsKey(user.getNickname())) {
         logger.info(String.format("Removing user %s because %s", user.toString(), reason));
-        user.noLongerVaild();
+        user.noLongerValid();
         users.remove(user.getNickname().toLowerCase());
         notifyRemoveUser(user, reason);
       }
@@ -181,7 +182,7 @@ public class ConnectedUsers {
   }
 
   /**
-   * Broadcast to all remaining users that a user has left.
+   * Broadcast to all remaining users that a user has left. Also logs for metrics.
    *
    * @param user
    *          User that has left.
@@ -197,6 +198,8 @@ public class ConnectedUsers {
       data.put(LongPollResponse.REASON, reason.toString());
       broadcastToAll(MessageType.PLAYER_EVENT, data);
     }
+
+    metrics.userDisconnect(user.getSessionId());
   }
 
   /**
@@ -226,7 +229,7 @@ public class ConnectedUsers {
     // Do this later to not keep users locked
     for (final Entry<User, DisconnectReason> entry : removedUsers.entrySet()) {
       try {
-        entry.getKey().noLongerVaild();
+        entry.getKey().noLongerValid();
         notifyRemoveUser(entry.getKey(), entry.getValue());
         logger.info(String.format("Automatically kicking user %s due to %s", entry.getKey(),
             entry.getValue()));

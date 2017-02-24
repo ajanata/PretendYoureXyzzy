@@ -34,8 +34,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
 import net.socialgamer.cah.CahModule.ServerStarted;
+import net.socialgamer.cah.CahModule.UniqueId;
 import net.socialgamer.cah.cardcast.CardcastModule;
 import net.socialgamer.cah.cardcast.CardcastService;
+import net.socialgamer.cah.metrics.Metrics;
 import net.socialgamer.cah.task.BroadcastGameListUpdateTask;
 import net.socialgamer.cah.task.UserPingTask;
 
@@ -131,6 +133,10 @@ public class StartupUtils extends GuiceServletContextListener {
     reconfigureLogging(contextEvent.getServletContext());
     reloadProperties(contextEvent.getServletContext());
     CardcastService.hackSslVerifier();
+
+    // log that the server (re-)started to metrics logging (to flush all old games and users)
+    injector.getInstance(Metrics.class).serverStarted(
+        injector.getInstance(Key.get(String.class, UniqueId.class)));
   }
 
   public static void reloadProperties(final ServletContext context) {

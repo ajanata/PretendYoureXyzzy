@@ -23,6 +23,14 @@
 
 package net.socialgamer.cah.metrics;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import net.socialgamer.cah.data.CardSet;
+import net.socialgamer.cah.data.User;
+import net.socialgamer.cah.data.WhiteCard;
+
 import org.apache.log4j.Logger;
 
 import com.google.inject.Singleton;
@@ -40,7 +48,35 @@ public class KafkaMetrics implements Metrics {
   private static final Logger LOG = Logger.getLogger(KafkaMetrics.class);
 
   @Override
-  public void newUser(final String guid, final String sessionId, final CityResponse geoIp) {
-    LOG.trace(String.format("newUser(%s, %s, %s)", guid, sessionId, geoIp));
+  public void serverStarted(final String startupId) {
+    LOG.trace(String.format("serverStarted(%s)", startupId));
+  }
+
+  @Override
+  public void newUser(final String guid, final String sessionId, final CityResponse geoIp,
+      final String agentName, final String agentType, final String agentOs,
+      final String agentLanguage) {
+    LOG.trace(String.format("newUser(%s, %s, %s, %s, %s, %s, %s)", guid, sessionId, geoIp,
+        agentName, agentType, agentOs, agentLanguage));
+  }
+
+  @Override
+  public void userDisconnect(final String sessionId) {
+    LOG.trace(String.format("userDisconnect(%s)", sessionId));
+  }
+
+  @Override
+  public void gameStart(final String gameId, final Collection<CardSet> decks, final int blanks,
+      final int maxPlayers, final int scoreGoal, final boolean hasPassword) {
+    LOG.trace(String.format("gameStart(%s, %s, %d, %d, %d, %s)", gameId, decks.toArray(), blanks,
+        maxPlayers, scoreGoal, hasPassword));
+  }
+
+  @Override
+  public void roundJudged(final String gameId, final String judgeSessionId,
+      final String winnerSessionId,
+      final Map<User, List<WhiteCard>> cards) {
+    LOG.trace(String.format("roundJudged(%s, %s, %s, %s)", gameId, judgeSessionId, winnerSessionId,
+        cards));
   }
 }

@@ -56,8 +56,10 @@ import net.socialgamer.cah.cardcast.CardcastDeck;
 import net.socialgamer.cah.cardcast.CardcastService;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
+import net.socialgamer.cah.metrics.Metrics;
 import net.socialgamer.cah.task.SafeTimerTask;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
@@ -109,6 +111,7 @@ public class Game {
   private GameState state;
   private final GameOptions options = new GameOptions();
   private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<String>());
+  private final Metrics metrics;
 
   private int judgeIndex = 0;
 
@@ -194,7 +197,8 @@ public class Game {
       final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer,
       final Provider<Session> sessionProvider,
       final Provider<CardcastService> cardcastServiceProvider,
-      @UniqueId final Provider<String> uniqueIdProvider) {
+      @UniqueId final Provider<String> uniqueIdProvider,
+      final Metrics metrics) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
@@ -202,6 +206,7 @@ public class Game {
     this.sessionProvider = sessionProvider;
     this.cardcastServiceProvider = cardcastServiceProvider;
     this.uniqueIdProvider = uniqueIdProvider;
+    this.metrics = metrics;
 
     state = GameState.LOBBY;
   }
@@ -683,10 +688,14 @@ public class Game {
             options.spectatorLimit, options.scoreGoal, players, currentUniqueId));
         // do this stuff outside the players lock; they will lock players again later for much less
         // time, and not at the same time as trying to lock users, which has caused deadlocks
+        final List<CardSet> cardSets;
         synchronized (options.cardSetIds) {
-          blackDeck = loadBlackDeck(session);
-          whiteDeck = loadWhiteDeck(session);
+          cardSets = loadCardSets(session);
+          blackDeck = loadBlackDeck(cardSets);
+          whiteDeck = loadWhiteDeck(cardSets);
         }
+        metrics.gameStart(currentUniqueId, cardSets, options.blanksInDeck, options.playerLimit,
+            options.scoreGoal, !StringUtils.isBlank(options.password));
         startNextRound();
         gameManager.broadcastGameListRefresh();
       }
@@ -698,7 +707,7 @@ public class Game {
     }
   }
 
-  private List<CardSet> loadCardSets(final Session session) {
+  public List<CardSet> loadCardSets(final Session session) {
     synchronized (options.cardSetIds) {
       try {
         final List<CardSet> cardSets = new ArrayList<>();
@@ -738,12 +747,12 @@ public class Game {
     }
   }
 
-  public BlackDeck loadBlackDeck(final Session session) {
-    return new BlackDeck(loadCardSets(session));
+  public BlackDeck loadBlackDeck(final List<CardSet> cardSets) {
+    return new BlackDeck(cardSets);
   }
 
-  public WhiteDeck loadWhiteDeck(final Session session) {
-    return new WhiteDeck(loadCardSets(session), options.blanksInDeck);
+  public WhiteDeck loadWhiteDeck(final List<CardSet> cardSets) {
+    return new WhiteDeck(cardSets, options.blanksInDeck);
   }
 
   public int getRequiredWhiteCardCount() {
@@ -752,21 +761,21 @@ public class Game {
 
   /**
    * Determine if there are sufficient cards in the selected card sets to start the game.
-   * <p>This could be done more efficiently as we're ending up loading the decks multiple times
-   * with different Sessions, so caching wouldn't help local decks.
    */
   public boolean hasEnoughCards(final Session session) {
     synchronized (options.cardSetIds) {
-      if (options.cardSetIds.isEmpty() && cardcastDeckIds.isEmpty()) {
+      final List<CardSet> cardSets = loadCardSets(session);
+
+      if (cardSets.isEmpty()) {
         return false;
       }
 
-      final BlackDeck tempBlackDeck = loadBlackDeck(session);
+      final BlackDeck tempBlackDeck = loadBlackDeck(cardSets);
       if (tempBlackDeck.totalCount() < MINIMUM_BLACK_CARDS) {
         return false;
       }
 
-      final WhiteDeck tempWhiteDeck = loadWhiteDeck(session);
+      final WhiteDeck tempWhiteDeck = loadWhiteDeck(cardSets);
       if (tempWhiteDeck.totalCount() < getRequiredWhiteCardCount()) {
         return false;
       }
@@ -1502,6 +1511,9 @@ public class Game {
       }
       rescheduleTimer(task, ROUND_INTERMISSION);
     }
+
+    metrics.roundJudged(currentUniqueId, user.getSessionId(), cardPlayer.getUser().getSessionId(),
+        playedCards.cardsByUser());
 
     return null;
   }
