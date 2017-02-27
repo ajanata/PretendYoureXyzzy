@@ -281,11 +281,11 @@ select {
   </h2>
   <label for="cardSetName">Name:</label>
   <input type="text" name="cardSetName" id="cardSetName" size="50"
-      value="<%=editCardSet != null ? StringEscapeUtils.escapeXml(editCardSet.getName()) : ""%>" />
+      value="<%=editCardSet != null ? StringEscapeUtils.escapeXml11(editCardSet.getName()) : ""%>" />
   <br/>
   <label for="cardSetDescription">Description:</label>
   <input type="text" name="cardSetDescription" id="cardSetDescription" size="50"
-      value="<%=editCardSet != null ? StringEscapeUtils.escapeXml(editCardSet.getDescription()) : ""%>" />
+      value="<%=editCardSet != null ? StringEscapeUtils.escapeXml11(editCardSet.getDescription()) : ""%>" />
   <br/>
   <label for="cardSetWeight">Weight:</label>
   <input type="text" name="cardSetWeight" id="cardSetWeight" size="4"
@@ -306,7 +306,7 @@ select {
       for (PyxBlackCard blackCard : blackCards) {
     %>
       <option value="<%=blackCard.getId()%>">
-        <%=StringEscapeUtils.escapeXml(blackCard.toString())%>
+        <%=StringEscapeUtils.escapeXml11(blackCard.toString())%>
       </option>
     <%
       }
@@ -326,7 +326,7 @@ select {
         for (PyxBlackCard blackCard : editCardSet.getBlackCards()) {
       %>
         <option value="<%=blackCard.getId()%>" id="bc_<%=blackCard.getId()%>">
-          <%=StringEscapeUtils.escapeXml(blackCard.toString())%>
+          <%=StringEscapeUtils.escapeXml11(blackCard.toString())%>
         </option>
       <%
         }
@@ -343,7 +343,7 @@ select {
       for (PyxWhiteCard whiteCard : whiteCards) {
     %>
       <option value="<%=whiteCard.getId()%>">
-        <%=StringEscapeUtils.escapeXml(whiteCard.toString())%>
+        <%=StringEscapeUtils.escapeXml11(whiteCard.toString())%>
       </option>
     <%
       }
@@ -363,7 +363,7 @@ select {
         for (PyxWhiteCard whiteCard : editCardSet.getWhiteCards()) {
       %>
         <option value="<%= whiteCard.getId() %>" id="wc_<%= whiteCard.getId() %>">
-          <%= StringEscapeUtils.escapeXml(whiteCard.toString()) %>
+          <%= StringEscapeUtils.escapeXml11(whiteCard.toString()) %>
         </option>
       <% } %>
     <% } %>
