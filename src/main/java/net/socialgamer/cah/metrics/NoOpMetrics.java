@@ -27,8 +27,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import net.socialgamer.cah.data.BlackCard;
 import net.socialgamer.cah.data.CardSet;
-import net.socialgamer.cah.data.User;
 import net.socialgamer.cah.data.WhiteCard;
 
 import org.apache.log4j.Logger;
@@ -48,15 +48,20 @@ public class NoOpMetrics implements Metrics {
   private static final Logger LOG = Logger.getLogger(NoOpMetrics.class);
 
   @Override
+  public void shutdown() {
+    // nothing to do
+  }
+
+  @Override
   public void serverStart(final String startupId) {
     LOG.trace(String.format("serverStarted(%s)", startupId));
   }
 
   @Override
-  public void newUser(final String guid, final String sessionId, final CityResponse geoIp,
+  public void userConnect(final String persistentId, final String sessionId, final CityResponse geoIp,
       final String agentName, final String agentType, final String agentOs,
       final String agentLanguage) {
-    LOG.trace(String.format("newUser(%s, %s, %s, %s, %s, %s, %s)", guid, sessionId, geoIp,
+    LOG.trace(String.format("newUser(%s, %s, %s, %s, %s, %s, %s)", persistentId, sessionId, geoIp,
         agentName, agentType, agentOs, agentLanguage));
   }
 
@@ -73,10 +78,10 @@ public class NoOpMetrics implements Metrics {
   }
 
   @Override
-  public void roundComplete(final String gameId, final String judgeSessionId,
-      final String winnerSessionId,
-      final Map<User, List<WhiteCard>> cards) {
-    LOG.trace(String.format("roundJudged(%s, %s, %s, %s)", gameId, judgeSessionId, winnerSessionId,
-        cards));
+  public void roundComplete(final String gameId, final String roundId, final String judgeSessionId,
+      final String winnerSessionId, final BlackCard blackCard,
+      final Map<String, List<WhiteCard>> cards) {
+    LOG.trace(String.format("roundJudged(%s, %s, %s, %s, %s, %s)", gameId, roundId, judgeSessionId,
+        winnerSessionId, blackCard, cards));
   }
 }

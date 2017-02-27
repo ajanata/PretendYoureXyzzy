@@ -148,10 +148,7 @@ public class PlayerPlayedCardsTracker {
    */
   public synchronized Map<User, List<WhiteCard>> cardsByUser() {
     final Map<User, List<WhiteCard>> cardsByUser = new HashMap<>();
-    // TODO java8: streams
-    for (final Map.Entry<Player, List<WhiteCard>> entry : playerCardMap.entrySet()) {
-      cardsByUser.put(entry.getKey().getUser(), entry.getValue());
-    }
+    playerCardMap.forEach((key, value) -> cardsByUser.put(key.getUser(), value));
     return Collections.unmodifiableMap(cardsByUser);
   }
 }

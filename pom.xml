@@ -5,7 +5,7 @@
 
   <groupId>net.socialgamer</groupId>
   <artifactId>pyx</artifactId>
-  <version>0.5.0-SNAPSHOT</version>
+  <version>0.6.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>pyx</name>
@@ -268,9 +268,9 @@
       <version>4.0</version>
     </dependency>
     <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-      <version>3.1</version>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+      <version>4.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -346,7 +346,7 @@
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
-      <version>0.10.1.1</version>
+      <version>0.10.2.0</version>
     </dependency>
     <dependency>
       <groupId>com.maxmind.geoip2</groupId>

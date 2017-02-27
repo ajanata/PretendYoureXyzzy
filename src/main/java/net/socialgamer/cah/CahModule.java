@@ -35,12 +35,13 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.servlet.ServletContext;
+
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.GameManager.MaxGames;
 import net.socialgamer.cah.data.User;
 import net.socialgamer.cah.metrics.Metrics;
-import net.socialgamer.cah.metrics.NoOpMetrics;
 import net.socialgamer.cah.metrics.UniqueIds;
 
 import org.hibernate.Session;
@@ -61,6 +62,12 @@ public class CahModule extends AbstractModule {
 
   private final static Properties properties = new Properties();
 
+  private final ServletContext context;
+
+  public CahModule(final ServletContext context) {
+    this.context = context;
+  }
+
   @Override
   protected void configure() {
     bind(Integer.class)
@@ -76,10 +83,21 @@ public class CahModule extends AbstractModule {
         .toInstance(Collections.synchronizedSet(new HashSet<String>()));
 
     bind(Properties.class).toInstance(properties);
-    bind(Metrics.class).to(NoOpMetrics.class);
+
+    // FIXME huge hack.
+    StartupUtils.reloadProperties(context, properties);
+    final String metricsClassName = properties.getProperty("pyx.metrics.impl");
+    try {
+      @SuppressWarnings("unchecked")
+      final Class<? extends Metrics> metricsClass = (Class<? extends Metrics>) Class
+          .forName(metricsClassName);
+      bind(Metrics.class).to(metricsClass);
+    } catch (final ClassNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+
     bind(Date.class).annotatedWith(ServerStarted.class).toInstance(new Date());
     bind(String.class).annotatedWith(UniqueId.class).toProvider(UniqueIds.class);
-
     install(new FactoryModuleBuilder().build(User.Factory.class));
 
     final ScheduledThreadPoolExecutor threadPool =

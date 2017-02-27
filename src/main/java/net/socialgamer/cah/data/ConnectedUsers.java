@@ -142,7 +142,7 @@ public class ConnectedUsers {
           logger.warn(String.format("Unable to get address for user %s (hostname: %s)",
               user.getNickname(), user.getHostname()), e);
         }
-        metrics.newUser(user.getPersistentId(), user.getSessionId(), geo, user.getAgentName(),
+        metrics.userConnect(user.getPersistentId(), user.getSessionId(), geo, user.getAgentName(),
             user.getAgentType(), user.getAgentOs(), user.getAgentLanguage());
 
         return null;

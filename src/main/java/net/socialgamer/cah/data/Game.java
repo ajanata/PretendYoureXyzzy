@@ -1446,29 +1446,29 @@ public class Game {
   }
 
   /**
-   * The judge has selected a card. The {@code cardId} passed in may be any white cards's ID for
+   * The judge has selected a card. The {@code cardId} passed in may be any white card's ID for
    * black cards that have multiple selection, however only the first card in the set's ID will be
    * passed around to clients.
    *
-   * @param user
+   * @param judge
    *          Judge user.
    * @param cardId
    *          Selected card ID.
    * @return Error code if there is an error, or null if success.
    */
-  public ErrorCode judgeCard(final User user, final int cardId) {
+  public ErrorCode judgeCard(final User judge, final int cardId) {
     final Player cardPlayer;
     synchronized (judgeLock) {
-      final Player player = getPlayerForUser(user);
-      if (getJudge() != player) {
+      final Player judgePlayer = getPlayerForUser(judge);
+      if (getJudge() != judgePlayer) {
         return ErrorCode.NOT_JUDGE;
       } else if (state != GameState.JUDGING) {
         return ErrorCode.NOT_YOUR_TURN;
       }
 
       // shouldn't ever happen, but just in case...
-      if (null != player) {
-        player.resetSkipCount();
+      if (null != judgePlayer) {
+        judgePlayer.resetSkipCount();
       }
 
       cardPlayer = playedCards.getPlayerForId(cardId);
@@ -1512,8 +1512,11 @@ public class Game {
       rescheduleTimer(task, ROUND_INTERMISSION);
     }
 
-    metrics.roundComplete(currentUniqueId, user.getSessionId(), cardPlayer.getUser().getSessionId(),
-        playedCards.cardsByUser());
+    final Map<String, List<WhiteCard>> cardsBySessionId = new HashMap<>();
+    playedCards.cardsByUser().forEach(
+        (key, value) -> cardsBySessionId.put(key.getSessionId(), value));
+    metrics.roundComplete(currentUniqueId, uniqueIdProvider.get(), judge.getSessionId(),
+        cardPlayer.getUser().getSessionId(), blackCard, cardsBySessionId);
 
     return null;
   }

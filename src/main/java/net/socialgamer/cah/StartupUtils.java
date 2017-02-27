@@ -114,7 +114,7 @@ public class StartupUtils extends GuiceServletContextListener {
   @Override
   public void contextInitialized(final ServletContextEvent contextEvent) {
     final ServletContext context = contextEvent.getServletContext();
-    final Injector injector = getInjector();
+    final Injector injector = getInjector(context);
 
     final ScheduledThreadPoolExecutor timer = injector
         .getInstance(ScheduledThreadPoolExecutor.class);
@@ -140,10 +140,17 @@ public class StartupUtils extends GuiceServletContextListener {
   }
 
   public static void reloadProperties(final ServletContext context) {
-    LOG.info("Reloading pyx.properties");
-
     final Injector injector = (Injector) context.getAttribute(INJECTOR);
     final Properties props = injector.getInstance(Properties.class);
+    reloadProperties(context, props);
+  }
+
+  /**
+   * Hack method for calling inside CahModule before the injector is usable.
+   */
+  public static void reloadProperties(final ServletContext context, final Properties props) {
+    LOG.info("Reloading pyx.properties");
+
     final File propsFile = new File(context.getRealPath("/WEB-INF/pyx.properties"));
     try {
       synchronized (props) {
@@ -163,8 +170,12 @@ public class StartupUtils extends GuiceServletContextListener {
         "/WEB-INF/log4j.properties"));
   }
 
+  protected Injector getInjector(final ServletContext context) {
+    return Guice.createInjector(new CahModule(context), new CardcastModule());
+  }
+
   @Override
   protected Injector getInjector() {
-    return Guice.createInjector(new CahModule(), new CardcastModule());
+    throw new RuntimeException("Not supported.");
   }
 }

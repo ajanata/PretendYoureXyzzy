@@ -46,6 +46,7 @@ import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.GameManager.MaxGames;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.Metrics;
+import net.socialgamer.cah.metrics.NoOpMetrics;
 
 import org.hibernate.Session;
 import org.junit.After;
@@ -98,6 +99,7 @@ public class GameManagerTest {
                   }
                 });
         bind(ScheduledThreadPoolExecutor.class).toInstance(threadPool);
+        bind(Metrics.class).to(NoOpMetrics.class);
       }
 
       @Provides
