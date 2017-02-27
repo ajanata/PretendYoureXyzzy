@@ -114,6 +114,7 @@ public class StartupUtils extends GuiceServletContextListener {
   @Override
   public void contextInitialized(final ServletContextEvent contextEvent) {
     final ServletContext context = contextEvent.getServletContext();
+    reconfigureLogging(context);
     final Injector injector = getInjector(context);
 
     final ScheduledThreadPoolExecutor timer = injector
@@ -130,8 +131,9 @@ public class StartupUtils extends GuiceServletContextListener {
     context.setAttribute(INJECTOR, injector);
     context.setAttribute(DATE_NAME, injector.getInstance(Key.get(Date.class, ServerStarted.class)));
 
-    reconfigureLogging(contextEvent.getServletContext());
-    reloadProperties(contextEvent.getServletContext());
+    // this is called in the process of setting up the injector right now... ideally we wouldn't
+    // need to do that there and can just do it here again.
+    // reloadProperties(context);
     CardcastService.hackSslVerifier();
 
     // log that the server (re-)started to metrics logging (to flush all old games and users)
