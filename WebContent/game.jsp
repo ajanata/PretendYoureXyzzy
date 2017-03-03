@@ -482,5 +482,16 @@ HttpSession hSession = request.getSession(true);
   </div>
 </div>
 <div style="position:absolute; left:-99999px" role="alert" id="aria-notifications"></div>
+<script type="text/javascript">
+$( ".game_right_side" ).hover(function() {
+	$( this ).style.zIndex = "1000";
+	$( ".game_hand_cards" ).style.zIndex = "0";
+	}
+
+$( ".game_hand_cards" ).hover(function() {
+	$( this ).style.zIndex = "1000";
+	$( ".game_right_side" ).style.zIndex = "0";
+	}
+</script>
 </body>
 </html>
