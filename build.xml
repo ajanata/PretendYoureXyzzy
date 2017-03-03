@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cah" default="all">
+  
+  
+  <property file="build.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/.pyc/**"/>
+    <exclude name="**/.pyo/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/*.lib/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/.bundle/**"/>
+    <exclude name="**/*.rbc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.zip"/>
+    <include name="*.apk"/>
+    <include name="*.war"/>
+    <include name="*.egg"/>
+    <include name="*.ear"/>
+    <include name="*.ane"/>
+    <include name="*.swc"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+  </patternset>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.lib.classpath">
+    <fileset dir="${basedir}/WebContent/WEB-INF/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  
+  
+  <!-- Global Libraries -->
+  
+  <path id="library.junit.classpath">
+    <pathelement location="${junit4.jar.path}"/>
+  </path>
+  
+  <path id="library.tomcat.classpath">
+    <fileset dir="${tomcat.library.path}">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module cah -->
+  
+  <dirname property="module.cah.basedir" file="${ant.file}"/>
+  
+  
+  
+  <property name="compiler.args.cah" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+  
+  <property name="cah.output.dir" value="${module.cah.basedir}/build/classes"/>
+  <property name="cah.testoutput.dir" value="${module.cah.basedir}/build/classes"/>
+  
+  <path id="cah.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="cah.module.production.classpath">
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/javax.persistence.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/hibernate3.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/commons-lang3-3.1.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/json_simple-1.1.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/guice-3.0.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/easymock-3.1.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/objenesis-1.2.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/asm-4.0.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/cglib-nodep-2.2.2.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/jsr305-2.0.1.jar"/>
+    <path refid="library.junit.classpath"/>
+    <path refid="library.tomcat.classpath"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  <path id="cah.runtime.production.module.classpath">
+    <pathelement location="${cah.output.dir}"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/javax.persistence.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/hibernate3.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/commons-lang3-3.1.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/json_simple-1.1.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/guice-3.0.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/easymock-3.1.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/objenesis-1.2.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/asm-4.0.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/cglib-nodep-2.2.2.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/jsr305-2.0.1.jar"/>
+    <path refid="library.junit.classpath"/>
+    <path refid="library.tomcat.classpath"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  <path id="cah.module.classpath">
+    <pathelement location="${cah.output.dir}"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/javax.persistence.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/hibernate3.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/commons-lang3-3.1.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/json_simple-1.1.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/guice-3.0.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/easymock-3.1.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/objenesis-1.2.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/asm-4.0.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/cglib-nodep-2.2.2.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/jsr305-2.0.1.jar"/>
+    <path refid="library.junit.classpath"/>
+    <path refid="library.tomcat.classpath"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  <path id="cah.runtime.module.classpath">
+    <pathelement location="${cah.output.dir}"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/javax.persistence.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/hibernate3.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/commons-lang3-3.1.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/json_simple-1.1.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/guice-3.0.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/easymock-3.1.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/objenesis-1.2.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/asm-4.0.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/cglib-nodep-2.2.2.jar"/>
+    <pathelement location="${basedir}/WebContent/WEB-INF/lib/jsr305-2.0.1.jar"/>
+    <path refid="library.junit.classpath"/>
+    <path refid="library.tomcat.classpath"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.cah">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.cah">
+    <patternset refid="excluded.from.module.cah"/>
+  </patternset>
+  
+  <path id="cah.module.sourcepath">
+    <dirset dir="${module.cah.basedir}">
+      <include name="src"/>
+      <include name="test"/>
+    </dirset>
+  </path>
+
+  <!-- additional taskdefs for tomcat specific targets -->
+  <path id="catalina-ant-classpath">
+      <fileset dir="${tomcat.library.path}" />
+      <fileset dir="${tomcat.bin.path}" />
+  </path>
+
+  <taskdef name="catalina-deploy" classname="org.apache.catalina.ant.DeployTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-list" classname="org.apache.catalina.ant.ListTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-reload" classname="org.apache.catalina.ant.ReloadTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-findleaks" classname="org.apache.catalina.ant.FindLeaksTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-resources" classname="org.apache.catalina.ant.ResourcesTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-start" classname="org.apache.catalina.ant.StartTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-stop" classname="org.apache.catalina.ant.StopTask" classpathref="catalina-ant-classpath"/>
+  <taskdef name="catalina-undeploy" classname="org.apache.catalina.ant.UndeployTask" classpathref="catalina-ant-classpath"/>
+
+  <target name="compile.module.cah" depends="compile.module.cah.production" description="Compile module cah"/>
+  
+  <target name="compile.module.cah.production" description="Compile module cah; production classes">
+    <mkdir dir="${cah.output.dir}"/>
+    <javac destdir="${cah.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" includeantruntime="false">
+      <compilerarg line="${compiler.args.cah}"/>
+      <bootclasspath refid="cah.module.bootclasspath"/>
+      <classpath refid="cah.module.production.classpath"/>
+      <src refid="cah.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.cah"/>
+    </javac>
+
+    <copy todir="${cah.output.dir}">
+      <fileset dir="${module.cah.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.cah.basedir}/test">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="test" depends="compile.module.cah" description="test classes" unless="skip.tests">
+      <junit printsummary="on">
+          <classpath refid="cah.module.production.classpath"/>
+          <classpath path="${cah.output.dir}"/>
+
+          <batchtest>
+              <fileset dir="${module.cah.basedir}/test">
+                  <include name="**/*Test*.java" />
+              </fileset>
+          </batchtest>
+      </junit>
+  </target>
+
+  <target name="package" depends="build.modules" description="create war file">
+      <war destfile="${war.file}">
+          <classes dir="build/classes" />
+          <fileset dir="WebContent" />
+      </war>
+  </target>
+
+  <target name="deploy" depends="package" description="deploy war package to tomcat">
+      <catalina-deploy url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}"
+                       path="/${webapp.name}" war="file:${war.file}"/>
+  </target>
+
+
+  <target name="undeploy" description="deploy war package to tomcat">
+      <catalina-undeploy url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}"
+                         path="/${webapp.name}" failonerror="false"/>
+  </target>
+
+  <target name="start-webapp" description="enable application on server">
+      <catalina-start url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}"
+                      path="/${webapp.name}" />
+  </target>
+
+  <target name="stop-webapp" description="disable application on server">
+      <catalina-stop url="${tomcat.manager.url}" username="${tomcat.username}" password="${tomcat.password}"
+                     path="/${webapp.name}" failonerror="false"/>
+  </target>
+
+  <target name="clean.module.cah" description="cleanup module">
+    <delete dir="${cah.output.dir}"/>
+    <delete dir="${cah.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.cah" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.cah" description="build all modules"/>
+
+  <target name="all" depends="build.modules" description="build all"/>
+</project>
