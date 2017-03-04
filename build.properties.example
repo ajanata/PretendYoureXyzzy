@@ -41,6 +41,15 @@ pyx.metrics.impl=net.socialgamer.cah.metrics.NoOpMetrics
 # for kafka metrics
 kafka.host=kafka-host:9092
 kafka.topic=pyx-metrics
+# if this is false, the rest don't matter
+kafka.ssl=false
+kafka.truststore.path=
+kafka.truststore.password=
+# if this is false, the rest don't matter
+kafka.ssl.auth=false
+kafka.keystore.path=
+kafka.keystore.password=
+kafka.key.password=
 
 
 # GeoIP database for analytics. If unset, will not be used.

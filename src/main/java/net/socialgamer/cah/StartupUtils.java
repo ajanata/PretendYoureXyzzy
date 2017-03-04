@@ -168,8 +168,7 @@ public class StartupUtils extends GuiceServletContextListener {
   public static void reconfigureLogging(final ServletContext context) {
     LOG.info("Reloading log4j.properties");
 
-    PropertyConfigurator.configure(context.getRealPath(
-        "/WEB-INF/log4j.properties"));
+    PropertyConfigurator.configure(context.getRealPath("/WEB-INF/log4j.properties"));
   }
 
   protected Injector getInjector(final ServletContext context) {

@@ -43,12 +43,15 @@ import net.socialgamer.cah.db.PyxBlackCard;
 import net.socialgamer.cah.db.PyxCardSet;
 import net.socialgamer.cah.db.PyxWhiteCard;
 
+import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.PartitionInfo;
+import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONValue;
@@ -71,7 +74,6 @@ public class KafkaMetrics implements Metrics {
 
   private final ProducerCallback callback = new ProducerCallback();
   private final String build;
-  private final String hosts;
   private final String topic;
   private volatile Producer<String, String> producer;
   private final Properties producerProps;
@@ -80,24 +82,37 @@ public class KafkaMetrics implements Metrics {
   @Inject
   public KafkaMetrics(final Properties properties) {
     build = properties.getProperty("pyx.build");
-    hosts = properties.getProperty("kafka.host");
     topic = properties.getProperty("kafka.topic");
     LOG.info("Sending metrics to Kafka topic " + topic);
-    producerProps = getProducerProps();
+    producerProps = getProducerProps(properties);
     tryEnsureProducer();
   }
 
-  private Properties getProducerProps() {
+  private Properties getProducerProps(final Properties inProps) {
     final Properties props = new Properties();
-    props.put("bootstrap.servers", hosts);
-    props.put("key.serializer", StringSerializer.class.getName());
-    props.put("value.serializer", StringSerializer.class.getName());
-    props.put("acks", "0");
-    props.put("compression.type", "gzip");
-    props.put("retries", 1);
-    props.put("client.id", "pyx-" + build);
-    props.put("max.block.ms", TimeUnit.SECONDS.toMillis(5));
-    // TODO TLS, authentication
+    props.put(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, inProps.getProperty("kafka.host"));
+    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+    props.put(ProducerConfig.ACKS_CONFIG, "0");
+    props.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "gzip");
+    props.put(ProducerConfig.RETRIES_CONFIG, 1);
+    props.put(ProducerConfig.CLIENT_ID_CONFIG, "pyx-" + inProps.getProperty("pyx.build"));
+    props.put(ProducerConfig.MAX_BLOCK_MS_CONFIG, TimeUnit.SECONDS.toMillis(5));
+
+    if (Boolean.valueOf(inProps.getProperty("kafka.ssl", "false"))) {
+      props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
+      props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG,
+          inProps.getProperty("kafka.truststore.path"));
+      props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG,
+          inProps.getProperty("kafka.truststore.password"));
+
+      if (Boolean.valueOf(inProps.getProperty("kafka.ssl.auth", "false"))) {
+        props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, inProps.get("kafka.keystore.path"));
+        props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, inProps.get("kafka.keystore.password"));
+        props.put(SslConfigs.SSL_KEY_PASSWORD_CONFIG, inProps.get("kafka.key.password"));
+      }
+    }
+
     return props;
   }
 
