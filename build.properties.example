@@ -46,10 +46,16 @@ kafka.ssl=false
 kafka.truststore.path=
 kafka.truststore.password=
 # if this is false, the rest don't matter
-kafka.ssl.auth=false
+kafka.ssl.usekey=false
 kafka.keystore.path=
 kafka.keystore.password=
 kafka.key.password=
+# only SCRAM-SHA-512 supported; if this is false, the rest don't matter
+# must be used with ssl, does not need client key
+kafka.sasl=false
+kafka.sasl.username=
+kafka.sasl.password=
+
 
 
 # GeoIP database for analytics. If unset, will not be used.

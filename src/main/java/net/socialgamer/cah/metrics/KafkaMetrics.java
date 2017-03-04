@@ -51,6 +51,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.PartitionInfo;
+import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.log4j.Logger;
@@ -106,10 +107,21 @@ public class KafkaMetrics implements Metrics {
       props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG,
           inProps.getProperty("kafka.truststore.password"));
 
-      if (Boolean.valueOf(inProps.getProperty("kafka.ssl.auth", "false"))) {
+      if (Boolean.valueOf(inProps.getProperty("kafka.ssl.usekey", "false"))) {
         props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, inProps.get("kafka.keystore.path"));
         props.put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, inProps.get("kafka.keystore.password"));
         props.put(SslConfigs.SSL_KEY_PASSWORD_CONFIG, inProps.get("kafka.key.password"));
+      }
+
+      if (Boolean.valueOf(inProps.getProperty("kafka.sasl", "false"))) {
+        // overwrite this
+        props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_SSL");
+        props.put(SaslConfigs.SASL_JAAS_CONFIG, String.format(
+            "org.apache.kafka.common.security.scram.ScramLoginModule "
+                + "required \n username=\"%s\" \n password=\"%s\";",
+            inProps.getProperty("kafka.sasl.username"),
+            inProps.getProperty("kafka.sasl.password")));
+        props.put(SaslConfigs.SASL_MECHANISM, "SCRAM-SHA-512");
       }
     }
 
