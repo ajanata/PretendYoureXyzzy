@@ -84,8 +84,8 @@ HttpSession hSession = request.getSession(true);
     logged.</strong>
   </p>
   <p>
-    If this is your first time playing, you may wish to read <a href="/">the changelog and list of
-    known issues</a>.
+    If this is your first time playing, you may wish to read <a href="index.jsp">the changelog and
+    list of known issues</a>.
   </p>
   <p tabindex="0">Most recent update: 3 May 2015:</p>
   <ul>
@@ -110,10 +110,12 @@ HttpSession hSession = request.getSession(true);
     <input type="button" id="nicknameconfirm" value="Set" />
     <span id="nickbox_error" class="error"></span>
   </div>
+  <p><a href="privacy.html"><strong>Hey, this is important:</strong> Read the privacy page for
+  details about what gameplay information is collected and how it's shared.</a></p>
   <p>
     Pretend You're Xyzzy is a Cards Against Humanity clone, which is available at
-    <a href="http://www.cardsagainsthumanity.com/">cardsagainsthumanity.com</a>, where you can buy it
-    or download and print it out yourself. It is distributed under a
+    <a href="http://www.cardsagainsthumanity.com/">cardsagainsthumanity.com</a>, where you can buy
+    it or download and print it out yourself. It is distributed under a
     <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons - Attribution -
     Noncommercial - Share Alike license</a>. This web version is in no way endorsed or sponsored by
     cardsagainsthumanity.com. You may download the source code to this version from
