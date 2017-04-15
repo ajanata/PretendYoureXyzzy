@@ -346,6 +346,7 @@ public class KafkaMetrics implements Metrics {
         cardInfo.put("isWriteIn", card.isWriteIn());
         // negative IDs would be custom: either blank or cardcast. they are not stable.
         cardInfo.put("id", card.getId());
+        cardInfo.put("watermark", card.getWatermark());
         cardInfo.put("text", card.getText());
         userCards.add(cardInfo);
       }
@@ -358,6 +359,7 @@ public class KafkaMetrics implements Metrics {
     blackCardData.put("isCustom", !(blackCard instanceof PyxBlackCard));
     // negative IDs would be custom: either blank or cardcast. they are not stable.
     blackCardData.put("id", blackCard.getId());
+    blackCardData.put("watermark", blackCard.getWatermark());
     blackCardData.put("text", blackCard.getText());
     blackCardData.put("draw", blackCard.getDraw());
     blackCardData.put("pick", blackCard.getPick());
