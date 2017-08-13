@@ -30,6 +30,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
+import javax.annotation.Nullable;
+
 import net.sf.uadetector.ReadableUserAgent;
 import net.sf.uadetector.service.UADetectorServiceFactory;
 import net.socialgamer.cah.CahModule.UniqueId;
@@ -96,14 +98,14 @@ public class User {
       @Assisted final boolean isAdmin,
       @Assisted("persistentId") final String persistentId,
       @UniqueId final String sessionId,
-      @Assisted("clientLanguage") final String clientLanguage,
-      @Assisted("clientAgent") final String clientAgent) {
+      @Nullable @Assisted("clientLanguage") final String clientLanguage,
+      @Nullable @Assisted("clientAgent") final String clientAgent) {
     this.nickname = nickname;
     this.hostname = hostname;
     this.isAdmin = isAdmin;
     this.persistentId = persistentId;
     this.sessionId = sessionId;
-    this.clientLanguage = clientLanguage;
+    this.clientLanguage = clientLanguage == null ? "" : clientLanguage;
     agent = UADetectorServiceFactory.getResourceModuleParser().parse(clientAgent);
     queuedMessages = new PriorityBlockingQueue<QueuedMessage>();
   }
