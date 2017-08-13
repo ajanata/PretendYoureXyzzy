@@ -87,21 +87,15 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="index.jsp">the changelog and
     list of known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 3 May 2015:</p>
+  <p tabindex="0">Most recent update: 13 August 2017:</p>
   <ul>
-    <li>The game list automatically updates once per minute now, instead of several times per
-    second. You can still click the Refresh Games button in the top left corner at any time.</li>
-    <li>Chat flood protection has been made more strict.</li>
-    <li>Other back-end changes to attempt to get the AWS bill in control.</li>
-    <li><strong>All locally-stored custom card sets have been removed.</strong> You must use
-    Cardcast for custom card sets now.</li>
-    <li>The 5th and 6th Expansions, PAX Prime 2014 Panel, Ten Days or Whatever of Kwanzaa,
-    and Science packs have all been added.</li>
-    <li>Remaining known issues and high priority features:<ul>
-      <li>Leaving a game as a spectator doesn't work right.</li>
-      <li>Game owners still can't kick players from their game.</li>
-      <li>Actually saw a deadlock the other night, so that needs fixed.</li>
-    </ul></li>
+    <li><strong>Global chat is disabled.</strong> Far too spammy, far too shitty. Go shitpost
+    somewhere else, or at least take it to a game chat.</li>
+    <li>Added metrics logging. This will allow analysis over what cards are played often, and
+    regional trends. See the next bullet point for details. Your username and chat will
+    <strong>never</strong> be stored permanently.</li>
+    <li><a href="privacy.html"><strong>Hey, this is important:</strong> Read the privacy page for
+    details about what gameplay information is collected and how it's shared.</a></li>
   </ul>
   <div id="nickbox">
     Nickname:
