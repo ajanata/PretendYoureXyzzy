@@ -18,6 +18,12 @@
         <property name="show_sql">${hibernate.sql.show}</property>
         <property name="format_sql">${hibernate.sql.format}</property>
         
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.timeout">300</property>
+        <property name="hibernate.c3p0.max_statements">50</property>
+        <property name="hibernate.c3p0.idle_test_period">10</property>
+
         <mapping class="net.socialgamer.cah.db.PyxBlackCard" />
         <mapping class="net.socialgamer.cah.db.PyxWhiteCard" />
         <mapping class="net.socialgamer.cah.db.PyxCardSet" />

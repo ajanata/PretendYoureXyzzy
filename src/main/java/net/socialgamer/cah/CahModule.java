@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2017, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -37,13 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.ServletContext;
 
-import net.socialgamer.cah.data.GameManager;
-import net.socialgamer.cah.data.GameManager.GameId;
-import net.socialgamer.cah.data.GameManager.MaxGames;
-import net.socialgamer.cah.data.User;
-import net.socialgamer.cah.metrics.Metrics;
-import net.socialgamer.cah.metrics.UniqueIds;
-
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import com.google.inject.AbstractModule;
@@ -51,6 +45,13 @@ import com.google.inject.BindingAnnotation;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+
+import net.socialgamer.cah.data.GameManager;
+import net.socialgamer.cah.data.GameManager.GameId;
+import net.socialgamer.cah.data.GameManager.MaxGames;
+import net.socialgamer.cah.data.User;
+import net.socialgamer.cah.metrics.Metrics;
+import net.socialgamer.cah.metrics.UniqueIds;
 
 
 /**
@@ -60,7 +61,9 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
  */
 public class CahModule extends AbstractModule {
 
-  private final static Properties properties = new Properties();
+  private static final Logger LOG = Logger.getLogger(CahModule.class);
+
+  private final Properties properties = new Properties();
 
   private final ServletContext context;
 
@@ -179,7 +182,11 @@ public class CahModule extends AbstractModule {
    */
   @Provides
   Session provideHibernateSession() {
-    return HibernateUtil.instance.sessionFactory.openSession();
+    final Session session = HibernateUtil.instance.sessionFactory.openSession();
+    if (!session.isConnected()) {
+      LOG.error("Session disconnected!");
+    }
+    return session;
   }
 
   @BindingAnnotation
