@@ -13,14 +13,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import net.socialgamer.cah.Constants.CardSetData;
-import net.socialgamer.cah.data.CardSet;
-
 import org.hibernate.Session;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+
+import net.socialgamer.cah.Constants.CardSetData;
+import net.socialgamer.cah.data.CardSet;
 
 
 @Entity
@@ -142,9 +142,9 @@ public class PyxCardSet extends CardSet {
 
   public static String getCardsetQuery(final boolean includeInactive) {
     if (includeInactive) {
-      return "from PyxCardSet order by weight, id";
+      return "from PyxCardSet order by weight, name";
     } else {
-      return "from PyxCardSet where active = true order by weight, id";
+      return "from PyxCardSet where active = true order by weight, name";
     }
   }
 }

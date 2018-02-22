@@ -151,7 +151,7 @@ try {
   }
   
   @SuppressWarnings("unchecked")
-  List<PyxCardSet> cardSets = hibernateSession.createQuery("from PyxCardSet order by weight, id")
+  List<PyxCardSet> cardSets = hibernateSession.createQuery("from PyxCardSet order by weight, name")
       .setReadOnly(true).list();
   
   @SuppressWarnings("unchecked")
@@ -242,6 +242,8 @@ select {
       <th>Delete</th>
       <th>Edit</th>
       <th>Weight</th>
+      <th>Blacks</th>
+      <th>Whites</th>
       <th>Active</th>
     </tr>
   </thead>
@@ -254,6 +256,8 @@ select {
         <td><a href="?delete=<%=cardSet.getId()%>" onclick="return confirm('Are you sure?')">Delete</a></td>
         <td><a href="?edit=<%=cardSet.getId()%>">Edit</a></td>
         <td><%=cardSet.getWeight()%></td>
+        <td><%=cardSet.getBlackCards().size()%></td>
+        <td><%=cardSet.getWhiteCards().size()%></td>
         <td><%=cardSet.isActive()%></td>
       </tr>
     <%
