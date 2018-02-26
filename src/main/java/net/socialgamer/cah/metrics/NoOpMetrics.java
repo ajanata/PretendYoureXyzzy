@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017, Andy Janata
+ * Copyright (c) 2017-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -27,14 +27,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import net.socialgamer.cah.data.BlackCard;
-import net.socialgamer.cah.data.CardSet;
-import net.socialgamer.cah.data.WhiteCard;
-
 import org.apache.log4j.Logger;
 
 import com.google.inject.Singleton;
 import com.maxmind.geoip2.model.CityResponse;
+
+import net.socialgamer.cah.data.BlackCard;
+import net.socialgamer.cah.data.CardSet;
+import net.socialgamer.cah.data.WhiteCard;
 
 
 /**
@@ -83,5 +83,11 @@ public class NoOpMetrics implements Metrics {
       final Map<String, List<WhiteCard>> cards) {
     LOG.trace(String.format("roundJudged(%s, %s, %s, %s, %s, %s)", gameId, roundId, judgeSessionId,
         winnerSessionId, blackCard, cards));
+  }
+
+  @Override
+  public void cardDealt(final String gameId, final String sessionId, final WhiteCard card,
+      final long dealSeq) {
+    LOG.trace(String.format("cardDealt(%s, %s, %s, %d)", gameId, sessionId, card, dealSeq));
   }
 }

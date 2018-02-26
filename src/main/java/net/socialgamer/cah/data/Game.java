@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2017, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -41,6 +41,13 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.hibernate.Session;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+
 import net.socialgamer.cah.CahModule.UniqueId;
 import net.socialgamer.cah.Constants.BlackCardData;
 import net.socialgamer.cah.Constants.ErrorCode;
@@ -58,13 +65,6 @@ import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.Metrics;
 import net.socialgamer.cah.task.SafeTimerTask;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.hibernate.Session;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 
 /**
@@ -178,6 +178,11 @@ public class Game {
   private final Provider<CardcastService> cardcastServiceProvider;
   private final Provider<String> uniqueIdProvider;
   private String currentUniqueId;
+  /**
+   * Sequence number of cards dealt. This allows re-shuffles and re-deals to still be tracked as
+   * unique card deals.
+   */
+  private long dealSeq = 0;
 
   /**
    * Create a new game.
@@ -799,6 +804,7 @@ public class Game {
         final WhiteCard card = getNextWhiteCard();
         hand.add(card);
         newCards.add(card);
+        metrics.cardDealt(currentUniqueId, player.getUser().getSessionId(), card, dealSeq++);
       }
       sendCardsToPlayer(player, newCards);
     }

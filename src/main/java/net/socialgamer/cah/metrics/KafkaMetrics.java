@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017, Andy Janata
+ * Copyright (c) 2017-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -36,13 +36,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Nullable;
 
-import net.socialgamer.cah.data.BlackCard;
-import net.socialgamer.cah.data.CardSet;
-import net.socialgamer.cah.data.WhiteCard;
-import net.socialgamer.cah.db.PyxBlackCard;
-import net.socialgamer.cah.db.PyxCardSet;
-import net.socialgamer.cah.db.PyxWhiteCard;
-
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -61,6 +54,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.maxmind.geoip2.model.CityResponse;
 
+import net.socialgamer.cah.data.BlackCard;
+import net.socialgamer.cah.data.CardSet;
+import net.socialgamer.cah.data.WhiteCard;
+import net.socialgamer.cah.db.PyxBlackCard;
+import net.socialgamer.cah.db.PyxCardSet;
+import net.socialgamer.cah.db.PyxWhiteCard;
+
 
 /**
  * Metrics implementation that sends all data to an Apache Kafka topic.
@@ -70,7 +70,9 @@ import com.maxmind.geoip2.model.CityResponse;
 @Singleton
 public class KafkaMetrics implements Metrics {
 
-  private static final String metricsVersion = "0.1";
+  // 0.1: initial version
+  // 0.2: added cardDealt
+  private static final String metricsVersion = "0.2";
   private static final Logger LOG = Logger.getLogger(KafkaMetrics.class);
 
   private final ProducerCallback callback = new ProducerCallback();
@@ -366,5 +368,28 @@ public class KafkaMetrics implements Metrics {
     data.put("blackCard", blackCardData);
 
     send(getEventMap("roundComplete", data));
+  }
+
+  @Override
+  public void cardDealt(final String gameId, final String sessionId, final WhiteCard card,
+      final long dealSeq) {
+    trace("%s, %s, %s, %d", gameId, sessionId, card, dealSeq);
+
+    final Map<String, Object> data = new HashMap<>();
+    data.put("gameId", gameId);
+    data.put("sessionId", sessionId);
+    data.put("dealSeq", dealSeq);
+
+    final Map<String, Object> whiteCardData = new HashMap<>();
+    // same re: more custom deck sources
+    whiteCardData.put("isCustom", !(card instanceof PyxWhiteCard));
+    whiteCardData.put("isWriteIn", card.isWriteIn());
+    // negative IDs would be custom: either blank or cardcast. they are not stable.
+    whiteCardData.put("id", card.getId());
+    whiteCardData.put("watermark", card.getWatermark());
+    whiteCardData.put("text", card.getText());
+    data.put("card", whiteCardData);
+
+    send(getEventMap("cardDealt", data));
   }
 }

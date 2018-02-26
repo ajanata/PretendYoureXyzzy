@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2017, Andy Janata
+ * Copyright (c) 2017-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -29,11 +29,11 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import com.maxmind.geoip2.model.CityResponse;
+
 import net.socialgamer.cah.data.BlackCard;
 import net.socialgamer.cah.data.CardSet;
 import net.socialgamer.cah.data.WhiteCard;
-
-import com.maxmind.geoip2.model.CityResponse;
 
 
 /**
@@ -58,4 +58,6 @@ public interface Metrics {
 
   void gameStart(String gameId, Collection<CardSet> decks, int blanks, int maxPlayers,
       int scoreGoal, boolean hasPassword);
+
+  void cardDealt(String gameId, String sessionId, WhiteCard card, long dealSeq);
 }
