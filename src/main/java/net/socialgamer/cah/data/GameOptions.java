@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -59,7 +59,7 @@ public class GameOptions {
   public int scoreGoal = DEFAULT_SCORE_LIMIT;
   public final Set<Integer> cardSetIds = new HashSet<Integer>();
   public String password = "";
-  public String timerMultiplier = "1.0x";
+  public String timerMultiplier = "1x";
 
   /**
    * Update the options in-place (so that the Game doesn't need more locks).
