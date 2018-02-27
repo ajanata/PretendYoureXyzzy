@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%--
-Copyright (c) 2012-2017, Andy Janata
+Copyright (c) 2012-2018, Andy Janata
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -132,11 +132,9 @@ HttpSession hSession = request.getSession(true);
     </div>
     <div id="menubar_right">
       Current timer duration: <span id="current_timer">0</span> seconds
-      <%-- disabled as this page can kill the database server without caching
       <input type="button" id="view_cards" value="View Cards"
           title="Open a new window to view all cards in the game."
           onclick="window.open('viewcards.jsp', 'viewcards');" />
-      --%>
       <input type="button" id="logout" value="Log out" />
     </div>
   </div>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -177,6 +177,8 @@ cah.CardSet.prototype.getWeight = function() {
 cah.CardSet.populateCardSets = function(cardSets) {
   cah.CardSet.list = {};
   cah.CardSet.byWeight = {};
+  // the server already sends us an ordered list, so let's just use that ordering
+  var i = 0;
   for ( var key in cardSets) {
     var cardSetData = cardSets[key];
     var cardSet = new cah.CardSet(cardSetData[cah.$.CardSetData.ID],
@@ -186,7 +188,7 @@ cah.CardSet.populateCardSets = function(cardSets) {
         cardSetData[cah.$.CardSetData.BLACK_CARDS_IN_DECK],
         cardSetData[cah.$.CardSetData.WHITE_CARDS_IN_DECK], cardSetData[cah.$.CardSetData.WEIGHT]);
     cah.CardSet.list[cardSet.getId()] = cardSet;
-    cah.CardSet.byWeight[cardSetData[cah.$.CardSetData.WEIGHT]] = cardSet;
+    cah.CardSet.byWeight[i++] = cardSet;
   }
 
   // not sure if there's a better way to call this...
