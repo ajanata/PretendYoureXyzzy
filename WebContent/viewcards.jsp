@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <%--
 Copyright (c) 2013-2018, Andy Janata
 All rights reserved.
@@ -133,9 +132,8 @@ try {
     whiteCardsData.put(whiteCard.getId(), whiteCardData);
   }
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Pretend You're Xyzzy: View Cards</title>
@@ -144,11 +142,11 @@ try {
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/jquery.json.js"></script>
 <script type="text/javascript" src="js/QTransform.js"></script>
-<script type="text/javascript" src="js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/jquery.tablesorter.js"></script>
-<link rel="stylesheet" type="text/css" href="cah.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="jquery-ui.min.css" media="screen" />
 <jsp:include page="analytics.jsp" />
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="jquery-ui.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="nightui.css" media="screen" />
 <script type="text/javascript">
 var data = <%= JSONValue.toJSONString(data) %>;
 
@@ -214,28 +212,27 @@ table td {
 </style>
 </head>
 <body style="overflow: scroll">
-<div style="float: left;">
-  Show only cards from card sets (hold ctrl or cmd to select multiple):
-  <br/>
-  <select id="cardSets" multiple="multiple" style="height: 150px; width: 450px;">
-  </select>
+<div class="jumbotron">
+      <div class="container">
+        <h1>View Cards</h1>
+        <p>CardCast decks will not appear here.</p>
+      </div>
+    </div>
+<div class="input-group">
+  <span class="input-group-addon glyphicon glyphicon-search" id="basic-addon1"></span>
+  
+  <input type="text" class="form-control" placeholder="Search cards" aria-describedby="basic-addon1">
 </div>
-<div>
-  <label for="search" style="padding-left: 10px;"
-      title="Search for text in cards. You can use regular expressions.">
-    Search card text:
-  </label>
-  <input type="text" id="search" style="width: 400px;" />
-</div>
+<br>
 <div style="clear:both"></div>
-<table id="cardTable">
+<table id="cardTable" class="table table-striped table-bordered table-condensed">
   <thead>
-    <tr>
-      <th class="sorting" style="width: 75px;">Type</th>
-      <th class="sorting" style="width: 100%" id="cardTextColumn">Text</th>
-      <th class="sorting" style="width: 100px;">Source</th>
-      <th class="sorting" style="width: 75px;">Draw</th>
-      <th class="sorting" style="width: 75px;">Pick</th>
+    <tr class="info">
+      <td class="success sorting" style="width: 75px;">Type</td>
+      <td class="info sorting" style="width: 100%" id="cardTextColumn">Text</td>
+      <td class="error" style="width: 100px;">Source</td>
+      <td class="warning" style="width: 75px;">Draw</td>
+      <td class="sorting" style="width: 75px;">Pick</td>
     </tr>
   </thead>
   <tbody id="cards">

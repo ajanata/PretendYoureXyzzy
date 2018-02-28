@@ -153,7 +153,7 @@ function chatsubmit_click(game_id, parent_element) {
           ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT);
         }
         ajax = ajax.withEmote(false).withMessage(text);
-        cah.log.status_with_game(game_id, "<" + cah.nickname + "> " + text);
+        cah.log.status_with_game(game_id, "[" + cah.nickname + "]: " + text);
         break;
       case 'me':
         if (game_id !== null) {
