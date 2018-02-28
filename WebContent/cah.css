@@ -638,3 +638,7 @@ span.debug, span.admin {
 dfn {
   border-bottom: 1px dotted black;
 }
+
+#tweetbox {
+  float: right;
+}

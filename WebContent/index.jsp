@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%--
-Copyright (c) 2012, Andy Janata
+Copyright (c) 2012-2018, Andy Janata
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -35,8 +35,15 @@ to, for instance, display the number of connected players.
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Pretend You're Xyzzy</title>
 <jsp:include page="analytics.jsp" />
+<link rel="stylesheet" type="text/css" href="cah.css" media="screen" />
 </head>
 <body>
+<div id="tweetbox">
+  <h3>Recent tweets (mainly server status updates)</h3>
+  <a class="twitter-timeline" data-height="500" data-dnt="true" data-theme="light"
+  href="https://twitter.com/_PYX_?ref_src=twsrc%5Etfw">Tweets by _PYX_</a>
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
 <h1>
   Pretend You're <dfn style="border-bottom: 1px dotted black"
   title="Xyzzy is an Artificial Unintelligence bot. You'll be making more sense than him in this game.">
@@ -54,6 +61,18 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>1 March 2018:<ul>
+    <li>Added reconnection to the card database server after it restarts. This really should have
+    been done years ago... This is what caused all of the errors while trying to start a game with
+    locally-stored decks.</li>
+    <li>The "view cards" page has been re-enabled.</li>
+    <li>Full games sort to the bottom of the game list.</li>
+    <li>Added more metrics logging. Sounds boring, but it's important for the long-term viability
+    of these servers.</li>
+    <li>All official CAH cards through Q3 2017 have been added, and deck names and contents have
+    been shuffled accordingly. Any cards not currently in any official decks are now removed.
+    The PAX panel sets have also been removed.</li>
+  </ul></li>
   <li>13 August 2017:<ul>
     <li><strong>Global chat is disabled.</strong> Far too spammy, far too shitty. Go shitpost
     somewhere else, or at least take it to a game chat.</li>
@@ -62,53 +81,6 @@ to, for instance, display the number of connected players.
     <strong>never</strong> be stored permanently.</li>
     <li><a href="privacy.html"><strong>Hey, this is important:</strong> Read the privacy page for
     details about what gameplay information is collected and how it's shared.</a></li>
-  </ul></li>
-  <li>3 May 2015:<ul>
-    <li>The game list automatically updates once per minute now, instead of several times per
-    second. You can still click the Refresh Games button in the top left corner at any time.</li>
-    <li>Chat flood protection has been made more strict.</li>
-    <li>Other back-end changes to attempt to get the AWS bill in control.</li>
-    <li><strong>All locally-stored custom card sets have been removed.</strong> You must use
-    Cardcast for custom card sets now.</li>
-    <li>The 5th and 6th Expansions, PAX Prime 2014 Panel, 10 Days or Whatever of Kwanzaa,
-    and Science packs have all been added.</li>
-  </ul></li>
-  <li>21 February 2015:<ul>
-    <li>Servers now run in Amazon Web Services. This is going to cost me more, but at least it
-    should be more stable and not take down my other stuff when it does go down...<ul>
-      <li>I am still tweaking server settings in AWS. It likely is going to be unstable for another
-      week or two while I fine-tune cost and performance.</li></ul></li>
-    <li>Card set filters are fixed.</li>
-    <li><pre>/removecardcast</pre> is fixed.</li>
-    <li>Connect and disconnect notices are disabled server-wide. This was a major source of
-    bandwidth and processing time.</li>
-    <li><strong>You can start a game without using any local card sets.</strong>You must have at
-    least 50 black cards and (20 times player limit) white cards to be able to start a game.</li>
-    <li>Several other back-end performance and code maintainability improvements.</li>
-    <li><strong>Custom card sets will be removed from local storage in the near future.</strong>You
-    will have to use Cardcast to use custom card sets. If a card set you want is not already in
-    Cardcast, you can attempt to extract it from
-    <a href='https://github.com/ajanata/PretendYoureXyzzy/blob/737b468/cah_cards.sql'>the last
-    version of the database dump which contains them</a> and add it to Cardcast yourself; I will be
-    unable to provide help in doing so.</li>
-    <li>At roughly the same time, all officially released Cards Against Humanity sets which are not
-    already in the system will be added as local decks.</li>
-    <li>Remaining known issues and high priority features:<ul>
-      <li>Leaving a game as a spectator doesn't work right.</li>
-      <li>Game owners still can't kick players from their game.</li>
-      <li>Actually saw a deadlock the other night, so that needs fixed.</li>
-    </ul></li>
-  </ul></li>
-  <li>11 August 2014:<ul>
-    <li>Loading decks from <a href="http://www.cardcastgame.com/">Cardcast</a> is now supported in a
-    preview release. See <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Cardcast">the
-    wiki</a> for instructions. A better UI will hopefully happen before too long, but you can see
-    how long it took to get any sort of custom deck loading implemented...</li>
-    <li>Please go make your own card sets there! It's a really cool site.</li>
-    <li><strong>If you submitted a card set which is currently hosted locally on PYX, please add it
-    to Cardcast and let me know when you have done so, so that I may remove it from the local list
-    to de-clutter the page.</strong> I will list Cardcast codes for previously-hosted decks for a
-    period of time so that users may continue to find them.</li>
   </ul></li>
   <li><a href="changelog.html">Older entries.</a></li>
 </ul>

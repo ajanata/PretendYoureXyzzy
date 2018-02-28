@@ -72,6 +72,12 @@ HttpSession hSession = request.getSession(true);
 <body>
 
 <div id="welcome">
+  <div id="tweetbox">
+    <h3>Recent tweets (mainly server status updates)</h3>
+    <a class="twitter-timeline" data-height="500" data-dnt="true" data-theme="light"
+    href="https://twitter.com/_PYX_?ref_src=twsrc%5Etfw">Tweets by _PYX_</a>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  </div>
   <h1 tabindex="0">
     Pretend You're <dfn
     title="Xyzzy is an Artificial Unintelligence bot. You'll be making more sense than him in this game.">
@@ -87,20 +93,23 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="index.jsp">the changelog and
     list of known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 13 August 2017:</p>
+  <p tabindex="0">Most recent update: 1 March 2018:</p>
   <ul>
-    <li><strong>Global chat is disabled.</strong> Far too spammy, far too shitty. Go shitpost
-    somewhere else, or at least take it to a game chat.</li>
-    <li>Added metrics logging. This will allow analysis over what cards are played often, and
-    regional trends. See the next bullet point for details. Your username and chat will
-    <strong>never</strong> be stored permanently.</li>
-    <li><a href="privacy.html"><strong>Hey, this is important:</strong> Read the privacy page for
-    details about what gameplay information is collected and how it's shared.</a></li>
+    <li>Added reconnection to the card database server after it restarts. This really should have
+    been done years ago... This is what caused all of the errors while trying to start a game with
+    locally-stored decks.</li>
+    <li>The "view cards" page has been re-enabled.</li>
+    <li>Full games sort to the bottom of the game list.</li>
+    <li>Added more metrics logging. Sounds boring, but it's important for the long-term viability
+    of these servers.</li>
+    <li>All official CAH cards through Q3 2017 have been added, and deck names and contents have
+    been shuffled accordingly. Any cards not currently in any official decks are now removed.
+    The PAX panel sets have also been removed.</li>
   </ul>
   <div id="nickbox">
     Nickname:
     <input type="text" id="nickname" value="" maxlength="30" role="textbox"
-        aria-label="Enter your nickname." />
+        aria-label="Enter your nickname." data-lpignore="true" />
     <input type="button" id="nicknameconfirm" value="Set" />
     <span id="nickbox_error" class="error"></span>
   </div>
@@ -124,7 +133,8 @@ HttpSession hSession = request.getSession(true);
     <div id="menubar_left">
       <input type="button" id="refresh_games" class="hide" value="Refresh Games" />
       <input type="button" id="create_game" class="hide" value="Create Game" />
-      <input type="text" id="filter_games" class="hide" placeholder="Filter games by keyword" />
+      <input type="text" id="filter_games" class="hide" placeholder="Filter games by keyword"
+          data-lpignore="true"/>
 
       <input type="button" id="leave_game" class="hide" value="Leave Game" />
       <input type="button" id="start_game" class="hide" value="Start Game" />
