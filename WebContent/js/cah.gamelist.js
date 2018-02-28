@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -112,19 +112,25 @@ cah.GameList.prototype.processUpdate = function(gameData) {
   }
   this.games_ = {};
 
-  // Sort the games into two lists, passworded and non-passworded.
+  // Sort the games into multiple lists:
+  // * not passworded, not full
+  // * passworded, not full
+  // * full
   var passworded = new Array();
   var notPassworded = new Array();
+  var full = new Array();
   for ( var key in gameData[cah.$.AjaxResponse.GAMES]) {
     var game = gameData[cah.$.AjaxResponse.GAMES][key];
-    if (game[cah.$.GameInfo.HAS_PASSWORD]) {
+    if (game[cah.$.GameInfo.PLAYERS].length >= game[cah.$.GameInfo.GAME_OPTIONS][cah.$.GameOptionData.PLAYER_LIMIT]) {
+      full.push(game);
+    } else if (game[cah.$.GameInfo.HAS_PASSWORD]) {
       passworded.push(game);
     } else {
       notPassworded.push(game);
     }
   }
 
-  var games = notPassworded.concat(passworded);
+  var games = notPassworded.concat(passworded).concat(full);
 
   var bannedSets = cah.Preferences.getBannedCardSetIds();
   var requiredSets = cah.Preferences.getRequiredCardSetIds();
