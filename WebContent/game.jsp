@@ -228,7 +228,8 @@ HttpSession hSession = request.getSession(true);
     </div>
     <div id="tab-global">
       <div class="log"></div>
-      <input type="text" class="chat" maxlength="200" aria-label="Type here to chat." />
+      <input type="text" class="chat" maxlength="200" aria-label="Type here to chat."
+          data-lpignore="true" />
       <input type="button" class="chat_submit" value="Chat" />
     </div>
   </div>
