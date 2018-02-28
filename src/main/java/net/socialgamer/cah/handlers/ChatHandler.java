@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -28,6 +28,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.google.inject.Inject;
+
+import net.socialgamer.cah.CahModule.GlobalChatEnabled;
 import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
@@ -41,8 +44,6 @@ import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.data.User;
 
-import com.google.inject.Inject;
-
 
 /**
  * Handler for chat messages.
@@ -54,10 +55,13 @@ public class ChatHandler extends Handler {
   public static final String OP = AjaxOperation.CHAT.toString();
 
   private final ConnectedUsers users;
+  private final boolean globalChatEnabled;
 
   @Inject
-  public ChatHandler(final ConnectedUsers users) {
+  public ChatHandler(final ConnectedUsers users,
+      @GlobalChatEnabled final boolean globalChatEnabled) {
     this.users = users;
+    this.globalChatEnabled = globalChatEnabled;
   }
 
   @Override
@@ -74,8 +78,10 @@ public class ChatHandler extends Handler {
 
     if (request.getParameter(AjaxRequest.MESSAGE) == null) {
       return error(ErrorCode.NO_MSG_SPECIFIED);
-    } else if (/* wall && */!user.isAdmin()) {
-      // Making global chat admin-only because it's hopeless
+    } else if (wall && !user.isAdmin()) {
+      return error(ErrorCode.NOT_ADMIN);
+    } else if (!globalChatEnabled && !user.isAdmin()) {
+      // global chat can be turned off in the properties file
       return error(ErrorCode.NOT_ADMIN);
     } else {
       final String message = request.getParameter(AjaxRequest.MESSAGE).trim();

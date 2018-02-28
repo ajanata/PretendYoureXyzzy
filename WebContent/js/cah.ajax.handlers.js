@@ -96,7 +96,9 @@ cah.ajax.after_registered = function() {
   $("#bottom").removeClass("hide");
   // TODO once there are channels, this needs to specify the global channel
   cah.Ajax.build(cah.$.AjaxOperation.NAMES).run();
-  cah.log.error("IMPORTANT: Global chat has been disabled.");
+  if (!cah.GLOBAL_CHAT_ENABLED) {
+    cah.log.error("IMPORTANT: Global chat has been disabled.");
+  }
   cah.GameList.instance.show();
   cah.GameList.instance.update();
   cah.longpoll.longPoll();

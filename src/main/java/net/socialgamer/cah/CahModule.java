@@ -160,6 +160,15 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
+  @GlobalChatEnabled
+  Boolean provideGlobalChatEnabled() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty(
+          "pyx.server.global_chat_enabled", "true"));
+    }
+  }
+
+  @Provides
   @CookieDomain
   String getCookieDomain() {
     synchronized (properties) {
@@ -202,6 +211,11 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface BroadcastConnectsAndDisconnects {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface GlobalChatEnabled {
   }
 
   @BindingAnnotation

@@ -3,6 +3,7 @@ pyx.max_users=100
 pyx.max_games=25
 pyx.include_inactive_cardsets=true
 pyx.broadcast_connects_and_disconnects=true
+pyx.global_chat_enabled=true
 
 # for production use, use postgres
 #hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
