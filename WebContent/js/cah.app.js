@@ -40,8 +40,8 @@ $(document).ready(function() {
     $("#nickname").val($.cookie("nickname"));
   }
   $("#nicknameconfirm").click(nicknameconfirm_click);
-  $("#nickbox").keyup(nickbox_keyup);
-  $("#nickbox").focus();
+  $("#nickname").keyup(nickbox_keyup);
+  $("#nickname").focus();
 
   $(".chat", $("#tab-global")).keyup(chat_keyup($(".chat_submit", $("#tab-global"))));
   $(".chat_submit", $("#tab-global")).click(chatsubmit_click(null, $("#tab-global")));
