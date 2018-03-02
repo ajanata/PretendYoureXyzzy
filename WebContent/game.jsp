@@ -69,7 +69,7 @@ HttpSession hSession = request.getSession(true);
 <link rel="stylesheet" type="text/css" href="jquery-ui.min.css" media="screen" />
 <jsp:include page="analytics.jsp" />
 </head>
-<body>
+<body id="gamebody">
 
 <div id="welcome">
   <div id="tweetbox">

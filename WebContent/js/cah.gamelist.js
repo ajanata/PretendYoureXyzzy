@@ -315,7 +315,7 @@ cah.GameListLobby = function(parentElem, data) {
   $(".gamelist_lobby_cardset", this.element_).html(cardSetNames.join(', '));
 
   if (data[cah.$.GameInfo.HAS_PASSWORD]) {
-    $(".gamelist_lobby_join", this.element_).val("Join\n(Passworded)");
+    $(".gamelist_lobby_join", this.element_).val("Join (Passworded)");
   }
 
   $(this.element_).attr(

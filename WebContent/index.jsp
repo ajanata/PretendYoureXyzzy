@@ -73,15 +73,6 @@ to, for instance, display the number of connected players.
     been shuffled accordingly. Any cards not currently in any official decks are now removed.
     The PAX panel sets have also been removed.</li>
   </ul></li>
-  <li>13 August 2017:<ul>
-    <li><strong>Global chat is disabled.</strong> Far too spammy, far too shitty. Go shitpost
-    somewhere else, or at least take it to a game chat.</li>
-    <li>Added metrics logging. This will allow analysis over what cards are played often, and
-    regional trends. See the next bullet point for details. Your username and chat will
-    <strong>never</strong> be stored permanently.</li>
-    <li><a href="privacy.html"><strong>Hey, this is important:</strong> Read the privacy page for
-    details about what gameplay information is collected and how it's shared.</a></li>
-  </ul></li>
   <li><a href="changelog.html">Older entries.</a></li>
 </ul>
 <p>Known issues:</p>
@@ -92,8 +83,8 @@ to, for instance, display the number of connected players.
   <li>This game was extensively tested in <a href="http://google.com/chrome">Google Chrome</a>.
   It should work in all recent versions of major browsers, but it may not look 100% as intended. If
   you find a major issue, please
-  <a href="mailto:ajanata@socialgamer.net?subject=PYX%20bug">email me</a> with a screenshot and the
-  name and version of the browser you are using, and I'll try to fix it.
+  <a href="https://github.com/ajanata/PretendYoureXyzzy/issues/new">open a bug on GitHub</a> with a
+  screenshot and the name and version of the browser you are using, and I'll try to fix it.
   </li>
   <li>You may not always see your card in the top area after you play it, but it has been played.
   Also, sometimes the card will display in the top area but be small. I have no idea why either of
@@ -133,8 +124,6 @@ to, for instance, display the number of connected players.
 <ul>
   <li>There may be an option to display who played every card.</li>
   <li>A registration system and long-term statistics tracking may be added at some point.</li>
-  <li>Support for custom Black and White cards will also likely be added, with a game host option to
-  use them or just the stock cards.</li>
 </ul>
 <p>
   If the game seems to be in a weird state, refresh the page and it should take you back to where

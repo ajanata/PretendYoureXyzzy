@@ -213,7 +213,7 @@ table td {
 }
 </style>
 </head>
-<body style="overflow: scroll">
+<body>
 <div style="float: left;">
   Show only cards from card sets (hold ctrl or cmd to select multiple):
   <br/>

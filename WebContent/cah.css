@@ -21,8 +21,11 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-body {
+#gamebody {
   overflow: hidden;
+}
+
+body {
   min-height: 640px;
   background: #eee;
   color: #000;
@@ -143,6 +146,7 @@ h2,h3,h4 {
   border-radius: .25em;
   text-transform: uppercase;
   font-weight: 700;
+  white-space: normal;
 }
 
 .gamelist_lobby_spectate {
