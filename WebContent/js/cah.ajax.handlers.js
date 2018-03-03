@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2017, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -29,11 +29,13 @@
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
   cah.nickname = data[cah.$.AjaxResponse.NICKNAME];
+  cah.idcode = data[cah.$.AjaxResponse.ID_CODE];
+  cah.sigil = data[cah.$.AjaxResponse.SIGIL];
   if (!cah.noPersistentId) {
     cah.persistentId = data[cah.$.AjaxResponse.PERSISTENT_ID];
     cah.setCookie("persistent_id", cah.persistentId);
   }
-  cah.log.status("You are connected as " + cah.nickname);
+  cah.log.status("You are connected as " + cah.sigil + cah.nickname);
   $("#welcome").hide();
   $("#canvass").show();
 

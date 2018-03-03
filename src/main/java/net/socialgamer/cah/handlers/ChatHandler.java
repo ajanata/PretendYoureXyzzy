@@ -106,6 +106,8 @@ public class ChatHandler extends Handler {
         broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
         broadcastData.put(LongPollResponse.FROM, user.getNickname());
         broadcastData.put(LongPollResponse.MESSAGE, message);
+        broadcastData.put(LongPollResponse.ID_CODE, user.getIdCode());
+        broadcastData.put(LongPollResponse.SIGIL, user.getSigil().toString());
         if (user.isAdmin()) {
           broadcastData.put(LongPollResponse.FROM_ADMIN, true);
         }

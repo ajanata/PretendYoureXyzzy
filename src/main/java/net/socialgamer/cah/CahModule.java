@@ -169,6 +169,23 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
+  @InsecureIdAllowed
+  Boolean provideInsecureIdAllowed() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty(
+          "pyx.server.insecure_id_allowed", "true"));
+    }
+  }
+
+  @Provides
+  @IdCodeSalt
+  String provideIdCodeSalt() {
+    synchronized (properties) {
+      return properties.getProperty("pyx.server.id_code_salt", "");
+    }
+  }
+
+  @Provides
   @CookieDomain
   String getCookieDomain() {
     synchronized (properties) {
@@ -216,6 +233,16 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface GlobalChatEnabled {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface InsecureIdAllowed {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface IdCodeSalt {
   }
 
   @BindingAnnotation

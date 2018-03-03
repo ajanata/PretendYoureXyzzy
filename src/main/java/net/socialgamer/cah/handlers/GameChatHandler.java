@@ -1,16 +1,16 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
  *   and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
  *   conditions and the following disclaimer in the documentation and/or other materials provided
  *   with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -28,6 +28,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.google.inject.Inject;
+
 import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
@@ -41,12 +43,10 @@ import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.data.User;
 
-import com.google.inject.Inject;
-
 
 /**
  * Handler for chat messages.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class GameChatHandler extends GameWithPlayerHandler {
@@ -91,6 +91,8 @@ public class GameChatHandler extends GameWithPlayerHandler {
         broadcastData.put(LongPollResponse.FROM, user.getNickname());
         broadcastData.put(LongPollResponse.MESSAGE, message);
         broadcastData.put(LongPollResponse.FROM_ADMIN, user.isAdmin());
+        broadcastData.put(LongPollResponse.ID_CODE, user.getIdCode());
+        broadcastData.put(LongPollResponse.SIGIL, user.getSigil().toString());
         broadcastData.put(LongPollResponse.GAME_ID, game.getId());
         broadcastData.put(LongPollResponse.EMOTE, emote);
         game.broadcastToPlayers(MessageType.CHAT, broadcastData);

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2017, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -38,12 +38,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import net.socialgamer.cah.data.Game.TooManyPlayersException;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.Metrics;
-
-import org.junit.Before;
-import org.junit.Test;
 
 
 /**
@@ -78,8 +78,8 @@ public class GameTest {
     expectLastCall().once();
     replay(gmMock);
 
-    final User user1 = new User("test1", "test.lan", false, "1", "1", "en-US", "JUnit");
-    final User user2 = new User("test2", "test.lan", false, "2", "2", "en-US", "JUnit");
+    final User user1 = new User("test1", null, "test.lan", false, "1", "1", "en-US", "JUnit");
+    final User user2 = new User("test2", null, "test.lan", false, "2", "2", "en-US", "JUnit");
     game.addPlayer(user1);
     game.addPlayer(user2);
 

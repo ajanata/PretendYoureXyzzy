@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2017, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -215,6 +215,7 @@ public class Constants {
     EMOTE("me"),
     GAME_ID("gid"),
     GAME_OPTIONS("go"),
+    ID_CODE("idc"),
     MESSAGE("m"),
     NICKNAME("n"),
     OP("o"),
@@ -252,6 +253,8 @@ public class Constants {
     GAME_OPTIONS(AjaxRequest.GAME_OPTIONS),
     GAMES("gl"),
     HAND("h"),
+    @DuplicationAllowed
+    ID_CODE(AjaxRequest.ID_CODE),
     /**
      * Whether this client is reconnecting or not.
      */
@@ -267,6 +270,10 @@ public class Constants {
     @DuplicationAllowed
     PERSISTENT_ID(AjaxRequest.PERSISTENT_ID),
     PLAYER_INFO("pi"),
+    /**
+     * Sigil to display next to user's name.
+     */
+    SIGIL("?"),
     @DuplicationAllowed
     SERIAL(AjaxRequest.SERIAL),
     WHITE_CARDS("wc");
@@ -324,6 +331,8 @@ public class Constants {
     GAME_FULL("gf", "That game is full. Join another."),
     INVALID_CARD("ic", "Invalid card specified."),
     INVALID_GAME("ig", "Invalid game specified."),
+    INVALID_ID_CODE("iid", "Identification code, if provided, must be between 8 and 100 characters,"
+        + " inclusive."),
     /**
      * TODO this probably should be pulled in from a static inside the RegisterHandler.
      */
@@ -468,7 +477,9 @@ public class Constants {
     FROM("f"),
     /**
      * A chat message is from an admin. This is going to be done with IP addresses for now.
+     * @deprecated Compare the SIGIL field to Sigil.ADMIN.
      */
+    @Deprecated
     FROM_ADMIN("fa"),
     @DuplicationAllowed
     GAME_ID(AjaxResponse.GAME_ID),
@@ -477,6 +488,8 @@ public class Constants {
     GAME_STATE("gs"),
     @DuplicationAllowed
     HAND(AjaxResponse.HAND),
+    @DuplicationAllowed
+    ID_CODE(AjaxRequest.ID_CODE),
     /**
      * The delay until the next game round begins.
      */
@@ -493,6 +506,11 @@ public class Constants {
      */
     REASON("qr"),
     ROUND_WINNER("rw"),
+    /**
+     * Sigil to display next to user's name.
+     */
+    @DuplicationAllowed
+    SIGIL(AjaxResponse.SIGIL),
     TIMESTAMP("ts"),
     @DuplicationAllowed
     WALL(AjaxRequest.WALL),
@@ -513,6 +531,24 @@ public class Constants {
     @Override
     public String toString() {
       return field;
+    }
+  }
+
+  /**
+   * User sigils. Displayed before the user's name.
+   */
+  public enum Sigil {
+    ADMIN("@"), ID_CODE("+"), NORMAL_USER("");
+
+    private final String sigil;
+
+    Sigil(final String sigil) {
+      this.sigil = sigil;
+    }
+
+    @Override
+    public String toString() {
+      return sigil;
     }
   }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2017, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -35,6 +35,13 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
+import org.apache.log4j.Logger;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
+import com.maxmind.geoip2.model.CityResponse;
+
 import net.socialgamer.cah.CahModule.BroadcastConnectsAndDisconnects;
 import net.socialgamer.cah.CahModule.MaxUsers;
 import net.socialgamer.cah.Constants.DisconnectReason;
@@ -45,13 +52,6 @@ import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.GeoIP;
 import net.socialgamer.cah.metrics.Metrics;
-
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.Singleton;
-import com.maxmind.geoip2.model.CityResponse;
 
 
 /**
@@ -124,8 +124,8 @@ public class ConnectedUsers {
             user.toString(), users.size(), maxUsers));
         return ErrorCode.TOO_MANY_USERS;
       } else {
-        logger.info(String.format("New user %s from %s (admin=%b)", user.toString(),
-            user.getHostname(), user.isAdmin()));
+        logger.info(String.format("New user %s from %s (admin=%b, id=%s)", user.toString(),
+            user.getHostname(), user.isAdmin(), user.getIdCode()));
         users.put(user.getNickname().toLowerCase(), user);
         if (broadcastConnectsAndDisconnectsProvider.get()) {
           final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
@@ -191,7 +191,8 @@ public class ConnectedUsers {
    */
   private void notifyRemoveUser(final User user, final DisconnectReason reason) {
     // Games are informed about the user leaving when the user object is marked invalid.
-    if (broadcastConnectsAndDisconnectsProvider.get()) {
+    if (broadcastConnectsAndDisconnectsProvider.get() || reason == DisconnectReason.BANNED
+        || reason == DisconnectReason.KICKED) {
       final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
       data.put(LongPollResponse.EVENT, LongPollEvent.PLAYER_LEAVE.toString());
       data.put(LongPollResponse.NICKNAME, user.getNickname());

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2017, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -196,6 +196,17 @@ cah.ajax.Builder.prototype.withEmote = function(emote) {
 cah.ajax.Builder.prototype.withCardcastId = function(id) {
   this.assertNotExecuted_();
   this.data[cah.$.AjaxRequest.CARDCAST_ID] = id;
+  return this;
+};
+
+/**
+ * @param {string}
+ *          id The user's identification code.
+ * @returns {cah.ajax.Builder} This object.
+ */
+cah.ajax.Builder.prototype.withIdCode = function(idCode) {
+  this.assertNotExecuted_();
+  this.data[cah.$.AjaxRequest.ID_CODE] = idCode;
   return this;
 };
 

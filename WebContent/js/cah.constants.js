@@ -109,33 +109,43 @@ cah.$.WhiteCardData.TEXT = "T";
 cah.$.WhiteCardData.ID = "cid";
 cah.$.WhiteCardData.WATERMARK = "W";
 
+cah.$.Sigil = function() {
+  // Dummy constructor to make Eclipse auto-complete.
+};
+cah.$.Sigil.prototype.dummyForAutocomplete = undefined;
+cah.$.Sigil.NORMAL_USER = "";
+cah.$.Sigil.ADMIN = "@";
+cah.$.Sigil.ID_CODE = "+";
+
 cah.$.LongPollResponse = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.LongPollResponse.prototype.dummyForAutocomplete = undefined;
-cah.$.LongPollResponse.WALL = "wall";
 cah.$.LongPollResponse.PLAY_TIMER = "Pt";
-cah.$.LongPollResponse.ROUND_WINNER = "rw";
-cah.$.LongPollResponse.EMOTE = "me";
-cah.$.LongPollResponse.CARDCAST_DECK_INFO = "cdi";
 cah.$.LongPollResponse.PLAYER_INFO = "pi";
 cah.$.LongPollResponse.FROM = "f";
-cah.$.LongPollResponse.GAME_ID = "gid";
 cah.$.LongPollResponse.WHITE_CARDS = "wc";
 cah.$.LongPollResponse.EVENT = "E";
 cah.$.LongPollResponse.HAND = "h";
 cah.$.LongPollResponse.ERROR_CODE = "ec";
 cah.$.LongPollResponse.MESSAGE = "m";
 cah.$.LongPollResponse.WINNING_CARD = "WC";
-cah.$.LongPollResponse.NICKNAME = "n";
-cah.$.LongPollResponse.BLACK_CARD = "bc";
 cah.$.LongPollResponse.FROM_ADMIN = "fa";
 cah.$.LongPollResponse.TIMESTAMP = "ts";
-cah.$.LongPollResponse.GAME_STATE = "gs";
 cah.$.LongPollResponse.GAME_INFO = "gi";
 cah.$.LongPollResponse.ERROR = "e";
-cah.$.LongPollResponse.INTERMISSION = "i";
+cah.$.LongPollResponse.ID_CODE = "idc";
 cah.$.LongPollResponse.REASON = "qr";
+cah.$.LongPollResponse.WALL = "wall";
+cah.$.LongPollResponse.ROUND_WINNER = "rw";
+cah.$.LongPollResponse.SIGIL = "?";
+cah.$.LongPollResponse.EMOTE = "me";
+cah.$.LongPollResponse.CARDCAST_DECK_INFO = "cdi";
+cah.$.LongPollResponse.GAME_ID = "gid";
+cah.$.LongPollResponse.NICKNAME = "n";
+cah.$.LongPollResponse.BLACK_CARD = "bc";
+cah.$.LongPollResponse.GAME_STATE = "gs";
+cah.$.LongPollResponse.INTERMISSION = "i";
 
 cah.$.LongPollEvent = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -181,6 +191,7 @@ cah.$.ErrorCode.BANNED = "B&";
 cah.$.ErrorCode.WRONG_PASSWORD = "wp";
 cah.$.ErrorCode.RESERVED_NICK = "rn";
 cah.$.ErrorCode.TOO_MANY_GAMES = "tmg";
+cah.$.ErrorCode.INVALID_ID_CODE = "iid";
 cah.$.ErrorCode.CANNOT_JOIN_ANOTHER_GAME = "cjag";
 cah.$.ErrorCode.NO_MSG_SPECIFIED = "nms";
 cah.$.ErrorCode.ALREADY_STARTED = "as";
@@ -213,6 +224,7 @@ cah.$.ErrorCode.INVALID_CARD = "ic";
 cah.$.ErrorCode_msg = {};
 cah.$.ErrorCode_msg['cii'] = "Invalid Cardcast ID. Must be exactly 5 characters.";
 cah.$.ErrorCode_msg['nr'] = "Not registered. Refresh the page.";
+cah.$.ErrorCode_msg['iid'] = "Identification code, if provided, must be between 8 and 100 characters, inclusive.";
 cah.$.ErrorCode_msg['ns'] = "Session not detected. Make sure you have cookies enabled.";
 cah.$.ErrorCode_msg['ccf'] = "Cannot find Cardcast deck with given ID. If you just added this deck to Cardcast, wait a few minutes and try again.";
 cah.$.ErrorCode_msg['nyt'] = "It is not your turn to play a card.";
@@ -267,6 +279,7 @@ cah.$.AjaxResponse.SERIAL = "s";
 cah.$.AjaxResponse.NAMES = "nl";
 cah.$.AjaxResponse.PERSISTENT_ID = "pid";
 cah.$.AjaxResponse.GAMES = "gl";
+cah.$.AjaxResponse.SIGIL = "?";
 cah.$.AjaxResponse.PLAYER_INFO = "pi";
 cah.$.AjaxResponse.GAME_ID = "gid";
 cah.$.AjaxResponse.WHITE_CARDS = "wc";
@@ -281,6 +294,7 @@ cah.$.AjaxResponse.NEXT = "next";
 cah.$.AjaxResponse.GAME_INFO = "gi";
 cah.$.AjaxResponse.CARD_ID = "cid";
 cah.$.AjaxResponse.ERROR = "e";
+cah.$.AjaxResponse.ID_CODE = "idc";
 cah.$.AjaxResponse.CARD_SETS = "css";
 
 cah.$.AjaxRequest = function() {
@@ -288,17 +302,18 @@ cah.$.AjaxRequest = function() {
 };
 cah.$.AjaxRequest.prototype.dummyForAutocomplete = undefined;
 cah.$.AjaxRequest.SERIAL = "s";
-cah.$.AjaxRequest.GAME_OPTIONS = "go";
-cah.$.AjaxRequest.MESSAGE = "m";
 cah.$.AjaxRequest.OP = "o";
-cah.$.AjaxRequest.NICKNAME = "n";
 cah.$.AjaxRequest.WALL = "wall";
-cah.$.AjaxRequest.PASSWORD = "pw";
 cah.$.AjaxRequest.PERSISTENT_ID = "pid";
 cah.$.AjaxRequest.EMOTE = "me";
-cah.$.AjaxRequest.CARD_ID = "cid";
 cah.$.AjaxRequest.CARDCAST_ID = "cci";
 cah.$.AjaxRequest.GAME_ID = "gid";
+cah.$.AjaxRequest.GAME_OPTIONS = "go";
+cah.$.AjaxRequest.MESSAGE = "m";
+cah.$.AjaxRequest.NICKNAME = "n";
+cah.$.AjaxRequest.PASSWORD = "pw";
+cah.$.AjaxRequest.CARD_ID = "cid";
+cah.$.AjaxRequest.ID_CODE = "idc";
 
 cah.$.AjaxOperation = function() {
   // Dummy constructor to make Eclipse auto-complete.

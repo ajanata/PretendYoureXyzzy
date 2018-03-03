@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2017, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -40,8 +40,13 @@ $(document).ready(function() {
     $("#nickname").val($.cookie("nickname"));
   }
   $("#nicknameconfirm").click(nicknameconfirm_click);
-  $("#nickname").keyup(nickbox_keyup);
+  $("#nickname").keyup(nickname_keyup);
   $("#nickname").focus();
+  if (document.location.protocol == "https:" || cah.INSECURE_ID_ALLOWED) {
+    $("#idcode").prop("disabled", false);
+    // re-use existing handler
+    $("#idcode").keyup(nickname_keyup);
+  }
 
   $(".chat", $("#tab-global")).keyup(chat_keyup($(".chat_submit", $("#tab-global"))));
   $(".chat_submit", $("#tab-global")).click(chatsubmit_click(null, $("#tab-global")));
@@ -82,7 +87,7 @@ $(window).blur(function() {
  * @param {jQuery.Event}
  *          e
  */
-function nickbox_keyup(e) {
+function nickname_keyup(e) {
   if (e.which == 13) {
     $("#nicknameconfirm").click();
     e.preventDefault();
@@ -96,6 +101,10 @@ function nicknameconfirm_click() {
   var nickname = $.trim($("#nickname").val());
   cah.setCookie("nickname", nickname);
   var builder = cah.Ajax.build(cah.$.AjaxOperation.REGISTER).withNickname(nickname);
+  var idCode = $.trim($("#idcode").val());
+  if (idCode) {
+    builder.withIdCode(idCode);
+  }
   if (!cah.noPersistentId && cah.persistentId) {
     builder.withPersistentId(cah.persistentId);
   }
@@ -153,7 +162,12 @@ function chatsubmit_click(game_id, parent_element) {
           ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT);
         }
         ajax = ajax.withEmote(false).withMessage(text);
-        cah.log.status_with_game(game_id, "<" + cah.nickname + "> " + text);
+        var clazz = '';
+        if (cah.sigil == cah.$.Sigil.ADMIN) {
+          clazz = 'admin';
+        }
+        cah.log.status_with_game(game_id, "<" + cah.sigil + cah.nickname + "> " + text, clazz,
+            false, cah.log.getTitleForIdCode(cah.idcode));
         break;
       case 'me':
         if (game_id !== null) {
@@ -162,7 +176,12 @@ function chatsubmit_click(game_id, parent_element) {
           ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT);
         }
         ajax = ajax.withEmote(true).withMessage(text);
-        cah.log.status_with_game(game_id, "* " + cah.nickname + " " + text);
+        var clazz = '';
+        if (cah.sigil == cah.$.Sigil.ADMIN) {
+          clazz = 'admin';
+        }
+        cah.log.status_with_game(game_id, "* " + cah.sigil + cah.nickname + " " + text, clazz,
+            false, cah.log.getTitleForIdCode(cah.idcode));
         break;
       case 'wall':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.CHAT).withWall(true).withMessage(text);

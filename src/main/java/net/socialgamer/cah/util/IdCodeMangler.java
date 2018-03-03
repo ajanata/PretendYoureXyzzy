@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2018, Andy Janata
+ * Copyright (c) 2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -21,52 +21,48 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.socialgamer.cah.handlers;
+package net.socialgamer.cah.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
-import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 
-import net.socialgamer.cah.Constants.AjaxOperation;
-import net.socialgamer.cah.Constants.AjaxResponse;
-import net.socialgamer.cah.Constants.ReturnableData;
-import net.socialgamer.cah.RequestWrapper;
-import net.socialgamer.cah.data.ConnectedUsers;
-import net.socialgamer.cah.data.User;
+import net.socialgamer.cah.CahModule.IdCodeSalt;
 
 
-/**
- * Handler to get the names of all players connected to the server.
- *
- * @author Andy Janata (ajanata@socialgamer.net)
- */
-public class NamesHandler extends Handler {
+public class IdCodeMangler {
+  private static final Logger LOG = Logger.getLogger(IdCodeMangler.class);
 
-  public static final String OP = AjaxOperation.NAMES.toString();
-
-  private final ConnectedUsers users;
+  private final String salt;
+  private final Base64.Encoder encoder = Base64.getEncoder();
 
   @Inject
-  public NamesHandler(final ConnectedUsers users) {
-    this.users = users;
+  public IdCodeMangler(@IdCodeSalt final String salt) {
+    this.salt = salt;
   }
 
-  @Override
-  public Map<ReturnableData, Object> handle(final RequestWrapper request,
-      final HttpSession session) {
-    final Map<ReturnableData, Object> ret = new HashMap<ReturnableData, Object>();
-    final Collection<User> userList = users.getUsers();
-    final List<String> names = new ArrayList<String>(userList.size());
-    for (final User u : userList) {
-      names.add(u.getSigil() + u.getNickname());
+  public String mangle(final String username, final String idCode) {
+    if (null == idCode || idCode.trim().isEmpty()) {
+      return "";
     }
-    ret.put(AjaxResponse.NAMES, names);
-    return ret;
+    try {
+      final MessageDigest md = MessageDigest.getInstance("SHA-256");
+      final byte[] plaintext = (salt + username + idCode.trim()).getBytes(Charset.forName("UTF-8"));
+      // 32 byte output
+      final byte[] digest = md.digest(plaintext);
+      final byte[] condensed = new byte[8];
+      for (int i = 0; i < 8; i++) {
+        condensed[i] = (byte) (digest[i] ^ digest[i + 8] ^ digest[i + 16] ^ digest[i + 24]);
+      }
+      return encoder.encodeToString(condensed).substring(0, 11);
+    } catch (final NoSuchAlgorithmException e) {
+      LOG.error("Unable to mangle ID code.", e);
+      return "";
+    }
   }
 }

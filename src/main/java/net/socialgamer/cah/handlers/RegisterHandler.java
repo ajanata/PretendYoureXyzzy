@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2017, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -30,6 +30,12 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpHeaders;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+
 import net.socialgamer.cah.CahModule.BanList;
 import net.socialgamer.cah.CahModule.UserPersistentId;
 import net.socialgamer.cah.Constants;
@@ -42,12 +48,7 @@ import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.User;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpHeaders;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+import net.socialgamer.cah.util.IdCodeMangler;
 
 
 /**
@@ -59,21 +60,25 @@ public class RegisterHandler extends Handler {
 
   public static final String OP = AjaxOperation.REGISTER.toString();
 
-  private static final Pattern validName = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]{2,29}");
+  private static final Pattern VALID_NAME = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]{2,29}");
+  private static final int ID_CODE_MIN_LENGTH = 8;
+  private static final int ID_CODE_MAX_LENGTH = 100;
 
   private final ConnectedUsers users;
   private final Set<String> banList;
   private final User.Factory userFactory;
   private final Provider<String> persistentIdProvider;
+  private final IdCodeMangler idCodeManger;
 
   @Inject
   public RegisterHandler(final ConnectedUsers users, @BanList final Set<String> banList,
-      final User.Factory userFactory,
+      final User.Factory userFactory, final IdCodeMangler idCodeMangler,
       @UserPersistentId final Provider<String> persistentIdProvider) {
     this.users = users;
     this.banList = banList;
     this.userFactory = userFactory;
     this.persistentIdProvider = persistentIdProvider;
+    this.idCodeManger = idCodeMangler;
   }
 
   @Override
@@ -87,9 +92,13 @@ public class RegisterHandler extends Handler {
 
     if (request.getParameter(AjaxRequest.NICKNAME) == null) {
       return error(ErrorCode.NO_NICK_SPECIFIED);
+    } else if (request.getParameter(AjaxRequest.ID_CODE) != null
+        && (request.getParameter(AjaxRequest.ID_CODE).trim().length() < ID_CODE_MIN_LENGTH
+            || request.getParameter(AjaxRequest.ID_CODE).trim().length() > ID_CODE_MAX_LENGTH)) {
+      return error(ErrorCode.INVALID_ID_CODE);
     } else {
       final String nick = request.getParameter(AjaxRequest.NICKNAME).trim();
-      if (!validName.matcher(nick).matches()) {
+      if (!VALID_NAME.matcher(nick).matches()) {
         return error(ErrorCode.INVALID_NICK);
       } else if ("xyzzy".equalsIgnoreCase(nick)) {
         return error(ErrorCode.RESERVED_NICK);
@@ -99,7 +108,10 @@ public class RegisterHandler extends Handler {
           persistentId = persistentIdProvider.get();
         }
 
-        final User user = userFactory.create(nick, request.getRemoteAddr(),
+        final String mangledIdCode = idCodeManger.mangle(nick,
+            request.getParameter(AjaxRequest.ID_CODE));
+
+        final User user = userFactory.create(nick, mangledIdCode, request.getRemoteAddr(),
             Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteAddr()), persistentId,
             request.getHeader(HttpHeaders.ACCEPT_LANGUAGE),
             request.getHeader(HttpHeaders.USER_AGENT));
@@ -116,6 +128,8 @@ public class RegisterHandler extends Handler {
 
           data.put(AjaxResponse.NICKNAME, nick);
           data.put(AjaxResponse.PERSISTENT_ID, persistentId);
+          data.put(AjaxResponse.ID_CODE, user.getIdCode());
+          data.put(AjaxResponse.SIGIL, user.getSigil().toString());
         } else {
           return error(errorCode);
         }

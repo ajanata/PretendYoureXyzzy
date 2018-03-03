@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2017, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -32,12 +32,13 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 import javax.annotation.Nullable;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 import net.sf.uadetector.ReadableUserAgent;
 import net.sf.uadetector.service.UADetectorServiceFactory;
 import net.socialgamer.cah.CahModule.UniqueId;
-
-import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
+import net.socialgamer.cah.Constants.Sigil;
 
 
 /**
@@ -48,6 +49,8 @@ import com.google.inject.assistedinject.Assisted;
 public class User {
 
   private final String nickname;
+
+  private final String idCode;
 
   private final PriorityBlockingQueue<QueuedMessage> queuedMessages;
 
@@ -83,6 +86,9 @@ public class User {
    *
    * @param nickname
    *          The user's nickname.
+   * @param idCode
+   *          The user's ID code, after hashing with salt and their name, or the empty string if
+   *          none provided.
    * @param hostname
    *          The user's Internet hostname (which will likely just be their IP address).
    * @param isAdmin
@@ -91,9 +97,14 @@ public class User {
    *          This user's persistent (cross-session) ID.
    * @param sessionId
    *          The unique ID of this session for this server instance.
+   * @param clientLanguage
+   *          The language of the user's web browser/client.
+   * @param clientAgent
+   *          The name of the user's web browser/client.
    */
   @Inject
   public User(@Assisted("nickname") final String nickname,
+      @Assisted("idCode") final String idCode,
       @Assisted("hostname") final String hostname,
       @Assisted final boolean isAdmin,
       @Assisted("persistentId") final String persistentId,
@@ -101,6 +112,7 @@ public class User {
       @Nullable @Assisted("clientLanguage") final String clientLanguage,
       @Nullable @Assisted("clientAgent") final String clientAgent) {
     this.nickname = nickname;
+    this.idCode = idCode;
     this.hostname = hostname;
     this.isAdmin = isAdmin;
     this.persistentId = persistentId;
@@ -111,10 +123,11 @@ public class User {
   }
 
   public interface Factory {
-    User create(@Assisted("nickname") String nickname, @Assisted("hostname") String hostname,
-        boolean isAdmin, @Assisted("persistentId") String persistentId,
-        @Assisted("clientLanguage") String clientLanguage,
-        @Assisted("clientAgent") String clientAgent);
+    User create(@Assisted("nickname") String nickname, @Assisted("idCode") String idCode,
+        @Assisted("hostname") String hostname, boolean isAdmin,
+        @Assisted("persistentId") String persistentId,
+        @Nullable @Assisted("clientLanguage") String clientLanguage,
+        @Nullable @Assisted("clientAgent") String clientAgent);
   }
 
   /**
@@ -183,6 +196,20 @@ public class User {
 
   public boolean isAdmin() {
     return isAdmin;
+  }
+
+  public String getIdCode() {
+    return idCode;
+  }
+
+  public Sigil getSigil() {
+    if (isAdmin) {
+      return Sigil.ADMIN;
+    } else if (!idCode.isEmpty()) {
+      return Sigil.ID_CODE;
+    } else {
+      return Sigil.NORMAL_USER;
+    }
   }
 
   public String getSessionId() {

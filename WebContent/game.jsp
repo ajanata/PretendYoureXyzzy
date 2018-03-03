@@ -107,9 +107,14 @@ HttpSession hSession = request.getSession(true);
     The PAX panel sets have also been removed.</li>
   </ul>
   <div id="nickbox">
-    Nickname:
+    <label for="nickname">Nickname:</label>
     <input type="text" id="nickname" value="" maxlength="30" role="textbox"
         aria-label="Enter your nickname." data-lpignore="true" />
+    <label for="idcode">
+    <dfn title="Only available via HTTPS. Provide a secret identification code to positively identify yourself in the chat.">
+    Optional identification code:</dfn></label>
+    <input type="password" id="idcode" value="" maxlength="100" disabled="disabled"
+        aria-label="Optionally enter and identification code." />
     <input type="button" id="nicknameconfirm" value="Set" />
     <span id="nickbox_error" class="error"></span>
   </div>
