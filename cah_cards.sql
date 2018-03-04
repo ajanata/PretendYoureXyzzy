@@ -630,7 +630,7 @@ COPY black_cards (id, draw, pick, text, watermark) FROM stdin;
 516	0	1	Donald Trump's first act as president was to outlaw ____.	PST45
 518	0	1	Donald Trump has nominated ____ for his VP.	PST45
 519	0	1	In 2019, Donald Trump eliminated our national parks to make room for ____.	PST45
-520	0	1	What are two cards in your hand that you want to get rid of?	RJECT
+520	0	2	What are two cards in your hand that you want to get rid of?	RJECT
 522	0	1	From WBEZ Chicago, it's <i>This American Life.</i> Today on our program, ____. Stay with us.	RJECT
 523	0	1	My name is Inigo Montoya. You killed my father. Prepare for ____.	RJECT
 524	0	1	[rorschach test] What do you see?	RJECT
