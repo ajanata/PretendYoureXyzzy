@@ -153,7 +153,7 @@ COPY black_cards (id, draw, pick, text, watermark) FROM stdin;
 11	0	1	What's a girl's best friend?	US
 12	0	1	____. High five, bro.	US
 13	0	2	Step 1: ____. Step 2: ____. Step 3: Profit.	US
-14	0	1	Make a haiku.	US
+14	2	3	Make a haiku.	US
 15	0	1	The class field trip was completely ruined by ____.	US
 16	0	1	If you can't be with the one you love, love ____.	US
 17	0	1	When I am a billionaire, I shall erect a 50-foot statue to commemorate ____.	US
