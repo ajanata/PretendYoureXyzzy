@@ -2,81 +2,95 @@
 
 cah.$ = {};
 
-cah.$.GamePlayerStatus = function() {
+cah.$.AjaxOperation = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.GamePlayerStatus.prototype.dummyForAutocomplete = undefined;
-cah.$.GamePlayerStatus.SPECTATOR = "sv";
-cah.$.GamePlayerStatus.WINNER = "sw";
-cah.$.GamePlayerStatus.IDLE = "si";
-cah.$.GamePlayerStatus.HOST = "sh";
-cah.$.GamePlayerStatus.JUDGING = "sjj";
-cah.$.GamePlayerStatus.JUDGE = "sj";
-cah.$.GamePlayerStatus.PLAYING = "sp";
-cah.$.GamePlayerStatus_msg = {};
-cah.$.GamePlayerStatus_msg['sjj'] = "Selecting";
-cah.$.GamePlayerStatus_msg['sv'] = "Spectator";
-cah.$.GamePlayerStatus_msg['sw'] = "Winner!";
-cah.$.GamePlayerStatus_msg['sh'] = "Host";
-cah.$.GamePlayerStatus_msg['si'] = "";
-cah.$.GamePlayerStatus_msg['sj'] = "Card Czar";
-cah.$.GamePlayerStatus_msg['sp'] = "Playing";
-cah.$.GamePlayerStatus_msg_2 = {};
-cah.$.GamePlayerStatus_msg_2['sjj'] = "Select a winning card.";
-cah.$.GamePlayerStatus_msg_2['sv'] = "You are just spectating.";
-cah.$.GamePlayerStatus_msg_2['sw'] = "You have won!";
-cah.$.GamePlayerStatus_msg_2['sh'] = "Wait for players then click Start Game.";
-cah.$.GamePlayerStatus_msg_2['si'] = "Waiting for players...";
-cah.$.GamePlayerStatus_msg_2['sj'] = "You are the Card Czar.";
-cah.$.GamePlayerStatus_msg_2['sp'] = "Select a card to play.";
+cah.$.AjaxOperation.prototype.dummyForAutocomplete = undefined;
+cah.$.AjaxOperation.NAMES = "gn";
+cah.$.AjaxOperation.SCORE = "SC";
+cah.$.AjaxOperation.LEAVE_GAME = "lg";
+cah.$.AjaxOperation.JOIN_GAME = "jg";
+cah.$.AjaxOperation.CHAT = "c";
+cah.$.AjaxOperation.GAME_LIST = "ggl";
+cah.$.AjaxOperation.CARDCAST_ADD_CARDSET = "cac";
+cah.$.AjaxOperation.CARDCAST_LIST_CARDSETS = "clc";
+cah.$.AjaxOperation.PLAY_CARD = "pc";
+cah.$.AjaxOperation.CHANGE_GAME_OPTIONS = "cgo";
+cah.$.AjaxOperation.GET_GAME_INFO = "ggi";
+cah.$.AjaxOperation.GET_CARDS = "gc";
+cah.$.AjaxOperation.ADMIN_SET_VERBOSE_LOG = "svl";
+cah.$.AjaxOperation.REGISTER = "r";
+cah.$.AjaxOperation.CARDCAST_REMOVE_CARDSET = "crc";
+cah.$.AjaxOperation.WHOIS = "Wi";
+cah.$.AjaxOperation.KICK = "K";
+cah.$.AjaxOperation.FIRST_LOAD = "fl";
+cah.$.AjaxOperation.START_GAME = "sg";
+cah.$.AjaxOperation.LOG_OUT = "lo";
+cah.$.AjaxOperation.BAN = "b";
+cah.$.AjaxOperation.CREATE_GAME = "cg";
+cah.$.AjaxOperation.STOP_GAME = "Sg";
+cah.$.AjaxOperation.GAME_CHAT = "GC";
+cah.$.AjaxOperation.SPECTATE_GAME = "vg";
+cah.$.AjaxOperation.JUDGE_SELECT = "js";
 
-cah.$.GamePlayerInfo = function() {
+cah.$.AjaxRequest = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.GamePlayerInfo.prototype.dummyForAutocomplete = undefined;
-cah.$.GamePlayerInfo.STATUS = "st";
-cah.$.GamePlayerInfo.SCORE = "sc";
-cah.$.GamePlayerInfo.NAME = "N";
+cah.$.AjaxRequest.prototype.dummyForAutocomplete = undefined;
+cah.$.AjaxRequest.SERIAL = "s";
+cah.$.AjaxRequest.OP = "o";
+cah.$.AjaxRequest.WALL = "wall";
+cah.$.AjaxRequest.PERSISTENT_ID = "pid";
+cah.$.AjaxRequest.EMOTE = "me";
+cah.$.AjaxRequest.CARDCAST_ID = "cci";
+cah.$.AjaxRequest.GAME_ID = "gid";
+cah.$.AjaxRequest.GAME_OPTIONS = "go";
+cah.$.AjaxRequest.MESSAGE = "m";
+cah.$.AjaxRequest.NICKNAME = "n";
+cah.$.AjaxRequest.PASSWORD = "pw";
+cah.$.AjaxRequest.CARD_ID = "cid";
+cah.$.AjaxRequest.ID_CODE = "idc";
 
-cah.$.GameOptionData = function() {
+cah.$.AjaxResponse = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.GameOptionData.prototype.dummyForAutocomplete = undefined;
-cah.$.GameOptionData.TIMER_MULTIPLIER = "tm";
-cah.$.GameOptionData.PASSWORD = "pw";
-cah.$.GameOptionData.SPECTATOR_LIMIT = "vL";
-cah.$.GameOptionData.SCORE_LIMIT = "sl";
-cah.$.GameOptionData.BLANKS_LIMIT = "bl";
-cah.$.GameOptionData.PLAYER_LIMIT = "pL";
-cah.$.GameOptionData.CARD_SETS = "css";
+cah.$.AjaxResponse.prototype.dummyForAutocomplete = undefined;
+cah.$.AjaxResponse.NAMES = "nl";
+cah.$.AjaxResponse.CLIENT_NAME = "cn";
+cah.$.AjaxResponse.PLAYER_INFO = "pi";
+cah.$.AjaxResponse.CONNECTED_AT = "ca";
+cah.$.AjaxResponse.WHITE_CARDS = "wc";
+cah.$.AjaxResponse.HAND = "h";
+cah.$.AjaxResponse.ERROR_CODE = "ec";
+cah.$.AjaxResponse.NEXT = "next";
+cah.$.AjaxResponse.GAME_INFO = "gi";
+cah.$.AjaxResponse.ERROR = "e";
+cah.$.AjaxResponse.GAME_STATE_DESCRIPTION = "gss";
+cah.$.AjaxResponse.ID_CODE = "idc";
+cah.$.AjaxResponse.CARD_SETS = "css";
+cah.$.AjaxResponse.SERIAL = "s";
+cah.$.AjaxResponse.PERSISTENT_ID = "pid";
+cah.$.AjaxResponse.GAMES = "gl";
+cah.$.AjaxResponse.SIGIL = "?";
+cah.$.AjaxResponse.GAME_ID = "gid";
+cah.$.AjaxResponse.MAX_GAMES = "mg";
+cah.$.AjaxResponse.IN_PROGRESS = "ip";
+cah.$.AjaxResponse.GAME_OPTIONS = "go";
+cah.$.AjaxResponse.NICKNAME = "n";
+cah.$.AjaxResponse.BLACK_CARD = "bc";
+cah.$.AjaxResponse.IDLE = "idl";
+cah.$.AjaxResponse.CARD_ID = "cid";
+cah.$.AjaxResponse.IP_ADDRESS = "IP";
 
-cah.$.GameInfo = function() {
+cah.$.BlackCardData = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.GameInfo.prototype.dummyForAutocomplete = undefined;
-cah.$.GameInfo.GAME_OPTIONS = "go";
-cah.$.GameInfo.PLAYERS = "P";
-cah.$.GameInfo.SPECTATORS = "V";
-cah.$.GameInfo.HOST = "H";
-cah.$.GameInfo.STATE = "S";
-cah.$.GameInfo.ID = "gid";
-cah.$.GameInfo.HAS_PASSWORD = "hp";
-
-cah.$.GameState = function() {
-  // Dummy constructor to make Eclipse auto-complete.
-};
-cah.$.GameState.prototype.dummyForAutocomplete = undefined;
-cah.$.GameState.ROUND_OVER = "ro";
-cah.$.GameState.LOBBY = "l";
-cah.$.GameState.DEALING = "d";
-cah.$.GameState.JUDGING = "j";
-cah.$.GameState.PLAYING = "p";
-cah.$.GameState_msg = {};
-cah.$.GameState_msg['p'] = "In Progress";
-cah.$.GameState_msg['d'] = "In Progress";
-cah.$.GameState_msg['j'] = "In Progress";
-cah.$.GameState_msg['l'] = "Not Started";
-cah.$.GameState_msg['ro'] = "In Progress";
+cah.$.BlackCardData.prototype.dummyForAutocomplete = undefined;
+cah.$.BlackCardData.DRAW = "D";
+cah.$.BlackCardData.PICK = "PK";
+cah.$.BlackCardData.TEXT = "T";
+cah.$.BlackCardData.ID = "cid";
+cah.$.BlackCardData.WATERMARK = "W";
 
 cah.$.CardSetData = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -90,93 +104,15 @@ cah.$.CardSetData.BASE_DECK = "bd";
 cah.$.CardSetData.ID = "cid";
 cah.$.CardSetData.WEIGHT = "w";
 
-cah.$.BlackCardData = function() {
+cah.$.DisconnectReason = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.BlackCardData.prototype.dummyForAutocomplete = undefined;
-cah.$.BlackCardData.DRAW = "D";
-cah.$.BlackCardData.PICK = "PK";
-cah.$.BlackCardData.TEXT = "T";
-cah.$.BlackCardData.ID = "cid";
-cah.$.BlackCardData.WATERMARK = "W";
-
-cah.$.WhiteCardData = function() {
-  // Dummy constructor to make Eclipse auto-complete.
-};
-cah.$.WhiteCardData.prototype.dummyForAutocomplete = undefined;
-cah.$.WhiteCardData.WRITE_IN = "wi";
-cah.$.WhiteCardData.TEXT = "T";
-cah.$.WhiteCardData.ID = "cid";
-cah.$.WhiteCardData.WATERMARK = "W";
-
-cah.$.Sigil = function() {
-  // Dummy constructor to make Eclipse auto-complete.
-};
-cah.$.Sigil.prototype.dummyForAutocomplete = undefined;
-cah.$.Sigil.NORMAL_USER = "";
-cah.$.Sigil.ADMIN = "@";
-cah.$.Sigil.ID_CODE = "+";
-
-cah.$.LongPollResponse = function() {
-  // Dummy constructor to make Eclipse auto-complete.
-};
-cah.$.LongPollResponse.prototype.dummyForAutocomplete = undefined;
-cah.$.LongPollResponse.PLAY_TIMER = "Pt";
-cah.$.LongPollResponse.PLAYER_INFO = "pi";
-cah.$.LongPollResponse.FROM = "f";
-cah.$.LongPollResponse.WHITE_CARDS = "wc";
-cah.$.LongPollResponse.EVENT = "E";
-cah.$.LongPollResponse.HAND = "h";
-cah.$.LongPollResponse.ERROR_CODE = "ec";
-cah.$.LongPollResponse.MESSAGE = "m";
-cah.$.LongPollResponse.WINNING_CARD = "WC";
-cah.$.LongPollResponse.FROM_ADMIN = "fa";
-cah.$.LongPollResponse.TIMESTAMP = "ts";
-cah.$.LongPollResponse.GAME_INFO = "gi";
-cah.$.LongPollResponse.ERROR = "e";
-cah.$.LongPollResponse.ID_CODE = "idc";
-cah.$.LongPollResponse.REASON = "qr";
-cah.$.LongPollResponse.WALL = "wall";
-cah.$.LongPollResponse.ROUND_WINNER = "rw";
-cah.$.LongPollResponse.SIGIL = "?";
-cah.$.LongPollResponse.EMOTE = "me";
-cah.$.LongPollResponse.CARDCAST_DECK_INFO = "cdi";
-cah.$.LongPollResponse.GAME_ID = "gid";
-cah.$.LongPollResponse.NICKNAME = "n";
-cah.$.LongPollResponse.BLACK_CARD = "bc";
-cah.$.LongPollResponse.GAME_STATE = "gs";
-cah.$.LongPollResponse.INTERMISSION = "i";
-
-cah.$.LongPollEvent = function() {
-  // Dummy constructor to make Eclipse auto-complete.
-};
-cah.$.LongPollEvent.prototype.dummyForAutocomplete = undefined;
-cah.$.LongPollEvent.GAME_ROUND_COMPLETE = "grc";
-cah.$.LongPollEvent.BANNED = "B&";
-cah.$.LongPollEvent.NOOP = "_";
-cah.$.LongPollEvent.CHAT = "c";
-cah.$.LongPollEvent.GAME_PLAYER_INFO_CHANGE = "gpic";
-cah.$.LongPollEvent.HAND_DEAL = "hd";
-cah.$.LongPollEvent.CARDCAST_ADD_CARDSET = "cac";
-cah.$.LongPollEvent.PLAYER_LEAVE = "pl";
-cah.$.LongPollEvent.GAME_BLACK_RESHUFFLE = "gbr";
-cah.$.LongPollEvent.GAME_JUDGE_SKIPPED = "gjs";
-cah.$.LongPollEvent.GAME_LIST_REFRESH = "glr";
-cah.$.LongPollEvent.NEW_PLAYER = "np";
-cah.$.LongPollEvent.GAME_PLAYER_SKIPPED = "gps";
-cah.$.LongPollEvent.GAME_PLAYER_JOIN = "gpj";
-cah.$.LongPollEvent.GAME_WHITE_RESHUFFLE = "gwr";
-cah.$.LongPollEvent.CARDCAST_REMOVE_CARDSET = "crc";
-cah.$.LongPollEvent.GAME_OPTIONS_CHANGED = "goc";
-cah.$.LongPollEvent.GAME_PLAYER_KICKED_IDLE = "gpki";
-cah.$.LongPollEvent.GAME_SPECTATOR_LEAVE = "gvl";
-cah.$.LongPollEvent.GAME_PLAYER_LEAVE = "gpl";
-cah.$.LongPollEvent.GAME_SPECTATOR_JOIN = "gvj";
-cah.$.LongPollEvent.HURRY_UP = "hu";
-cah.$.LongPollEvent.GAME_JUDGE_LEFT = "gjl";
-cah.$.LongPollEvent.KICKED = "k";
-cah.$.LongPollEvent.KICKED_FROM_GAME_IDLE = "kfgi";
-cah.$.LongPollEvent.GAME_STATE_CHANGE = "gsc";
+cah.$.DisconnectReason.prototype.dummyForAutocomplete = undefined;
+cah.$.DisconnectReason.PING_TIMEOUT = "pt";
+cah.$.DisconnectReason.BANNED = "B&";
+cah.$.DisconnectReason.IDLE_TIMEOUT = "it";
+cah.$.DisconnectReason.KICKED = "k";
+cah.$.DisconnectReason.MANUAL = "man";
 
 cah.$.ErrorCode = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -271,79 +207,142 @@ cah.$.ErrorInformation.WHITE_CARDS_REQUIRED = "wcr";
 cah.$.ErrorInformation.BLACK_CARDS_REQUIRED = "bcr";
 cah.$.ErrorInformation.BLACK_CARDS_PRESENT = "bcp";
 
-cah.$.AjaxResponse = function() {
+cah.$.GameInfo = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.AjaxResponse.prototype.dummyForAutocomplete = undefined;
-cah.$.AjaxResponse.SERIAL = "s";
-cah.$.AjaxResponse.NAMES = "nl";
-cah.$.AjaxResponse.PERSISTENT_ID = "pid";
-cah.$.AjaxResponse.GAMES = "gl";
-cah.$.AjaxResponse.SIGIL = "?";
-cah.$.AjaxResponse.PLAYER_INFO = "pi";
-cah.$.AjaxResponse.GAME_ID = "gid";
-cah.$.AjaxResponse.WHITE_CARDS = "wc";
-cah.$.AjaxResponse.HAND = "h";
-cah.$.AjaxResponse.ERROR_CODE = "ec";
-cah.$.AjaxResponse.MAX_GAMES = "mg";
-cah.$.AjaxResponse.IN_PROGRESS = "ip";
-cah.$.AjaxResponse.GAME_OPTIONS = "go";
-cah.$.AjaxResponse.NICKNAME = "n";
-cah.$.AjaxResponse.BLACK_CARD = "bc";
-cah.$.AjaxResponse.NEXT = "next";
-cah.$.AjaxResponse.GAME_INFO = "gi";
-cah.$.AjaxResponse.CARD_ID = "cid";
-cah.$.AjaxResponse.ERROR = "e";
-cah.$.AjaxResponse.ID_CODE = "idc";
-cah.$.AjaxResponse.CARD_SETS = "css";
+cah.$.GameInfo.prototype.dummyForAutocomplete = undefined;
+cah.$.GameInfo.GAME_OPTIONS = "go";
+cah.$.GameInfo.PLAYERS = "P";
+cah.$.GameInfo.SPECTATORS = "V";
+cah.$.GameInfo.HOST = "H";
+cah.$.GameInfo.STATE = "S";
+cah.$.GameInfo.ID = "gid";
+cah.$.GameInfo.HAS_PASSWORD = "hp";
 
-cah.$.AjaxRequest = function() {
+cah.$.GameOptionData = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.AjaxRequest.prototype.dummyForAutocomplete = undefined;
-cah.$.AjaxRequest.SERIAL = "s";
-cah.$.AjaxRequest.OP = "o";
-cah.$.AjaxRequest.WALL = "wall";
-cah.$.AjaxRequest.PERSISTENT_ID = "pid";
-cah.$.AjaxRequest.EMOTE = "me";
-cah.$.AjaxRequest.CARDCAST_ID = "cci";
-cah.$.AjaxRequest.GAME_ID = "gid";
-cah.$.AjaxRequest.GAME_OPTIONS = "go";
-cah.$.AjaxRequest.MESSAGE = "m";
-cah.$.AjaxRequest.NICKNAME = "n";
-cah.$.AjaxRequest.PASSWORD = "pw";
-cah.$.AjaxRequest.CARD_ID = "cid";
-cah.$.AjaxRequest.ID_CODE = "idc";
+cah.$.GameOptionData.prototype.dummyForAutocomplete = undefined;
+cah.$.GameOptionData.TIMER_MULTIPLIER = "tm";
+cah.$.GameOptionData.PASSWORD = "pw";
+cah.$.GameOptionData.SPECTATOR_LIMIT = "vL";
+cah.$.GameOptionData.SCORE_LIMIT = "sl";
+cah.$.GameOptionData.BLANKS_LIMIT = "bl";
+cah.$.GameOptionData.PLAYER_LIMIT = "pL";
+cah.$.GameOptionData.CARD_SETS = "css";
 
-cah.$.AjaxOperation = function() {
+cah.$.GamePlayerInfo = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.AjaxOperation.prototype.dummyForAutocomplete = undefined;
-cah.$.AjaxOperation.NAMES = "gn";
-cah.$.AjaxOperation.SCORE = "SC";
-cah.$.AjaxOperation.LEAVE_GAME = "lg";
-cah.$.AjaxOperation.JOIN_GAME = "jg";
-cah.$.AjaxOperation.CHAT = "c";
-cah.$.AjaxOperation.GAME_LIST = "ggl";
-cah.$.AjaxOperation.CARDCAST_ADD_CARDSET = "cac";
-cah.$.AjaxOperation.CARDCAST_LIST_CARDSETS = "clc";
-cah.$.AjaxOperation.PLAY_CARD = "pc";
-cah.$.AjaxOperation.CHANGE_GAME_OPTIONS = "cgo";
-cah.$.AjaxOperation.GET_GAME_INFO = "ggi";
-cah.$.AjaxOperation.GET_CARDS = "gc";
-cah.$.AjaxOperation.ADMIN_SET_VERBOSE_LOG = "svl";
-cah.$.AjaxOperation.REGISTER = "r";
-cah.$.AjaxOperation.CARDCAST_REMOVE_CARDSET = "crc";
-cah.$.AjaxOperation.KICK = "K";
-cah.$.AjaxOperation.FIRST_LOAD = "fl";
-cah.$.AjaxOperation.START_GAME = "sg";
-cah.$.AjaxOperation.LOG_OUT = "lo";
-cah.$.AjaxOperation.BAN = "b";
-cah.$.AjaxOperation.CREATE_GAME = "cg";
-cah.$.AjaxOperation.STOP_GAME = "Sg";
-cah.$.AjaxOperation.GAME_CHAT = "GC";
-cah.$.AjaxOperation.SPECTATE_GAME = "vg";
-cah.$.AjaxOperation.JUDGE_SELECT = "js";
+cah.$.GamePlayerInfo.prototype.dummyForAutocomplete = undefined;
+cah.$.GamePlayerInfo.STATUS = "st";
+cah.$.GamePlayerInfo.SCORE = "sc";
+cah.$.GamePlayerInfo.NAME = "N";
+
+cah.$.GamePlayerStatus = function() {
+  // Dummy constructor to make Eclipse auto-complete.
+};
+cah.$.GamePlayerStatus.prototype.dummyForAutocomplete = undefined;
+cah.$.GamePlayerStatus.SPECTATOR = "sv";
+cah.$.GamePlayerStatus.WINNER = "sw";
+cah.$.GamePlayerStatus.IDLE = "si";
+cah.$.GamePlayerStatus.HOST = "sh";
+cah.$.GamePlayerStatus.JUDGING = "sjj";
+cah.$.GamePlayerStatus.JUDGE = "sj";
+cah.$.GamePlayerStatus.PLAYING = "sp";
+cah.$.GamePlayerStatus_msg = {};
+cah.$.GamePlayerStatus_msg['sjj'] = "Selecting";
+cah.$.GamePlayerStatus_msg['sv'] = "Spectator";
+cah.$.GamePlayerStatus_msg['sw'] = "Winner!";
+cah.$.GamePlayerStatus_msg['sh'] = "Host";
+cah.$.GamePlayerStatus_msg['si'] = "";
+cah.$.GamePlayerStatus_msg['sj'] = "Card Czar";
+cah.$.GamePlayerStatus_msg['sp'] = "Playing";
+cah.$.GamePlayerStatus_msg_2 = {};
+cah.$.GamePlayerStatus_msg_2['sjj'] = "Select a winning card.";
+cah.$.GamePlayerStatus_msg_2['sv'] = "You are just spectating.";
+cah.$.GamePlayerStatus_msg_2['sw'] = "You have won!";
+cah.$.GamePlayerStatus_msg_2['sh'] = "Wait for players then click Start Game.";
+cah.$.GamePlayerStatus_msg_2['si'] = "Waiting for players...";
+cah.$.GamePlayerStatus_msg_2['sj'] = "You are the Card Czar.";
+cah.$.GamePlayerStatus_msg_2['sp'] = "Select a card to play.";
+
+cah.$.GameState = function() {
+  // Dummy constructor to make Eclipse auto-complete.
+};
+cah.$.GameState.prototype.dummyForAutocomplete = undefined;
+cah.$.GameState.ROUND_OVER = "ro";
+cah.$.GameState.LOBBY = "l";
+cah.$.GameState.DEALING = "d";
+cah.$.GameState.JUDGING = "j";
+cah.$.GameState.PLAYING = "p";
+cah.$.GameState_msg = {};
+cah.$.GameState_msg['p'] = "In Progress";
+cah.$.GameState_msg['d'] = "In Progress";
+cah.$.GameState_msg['j'] = "In Progress";
+cah.$.GameState_msg['l'] = "Not Started";
+cah.$.GameState_msg['ro'] = "In Progress";
+
+cah.$.LongPollEvent = function() {
+  // Dummy constructor to make Eclipse auto-complete.
+};
+cah.$.LongPollEvent.prototype.dummyForAutocomplete = undefined;
+cah.$.LongPollEvent.GAME_ROUND_COMPLETE = "grc";
+cah.$.LongPollEvent.BANNED = "B&";
+cah.$.LongPollEvent.NOOP = "_";
+cah.$.LongPollEvent.CHAT = "c";
+cah.$.LongPollEvent.GAME_PLAYER_INFO_CHANGE = "gpic";
+cah.$.LongPollEvent.HAND_DEAL = "hd";
+cah.$.LongPollEvent.CARDCAST_ADD_CARDSET = "cac";
+cah.$.LongPollEvent.PLAYER_LEAVE = "pl";
+cah.$.LongPollEvent.GAME_BLACK_RESHUFFLE = "gbr";
+cah.$.LongPollEvent.GAME_JUDGE_SKIPPED = "gjs";
+cah.$.LongPollEvent.GAME_LIST_REFRESH = "glr";
+cah.$.LongPollEvent.NEW_PLAYER = "np";
+cah.$.LongPollEvent.GAME_PLAYER_SKIPPED = "gps";
+cah.$.LongPollEvent.GAME_PLAYER_JOIN = "gpj";
+cah.$.LongPollEvent.GAME_WHITE_RESHUFFLE = "gwr";
+cah.$.LongPollEvent.CARDCAST_REMOVE_CARDSET = "crc";
+cah.$.LongPollEvent.GAME_OPTIONS_CHANGED = "goc";
+cah.$.LongPollEvent.GAME_PLAYER_KICKED_IDLE = "gpki";
+cah.$.LongPollEvent.GAME_SPECTATOR_LEAVE = "gvl";
+cah.$.LongPollEvent.GAME_PLAYER_LEAVE = "gpl";
+cah.$.LongPollEvent.GAME_SPECTATOR_JOIN = "gvj";
+cah.$.LongPollEvent.HURRY_UP = "hu";
+cah.$.LongPollEvent.GAME_JUDGE_LEFT = "gjl";
+cah.$.LongPollEvent.KICKED = "k";
+cah.$.LongPollEvent.KICKED_FROM_GAME_IDLE = "kfgi";
+cah.$.LongPollEvent.GAME_STATE_CHANGE = "gsc";
+
+cah.$.LongPollResponse = function() {
+  // Dummy constructor to make Eclipse auto-complete.
+};
+cah.$.LongPollResponse.prototype.dummyForAutocomplete = undefined;
+cah.$.LongPollResponse.PLAY_TIMER = "Pt";
+cah.$.LongPollResponse.PLAYER_INFO = "pi";
+cah.$.LongPollResponse.FROM = "f";
+cah.$.LongPollResponse.WHITE_CARDS = "wc";
+cah.$.LongPollResponse.EVENT = "E";
+cah.$.LongPollResponse.HAND = "h";
+cah.$.LongPollResponse.ERROR_CODE = "ec";
+cah.$.LongPollResponse.MESSAGE = "m";
+cah.$.LongPollResponse.WINNING_CARD = "WC";
+cah.$.LongPollResponse.FROM_ADMIN = "fa";
+cah.$.LongPollResponse.TIMESTAMP = "ts";
+cah.$.LongPollResponse.GAME_INFO = "gi";
+cah.$.LongPollResponse.ERROR = "e";
+cah.$.LongPollResponse.ID_CODE = "idc";
+cah.$.LongPollResponse.REASON = "qr";
+cah.$.LongPollResponse.WALL = "wall";
+cah.$.LongPollResponse.ROUND_WINNER = "rw";
+cah.$.LongPollResponse.SIGIL = "?";
+cah.$.LongPollResponse.EMOTE = "me";
+cah.$.LongPollResponse.CARDCAST_DECK_INFO = "cdi";
+cah.$.LongPollResponse.GAME_ID = "gid";
+cah.$.LongPollResponse.NICKNAME = "n";
+cah.$.LongPollResponse.BLACK_CARD = "bc";
+cah.$.LongPollResponse.GAME_STATE = "gs";
+cah.$.LongPollResponse.INTERMISSION = "i";
 
 cah.$.ReconnectNextAction = function() {
   // Dummy constructor to make Eclipse auto-complete.
@@ -352,13 +351,20 @@ cah.$.ReconnectNextAction.prototype.dummyForAutocomplete = undefined;
 cah.$.ReconnectNextAction.GAME = "game";
 cah.$.ReconnectNextAction.NONE = "none";
 
-cah.$.DisconnectReason = function() {
+cah.$.Sigil = function() {
   // Dummy constructor to make Eclipse auto-complete.
 };
-cah.$.DisconnectReason.prototype.dummyForAutocomplete = undefined;
-cah.$.DisconnectReason.PING_TIMEOUT = "pt";
-cah.$.DisconnectReason.BANNED = "B&";
-cah.$.DisconnectReason.IDLE_TIMEOUT = "it";
-cah.$.DisconnectReason.KICKED = "k";
-cah.$.DisconnectReason.MANUAL = "man";
+cah.$.Sigil.prototype.dummyForAutocomplete = undefined;
+cah.$.Sigil.NORMAL_USER = "";
+cah.$.Sigil.ADMIN = "@";
+cah.$.Sigil.ID_CODE = "+";
+
+cah.$.WhiteCardData = function() {
+  // Dummy constructor to make Eclipse auto-complete.
+};
+cah.$.WhiteCardData.prototype.dummyForAutocomplete = undefined;
+cah.$.WhiteCardData.WRITE_IN = "wi";
+cah.$.WhiteCardData.TEXT = "T";
+cah.$.WhiteCardData.ID = "cid";
+cah.$.WhiteCardData.WATERMARK = "W";
 

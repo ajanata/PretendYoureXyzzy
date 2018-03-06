@@ -236,6 +236,9 @@ function chatsubmit_click(game_id, parent_element) {
           cah.log.error("This command only works in a game.");
         }
         break;
+      case 'whois':
+        ajax = cah.Ajax.build(cah.$.AjaxOperation.WHOIS).withNickname(text.split(' ')[0]);
+        break;
       default:
         cah.log.error("Invalid command.");
     }

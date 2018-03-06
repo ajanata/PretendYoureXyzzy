@@ -27,6 +27,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,13 +35,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
-
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.Singleton;
-import com.maxmind.geoip2.model.CityResponse;
 
 import net.socialgamer.cah.CahModule.BroadcastConnectsAndDisconnects;
 import net.socialgamer.cah.CahModule.MaxUsers;
@@ -52,6 +46,13 @@ import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.GeoIP;
 import net.socialgamer.cah.metrics.Metrics;
+
+import org.apache.log4j.Logger;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
+import com.maxmind.geoip2.model.CityResponse;
 
 
 /**
@@ -78,7 +79,7 @@ public class ConnectedUsers {
   /**
    * Key (username) must be stored in lower-case to facilitate case-insensitivity in nicks.
    */
-  private final Map<String, User> users = new HashMap<String, User>();
+  private final Map<String, User> users = Collections.synchronizedMap(new HashMap<>());
 
   final Provider<Boolean> broadcastConnectsAndDisconnectsProvider;
   final Provider<Integer> maxUsersProvider;
@@ -267,7 +268,6 @@ public class ConnectedUsers {
    */
   public void broadcastToList(final Collection<User> broadcastTo, final MessageType type,
       final HashMap<ReturnableData, Object> masterData) {
-    // TODO I think this synchronized block is pointless.
     synchronized (users) {
       for (final User u : broadcastTo) {
         @SuppressWarnings("unchecked")

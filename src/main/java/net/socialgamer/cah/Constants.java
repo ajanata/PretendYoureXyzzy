@@ -192,7 +192,8 @@ public class Constants {
     REGISTER("r"),
     SCORE("SC"),
     START_GAME("sg"),
-    STOP_GAME("Sg");
+    STOP_GAME("Sg"),
+    WHOIS("Wi");
 
     private final String op;
 
@@ -244,6 +245,8 @@ public class Constants {
     @DuplicationAllowed
     CARD_ID(AjaxRequest.CARD_ID),
     CARD_SETS("css"),
+    CLIENT_NAME("cn"),
+    CONNECTED_AT("ca"),
     ERROR("e"),
     ERROR_CODE("ec"),
     @DuplicationAllowed
@@ -251,10 +254,13 @@ public class Constants {
     GAME_INFO("gi"),
     @DuplicationAllowed
     GAME_OPTIONS(AjaxRequest.GAME_OPTIONS),
+    GAME_STATE_DESCRIPTION("gss"),
     GAMES("gl"),
     HAND("h"),
     @DuplicationAllowed
     ID_CODE(AjaxRequest.ID_CODE),
+    IDLE("idl"),
+    IP_ADDRESS("IP"),
     /**
      * Whether this client is reconnecting or not.
      */

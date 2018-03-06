@@ -48,9 +48,13 @@ cah.log.init = function() {
  *          escaped automatically.
  * @param {string}
  *          opt_class Optional CSS class to use for this message.
+ * @param {boolean}
+ *          opt_allow_html Allow HTML to be used.
+ * @param {string}
+ *          opt_title Optional title text for span.
  */
-cah.log.status = function(text, opt_class) {
-  cah.log.status_with_game(null, text, opt_class);
+cah.log.status = function(text, opt_class, opt_allow_html, opt_title) {
+  cah.log.status_with_game(null, text, opt_class, opt_allow_html, opt_title);
 };
 
 /**
@@ -220,4 +224,4 @@ cah.log.getTitleForIdCode = function(idcode) {
   } else {
     return null;
   }
-}
+};

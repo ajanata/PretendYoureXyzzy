@@ -304,3 +304,40 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CARDCAST_LIST_CARDSETS] = function(
     game.listCardcastDecks(data[cah.$.AjaxResponse.CARD_SETS]);
   }
 };
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.WHOIS] = function(data) {
+  var nick = data[cah.$.AjaxResponse.NICKNAME];
+  var sigil = data[cah.$.AjaxResponse.SIGIL];
+  cah.log.status("Whois information for " + sigil + nick + ":");
+  if (cah.$.Sigil.ADMIN == sigil) {
+    cah.log.status("* <strong>Is an administrator</strong>", null, true);
+  }
+  if (data[cah.$.AjaxResponse.ID_CODE] != "") {
+    cah.log.status("* Identification code: " + data[cah.$.AjaxResponse.ID_CODE]);
+  }
+  if (data[cah.$.AjaxResponse.IP_ADDRESS]) {
+    cah.log.status("* Hostname: " + data[cah.$.AjaxResponse.IP_ADDRESS]);
+  }
+  if (data[cah.$.AjaxResponse.CLIENT_NAME]) {
+    cah.log.status("* Client: " + data[cah.$.AjaxResponse.CLIENT_NAME]);
+  }
+  var gameId = data[cah.$.AjaxResponse.GAME_ID];
+  if (undefined !== gameId) {
+    var gameInfo = data[cah.$.AjaxResponse.GAME_INFO];
+    var stateMsg = cah.$.GameState_msg[gameInfo[cah.$.GameInfo.STATE]];
+    for (var i = 0; i < gameInfo[cah.$.GameInfo.SPECTATORS].length; i++) {
+      if (gameInfo[cah.$.GameInfo.SPECTATORS] == nick) {
+        stateMsg += ", Spectating";
+        break;
+      }
+    }
+    cah.log.status("* Game: <a onclick='$(\"#filter_games\").val(\"" + nick
+        + "\").keyup()' class='gamelink'>#" + gameId + "</a>, " + stateMsg, null, true);
+  }
+  cah.log.status("* Connected at "
+      + new Date(data[cah.$.AjaxResponse.CONNECTED_AT]).toLocaleString());
+  var idle = new Date(data[cah.$.AjaxResponse.IDLE]);
+  cah.log.status("* Idle " + idle.getUTCHours() + " hours " + idle.getUTCMinutes() + " mins "
+      + idle.getUTCSeconds() + " secs");
+  cah.log.status("End of whois information");
+};

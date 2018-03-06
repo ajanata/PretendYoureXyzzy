@@ -26,19 +26,20 @@ package net.socialgamer.cah.data;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import javax.annotation.Nullable;
 
-import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
-
 import net.sf.uadetector.ReadableUserAgent;
 import net.sf.uadetector.service.UADetectorServiceFactory;
 import net.socialgamer.cah.CahModule.UniqueId;
 import net.socialgamer.cah.Constants.Sigil;
+
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 
 
 /**
@@ -59,6 +60,8 @@ public class User {
   private long lastHeardFrom = 0;
 
   private long lastUserAction = 0;
+
+  private final long connectedAt = new Date().getTime();
 
   private Game currentGame;
 
@@ -275,6 +278,13 @@ public class User {
 
   public long getLastUserAction() {
     return lastUserAction;
+  }
+
+  /**
+   * @return The UNIX timestamp at which this user connected, in milliseconds.
+   */
+  public long getConnectedAt() {
+    return connectedAt;
   }
 
   /**
