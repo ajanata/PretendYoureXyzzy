@@ -305,21 +305,23 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CARDCAST_LIST_CARDSETS] = function(
   }
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.WHOIS] = function(data) {
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.WHOIS] = function(data, req) {
+  var chatWindowId = req[cah.$.AjaxRequest.GAME_ID];
   var nick = data[cah.$.AjaxResponse.NICKNAME];
   var sigil = data[cah.$.AjaxResponse.SIGIL];
-  cah.log.status("Whois information for " + sigil + nick + ":");
+  cah.log.status_with_game(chatWindowId, "Whois information for " + sigil + nick + ":");
   if (cah.$.Sigil.ADMIN == sigil) {
-    cah.log.status("* <strong>Is an administrator</strong>", null, true);
+    cah.log.status_with_game(chatWindowId, "* <strong>Is an administrator</strong>", null, true);
   }
   if (data[cah.$.AjaxResponse.ID_CODE] != "") {
-    cah.log.status("* Identification code: " + data[cah.$.AjaxResponse.ID_CODE]);
+    cah.log.status_with_game(chatWindowId, "* Identification code: "
+        + data[cah.$.AjaxResponse.ID_CODE]);
   }
   if (data[cah.$.AjaxResponse.IP_ADDRESS]) {
-    cah.log.status("* Hostname: " + data[cah.$.AjaxResponse.IP_ADDRESS]);
+    cah.log.status_with_game(chatWindowId, "* Hostname: " + data[cah.$.AjaxResponse.IP_ADDRESS]);
   }
   if (data[cah.$.AjaxResponse.CLIENT_NAME]) {
-    cah.log.status("* Client: " + data[cah.$.AjaxResponse.CLIENT_NAME]);
+    cah.log.status_with_game(chatWindowId, "* Client: " + data[cah.$.AjaxResponse.CLIENT_NAME]);
   }
   var gameId = data[cah.$.AjaxResponse.GAME_ID];
   if (undefined !== gameId) {
@@ -331,13 +333,13 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.WHOIS] = function(data) {
         break;
       }
     }
-    cah.log.status("* Game: <a onclick='$(\"#filter_games\").val(\"" + nick
+    cah.log.status_with_game(chatWindowId, "* Game: <a onclick='$(\"#filter_games\").val(\"" + nick
         + "\").keyup()' class='gamelink'>#" + gameId + "</a>, " + stateMsg, null, true);
   }
-  cah.log.status("* Connected at "
+  cah.log.status_with_game(chatWindowId, "* Connected at "
       + new Date(data[cah.$.AjaxResponse.CONNECTED_AT]).toLocaleString());
   var idle = new Date(data[cah.$.AjaxResponse.IDLE]);
-  cah.log.status("* Idle " + idle.getUTCHours() + " hours " + idle.getUTCMinutes() + " mins "
-      + idle.getUTCSeconds() + " secs");
-  cah.log.status("End of whois information");
+  cah.log.status_with_game(chatWindowId, "* Idle " + idle.getUTCHours() + " hours "
+      + idle.getUTCMinutes() + " mins " + idle.getUTCSeconds() + " secs");
+  cah.log.status_with_game(chatWindowId, "End of whois information");
 };

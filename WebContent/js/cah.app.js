@@ -238,6 +238,10 @@ function chatsubmit_click(game_id, parent_element) {
         break;
       case 'whois':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.WHOIS).withNickname(text.split(' ')[0]);
+        // so we can show it in the right place; the server ignores this
+        if (game_id !== null) {
+          ajax = ajax.withGameId(game_id);
+        }
         break;
       default:
         cah.log.error("Invalid command.");

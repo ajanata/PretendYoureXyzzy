@@ -79,7 +79,8 @@ cah.log.status = function(text, opt_class, opt_allow_html, opt_title) {
  */
 cah.log.status_with_game = function(game_or_id, text, opt_class, opt_allow_html, opt_title) {
   var logElement;
-  if (game_or_id === null) {
+  // I think == null here would catch both of these cases and also be okay with game id 0 but...
+  if (game_or_id === null || game_or_id === undefined) {
     logElement = cah.log.log;
   } else {
     var game;
