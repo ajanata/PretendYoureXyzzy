@@ -33,13 +33,13 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 import javax.annotation.Nullable;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 import net.sf.uadetector.ReadableUserAgent;
 import net.sf.uadetector.service.UADetectorServiceFactory;
 import net.socialgamer.cah.CahModule.UniqueId;
 import net.socialgamer.cah.Constants.Sigil;
-
-import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
 
 
 /**
@@ -300,6 +300,7 @@ public class User {
   public void noLongerValid() {
     if (currentGame != null) {
       currentGame.removePlayer(this);
+      currentGame.removeSpectator(this);
     }
     valid = false;
   }
