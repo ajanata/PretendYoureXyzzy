@@ -651,3 +651,13 @@ dfn {
   cursor: pointer;
   text-decoration: underline;
 }
+
+.imagecard {
+  height: 100%;
+  width: 100%;
+}
+
+.card_text {
+  word-wrap: break-word;
+  overflow: hidden;
+}

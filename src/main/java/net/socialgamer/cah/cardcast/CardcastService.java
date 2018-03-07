@@ -1,3 +1,26 @@
+/**
+ * Copyright (c) 2012-2018, Andy Janata
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright notice, this list of conditions
+ *   and the following disclaimer.
+ * * Redistributions in binary form must reproduce the above copyright notice, this list of
+ *   conditions and the following disclaimer in the documentation and/or other materials provided
+ *   with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+ * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package net.socialgamer.cah.cardcast;
 
 import java.io.BufferedReader;
@@ -8,10 +31,8 @@ import java.lang.ref.SoftReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -23,10 +44,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import net.socialgamer.cah.cardcast.CardcastModule.CardcastCardId;
-
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -34,6 +52,8 @@ import org.json.simple.JSONValue;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+
+import net.socialgamer.cah.cardcast.CardcastModule.CardcastCardId;
 
 
 public class CardcastService {
@@ -76,10 +96,13 @@ public class CardcastService {
       .synchronizedMap(new HashMap<String, SoftReference<CardcastCacheEntry>>());
 
   private final Provider<Integer> cardIdProvider;
+  private final CardcastFormatHelper formatHelper;
 
   @Inject
-  public CardcastService(@CardcastCardId final Provider<Integer> cardIdProvider) {
+  public CardcastService(@CardcastCardId final Provider<Integer> cardIdProvider,
+      final CardcastFormatHelper formatHelper) {
     this.cardIdProvider = cardIdProvider;
+    this.formatHelper = formatHelper;
   }
 
   private class CardcastCacheEntry {
@@ -149,16 +172,11 @@ public class CardcastService {
         for (final Object black : blacks) {
           final JSONArray texts = (JSONArray) ((JSONObject) black).get("text");
           if (null != texts) {
-            // TODO this is going to need some work to look pretty.
-            final List<String> strs = new ArrayList<String>(texts.size());
-            for (final Object o : texts) {
-              strs.add((String) o);
-            }
-            final String text = StringUtils.join(strs, "____");
-            final int pick = strs.size() - 1;
+            final String text = formatHelper.formatBlackCard(texts);
+            final int pick = texts.size() - 1;
             final int draw = (pick >= 3 ? pick - 1 : 0);
-            final CardcastBlackCard card = new CardcastBlackCard(cardIdProvider.get(),
-                StringEscapeUtils.escapeXml11(text), draw, pick, setId);
+            final CardcastBlackCard card = new CardcastBlackCard(cardIdProvider.get(), text, draw,
+                pick, setId);
             deck.getBlackCards().add(card);
           }
         }
@@ -169,33 +187,11 @@ public class CardcastService {
         for (final Object white : whites) {
           final JSONArray texts = (JSONArray) ((JSONObject) white).get("text");
           if (null != texts) {
-            // The white cards should only ever have one element in text, but let's be safe.
-            final List<String> strs = new ArrayList<String>(texts.size());
-            for (final Object o : texts) {
-              final String cardCastString = (String) o;
-              if (cardCastString.isEmpty()) {
-                // skip blank segments
-                continue;
-              }
-              final StringBuilder pyxString = new StringBuilder();
-
-              // Cardcast's recommended format is to not capitalize the first letter
-              pyxString.append(cardCastString.substring(0, 1).toUpperCase());
-              pyxString.append(cardCastString.substring(1));
-
-              // Cardcast's recommended format is to not include a period
-              if (Character.isLetterOrDigit(cardCastString.charAt(cardCastString.length() - 1))) {
-                pyxString.append('.');
-              }
-
-              // Cardcast's white cards are now formatted consistently with pyx cards
-              strs.add(pyxString.toString());
-            }
-            final String text = StringUtils.join(strs, "");
+            final String text = formatHelper.formatWhiteCard(texts);
             // don't add blank cards, they don't do anything
             if (!text.isEmpty()) {
-              final CardcastWhiteCard card = new CardcastWhiteCard(cardIdProvider.get(),
-                  StringEscapeUtils.escapeXml11(text), setId);
+              final CardcastWhiteCard card = new CardcastWhiteCard(cardIdProvider.get(), text,
+                  setId);
               deck.getWhiteCards().add(card);
             }
           }
