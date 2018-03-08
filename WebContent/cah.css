@@ -197,6 +197,7 @@ h2,h3,h4 {
   position: absolute;
   bottom: 0px;
   right: 14px;
+  overflow-y: scroll;
 }
 
 #tabs .ui-widget {
