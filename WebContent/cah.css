@@ -199,6 +199,11 @@ h2,h3,h4 {
   right: 14px;
 }
 
+#tabs .ui-tabs .ui-tabs-nav {
+  overflow-y: scroll;
+  height: 100%;
+}
+
 #tabs .ui-widget {
   font-height: 16px !important;
 }
