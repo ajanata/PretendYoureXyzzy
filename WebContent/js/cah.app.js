@@ -401,6 +401,8 @@ function app_resize() {
   $("#bottom").height(bottomHeight);
   $("#info_area").height(bottomHeight);
   $("#tabs").height(bottomHeight);
+  $("#tab-preferences").height(bottomHeight - 45);
+  $("#tab-gamelist-filters").height(bottomHeight - 45);
 
   // global chat
   do_app_resize(chat, log);
