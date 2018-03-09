@@ -197,7 +197,11 @@ h2,h3,h4 {
   position: absolute;
   bottom: 0px;
   right: 14px;
+}
+
+#tabs .ui-tabs .ui-tabs-nav {
   overflow-y: scroll;
+  height: 100%;
 }
 
 #tabs .ui-widget {
