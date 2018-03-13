@@ -210,11 +210,16 @@ public class Constants {
   /**
    * Parameters for client requests.
    */
+  @GoStruct
   public enum AjaxRequest {
+    @GoDataType("int")
     CARD_ID("cid"),
     CARDCAST_ID("cci"),
+    @GoDataType("bool")
     EMOTE("me"),
+    @GoDataType("int")
     GAME_ID("gid"),
+    @GoDataType("GameOptionData")
     GAME_OPTIONS("go"),
     ID_CODE("idc"),
     MESSAGE("m"),
@@ -222,7 +227,9 @@ public class Constants {
     OP("o"),
     PASSWORD("pw"),
     PERSISTENT_ID("pid"),
+    @GoDataType("int")
     SERIAL("s"),
+    @GoDataType("bool")
     WALL("wall");
 
     private final String field;
@@ -240,32 +247,47 @@ public class Constants {
   /**
    * Keys for client request responses.
    */
+  @GoStruct
   public enum AjaxResponse implements ReturnableData {
+    @GoDataType("int")
     BLACK_CARD("bc"),
     @DuplicationAllowed
+    @GoDataType("int")
     CARD_ID(AjaxRequest.CARD_ID),
+    @GoDataType("[]CardSetData")
     CARD_SETS("css"),
     CLIENT_NAME("cn"),
+    @GoDataType("int")
     CONNECTED_AT("ca"),
+    @GoDataType("bool")
     ERROR("e"),
     ERROR_CODE("ec"),
     @DuplicationAllowed
+    @GoDataType("int")
     GAME_ID(AjaxRequest.GAME_ID),
+    @GoDataType("GameInfo")
     GAME_INFO("gi"),
     @DuplicationAllowed
+    @GoDataType("GameOptionData")
     GAME_OPTIONS(AjaxRequest.GAME_OPTIONS),
     GAME_STATE_DESCRIPTION("gss"),
+    @GoDataType("[]GameInfo")
     GAMES("gl"),
+    @GoDataType("[]int")
     HAND("h"),
     @DuplicationAllowed
     ID_CODE(AjaxRequest.ID_CODE),
+    @GoDataType("int")
     IDLE("idl"),
     IP_ADDRESS("IP"),
     /**
      * Whether this client is reconnecting or not.
      */
+    @GoDataType("bool")
     IN_PROGRESS("ip"),
+    @GoDataType("int")
     MAX_GAMES("mg"),
+    @GoDataType("[]string")
     NAMES("nl"),
     /**
      * Next thing that should be done in reconnect process. Used once, long string OK.
@@ -275,13 +297,16 @@ public class Constants {
     NICKNAME(AjaxRequest.NICKNAME),
     @DuplicationAllowed
     PERSISTENT_ID(AjaxRequest.PERSISTENT_ID),
+    @GoDataType("GamePlayerInfo")
     PLAYER_INFO("pi"),
     /**
      * Sigil to display next to user's name.
      */
     SIGIL("?"),
     @DuplicationAllowed
+    @GoDataType("int")
     SERIAL(AjaxRequest.SERIAL),
+    @GoDataType("[]int")
     WHITE_CARDS("wc");
 
     private final String field;
@@ -300,6 +325,7 @@ public class Constants {
     }
   }
 
+  // hmm this just gets dumped into the regular data it looks like
   public enum ErrorInformation implements ReturnableData {
     BLACK_CARDS_PRESENT("bcp"),
     BLACK_CARDS_REQUIRED("bcr"),
@@ -466,13 +492,17 @@ public class Constants {
   /**
    * Data keys that can be in a long poll response.
    */
+  @GoStruct
   public enum LongPollResponse implements ReturnableData {
     @DuplicationAllowed
+    @GoDataType("BlackCardData")
     BLACK_CARD(AjaxResponse.BLACK_CARD),
     CARDCAST_DECK_INFO("cdi"),
     @DuplicationAllowed
+    @GoDataType("bool")
     EMOTE(AjaxRequest.EMOTE),
     @DuplicationAllowed
+    @GoDataType("bool")
     ERROR(AjaxResponse.ERROR),
     @DuplicationAllowed
     ERROR_CODE(AjaxResponse.ERROR_CODE),
@@ -486,26 +516,33 @@ public class Constants {
      * @deprecated Compare the SIGIL field to Sigil.ADMIN.
      */
     @Deprecated
+    @GoDataType("bool")
     FROM_ADMIN("fa"),
     @DuplicationAllowed
+    @GoDataType("int")
     GAME_ID(AjaxResponse.GAME_ID),
     @DuplicationAllowed
+    @GoDataType("GameInfo")
     GAME_INFO(AjaxResponse.GAME_INFO),
     GAME_STATE("gs"),
     @DuplicationAllowed
+    @GoDataType("[]WhiteCardData")
     HAND(AjaxResponse.HAND),
     @DuplicationAllowed
     ID_CODE(AjaxRequest.ID_CODE),
     /**
      * The delay until the next game round begins.
      */
+    @GoDataType("int")
     INTERMISSION("i"),
     @DuplicationAllowed
     MESSAGE(AjaxRequest.MESSAGE),
     @DuplicationAllowed
     NICKNAME(AjaxRequest.NICKNAME),
+    @GoDataType("int")
     PLAY_TIMER("Pt"),
     @DuplicationAllowed
+    @GoDataType("[]GamePlayerInfo")
     PLAYER_INFO(AjaxResponse.PLAYER_INFO),
     /**
      * Reason why a player disconnected.
@@ -517,11 +554,15 @@ public class Constants {
      */
     @DuplicationAllowed
     SIGIL(AjaxResponse.SIGIL),
+    @GoDataType("int")
     TIMESTAMP("ts"),
     @DuplicationAllowed
+    @GoDataType("bool")
     WALL(AjaxRequest.WALL),
     @DuplicationAllowed
+    @GoDataType("[]WhiteCardData")
     WHITE_CARDS(AjaxResponse.WHITE_CARDS),
+    @GoDataType("WhiteCardData")
     WINNING_CARD("WC");
 
     private final String field;
@@ -561,11 +602,14 @@ public class Constants {
   /**
    * Data fields for white cards.
    */
+  @GoStruct
   public enum WhiteCardData {
     @DuplicationAllowed
+    @GoDataType("int")
     ID(AjaxRequest.CARD_ID),
     TEXT("T"),
     WATERMARK("W"),
+    @GoDataType("bool")
     WRITE_IN("wi");
 
     private final String key;
@@ -587,10 +631,14 @@ public class Constants {
   /**
    * Data fields for black cards.
    */
+  @GoStruct
   public enum BlackCardData {
+    @GoDataType("int")
     DRAW("D"),
     @DuplicationAllowed
+    @GoDataType("int")
     ID(WhiteCardData.ID),
+    @GoDataType("int")
     PICK("PK"),
     @DuplicationAllowed
     TEXT(WhiteCardData.TEXT),
@@ -616,14 +664,20 @@ public class Constants {
   /**
    * Data fields for card sets.
    */
+  @GoStruct
   public enum CardSetData {
+    @GoDataType("bool")
     BASE_DECK("bd"),
+    @GoDataType("int")
     BLACK_CARDS_IN_DECK("bcid"),
     CARD_SET_DESCRIPTION("csd"),
     CARD_SET_NAME("csn"),
     @DuplicationAllowed
+    @GoDataType("int")
     ID(WhiteCardData.ID),
+    @GoDataType("int")
     WEIGHT("w"),
+    @GoDataType("int")
     WHITE_CARDS_IN_DECK("wcid");
 
     private final String key;
@@ -674,14 +728,20 @@ public class Constants {
   /**
    * Fields for information about a game.
    */
+  @GoStruct
   public enum GameInfo {
     HOST("H"),
     @DuplicationAllowed
+    @GoDataType("int")
     ID(AjaxRequest.GAME_ID),
     @DuplicationAllowed
+    @GoDataType("GameOptionData")
     GAME_OPTIONS(AjaxRequest.GAME_OPTIONS),
+    @GoDataType("bool")
     HAS_PASSWORD("hp"),
+    @GoDataType("[]string")
     PLAYERS("P"),
+    @GoDataType("[]string")
     SPECTATORS("V"),
     STATE("S");
 
@@ -704,14 +764,20 @@ public class Constants {
   /**
    * Fields for options about a game.
    */
+  @GoStruct
   public enum GameOptionData {
+    @GoDataType("int")
     BLANKS_LIMIT("bl"),
     @DuplicationAllowed
+    @GoDataType("[]int")
     CARD_SETS(AjaxResponse.CARD_SETS),
     @DuplicationAllowed
     PASSWORD(AjaxRequest.PASSWORD),
+    @GoDataType("int")
     PLAYER_LIMIT("pL"),
+    @GoDataType("int")
     SPECTATOR_LIMIT("vL"),
+    @GoDataType("int")
     SCORE_LIMIT("sl"),
     TIMER_MULTIPLIER("tm");
 
@@ -734,8 +800,10 @@ public class Constants {
   /**
    * Keys for the information about players in a game.
    */
+  @GoStruct
   public enum GamePlayerInfo {
     NAME("N"),
+    @GoDataType("int")
     SCORE("sc"),
     STATUS("st");
 
@@ -805,5 +873,22 @@ public class Constants {
    */
   @Retention(RetentionPolicy.RUNTIME)
   public @interface DuplicationAllowed {
+  }
+
+  /**
+   * Mark an enum to generate a struct for it in the Go output. This would be used for things that
+   * describe objects, not a list of valid values for a field.
+   */
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface GoStruct {
+  }
+
+  /**
+   * Mark an enum value as having a specific Go data type. The default (if this annotation is not
+   * specified) is string.
+   */
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface GoDataType {
+    String value() default "string";
   }
 }

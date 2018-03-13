@@ -27,9 +27,12 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import net.socialgamer.cah.Constants.DoubleLocalizable;
+import net.socialgamer.cah.Constants.GoDataType;
+import net.socialgamer.cah.Constants.GoStruct;
 import net.socialgamer.cah.Constants.Localizable;
 
 
@@ -43,6 +46,10 @@ public class UpdateGoConstants {
   private static final String enumHeaderFmt = "// %s\r\nconst (\r\n";
   private static final String enumValueFmt = "\t%s_%s = \"%s\"\r\n";
   private static final String enumTailFmt = ")\r\n";
+
+  private static final String structHeaderFmt = "type %s struct {\r\n";
+  private static final String structValueFmt = "\t%s %s `%s`\r\n";
+  private static final String structTailFmt = "}\r\n";
 
   private static final String msgHeaderFmt = "var %sMsgs = map[string]string{\r\n";
   private static final String msgValueFmt = "\t \"%s\": \"%s\",\r\n";
@@ -82,6 +89,7 @@ public class UpdateGoConstants {
       // We need to know the name of the enum itself, not that it's Constants$Foo.
       final String cName = c.getName().split("\\$")[1];
       System.out.println(cName);
+
       writer.format(enumHeaderFmt, cName);
       final Map<String, String> values = getEnumValues(c);
       for (final String key : values.keySet()) {
@@ -89,6 +97,19 @@ public class UpdateGoConstants {
         writer.format(enumValueFmt, cName, key, value);
       }
       writer.println(enumTailFmt);
+
+      if (c.isAnnotationPresent(GoStruct.class)) {
+        writer.format(structHeaderFmt, cName);
+        for (final String key : values.keySet()) {
+          final String value = values.get(key);
+          String type = "string";
+          if (c.getField(key).isAnnotationPresent(GoDataType.class)) {
+            type = c.getField(key).getAnnotation(GoDataType.class).value();
+          }
+          writer.format(structValueFmt, formatGoName(key), type, value);
+        }
+        writer.println(structTailFmt);
+      }
 
       if (Localizable.class.isAssignableFrom(c) || DoubleLocalizable.class.isAssignableFrom(c)) {
         System.out.println(cName + "_msg");
@@ -115,6 +136,15 @@ public class UpdateGoConstants {
     }
     writer.flush();
     writer.close();
+  }
+
+  private static String formatGoName(final String constName) {
+    final StringBuilder out = new StringBuilder(constName.length());
+    for (final String part : constName.split("_")) {
+      out.append(part.substring(0, 1).toUpperCase(Locale.ENGLISH));
+      out.append(part.substring(1).toLowerCase(Locale.ENGLISH));
+    }
+    return out.toString();
   }
 
   /**
