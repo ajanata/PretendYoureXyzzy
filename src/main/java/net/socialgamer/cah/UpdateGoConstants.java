@@ -40,9 +40,8 @@ import net.socialgamer.cah.Constants.Localizable;
  */
 public class UpdateGoConstants {
 
-  private static final String enumHeaderFmt =
-      "type %s string\r\nconst (\r\n";
-  private static final String enumValueFmt = "\t%s_%s %s = \"%s\"\r\n";
+  private static final String enumHeaderFmt = "// %s\r\nconst (\r\n";
+  private static final String enumValueFmt = "\t%s_%s = \"%s\"\r\n";
   private static final String enumTailFmt = ")\r\n";
 
   private static final String msgHeaderFmt = "var %sMsgs = map[string]string{\r\n";
@@ -87,7 +86,7 @@ public class UpdateGoConstants {
       final Map<String, String> values = getEnumValues(c);
       for (final String key : values.keySet()) {
         final String value = values.get(key);
-        writer.format(enumValueFmt, cName, key, cName, value);
+        writer.format(enumValueFmt, cName, key, value);
       }
       writer.println(enumTailFmt);
 
