@@ -48,7 +48,7 @@ public class UpdateGoConstants {
   private static final String enumTailFmt = ")\r\n";
 
   private static final String structHeaderFmt = "type %s struct {\r\n";
-  private static final String structValueFmt = "\t%s %s `%s`\r\n";
+  private static final String structValueFmt = "\t%s %s `json:\"%s\"`\r\n";
   private static final String structTailFmt = "}\r\n";
 
   private static final String msgHeaderFmt = "var %sMsgs = map[string]string{\r\n";

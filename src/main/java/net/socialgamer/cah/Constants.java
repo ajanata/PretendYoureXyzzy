@@ -257,7 +257,7 @@ public class Constants {
     @GoDataType("[]CardSetData")
     CARD_SETS("css"),
     CLIENT_NAME("cn"),
-    @GoDataType("int")
+    @GoDataType("int64")
     CONNECTED_AT("ca"),
     @GoDataType("bool")
     ERROR("e"),
@@ -277,7 +277,7 @@ public class Constants {
     HAND("h"),
     @DuplicationAllowed
     ID_CODE(AjaxRequest.ID_CODE),
-    @GoDataType("int")
+    @GoDataType("int64")
     IDLE("idl"),
     IP_ADDRESS("IP"),
     /**
@@ -554,7 +554,7 @@ public class Constants {
      */
     @DuplicationAllowed
     SIGIL(AjaxResponse.SIGIL),
-    @GoDataType("int")
+    @GoDataType("int64")
     TIMESTAMP("ts"),
     @DuplicationAllowed
     @GoDataType("bool")
