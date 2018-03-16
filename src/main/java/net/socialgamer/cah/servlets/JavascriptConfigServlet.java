@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 
+import net.socialgamer.cah.CahModule.BroadcastConnectsAndDisconnects;
 import net.socialgamer.cah.CahModule.CookieDomain;
 import net.socialgamer.cah.CahModule.GlobalChatEnabled;
 import net.socialgamer.cah.CahModule.InsecureIdAllowed;
@@ -80,9 +81,12 @@ public class JavascriptConfigServlet extends HttpServlet {
     final Boolean globalChatEnabled = injector.getInstance(Key.get(Boolean.class, GlobalChatEnabled.class));
     final Boolean insecureIdAllowed = injector
         .getInstance(Key.get(Boolean.class, InsecureIdAllowed.class));
+    final Boolean broadcastingUsers = injector
+        .getInstance(Key.get(Boolean.class, BroadcastConnectsAndDisconnects.class));
     builder.append(String.format("cah.COOKIE_DOMAIN = '%s';\n", cookieDomain));
     builder.append(String.format("cah.GLOBAL_CHAT_ENABLED = %b;\n", globalChatEnabled));
     builder.append(String.format("cah.INSECURE_ID_ALLOWED = %b;\n", insecureIdAllowed));
+    builder.append(String.format("cah.BROADCASTING_USERS = %b;\n", broadcastingUsers));
 
     resp.setContentType("text/javascript");
     final PrintWriter out = resp.getWriter();

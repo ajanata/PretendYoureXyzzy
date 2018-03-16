@@ -36,6 +36,13 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
+import org.apache.log4j.Logger;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
+import com.maxmind.geoip2.model.CityResponse;
+
 import net.socialgamer.cah.CahModule.BroadcastConnectsAndDisconnects;
 import net.socialgamer.cah.CahModule.MaxUsers;
 import net.socialgamer.cah.Constants.DisconnectReason;
@@ -46,13 +53,6 @@ import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.GeoIP;
 import net.socialgamer.cah.metrics.Metrics;
-
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.Singleton;
-import com.maxmind.geoip2.model.CityResponse;
 
 
 /**
@@ -132,6 +132,8 @@ public class ConnectedUsers {
           final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
           data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
           data.put(LongPollResponse.NICKNAME, user.getNickname());
+          data.put(LongPollResponse.SIGIL, user.getSigil().toString());
+          data.put(LongPollResponse.ID_CODE, user.getIdCode());
           broadcastToAll(MessageType.PLAYER_EVENT, data);
         }
         // log them in the metrics

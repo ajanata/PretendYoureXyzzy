@@ -96,37 +96,44 @@ public class Constants {
   /**
    * Reason why a client disconnected.
    */
-  public enum DisconnectReason {
+  public enum DisconnectReason implements Localizable {
     /**
      * The client was banned by the server administrator.
      */
-    BANNED("B&"),
+    BANNED("B&", "Banned"),
     /**
      * The client made no user-caused requests within the timeout window.
      */
-    IDLE_TIMEOUT("it"),
+    IDLE_TIMEOUT("it", "Kicked due to idle"),
     /**
      * The client was kicked by the server administrator.
      */
-    KICKED("k"),
+    KICKED("k", "Kicked by server administrator"),
     /**
      * The user clicked the "log out" button.
      */
-    MANUAL("man"),
+    MANUAL("man", "Leaving"),
     /**
      * The client failed to make any queries within the timeout window.
      */
-    PING_TIMEOUT("pt");
+    PING_TIMEOUT("pt", "Ping timeout");
 
     private final String reason;
+    private final String message;
 
-    DisconnectReason(final String reason) {
+    DisconnectReason(final String reason, final String message) {
       this.reason = reason;
+      this.message = message;
     }
 
     @Override
     public String toString() {
       return reason;
+    }
+
+    @Override
+    public String getString() {
+      return message;
     }
   }
 
@@ -518,8 +525,12 @@ public class Constants {
     @Deprecated
     @GoDataType("bool")
     FROM_ADMIN("fa"),
+    // This is explicitly a pointer to the value, and not just the value. We need to be able to tell
+    // the difference between game 0, and lack of game id.
+    // This could be done with an explicit unmarshaller for the type, and a sentinel value, but that
+    // would require significantly more work on the code generation.
     @DuplicationAllowed
-    @GoDataType("int")
+    @GoDataType("*int")
     GAME_ID(AjaxResponse.GAME_ID),
     @DuplicationAllowed
     @GoDataType("GameInfo")

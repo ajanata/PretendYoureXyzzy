@@ -113,6 +113,12 @@ cah.$.DisconnectReason.BANNED = "B&";
 cah.$.DisconnectReason.IDLE_TIMEOUT = "it";
 cah.$.DisconnectReason.KICKED = "k";
 cah.$.DisconnectReason.MANUAL = "man";
+cah.$.DisconnectReason_msg = {};
+cah.$.DisconnectReason_msg['B&'] = "Banned";
+cah.$.DisconnectReason_msg['pt'] = "Ping timeout";
+cah.$.DisconnectReason_msg['it'] = "Kicked due to idle";
+cah.$.DisconnectReason_msg['k'] = "Kicked by server administrator";
+cah.$.DisconnectReason_msg['man'] = "Leaving";
 
 cah.$.ErrorCode = function() {
   // Dummy constructor to make Eclipse auto-complete.
