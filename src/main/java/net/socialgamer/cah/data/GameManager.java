@@ -31,16 +31,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import net.socialgamer.cah.data.Game.TooManyPlayersException;
-import net.socialgamer.cah.data.GameManager.GameId;
-import net.socialgamer.cah.task.BroadcastGameListUpdateTask;
-
 import org.apache.log4j.Logger;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.inject.BindingAnnotation;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+
+import net.socialgamer.cah.data.Game.TooManyPlayersException;
+import net.socialgamer.cah.data.GameManager.GameId;
+import net.socialgamer.cah.task.BroadcastGameListUpdateTask;
 
 
 /**
@@ -261,7 +262,7 @@ public class GameManager implements Provider<Integer> {
     }
   }
 
-  // @VisibileForTesting
+  @VisibleForTesting
   Map<Integer, Game> getGames() {
     return games;
   }
