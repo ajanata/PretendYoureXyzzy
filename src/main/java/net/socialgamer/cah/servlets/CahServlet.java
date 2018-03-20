@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -169,7 +169,7 @@ public abstract class CahServlet extends HttpServlet {
     final JSONObject ret = new JSONObject();
     ret.put(AjaxResponse.ERROR, Boolean.TRUE);
     ret.put(AjaxResponse.ERROR_CODE, code.toString());
-    ret.put(AjaxResponse.SERIAL, String.valueOf(serial));
+    ret.put(AjaxResponse.SERIAL, serial);
     writer.println(ret.toJSONString());
   }
 
