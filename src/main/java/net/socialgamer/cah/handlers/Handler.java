@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -79,37 +79,5 @@ public abstract class Handler {
     final Map<ReturnableData, Object> data = error(errorCode);
     data.putAll(extraData);
     return data;
-  }
-
-  /**
-   * Clean up after this Handler. Currently, this means using reflection to see if the concrete
-   * Handler implementation had a field of type Session (Hibernate), and closing it if it does and
-   * did not already close it.
-   */
-  public final void cleanUp() {
-    // this actually breaks stuff, I'll have to think it through later.
-    //    for (final Field field : this.getClass().getDeclaredFields()) {
-    //      if (field.getType() == Session.class) {
-    //        try {
-    //          // This Handler had a Hibernate Session. Try to close it if it wasn't already closed.
-    //          // This is extremely dirty but also extremely awesome to not have problems if it is
-    //          // forgotten.
-    //          field.setAccessible(true);
-    //          final Session session = (Session) field.get(this);
-    //          if (session.isOpen()) {
-    //            session.close();
-    //            logger.log(Level.INFO, "Closing unclosed Hibernate Session in "
-    //                + this.getClass().getName());
-    //          }
-    //        } catch (final Exception e) {
-    //          // Something prevented us from ignoring access control check, so we can't close the
-    //          // session. Log about it and continue.
-    //          e.printStackTrace();
-    //          logger.log(Level.SEVERE, "Unable to reflect and get Hibernate Session from "
-    //              + this.getClass().getName());
-    //          logger.log(Level.SEVERE, e.toString());
-    //        }
-    //      }
-    //    }
   }
 }

@@ -10,7 +10,6 @@ public class Handlers {
 
   static {
     LIST = new HashMap<String, Class<? extends Handler>>();
-    LIST.put(AdminSetVerboseLog.OP, AdminSetVerboseLog.class);
     LIST.put(BanHandler.OP, BanHandler.class);
     LIST.put(CardcastAddCardsetHandler.OP, CardcastAddCardsetHandler.class);
     LIST.put(CardcastListCardsetsHandler.OP, CardcastListCardsetsHandler.class);
