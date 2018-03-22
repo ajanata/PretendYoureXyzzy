@@ -8,6 +8,8 @@ pyx.global_chat_enabled=true
 pyx.insecure_id_allowed=true
 # set this to some secure random value, and never change it, unless you want to break all codes
 pyx.id_code_salt=
+# comma-separated listed of IP addresses (v4 or v6) from which users are considered admins.
+pyx.admin_addrs=127.0.0.1,::1
 
 # for production use, use postgres
 #hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect

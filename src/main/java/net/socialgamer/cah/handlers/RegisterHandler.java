@@ -36,9 +36,9 @@ import org.apache.http.HttpHeaders;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+import net.socialgamer.cah.CahModule.Admins;
 import net.socialgamer.cah.CahModule.BanList;
 import net.socialgamer.cah.CahModule.UserPersistentId;
-import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.AjaxResponse;
@@ -65,6 +65,7 @@ public class RegisterHandler extends Handler {
   private static final int ID_CODE_MAX_LENGTH = 100;
 
   private final ConnectedUsers users;
+  private final Set<String> adminList;
   private final Set<String> banList;
   private final User.Factory userFactory;
   private final Provider<String> persistentIdProvider;
@@ -73,12 +74,14 @@ public class RegisterHandler extends Handler {
   @Inject
   public RegisterHandler(final ConnectedUsers users, @BanList final Set<String> banList,
       final User.Factory userFactory, final IdCodeMangler idCodeMangler,
-      @UserPersistentId final Provider<String> persistentIdProvider) {
+      @UserPersistentId final Provider<String> persistentIdProvider,
+      @Admins final Set<String> adminList) {
     this.users = users;
     this.banList = banList;
     this.userFactory = userFactory;
     this.persistentIdProvider = persistentIdProvider;
     this.idCodeManger = idCodeMangler;
+    this.adminList = adminList;
   }
 
   @Override
@@ -112,7 +115,7 @@ public class RegisterHandler extends Handler {
             request.getParameter(AjaxRequest.ID_CODE));
 
         final User user = userFactory.create(nick, mangledIdCode, request.getRemoteAddr(),
-            Constants.ADMIN_IP_ADDRESSES.contains(request.getRemoteAddr()), persistentId,
+            adminList.contains(request.getRemoteAddr()), persistentId,
             request.getHeader(HttpHeaders.ACCEPT_LANGUAGE),
             request.getHeader(HttpHeaders.USER_AGENT));
         final ErrorCode errorCode = users.checkAndAdd(user);

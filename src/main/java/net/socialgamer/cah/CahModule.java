@@ -40,6 +40,7 @@ import javax.servlet.ServletContext;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
 import com.google.inject.BindingAnnotation;
 import com.google.inject.Provides;
@@ -215,6 +216,15 @@ public class CahModule extends AbstractModule {
     return session;
   }
 
+  @Provides
+  @Admins
+  Set<String> provideAdmins() {
+    synchronized (properties) {
+      return ImmutableSet
+          .copyOf(properties.getProperty("pyx.server.admin_addrs", "127.0.0.1,::1").split(","));
+    }
+  }
+
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface BanList {
@@ -268,5 +278,10 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface UserPersistentId {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface Admins {
   }
 }

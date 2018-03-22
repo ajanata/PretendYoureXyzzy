@@ -25,8 +25,6 @@ package net.socialgamer.cah;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.HashSet;
-import java.util.Set;
 
 import net.socialgamer.cah.data.Game;
 
@@ -47,16 +45,6 @@ public class Constants {
   public static final int CHAT_FLOOD_MESSAGE_COUNT = 4;
   public static final int CHAT_FLOOD_TIME = 30 * 1000;
   public static final int CHAT_MAX_LENGTH = 200;
-
-  @SuppressWarnings("serial")
-  public static final Set<String> ADMIN_IP_ADDRESSES = new HashSet<String>() {
-    {
-      add("0:0:0:0:0:0:0:1");
-      add("127.0.0.1");
-      // ajanata
-      add("107.218.154.202");
-    }
-  };
 
   /**
    * Enums that implement this interface are valid keys for data returned to clients.
