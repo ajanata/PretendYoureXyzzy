@@ -28,10 +28,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 
 import net.socialgamer.cah.CahModule.GlobalChatEnabled;
-import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.ErrorCode;
@@ -43,6 +44,7 @@ import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.data.User;
+import net.socialgamer.cah.util.ChatFilter;
 
 
 /**
@@ -52,16 +54,19 @@ import net.socialgamer.cah.data.User;
  */
 public class ChatHandler extends Handler {
 
+  private static final Logger LOG = Logger.getLogger(ChatHandler.class);
   public static final String OP = AjaxOperation.CHAT.toString();
 
+  private final ChatFilter chatFilter;
   private final ConnectedUsers users;
   private final boolean globalChatEnabled;
 
   @Inject
   public ChatHandler(final ConnectedUsers users,
-      @GlobalChatEnabled final boolean globalChatEnabled) {
+      @GlobalChatEnabled final boolean globalChatEnabled, final ChatFilter chatFilter) {
     this.users = users;
     this.globalChatEnabled = globalChatEnabled;
+    this.chatFilter = chatFilter;
   }
 
   @Override
@@ -86,39 +91,37 @@ public class ChatHandler extends Handler {
     } else {
       final String message = request.getParameter(AjaxRequest.MESSAGE).trim();
 
-      // Intentionally leaving flood protection as per-user, rather than
-      // changing it to per-user-per-game.
-      if (user.getLastMessageTimes().size() >= Constants.CHAT_FLOOD_MESSAGE_COUNT) {
-        final Long head = user.getLastMessageTimes().get(0);
-        if (System.currentTimeMillis() - head < Constants.CHAT_FLOOD_TIME) {
+      final ChatFilter.Result filterResult = chatFilter.filterGlobal(user, message);
+      switch (filterResult) {
+        case OK:
+          // nothing to do
+          break;
+        case TOO_FAST:
           return error(ErrorCode.TOO_FAST);
-        }
-        user.getLastMessageTimes().remove(0);
+        case TOO_LONG:
+          return error(ErrorCode.MESSAGE_TOO_LONG);
+        case NO_MESSAGE:
+          return error(ErrorCode.NO_MSG_SPECIFIED);
+        default:
+          LOG.error(String.format("Unknown chat filter result %s", filterResult));
       }
 
-      if (message.length() > Constants.CHAT_MAX_LENGTH) {
-        return error(ErrorCode.MESSAGE_TOO_LONG);
-      } else if (message.length() == 0) {
-        return error(ErrorCode.NO_MSG_SPECIFIED);
-      } else {
-        user.getLastMessageTimes().add(System.currentTimeMillis());
-        final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
-        broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
-        broadcastData.put(LongPollResponse.FROM, user.getNickname());
-        broadcastData.put(LongPollResponse.MESSAGE, message);
-        broadcastData.put(LongPollResponse.ID_CODE, user.getIdCode());
-        broadcastData.put(LongPollResponse.SIGIL, user.getSigil().toString());
-        if (user.isAdmin()) {
-          broadcastData.put(LongPollResponse.FROM_ADMIN, true);
-        }
-        if (wall) {
-          broadcastData.put(LongPollResponse.WALL, true);
-        }
-        if (emote) {
-          broadcastData.put(LongPollResponse.EMOTE, true);
-        }
-        users.broadcastToAll(MessageType.CHAT, broadcastData);
+      final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
+      broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
+      broadcastData.put(LongPollResponse.FROM, user.getNickname());
+      broadcastData.put(LongPollResponse.MESSAGE, message);
+      broadcastData.put(LongPollResponse.ID_CODE, user.getIdCode());
+      broadcastData.put(LongPollResponse.SIGIL, user.getSigil().toString());
+      if (user.isAdmin()) {
+        broadcastData.put(LongPollResponse.FROM_ADMIN, true);
       }
+      if (wall) {
+        broadcastData.put(LongPollResponse.WALL, true);
+      }
+      if (emote) {
+        broadcastData.put(LongPollResponse.EMOTE, true);
+      }
+      users.broadcastToAll(MessageType.CHAT, broadcastData);
     }
 
     return data;

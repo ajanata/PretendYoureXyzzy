@@ -28,9 +28,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 
-import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.ErrorCode;
@@ -42,6 +43,7 @@ import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.data.User;
+import net.socialgamer.cah.util.ChatFilter;
 
 
 /**
@@ -51,11 +53,15 @@ import net.socialgamer.cah.data.User;
  */
 public class GameChatHandler extends GameWithPlayerHandler {
 
+  private static final Logger LOG = Logger.getLogger(GameChatHandler.class);
   public static final String OP = AjaxOperation.GAME_CHAT.toString();
 
+  private final ChatFilter chatFilter;
+
   @Inject
-  public GameChatHandler(final GameManager gameManager) {
+  public GameChatHandler(final GameManager gameManager, final ChatFilter chatFilter) {
     super(gameManager);
+    this.chatFilter = chatFilter;
   }
 
   @Override
@@ -70,33 +76,31 @@ public class GameChatHandler extends GameWithPlayerHandler {
     } else {
       final String message = request.getParameter(AjaxRequest.MESSAGE).trim();
 
-      // Intentionally leaving flood protection as per-user, rather than
-      // changing it to per-user-per-game.
-      if (user.getLastMessageTimes().size() >= Constants.CHAT_FLOOD_MESSAGE_COUNT) {
-        final Long head = user.getLastMessageTimes().get(0);
-        if (System.currentTimeMillis() - head < Constants.CHAT_FLOOD_TIME) {
+      final ChatFilter.Result filterResult = chatFilter.filterGame(user, message);
+      switch (filterResult) {
+        case OK:
+          // nothing to do
+          break;
+        case TOO_FAST:
           return error(ErrorCode.TOO_FAST);
-        }
-        user.getLastMessageTimes().remove(0);
+        case TOO_LONG:
+          return error(ErrorCode.MESSAGE_TOO_LONG);
+        case NO_MESSAGE:
+          return error(ErrorCode.NO_MSG_SPECIFIED);
+        default:
+          LOG.error(String.format("Unknown chat filter result %s", filterResult));
       }
 
-      if (message.length() > Constants.CHAT_MAX_LENGTH) {
-        return error(ErrorCode.MESSAGE_TOO_LONG);
-      } else if (message.length() == 0) {
-        return error(ErrorCode.NO_MSG_SPECIFIED);
-      } else {
-        user.getLastMessageTimes().add(System.currentTimeMillis());
-        final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
-        broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
-        broadcastData.put(LongPollResponse.FROM, user.getNickname());
-        broadcastData.put(LongPollResponse.MESSAGE, message);
-        broadcastData.put(LongPollResponse.FROM_ADMIN, user.isAdmin());
-        broadcastData.put(LongPollResponse.ID_CODE, user.getIdCode());
-        broadcastData.put(LongPollResponse.SIGIL, user.getSigil().toString());
-        broadcastData.put(LongPollResponse.GAME_ID, game.getId());
-        broadcastData.put(LongPollResponse.EMOTE, emote);
-        game.broadcastToPlayers(MessageType.CHAT, broadcastData);
-      }
+      final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
+      broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
+      broadcastData.put(LongPollResponse.FROM, user.getNickname());
+      broadcastData.put(LongPollResponse.MESSAGE, message);
+      broadcastData.put(LongPollResponse.FROM_ADMIN, user.isAdmin());
+      broadcastData.put(LongPollResponse.ID_CODE, user.getIdCode());
+      broadcastData.put(LongPollResponse.SIGIL, user.getSigil().toString());
+      broadcastData.put(LongPollResponse.GAME_ID, game.getId());
+      broadcastData.put(LongPollResponse.EMOTE, emote);
+      game.broadcastToPlayers(MessageType.CHAT, broadcastData);
     }
 
     return data;

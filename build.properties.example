@@ -10,6 +10,10 @@ pyx.insecure_id_allowed=true
 pyx.id_code_salt=
 # comma-separated listed of IP addresses (v4 or v6) from which users are considered admins.
 pyx.admin_addrs=127.0.0.1,::1
+# this many messages in that many seconds is considered chatting too fast.
+pyx.flood_count=4
+# seconds
+pyx.flood_time=30
 
 # for production use, use postgres
 #hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
