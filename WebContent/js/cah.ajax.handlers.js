@@ -128,6 +128,12 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CHAT] = function(data) {
   // pass
 };
 
+cah.ajax.ErrorHandlers[cah.$.AjaxOperation.CHAT] = function(data, req) {
+  cah.log.status_with_game(req[cah.$.AjaxRequest.GAME_ID], "Error: "
+      + cah.$.ErrorCode_msg[data[cah.$.AjaxResponse.ERROR_CODE]], "error")
+};
+cah.ajax.ErrorHandlers[cah.$.AjaxOperation.GAME_CHAT] = cah.ajax.ErrorHandlers[cah.$.AjaxOperation.CHAT];
+
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GAME_CHAT] = function(data) {
   // pass
 };

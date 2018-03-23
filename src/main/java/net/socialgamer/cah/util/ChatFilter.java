@@ -23,7 +23,13 @@
 
 package net.socialgamer.cah.util;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
+import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -47,9 +53,14 @@ public class ChatFilter {
   private static final long DEFAULT_CHAT_FLOOD_TIME = TimeUnit.SECONDS.toMillis(30);
 
   private final Provider<Properties> propsProvider;
+  private final Map<User, FilterData> filterData = Collections.synchronizedMap(new WeakHashMap<>());
 
   public enum Result {
     OK, TOO_FAST, TOO_LONG, NO_MESSAGE
+  }
+
+  private enum Scope {
+    global, game
   }
 
   @Inject
@@ -58,38 +69,39 @@ public class ChatFilter {
   }
 
   public Result filterGlobal(final User user, final String message) {
-    final Result result = filterCommon(user, message);
+    final Result result = filterCommon(Scope.global, user, message);
     if (Result.OK != result) {
       return result;
     }
 
     // TODO
-    user.getLastMessageTimes().add(System.currentTimeMillis());
+
+    getMessageTimes(user, Scope.global).add(System.currentTimeMillis());
     return result;
   }
 
   public Result filterGame(final User user, final String message) {
-    final Result result = filterCommon(user, message);
+    final Result result = filterCommon(Scope.game, user, message);
     if (Result.OK != result) {
       return result;
     }
 
     // TODO
-    user.getLastMessageTimes().add(System.currentTimeMillis());
+
+    getMessageTimes(user, Scope.game).add(System.currentTimeMillis());
     return result;
   }
 
-  private Result filterCommon(final User user, final String message) {
+  private Result filterCommon(final Scope scope, final User user, final String message) {
     // TODO
 
-    // Intentionally leaving flood protection as per-user, rather than
-    // changing it to per-user-per-game.
-    if (user.getLastMessageTimes().size() >= getFloodCount()) {
-      final Long head = user.getLastMessageTimes().get(0);
-      if (System.currentTimeMillis() - head < getFloodTime()) {
+    final List<Long> messageTimes = getMessageTimes(user, scope);
+    if (messageTimes.size() >= getFloodCount(scope)) {
+      final Long head = messageTimes.get(0);
+      if (System.currentTimeMillis() - head < getFloodTime(scope)) {
         return Result.TOO_FAST;
       }
-      user.getLastMessageTimes().remove(0);
+      messageTimes.remove(0);
     }
 
     if (message.length() > Constants.CHAT_MAX_LENGTH) {
@@ -101,25 +113,52 @@ public class ChatFilter {
     return Result.OK;
   }
 
-  private int getFloodCount() {
+  private int getFloodCount(final Scope scope) {
     try {
-      return Integer.parseInt(propsProvider.get().getProperty("pyx.chat.flood_count",
+      return Integer.parseInt(propsProvider.get().getProperty(
+          String.format("pyx.chat.%s.flood_count", scope),
           String.valueOf(DEFAULT_CHAT_FLOOD_MESSAGE_COUNT)));
     } catch (final NumberFormatException e) {
-      LOG.warn(String.format("Unable to parse pyx.chat.flood_count as a number,"
-          + " using default of %d", DEFAULT_CHAT_FLOOD_MESSAGE_COUNT), e);
+      LOG.warn(String.format("Unable to parse pyx.chat.%s.flood_count as a number,"
+          + " using default of %d", scope, DEFAULT_CHAT_FLOOD_MESSAGE_COUNT), e);
       return DEFAULT_CHAT_FLOOD_MESSAGE_COUNT;
     }
   }
 
-  private long getFloodTime() {
+  private long getFloodTime(final Scope scope) {
     try {
       return TimeUnit.SECONDS.toMillis(Integer.parseInt(propsProvider.get().getProperty(
-          "pyx.chat.flood_time", String.valueOf(DEFAULT_CHAT_FLOOD_TIME))));
+          String.format("pyx.chat.%s.flood_time", scope),
+          String.valueOf(DEFAULT_CHAT_FLOOD_TIME))));
     } catch (final NumberFormatException e) {
-      LOG.warn(String.format("Unable to parse pyx.chat.flood_time as a number,"
-          + " using default of %d", DEFAULT_CHAT_FLOOD_TIME), e);
+      LOG.warn(String.format("Unable to parse pyx.chat.%s.flood_time as a number,"
+          + " using default of %d", scope, DEFAULT_CHAT_FLOOD_TIME), e);
       return DEFAULT_CHAT_FLOOD_TIME;
+    }
+  }
+
+  private List<Long> getMessageTimes(final User user, final Scope scope) {
+    FilterData data;
+    synchronized (filterData) {
+      data = filterData.get(user);
+      // we should only have to do this once per user...
+      if (null == data) {
+        LOG.trace(String.format("Created new FilterData for user %s", user.getNickname()));
+        data = new FilterData();
+        filterData.put(user, data);
+      }
+    }
+    return data.lastMessageTimes.get(scope);
+  }
+
+  private static class FilterData {
+    final Map<Scope, List<Long>> lastMessageTimes;
+
+    private FilterData() {
+      final Map<Scope, List<Long>> map = new TreeMap<>();
+      map.put(Scope.global, Collections.synchronizedList(new LinkedList<>()));
+      map.put(Scope.game, Collections.synchronizedList(new LinkedList<>()));
+      lastMessageTimes = Collections.unmodifiableMap(map);
     }
   }
 }
