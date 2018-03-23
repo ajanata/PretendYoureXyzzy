@@ -294,8 +294,9 @@ public class User {
    */
   public void noLongerValid() {
     if (currentGame != null) {
-      currentGame.removePlayer(this);
-      currentGame.removeSpectator(this);
+      final Game game = currentGame;
+      game.removePlayer(this);
+      game.removeSpectator(this);
     }
     valid = false;
   }
