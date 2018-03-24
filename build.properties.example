@@ -11,9 +11,13 @@ pyx.id_code_salt=
 # comma-separated listed of IP addresses (v4 or v6) from which users are considered admins.
 pyx.admin_addrs=127.0.0.1,::1
 
-# comma-separated list of strings that will cause a chat message to get silently dropped without
-# notifying the user. does not currently permanently shadowban the user, but maybe it should...
-pyx.shadowban_strings=
+# The name of a class that implements net.socialgamer.cah.util.ChatFilter.ShadowBannedStringProvider
+# which will then be called to get the shadowbanned strings.
+# Ideally we'd just have the list of strings here, but providing unicode characters directly gets
+# mangled during the build process, and for some reason unicode escapes were not being loaded
+# properly at runtime.
+# If this is blank, it is ignored and no strings will cause such filtering to occur.
+pyx.shadowban_strings_provider=
 # Settings for global chat protection. Some of these do not apply to game chats.
 # Ratio of 'basic' characters to length of message. Basic characters are defined by
 # Character.isJavaIdentifierPart, which stipulates:

@@ -36,7 +36,6 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
@@ -60,7 +59,8 @@ public class ChatFilter {
   private static final int DEFAULT_SPACES_REQUIRED = 3;
   private static final int DEFAULT_CAPSLOCK_MIN_MSG_LENGTH = 50;
   private static final double DEFAULT_CAPSLOCK_RATIO = .5;
-  private static final String DEFAULT_SHADOWBAN_CHARACTERS = "";
+  public static final String DEFAULT_SHADOWBAN_PROVIDER = DefaultShadowBannedStringsProvider.class
+      .getCanonicalName();
 
   public static final Pattern SIMPLE_MESSAGE_PATTERN = Pattern
       .compile("^[a-zA-Z0-9 _\\-=+*()\\[\\]\\\\/|,.!:'\"`~#]+$");
@@ -189,8 +189,17 @@ public class ChatFilter {
   }
 
   private Set<String> getShadowbanCharacters() {
-    return ImmutableSet.copyOf(getPropValue("pyx.chat.shadowban_strings",
-        DEFAULT_SHADOWBAN_CHARACTERS).split(","));
+    try {
+      return ((ShadowBannedStringProvider) Class
+          .forName(getPropValue("pyx.chat.shadowban_strings_provider",
+          DEFAULT_SHADOWBAN_PROVIDER)).newInstance()).getShadowBannedStrings();
+    } catch (final InstantiationException | IllegalAccessException | ClassNotFoundException
+        | ClassCastException e) {
+      LOG.error(String.format("Unable to load shadowban string provider %s, using empty set.",
+          getPropValue("pyx.chat.shadowban_strings_provider", DEFAULT_SHADOWBAN_PROVIDER)),
+          e);
+      return Collections.emptySet();
+    }
   }
 
   private String getPropValue(final String name, final String defaultValue) {
