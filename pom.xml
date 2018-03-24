@@ -5,7 +5,7 @@
 
   <groupId>net.socialgamer</groupId>
   <artifactId>pyx</artifactId>
-  <version>0.6.0-SNAPSHOT</version>
+  <version>0.7.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>pyx</name>
