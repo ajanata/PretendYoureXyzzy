@@ -351,6 +351,7 @@ public class Constants {
     @DuplicationAllowed
     BANNED(DisconnectReason.BANNED, "Banned."),
     CANNOT_JOIN_ANOTHER_GAME("cjag", "You cannot join another game."),
+    CAPSLOCK("CL", "Try turning caps lock off."),
     CARDCAST_CANNOT_FIND("ccf", "Cannot find Cardcast deck with given ID. If you just added this"
         + " deck to Cardcast, wait a few minutes and try again."),
     CARDCAST_INVALID_ID("cii", "Invalid Cardcast ID. Must be exactly 5 characters."),

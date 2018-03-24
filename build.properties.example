@@ -11,6 +11,9 @@ pyx.id_code_salt=
 # comma-separated listed of IP addresses (v4 or v6) from which users are considered admins.
 pyx.admin_addrs=127.0.0.1,::1
 
+# comma-separated list of strings that will cause a chat message to get silently dropped without
+# notifying the user. does not currently permanently shadowban the user, but maybe it should...
+pyx.shadowban_strings=
 # Settings for global chat protection. Some of these do not apply to game chats.
 # Ratio of 'basic' characters to length of message. Basic characters are defined by
 # Character.isJavaIdentifierPart, which stipulates:
@@ -25,6 +28,9 @@ pyx.admin_addrs=127.0.0.1,::1
 pyx.global.basic_ratio=.5
 # A message must have at least this many characters for that ratio to apply.
 pyx.global.basic_min_len=10
+# Message longer than min_len characters cannot have more than ratio of CAPS CHARACTERS
+pyx.global.capslock_min_len=50
+pyx.global.capslock_ratio=.5
 # messages longer than min_len characters require at least min_count spaces between words
 pyx.global.spaces_min_len=50
 pyx.global.spaces_min_count=4

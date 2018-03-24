@@ -78,13 +78,18 @@ public class GameChatHandler extends GameWithPlayerHandler {
 
       final ChatFilter.Result filterResult = chatFilter.filterGame(user, message);
       switch (filterResult) {
-        case OK:
-          // nothing to do
-          break;
+        case CAPSLOCK:
+          return error(ErrorCode.CAPSLOCK);
+        case DROP_MESSAGE:
+          // Don't tell the user we dropped it, and don't send it to everyone else...
+          return data;
         case NO_MESSAGE:
           return error(ErrorCode.NO_MSG_SPECIFIED);
         case NOT_ENOUGH_SPACES:
           return error(ErrorCode.NOT_ENOUGH_SPACES);
+        case OK:
+          // nothing to do
+          break;
         case REPEAT:
           return error(ErrorCode.REPEAT_MESSAGE);
         case TOO_FAST:

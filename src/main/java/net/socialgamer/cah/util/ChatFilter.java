@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +36,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
@@ -56,6 +58,9 @@ public class ChatFilter {
   private static final double DEFAULT_BASIC_CHARACTER_RATIO = .5;
   private static final int DEFAULT_SPACES_MIN_MSG_LENGTH = 75;
   private static final int DEFAULT_SPACES_REQUIRED = 3;
+  private static final int DEFAULT_CAPSLOCK_MIN_MSG_LENGTH = 50;
+  private static final double DEFAULT_CAPSLOCK_RATIO = .5;
+  private static final String DEFAULT_SHADOWBAN_CHARACTERS = "";
 
   public static final Pattern SIMPLE_MESSAGE_PATTERN = Pattern
       .compile("^[a-zA-Z0-9 _\\-=+*()\\[\\]\\\\/|,.!:'\"`~#]+$");
@@ -64,7 +69,7 @@ public class ChatFilter {
   private final Map<User, FilterData> filterData = Collections.synchronizedMap(new WeakHashMap<>());
 
   public enum Result {
-    OK, NO_MESSAGE, NOT_ENOUGH_SPACES, REPEAT, TOO_FAST, TOO_LONG, TOO_MANY_SPECIALS
+    CAPSLOCK, DROP_MESSAGE, NO_MESSAGE, NOT_ENOUGH_SPACES, OK, REPEAT, TOO_FAST, TOO_LONG, TOO_MANY_SPECIALS
   }
 
   private enum Scope {
@@ -89,7 +94,8 @@ public class ChatFilter {
       // do some more in-depth analysis. we don't want too many emoji or non-latin characters
       final long basic = message.codePoints().filter(c -> Character.isJavaIdentifierPart(c))
           .count();
-      if (((double) basic) / total < getBasicCharacterRatio(Scope.global)) {
+      if (((double) basic) / total < getDoubleParameter(Scope.global, "basic_ratio",
+          DEFAULT_BASIC_CHARACTER_RATIO)) {
         return Result.TOO_MANY_SPECIALS;
       }
     }
@@ -98,6 +104,13 @@ public class ChatFilter {
     if (total >= getIntParameter(Scope.global, "spaces_min_len", DEFAULT_SPACES_MIN_MSG_LENGTH)
         && spaces < getIntParameter(Scope.global, "spaces_min_count", DEFAULT_SPACES_REQUIRED)) {
       return Result.NOT_ENOUGH_SPACES;
+    }
+
+    final long caps = message.codePoints().filter(c -> Character.isUpperCase(c)).count();
+    if (total >= getIntParameter(Scope.global, "capslock_min_len", DEFAULT_CAPSLOCK_MIN_MSG_LENGTH)
+        && ((double) caps) / total > getDoubleParameter(Scope.global, "capslock_ratio",
+            DEFAULT_CAPSLOCK_RATIO)) {
+      return Result.CAPSLOCK;
     }
 
     getMessageTimes(user, Scope.global).add(System.currentTimeMillis());
@@ -109,8 +122,6 @@ public class ChatFilter {
     if (Result.OK != result) {
       return result;
     }
-
-    // TODO?
 
     getMessageTimes(user, Scope.game).add(System.currentTimeMillis());
     return Result.OK;
@@ -141,18 +152,49 @@ public class ChatFilter {
       }
     }
 
+    // TODO keep track of how much someone does this and perma-shadowban them...
+    for (final String banned : getShadowbanCharacters()) {
+      if (message.contains(banned)) {
+        LOG.info(String.format(
+            "Dropping message '%s' from user %s (%s); contains banned string %s.", message,
+            user.getNickname(), user.getHostname(), banned));
+        return Result.DROP_MESSAGE;
+      }
+    }
+
     return Result.OK;
   }
 
   private int getIntParameter(final Scope scope, final String name, final int defaultValue) {
     try {
-      return Integer.parseInt(propsProvider.get().getProperty(
+      return Integer.parseInt(getPropValue(
           String.format("pyx.chat.%s.%s", scope, name), String.valueOf(defaultValue)));
     } catch (final NumberFormatException e) {
       LOG.warn(String.format("Unable to parse pyx.chat.%s.%s as a number,"
           + " using default of %d", scope, name, defaultValue), e);
       return defaultValue;
     }
+  }
+
+  private double getDoubleParameter(final Scope scope, final String name,
+      final double defaultValue) {
+    try {
+      return Double.parseDouble(
+          getPropValue(String.format("pyx.chat.%s.%s", scope, name), String.valueOf(defaultValue)));
+    } catch (final NumberFormatException e) {
+      LOG.warn(String.format("Unable to parse pyx.chat.%s.%s as a number,"
+          + " using default of %d", scope, name, defaultValue), e);
+      return defaultValue;
+    }
+  }
+
+  private Set<String> getShadowbanCharacters() {
+    return ImmutableSet.copyOf(getPropValue("pyx.chat.shadowban_strings",
+        DEFAULT_SHADOWBAN_CHARACTERS).split(","));
+  }
+
+  private String getPropValue(final String name, final String defaultValue) {
+    return propsProvider.get().getProperty(name, defaultValue);
   }
 
   private int getFloodCount(final Scope scope) {
@@ -162,18 +204,6 @@ public class ChatFilter {
   private long getFloodTimeMillis(final Scope scope) {
     return TimeUnit.SECONDS
         .toMillis(getIntParameter(scope, "flood_time", DEFAULT_CHAT_FLOOD_TIME_SECONDS));
-  }
-
-  private double getBasicCharacterRatio(final Scope scope) {
-    try {
-      return Double.parseDouble(propsProvider.get().getProperty(
-          String.format("pyx.chat.%s.basic_ratio", scope),
-          String.valueOf(DEFAULT_BASIC_CHARACTER_RATIO)));
-    } catch (final NumberFormatException e) {
-      LOG.warn(String.format("Unable to parse pyx.chat.%s.basic_ratio as a number,"
-          + " using default of %d", scope, DEFAULT_BASIC_CHARACTER_RATIO), e);
-      return DEFAULT_BASIC_CHARACTER_RATIO;
-    }
   }
 
   private FilterData getFilterData(final User user) {
