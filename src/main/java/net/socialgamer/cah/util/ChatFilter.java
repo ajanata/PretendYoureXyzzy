@@ -31,6 +31,7 @@ import java.util.Properties;
 import java.util.TreeMap;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -50,13 +51,20 @@ public class ChatFilter {
   private static final Logger LOG = Logger.getLogger(ChatFilter.class);
 
   private static final int DEFAULT_CHAT_FLOOD_MESSAGE_COUNT = 4;
-  private static final long DEFAULT_CHAT_FLOOD_TIME = TimeUnit.SECONDS.toMillis(30);
+  private static final int DEFAULT_CHAT_FLOOD_TIME_SECONDS = 30;
+  private static final int DEFAULT_BASIC_MIN_MSG_LENGTH = 10;
+  private static final double DEFAULT_BASIC_CHARACTER_RATIO = .5;
+  private static final int DEFAULT_SPACES_MIN_MSG_LENGTH = 75;
+  private static final int DEFAULT_SPACES_REQUIRED = 3;
+
+  public static final Pattern SIMPLE_MESSAGE_PATTERN = Pattern
+      .compile("^[a-zA-Z0-9 _\\-=+*()\\[\\]\\\\/|,.!:'\"`~#]+$");
 
   private final Provider<Properties> propsProvider;
   private final Map<User, FilterData> filterData = Collections.synchronizedMap(new WeakHashMap<>());
 
   public enum Result {
-    OK, TOO_FAST, TOO_LONG, NO_MESSAGE
+    OK, NO_MESSAGE, NOT_ENOUGH_SPACES, REPEAT, TOO_FAST, TOO_LONG, TOO_MANY_SPECIALS
   }
 
   private enum Scope {
@@ -74,10 +82,26 @@ public class ChatFilter {
       return result;
     }
 
-    // TODO
+    final long total = message.codePoints().count();
+
+    if (!SIMPLE_MESSAGE_PATTERN.matcher(message).matches()
+        && total >= getIntParameter(Scope.global, "basic_min_len", DEFAULT_BASIC_MIN_MSG_LENGTH)) {
+      // do some more in-depth analysis. we don't want too many emoji or non-latin characters
+      final long basic = message.codePoints().filter(c -> Character.isJavaIdentifierPart(c))
+          .count();
+      if (((double) basic) / total < getBasicCharacterRatio(Scope.global)) {
+        return Result.TOO_MANY_SPECIALS;
+      }
+    }
+
+    final int spaces = message.split("\\s+").length + 1;
+    if (total >= getIntParameter(Scope.global, "spaces_min_len", DEFAULT_SPACES_MIN_MSG_LENGTH)
+        && spaces < getIntParameter(Scope.global, "spaces_min_count", DEFAULT_SPACES_REQUIRED)) {
+      return Result.NOT_ENOUGH_SPACES;
+    }
 
     getMessageTimes(user, Scope.global).add(System.currentTimeMillis());
-    return result;
+    return Result.OK;
   }
 
   public Result filterGame(final User user, final String message) {
@@ -86,19 +110,17 @@ public class ChatFilter {
       return result;
     }
 
-    // TODO
+    // TODO?
 
     getMessageTimes(user, Scope.game).add(System.currentTimeMillis());
-    return result;
+    return Result.OK;
   }
 
   private Result filterCommon(final Scope scope, final User user, final String message) {
-    // TODO
-
     final List<Long> messageTimes = getMessageTimes(user, scope);
     if (messageTimes.size() >= getFloodCount(scope)) {
       final Long head = messageTimes.get(0);
-      if (System.currentTimeMillis() - head < getFloodTime(scope)) {
+      if (System.currentTimeMillis() - head < getFloodTimeMillis(scope)) {
         return Result.TOO_FAST;
       }
       messageTimes.remove(0);
@@ -110,34 +132,51 @@ public class ChatFilter {
       return Result.NO_MESSAGE;
     }
 
+    final FilterData data = getFilterData(user);
+    synchronized (data.lastMessages) {
+      if (message.equals(data.lastMessages.get(scope))) {
+        return Result.REPEAT;
+      } else {
+        data.lastMessages.put(scope, message);
+      }
+    }
+
     return Result.OK;
   }
 
-  private int getFloodCount(final Scope scope) {
+  private int getIntParameter(final Scope scope, final String name, final int defaultValue) {
     try {
       return Integer.parseInt(propsProvider.get().getProperty(
-          String.format("pyx.chat.%s.flood_count", scope),
-          String.valueOf(DEFAULT_CHAT_FLOOD_MESSAGE_COUNT)));
+          String.format("pyx.chat.%s.%s", scope, name), String.valueOf(defaultValue)));
     } catch (final NumberFormatException e) {
-      LOG.warn(String.format("Unable to parse pyx.chat.%s.flood_count as a number,"
-          + " using default of %d", scope, DEFAULT_CHAT_FLOOD_MESSAGE_COUNT), e);
-      return DEFAULT_CHAT_FLOOD_MESSAGE_COUNT;
+      LOG.warn(String.format("Unable to parse pyx.chat.%s.%s as a number,"
+          + " using default of %d", scope, name, defaultValue), e);
+      return defaultValue;
     }
   }
 
-  private long getFloodTime(final Scope scope) {
+  private int getFloodCount(final Scope scope) {
+    return getIntParameter(scope, "flood_count", DEFAULT_CHAT_FLOOD_MESSAGE_COUNT);
+  }
+
+  private long getFloodTimeMillis(final Scope scope) {
+    return TimeUnit.SECONDS
+        .toMillis(getIntParameter(scope, "flood_time", DEFAULT_CHAT_FLOOD_TIME_SECONDS));
+  }
+
+  private double getBasicCharacterRatio(final Scope scope) {
     try {
-      return TimeUnit.SECONDS.toMillis(Integer.parseInt(propsProvider.get().getProperty(
-          String.format("pyx.chat.%s.flood_time", scope),
-          String.valueOf(DEFAULT_CHAT_FLOOD_TIME))));
+      return Double.parseDouble(propsProvider.get().getProperty(
+          String.format("pyx.chat.%s.basic_ratio", scope),
+          String.valueOf(DEFAULT_BASIC_CHARACTER_RATIO)));
     } catch (final NumberFormatException e) {
-      LOG.warn(String.format("Unable to parse pyx.chat.%s.flood_time as a number,"
-          + " using default of %d", scope, DEFAULT_CHAT_FLOOD_TIME), e);
-      return DEFAULT_CHAT_FLOOD_TIME;
+      LOG.warn(String.format("Unable to parse pyx.chat.%s.basic_ratio as a number,"
+          + " using default of %d", scope, DEFAULT_BASIC_CHARACTER_RATIO), e);
+      return DEFAULT_BASIC_CHARACTER_RATIO;
     }
   }
 
-  private List<Long> getMessageTimes(final User user, final Scope scope) {
+  private FilterData getFilterData(final User user) {
     FilterData data;
     synchronized (filterData) {
       data = filterData.get(user);
@@ -148,11 +187,16 @@ public class ChatFilter {
         filterData.put(user, data);
       }
     }
-    return data.lastMessageTimes.get(scope);
+    return data;
+  }
+
+  private List<Long> getMessageTimes(final User user, final Scope scope) {
+    return getFilterData(user).lastMessageTimes.get(scope);
   }
 
   private static class FilterData {
     final Map<Scope, List<Long>> lastMessageTimes;
+    final Map<Scope, String> lastMessages = Collections.synchronizedMap(new TreeMap<>());
 
     private FilterData() {
       final Map<Scope, List<Long>> map = new TreeMap<>();

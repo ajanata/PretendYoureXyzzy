@@ -10,14 +10,34 @@ pyx.insecure_id_allowed=true
 pyx.id_code_salt=
 # comma-separated listed of IP addresses (v4 or v6) from which users are considered admins.
 pyx.admin_addrs=127.0.0.1,::1
+
+# Settings for global chat protection. Some of these do not apply to game chats.
+# Ratio of 'basic' characters to length of message. Basic characters are defined by
+# Character.isJavaIdentifierPart, which stipulates:
+# -it is a letter
+# -it is a currency symbol (such as '$')
+# -it is a connecting punctuation character (such as '_')
+# -it is a digit
+# -it is a numeric letter (such as a Roman numeral character)
+# -it is a combining mark
+# -it is a non-spacing mark
+# -isIdentifierIgnorable(codePoint) returns true for the character
+pyx.global.basic_ratio=.5
+# A message must have at least this many characters for that ratio to apply.
+pyx.global.basic_min_len=10
+# messages longer than min_len characters require at least min_count spaces between words
+pyx.global.spaces_min_len=50
+pyx.global.spaces_min_count=4
 # this many messages to global chat in that many seconds is considered chatting too fast.
-pyx.global_flood_count=3
+pyx.global.flood_count=3
 # seconds
-pyx.global_flood_time=25
+pyx.global.flood_time=25
+
+# Settings for game chat protection. If it isn't listed here, it isn't supported.
 # same but for game chats
-pyx.game_flood_count=5
+pyx.game.flood_count=5
 # seconds
-pyx.game_flood_time=30
+pyx.game.flood_time=30
 
 
 # for production use, use postgres

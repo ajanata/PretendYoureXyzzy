@@ -382,6 +382,7 @@ public class Constants {
         + Game.MINIMUM_BLACK_CARDS + " black cards and " + Game.MINIMUM_WHITE_CARDS_PER_PLAYER
         + " times the player limit white cards."),
     NOT_ENOUGH_PLAYERS("nep", "There are not enough players to start the game."),
+    NOT_ENOUGH_SPACES("nes", "You must use more words in a message that long."),
     NOT_GAME_HOST("ngh", "Only the game host can do that."),
     NOT_IN_THAT_GAME("nitg", "You are not in that game."),
     NOT_JUDGE("nj", "You are not the judge."),
@@ -389,11 +390,15 @@ public class Constants {
     NOT_YOUR_TURN("nyt", "It is not your turn to play a card."),
     OP_NOT_SPECIFIED("ons", "Operation not specified."),
     RESERVED_NICK("rn", "That nick is reserved."),
+    REPEAT_MESSAGE("rm",
+        "You can't repeat the same message multiple times in a row."),
     SERVER_ERROR("serr", "An error occured on the server."),
     SESSION_EXPIRED("se", "Your session has expired. Refresh the page."),
     TOO_FAST("tf", "You are chatting too fast. Wait a few seconds and try again."),
     TOO_MANY_GAMES("tmg", "There are too many games already in progress. Either join " +
         "an existing game, or wait for one to become available."),
+    TOO_MANY_SPECIAL_CHARACTERS("tmsc",
+        "You used too many special characters in that message."),
     TOO_MANY_USERS("tmu", "There are too many users connected. Either join another server, or " +
         "wait for a user to disconnect."),
     WRONG_PASSWORD("wp", "That password is incorrect.");

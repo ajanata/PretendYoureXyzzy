@@ -96,12 +96,18 @@ public class ChatHandler extends Handler {
         case OK:
           // nothing to do
           break;
+        case NO_MESSAGE:
+          return error(ErrorCode.NO_MSG_SPECIFIED);
+        case NOT_ENOUGH_SPACES:
+          return error(ErrorCode.NOT_ENOUGH_SPACES);
+        case REPEAT:
+          return error(ErrorCode.REPEAT_MESSAGE);
         case TOO_FAST:
           return error(ErrorCode.TOO_FAST);
         case TOO_LONG:
           return error(ErrorCode.MESSAGE_TOO_LONG);
-        case NO_MESSAGE:
-          return error(ErrorCode.NO_MSG_SPECIFIED);
+        case TOO_MANY_SPECIALS:
+          return error(ErrorCode.TOO_MANY_SPECIAL_CHARACTERS);
         default:
           LOG.error(String.format("Unknown chat filter result %s", filterResult));
       }
