@@ -9,7 +9,8 @@ pyx.insecure_id_allowed=true
 # set this to some secure random value, and never change it, unless you want to break all codes
 pyx.id_code_salt=
 # comma-separated listed of IP addresses (v4 or v6) from which users are considered admins.
-pyx.admin_addrs=127.0.0.1,::1
+# IPv6 addresses must be fully spelt out without omitting groups of 0s with ::
+pyx.admin_addrs=127.0.0.1,0:0:0:0:0:0:0:1
 
 # The name of a class that implements net.socialgamer.cah.util.ChatFilter.ShadowBannedStringProvider
 # which will then be called to get the shadowbanned strings.
