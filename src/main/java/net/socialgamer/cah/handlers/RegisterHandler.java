@@ -32,6 +32,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
+import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -58,6 +59,7 @@ import net.socialgamer.cah.util.IdCodeMangler;
  */
 public class RegisterHandler extends Handler {
 
+  private static final Logger LOG = Logger.getLogger(RegisterHandler.class);
   public static final String OP = AjaxOperation.REGISTER.toString();
 
   private static final Pattern VALID_NAME = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]{2,29}");
@@ -90,6 +92,8 @@ public class RegisterHandler extends Handler {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
     if (banList.contains(request.getRemoteAddr())) {
+      LOG.info(String.format("Rejecting user %s from %s because they are banned.",
+          request.getParameter(AjaxRequest.NICKNAME), request.getRemoteAddr()));
       return error(ErrorCode.BANNED);
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -27,25 +27,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+
+import net.socialgamer.cah.CahModule.BanList;
 import net.socialgamer.cah.CahModule.IncludeInactiveCardsets;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.CardSetData;
+import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReconnectNextAction;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.User;
 import net.socialgamer.cah.db.PyxCardSet;
-
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 
 /**
@@ -56,14 +60,17 @@ import com.google.inject.Provider;
  */
 public class FirstLoadHandler extends Handler {
 
+  private static final Logger LOG = Logger.getLogger(FirstLoadHandler.class);
   public static final String OP = AjaxOperation.FIRST_LOAD.toString();
 
+  private final Set<String> banList;
   private final Session hibernateSession;
   private final Provider<Boolean> includeInactiveCardsetsProvider;
 
   @Inject
-  public FirstLoadHandler(final Session hibernateSession,
+  public FirstLoadHandler(final Session hibernateSession, @BanList final Set<String> banList,
       @IncludeInactiveCardsets final Provider<Boolean> includeInactiveCardsetsProvider) {
+    this.banList = banList;
     this.hibernateSession = hibernateSession;
     this.includeInactiveCardsetsProvider = includeInactiveCardsetsProvider;
   }
@@ -72,6 +79,12 @@ public class FirstLoadHandler extends Handler {
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
       final HttpSession session) {
     final HashMap<ReturnableData, Object> ret = new HashMap<ReturnableData, Object>();
+
+    if (banList.contains(request.getRemoteAddr())) {
+      LOG.info(String.format("Rejecting user from %s because they are banned.",
+          request.getRemoteAddr()));
+      return error(ErrorCode.BANNED);
+    }
 
     final User user = (User) session.getAttribute(SessionAttribute.USER);
     if (user == null) {
