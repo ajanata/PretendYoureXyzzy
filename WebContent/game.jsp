@@ -93,18 +93,41 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="index.jsp">the changelog and
     list of known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 1 March 2018:</p>
+  <p tabindex="0">Most recent update: 27 March 2018:</p>
   <ul>
-    <li>Added reconnection to the card database server after it restarts. This really should have
-    been done years ago... This is what caused all of the errors while trying to start a game with
-    locally-stored decks.</li>
-    <li>The "view cards" page has been re-enabled.</li>
-    <li>Full games sort to the bottom of the game list.</li>
-    <li>Added more metrics logging. Sounds boring, but it's important for the long-term viability
-    of these servers.</li>
-    <li>All official CAH cards through Q3 2017 have been added, and deck names and contents have
-    been shuffled accordingly. Any cards not currently in any official decks are now removed.
-    The PAX panel sets have also been removed.</li>
+<li>You may now provide a password-like identification code when connecting to positively
+    identify yourself and make it difficult for someone to impersonate you. Details are on
+    <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Identification-Codes">the GitHub
+    wiki.</a><ul>
+      <li><strong>This is optional, and if you choose to not do so, everything will work the same as
+      it always has.</strong></li>
+      <li><strong>Do not use a password you use on any other site.</strong></li>
+      <li>The value you enter in the identification code box will be combined with your username
+      and a server secret and converted into an 11 character code.</li>
+      <li>Users that have an identification code will have a + in front of their name in chat.
+      Hover your mouse over their message to see their 11 character code.</li>
+      <li>You may also use the <span style="font-family:monospace">/whois</span> command in the chat
+      to view information about a user, including their 11 character code.</li></ul></li>
+    <li>Images on CardCast cards is now supported in a safe manner. Cards will need updated to work
+    with this format. Information on how to use it is on the
+    <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Cardcast#images-on-cards">GitHub
+    wiki.</a></li>
+    <li><strong>Automatic chat moderation has been added.</strong> This is fairly crude, and limits
+    the following behavior:<ul>
+      <li>(Global only, if enabled) Messages may not contain large amounts of non-Latin characters
+      (emoji spam, etc.).</li>
+      <li>(Global only, if enabled) CAPS LOCK IS NOT ALLOWED EITHER.</li>
+      <li>(Global only, if enabled) Once your message is a certain length, you have to actually use
+      multiple words.</li>
+      <li>Global and game chats now have different messages-per-unit-time settings and counters.
+      </li>
+      <li>You may not repeat the same message multiple times in a row.</li>
+      <li>Certain characters and words will cause a message to be silently dropped (that is, instead
+      of returning an error message to the person who typed it like all of the previous things will,
+      the server will just ignore the message altogether so that user does not know their message
+      was ignored). There are currently two things on this list, and no, I'm not telling you what
+      they are, and no, they're not actually in Git either.</li>
+    </ul></li>
   </ul>
   <div id="nickbox">
     <label for="nickname">Nickname:</label>
@@ -114,7 +137,8 @@ HttpSession hSession = request.getSession(true);
     <dfn title="Only available via HTTPS. Provide a secret identification code to positively identify yourself in the chat.">
     Optional identification code:</dfn></label>
     <input type="password" id="idcode" value="" maxlength="100" disabled="disabled"
-        aria-label="Optionally enter and identification code." />
+        aria-label="Optionally enter an identification code." />
+    <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Identification-Codes">(Help)</a>
     <input type="button" id="nicknameconfirm" value="Set" />
     <span id="nickbox_error" class="error"></span>
   </div>

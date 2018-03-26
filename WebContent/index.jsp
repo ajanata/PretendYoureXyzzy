@@ -61,6 +61,41 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>27 March 2018:<ul>
+    <li>You may now provide a password-like identification code when connecting to positively
+    identify yourself and make it difficult for someone to impersonate you. Details are on
+    <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Identification-Codes">the GitHub
+    wiki.</a><ul>
+      <li><strong>This is optional, and if you choose to not do so, everything will work the same as
+      it always has.</strong></li>
+      <li><strong>Do not use a password you use on any other site.</strong></li>
+      <li>The value you enter in the identification code box will be combined with your username
+      and a server secret and converted into an 11 character code.</li>
+      <li>Users that have an identification code will have a + in front of their name in chat.
+      Hover your mouse over their message to see their 11 character code.</li>
+      <li>You may also use the <span style="font-family:monospace">/whois</span> command in the chat
+      to view information about a user, including their 11 character code.</li></ul></li>
+    <li>Images on CardCast cards is now supported in a safe manner. Cards will need updated to work
+    with this format. Information on how to use it is on the
+    <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Cardcast#images-on-cards">GitHub
+    wiki.</a></li>
+    <li><strong>Automatic chat moderation has been added.</strong> This is fairly crude, and limits
+    the following behavior:<ul>
+      <li>(Global only, if enabled) Messages may not contain large amounts of non-Latin characters
+      (emoji spam, etc.).</li>
+      <li>(Global only, if enabled) CAPS LOCK IS NOT ALLOWED EITHER.</li>
+      <li>(Global only, if enabled) Once your message is a certain length, you have to actually use
+      multiple words.</li>
+      <li>Global and game chats now have different messages-per-unit-time settings and counters.
+      </li>
+      <li>You may not repeat the same message multiple times in a row.</li>
+      <li>Certain characters and words will cause a message to be silently dropped (that is, instead
+      of returning an error message to the person who typed it like all of the previous things will,
+      the server will just ignore the message altogether so that user does not know their message
+      was ignored). There are currently two things on this list, and no, I'm not telling you what
+      they are, and no, they're not actually in Git either.</li>
+    </ul></li>
+  </ul></li>
   <li>1 March 2018:<ul>
     <li>Added reconnection to the card database server after it restarts. This really should have
     been done years ago... This is what caused all of the errors while trying to start a game with
@@ -127,9 +162,9 @@ to, for instance, display the number of connected players.
 </ul>
 <p>
   If the game seems to be in a weird state, refresh the page and it should take you back to where
-  you were. It would be helpful to take a screenshot and
-  <a href="mailto:ajanata@socialgamer.net?subject=PYX%20bug">email it to me</a> along with a general
-  description of the problem and the time that it happened (include a time zone please!).
+  you were. It would be helpful to take a screenshot and include it in a
+  <a href="https://github.com/ajanata/PretendYoureXyzzy/issues/new">new bug on GitHub</a> along with
+  a general description of the problem and the time that it happened (include a time zone please!).
 </p>
 <p>
   <input type="button" value="I have read the above; Take me to the game!"
