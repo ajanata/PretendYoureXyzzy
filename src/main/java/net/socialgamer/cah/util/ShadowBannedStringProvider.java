@@ -28,7 +28,8 @@ import java.util.Set;
 public interface ShadowBannedStringProvider {
   /**
    * A message that contains any string in this set should be silently dropped: not forwarded to any
-   * other user nor inform the originating user that the message was dropped.
+   * other user nor inform the originating user that the message was dropped. These should all be in
+   * lower-case unless the case matters for what they look like.
    */
   Set<String> getShadowBannedStrings();
 }

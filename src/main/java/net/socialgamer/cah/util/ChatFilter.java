@@ -26,6 +26,7 @@ package net.socialgamer.cah.util;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -152,9 +153,12 @@ public class ChatFilter {
       }
     }
 
+    final String messageLower = message.toLowerCase(Locale.ENGLISH);
     // TODO keep track of how much someone does this and perma-shadowban them...
     for (final String banned : getShadowbanCharacters()) {
-      if (message.contains(banned)) {
+      // assume that the banned strings are already lowercase
+      // check both ways in case it decides lowercase of some unicode is not what we want though
+      if (message.contains(banned) || messageLower.contains(banned)) {
         LOG.info(String.format(
             "Dropping message '%s' from user %s (%s); contains banned string %s.", message,
             user.getNickname(), user.getHostname(), banned));
