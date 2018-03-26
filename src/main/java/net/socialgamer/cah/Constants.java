@@ -301,6 +301,8 @@ public class Constants {
     @DuplicationAllowed
     @GoDataType("int")
     SERIAL(AjaxRequest.SERIAL),
+    @GoDataType("int64")
+    SERVER_STARTED("SS"),
     @GoDataType("[]int")
     WHITE_CARDS("wc");
 
@@ -735,6 +737,8 @@ public class Constants {
    */
   @GoStruct
   public enum GameInfo {
+    @GoDataType("int64")
+    CREATED("gca"),
     HOST("H"),
     @DuplicationAllowed
     @GoDataType("int")

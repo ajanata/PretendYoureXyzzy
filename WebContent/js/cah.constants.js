@@ -62,6 +62,7 @@ cah.$.AjaxResponse.CONNECTED_AT = "ca";
 cah.$.AjaxResponse.WHITE_CARDS = "wc";
 cah.$.AjaxResponse.HAND = "h";
 cah.$.AjaxResponse.ERROR_CODE = "ec";
+cah.$.AjaxResponse.SERVER_STARTED = "SS";
 cah.$.AjaxResponse.NEXT = "next";
 cah.$.AjaxResponse.GAME_INFO = "gi";
 cah.$.AjaxResponse.ERROR = "e";
@@ -226,6 +227,7 @@ cah.$.GameInfo = function() {
 };
 cah.$.GameInfo.prototype.dummyForAutocomplete = undefined;
 cah.$.GameInfo.GAME_OPTIONS = "go";
+cah.$.GameInfo.CREATED = "gca";
 cah.$.GameInfo.PLAYERS = "P";
 cah.$.GameInfo.SPECTATORS = "V";
 cah.$.GameInfo.HOST = "H";

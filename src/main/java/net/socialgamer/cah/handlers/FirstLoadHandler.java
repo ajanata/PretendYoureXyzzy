@@ -24,6 +24,7 @@
 package net.socialgamer.cah.handlers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ import com.google.inject.Provider;
 
 import net.socialgamer.cah.CahModule.BanList;
 import net.socialgamer.cah.CahModule.IncludeInactiveCardsets;
+import net.socialgamer.cah.CahModule.ServerStarted;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.CardSetData;
@@ -66,13 +68,16 @@ public class FirstLoadHandler extends Handler {
   private final Set<String> banList;
   private final Session hibernateSession;
   private final Provider<Boolean> includeInactiveCardsetsProvider;
+  private final Date serverStarted;
 
   @Inject
   public FirstLoadHandler(final Session hibernateSession, @BanList final Set<String> banList,
-      @IncludeInactiveCardsets final Provider<Boolean> includeInactiveCardsetsProvider) {
+      @IncludeInactiveCardsets final Provider<Boolean> includeInactiveCardsetsProvider,
+      @ServerStarted final Date serverStarted) {
     this.banList = banList;
     this.hibernateSession = hibernateSession;
     this.includeInactiveCardsetsProvider = includeInactiveCardsetsProvider;
+    this.serverStarted = serverStarted;
   }
 
   @Override
@@ -123,6 +128,7 @@ public class FirstLoadHandler extends Handler {
     } finally {
       hibernateSession.close();
     }
+    ret.put(AjaxResponse.SERVER_STARTED, serverStarted.getTime());
     return ret;
   }
 

@@ -112,6 +112,7 @@ public class Game {
   private final GameOptions options = new GameOptions();
   private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<String>());
   private final Metrics metrics;
+  private final long created = System.currentTimeMillis();
 
   private int judgeIndex = 0;
 
@@ -536,6 +537,7 @@ public class Game {
     if (null == host) {
       return null;
     }
+    info.put(GameInfo.CREATED, created);
     info.put(GameInfo.HOST, host.getUser().getNickname());
     info.put(GameInfo.STATE, state.toString());
     info.put(GameInfo.GAME_OPTIONS, options.serialize(includePassword));
