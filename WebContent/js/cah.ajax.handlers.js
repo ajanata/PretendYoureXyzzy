@@ -324,7 +324,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.WHOIS] = function(data, req) {
     cah.log.status_with_game(chatWindowId, "* <strong>Is an administrator</strong>", null, true);
   }
   if (data[cah.$.AjaxResponse.ID_CODE] != "") {
-    cah.log.status_with_game(chatWindowId, "* Identification code: "
+    cah.log.status_with_game(chatWindowId, "* Verification code: "
         + data[cah.$.AjaxResponse.ID_CODE]);
   }
   if (data[cah.$.AjaxResponse.IP_ADDRESS]) {

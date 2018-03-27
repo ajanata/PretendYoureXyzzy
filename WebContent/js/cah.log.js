@@ -221,7 +221,7 @@ cah.log.debug = function(text, opt_obj) {
  */
 cah.log.getTitleForIdCode = function(idcode) {
   if (idcode) {
-    return "Identification code: " + idcode;
+    return "Verification code: " + idcode;
   } else {
     return null;
   }
