@@ -64,7 +64,7 @@ public class ChatFilter {
       .getCanonicalName();
 
   public static final Pattern SIMPLE_MESSAGE_PATTERN = Pattern
-      .compile("^[a-zA-Z0-9 _\\-=+*()\\[\\]\\\\/|,.!:'\"`~#]+$");
+      .compile("^[a-zA-Z0-9 _\\-=+*()\\[\\]\\\\/|,.!\\?:'\"`~#]+$");
 
   private final Provider<Properties> propsProvider;
   private final Map<User, FilterData> filterData = Collections.synchronizedMap(new WeakHashMap<>());
@@ -93,7 +93,8 @@ public class ChatFilter {
     if (!SIMPLE_MESSAGE_PATTERN.matcher(message).matches()
         && total >= getIntParameter(Scope.global, "basic_min_len", DEFAULT_BASIC_MIN_MSG_LENGTH)) {
       // do some more in-depth analysis. we don't want too many emoji or non-latin characters
-      final long basic = message.codePoints().filter(c -> Character.isJavaIdentifierPart(c))
+      final long basic = message.codePoints()
+          .filter(c -> Character.isJavaIdentifierPart(c) || Character.isSpaceChar(c))
           .count();
       if (((double) basic) / total < getDoubleParameter(Scope.global, "basic_ratio",
           DEFAULT_BASIC_CHARACTER_RATIO)) {
