@@ -100,6 +100,9 @@ public class FirstLoadHandler extends Handler {
       // and tell the client where to continue from.
       ret.put(AjaxResponse.IN_PROGRESS, Boolean.TRUE);
       ret.put(AjaxResponse.NICKNAME, user.getNickname());
+      ret.put(AjaxResponse.PERSISTENT_ID, user.getPersistentId());
+      ret.put(AjaxResponse.ID_CODE, user.getIdCode());
+      ret.put(AjaxResponse.SIGIL, user.getSigil().toString());
 
       if (user.getGame() != null) {
         ret.put(AjaxResponse.NEXT, ReconnectNextAction.GAME.toString());

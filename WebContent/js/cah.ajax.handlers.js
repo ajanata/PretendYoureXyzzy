@@ -27,7 +27,7 @@
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
+cah.ajax.StoreClientInformation_ = function(data) {
   cah.nickname = data[cah.$.AjaxResponse.NICKNAME];
   cah.idcode = data[cah.$.AjaxResponse.ID_CODE];
   cah.sigil = data[cah.$.AjaxResponse.SIGIL];
@@ -35,6 +35,10 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
     cah.persistentId = data[cah.$.AjaxResponse.PERSISTENT_ID];
     cah.setCookie("persistent_id", cah.persistentId);
   }
+};
+
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
+  cah.ajax.StoreClientInformation_(data);
   cah.log.status("You are connected as " + cah.sigil + cah.nickname);
   $("#welcome").hide();
   $("#canvass").show();
@@ -53,7 +57,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
   cah.CardSet.populateCardSets(data[cah.$.AjaxResponse.CARD_SETS]);
 
   if (data[cah.$.AjaxResponse.IN_PROGRESS]) {
-    cah.nickname = data[cah.$.AjaxResponse.NICKNAME];
+    cah.ajax.StoreClientInformation_(data);
     cah.log.status("You have reconnected as " + cah.nickname);
     $("#welcome").hide();
     $("#canvass").show();
