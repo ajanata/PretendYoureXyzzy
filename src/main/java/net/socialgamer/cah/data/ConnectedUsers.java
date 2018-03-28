@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -128,13 +129,15 @@ public class ConnectedUsers {
         logger.info(String.format("New user %s from %s (admin=%b, id=%s)", user.toString(),
             user.getHostname(), user.isAdmin(), user.getIdCode()));
         users.put(user.getNickname().toLowerCase(), user);
+        final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+        data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
+        data.put(LongPollResponse.NICKNAME, user.getNickname());
+        data.put(LongPollResponse.SIGIL, user.getSigil().toString());
+        data.put(LongPollResponse.ID_CODE, user.getIdCode());
         if (broadcastConnectsAndDisconnectsProvider.get()) {
-          final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-          data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
-          data.put(LongPollResponse.NICKNAME, user.getNickname());
-          data.put(LongPollResponse.SIGIL, user.getSigil().toString());
-          data.put(LongPollResponse.ID_CODE, user.getIdCode());
           broadcastToAll(MessageType.PLAYER_EVENT, data);
+        } else {
+          broadcastToList(getAdmins(), MessageType.PLAYER_EVENT, data);
         }
         // log them in the metrics
         CityResponse geo = null;
@@ -194,13 +197,16 @@ public class ConnectedUsers {
    */
   private void notifyRemoveUser(final User user, final DisconnectReason reason) {
     // Games are informed about the user leaving when the user object is marked invalid.
+    final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    data.put(LongPollResponse.EVENT, LongPollEvent.PLAYER_LEAVE.toString());
+    data.put(LongPollResponse.NICKNAME, user.getNickname());
+    data.put(LongPollResponse.REASON, reason.toString());
     if (broadcastConnectsAndDisconnectsProvider.get() || reason == DisconnectReason.BANNED
         || reason == DisconnectReason.KICKED) {
-      final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-      data.put(LongPollResponse.EVENT, LongPollEvent.PLAYER_LEAVE.toString());
-      data.put(LongPollResponse.NICKNAME, user.getNickname());
-      data.put(LongPollResponse.REASON, reason.toString());
       broadcastToAll(MessageType.PLAYER_EVENT, data);
+    } else {
+      // always tell admins
+      broadcastToList(getAdmins(), MessageType.PLAYER_EVENT, data);
     }
 
     metrics.userDisconnect(user.getSessionId());
@@ -287,6 +293,15 @@ public class ConnectedUsers {
   public Collection<User> getUsers() {
     synchronized (users) {
       return new ArrayList<User>(users.values());
+    }
+  }
+
+  /**
+   * @return A copy of the list of connected users, filtered to contain only administrators.
+   */
+  public Collection<User> getAdmins() {
+    synchronized (users) {
+      return users.values().stream().filter(u -> u.isAdmin()).collect(Collectors.toSet());
     }
   }
 }
