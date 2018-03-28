@@ -91,13 +91,16 @@ public class ChatHandler extends Handler {
     } else {
       final String message = request.getParameter(AjaxRequest.MESSAGE).trim();
 
+      LongPollEvent event = LongPollEvent.CHAT;
       final ChatFilter.Result filterResult = chatFilter.filterGlobal(user, message);
       switch (filterResult) {
         case CAPSLOCK:
           return error(ErrorCode.CAPSLOCK);
         case DROP_MESSAGE:
           // Don't tell the user we dropped it, and don't send it to everyone else...
-          return data;
+          // but let any online admins know about it
+          event = LongPollEvent.FILTERED_CHAT;
+          break;
         case NO_MESSAGE:
           return error(ErrorCode.NO_MSG_SPECIFIED);
         case NOT_ENOUGH_SPACES:
@@ -118,7 +121,7 @@ public class ChatHandler extends Handler {
       }
 
       final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
-      broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
+      broadcastData.put(LongPollResponse.EVENT, event.toString());
       broadcastData.put(LongPollResponse.FROM, user.getNickname());
       broadcastData.put(LongPollResponse.MESSAGE, message);
       broadcastData.put(LongPollResponse.ID_CODE, user.getIdCode());
@@ -132,7 +135,11 @@ public class ChatHandler extends Handler {
       if (emote) {
         broadcastData.put(LongPollResponse.EMOTE, true);
       }
-      users.broadcastToAll(MessageType.CHAT, broadcastData);
+      if (LongPollEvent.CHAT == event) {
+        users.broadcastToAll(MessageType.CHAT, broadcastData);
+      } else {
+        users.broadcastToList(users.getAdmins(), MessageType.CHAT, broadcastData);
+      }
     }
 
     return data;

@@ -328,6 +328,7 @@ cah.$.LongPollEvent.HURRY_UP = "hu";
 cah.$.LongPollEvent.GAME_JUDGE_LEFT = "gjl";
 cah.$.LongPollEvent.KICKED = "k";
 cah.$.LongPollEvent.KICKED_FROM_GAME_IDLE = "kfgi";
+cah.$.LongPollEvent.FILTERED_CHAT = "FC";
 cah.$.LongPollEvent.GAME_STATE_CHANGE = "gsc";
 
 cah.$.LongPollResponse = function() {

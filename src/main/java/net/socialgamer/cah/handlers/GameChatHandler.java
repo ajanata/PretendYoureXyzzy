@@ -39,6 +39,7 @@ import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
+import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
@@ -57,11 +58,14 @@ public class GameChatHandler extends GameWithPlayerHandler {
   public static final String OP = AjaxOperation.GAME_CHAT.toString();
 
   private final ChatFilter chatFilter;
+  private final ConnectedUsers users;
 
   @Inject
-  public GameChatHandler(final GameManager gameManager, final ChatFilter chatFilter) {
+  public GameChatHandler(final GameManager gameManager, final ChatFilter chatFilter,
+      final ConnectedUsers users) {
     super(gameManager);
     this.chatFilter = chatFilter;
+    this.users = users;
   }
 
   @Override
@@ -71,6 +75,7 @@ public class GameChatHandler extends GameWithPlayerHandler {
     final boolean emote = request.getParameter(AjaxRequest.EMOTE) != null
         && Boolean.valueOf(request.getParameter(AjaxRequest.EMOTE));
 
+    LongPollEvent event = LongPollEvent.CHAT;
     if (request.getParameter(AjaxRequest.MESSAGE) == null) {
       return error(ErrorCode.NO_MSG_SPECIFIED);
     } else {
@@ -82,7 +87,9 @@ public class GameChatHandler extends GameWithPlayerHandler {
           return error(ErrorCode.CAPSLOCK);
         case DROP_MESSAGE:
           // Don't tell the user we dropped it, and don't send it to everyone else...
-          return data;
+          // but let any online admins know about it
+          event = LongPollEvent.FILTERED_CHAT;
+          break;
         case NO_MESSAGE:
           return error(ErrorCode.NO_MSG_SPECIFIED);
         case NOT_ENOUGH_SPACES:
@@ -103,7 +110,7 @@ public class GameChatHandler extends GameWithPlayerHandler {
       }
 
       final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
-      broadcastData.put(LongPollResponse.EVENT, LongPollEvent.CHAT.toString());
+      broadcastData.put(LongPollResponse.EVENT, event.toString());
       broadcastData.put(LongPollResponse.FROM, user.getNickname());
       broadcastData.put(LongPollResponse.MESSAGE, message);
       broadcastData.put(LongPollResponse.FROM_ADMIN, user.isAdmin());
@@ -111,7 +118,11 @@ public class GameChatHandler extends GameWithPlayerHandler {
       broadcastData.put(LongPollResponse.SIGIL, user.getSigil().toString());
       broadcastData.put(LongPollResponse.GAME_ID, game.getId());
       broadcastData.put(LongPollResponse.EMOTE, emote);
-      game.broadcastToPlayers(MessageType.CHAT, broadcastData);
+      if (LongPollEvent.CHAT == event) {
+        game.broadcastToPlayers(MessageType.CHAT, broadcastData);
+      } else {
+        users.broadcastToList(users.getAdmins(), MessageType.CHAT, broadcastData);
+      }
     }
 
     return data;

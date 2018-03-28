@@ -448,6 +448,7 @@ public class Constants {
     CARDCAST_REMOVE_CARDSET(AjaxOperation.CARDCAST_REMOVE_CARDSET),
     @DuplicationAllowed
     CHAT(AjaxOperation.CHAT),
+    FILTERED_CHAT("FC"),
     GAME_BLACK_RESHUFFLE("gbr"),
     GAME_JUDGE_LEFT("gjl"),
     GAME_JUDGE_SKIPPED("gjs"),
