@@ -338,7 +338,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.WHOIS] = function(data, req) {
     var gameInfo = data[cah.$.AjaxResponse.GAME_INFO];
     var stateMsg = cah.$.GameState_msg[gameInfo[cah.$.GameInfo.STATE]];
     for (var i = 0; i < gameInfo[cah.$.GameInfo.SPECTATORS].length; i++) {
-      if (gameInfo[cah.$.GameInfo.SPECTATORS] == nick) {
+      if (gameInfo[cah.$.GameInfo.SPECTATORS][i] == nick) {
         stateMsg += ", Spectating";
         break;
       }
