@@ -257,8 +257,12 @@ public class Constants {
     @GoDataType("bool")
     ERROR("e"),
     ERROR_CODE("ec"),
+    // This is explicitly a pointer to the value, and not just the value. We need to be able to tell
+    // the difference between game 0, and lack of game id.
+    // This could be done with an explicit unmarshaller for the type, and a sentinel value, but that
+    // would require significantly more work on the code generation.
     @DuplicationAllowed
-    @GoDataType("int")
+    @GoDataType("*int")
     GAME_ID(AjaxRequest.GAME_ID),
     @GoDataType("GameInfo")
     GAME_INFO("gi"),
