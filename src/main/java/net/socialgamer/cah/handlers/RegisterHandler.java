@@ -71,7 +71,7 @@ public class RegisterHandler extends Handler {
   private final Set<String> banList;
   private final User.Factory userFactory;
   private final Provider<String> persistentIdProvider;
-  private final IdCodeMangler idCodeManger;
+  private final IdCodeMangler idCodeMangler;
 
   @Inject
   public RegisterHandler(final ConnectedUsers users, @BanList final Set<String> banList,
@@ -82,7 +82,7 @@ public class RegisterHandler extends Handler {
     this.banList = banList;
     this.userFactory = userFactory;
     this.persistentIdProvider = persistentIdProvider;
-    this.idCodeManger = idCodeMangler;
+    this.idCodeMangler = idCodeMangler;
     this.adminList = adminList;
   }
 
@@ -115,7 +115,7 @@ public class RegisterHandler extends Handler {
           persistentId = persistentIdProvider.get();
         }
 
-        final String mangledIdCode = idCodeManger.mangle(nick,
+        final String mangledIdCode = idCodeMangler.mangle(nick,
             request.getParameter(AjaxRequest.ID_CODE));
 
         final User user = userFactory.create(nick, mangledIdCode, request.getRemoteAddr(),
