@@ -572,9 +572,10 @@ public class Constants {
     @GoDataType("bool")
     WALL(AjaxRequest.WALL),
     @DuplicationAllowed
-    @GoDataType("[]WhiteCardData")
+    @GoDataType("[][]WhiteCardData")
     WHITE_CARDS(AjaxResponse.WHITE_CARDS),
-    @GoDataType("WhiteCardData")
+    // This is just the ID of one of the cards played by the winner
+    @GoDataType("int")
     WINNING_CARD("WC");
 
     private final String field;
