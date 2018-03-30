@@ -296,7 +296,7 @@ public class Constants {
     NICKNAME(AjaxRequest.NICKNAME),
     @DuplicationAllowed
     PERSISTENT_ID(AjaxRequest.PERSISTENT_ID),
-    @GoDataType("GamePlayerInfo")
+    @GoDataType("[]GamePlayerInfo")
     PLAYER_INFO("pi"),
     /**
      * Sigil to display next to user's name.
