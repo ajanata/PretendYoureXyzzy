@@ -43,6 +43,10 @@ pyx.global.spaces_min_count=4
 pyx.global.flood_count=3
 # seconds
 pyx.global.flood_time=25
+# Messages with more than repeated_words_min_count words must have at least
+# repeated_words_unique_ratio unique words in them.
+pyx.global.repeated_words_min_count=10
+pyx.global.repeated_words_unique_ratio=.5
 
 # Settings for game chat protection. If it isn't listed here, it isn't supported.
 # same but for game chats

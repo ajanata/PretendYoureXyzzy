@@ -399,6 +399,7 @@ public class Constants {
     RESERVED_NICK("rn", "That nick is reserved."),
     REPEAT_MESSAGE("rm",
         "You can't repeat the same message multiple times in a row."),
+    REPEATED_WORDS("rW", "You must use more unique words in your message."),
     SERVER_ERROR("serr", "An error occured on the server."),
     SESSION_EXPIRED("se", "Your session has expired. Refresh the page."),
     TOO_FAST("tf", "You are chatting too fast. Wait a few seconds and try again."),

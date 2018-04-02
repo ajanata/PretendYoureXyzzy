@@ -37,6 +37,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
@@ -60,6 +61,8 @@ public class ChatFilter {
   private static final int DEFAULT_SPACES_REQUIRED = 3;
   private static final int DEFAULT_CAPSLOCK_MIN_MSG_LENGTH = 50;
   private static final double DEFAULT_CAPSLOCK_RATIO = .5;
+  private static final int DEFAULT_REPEATED_WORDS_MIN_COUNT = 10;
+  private static final double DEFAULT_REPEATED_WORDS_UNIQUE_RATIO = .5;
   public static final String DEFAULT_SHADOWBAN_PROVIDER = DefaultShadowBannedStringsProvider.class
       .getCanonicalName();
 
@@ -70,7 +73,7 @@ public class ChatFilter {
   private final Map<User, FilterData> filterData = Collections.synchronizedMap(new WeakHashMap<>());
 
   public enum Result {
-    CAPSLOCK, DROP_MESSAGE, NO_MESSAGE, NOT_ENOUGH_SPACES, OK, REPEAT, TOO_FAST, TOO_LONG, TOO_MANY_SPECIALS
+    CAPSLOCK, DROP_MESSAGE, NO_MESSAGE, NOT_ENOUGH_SPACES, OK, REPEAT, REPEAT_WORDS, TOO_FAST, TOO_LONG, TOO_MANY_SPECIALS
   }
 
   private enum Scope {
@@ -102,10 +105,19 @@ public class ChatFilter {
       }
     }
 
-    final int spaces = message.split("\\s+").length + 1;
+    final String[] words = message.toLowerCase(Locale.ENGLISH).split("\\s+");
+    final int spaces = words.length + 1;
     if (total >= getIntParameter(Scope.global, "spaces_min_len", DEFAULT_SPACES_MIN_MSG_LENGTH)
         && spaces < getIntParameter(Scope.global, "spaces_min_count", DEFAULT_SPACES_REQUIRED)) {
       return Result.NOT_ENOUGH_SPACES;
+    }
+
+    final Set<String> uniqueWords = ImmutableSet.copyOf(words);
+    if (words.length >= getIntParameter(Scope.global, "repeated_words_min_count",
+        DEFAULT_REPEATED_WORDS_MIN_COUNT)
+        && ((double) uniqueWords.size()) / words.length < getDoubleParameter(Scope.global,
+            "repeated_words_unique_ratio", DEFAULT_REPEATED_WORDS_UNIQUE_RATIO)) {
+      return Result.REPEAT_WORDS;
     }
 
     final long caps = message.codePoints().filter(c -> Character.isUpperCase(c)).count();

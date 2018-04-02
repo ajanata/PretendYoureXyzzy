@@ -99,6 +99,8 @@ public class GameChatHandler extends GameWithPlayerHandler {
           break;
         case REPEAT:
           return error(ErrorCode.REPEAT_MESSAGE);
+        case REPEAT_WORDS:
+          return error(ErrorCode.REPEATED_WORDS);
         case TOO_FAST:
           return error(ErrorCode.TOO_FAST);
         case TOO_LONG:
