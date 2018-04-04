@@ -358,6 +358,7 @@ cah.$.LongPollResponse.SIGIL = "?";
 cah.$.LongPollResponse.EMOTE = "me";
 cah.$.LongPollResponse.CARDCAST_DECK_INFO = "cdi";
 cah.$.LongPollResponse.GAME_ID = "gid";
+cah.$.LongPollResponse.ROUND_PERMALINK = "rP";
 cah.$.LongPollResponse.NICKNAME = "n";
 cah.$.LongPollResponse.BLACK_CARD = "bc";
 cah.$.LongPollResponse.GAME_STATE = "gs";

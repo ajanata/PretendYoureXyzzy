@@ -48,6 +48,8 @@ import org.hibernate.Session;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+import net.socialgamer.cah.CahModule.RoundPermalinkUrlFormat;
+import net.socialgamer.cah.CahModule.ShowRoundPermalink;
 import net.socialgamer.cah.CahModule.UniqueId;
 import net.socialgamer.cah.Constants.BlackCardData;
 import net.socialgamer.cah.Constants.ErrorCode;
@@ -112,6 +114,8 @@ public class Game {
   private final GameOptions options = new GameOptions();
   private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<String>());
   private final Metrics metrics;
+  private final Provider<Boolean> showRoundLinkProvider;
+  private final Provider<String> roundPermalinkFormatProvider;
   private final long created = System.currentTimeMillis();
 
   private int judgeIndex = 0;
@@ -204,7 +208,8 @@ public class Game {
       final Provider<Session> sessionProvider,
       final Provider<CardcastService> cardcastServiceProvider,
       @UniqueId final Provider<String> uniqueIdProvider,
-      final Metrics metrics) {
+      final Metrics metrics, @ShowRoundPermalink final Provider<Boolean> showRoundLinkProvider,
+      @RoundPermalinkUrlFormat final Provider<String> roundPermalinkFormatProvider) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
@@ -213,6 +218,8 @@ public class Game {
     this.cardcastServiceProvider = cardcastServiceProvider;
     this.uniqueIdProvider = uniqueIdProvider;
     this.metrics = metrics;
+    this.showRoundLinkProvider = showRoundLinkProvider;
+    this.roundPermalinkFormatProvider = roundPermalinkFormatProvider;
 
     state = GameState.LOBBY;
   }
@@ -1489,11 +1496,16 @@ public class Game {
     }
     final int clientCardId = playedCards.getCards(cardPlayer).get(0).getId();
 
+    final String roundId = uniqueIdProvider.get();
     final HashMap<ReturnableData, Object> data = getEventMap();
     data.put(LongPollResponse.EVENT, LongPollEvent.GAME_ROUND_COMPLETE.toString());
     data.put(LongPollResponse.ROUND_WINNER, cardPlayer.getUser().getNickname());
     data.put(LongPollResponse.WINNING_CARD, clientCardId);
     data.put(LongPollResponse.INTERMISSION, ROUND_INTERMISSION);
+    if (showRoundLinkProvider.get()) {
+      data.put(LongPollResponse.ROUND_PERMALINK,
+          String.format(roundPermalinkFormatProvider.get(), roundId));
+    }
     broadcastToPlayers(MessageType.GAME_EVENT, data);
 
     notifyPlayerInfoChange(getJudge());
@@ -1523,7 +1535,7 @@ public class Game {
     final Map<String, List<WhiteCard>> cardsBySessionId = new HashMap<>();
     playedCards.cardsByUser().forEach(
         (key, value) -> cardsBySessionId.put(key.getSessionId(), value));
-    metrics.roundComplete(currentUniqueId, uniqueIdProvider.get(), judge.getSessionId(),
+    metrics.roundComplete(currentUniqueId, roundId, judge.getSessionId(),
         cardPlayer.getUser().getSessionId(), blackCard, cardsBySessionId);
 
     return null;

@@ -86,6 +86,16 @@ hibernate.cache.use_second_level_cache=false
 hibernate.cache.use_query_cache=false
 hibernate.cache.provider_class=org.hibernate.cache.NoCacheProvider
 
+# If the server should send round IDs to clients after the round is over, and if the client should
+# display a permalink to them. You must be using the Kafka metrics implementation, and have
+# pyx-metrics-processor running somewhere to put the data into a database, and have
+# pyx-metrics-viewer running somewhere connected to that database. The URL to the viewer is provided
+# below. If you don't know what any of that is, you certainly don't have it running, so leave this
+# set to false.
+pyx.metrics.round.enabled=false
+# Format string to the URL to view a previous round. Must contain exactly one %s which will be
+# replaced with the round's ID.
+pyx.metrics.round.url_format=http://localhost:4080/static/round.html#%s
 # Metrics implementation.
 pyx.metrics.impl=net.socialgamer.cah.metrics.NoOpMetrics
 

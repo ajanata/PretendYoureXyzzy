@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -988,8 +988,13 @@ cah.Game.prototype.roundComplete = function(data) {
   var scoreCard = this.scoreCards_[roundWinner];
   $(scoreCard.getElement()).addClass("selected");
   $(".confirm_card", this.element_).attr("disabled", "disabled");
-  cah.log.status_with_game(this, roundWinner + " wins the round.  The next round will begin in "
-      + (data[cah.$.LongPollResponse.INTERMISSION] / 1000) + " seconds.");
+  var msg = roundWinner + " wins the round.  The next round will begin in "
+      + (data[cah.$.LongPollResponse.INTERMISSION] / 1000) + " seconds.";
+  if (cah.$.LongPollResponse.ROUND_PERMALINK in data) {
+    msg = msg + " <a href='" + data[cah.$.LongPollResponse.ROUND_PERMALINK]
+        + "' rel='noopener' target='_blank'>Permalink</a>";
+  }
+  cah.log.status_with_game(this, msg, undefined, true);
 
   // update the previous round display
   $(".game_last_round_winner", this.element_).text(roundWinner);

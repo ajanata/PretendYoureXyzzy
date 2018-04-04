@@ -170,6 +170,22 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
+  @ShowRoundPermalink
+  Boolean provideShowRoundPermalink() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty("pyx.metrics.round.enabled", "false"));
+    }
+  }
+
+  @Provides
+  @RoundPermalinkUrlFormat
+  String provideRoundPermalinkUrlFormat() {
+    synchronized (properties) {
+      return properties.getProperty("pyx.metrics.round.url_format", "about:blank#%s");
+    }
+  }
+
+  @Provides
   @InsecureIdAllowed
   Boolean provideInsecureIdAllowed() {
     synchronized (properties) {
@@ -233,6 +249,16 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface MaxUsers {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface ShowRoundPermalink {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface RoundPermalinkUrlFormat {
   }
 
   @BindingAnnotation

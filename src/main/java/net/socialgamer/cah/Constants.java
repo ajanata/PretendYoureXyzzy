@@ -561,6 +561,7 @@ public class Constants {
      * Reason why a player disconnected.
      */
     REASON("qr"),
+    ROUND_PERMALINK("rP"),
     ROUND_WINNER("rw"),
     /**
      * Sigil to display next to user's name.

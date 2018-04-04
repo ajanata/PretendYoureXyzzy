@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2017, Andy Janata
+ * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -39,15 +39,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import net.socialgamer.cah.CahModule.UniqueId;
-import net.socialgamer.cah.HibernateUtil;
-import net.socialgamer.cah.cardcast.CardcastModule.CardcastCardId;
-import net.socialgamer.cah.data.GameManager.GameId;
-import net.socialgamer.cah.data.GameManager.MaxGames;
-import net.socialgamer.cah.data.QueuedMessage.MessageType;
-import net.socialgamer.cah.metrics.Metrics;
-import net.socialgamer.cah.metrics.NoOpMetrics;
-
 import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
@@ -56,7 +47,19 @@ import org.junit.Test;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Provider;
 import com.google.inject.Provides;
+
+import net.socialgamer.cah.CahModule.RoundPermalinkUrlFormat;
+import net.socialgamer.cah.CahModule.ShowRoundPermalink;
+import net.socialgamer.cah.CahModule.UniqueId;
+import net.socialgamer.cah.HibernateUtil;
+import net.socialgamer.cah.cardcast.CardcastModule.CardcastCardId;
+import net.socialgamer.cah.data.GameManager.GameId;
+import net.socialgamer.cah.data.GameManager.MaxGames;
+import net.socialgamer.cah.data.QueuedMessage.MessageType;
+import net.socialgamer.cah.metrics.Metrics;
+import net.socialgamer.cah.metrics.NoOpMetrics;
 
 
 /**
@@ -73,6 +76,18 @@ public class GameManagerTest {
   private int gameId;
   private final ScheduledThreadPoolExecutor timer = new ScheduledThreadPoolExecutor(1);
   private Metrics metricsMock;
+  private final Provider<Boolean> falseProvider = new Provider<Boolean>() {
+    @Override
+    public Boolean get() {
+      return Boolean.FALSE;
+    }
+  };
+  private final Provider<String> formatProvider = new Provider<String>() {
+    @Override
+    public String get() {
+      return "%s";
+    }
+  };
 
   @Before
   public void setUp() throws Exception {
@@ -100,6 +115,8 @@ public class GameManagerTest {
                 });
         bind(ScheduledThreadPoolExecutor.class).toInstance(threadPool);
         bind(Metrics.class).to(NoOpMetrics.class);
+        bind(Boolean.class).annotatedWith(ShowRoundPermalink.class).toProvider(falseProvider);
+        bind(String.class).annotatedWith(RoundPermalinkUrlFormat.class).toProvider(formatProvider);
       }
 
       @Provides
@@ -149,13 +166,16 @@ public class GameManagerTest {
     // fill it up with 3 games
     assertEquals(0, gameManager.get().intValue());
     gameManager.getGames().put(0,
-        new Game(0, cuMock, gameManager, timer, null, null, null, metricsMock));
+        new Game(0, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
+            formatProvider));
     assertEquals(1, gameManager.get().intValue());
     gameManager.getGames().put(1,
-        new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock));
+        new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
+            formatProvider));
     assertEquals(2, gameManager.get().intValue());
     gameManager.getGames().put(2,
-        new Game(2, cuMock, gameManager, timer, null, null, null, metricsMock));
+        new Game(2, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
+            formatProvider));
     // make sure it says it can't make any more
     assertEquals(-1, gameManager.get().intValue());
 
@@ -164,14 +184,16 @@ public class GameManagerTest {
     // make sure it re-uses that id
     assertEquals(1, gameManager.get().intValue());
     gameManager.getGames().put(1,
-        new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock));
+        new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
+            formatProvider));
     assertEquals(-1, gameManager.get().intValue());
 
     // remove game 1 out from under it, to make sure it'll fix itself
     gameManager.getGames().remove(1);
     assertEquals(1, gameManager.get().intValue());
     gameManager.getGames().put(1,
-        new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock));
+        new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
+            formatProvider));
     assertEquals(-1, gameManager.get().intValue());
 
     gameManager.destroyGame(2);

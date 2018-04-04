@@ -41,6 +41,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.inject.Provider;
+
 import net.socialgamer.cah.data.Game.TooManyPlayersException;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.Metrics;
@@ -58,13 +60,26 @@ public class GameTest {
   private GameManager gmMock;
   private Metrics metricsMock;
   private final ScheduledThreadPoolExecutor timer = new ScheduledThreadPoolExecutor(1);
+  private final Provider<Boolean> falseProvider = new Provider<Boolean>() {
+    @Override
+    public Boolean get() {
+      return Boolean.FALSE;
+    }
+  };
+  private final Provider<String> formatProvider = new Provider<String>() {
+    @Override
+    public String get() {
+      return "%s";
+    }
+  };
 
   @Before
   public void setUp() throws Exception {
     cuMock = createMock(ConnectedUsers.class);
     gmMock = createMock(GameManager.class);
     metricsMock = createMock(Metrics.class);
-    game = new Game(0, cuMock, gmMock, timer, null, null, null, metricsMock);
+    game = new Game(0, cuMock, gmMock, timer, null, null, null, metricsMock, falseProvider,
+        formatProvider);
   }
 
   @SuppressWarnings("unchecked")
