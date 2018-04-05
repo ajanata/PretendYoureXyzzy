@@ -93,9 +93,14 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="index.jsp">the changelog and
     list of known issues</a>.
   </p>
-  <p tabindex="0">Most recent update: 27 March 2018:</p>
+  <p tabindex="0">Most recent updates: 5 April 2018 and 27 March 2018:</p>
   <ul>
-<li>You may now provide a password-like identification code when connecting to positively
+    <li>Bugfixes from last week's release (most notably, no more "undefined" before your name if you
+    reload the page).</li>
+    <li>Minor updates to the chat filter settings to make it less strict, and an additional chat
+    filter (you cannot use the same word too many times in the same message).</li>
+    <li>Back-end support for other features which will be enabled soon.</li>
+    <li>You may now provide a password-like identification code when connecting to positively
     identify yourself and make it difficult for someone to impersonate you. Details are on
     <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Identification-Codes">the GitHub
     wiki.</a><ul>

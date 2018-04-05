@@ -61,6 +61,13 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>5 April 2018:<ul>
+    <li>Bugfixes from last week's release (most notably, no more "undefined" before your name if you
+    reload the page).</li>
+    <li>Minor updates to the chat filter settings to make it less strict, and an additional chat
+    filter (you cannot use the same word too many times in the same message).</li>
+    <li>Back-end support for other features which will be enabled soon.</li>
+  </ul></li>
   <li>27 March 2018:<ul>
     <li>You may now provide a password-like identification code when connecting to positively
     identify yourself and make it difficult for someone to impersonate you. Details are on
