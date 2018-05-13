@@ -308,7 +308,9 @@ public class Constants {
     @GoDataType("int64")
     SERVER_STARTED("SS"),
     @GoDataType("[]int")
-    WHITE_CARDS("wc");
+    WHITE_CARDS("wc"),
+    @GoDataType("bool")
+    GLOBAL_CHAT_ENABLED("gce");
 
     private final String field;
 

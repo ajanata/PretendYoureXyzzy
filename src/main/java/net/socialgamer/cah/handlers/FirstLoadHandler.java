@@ -32,6 +32,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import net.socialgamer.cah.CahModule;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -68,15 +69,18 @@ public class FirstLoadHandler extends Handler {
   private final Set<String> banList;
   private final Session hibernateSession;
   private final Provider<Boolean> includeInactiveCardsetsProvider;
+  private final boolean globalChatEnabled;
   private final Date serverStarted;
 
   @Inject
   public FirstLoadHandler(final Session hibernateSession, @BanList final Set<String> banList,
       @IncludeInactiveCardsets final Provider<Boolean> includeInactiveCardsetsProvider,
+      @CahModule.GlobalChatEnabled final boolean globalChatEnabled,
       @ServerStarted final Date serverStarted) {
     this.banList = banList;
     this.hibernateSession = hibernateSession;
     this.includeInactiveCardsetsProvider = includeInactiveCardsetsProvider;
+    this.globalChatEnabled = globalChatEnabled;
     this.serverStarted = serverStarted;
   }
 
@@ -84,6 +88,7 @@ public class FirstLoadHandler extends Handler {
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
       final HttpSession session) {
     final HashMap<ReturnableData, Object> ret = new HashMap<ReturnableData, Object>();
+    ret.put(AjaxResponse.GLOBAL_CHAT_ENABLED, globalChatEnabled);
 
     if (banList.contains(request.getRemoteAddr())) {
       LOG.info(String.format("Rejecting user from %s because they are banned.",
