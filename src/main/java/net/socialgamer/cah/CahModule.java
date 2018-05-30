@@ -170,6 +170,22 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
+  @ShowGamePermalink
+  Boolean provideShowGamePermalink() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty("pyx.metrics.game.enabled", "false"));
+    }
+  }
+
+  @Provides
+  @GamePermalinkUrlFormat
+  String provideGamePermalinkUrlFormat() {
+    synchronized (properties) {
+      return properties.getProperty("pyx.metrics.game.url_format", "about:blank#%s");
+    }
+  }
+
+  @Provides
   @ShowRoundPermalink
   Boolean provideShowRoundPermalink() {
     synchronized (properties) {
@@ -182,6 +198,38 @@ public class CahModule extends AbstractModule {
   String provideRoundPermalinkUrlFormat() {
     synchronized (properties) {
       return properties.getProperty("pyx.metrics.round.url_format", "about:blank#%s");
+    }
+  }
+
+  @Provides
+  @ShowSessionPermalink
+  Boolean provideShowSessionPermalink() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty("pyx.metrics.session.enabled", "false"));
+    }
+  }
+
+  @Provides
+  @SessionPermalinkUrlFormat
+  String provideSessionPermalinkUrlFormat() {
+    synchronized (properties) {
+      return properties.getProperty("pyx.metrics.session.url_format", "about:blank#%s");
+    }
+  }
+
+  @Provides
+  @ShowUserPermalink
+  Boolean provideShowUserPermalink() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty("pyx.metrics.user.enabled", "false"));
+    }
+  }
+
+  @Provides
+  @UserPermalinkUrlFormat
+  String provideUserPermalinkUrlFormat() {
+    synchronized (properties) {
+      return properties.getProperty("pyx.metrics.user.url_format", "about:blank#%s");
     }
   }
 
@@ -253,12 +301,42 @@ public class CahModule extends AbstractModule {
 
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
+  public @interface ShowGamePermalink {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface GamePermalinkUrlFormat {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
   public @interface ShowRoundPermalink {
   }
 
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface RoundPermalinkUrlFormat {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface ShowSessionPermalink {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface SessionPermalinkUrlFormat {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface ShowUserPermalink {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface UserPermalinkUrlFormat {
   }
 
   @BindingAnnotation

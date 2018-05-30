@@ -39,6 +39,10 @@ import com.google.inject.Provider;
 
 import net.socialgamer.cah.CahModule.Admins;
 import net.socialgamer.cah.CahModule.BanList;
+import net.socialgamer.cah.CahModule.SessionPermalinkUrlFormat;
+import net.socialgamer.cah.CahModule.ShowSessionPermalink;
+import net.socialgamer.cah.CahModule.ShowUserPermalink;
+import net.socialgamer.cah.CahModule.UserPermalinkUrlFormat;
 import net.socialgamer.cah.CahModule.UserPersistentId;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
@@ -72,18 +76,30 @@ public class RegisterHandler extends Handler {
   private final User.Factory userFactory;
   private final Provider<String> persistentIdProvider;
   private final IdCodeMangler idCodeMangler;
+  private final boolean showSessionPermalink;
+  private final String sessionPermalinkFormatString;
+  private final boolean showUserPermalink;
+  private final String userPermalinkFormatString;
 
   @Inject
   public RegisterHandler(final ConnectedUsers users, @BanList final Set<String> banList,
       final User.Factory userFactory, final IdCodeMangler idCodeMangler,
       @UserPersistentId final Provider<String> persistentIdProvider,
-      @Admins final Set<String> adminList) {
+      @Admins final Set<String> adminList,
+      @ShowSessionPermalink final boolean showSessionPermalink,
+      @SessionPermalinkUrlFormat final String sessionPermalinkFormatString,
+      @ShowUserPermalink final boolean showUserPermalink,
+      @UserPermalinkUrlFormat final String userPermalinkFormatString) {
     this.users = users;
     this.banList = banList;
     this.userFactory = userFactory;
     this.persistentIdProvider = persistentIdProvider;
     this.idCodeMangler = idCodeMangler;
     this.adminList = adminList;
+    this.showSessionPermalink = showSessionPermalink;
+    this.sessionPermalinkFormatString = sessionPermalinkFormatString;
+    this.showUserPermalink = showUserPermalink;
+    this.userPermalinkFormatString = userPermalinkFormatString;
   }
 
   @Override
@@ -122,6 +138,8 @@ public class RegisterHandler extends Handler {
             adminList.contains(request.getRemoteAddr()), persistentId,
             request.getHeader(HttpHeaders.ACCEPT_LANGUAGE),
             request.getHeader(HttpHeaders.USER_AGENT));
+        user.userDidSomething();
+        user.contactedServer();
         final ErrorCode errorCode = users.checkAndAdd(user);
         if (null == errorCode) {
           // There is a findbugs warning on this line:
@@ -137,6 +155,14 @@ public class RegisterHandler extends Handler {
           data.put(AjaxResponse.PERSISTENT_ID, persistentId);
           data.put(AjaxResponse.ID_CODE, user.getIdCode());
           data.put(AjaxResponse.SIGIL, user.getSigil().toString());
+          if (showSessionPermalink) {
+            data.put(AjaxResponse.SESSION_PERMALINK,
+                String.format(sessionPermalinkFormatString, user.getSessionId()));
+          }
+          if (showUserPermalink) {
+            data.put(AjaxResponse.USER_PERMALINK,
+                String.format(userPermalinkFormatString, user.getPersistentId()));
+          }
         } else {
           return error(errorCode);
         }

@@ -43,6 +43,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
   $("#welcome").hide();
   $("#canvass").show();
 
+  cah.logUserPermalinks(data);
   cah.ajax.after_registered();
 };
 
@@ -59,6 +60,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
   if (data[cah.$.AjaxResponse.IN_PROGRESS]) {
     cah.ajax.StoreClientInformation_(data);
     cah.log.status("You have reconnected as " + cah.nickname);
+    cah.logUserPermalinks(data);
     $("#welcome").hide();
     $("#canvass").show();
     cah.ajax.after_registered();
@@ -66,7 +68,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.FIRST_LOAD] = function(data) {
     switch (data[cah.$.AjaxResponse.NEXT]) {
       case cah.$.ReconnectNextAction.GAME:
         cah.log.status("Reconnecting to game...");
-        cah.Game.joinGame(data[cah.$.AjaxResponse.GAME_ID]);
+        cah.Game.joinGame(data[cah.$.AjaxResponse.GAME_ID], data);
         cah.ajax.hasAutojoinedGame_ = true;
         break;
       case cah.$.ReconnectNextAction.NONE:
@@ -167,15 +169,13 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GAME_LIST] = function(data) {
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME] = function(data, req) {
-  cah.Game.joinGame(req[cah.$.AjaxRequest.GAME_ID]);
+  cah.Game.joinGame(req[cah.$.AjaxRequest.GAME_ID], data);
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.SPECTATE_GAME] = function(data, req) {
-  cah.Game.joinGame(req[cah.$.AjaxRequest.GAME_ID]);
-};
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.SPECTATE_GAME] = cah.ajax.SuccessHandlers[cah.$.AjaxOperation.JOIN_GAME];
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CREATE_GAME] = function(data) {
-  cah.Game.joinGame(data[cah.$.AjaxResponse.GAME_ID]);
+  cah.Game.joinGame(data[cah.$.AjaxResponse.GAME_ID], data);
 };
 
 cah.ajax.SuccessHandlers[cah.$.AjaxOperation.GET_GAME_INFO] = function(data, req) {

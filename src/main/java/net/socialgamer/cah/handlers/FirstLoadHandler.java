@@ -32,17 +32,20 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import net.socialgamer.cah.CahModule;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 import net.socialgamer.cah.CahModule.BanList;
+import net.socialgamer.cah.CahModule.GlobalChatEnabled;
 import net.socialgamer.cah.CahModule.IncludeInactiveCardsets;
 import net.socialgamer.cah.CahModule.ServerStarted;
+import net.socialgamer.cah.CahModule.SessionPermalinkUrlFormat;
+import net.socialgamer.cah.CahModule.ShowSessionPermalink;
+import net.socialgamer.cah.CahModule.ShowUserPermalink;
+import net.socialgamer.cah.CahModule.UserPermalinkUrlFormat;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.CardSetData;
@@ -68,20 +71,32 @@ public class FirstLoadHandler extends Handler {
 
   private final Set<String> banList;
   private final Session hibernateSession;
-  private final Provider<Boolean> includeInactiveCardsetsProvider;
+  private final boolean includeInactiveCardsets;
   private final boolean globalChatEnabled;
+  private final boolean showSessionPermalink;
+  private final String sessionPermalinkFormatString;
+  private final boolean showUserPermalink;
+  private final String userPermalinkFormatString;
   private final Date serverStarted;
 
   @Inject
   public FirstLoadHandler(final Session hibernateSession, @BanList final Set<String> banList,
-      @IncludeInactiveCardsets final Provider<Boolean> includeInactiveCardsetsProvider,
-      @CahModule.GlobalChatEnabled final boolean globalChatEnabled,
-      @ServerStarted final Date serverStarted) {
+      @IncludeInactiveCardsets final boolean includeInactiveCardsets,
+      @GlobalChatEnabled final boolean globalChatEnabled,
+      @ServerStarted final Date serverStarted,
+      @ShowSessionPermalink final boolean showSessionPermalink,
+      @SessionPermalinkUrlFormat final String sessionPermalinkFormatString,
+      @ShowUserPermalink final boolean showUserPermalink,
+      @UserPermalinkUrlFormat final String userPermalinkFormatString) {
     this.banList = banList;
     this.hibernateSession = hibernateSession;
-    this.includeInactiveCardsetsProvider = includeInactiveCardsetsProvider;
+    this.includeInactiveCardsets = includeInactiveCardsets;
     this.globalChatEnabled = globalChatEnabled;
     this.serverStarted = serverStarted;
+    this.showSessionPermalink = showSessionPermalink;
+    this.sessionPermalinkFormatString = sessionPermalinkFormatString;
+    this.showUserPermalink = showUserPermalink;
+    this.userPermalinkFormatString = userPermalinkFormatString;
   }
 
   @Override
@@ -108,10 +123,19 @@ public class FirstLoadHandler extends Handler {
       ret.put(AjaxResponse.PERSISTENT_ID, user.getPersistentId());
       ret.put(AjaxResponse.ID_CODE, user.getIdCode());
       ret.put(AjaxResponse.SIGIL, user.getSigil().toString());
+      if (showSessionPermalink) {
+        ret.put(AjaxResponse.SESSION_PERMALINK,
+            String.format(sessionPermalinkFormatString, user.getSessionId()));
+      }
+      if (showUserPermalink) {
+        ret.put(AjaxResponse.USER_PERMALINK,
+            String.format(userPermalinkFormatString, user.getPersistentId()));
+      }
 
       if (user.getGame() != null) {
         ret.put(AjaxResponse.NEXT, ReconnectNextAction.GAME.toString());
         ret.put(AjaxResponse.GAME_ID, user.getGame().getId());
+        user.getGame().maybeAddPermalinkToData(ret);
       } else {
         ret.put(AjaxResponse.NEXT, ReconnectNextAction.NONE.toString());
       }
@@ -122,7 +146,7 @@ public class FirstLoadHandler extends Handler {
       final Transaction transaction = hibernateSession.beginTransaction();
       @SuppressWarnings("unchecked")
       final List<PyxCardSet> cardSets = hibernateSession
-          .createQuery(PyxCardSet.getCardsetQuery(includeInactiveCardsetsProvider.get()))
+          .createQuery(PyxCardSet.getCardsetQuery(includeInactiveCardsets))
           .setReadOnly(true)
           .setCacheable(true)
           .list();

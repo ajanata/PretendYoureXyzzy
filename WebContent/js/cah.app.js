@@ -428,3 +428,19 @@ function do_app_resize(chatElement, logElement) {
   var bottomHeight = $(window).height() - $("#main").height() - $("#menubar").height() - 29;
   logElement.height(bottomHeight - chatElement.height() - 40);
 }
+
+cah.logUserPermalinks = function(data) {
+  var linkMsg = "";
+  if (cah.$.AjaxResponse.SESSION_PERMALINK in data) {
+    linkMsg += "<a href='" + data[cah.$.AjaxResponse.SESSION_PERMALINK]
+        + "'rel='noopener' target='_blank'>Permanent link to games you play this session.</a> ";
+  }
+  if (cah.$.AjaxResponse.USER_PERMALINK in data && !cah.noPersistentId) {
+    linkMsg += "<a href='"
+        + data[cah.$.AjaxResponse.USER_PERMALINK]
+        + "'rel='noopener' target='_blank'>Permanent link to every time you've played on this device.</a> ";
+  }
+  if ("" != linkMsg) {
+    cah.log.status(linkMsg, undefined, true);
+  }
+}

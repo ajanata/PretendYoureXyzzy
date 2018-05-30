@@ -79,7 +79,7 @@ public class GameTest {
     gmMock = createMock(GameManager.class);
     metricsMock = createMock(Metrics.class);
     game = new Game(0, cuMock, gmMock, timer, null, null, null, metricsMock, falseProvider,
-        formatProvider);
+        formatProvider, falseProvider, formatProvider);
   }
 
   @SuppressWarnings("unchecked")

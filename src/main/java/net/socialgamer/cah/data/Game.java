@@ -48,9 +48,12 @@ import org.hibernate.Session;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+import net.socialgamer.cah.CahModule.GamePermalinkUrlFormat;
 import net.socialgamer.cah.CahModule.RoundPermalinkUrlFormat;
+import net.socialgamer.cah.CahModule.ShowGamePermalink;
 import net.socialgamer.cah.CahModule.ShowRoundPermalink;
 import net.socialgamer.cah.CahModule.UniqueId;
+import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.BlackCardData;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.GameInfo;
@@ -114,6 +117,8 @@ public class Game {
   private final GameOptions options = new GameOptions();
   private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<String>());
   private final Metrics metrics;
+  private final Provider<Boolean> showGameLinkProvider;
+  private final Provider<String> gamePermalinkFormatProvider;
   private final Provider<Boolean> showRoundLinkProvider;
   private final Provider<String> roundPermalinkFormatProvider;
   private final long created = System.currentTimeMillis();
@@ -209,7 +214,9 @@ public class Game {
       final Provider<CardcastService> cardcastServiceProvider,
       @UniqueId final Provider<String> uniqueIdProvider,
       final Metrics metrics, @ShowRoundPermalink final Provider<Boolean> showRoundLinkProvider,
-      @RoundPermalinkUrlFormat final Provider<String> roundPermalinkFormatProvider) {
+      @RoundPermalinkUrlFormat final Provider<String> roundPermalinkFormatProvider,
+      @ShowGamePermalink final Provider<Boolean> showGameLinkProvider,
+      @GamePermalinkUrlFormat final Provider<String> gamePermalinkFormatProvider) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
@@ -220,8 +227,22 @@ public class Game {
     this.metrics = metrics;
     this.showRoundLinkProvider = showRoundLinkProvider;
     this.roundPermalinkFormatProvider = roundPermalinkFormatProvider;
+    this.showGameLinkProvider = showGameLinkProvider;
+    this.gamePermalinkFormatProvider = gamePermalinkFormatProvider;
 
     state = GameState.LOBBY;
+  }
+
+  /**
+   * Adds a permalink to this game to the client request response data, if said permalinks are
+   * enabled.
+   * @param data A map of data being returned to a client request.
+   */
+  public void maybeAddPermalinkToData(final Map<ReturnableData, Object> data) {
+    if (showGameLinkProvider.get() && null != currentUniqueId) {
+      data.put(AjaxResponse.GAME_PERMALINK,
+          String.format(gamePermalinkFormatProvider.get(), currentUniqueId));
+    }
   }
 
   /**
@@ -799,12 +820,10 @@ public class Game {
   }
 
   /**
-   * Move the game into the {@code DEALING} state, and deal cards. The game immediately then moves
-   * into the {@code PLAYING} state.
+   * Deal cards for this round. The game immediately then moves into the {@code PLAYING} state.
    * <br/>
    */
   private void dealState() {
-    state = GameState.DEALING;
     final Player[] playersCopy = players.toArray(new Player[players.size()]);
     for (final Player player : playersCopy) {
       final List<WhiteCard> hand = player.getHand();
@@ -827,6 +846,7 @@ public class Game {
    * Synchronizes on {@link #players}, {@link #blackCardLock}, and {@link #roundTimerLock}.
    */
   private void playingState() {
+    final GameState oldState = state;
     state = GameState.PLAYING;
 
     playedCards.clear();
@@ -863,6 +883,10 @@ public class Game {
     data.put(LongPollResponse.BLACK_CARD, getBlackCard());
     data.put(LongPollResponse.GAME_STATE, GameState.PLAYING.toString());
     data.put(LongPollResponse.PLAY_TIMER, playTimer);
+    // if we're moving from lobby to playing, this is the first round
+    if (GameState.LOBBY == oldState) {
+      maybeAddPermalinkToData(data);
+    }
 
     broadcastToPlayers(MessageType.GAME_EVENT, data);
 
@@ -1125,6 +1149,7 @@ public class Game {
     playedCards.clear();
     roundPlayers.clear();
     state = GameState.LOBBY;
+    currentUniqueId = null;
     final Player judge = getJudge();
     judgeIndex = 0;
 

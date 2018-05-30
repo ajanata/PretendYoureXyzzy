@@ -50,7 +50,9 @@ import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.Provides;
 
+import net.socialgamer.cah.CahModule.GamePermalinkUrlFormat;
 import net.socialgamer.cah.CahModule.RoundPermalinkUrlFormat;
+import net.socialgamer.cah.CahModule.ShowGamePermalink;
 import net.socialgamer.cah.CahModule.ShowRoundPermalink;
 import net.socialgamer.cah.CahModule.UniqueId;
 import net.socialgamer.cah.HibernateUtil;
@@ -117,6 +119,8 @@ public class GameManagerTest {
         bind(Metrics.class).to(NoOpMetrics.class);
         bind(Boolean.class).annotatedWith(ShowRoundPermalink.class).toProvider(falseProvider);
         bind(String.class).annotatedWith(RoundPermalinkUrlFormat.class).toProvider(formatProvider);
+        bind(Boolean.class).annotatedWith(ShowGamePermalink.class).toProvider(falseProvider);
+        bind(String.class).annotatedWith(GamePermalinkUrlFormat.class).toProvider(formatProvider);
       }
 
       @Provides
@@ -167,15 +171,15 @@ public class GameManagerTest {
     assertEquals(0, gameManager.get().intValue());
     gameManager.getGames().put(0,
         new Game(0, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
-            formatProvider));
+            formatProvider, falseProvider, formatProvider));
     assertEquals(1, gameManager.get().intValue());
     gameManager.getGames().put(1,
         new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
-            formatProvider));
+            formatProvider, falseProvider, formatProvider));
     assertEquals(2, gameManager.get().intValue());
     gameManager.getGames().put(2,
         new Game(2, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
-            formatProvider));
+            formatProvider, falseProvider, formatProvider));
     // make sure it says it can't make any more
     assertEquals(-1, gameManager.get().intValue());
 
@@ -185,7 +189,7 @@ public class GameManagerTest {
     assertEquals(1, gameManager.get().intValue());
     gameManager.getGames().put(1,
         new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
-            formatProvider));
+            formatProvider, falseProvider, formatProvider));
     assertEquals(-1, gameManager.get().intValue());
 
     // remove game 1 out from under it, to make sure it'll fix itself
@@ -193,7 +197,7 @@ public class GameManagerTest {
     assertEquals(1, gameManager.get().intValue());
     gameManager.getGames().put(1,
         new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
-            formatProvider));
+            formatProvider, falseProvider, formatProvider));
     assertEquals(-1, gameManager.get().intValue());
 
     gameManager.destroyGame(2);

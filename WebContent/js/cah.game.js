@@ -321,8 +321,10 @@ cah.Game = function(id) {
  * 
  * @param {Number}
  *          gameId The game id.
+ * @param {Object}
+ *          data The data returned by the server.
  */
-cah.Game.joinGame = function(gameId) {
+cah.Game.joinGame = function(gameId, data) {
   cah.Ajax.build(cah.$.AjaxOperation.GET_GAME_INFO).withGameId(gameId).run();
   cah.Ajax.build(cah.$.AjaxOperation.GET_CARDS).withGameId(gameId).run();
   cah.Ajax.build(cah.$.AjaxOperation.CARDCAST_LIST_CARDSETS).withGameId(gameId).run();
@@ -330,9 +332,24 @@ cah.Game.joinGame = function(gameId) {
   var game = new cah.Game(gameId);
   cah.currentGames[gameId] = game;
   game.insertIntoDocument();
+  game.showGamePermalink_(data);
 
   cah.updateHash('game=' + gameId);
 };
+
+/**
+ * Show the permanent link to this game, if it is in the provider server data.
+ * 
+ * @param {Object}
+ *          data The data returned by the server, from either an AJAX call or an long poll response.
+ */
+cah.Game.prototype.showGamePermalink_ = function(data) {
+  if (cah.$.AjaxResponse.GAME_PERMALINK in data) {
+    cah.log.status_with_game(this, "<a href='" + data[cah.$.AjaxResponse.GAME_PERMALINK] +
+        "' rel='noopener' target='_blank'>Permanent link to this game's rounds.</a>", undefined,
+        true);
+  }
+}
 
 /**
  * Toggle showing the previous round result.
@@ -1405,6 +1422,7 @@ cah.Game.prototype.stateChange = function(data) {
       this.hideOptions_();
       this.refreshGameStatus();
       this.setBlackCard(data[cah.$.LongPollResponse.BLACK_CARD]);
+      this.showGamePermalink_(data);
       break;
 
     case cah.$.GameState.JUDGING:

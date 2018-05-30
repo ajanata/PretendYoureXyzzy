@@ -270,8 +270,11 @@ public class Constants {
     @GoDataType("GameOptionData")
     GAME_OPTIONS(AjaxRequest.GAME_OPTIONS),
     GAME_STATE_DESCRIPTION("gss"),
+    GAME_PERMALINK("gp"),
     @GoDataType("[]GameInfo")
     GAMES("gl"),
+    @GoDataType("bool")
+    GLOBAL_CHAT_ENABLED("gce"),
     @GoDataType("[]int")
     HAND("h"),
     @DuplicationAllowed
@@ -307,10 +310,10 @@ public class Constants {
     SERIAL(AjaxRequest.SERIAL),
     @GoDataType("int64")
     SERVER_STARTED("SS"),
+    SESSION_PERMALINK("sP"),
+    USER_PERMALINK("up"),
     @GoDataType("[]int")
-    WHITE_CARDS("wc"),
-    @GoDataType("bool")
-    GLOBAL_CHAT_ENABLED("gce");
+    WHITE_CARDS("wc");
 
     private final String field;
 
@@ -539,6 +542,8 @@ public class Constants {
     @DuplicationAllowed
     @GoDataType("GameInfo")
     GAME_INFO(AjaxResponse.GAME_INFO),
+    @DuplicationAllowed
+    GAME_PERMALINK(AjaxResponse.GAME_PERMALINK),
     GAME_STATE("gs"),
     @DuplicationAllowed
     @GoDataType("[]WhiteCardData")
@@ -717,7 +722,6 @@ public class Constants {
    * A game's current state.
    */
   public enum GameState implements Localizable {
-    DEALING("d", "In Progress"),
     JUDGING("j", "In Progress"),
     LOBBY("l", "Not Started"),
     PLAYING("p", "In Progress"),
