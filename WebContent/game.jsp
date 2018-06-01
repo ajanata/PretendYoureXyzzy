@@ -93,8 +93,13 @@ HttpSession hSession = request.getSession(true);
     If this is your first time playing, you may wish to read <a href="index.jsp">the changelog and
     list of known issues</a>.
   </p>
-  <p tabindex="0">Most recent updates: 5 April 2018 and 27 March 2018:</p>
+  <p tabindex="0">Most recent updates: 1 June 2018, 5 April 2018, and 27 March 2018:</p>
   <ul>
+    <li>Play history links are now provided for users and games. Assuming you have not opted out
+    from persistent play history logging and still have your persistent ID cookie, you can view
+    every game you've played on the device you are connecting from since the beginning of March.
+    Regardless of opting out or not, you can view every game you've played in the current session,
+    or every round in a game, with the links provided when you log in or join a game.</li>
     <li>Bugfixes from last week's release (most notably, no more "undefined" before your name if you
     reload the page).</li>
     <li>Minor updates to the chat filter settings to make it less strict, and an additional chat

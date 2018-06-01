@@ -61,6 +61,13 @@ to, for instance, display the number of connected players.
 </p>
 <p>Recent Changes:</p>
 <ul>
+  <li>1 June 2018:<ul>
+    <li>Play history links are now provided for users and games. Assuming you have not opted out
+    from persistent play history logging and still have your persistent ID cookie, you can view
+    every game you've played on the device you are connecting from since the beginning of March.
+    Regardless of opting out or not, you can view every game you've played in the current session,
+    or every round in a game, with the links provided when you log in or join a game.</li>
+  </ul></li>
   <li>5 April 2018:<ul>
     <li>Bugfixes from last week's release (most notably, no more "undefined" before your name if you
     reload the page).</li>
@@ -77,11 +84,11 @@ to, for instance, display the number of connected players.
       it always has.</strong></li>
       <li><strong>Do not use a password you use on any other site.</strong></li>
       <li>The value you enter in the identification code box will be combined with your username
-      and a server secret and converted into an 11 character code.</li>
-      <li>Users that have an identification code will have a + in front of their name in chat.
-      Hover your mouse over their message to see their 11 character code.</li>
+      and a server secret and converted into an 11 character verification code.</li>
+      <li>Users that have an verification code will have a + in front of their name in chat.
+      Hover your mouse over their message to see their 11 character verification code.</li>
       <li>You may also use the <span style="font-family:monospace">/whois</span> command in the chat
-      to view information about a user, including their 11 character code.</li></ul></li>
+      to view information about a user, including their 11 character verification code.</li></ul></li>
     <li>Images on CardCast cards is now supported in a safe manner. Cards will need updated to work
     with this format. Information on how to use it is on the
     <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Cardcast#images-on-cards">GitHub
