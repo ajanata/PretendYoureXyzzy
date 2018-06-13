@@ -48,6 +48,7 @@ import net.socialgamer.cah.Constants.AjaxResponse;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.SessionAttribute;
+import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.StartupUtils;
 import net.socialgamer.cah.data.User;
 
@@ -107,7 +108,8 @@ public abstract class CahServlet extends HttpServlet {
           || op.equals(AjaxOperation.FIRST_LOAD.toString()));
       if (!skipSessionUserCheck && hSession.getAttribute(SessionAttribute.USER) == null) {
         returnError(user, response.getWriter(), ErrorCode.NOT_REGISTERED, serial);
-      } else if (user != null && !user.isValidFromHost(request.getRemoteAddr())) {
+      } else if (user != null
+          && !user.isValidFromHost(new RequestWrapper(request).getRemoteAddr())) {
         // user probably pinged out, or possibly kicked by admin
         // or their IP address magically changed (working around a ban?)
         hSession.invalidate();
