@@ -24,6 +24,7 @@
 package net.socialgamer.cah.handlers;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -39,6 +40,7 @@ import com.google.inject.Provider;
 
 import net.socialgamer.cah.CahModule.Admins;
 import net.socialgamer.cah.CahModule.BanList;
+import net.socialgamer.cah.CahModule.BannedNicks;
 import net.socialgamer.cah.CahModule.SessionPermalinkUrlFormat;
 import net.socialgamer.cah.CahModule.ShowSessionPermalink;
 import net.socialgamer.cah.CahModule.ShowUserPermalink;
@@ -73,6 +75,7 @@ public class RegisterHandler extends Handler {
   private final ConnectedUsers users;
   private final Set<String> adminList;
   private final Set<String> banList;
+  private final Set<String> bannedNickList;
   private final User.Factory userFactory;
   private final Provider<String> persistentIdProvider;
   private final IdCodeMangler idCodeMangler;
@@ -89,7 +92,8 @@ public class RegisterHandler extends Handler {
       @ShowSessionPermalink final boolean showSessionPermalink,
       @SessionPermalinkUrlFormat final String sessionPermalinkFormatString,
       @ShowUserPermalink final boolean showUserPermalink,
-      @UserPermalinkUrlFormat final String userPermalinkFormatString) {
+      @UserPermalinkUrlFormat final String userPermalinkFormatString,
+      @BannedNicks final Set<String> bannedNickList) {
     this.users = users;
     this.banList = banList;
     this.userFactory = userFactory;
@@ -100,6 +104,7 @@ public class RegisterHandler extends Handler {
     this.sessionPermalinkFormatString = sessionPermalinkFormatString;
     this.showUserPermalink = showUserPermalink;
     this.userPermalinkFormatString = userPermalinkFormatString;
+    this.bannedNickList = bannedNickList;
   }
 
   @Override
@@ -121,10 +126,14 @@ public class RegisterHandler extends Handler {
       return error(ErrorCode.INVALID_ID_CODE);
     } else {
       final String nick = request.getParameter(AjaxRequest.NICKNAME).trim();
+      final String nickLower = nick.toLowerCase(Locale.ENGLISH);
+      for (final String banned : bannedNickList) {
+        if (nickLower.contains(banned)) {
+          return error(ErrorCode.RESERVED_NICK);
+        }
+      }
       if (!VALID_NAME.matcher(nick).matches()) {
         return error(ErrorCode.INVALID_NICK);
-      } else if ("xyzzy".equalsIgnoreCase(nick)) {
-        return error(ErrorCode.RESERVED_NICK);
       } else {
         String persistentId = request.getParameter(AjaxRequest.PERSISTENT_ID);
         if (StringUtils.isBlank(persistentId)) {

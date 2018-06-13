@@ -30,6 +30,8 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 import javax.annotation.Nullable;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
@@ -45,6 +47,8 @@ import net.socialgamer.cah.Constants.Sigil;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class User {
+
+  private static final Logger LOG = Logger.getLogger(User.class);
 
   private final String nickname;
 
@@ -287,6 +291,15 @@ public class User {
    */
   public boolean isValid() {
     return valid;
+  }
+
+  public boolean isValidFromHost(final String currentHostname) {
+    final boolean addrValid = hostname.equals(currentHostname);
+    if (!addrValid) {
+      LOG.warn(String.format("User %s used to be from %s but is now from %s", nickname, hostname,
+          currentHostname));
+    }
+    return isValid() && addrValid;
   }
 
   /**

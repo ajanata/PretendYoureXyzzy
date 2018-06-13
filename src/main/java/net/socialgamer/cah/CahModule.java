@@ -289,6 +289,14 @@ public class CahModule extends AbstractModule {
     }
   }
 
+  @Provides
+  @BannedNicks
+  Set<String> provideBannedNicks() {
+    synchronized (properties) {
+      return ImmutableSet.copyOf(properties.getProperty("pyx.banned_nicks", "").split(","));
+    }
+  }
+
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface BanList {
@@ -387,5 +395,10 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface Admins {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface BannedNicks {
   }
 }

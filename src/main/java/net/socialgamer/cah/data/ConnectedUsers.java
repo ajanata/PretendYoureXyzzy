@@ -167,7 +167,7 @@ public class ConnectedUsers {
    */
   public void removeUser(final User user, final DisconnectReason reason) {
     synchronized (users) {
-      if (users.containsKey(user.getNickname())) {
+      if (users.containsKey(user.getNickname().toLowerCase())) {
         logger.info(String.format("Removing user %s because %s", user.toString(), reason));
         user.noLongerValid();
         users.remove(user.getNickname().toLowerCase());

@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
  *   and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
  *   conditions and the following disclaimer in the documentation and/or other materials provided
  *   with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -37,6 +37,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
+import com.google.inject.Injector;
+
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.AjaxResponse;
@@ -46,17 +51,12 @@ import net.socialgamer.cah.Constants.SessionAttribute;
 import net.socialgamer.cah.StartupUtils;
 import net.socialgamer.cah.data.User;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
-import com.google.inject.Injector;
-
 
 /**
  * Servlet implementation class CahServlet.
- * 
+ *
  * Superclass for all CAH servlets. Provides utility methods to return errors and data, and to log.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public abstract class CahServlet extends HttpServlet {
@@ -107,8 +107,9 @@ public abstract class CahServlet extends HttpServlet {
           || op.equals(AjaxOperation.FIRST_LOAD.toString()));
       if (!skipSessionUserCheck && hSession.getAttribute(SessionAttribute.USER) == null) {
         returnError(user, response.getWriter(), ErrorCode.NOT_REGISTERED, serial);
-      } else if (user != null && !user.isValid()) {
+      } else if (user != null && !user.isValidFromHost(request.getRemoteAddr())) {
         // user probably pinged out, or possibly kicked by admin
+        // or their IP address magically changed (working around a ban?)
         hSession.invalidate();
         returnError(user, response.getWriter(), ErrorCode.SESSION_EXPIRED, serial);
       } else {
@@ -137,7 +138,7 @@ public abstract class CahServlet extends HttpServlet {
 
   /**
    * Handles a request from a CAH client. A session is guaranteed to exist at this point.
-   * 
+   *
    * @param request
    *          The request data.
    * @param response
@@ -153,7 +154,7 @@ public abstract class CahServlet extends HttpServlet {
 
   /**
    * Return an error to the client.
-   * 
+   *
    * @param user
    *          User that caused the error.
    * @param writer
@@ -175,7 +176,7 @@ public abstract class CahServlet extends HttpServlet {
 
   /**
    * Return response data to the client.
-   * 
+   *
    * @param user
    *          User this response is for.
    * @param writer
@@ -190,7 +191,7 @@ public abstract class CahServlet extends HttpServlet {
 
   /**
    * Return multiple response data to the client.
-   * 
+   *
    * @param user
    *          User this response is for.
    * @param writer
@@ -205,7 +206,7 @@ public abstract class CahServlet extends HttpServlet {
 
   /**
    * Return any response data to the client.
-   * 
+   *
    * @param user
    *          User this response is for.
    * @param writer
@@ -231,7 +232,7 @@ public abstract class CahServlet extends HttpServlet {
 
   /**
    * Log a message, with the user's name if {@code user} is not null.
-   * 
+   *
    * @param user
    *          The user this log message is about, or {@code null} if unknown.
    * @param message
