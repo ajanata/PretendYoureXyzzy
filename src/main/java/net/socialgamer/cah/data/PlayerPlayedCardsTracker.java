@@ -100,6 +100,16 @@ public class PlayerPlayedCardsTracker {
   }
 
   /**
+   *
+   * @param player
+   * @return The number of played cards by {@code player}
+   */
+  public synchronized int getCardsCount(final Player player) {
+    List<WhiteCard> cards = playerCardMap.get(player);
+    return cards == null ? 0 : cards.size();
+  }
+
+  /**
    * Remove and return a player's cards from the played cards tracking.
    *
    * @param player

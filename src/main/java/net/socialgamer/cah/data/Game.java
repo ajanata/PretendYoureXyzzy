@@ -1453,8 +1453,10 @@ public class Game {
         return ErrorCode.NOT_YOUR_TURN;
       }
 
-      if (playedCards.getCards(player).size() >= blackCard.getPick()) {
-        return ErrorCode.PLAYED_ALL_CARDS;
+      synchronized (blackCardLock) {
+        if (playedCards.getCardsCount(player) >= blackCard.getPick()) {
+          return ErrorCode.PLAYED_ALL_CARDS;
+        }
       }
 
       final List<WhiteCard> hand = player.getHand();
