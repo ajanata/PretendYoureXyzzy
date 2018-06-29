@@ -414,7 +414,8 @@ public class Constants {
         "You used too many special characters in that message."),
     TOO_MANY_USERS("tmu", "There are too many users connected. Either join another server, or " +
         "wait for a user to disconnect."),
-    WRONG_PASSWORD("wp", "That password is incorrect.");
+    WRONG_PASSWORD("wp", "That password is incorrect."),
+    PLAYED_ALL_CARDS("pac", "You already played all the necessary cards!");
 
     private final String code;
     private final String message;
