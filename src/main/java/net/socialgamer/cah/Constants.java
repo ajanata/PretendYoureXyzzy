@@ -401,11 +401,12 @@ public class Constants {
     NOT_REGISTERED("nr", "Not registered. Refresh the page."),
     NOT_YOUR_TURN("nyt", "It is not your turn to play a card."),
     OP_NOT_SPECIFIED("ons", "Operation not specified."),
+    PLAYED_ALL_CARDS("pac", "You already played all the necessary cards!"),
     RESERVED_NICK("rn", "That nick is reserved."),
     REPEAT_MESSAGE("rm",
         "You can't repeat the same message multiple times in a row."),
     REPEATED_WORDS("rW", "You must use more unique words in your message."),
-    SERVER_ERROR("serr", "An error occured on the server."),
+    SERVER_ERROR("serr", "An error occurred on the server."),
     SESSION_EXPIRED("se", "Your session has expired. Refresh the page."),
     TOO_FAST("tf", "You are chatting too fast. Wait a few seconds and try again."),
     TOO_MANY_GAMES("tmg", "There are too many games already in progress. Either join " +

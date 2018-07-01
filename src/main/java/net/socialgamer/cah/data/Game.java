@@ -1448,9 +1448,17 @@ public class Game {
     final Player player = getPlayerForUser(user);
     if (player != null) {
       player.resetSkipCount();
+
       if (getJudge() == player || state != GameState.PLAYING) {
         return ErrorCode.NOT_YOUR_TURN;
       }
+
+      synchronized (blackCardLock) {
+        if (playedCards.getCardsCount(player) >= blackCard.getPick()) {
+          return ErrorCode.PLAYED_ALL_CARDS;
+        }
+      }
+
       final List<WhiteCard> hand = player.getHand();
       WhiteCard playCard = null;
       synchronized (hand) {
