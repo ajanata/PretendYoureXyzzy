@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2017-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,26 +23,17 @@
 
 package net.socialgamer.cah.metrics;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import javax.annotation.Nullable;
-
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.maxmind.geoip2.model.CityResponse;
+import net.socialgamer.cah.data.BlackCard;
+import net.socialgamer.cah.data.CardSet;
+import net.socialgamer.cah.data.WhiteCard;
+import net.socialgamer.cah.db.PyxBlackCard;
+import net.socialgamer.cah.db.PyxCardSet;
+import net.socialgamer.cah.db.PyxWhiteCard;
 import org.apache.kafka.clients.CommonClientConfigs;
-import org.apache.kafka.clients.producer.Callback;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.config.SslConfigs;
@@ -50,16 +41,12 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONValue;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.maxmind.geoip2.model.CityResponse;
-
-import net.socialgamer.cah.data.BlackCard;
-import net.socialgamer.cah.data.CardSet;
-import net.socialgamer.cah.data.WhiteCard;
-import net.socialgamer.cah.db.PyxBlackCard;
-import net.socialgamer.cah.db.PyxCardSet;
-import net.socialgamer.cah.db.PyxWhiteCard;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 /**
@@ -78,9 +65,9 @@ public class KafkaMetrics implements Metrics {
   private final ProducerCallback callback = new ProducerCallback();
   private final String build;
   private final String topic;
-  private volatile Producer<String, String> producer;
   private final Properties producerProps;
   private final Lock makeProducerLock = new ReentrantLock();
+  private volatile Producer<String, String> producer;
 
   @Inject
   public KafkaMetrics(final Properties properties) {
@@ -105,9 +92,9 @@ public class KafkaMetrics implements Metrics {
     if (Boolean.valueOf(inProps.getProperty("kafka.ssl", "false"))) {
       props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
       props.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG,
-          inProps.getProperty("kafka.truststore.path"));
+              inProps.getProperty("kafka.truststore.path"));
       props.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG,
-          inProps.getProperty("kafka.truststore.password"));
+              inProps.getProperty("kafka.truststore.password"));
 
       if (Boolean.valueOf(inProps.getProperty("kafka.ssl.usekey", "false"))) {
         props.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, inProps.get("kafka.keystore.path"));
@@ -119,10 +106,10 @@ public class KafkaMetrics implements Metrics {
         // overwrite this
         props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_SSL");
         props.put(SaslConfigs.SASL_JAAS_CONFIG, String.format(
-            "org.apache.kafka.common.security.scram.ScramLoginModule "
-                + "required \n username=\"%s\" \n password=\"%s\";",
-            inProps.getProperty("kafka.sasl.username"),
-            inProps.getProperty("kafka.sasl.password")));
+                "org.apache.kafka.common.security.scram.ScramLoginModule "
+                        + "required \n username=\"%s\" \n password=\"%s\";",
+                inProps.getProperty("kafka.sasl.username"),
+                inProps.getProperty("kafka.sasl.password")));
         props.put(SaslConfigs.SASL_MECHANISM, "SCRAM-SHA-512");
       }
     }
@@ -199,21 +186,6 @@ public class KafkaMetrics implements Metrics {
     }
   }
 
-  private class ProducerCallback implements Callback {
-    @Override
-    public void onCompletion(final RecordMetadata metadata, final Exception exception) {
-      if (null != exception) {
-        LOG.error("Unable to send event to Kafka", exception);
-        final Producer<String, String> oldProducer = producer;
-        producer = null;
-        if (null != oldProducer) {
-          LOG.info("Closing producer after exception.");
-          oldProducer.close(0, TimeUnit.MILLISECONDS);
-        }
-      }
-    }
-  }
-
   @Override
   public void shutdown() {
     trace("");
@@ -242,10 +214,10 @@ public class KafkaMetrics implements Metrics {
 
   @Override
   public void userConnect(final String persistentId, final String sessionId,
-      @Nullable final CityResponse geoIp, final String agentName, final String agentType,
-      final String agentOs, final String agentLanguage) {
+                          @Nullable final CityResponse geoIp, final String agentName, final String agentType,
+                          final String agentOs, final String agentLanguage) {
     trace("%s, %s, %s, %s, %s, %s, %s", persistentId, sessionId, geoIp, agentName, agentType,
-        agentOs, agentLanguage);
+            agentOs, agentLanguage);
 
     final Map<String, Object> data = new HashMap<>();
     data.put("persistentId", persistentId);
@@ -295,9 +267,9 @@ public class KafkaMetrics implements Metrics {
 
   @Override
   public void gameStart(final String gameId, final Collection<CardSet> decks, final int blanks,
-      final int maxPlayers, final int scoreGoal, final boolean hasPassword) {
+                        final int maxPlayers, final int scoreGoal, final boolean hasPassword) {
     trace("%s, %s, %d, %d, %d, %s", gameId, decks.toArray(), blanks, maxPlayers, scoreGoal,
-        hasPassword);
+            hasPassword);
 
     final Map<String, Object> data = new HashMap<>();
     data.put("gameId", gameId);
@@ -326,10 +298,10 @@ public class KafkaMetrics implements Metrics {
 
   @Override
   public void roundComplete(final String gameId, final String roundId, final String judgeSessionId,
-      final String winnerSessionId, final BlackCard blackCard,
-      final Map<String, List<WhiteCard>> cards) {
+                            final String winnerSessionId, final BlackCard blackCard,
+                            final Map<String, List<WhiteCard>> cards) {
     trace("%s, %s, %s, %s, %s, %s", gameId, roundId, judgeSessionId, winnerSessionId, blackCard,
-        cards);
+            cards);
 
     final Map<String, Object> data = new HashMap<>();
     data.put("gameId", gameId);
@@ -372,7 +344,7 @@ public class KafkaMetrics implements Metrics {
 
   @Override
   public void cardDealt(final String gameId, final String sessionId, final WhiteCard card,
-      final long dealSeq) {
+                        final long dealSeq) {
     trace("%s, %s, %s, %d", gameId, sessionId, card, dealSeq);
 
     final Map<String, Object> data = new HashMap<>();
@@ -391,5 +363,20 @@ public class KafkaMetrics implements Metrics {
     data.put("card", whiteCardData);
 
     send(getEventMap("cardDealt", data));
+  }
+
+  private class ProducerCallback implements Callback {
+    @Override
+    public void onCompletion(final RecordMetadata metadata, final Exception exception) {
+      if (null != exception) {
+        LOG.error("Unable to send event to Kafka", exception);
+        final Producer<String, String> oldProducer = producer;
+        producer = null;
+        if (null != oldProducer) {
+          LOG.info("Closing producer after exception.");
+          oldProducer.close(0, TimeUnit.MILLISECONDS);
+        }
+      }
+    }
   }
 }

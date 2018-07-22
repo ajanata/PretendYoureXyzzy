@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,22 +23,19 @@
 
 package net.socialgamer.cah.data;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.concurrent.PriorityBlockingQueue;
-
-import javax.annotation.Nullable;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-
 import net.sf.uadetector.ReadableUserAgent;
 import net.sf.uadetector.service.UADetectorServiceFactory;
 import net.socialgamer.cah.CahModule.UniqueId;
 import net.socialgamer.cah.Constants.Sigil;
+import org.apache.log4j.Logger;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.concurrent.PriorityBlockingQueue;
 
 
 /**
@@ -57,27 +54,16 @@ public class User {
   private final PriorityBlockingQueue<QueuedMessage> queuedMessages;
 
   private final Object queuedMessageSynchronization = new Object();
-
-  private long lastHeardFrom = 0;
-
-  private long lastUserAction = 0;
-
   private final long connectedAt = new Date().getTime();
-
-  private Game currentGame;
-
   private final String hostname;
-
   private final boolean isAdmin;
-
   private final String persistentId;
-
   private final String sessionId;
-
   private final String clientLanguage;
-
   private final ReadableUserAgent agent;
-
+  private long lastHeardFrom = 0;
+  private long lastUserAction = 0;
+  private Game currentGame;
   /**
    * Reset when this user object is no longer valid, most likely because it pinged out.
    */
@@ -106,13 +92,13 @@ public class User {
    */
   @Inject
   public User(@Assisted("nickname") final String nickname,
-      @Assisted("idCode") final String idCode,
-      @Assisted("hostname") final String hostname,
-      @Assisted final boolean isAdmin,
-      @Assisted("persistentId") final String persistentId,
-      @UniqueId final String sessionId,
-      @Nullable @Assisted("clientLanguage") final String clientLanguage,
-      @Nullable @Assisted("clientAgent") final String clientAgent) {
+              @Assisted("idCode") final String idCode,
+              @Assisted("hostname") final String hostname,
+              @Assisted final boolean isAdmin,
+              @Assisted("persistentId") final String persistentId,
+              @UniqueId final String sessionId,
+              @Nullable @Assisted("clientLanguage") final String clientLanguage,
+              @Nullable @Assisted("clientAgent") final String clientAgent) {
     this.nickname = nickname;
     this.idCode = idCode;
     this.hostname = hostname;
@@ -122,14 +108,6 @@ public class User {
     this.clientLanguage = clientLanguage == null ? "" : clientLanguage;
     agent = UADetectorServiceFactory.getResourceModuleParser().parse(clientAgent);
     queuedMessages = new PriorityBlockingQueue<QueuedMessage>();
-  }
-
-  public interface Factory {
-    User create(@Assisted("nickname") String nickname, @Assisted("idCode") String idCode,
-        @Assisted("hostname") String hostname, boolean isAdmin,
-        @Assisted("persistentId") String persistentId,
-        @Nullable @Assisted("clientLanguage") String clientLanguage,
-        @Nullable @Assisted("clientAgent") String clientAgent);
   }
 
   /**
@@ -297,7 +275,7 @@ public class User {
     final boolean addrValid = hostname.equals(currentHostname);
     if (!addrValid) {
       LOG.warn(String.format("User %s used to be from %s but is now from %s", nickname, hostname,
-          currentHostname));
+              currentHostname));
     }
     return isValid() && addrValid;
   }
@@ -350,5 +328,13 @@ public class User {
     if (currentGame == game) {
       currentGame = null;
     }
+  }
+
+  public interface Factory {
+    User create(@Assisted("nickname") String nickname, @Assisted("idCode") String idCode,
+                @Assisted("hostname") String hostname, boolean isAdmin,
+                @Assisted("persistentId") String persistentId,
+                @Nullable @Assisted("clientLanguage") String clientLanguage,
+                @Nullable @Assisted("clientAgent") String clientAgent);
   }
 }

@@ -1,9 +1,9 @@
 package net.socialgamer.cah.data;
 
+import net.socialgamer.cah.Constants.BlackCardData;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import net.socialgamer.cah.Constants.BlackCardData;
 
 
 public abstract class BlackCard {
@@ -47,6 +47,6 @@ public abstract class BlackCard {
   @Override
   public String toString() {
     return String.format("%s %s (id:%d, draw:%d, pick:%d, watermark:%s)", getClass().getName(),
-        getText(), getId(), getDraw(), getPick(), getWatermark());
+            getText(), getId(), getDraw(), getPick(), getWatermark());
   }
 }

@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,53 +23,26 @@
 
 package net.socialgamer.cah.data;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.hibernate.Session;
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-
-import net.socialgamer.cah.CahModule.GamePermalinkUrlFormat;
-import net.socialgamer.cah.CahModule.RoundPermalinkUrlFormat;
-import net.socialgamer.cah.CahModule.ShowGamePermalink;
-import net.socialgamer.cah.CahModule.ShowRoundPermalink;
-import net.socialgamer.cah.CahModule.UniqueId;
-import net.socialgamer.cah.Constants.AjaxResponse;
-import net.socialgamer.cah.Constants.BlackCardData;
-import net.socialgamer.cah.Constants.ErrorCode;
-import net.socialgamer.cah.Constants.GameInfo;
-import net.socialgamer.cah.Constants.GamePlayerInfo;
-import net.socialgamer.cah.Constants.GamePlayerStatus;
-import net.socialgamer.cah.Constants.GameState;
-import net.socialgamer.cah.Constants.LongPollEvent;
-import net.socialgamer.cah.Constants.LongPollResponse;
-import net.socialgamer.cah.Constants.ReturnableData;
-import net.socialgamer.cah.Constants.WhiteCardData;
+import net.socialgamer.cah.CahModule.*;
+import net.socialgamer.cah.Constants.*;
 import net.socialgamer.cah.cardcast.CardcastDeck;
 import net.socialgamer.cah.cardcast.CardcastService;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.Metrics;
 import net.socialgamer.cah.task.SafeTimerTask;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.hibernate.Session;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -92,44 +65,10 @@ import net.socialgamer.cah.task.SafeTimerTask;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class Game {
-  private static final Logger logger = Logger.getLogger(Game.class);
-
-  private final int id;
-  /**
-   * All players present in the game.
-   */
-  private final List<Player> players = Collections.synchronizedList(new ArrayList<Player>(10));
-  /**
-   * Players participating in the current round.
-   */
-  private final List<Player> roundPlayers = Collections.synchronizedList(new ArrayList<Player>(9));
-  private final PlayerPlayedCardsTracker playedCards = new PlayerPlayedCardsTracker();
-  private final List<User> spectators = Collections.synchronizedList(new ArrayList<User>(10));
-  private final ConnectedUsers connectedUsers;
-  private final GameManager gameManager;
-  private Player host;
-  private final Provider<Session> sessionProvider;
-  private BlackDeck blackDeck;
-  private BlackCard blackCard;
-  private final Object blackCardLock = new Object();
-  private WhiteDeck whiteDeck;
-  private GameState state;
-  private final GameOptions options = new GameOptions();
-  private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<String>());
-  private final Metrics metrics;
-  private final Provider<Boolean> showGameLinkProvider;
-  private final Provider<String> gamePermalinkFormatProvider;
-  private final Provider<Boolean> showRoundLinkProvider;
-  private final Provider<String> roundPermalinkFormatProvider;
-  private final long created = System.currentTimeMillis();
-
-  private int judgeIndex = 0;
-
   /**
    * The minimum number of black cards that must be added to a game for it to be able to start.
    */
   public final static int MINIMUM_BLACK_CARDS = 50;
-
   /**
    * The minimum number of white cards per player limit slots that must be added to a game for it to
    * be able to start.
@@ -137,8 +76,7 @@ public class Game {
    * We need 20 * maxPlayers cards. This allows black cards up to "draw 9" to work correctly.
    */
   public final static int MINIMUM_WHITE_CARDS_PER_PLAYER = 20;
-
-  // All of these delays could be moved to pyx.properties.
+  private static final Logger logger = Logger.getLogger(Game.class);
   /**
    * Time, in milliseconds, to delay before starting a new round.
    */
@@ -167,26 +105,56 @@ public class Game {
   private final static int JUDGE_TIMEOUT_PER_CARD = 7 * 1000;
   private final static int MAX_SKIPS_BEFORE_KICK = 2;
   private final static Set<String> FINITE_PLAYTIMES;
-  static
-  {
+
+  static {
     final Set<String> finitePlaytimes = new TreeSet<String>(Arrays.asList(
-        new String[]{"0.25x", "0.5x", "0.75x", "1x", "1.25x", "1.5x", "1.75x", "2x", "2.5x", "3x", "4x", "5x", "10x"}));
+            "0.25x", "0.5x", "0.75x", "1x", "1.25x", "1.5x", "1.75x", "2x", "2.5x", "3x", "4x", "5x", "10x"));
     FINITE_PLAYTIMES = Collections.unmodifiableSet(finitePlaytimes);
   }
 
+  private final int id;
+  /**
+   * All players present in the game.
+   */
+  private final List<Player> players = Collections.synchronizedList(new ArrayList<Player>(10));
+  /**
+   * Players participating in the current round.
+   */
+  private final List<Player> roundPlayers = Collections.synchronizedList(new ArrayList<Player>(9));
+  private final PlayerPlayedCardsTracker playedCards = new PlayerPlayedCardsTracker();
+  private final List<User> spectators = Collections.synchronizedList(new ArrayList<User>(10));
+  private final ConnectedUsers connectedUsers;
+  private final GameManager gameManager;
+  private final Provider<Session> sessionProvider;
+  private final Object blackCardLock = new Object();
+  private final GameOptions options = new GameOptions();
+  private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<String>());
+  private final Metrics metrics;
+  private final Provider<Boolean> showGameLinkProvider;
+  private final Provider<String> gamePermalinkFormatProvider;
+  private final Provider<Boolean> showRoundLinkProvider;
+
+  // All of these delays could be moved to pyx.properties.
+  private final Provider<String> roundPermalinkFormatProvider;
+  private final long created = System.currentTimeMillis();
   /**
    * Lock object to prevent judging during idle judge detection and vice-versa.
    */
   private final Object judgeLock = new Object();
-
   /**
    * Lock to prevent missing timer updates.
    */
   private final Object roundTimerLock = new Object();
-  private volatile ScheduledFuture<?> lastScheduledFuture;
   private final ScheduledThreadPoolExecutor globalTimer;
   private final Provider<CardcastService> cardcastServiceProvider;
   private final Provider<String> uniqueIdProvider;
+  private Player host;
+  private BlackDeck blackDeck;
+  private BlackCard blackCard;
+  private WhiteDeck whiteDeck;
+  private GameState state;
+  private int judgeIndex = 0;
+  private volatile ScheduledFuture<?> lastScheduledFuture;
   private String currentUniqueId;
   /**
    * Sequence number of cards dealt. This allows re-shuffles and re-deals to still be tracked as
@@ -209,14 +177,14 @@ public class Game {
    */
   @Inject
   public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
-      final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer,
-      final Provider<Session> sessionProvider,
-      final Provider<CardcastService> cardcastServiceProvider,
-      @UniqueId final Provider<String> uniqueIdProvider,
-      final Metrics metrics, @ShowRoundPermalink final Provider<Boolean> showRoundLinkProvider,
-      @RoundPermalinkUrlFormat final Provider<String> roundPermalinkFormatProvider,
-      @ShowGamePermalink final Provider<Boolean> showGameLinkProvider,
-      @GamePermalinkUrlFormat final Provider<String> gamePermalinkFormatProvider) {
+              final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer,
+              final Provider<Session> sessionProvider,
+              final Provider<CardcastService> cardcastServiceProvider,
+              @UniqueId final Provider<String> uniqueIdProvider,
+              final Metrics metrics, @ShowRoundPermalink final Provider<Boolean> showRoundLinkProvider,
+              @RoundPermalinkUrlFormat final Provider<String> roundPermalinkFormatProvider,
+              @ShowGamePermalink final Provider<Boolean> showGameLinkProvider,
+              @GamePermalinkUrlFormat final Provider<String> gamePermalinkFormatProvider) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
@@ -241,7 +209,7 @@ public class Game {
   public void maybeAddPermalinkToData(final Map<ReturnableData, Object> data) {
     if (showGameLinkProvider.get() && null != currentUniqueId) {
       data.put(AjaxResponse.GAME_PERMALINK,
-          String.format(gamePermalinkFormatProvider.get(), currentUniqueId));
+              String.format(gamePermalinkFormatProvider.get(), currentUniqueId));
     }
   }
 
@@ -362,7 +330,7 @@ public class Game {
       }
       if (players.size() < 3 && state != GameState.LOBBY) {
         logger.info(String.format("Resetting game %d due to too few players after someone left.",
-            id));
+                id));
         resetState(true);
       } else if (wasJudge) {
         synchronized (roundTimerLock) {
@@ -393,7 +361,7 @@ public class Game {
    *           Thrown if {@code user} is already in a game.
    */
   public void addSpectator(final User user) throws TooManySpectatorsException,
-      IllegalStateException {
+          IllegalStateException {
     logger.info(String.format("%s joined game %d as a spectator.", user.toString(), id));
     synchronized (spectators) {
       if (spectators.size() >= options.spectatorLimit) {
@@ -465,7 +433,7 @@ public class Game {
    *          Message data to broadcast.
    */
   public void broadcastToPlayers(final MessageType type,
-      final HashMap<ReturnableData, Object> masterData) {
+                                 final HashMap<ReturnableData, Object> masterData) {
     connectedUsers.broadcastToList(playersToUsers(), type, masterData);
   }
 
@@ -659,7 +627,7 @@ public class Game {
           }
           final List<WhiteCard> playerCards = playedCards.getCards(player);
           if (playerCards != null && blackCard != null
-              && playerCards.size() == blackCard.getPick()) {
+                  && playerCards.size() == blackCard.getPick()) {
             playerStatus = GamePlayerStatus.IDLE;
           } else {
             playerStatus = GamePlayerStatus.PLAYING;
@@ -718,9 +686,9 @@ public class Game {
       if (started) {
         currentUniqueId = uniqueIdProvider.get();
         logger.info(String.format("Starting game %d with card sets %s, Cardcast %s, %d blanks, %d "
-            + "max players, %d max spectators, %d score limit, players %s, unique %s.",
-            id, options.cardSetIds, cardcastDeckIds, options.blanksInDeck, options.playerLimit,
-            options.spectatorLimit, options.scoreGoal, players, currentUniqueId));
+                        + "max players, %d max spectators, %d score limit, players %s, unique %s.",
+                id, options.cardSetIds, cardcastDeckIds, options.blanksInDeck, options.playerLimit,
+                options.spectatorLimit, options.scoreGoal, players, currentUniqueId));
         // do this stuff outside the players lock; they will lock players again later for much less
         // time, and not at the same time as trying to lock users, which has caused deadlocks
         final List<CardSet> cardSets;
@@ -730,7 +698,7 @@ public class Game {
           whiteDeck = loadWhiteDeck(cardSets);
         }
         metrics.gameStart(currentUniqueId, cardSets, options.blanksInDeck, options.playerLimit,
-            options.scoreGoal, !StringUtils.isBlank(options.password));
+                options.scoreGoal, !StringUtils.isBlank(options.password));
         startNextRound();
         gameManager.broadcastGameListRefresh();
       }
@@ -748,10 +716,9 @@ public class Game {
         final List<CardSet> cardSets = new ArrayList<>();
 
         if (!options.getPyxCardSetIds().isEmpty()) {
-          @SuppressWarnings("unchecked")
-          final List<CardSet> pyxCardSets = session
-              .createQuery("from PyxCardSet where id in (:ids)")
-              .setParameterList("ids", options.getPyxCardSetIds()).list();
+          @SuppressWarnings("unchecked") final List<CardSet> pyxCardSets = session
+                  .createQuery("from PyxCardSet where id in (:ids)")
+                  .setParameterList("ids", options.getPyxCardSetIds()).list();
           cardSets.addAll(pyxCardSets);
         }
 
@@ -811,11 +778,7 @@ public class Game {
       }
 
       final WhiteDeck tempWhiteDeck = loadWhiteDeck(cardSets);
-      if (tempWhiteDeck.totalCount() < getRequiredWhiteCardCount()) {
-        return false;
-      }
-
-      return true;
+      return tempWhiteDeck.totalCount() >= getRequiredWhiteCardCount();
     }
   }
 
@@ -906,18 +869,17 @@ public class Game {
     double factor = 1.0d;
     final String tm = options.timerMultiplier;
 
-    if(tm.equals("Unlimited")) {
+    if (tm.equals("Unlimited")) {
       return Integer.MAX_VALUE;
     }
 
-    if(FINITE_PLAYTIMES.contains(tm))
-    {
+    if (FINITE_PLAYTIMES.contains(tm)) {
       factor = Double.valueOf(tm.substring(0, tm.length() - 1));
     }
 
     final long retval = Math.round(base * factor);
 
-    if(retval > Integer.MAX_VALUE) {
+    if (retval > Integer.MAX_VALUE) {
       return Integer.MAX_VALUE;
     }
 
@@ -1052,8 +1014,8 @@ public class Game {
         // not sure how much of this check is actually required
         if (players.size() < 3 || playedCards.size() < 2) {
           logger.info(String.format(
-              "Resetting game %d due to insufficient players after removing %d idle players.",
-              id, playersToRemove.size()));
+                  "Resetting game %d due to insufficient players after removing %d idle players.",
+                  id, playersToRemove.size()));
           resetState(true);
         } else {
           judgingState();
@@ -1309,7 +1271,7 @@ public class Game {
       shuffledPlayedCards = new ArrayList<List<WhiteCard>>(playedCards.cards());
       // list of all sets of cards played, which have data. this looks terrible...
       final List<List<Map<WhiteCardData, Object>>> cardData =
-          new ArrayList<List<Map<WhiteCardData, Object>>>(shuffledPlayedCards.size());
+              new ArrayList<List<Map<WhiteCardData, Object>>>(shuffledPlayedCards.size());
       Collections.shuffle(shuffledPlayedCards);
       for (final List<WhiteCard> cards : shuffledPlayedCards) {
         cardData.add(getWhiteCardData(cards));
@@ -1336,7 +1298,7 @@ public class Game {
       final Player player = getPlayerForUser(user);
       synchronized (playedCards) {
         final List<List<Map<WhiteCardData, Object>>> cardData =
-            new ArrayList<List<Map<WhiteCardData, Object>>>(playedCards.size());
+                new ArrayList<List<Map<WhiteCardData, Object>>>(playedCards.size());
         int faceDownCards = playedCards.size();
         if (playedCards.hasPlayer(player)) {
           cardData.add(getWhiteCardData(playedCards.getCards(player)));
@@ -1360,7 +1322,7 @@ public class Game {
    */
   private List<Map<WhiteCardData, Object>> getWhiteCardData(final List<WhiteCard> cards) {
     final List<Map<WhiteCardData, Object>> data =
-        new ArrayList<Map<WhiteCardData, Object>>(cards.size());
+            new ArrayList<Map<WhiteCardData, Object>>(cards.size());
     for (final WhiteCard card : cards) {
       data.add(card.getClientData());
     }
@@ -1537,7 +1499,7 @@ public class Game {
     data.put(LongPollResponse.INTERMISSION, ROUND_INTERMISSION);
     if (showRoundLinkProvider.get()) {
       data.put(LongPollResponse.ROUND_PERMALINK,
-          String.format(roundPermalinkFormatProvider.get(), roundId));
+              String.format(roundPermalinkFormatProvider.get(), roundId));
     }
     broadcastToPlayers(MessageType.GAME_EVENT, data);
 
@@ -1567,9 +1529,9 @@ public class Game {
 
     final Map<String, List<WhiteCard>> cardsBySessionId = new HashMap<>();
     playedCards.cardsByUser().forEach(
-        (key, value) -> cardsBySessionId.put(key.getSessionId(), value));
+            (key, value) -> cardsBySessionId.put(key.getSessionId(), value));
     metrics.roundComplete(currentUniqueId, roundId, judge.getSessionId(),
-        cardPlayer.getUser().getSessionId(), blackCard, cardsBySessionId);
+            cardPlayer.getUser().getSessionId(), blackCard, cardsBySessionId);
 
     return null;
   }

@@ -24,69 +24,69 @@
 /**
  * Builder for ajax requests. This contains methods to add every possible parameter to an ajax
  * request, even if it doesn't make sense for the operation code.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  * @param {string}
  *          op The operation code for the ajax request.
  * @returns {cah.ajax.Builder}
  * @constructor
  */
-cah.ajax.Builder = function(op) {
-  /**
-   * The data for this request.
-   * 
-   * @type {object}
-   */
-  this.data = {};
+cah.ajax.Builder = function (op) {
+    /**
+     * The data for this request.
+     *
+     * @type {object}
+     */
+    this.data = {};
 
-  this.data[cah.$.AjaxRequest.OP] = op;
+    this.data[cah.$.AjaxRequest.OP] = op;
 
-  /**
-   * Whether this request has been run or not.
-   * 
-   * @type {boolean}
-   * @private
-   */
-  this.run_ = false;
+    /**
+     * Whether this request has been run or not.
+     *
+     * @type {boolean}
+     * @private
+     */
+    this.run_ = false;
 
-  /**
-   * Error callback for this request. This is for communication-level errors. If this is not
-   * specified, the default handler of logging the error to the user will occur.
-   * 
-   * @type {?function(jqXHR,textStatus,errorThrown)}
-   */
-  this.errback = undefined;
+    /**
+     * Error callback for this request. This is for communication-level errors. If this is not
+     * specified, the default handler of logging the error to the user will occur.
+     *
+     * @type {?function(jqXHR,textStatus,errorThrown)}
+     */
+    this.errback = undefined;
 };
 
 /**
  * Serial counter for ajax requests.
- * 
+ *
  * @type {number}
  */
 cah.ajax.Builder.serial = 0;
 
 /**
  * Set an error callback for the request.
- * 
+ *
  * @param {Function}
  *          opt_errback Optional error callback. (jqXHR,textStatus,errorThrown)
  * @returns {cah.ajax.Builder}
  */
-cah.ajax.Builder.prototype.withErrback = function(opt_errback) {
-  this.assertNotExecuted_();
-  this.errback = errback;
-  return this;
+cah.ajax.Builder.prototype.withErrback = function (opt_errback) {
+    this.assertNotExecuted_();
+    this.errback = errback;
+    return this;
 };
 
 /**
  * Run the ajax request.
  */
-cah.ajax.Builder.prototype.run = function() {
-  this.assertNotExecuted_();
-  this.run_ = true;
+cah.ajax.Builder.prototype.run = function () {
+    this.assertNotExecuted_();
+    this.run_ = true;
 
-  this.data[cah.$.AjaxRequest.SERIAL] = cah.ajax.Builder.serial++;
-  cah.Ajax.instance.requestWithBuilder(this);
+    this.data[cah.$.AjaxRequest.SERIAL] = cah.ajax.Builder.serial++;
+    cah.Ajax.instance.requestWithBuilder(this);
 };
 
 /**
@@ -94,10 +94,10 @@ cah.ajax.Builder.prototype.run = function() {
  *          nickname Nickname field to use in the request.
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withNickname = function(nickname) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.NICKNAME] = nickname;
-  return this;
+cah.ajax.Builder.prototype.withNickname = function (nickname) {
+    this.assertNotExecuted_();
+    this.data[cah.$.AjaxRequest.NICKNAME] = nickname;
+    return this;
 };
 
 /**
@@ -105,10 +105,10 @@ cah.ajax.Builder.prototype.withNickname = function(nickname) {
  *          persistentId Persistent ID to use in the request.
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withPersistentId = function(persistentId) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.PERSISTENT_ID] = persistentId;
-  return this;
+cah.ajax.Builder.prototype.withPersistentId = function (persistentId) {
+    this.assertNotExecuted_();
+    this.data[cah.$.AjaxRequest.PERSISTENT_ID] = persistentId;
+    return this;
 };
 
 /**
@@ -116,10 +116,10 @@ cah.ajax.Builder.prototype.withPersistentId = function(persistentId) {
  *          message Message field to use in the request.
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withMessage = function(message) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.MESSAGE] = message;
-  return this;
+cah.ajax.Builder.prototype.withMessage = function (message) {
+    this.assertNotExecuted_();
+    this.data[cah.$.AjaxRequest.MESSAGE] = message;
+    return this;
 };
 
 /**
@@ -127,10 +127,10 @@ cah.ajax.Builder.prototype.withMessage = function(message) {
  *          gameId Game id field to use in the request.
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withGameId = function(gameId) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.GAME_ID] = gameId;
-  return this;
+cah.ajax.Builder.prototype.withGameId = function (gameId) {
+    this.assertNotExecuted_();
+    this.data[cah.$.AjaxRequest.GAME_ID] = gameId;
+    return this;
 };
 
 /**
@@ -138,10 +138,10 @@ cah.ajax.Builder.prototype.withGameId = function(gameId) {
  *          cardId Card id field to use in the request.
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withCardId = function(cardId) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.CARD_ID] = cardId;
-  return this;
+cah.ajax.Builder.prototype.withCardId = function (cardId) {
+    this.assertNotExecuted_();
+    this.data[cah.$.AjaxRequest.CARD_ID] = cardId;
+    return this;
 };
 
 /**
@@ -149,10 +149,10 @@ cah.ajax.Builder.prototype.withCardId = function(cardId) {
  *          options Game options to use in the request.
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withGameOptions = function(options) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.GAME_OPTIONS] = $.toJSON(options);
-  return this;
+cah.ajax.Builder.prototype.withGameOptions = function (options) {
+    this.assertNotExecuted_();
+    this.data[cah.$.AjaxRequest.GAME_OPTIONS] = $.toJSON(options);
+    return this;
 };
 
 /**
@@ -160,10 +160,10 @@ cah.ajax.Builder.prototype.withGameOptions = function(options) {
  *          password Password field to use in the request.
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withPassword = function(password) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.PASSWORD] = password;
-  return this;
+cah.ajax.Builder.prototype.withPassword = function (password) {
+    this.assertNotExecuted_();
+    this.data[cah.$.AjaxRequest.PASSWORD] = password;
+    return this;
 };
 
 /**
@@ -171,10 +171,10 @@ cah.ajax.Builder.prototype.withPassword = function(password) {
  *          wall Whether or not this is a warn-all ("wall").
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withWall = function(wall) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.WALL] = wall;
-  return this;
+cah.ajax.Builder.prototype.withWall = function (wall) {
+    this.assertNotExecuted_();
+    this.data[cah.$.AjaxRequest.WALL] = wall;
+    return this;
 };
 
 /**
@@ -182,10 +182,10 @@ cah.ajax.Builder.prototype.withWall = function(wall) {
  *          emote Whether or not this is an emote
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withEmote = function(emote) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.EMOTE] = emote;
-  return this;
+cah.ajax.Builder.prototype.withEmote = function (emote) {
+    this.assertNotExecuted_();
+    this.data[cah.$.AjaxRequest.EMOTE] = emote;
+    return this;
 };
 
 /**
@@ -193,10 +193,10 @@ cah.ajax.Builder.prototype.withEmote = function(emote) {
  *          id The Cardcast ID of the deck to add.
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withCardcastId = function(id) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.CARDCAST_ID] = id;
-  return this;
+cah.ajax.Builder.prototype.withCardcastId = function (id) {
+    this.assertNotExecuted_();
+    this.data[cah.$.AjaxRequest.CARDCAST_ID] = id;
+    return this;
 };
 
 /**
@@ -204,46 +204,46 @@ cah.ajax.Builder.prototype.withCardcastId = function(id) {
  *          id The user's identification code.
  * @returns {cah.ajax.Builder} This object.
  */
-cah.ajax.Builder.prototype.withIdCode = function(idCode) {
-  this.assertNotExecuted_();
-  this.data[cah.$.AjaxRequest.ID_CODE] = idCode;
-  return this;
+cah.ajax.Builder.prototype.withIdCode = function (idCode) {
+    this.assertNotExecuted_();
+    this.data[cah.$.AjaxRequest.ID_CODE] = idCode;
+    return this;
 };
 
 /**
  * Assert that the request from this builder has not already run. Throws an exception if it has.
- * 
+ *
  * @private
  */
-cah.ajax.Builder.prototype.assertNotExecuted_ = function() {
-  if (this.run_) {
-    throw "Request already executed.";
-  }
+cah.ajax.Builder.prototype.assertNotExecuted_ = function () {
+    if (this.run_) {
+        throw "Request already executed.";
+    }
 };
 
 /**
  * Assert that the request from this builder has already run. Throws an exception if it has not.
- * 
+ *
  * @private
  */
-cah.ajax.Builder.prototype.assertExecuted_ = function() {
-  if (!this.run_) {
-    throw "Request not yet executed.";
-  }
+cah.ajax.Builder.prototype.assertExecuted_ = function () {
+    if (!this.run_) {
+        throw "Request not yet executed.";
+    }
 };
 
 /**
  * @returns {string} The operation code of the request this builder built.
  */
-cah.ajax.Builder.prototype.getOp = function() {
-  this.assertExecuted_();
-  return this.data[cah.$.AjaxRequest.OP];
+cah.ajax.Builder.prototype.getOp = function () {
+    this.assertExecuted_();
+    return this.data[cah.$.AjaxRequest.OP];
 };
 
 /**
  * @returns {number} The serial id of the request this builder built.
  */
-cah.ajax.Builder.prototype.getSerial = function() {
-  this.assertExecuted_();
-  return this.data[cah.$.AjaxRequest.SERIAL];
+cah.ajax.Builder.prototype.getSerial = function () {
+    this.assertExecuted_();
+    return this.data[cah.$.AjaxRequest.SERIAL];
 };

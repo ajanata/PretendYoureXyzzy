@@ -28,11 +28,11 @@ most useful graph if it is only updated every 15 minutes, but it is still nice t
 @author Andy Janata (ajanata@socialgamer.net)
 --%>
 <%@ page language="java" contentType="text/plain; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.util.Properties" %>
 <%@ page import="com.google.inject.Injector" %>
+<%@ page import="net.socialgamer.cah.StartupUtils" %>
 <%@ page import="net.socialgamer.cah.data.ConnectedUsers" %>
 <%@ page import="net.socialgamer.cah.data.GameManager" %>
-<%@ page import="net.socialgamer.cah.StartupUtils" %>
+<%@ page import="java.util.Properties" %>
 <%
 ServletContext servletContext = pageContext.getServletContext();
 Injector injector = (Injector) servletContext.getAttribute(StartupUtils.INJECTOR);

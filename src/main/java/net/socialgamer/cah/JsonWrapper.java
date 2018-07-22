@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- * 
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -29,7 +29,7 @@ import org.json.simple.JSONValue;
 
 /**
  * Wrap around an {@code JSONObject}, to allow parameters to be retrieved by enum value.
- * 
+ *
  * @author Gavin Lambert (uecasm)
  */
 public class JsonWrapper {
@@ -37,7 +37,7 @@ public class JsonWrapper {
 
   /**
    * Create a new JsonWrapper.
-   * 
+   *
    * @param json
    *          The JSON text to parse.
    */
@@ -47,7 +47,7 @@ public class JsonWrapper {
 
   /**
    * Returns the value of a property as an Object, or null if the property does not exist.
-   * 
+   *
    * @param key
    *          Property to get (should be one of the defined Constants).
    * @return Value of the property, or null if property does not exist.
@@ -58,7 +58,7 @@ public class JsonWrapper {
 
   /**
    * Returns the value of a property as a String, or the default if the parameter does not exist.
-   * 
+   *
    * @param parameter
    *          Parameter to get.
    * @param defaultValue
@@ -72,7 +72,7 @@ public class JsonWrapper {
 
   /**
    * Returns the value of a property as an integer, or the default if the parameter does not exist.
-   * 
+   *
    * @param parameter
    *          Parameter to get.
    * @param defaultValue
@@ -89,7 +89,7 @@ public class JsonWrapper {
 
   /**
    * Returns the value of a property as a boolean, or the default if the parameter does not exist.
-   * 
+   *
    * @param parameter
    *          Parameter to get.
    * @param defaultValue

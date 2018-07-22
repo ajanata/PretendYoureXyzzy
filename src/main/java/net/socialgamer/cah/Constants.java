@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,10 +23,10 @@
 
 package net.socialgamer.cah;
 
+import net.socialgamer.cah.data.Game;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-
-import net.socialgamer.cah.data.Game;
 
 
 /**
@@ -45,41 +45,6 @@ public class Constants {
   public static final int CHAT_FLOOD_MESSAGE_COUNT = 4;
   public static final int CHAT_FLOOD_TIME = 30 * 1000;
   public static final int CHAT_MAX_LENGTH = 200;
-
-  /**
-   * Enums that implement this interface are valid keys for data returned to clients.
-   */
-  public interface ReturnableData {
-  }
-
-  /**
-   * Enums that implement this interface have a user-visible string associated with them.
-   *
-   * There presently is not support for localization, but the name fits.
-   */
-  public interface Localizable {
-    /**
-     * @return The user-visible string that is associated with this enum value.
-     */
-    public String getString();
-  }
-
-  /**
-   * Enums that implement this interface have two user-visible strings associated with them.
-   *
-   * There presently is not support for localization, but the name fits.
-   */
-  public interface DoubleLocalizable {
-    /**
-     * @return The first user-visible string that is associated with this enum value.
-     */
-    public String getString();
-
-    /**
-     * @return The second user-visible string that is associated with this enum value.
-     */
-    public String getString2();
-  }
 
   /**
    * Reason why a client disconnected.
@@ -364,20 +329,20 @@ public class Constants {
     CANNOT_JOIN_ANOTHER_GAME("cjag", "You cannot join another game."),
     CAPSLOCK("CL", "Try turning caps lock off."),
     CARDCAST_CANNOT_FIND("ccf", "Cannot find Cardcast deck with given ID. If you just added this"
-        + " deck to Cardcast, wait a few minutes and try again."),
+            + " deck to Cardcast, wait a few minutes and try again."),
     CARDCAST_INVALID_ID("cii", "Invalid Cardcast ID. Must be exactly 5 characters."),
     DO_NOT_HAVE_CARD("dnhc", "You don't have that card."),
     GAME_FULL("gf", "That game is full. Join another."),
     INVALID_CARD("ic", "Invalid card specified."),
     INVALID_GAME("ig", "Invalid game specified."),
     INVALID_ID_CODE("iid", "Identification code, if provided, must be between 8 and 100 characters,"
-        + " inclusive."),
+            + " inclusive."),
     /**
      * TODO this probably should be pulled in from a static inside the RegisterHandler.
      */
     INVALID_NICK("in", "Nickname must contain only upper and lower case letters, " +
-        "numbers, or underscores, must be 3 to 30 characters long, and must not start with a " +
-        "number."),
+            "numbers, or underscores, must be 3 to 30 characters long, and must not start with a " +
+            "number."),
     /**
      * TODO this probably should be pulled in from a static inside the ChatHandler.
      */
@@ -391,8 +356,8 @@ public class Constants {
     NO_SUCH_USER("nsu", "No such user."),
     NOT_ADMIN("na", "You are not an administrator."),
     NOT_ENOUGH_CARDS("nec", "You must add card sets containing at least "
-        + Game.MINIMUM_BLACK_CARDS + " black cards and " + Game.MINIMUM_WHITE_CARDS_PER_PLAYER
-        + " times the player limit white cards."),
+            + Game.MINIMUM_BLACK_CARDS + " black cards and " + Game.MINIMUM_WHITE_CARDS_PER_PLAYER
+            + " times the player limit white cards."),
     NOT_ENOUGH_PLAYERS("nep", "There are not enough players to start the game."),
     NOT_ENOUGH_SPACES("nes", "You must use more words in a message that long."),
     NOT_GAME_HOST("ngh", "Only the game host can do that."),
@@ -404,17 +369,17 @@ public class Constants {
     PLAYED_ALL_CARDS("pac", "You already played all the necessary cards!"),
     RESERVED_NICK("rn", "That nick is reserved."),
     REPEAT_MESSAGE("rm",
-        "You can't repeat the same message multiple times in a row."),
+            "You can't repeat the same message multiple times in a row."),
     REPEATED_WORDS("rW", "You must use more unique words in your message."),
     SERVER_ERROR("serr", "An error occurred on the server."),
     SESSION_EXPIRED("se", "Your session has expired. Refresh the page."),
     TOO_FAST("tf", "You are chatting too fast. Wait a few seconds and try again."),
     TOO_MANY_GAMES("tmg", "There are too many games already in progress. Either join " +
-        "an existing game, or wait for one to become available."),
+            "an existing game, or wait for one to become available."),
     TOO_MANY_SPECIAL_CHARACTERS("tmsc",
-        "You used too many special characters in that message."),
+            "You used too many special characters in that message."),
     TOO_MANY_USERS("tmu", "There are too many users connected. Either join another server, or " +
-        "wait for a user to disconnect."),
+            "wait for a user to disconnect."),
     WRONG_PASSWORD("wp", "That password is incorrect.");
 
     private final String code;
@@ -884,10 +849,38 @@ public class Constants {
   }
 
   /**
-   * Attributes stored in a client session.
+   * Enums that implement this interface are valid keys for data returned to clients.
    */
-  public class SessionAttribute {
-    public static final String USER = "user";
+  public interface ReturnableData {
+  }
+
+  /**
+   * Enums that implement this interface have a user-visible string associated with them.
+   *
+   * There presently is not support for localization, but the name fits.
+   */
+  public interface Localizable {
+    /**
+     * @return The user-visible string that is associated with this enum value.
+     */
+    String getString();
+  }
+
+  /**
+   * Enums that implement this interface have two user-visible strings associated with them.
+   * <p>
+   * There presently is not support for localization, but the name fits.
+   */
+  public interface DoubleLocalizable {
+    /**
+     * @return The first user-visible string that is associated with this enum value.
+     */
+    String getString();
+
+    /**
+     * @return The second user-visible string that is associated with this enum value.
+     */
+    String getString2();
   }
 
   /**
@@ -914,5 +907,12 @@ public class Constants {
   @Retention(RetentionPolicy.RUNTIME)
   public @interface GoDataType {
     String value() default "string";
+  }
+
+  /**
+   * Attributes stored in a client session.
+   */
+  public class SessionAttribute {
+    public static final String USER = "user";
   }
 }

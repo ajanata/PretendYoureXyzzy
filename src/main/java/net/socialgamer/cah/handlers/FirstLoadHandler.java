@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,39 +23,18 @@
 
 package net.socialgamer.cah.handlers;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpSession;
-
+import com.google.inject.Inject;
+import net.socialgamer.cah.CahModule.*;
+import net.socialgamer.cah.Constants.*;
+import net.socialgamer.cah.RequestWrapper;
+import net.socialgamer.cah.data.User;
+import net.socialgamer.cah.db.PyxCardSet;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.google.inject.Inject;
-
-import net.socialgamer.cah.CahModule.BanList;
-import net.socialgamer.cah.CahModule.GlobalChatEnabled;
-import net.socialgamer.cah.CahModule.IncludeInactiveCardsets;
-import net.socialgamer.cah.CahModule.ServerStarted;
-import net.socialgamer.cah.CahModule.SessionPermalinkUrlFormat;
-import net.socialgamer.cah.CahModule.ShowSessionPermalink;
-import net.socialgamer.cah.CahModule.ShowUserPermalink;
-import net.socialgamer.cah.CahModule.UserPermalinkUrlFormat;
-import net.socialgamer.cah.Constants.AjaxOperation;
-import net.socialgamer.cah.Constants.AjaxResponse;
-import net.socialgamer.cah.Constants.CardSetData;
-import net.socialgamer.cah.Constants.ErrorCode;
-import net.socialgamer.cah.Constants.ReconnectNextAction;
-import net.socialgamer.cah.Constants.ReturnableData;
-import net.socialgamer.cah.Constants.SessionAttribute;
-import net.socialgamer.cah.RequestWrapper;
-import net.socialgamer.cah.data.User;
-import net.socialgamer.cah.db.PyxCardSet;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 
 /**
@@ -66,9 +45,8 @@ import net.socialgamer.cah.db.PyxCardSet;
  */
 public class FirstLoadHandler extends Handler {
 
-  private static final Logger LOG = Logger.getLogger(FirstLoadHandler.class);
   public static final String OP = AjaxOperation.FIRST_LOAD.toString();
-
+  private static final Logger LOG = Logger.getLogger(FirstLoadHandler.class);
   private final Set<String> banList;
   private final Session hibernateSession;
   private final boolean includeInactiveCardsets;
@@ -81,13 +59,13 @@ public class FirstLoadHandler extends Handler {
 
   @Inject
   public FirstLoadHandler(final Session hibernateSession, @BanList final Set<String> banList,
-      @IncludeInactiveCardsets final boolean includeInactiveCardsets,
-      @GlobalChatEnabled final boolean globalChatEnabled,
-      @ServerStarted final Date serverStarted,
-      @ShowSessionPermalink final boolean showSessionPermalink,
-      @SessionPermalinkUrlFormat final String sessionPermalinkFormatString,
-      @ShowUserPermalink final boolean showUserPermalink,
-      @UserPermalinkUrlFormat final String userPermalinkFormatString) {
+                          @IncludeInactiveCardsets final boolean includeInactiveCardsets,
+                          @GlobalChatEnabled final boolean globalChatEnabled,
+                          @ServerStarted final Date serverStarted,
+                          @ShowSessionPermalink final boolean showSessionPermalink,
+                          @SessionPermalinkUrlFormat final String sessionPermalinkFormatString,
+                          @ShowUserPermalink final boolean showUserPermalink,
+                          @UserPermalinkUrlFormat final String userPermalinkFormatString) {
     this.banList = banList;
     this.hibernateSession = hibernateSession;
     this.includeInactiveCardsets = includeInactiveCardsets;
@@ -101,13 +79,13 @@ public class FirstLoadHandler extends Handler {
 
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
-      final HttpSession session) {
+                                            final HttpSession session) {
     final HashMap<ReturnableData, Object> ret = new HashMap<ReturnableData, Object>();
     ret.put(AjaxResponse.GLOBAL_CHAT_ENABLED, globalChatEnabled);
 
     if (banList.contains(request.getRemoteAddr())) {
       LOG.info(String.format("Rejecting user from %s because they are banned.",
-          request.getRemoteAddr()));
+              request.getRemoteAddr()));
       return error(ErrorCode.BANNED);
     }
 
@@ -125,11 +103,11 @@ public class FirstLoadHandler extends Handler {
       ret.put(AjaxResponse.SIGIL, user.getSigil().toString());
       if (showSessionPermalink) {
         ret.put(AjaxResponse.SESSION_PERMALINK,
-            String.format(sessionPermalinkFormatString, user.getSessionId()));
+                String.format(sessionPermalinkFormatString, user.getSessionId()));
       }
       if (showUserPermalink) {
         ret.put(AjaxResponse.USER_PERMALINK,
-            String.format(userPermalinkFormatString, user.getPersistentId()));
+                String.format(userPermalinkFormatString, user.getPersistentId()));
       }
 
       if (user.getGame() != null) {
@@ -144,14 +122,13 @@ public class FirstLoadHandler extends Handler {
     try {
       // get the list of card sets
       final Transaction transaction = hibernateSession.beginTransaction();
-      @SuppressWarnings("unchecked")
-      final List<PyxCardSet> cardSets = hibernateSession
-          .createQuery(PyxCardSet.getCardsetQuery(includeInactiveCardsets))
-          .setReadOnly(true)
-          .setCacheable(true)
-          .list();
+      @SuppressWarnings("unchecked") final List<PyxCardSet> cardSets = hibernateSession
+              .createQuery(PyxCardSet.getCardsetQuery(includeInactiveCardsets))
+              .setReadOnly(true)
+              .setCacheable(true)
+              .list();
       final List<Map<CardSetData, Object>> cardSetsData =
-          new ArrayList<Map<CardSetData, Object>>(cardSets.size());
+              new ArrayList<Map<CardSetData, Object>>(cardSets.size());
       for (final PyxCardSet cardSet : cardSets) {
         cardSetsData.add(cardSet.getClientMetadata(hibernateSession));
       }

@@ -2,8 +2,8 @@
 
 cah.$ = {};
 
-cah.$.GamePlayerStatus = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.GamePlayerStatus = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.GamePlayerStatus.prototype.dummyForAutocomplete = undefined;
 cah.$.GamePlayerStatus.SPECTATOR = "sv";
@@ -30,16 +30,16 @@ cah.$.GamePlayerStatus_msg_2['si'] = "Waiting for players...";
 cah.$.GamePlayerStatus_msg_2['sj'] = "You are the Card Czar.";
 cah.$.GamePlayerStatus_msg_2['sp'] = "Select a card to play.";
 
-cah.$.GamePlayerInfo = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.GamePlayerInfo = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.GamePlayerInfo.prototype.dummyForAutocomplete = undefined;
 cah.$.GamePlayerInfo.STATUS = "st";
 cah.$.GamePlayerInfo.SCORE = "sc";
 cah.$.GamePlayerInfo.NAME = "N";
 
-cah.$.GameOptionData = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.GameOptionData = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.GameOptionData.prototype.dummyForAutocomplete = undefined;
 cah.$.GameOptionData.TIMER_MULTIPLIER = "tm";
@@ -50,8 +50,8 @@ cah.$.GameOptionData.BLANKS_LIMIT = "bl";
 cah.$.GameOptionData.PLAYER_LIMIT = "pL";
 cah.$.GameOptionData.CARD_SETS = "css";
 
-cah.$.GameInfo = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.GameInfo = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.GameInfo.prototype.dummyForAutocomplete = undefined;
 cah.$.GameInfo.GAME_OPTIONS = "go";
@@ -63,8 +63,8 @@ cah.$.GameInfo.STATE = "S";
 cah.$.GameInfo.ID = "gid";
 cah.$.GameInfo.HAS_PASSWORD = "hp";
 
-cah.$.GameState = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.GameState = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.GameState.prototype.dummyForAutocomplete = undefined;
 cah.$.GameState.ROUND_OVER = "ro";
@@ -77,8 +77,8 @@ cah.$.GameState_msg['j'] = "In Progress";
 cah.$.GameState_msg['l'] = "Not Started";
 cah.$.GameState_msg['ro'] = "In Progress";
 
-cah.$.CardSetData = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.CardSetData = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.CardSetData.prototype.dummyForAutocomplete = undefined;
 cah.$.CardSetData.WHITE_CARDS_IN_DECK = "wcid";
@@ -89,8 +89,8 @@ cah.$.CardSetData.BASE_DECK = "bd";
 cah.$.CardSetData.ID = "cid";
 cah.$.CardSetData.WEIGHT = "w";
 
-cah.$.BlackCardData = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.BlackCardData = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.BlackCardData.prototype.dummyForAutocomplete = undefined;
 cah.$.BlackCardData.DRAW = "D";
@@ -99,8 +99,8 @@ cah.$.BlackCardData.TEXT = "T";
 cah.$.BlackCardData.ID = "cid";
 cah.$.BlackCardData.WATERMARK = "W";
 
-cah.$.WhiteCardData = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.WhiteCardData = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.WhiteCardData.prototype.dummyForAutocomplete = undefined;
 cah.$.WhiteCardData.WRITE_IN = "wi";
@@ -108,16 +108,16 @@ cah.$.WhiteCardData.TEXT = "T";
 cah.$.WhiteCardData.ID = "cid";
 cah.$.WhiteCardData.WATERMARK = "W";
 
-cah.$.Sigil = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.Sigil = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.Sigil.prototype.dummyForAutocomplete = undefined;
 cah.$.Sigil.NORMAL_USER = "";
 cah.$.Sigil.ADMIN = "@";
 cah.$.Sigil.ID_CODE = "+";
 
-cah.$.LongPollResponse = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.LongPollResponse = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.LongPollResponse.prototype.dummyForAutocomplete = undefined;
 cah.$.LongPollResponse.PLAY_TIMER = "Pt";
@@ -148,8 +148,8 @@ cah.$.LongPollResponse.GAME_PERMALINK = "gp";
 cah.$.LongPollResponse.GAME_STATE = "gs";
 cah.$.LongPollResponse.INTERMISSION = "i";
 
-cah.$.LongPollEvent = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.LongPollEvent = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.LongPollEvent.prototype.dummyForAutocomplete = undefined;
 cah.$.LongPollEvent.GAME_ROUND_COMPLETE = "grc";
@@ -180,8 +180,8 @@ cah.$.LongPollEvent.KICKED_FROM_GAME_IDLE = "kfgi";
 cah.$.LongPollEvent.FILTERED_CHAT = "FC";
 cah.$.LongPollEvent.GAME_STATE_CHANGE = "gsc";
 
-cah.$.ErrorCode = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.ErrorCode = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.ErrorCode.prototype.dummyForAutocomplete = undefined;
 cah.$.ErrorCode.INVALID_NICK = "in";
@@ -276,8 +276,8 @@ cah.$.ErrorCode_msg['nj'] = "You are not the judge.";
 cah.$.ErrorCode_msg['rn'] = "That nick is reserved.";
 cah.$.ErrorCode_msg['tmsc'] = "You used too many special characters in that message.";
 
-cah.$.ErrorInformation = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.ErrorInformation = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.ErrorInformation.prototype.dummyForAutocomplete = undefined;
 cah.$.ErrorInformation.WHITE_CARDS_PRESENT = "wcp";
@@ -285,8 +285,8 @@ cah.$.ErrorInformation.WHITE_CARDS_REQUIRED = "wcr";
 cah.$.ErrorInformation.BLACK_CARDS_REQUIRED = "bcr";
 cah.$.ErrorInformation.BLACK_CARDS_PRESENT = "bcp";
 
-cah.$.AjaxResponse = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.AjaxResponse = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.AjaxResponse.prototype.dummyForAutocomplete = undefined;
 cah.$.AjaxResponse.NAMES = "nl";
@@ -321,8 +321,8 @@ cah.$.AjaxResponse.CARD_ID = "cid";
 cah.$.AjaxResponse.IP_ADDRESS = "IP";
 cah.$.AjaxResponse.SESSION_PERMALINK = "sP";
 
-cah.$.AjaxRequest = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.AjaxRequest = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.AjaxRequest.prototype.dummyForAutocomplete = undefined;
 cah.$.AjaxRequest.SERIAL = "s";
@@ -339,8 +339,8 @@ cah.$.AjaxRequest.PASSWORD = "pw";
 cah.$.AjaxRequest.CARD_ID = "cid";
 cah.$.AjaxRequest.ID_CODE = "idc";
 
-cah.$.AjaxOperation = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.AjaxOperation = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.AjaxOperation.prototype.dummyForAutocomplete = undefined;
 cah.$.AjaxOperation.NAMES = "gn";
@@ -370,15 +370,15 @@ cah.$.AjaxOperation.GAME_CHAT = "GC";
 cah.$.AjaxOperation.SPECTATE_GAME = "vg";
 cah.$.AjaxOperation.JUDGE_SELECT = "js";
 
-cah.$.ReconnectNextAction = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.ReconnectNextAction = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.ReconnectNextAction.prototype.dummyForAutocomplete = undefined;
 cah.$.ReconnectNextAction.GAME = "game";
 cah.$.ReconnectNextAction.NONE = "none";
 
-cah.$.DisconnectReason = function() {
-  // Dummy constructor to make Eclipse auto-complete.
+cah.$.DisconnectReason = function () {
+    // Dummy constructor to make Eclipse auto-complete.
 };
 cah.$.DisconnectReason.prototype.dummyForAutocomplete = undefined;
 cah.$.DisconnectReason.PING_TIMEOUT = "pt";

@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,6 +23,16 @@
 
 package net.socialgamer.cah.cardcast;
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import net.socialgamer.cah.cardcast.CardcastModule.CardcastCardId;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
+import javax.net.ssl.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,24 +46,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
-import net.socialgamer.cah.cardcast.CardcastModule.CardcastCardId;
 
 
 public class CardcastService {
@@ -75,7 +67,7 @@ public class CardcastService {
    * deck ID.
    */
   private static final String CARD_SET_CARDS_URL_FORMAT_STRING = CARD_SET_INFO_URL_FORMAT_STRING
-      + "/cards";
+          + "/cards";
 
   private static final int GET_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(3);
 
@@ -93,26 +85,57 @@ public class CardcastService {
   private static final Pattern validIdPattern = Pattern.compile("[A-Z0-9]{5}");
 
   private static final Map<String, SoftReference<CardcastCacheEntry>> cache = Collections
-      .synchronizedMap(new HashMap<String, SoftReference<CardcastCacheEntry>>());
+          .synchronizedMap(new HashMap<String, SoftReference<CardcastCacheEntry>>());
 
   private final Provider<Integer> cardIdProvider;
   private final CardcastFormatHelper formatHelper;
 
   @Inject
   public CardcastService(@CardcastCardId final Provider<Integer> cardIdProvider,
-      final CardcastFormatHelper formatHelper) {
+                         final CardcastFormatHelper formatHelper) {
     this.cardIdProvider = cardIdProvider;
     this.formatHelper = formatHelper;
   }
 
-  private class CardcastCacheEntry {
-    final long expires;
-    final CardcastDeck deck;
+  public static void hackSslVerifier() {
+    // FIXME: My JVM doesn't like the certificate. I should go add StartSSL's root certificate to
+    // its trust store, and document steps. For now, I'm going to disable SSL certificate checking.
 
-    CardcastCacheEntry(final long cacheLifetime, final CardcastDeck deck) {
-      this.expires = System.currentTimeMillis() + cacheLifetime;
-      this.deck = deck;
+    // Create a trust manager that does not validate certificate chains
+    final TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+              @Override
+              public X509Certificate[] getAcceptedIssuers() {
+                return null;
+              }
+
+              @Override
+              public void checkClientTrusted(final X509Certificate[] certs, final String authType) {
+              }
+
+              @Override
+              public void checkServerTrusted(final X509Certificate[] certs, final String authType) {
+              }
+            }
+    };
+
+    try {
+      final SSLContext sc = SSLContext.getInstance("SSL");
+      sc.init(null, trustAllCerts, new java.security.SecureRandom());
+      HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+    } catch (final Exception e) {
+      LOG.error("Unable to install trust-all security manager", e);
     }
+
+    // Create host name verifier that only trusts cardcast
+    final HostnameVerifier allHostsValid = new HostnameVerifier() {
+      @Override
+      public boolean verify(final String hostname, final SSLSession session) {
+        return HOSTNAME.equals(hostname);
+      }
+    };
+
+    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
   }
 
   private CardcastCacheEntry checkCache(final String setId) {
@@ -139,7 +162,7 @@ public class CardcastService {
 
     try {
       final String infoContent = getUrlContent(String
-          .format(CARD_SET_INFO_URL_FORMAT_STRING, setId));
+              .format(CARD_SET_INFO_URL_FORMAT_STRING, setId));
       if (null == infoContent) {
         // failed to load
         cacheMissingSet(setId);
@@ -148,7 +171,7 @@ public class CardcastService {
       final JSONObject info = (JSONObject) JSONValue.parse(infoContent);
 
       final String cardContent = getUrlContent(String.format(
-          CARD_SET_CARDS_URL_FORMAT_STRING, setId));
+              CARD_SET_CARDS_URL_FORMAT_STRING, setId));
       if (null == cardContent) {
         // failed to load
         cacheMissingSet(setId);
@@ -164,7 +187,7 @@ public class CardcastService {
         return null;
       }
       final CardcastDeck deck = new CardcastDeck(StringEscapeUtils.escapeXml11(name), setId,
-          StringEscapeUtils.escapeXml11(description));
+              StringEscapeUtils.escapeXml11(description));
 
       // load up the cards
       final JSONArray blacks = (JSONArray) cards.get("calls");
@@ -176,7 +199,7 @@ public class CardcastService {
             final int pick = texts.size() - 1;
             final int draw = (pick >= 3 ? pick - 1 : 0);
             final CardcastBlackCard card = new CardcastBlackCard(cardIdProvider.get(), text, draw,
-                pick, setId);
+                    pick, setId);
             deck.getBlackCards().add(card);
           }
         }
@@ -191,7 +214,7 @@ public class CardcastService {
             // don't add blank cards, they don't do anything
             if (!text.isEmpty()) {
               final CardcastWhiteCard card = new CardcastWhiteCard(cardIdProvider.get(), text,
-                  setId);
+                      setId);
               deck.getWhiteCards().add(card);
             }
           }
@@ -258,44 +281,13 @@ public class CardcastService {
     return builder.toString();
   }
 
-  public static void hackSslVerifier() {
-    // FIXME: My JVM doesn't like the certificate. I should go add StartSSL's root certificate to
-    // its trust store, and document steps. For now, I'm going to disable SSL certificate checking.
+  private class CardcastCacheEntry {
+    final long expires;
+    final CardcastDeck deck;
 
-    // Create a trust manager that does not validate certificate chains
-    final TrustManager[] trustAllCerts = new TrustManager[] {
-        new X509TrustManager() {
-          @Override
-          public X509Certificate[] getAcceptedIssuers() {
-            return null;
-          }
-
-          @Override
-          public void checkClientTrusted(final X509Certificate[] certs, final String authType) {
-          }
-
-          @Override
-          public void checkServerTrusted(final X509Certificate[] certs, final String authType) {
-          }
-        }
-    };
-
-    try {
-      final SSLContext sc = SSLContext.getInstance("SSL");
-      sc.init(null, trustAllCerts, new java.security.SecureRandom());
-      HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-    } catch (final Exception e) {
-      LOG.error("Unable to install trust-all security manager", e);
+    CardcastCacheEntry(final long cacheLifetime, final CardcastDeck deck) {
+      this.expires = System.currentTimeMillis() + cacheLifetime;
+      this.deck = deck;
     }
-
-    // Create host name verifier that only trusts cardcast
-    final HostnameVerifier allHostsValid = new HostnameVerifier() {
-      @Override
-      public boolean verify(final String hostname, final SSLSession session) {
-        return HOSTNAME.equals(hostname);
-      }
-    };
-
-    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
   }
 }

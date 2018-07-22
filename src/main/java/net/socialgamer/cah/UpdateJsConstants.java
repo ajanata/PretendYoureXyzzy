@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- * 
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,27 +23,27 @@
 
 package net.socialgamer.cah;
 
+import net.socialgamer.cah.Constants.DoubleLocalizable;
+import net.socialgamer.cah.Constants.Localizable;
+
 import java.io.File;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.socialgamer.cah.Constants.DoubleLocalizable;
-import net.socialgamer.cah.Constants.Localizable;
-
 
 /**
  * Analyze the server enums using reflection and create a Javascript version for the client to use.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class UpdateJsConstants {
 
   private static final String enumHeaderFmt =
-      "cah.$.%s = function() {\r\n  // Dummy constructor to make Eclipse auto-complete.\r\n};\r\n";
+          "cah.$.%s = function() {\r\n  // Dummy constructor to make Eclipse auto-complete.\r\n};\r\n";
   private static final String enumDummyFmt =
-      "cah.$.%s.prototype.dummyForAutocomplete = undefined;\r\n";
+          "cah.$.%s.prototype.dummyForAutocomplete = undefined;\r\n";
   private static final String enumValueFmt = "cah.$.%s.%s = \"%s\";\r\n";
   private static final String msgHeaderFmt = "cah.$.%s_msg = {};\r\n";
   private static final String msgValueFmt = "cah.$.%s_msg['%s'] = \"%s\";\r\n";
@@ -52,7 +52,7 @@ public class UpdateJsConstants {
 
   /**
    * Run the enum updater. The working directory for this program should be the project's root.
-   * 
+   *
    * @param args
    */
   @SuppressWarnings("rawtypes")
@@ -112,7 +112,7 @@ public class UpdateJsConstants {
   /**
    * Return a map of enum values in an Enum class, with the enum field names as keys and the values
    * of toString() as the values.
-   * 
+   *
    * @param enumClass
    *          The Enum to examine.
    * @return Map of field name -> toString values.
@@ -122,7 +122,7 @@ public class UpdateJsConstants {
    *           If the value was unable to be retrieved.
    */
   private static Map<String, String> getEnumValues(final Class<?> enumClass)
-      throws IllegalArgumentException, IllegalAccessException {
+          throws IllegalArgumentException, IllegalAccessException {
     if (!enumClass.isEnum()) {
       throw new IllegalArgumentException(enumClass.getName() + " is not an enum");
     }
@@ -140,7 +140,7 @@ public class UpdateJsConstants {
   /**
    * Return a map of {@code Localizable} message values in an Enum class, with the enum field names
    * as keys and the values of getString() as the values.
-   * 
+   *
    * @param enumClass
    *          The Enum to examine.
    * @return Map of field name -> getString values.
@@ -150,13 +150,13 @@ public class UpdateJsConstants {
    *           If the value was unable to be retrieved.
    */
   private static Map<String, String> getEnumMessageValues(final Class<?> enumClass)
-      throws IllegalArgumentException, IllegalAccessException {
+          throws IllegalArgumentException, IllegalAccessException {
     if (!enumClass.isEnum()) {
       throw new IllegalArgumentException(enumClass.getName() + " is not an enum");
     } else if (!Localizable.class.isAssignableFrom(enumClass)
-        && !DoubleLocalizable.class.isAssignableFrom(enumClass)) {
+            && !DoubleLocalizable.class.isAssignableFrom(enumClass)) {
       throw new IllegalArgumentException(enumClass.getName()
-          + " does not implement Localizable or DoubleLocalizable.");
+              + " does not implement Localizable or DoubleLocalizable.");
     }
 
     final Field[] flds = enumClass.getDeclaredFields();
@@ -176,7 +176,7 @@ public class UpdateJsConstants {
   /**
    * Return a map of {@code DoubleLocalizable} message values in an Enum class, with the enum field
    * names as keys and the values of getString2() as the values.
-   * 
+   *
    * @param enumClass
    *          The Enum to examine.
    * @return Map of field name -> getString2 values.
@@ -186,12 +186,12 @@ public class UpdateJsConstants {
    *           If the value was unable to be retrieved.
    */
   private static Map<String, String> getEnumMessage2Values(final Class<?> enumClass)
-      throws IllegalArgumentException, IllegalAccessException {
+          throws IllegalArgumentException, IllegalAccessException {
     if (!enumClass.isEnum()) {
       throw new IllegalArgumentException(enumClass.getName() + " is not an enum");
     } else if (!DoubleLocalizable.class.isAssignableFrom(enumClass)) {
       throw new IllegalArgumentException(enumClass.getName()
-          + " does not implement DoubleLocalizable.");
+              + " does not implement DoubleLocalizable.");
     }
 
     final Field[] flds = enumClass.getDeclaredFields();

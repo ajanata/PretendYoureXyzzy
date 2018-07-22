@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,28 +23,19 @@
 
 package net.socialgamer.cah.handlers;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
-
 import net.socialgamer.cah.CahModule.GlobalChatEnabled;
-import net.socialgamer.cah.Constants.AjaxOperation;
-import net.socialgamer.cah.Constants.AjaxRequest;
-import net.socialgamer.cah.Constants.ErrorCode;
-import net.socialgamer.cah.Constants.LongPollEvent;
-import net.socialgamer.cah.Constants.LongPollResponse;
-import net.socialgamer.cah.Constants.ReturnableData;
-import net.socialgamer.cah.Constants.SessionAttribute;
+import net.socialgamer.cah.Constants.*;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.data.User;
 import net.socialgamer.cah.util.ChatFilter;
+import org.apache.log4j.Logger;
+
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -54,16 +45,15 @@ import net.socialgamer.cah.util.ChatFilter;
  */
 public class ChatHandler extends Handler {
 
-  private static final Logger LOG = Logger.getLogger(ChatHandler.class);
   public static final String OP = AjaxOperation.CHAT.toString();
-
+  private static final Logger LOG = Logger.getLogger(ChatHandler.class);
   private final ChatFilter chatFilter;
   private final ConnectedUsers users;
   private final boolean globalChatEnabled;
 
   @Inject
   public ChatHandler(final ConnectedUsers users,
-      @GlobalChatEnabled final boolean globalChatEnabled, final ChatFilter chatFilter) {
+                     @GlobalChatEnabled final boolean globalChatEnabled, final ChatFilter chatFilter) {
     this.users = users;
     this.globalChatEnabled = globalChatEnabled;
     this.chatFilter = chatFilter;
@@ -71,15 +61,15 @@ public class ChatHandler extends Handler {
 
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
-      final HttpSession session) {
+                                            final HttpSession session) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
     final User user = (User) session.getAttribute(SessionAttribute.USER);
     assert (user != null);
     final boolean wall = request.getParameter(AjaxRequest.WALL) != null
-        && Boolean.valueOf(request.getParameter(AjaxRequest.WALL));
+            && Boolean.valueOf(request.getParameter(AjaxRequest.WALL));
     final boolean emote = request.getParameter(AjaxRequest.EMOTE) != null
-        && Boolean.valueOf(request.getParameter(AjaxRequest.EMOTE));
+            && Boolean.valueOf(request.getParameter(AjaxRequest.EMOTE));
 
     if (request.getParameter(AjaxRequest.MESSAGE) == null) {
       return error(ErrorCode.NO_MSG_SPECIFIED);

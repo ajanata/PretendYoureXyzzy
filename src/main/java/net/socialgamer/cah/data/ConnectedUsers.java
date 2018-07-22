@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,37 +23,25 @@
 
 package net.socialgamer.cah.data;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.maxmind.geoip2.model.CityResponse;
-
 import net.socialgamer.cah.CahModule.BroadcastConnectsAndDisconnects;
 import net.socialgamer.cah.CahModule.MaxUsers;
-import net.socialgamer.cah.Constants.DisconnectReason;
-import net.socialgamer.cah.Constants.ErrorCode;
-import net.socialgamer.cah.Constants.LongPollEvent;
-import net.socialgamer.cah.Constants.LongPollResponse;
-import net.socialgamer.cah.Constants.ReturnableData;
+import net.socialgamer.cah.Constants.*;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.GeoIP;
 import net.socialgamer.cah.metrics.Metrics;
+import org.apache.log4j.Logger;
+
+import javax.annotation.Nullable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 /**
@@ -65,33 +53,29 @@ import net.socialgamer.cah.metrics.Metrics;
 @Singleton
 public class ConnectedUsers {
 
-  private static final Logger logger = Logger.getLogger(ConnectedUsers.class);
-
   /**
    * Duration of a ping timeout, in nanoseconds.
    */
   public static final long PING_TIMEOUT = TimeUnit.SECONDS.toNanos(90);
-
   /**
    * Duration of an idle timeout, in nanoseconds.
    */
   public static final long IDLE_TIMEOUT = TimeUnit.MINUTES.toNanos(60);
-
+  private static final Logger logger = Logger.getLogger(ConnectedUsers.class);
+  final Provider<Boolean> broadcastConnectsAndDisconnectsProvider;
+  final Provider<Integer> maxUsersProvider;
+  final GeoIP geoIp;
+  final Metrics metrics;
   /**
    * Key (username) must be stored in lower-case to facilitate case-insensitivity in nicks.
    */
   private final Map<String, User> users = Collections.synchronizedMap(new HashMap<>());
 
-  final Provider<Boolean> broadcastConnectsAndDisconnectsProvider;
-  final Provider<Integer> maxUsersProvider;
-  final GeoIP geoIp;
-  final Metrics metrics;
-
   @Inject
   public ConnectedUsers(
-      @BroadcastConnectsAndDisconnects final Provider<Boolean> broadcastConnectsAndDisconnectsProvider,
-      @MaxUsers final Provider<Integer> maxUsersProvider, final GeoIP geoIp,
-      final Metrics metrics) {
+          @BroadcastConnectsAndDisconnects final Provider<Boolean> broadcastConnectsAndDisconnectsProvider,
+          @MaxUsers final Provider<Integer> maxUsersProvider, final GeoIP geoIp,
+          final Metrics metrics) {
     this.broadcastConnectsAndDisconnectsProvider = broadcastConnectsAndDisconnectsProvider;
     this.maxUsersProvider = maxUsersProvider;
     this.geoIp = geoIp;
@@ -119,15 +103,15 @@ public class ConnectedUsers {
     synchronized (users) {
       if (this.hasUser(user.getNickname())) {
         logger.info(String.format("Rejecting existing username %s from %s", user.toString(),
-            user.getHostname()));
+                user.getHostname()));
         return ErrorCode.NICK_IN_USE;
       } else if (users.size() >= maxUsers && !user.isAdmin()) {
         logger.warn(String.format("Rejecting user %s due to too many users (%d >= %d)",
-            user.toString(), users.size(), maxUsers));
+                user.toString(), users.size(), maxUsers));
         return ErrorCode.TOO_MANY_USERS;
       } else {
         logger.info(String.format("New user %s from %s (admin=%b, id=%s)", user.toString(),
-            user.getHostname(), user.isAdmin(), user.getIdCode()));
+                user.getHostname(), user.isAdmin(), user.getIdCode()));
         users.put(user.getNickname().toLowerCase(), user);
         final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
         data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
@@ -146,10 +130,10 @@ public class ConnectedUsers {
           geo = geoIp.getInfo(addr);
         } catch (final UnknownHostException e) {
           logger.warn(String.format("Unable to get address for user %s (hostname: %s)",
-              user.getNickname(), user.getHostname()), e);
+                  user.getNickname(), user.getHostname()), e);
         }
         metrics.userConnect(user.getPersistentId(), user.getSessionId(), geo, user.getAgentName(),
-            user.getAgentType(), user.getAgentOs(), user.getAgentLanguage());
+                user.getAgentType(), user.getAgentOs(), user.getAgentLanguage());
 
         return null;
       }
@@ -202,7 +186,7 @@ public class ConnectedUsers {
     data.put(LongPollResponse.NICKNAME, user.getNickname());
     data.put(LongPollResponse.REASON, reason.toString());
     if (broadcastConnectsAndDisconnectsProvider.get() || reason == DisconnectReason.BANNED
-        || reason == DisconnectReason.KICKED) {
+            || reason == DisconnectReason.KICKED) {
       broadcastToAll(MessageType.PLAYER_EVENT, data);
     } else {
       // always tell admins
@@ -226,8 +210,7 @@ public class ConnectedUsers {
         DisconnectReason reason = null;
         if (System.nanoTime() - u.getLastHeardFrom() > PING_TIMEOUT) {
           reason = DisconnectReason.PING_TIMEOUT;
-        }
-        else if (!u.isAdmin() && System.nanoTime() - u.getLastUserAction() > IDLE_TIMEOUT) {
+        } else if (!u.isAdmin() && System.nanoTime() - u.getLastUserAction() > IDLE_TIMEOUT) {
           reason = DisconnectReason.IDLE_TIMEOUT;
         }
         if (null != reason) {
@@ -242,7 +225,7 @@ public class ConnectedUsers {
         entry.getKey().noLongerValid();
         notifyRemoveUser(entry.getKey(), entry.getValue());
         logger.info(String.format("Automatically kicking user %s due to %s", entry.getKey(),
-            entry.getValue()));
+                entry.getValue()));
       } catch (final Exception e) {
         logger.error("Unable to remove pinged-out user", e);
       }
@@ -259,7 +242,7 @@ public class ConnectedUsers {
    *          Message data to broadcast.
    */
   public void broadcastToAll(final MessageType type,
-      final HashMap<ReturnableData, Object> masterData) {
+                             final HashMap<ReturnableData, Object> masterData) {
     broadcastToList(users.values(), type, masterData);
   }
 
@@ -275,11 +258,10 @@ public class ConnectedUsers {
    *          Message data to broadcast.
    */
   public void broadcastToList(final Collection<User> broadcastTo, final MessageType type,
-      final HashMap<ReturnableData, Object> masterData) {
+                              final HashMap<ReturnableData, Object> masterData) {
     synchronized (users) {
       for (final User u : broadcastTo) {
-        @SuppressWarnings("unchecked")
-        final Map<ReturnableData, Object> data = (Map<ReturnableData, Object>) masterData.clone();
+        @SuppressWarnings("unchecked") final Map<ReturnableData, Object> data = (Map<ReturnableData, Object>) masterData.clone();
         data.put(LongPollResponse.TIMESTAMP, System.currentTimeMillis());
         final QueuedMessage qm = new QueuedMessage(type, data);
         u.enqueueMessage(qm);

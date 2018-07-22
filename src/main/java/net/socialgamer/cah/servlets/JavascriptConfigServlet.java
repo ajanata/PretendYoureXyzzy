@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,8 +23,13 @@
 
 package net.socialgamer.cah.servlets;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import net.socialgamer.cah.CahModule.BroadcastConnectsAndDisconnects;
+import net.socialgamer.cah.CahModule.CookieDomain;
+import net.socialgamer.cah.CahModule.GlobalChatEnabled;
+import net.socialgamer.cah.CahModule.InsecureIdAllowed;
+import net.socialgamer.cah.StartupUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -32,15 +37,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.inject.Injector;
-import com.google.inject.Key;
-
-import net.socialgamer.cah.CahModule.BroadcastConnectsAndDisconnects;
-import net.socialgamer.cah.CahModule.CookieDomain;
-import net.socialgamer.cah.CahModule.GlobalChatEnabled;
-import net.socialgamer.cah.CahModule.InsecureIdAllowed;
-import net.socialgamer.cah.StartupUtils;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 
 @WebServlet("/js/cah.config.js")
@@ -71,7 +69,7 @@ public class JavascriptConfigServlet extends HttpServlet {
 
   @Override
   protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
-      throws ServletException, IOException {
+          throws IOException {
 
     // We have to do this every time since these come from the properties file and that can change...
     final StringBuilder builder = new StringBuilder(256).append(configString);
@@ -80,9 +78,9 @@ public class JavascriptConfigServlet extends HttpServlet {
     final String cookieDomain = injector.getInstance(Key.get(String.class, CookieDomain.class));
     final Boolean globalChatEnabled = injector.getInstance(Key.get(Boolean.class, GlobalChatEnabled.class));
     final Boolean insecureIdAllowed = injector
-        .getInstance(Key.get(Boolean.class, InsecureIdAllowed.class));
+            .getInstance(Key.get(Boolean.class, InsecureIdAllowed.class));
     final Boolean broadcastingUsers = injector
-        .getInstance(Key.get(Boolean.class, BroadcastConnectsAndDisconnects.class));
+            .getInstance(Key.get(Boolean.class, BroadcastConnectsAndDisconnects.class));
     builder.append(String.format("cah.COOKIE_DOMAIN = '%s';\n", cookieDomain));
     builder.append(String.format("cah.GLOBAL_CHAT_ENABLED = %b;\n", globalChatEnabled));
     builder.append(String.format("cah.INSECURE_ID_ALLOWED = %b;\n", insecureIdAllowed));

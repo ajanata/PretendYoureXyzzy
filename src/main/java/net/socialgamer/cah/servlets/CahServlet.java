@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,12 +23,13 @@
 
 package net.socialgamer.cah.servlets;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.google.inject.Injector;
+import net.socialgamer.cah.Constants.*;
+import net.socialgamer.cah.RequestWrapper;
+import net.socialgamer.cah.StartupUtils;
+import net.socialgamer.cah.data.User;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import javax.annotation.Nullable;
 import javax.servlet.ServletException;
@@ -36,21 +37,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
-import com.google.inject.Injector;
-
-import net.socialgamer.cah.Constants.AjaxOperation;
-import net.socialgamer.cah.Constants.AjaxRequest;
-import net.socialgamer.cah.Constants.AjaxResponse;
-import net.socialgamer.cah.Constants.ErrorCode;
-import net.socialgamer.cah.Constants.ReturnableData;
-import net.socialgamer.cah.Constants.SessionAttribute;
-import net.socialgamer.cah.RequestWrapper;
-import net.socialgamer.cah.StartupUtils;
-import net.socialgamer.cah.data.User;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -68,7 +60,7 @@ public abstract class CahServlet extends HttpServlet {
    */
   @Override
   protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
     request.setCharacterEncoding("UTF-8");
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
@@ -104,12 +96,12 @@ public abstract class CahServlet extends HttpServlet {
       // we don't make sure they have a User object if they are doing either of the requests that
       // create or check for the User object. That would be silly.
       final boolean skipSessionUserCheck = op != null
-          && (op.equals(AjaxOperation.REGISTER.toString())
-          || op.equals(AjaxOperation.FIRST_LOAD.toString()));
+              && (op.equals(AjaxOperation.REGISTER.toString())
+              || op.equals(AjaxOperation.FIRST_LOAD.toString()));
       if (!skipSessionUserCheck && hSession.getAttribute(SessionAttribute.USER) == null) {
         returnError(user, response.getWriter(), ErrorCode.NOT_REGISTERED, serial);
       } else if (user != null
-          && !user.isValidFromHost(new RequestWrapper(request).getRemoteAddr())) {
+              && !user.isValidFromHost(new RequestWrapper(request).getRemoteAddr())) {
         // user probably pinged out, or possibly kicked by admin
         // or their IP address magically changed (working around a ban?)
         hSession.invalidate();
@@ -133,8 +125,8 @@ public abstract class CahServlet extends HttpServlet {
    */
   private boolean verboseDebug() {
     final Boolean verboseDebugObj = (Boolean) getServletContext().getAttribute(
-        StartupUtils.VERBOSE_DEBUG);
-    final boolean verboseDebug = verboseDebugObj != null ? verboseDebugObj.booleanValue() : false;
+            StartupUtils.VERBOSE_DEBUG);
+    final boolean verboseDebug = verboseDebugObj != null && verboseDebugObj.booleanValue();
     return verboseDebug;
   }
 
@@ -151,8 +143,8 @@ public abstract class CahServlet extends HttpServlet {
    * @throws IOException
    */
   protected abstract void handleRequest(final HttpServletRequest request,
-      final HttpServletResponse response, final HttpSession hSession) throws ServletException,
-      IOException;
+                                        final HttpServletResponse response, final HttpSession hSession) throws ServletException,
+          IOException;
 
   /**
    * Return an error to the client.
@@ -168,7 +160,7 @@ public abstract class CahServlet extends HttpServlet {
    */
   @SuppressWarnings("unchecked")
   protected void returnError(@Nullable final User user, final PrintWriter writer,
-      final ErrorCode code, final int serial) {
+                             final ErrorCode code, final int serial) {
     final JSONObject ret = new JSONObject();
     ret.put(AjaxResponse.ERROR, Boolean.TRUE);
     ret.put(AjaxResponse.ERROR_CODE, code.toString());
@@ -187,7 +179,7 @@ public abstract class CahServlet extends HttpServlet {
    *          Key-value data to return as the response.
    */
   protected void returnData(@Nullable final User user, final PrintWriter writer,
-      final Map<ReturnableData, Object> data) {
+                            final Map<ReturnableData, Object> data) {
     returnObject(user, writer, data);
   }
 
@@ -202,7 +194,7 @@ public abstract class CahServlet extends HttpServlet {
    *          List of key-value data to return as the response.
    */
   protected void returnArray(@Nullable final User user, final PrintWriter writer,
-      final List<Map<ReturnableData, Object>> data_list) {
+                             final List<Map<ReturnableData, Object>> data_list) {
     returnObject(user, writer, data_list);
   }
 
@@ -217,7 +209,7 @@ public abstract class CahServlet extends HttpServlet {
    *          Data to return.
    */
   private void returnObject(@Nullable final User user, final PrintWriter writer,
-      final Object object) {
+                            final Object object) {
     final String ret = JSONValue.toJSONString(object);
     writer.println(ret);
     if (verboseDebug()) {
