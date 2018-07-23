@@ -33,6 +33,7 @@ import net.socialgamer.cah.cardcast.CardcastModule;
 import net.socialgamer.cah.cardcast.CardcastService;
 import net.socialgamer.cah.metrics.Metrics;
 import net.socialgamer.cah.task.BroadcastGameListUpdateTask;
+import net.socialgamer.cah.task.ServerIsAliveTask;
 import net.socialgamer.cah.task.UserPingTask;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -147,6 +148,9 @@ public class StartupUtils extends GuiceServletContextListener {
             .getInstance(BroadcastGameListUpdateTask.class);
     timer.scheduleAtFixedRate(broadcastUpdate, BROADCAST_UPDATE_START_DELAY,
             BROADCAST_UPDATE_DELAY, TimeUnit.MILLISECONDS);
+
+    ServerIsAliveTask serverIsAliveTask = injector.getInstance(ServerIsAliveTask.class);
+    timer.execute(serverIsAliveTask); // FIXME: Possibility to disable this
 
     context.setAttribute(INJECTOR, injector);
     context.setAttribute(DATE_NAME, injector.getInstance(Key.get(Date.class, ServerStarted.class)));

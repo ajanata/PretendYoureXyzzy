@@ -186,6 +186,35 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.3.0.v20150612</version>
+
+                <configuration>
+                    <!-- Uncomment this to enable JMX in Jetty for debugging. -->
+                    <!-- <jettyXml>${appserver.web-inf.dir}/jetty-jmx.xml</jettyXml> -->
+                    <webApp>
+                        <!--<defaultsDescriptor>${project.basedir}/jetty-defaults.xml</defaultsDescriptor> -->
+                        <descriptor>${project.build.directory}/${project.build.artifact.name}/WEB-INF/web.xml
+                        </descriptor>
+                        <resourceBases>
+                            <!-- Non-filtered -->
+                            <resource>src/main/resources</resource>
+                            <!-- Filtered -->
+                            <resource>${project.build.directory}/ZY</resource>
+                        </resourceBases>
+                    </webApp>
+                    <scanTargets>
+                        <scanTarget>src/main/filtered-resources</scanTarget>
+                    </scanTargets>
+                    <scanIntervalSeconds>0</scanIntervalSeconds>
+                    <reload>manual</reload>
+                    <webAppSourceDirectory>WebContent</webAppSourceDirectory>
+                    <stopPort>8081</stopPort>
+                    <stopKey>STOP</stopKey>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
