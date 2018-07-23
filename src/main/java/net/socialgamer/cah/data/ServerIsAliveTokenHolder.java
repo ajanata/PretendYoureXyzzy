@@ -1,6 +1,5 @@
 package net.socialgamer.cah.data;
 
-import com.sun.istack.internal.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicReference;
@@ -21,7 +20,7 @@ public class ServerIsAliveTokenHolder {
     }
   }
 
-  public static void set(@NotNull String set) {
+  public static void set(@Nullable String set) {
     synchronized (token) {
       token.set(set);
     }
