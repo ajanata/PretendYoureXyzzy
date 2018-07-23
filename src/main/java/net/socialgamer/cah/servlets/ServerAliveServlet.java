@@ -19,11 +19,15 @@ import java.util.Properties;
  */
 @WebServlet("/ServerAlive")
 public class ServerAliveServlet extends HttpServlet {
-  private final GameManager games;
-  private final ConnectedUsers users;
-  private final Properties props;
+  private GameManager games;
+  private ConnectedUsers users;
+  private Properties props;
 
   public ServerAliveServlet() {
+  }
+
+  @Override
+  public void init() {
     Injector injector = (Injector) getServletContext().getAttribute(StartupUtils.INJECTOR);
     users = injector.getInstance(ConnectedUsers.class);
     games = injector.getInstance(GameManager.class);
