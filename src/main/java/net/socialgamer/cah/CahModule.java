@@ -146,7 +146,7 @@ public class CahModule extends AbstractModule {
   @ServerDiscoveryAddress
   String provideServerDiscoveryAddress() {
     synchronized (properties) {
-      return properties.getProperty("pyx.server_discovery_address", null);
+      return properties.getProperty("pyx.server.discovery_address", null);
     }
   }
 
@@ -154,7 +154,7 @@ public class CahModule extends AbstractModule {
   @ServerDiscoveryPort
   int provideServerDiscoveryPort() {
     synchronized (properties) {
-      return Integer.valueOf(properties.getProperty("pyx.server_discovery_port", "-1"));
+      return Integer.valueOf(properties.getProperty("pyx.server.discovery_port", "-1"));
     }
   }
 

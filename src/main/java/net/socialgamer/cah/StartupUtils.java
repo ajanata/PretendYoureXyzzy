@@ -149,7 +149,7 @@ public class StartupUtils extends GuiceServletContextListener {
     timer.scheduleAtFixedRate(broadcastUpdate, BROADCAST_UPDATE_START_DELAY,
             BROADCAST_UPDATE_DELAY, TimeUnit.MILLISECONDS);
 
-    if (Boolean.valueOf(injector.getInstance(Properties.class).getProperty("pyx.server_discovery_enabled", "false"))) {
+    if (Boolean.valueOf(injector.getInstance(Properties.class).getProperty("pyx.server.discovery_enabled", "false"))) {
       ServerIsAliveTask serverIsAliveTask = injector.getInstance(ServerIsAliveTask.class);
       timer.execute(serverIsAliveTask);
     }
