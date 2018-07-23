@@ -143,6 +143,22 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
+  @ServerDiscoveryAddress
+  String provideServerDiscoveryAddress() {
+    synchronized (properties) {
+      return properties.getProperty("pyx.server_discovery_address", null);
+    }
+  }
+
+  @Provides
+  @ServerDiscoveryPort
+  int provideServerDiscoveryPort() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.server_discovery_port", "-1"));
+    }
+  }
+
+  @Provides
   @BroadcastConnectsAndDisconnects
   Boolean provideBroadcastConnectsAndDisconnects() {
     synchronized (properties) {
@@ -345,6 +361,11 @@ public class CahModule extends AbstractModule {
 
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
+  public @interface ServerDiscoveryAddress {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
   public @interface GlobalChatEnabled {
   }
 
@@ -391,5 +412,10 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface BannedNicks {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface ServerDiscoveryPort {
   }
 }

@@ -1,3 +1,6 @@
+pyx.server_discovery_enabled=false
+pyx.server_discovery_address=
+pyx.server_discovery_port=
 pyx.cookie_domain=.localhost
 pyx.max_users=100
 pyx.max_games=25
@@ -13,7 +16,6 @@ pyx.id_code_salt=
 pyx.admin_addrs=127.0.0.1,0:0:0:0:0:0:0:1
 # comma-separated list of strings banned from appearing in nicks.
 pyx.banned_nicks=xyzzy
-
 # The name of a class that implements net.socialgamer.cah.util.ChatFilter.ShadowBannedStringProvider
 # which will then be called to get the shadowbanned strings.
 # Ideally we'd just have the list of strings here, but providing unicode characters directly gets
@@ -49,32 +51,25 @@ pyx.global.flood_time=25
 # repeated_words_unique_ratio unique words in them.
 pyx.global.repeated_words_min_count=10
 pyx.global.repeated_words_unique_ratio=.5
-
 # Settings for game chat protection. If it isn't listed here, it isn't supported.
 # same but for game chats
 pyx.game.flood_count=5
 # seconds
 pyx.game.flood_time=30
-
-
 # for production use, use postgres
 #hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 #hibernate.driver_class=org.postgresql.Driver
 #hibernate.url=jdbc:postgresql://localhost/pyx
-
 # for local use, you can also use sqlite
 hibernate.dialect=net.socialgamer.cah.hibernate.SqliteDialect
 hibernate.driver_class=org.sqlite.JDBC
 hibernate.url=jdbc:sqlite:pyx.sqlite
-
 # these likely need specified even with sqlite, even though they don't matter
 hibernate.username=pyx
 hibernate.password=CorrectHorseBatteryStaple
-
 # debugging information
 hibernate.sql.show=false
 hibernate.sql.format=false
-
 # second-level hibernate cache.
 # vastly reduces database load at expense of data potentially being stale.
 # use an in-memory cache provider. this is not suitable for long-term use, however I am using it for
@@ -82,12 +77,10 @@ hibernate.sql.format=false
 #hibernate.cache.use_second_level_cache=true
 #hibernate.cache.use_query_cache=true
 #hibernate.cache.provider_class=org.hibernate.cache.HashtableCacheProvider
-
 # to turn it off, use these settings instead. you will hit the db a lot more often.
 hibernate.cache.use_second_level_cache=false
 hibernate.cache.use_query_cache=false
 hibernate.cache.provider_class=org.hibernate.cache.NoCacheProvider
-
 # If the server should send replay IDs to clients after certain events, and if the client should
 # display a permalink to them. You must be using the KafkaMetrics implementation, and have
 # pyx-metrics-processor running somewhere to put the data into a database, and have
@@ -106,7 +99,6 @@ pyx.metrics.session.url_format=http://localhost:4080/session/%s
 pyx.metrics.user.url_format=http://localhost:4080/user/%s
 # Metrics logger implementation.
 pyx.metrics.impl=net.socialgamer.cah.metrics.NoOpMetrics
-
 # for kafka metrics
 kafka.host=kafka-host:9092
 kafka.topic=pyx-metrics
@@ -124,9 +116,6 @@ kafka.key.password=
 kafka.sasl=false
 kafka.sasl.username=
 kafka.sasl.password=
-
-
-
 # GeoIP database for analytics. If unset, will not be used.
 # Only used if the above is not NoOpMetrics.
 # See README.md for instructions.

@@ -1,6 +1,9 @@
 package net.socialgamer.cah.task;
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import net.socialgamer.cah.CahModule;
 import net.socialgamer.cah.data.ServerIsAliveTokenHolder;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -31,32 +34,47 @@ public class ServerIsAliveTask extends SafeTimerTask {
     }
   }
 
+  private final Provider<String> discoveryAddressProvider;
+  private final Provider<Integer> discoveryPortProvider;
   private String myIp = null;
 
-  public ServerIsAliveTask() {
+  @Inject
+  public ServerIsAliveTask(@CahModule.ServerDiscoveryAddress Provider<String> discoveryAddressProvider,
+                           @CahModule.ServerDiscoveryPort Provider<Integer> discoveryPortProvider) {
+    this.discoveryAddressProvider = discoveryAddressProvider;
+    this.discoveryPortProvider = discoveryPortProvider;
   }
 
   @Override
   public void process() {
     if (myIp == null) {
-      try {
-        HttpURLConnection conn = (HttpURLConnection) GET_MY_IP.openConnection();
-        conn.connect();
+      Integer discoveryPort = discoveryPortProvider.get();
+      if (discoveryPort == null || discoveryPort <= 0 || discoveryPort >= 65536)
+        throw new IllegalArgumentException("Invalid server discovery configuration!");
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-          JSONObject obj = (JSONObject) JSONValue.parse(reader.readLine());
-          myIp = (String) obj.get("ip");
-          logger.info("Successfully retrieved server IP: " + myIp);
+      String discoveryAddress = discoveryAddressProvider.get();
+      if (discoveryAddress != null && !discoveryAddress.isEmpty()) {
+        myIp = discoveryAddress + ":" + discoveryPort;
+      } else {
+        try {
+          HttpURLConnection conn = (HttpURLConnection) GET_MY_IP.openConnection();
+          conn.connect();
+
+          try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+            JSONObject obj = (JSONObject) JSONValue.parse(reader.readLine());
+            myIp = obj.get("ip") + ":" + discoveryPortProvider.get();
+            logger.info("Successfully retrieved server IP: " + myIp);
+          }
+
+          conn.disconnect();
+        } catch (IOException ex) {
+          logger.error("Failed retrieving server IP!", ex);
         }
-
-        conn.disconnect();
-      } catch (IOException ex) {
-        logger.error("Failed retrieving server IP!", ex);
       }
     }
 
     try {
-      HttpURLConnection conn = (HttpURLConnection) URI.create(AM_ALIVE_API + myIp).toURL().openConnection(); // FIXME: IP and port
+      HttpURLConnection conn = (HttpURLConnection) URI.create(AM_ALIVE_API + myIp).toURL().openConnection();
       conn.connect();
 
       try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
