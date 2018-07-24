@@ -66,14 +66,14 @@ public class AjaxServlet extends CahServlet {
       try {
         serial = Integer.parseInt(request.getParameter(AjaxRequest.SERIAL.toString()));
       } catch (final NumberFormatException nfe) {
-        returnError(user, out, ErrorCode.BAD_REQUEST, -1);
+        returnError(out, ErrorCode.BAD_REQUEST, -1);
         return;
       }
     }
 
     final String op = request.getParameter(AjaxRequest.OP.toString());
     if (op == null || op.equals("")) {
-      returnError(user, out, ErrorCode.OP_NOT_SPECIFIED, serial);
+      returnError(out, ErrorCode.OP_NOT_SPECIFIED, serial);
       return;
     }
 
@@ -83,11 +83,11 @@ public class AjaxServlet extends CahServlet {
     } catch (final Exception e) {
       log((User) hSession.getAttribute(SessionAttribute.USER), "Exception handling op " + op + ": "
               + e.toString());
-      returnError(user, out, ErrorCode.BAD_OP, serial);
+      returnError(out, ErrorCode.BAD_OP, serial);
       return;
     }
     final Map<ReturnableData, Object> data = handler.handle(new RequestWrapper(request), hSession);
     data.put(AjaxResponse.SERIAL, serial);
-    returnData(user, out, data);
+    returnData(out, data);
   }
 }
