@@ -218,7 +218,13 @@ public class ConfigurationHolder {
     conf.clear();
     if (pyxConfig.exists() && pyxConfig.canRead())
       load(new LineReader(new FileInputStream(pyxConfig)), conf);
-    conf.putAll(startupArgs); // Startup arguments override configuration file
+
+    Map<String, String> env = System.getenv();
+    for (String key : env.keySet())
+      if (key.startsWith("pyx"))
+        conf.put(key, env.get(key)); // Environment arguments override configuration file
+
+    conf.putAll(startupArgs); // Startup arguments override configuration file and environment
   }
 
   @Nonnull
