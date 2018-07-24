@@ -61,6 +61,7 @@ public class User {
   private final String sessionId;
   private final String clientLanguage;
   private final ReadableUserAgent agent;
+  private final String clientAgent;
   private long lastHeardFrom = 0;
   private long lastUserAction = 0;
   private Game currentGame;
@@ -72,23 +73,15 @@ public class User {
   /**
    * Create a new user.
    *
-   * @param nickname
-   *          The user's nickname.
-   * @param idCode
-   *          The user's ID code, after hashing with salt and their name, or the empty string if
-   *          none provided.
-   * @param hostname
-   *          The user's Internet hostname (which will likely just be their IP address).
-   * @param isAdmin
-   *          Whether this user is an admin.
-   * @param persistentId
-   *          This user's persistent (cross-session) ID.
-   * @param sessionId
-   *          The unique ID of this session for this server instance.
-   * @param clientLanguage
-   *          The language of the user's web browser/client.
-   * @param clientAgent
-   *          The name of the user's web browser/client.
+   * @param nickname       The user's nickname.
+   * @param idCode         The user's ID code, after hashing with salt and their name, or the empty string if
+   *                       none provided.
+   * @param hostname       The user's Internet hostname (which will likely just be their IP address).
+   * @param isAdmin        Whether this user is an admin.
+   * @param persistentId   This user's persistent (cross-session) ID.
+   * @param sessionId      The unique ID of this session for this server instance.
+   * @param clientLanguage The language of the user's web browser/client.
+   * @param clientAgent    The name of the user's web browser/client.
    */
   @Inject
   public User(@Assisted("nickname") final String nickname,
@@ -106,15 +99,16 @@ public class User {
     this.persistentId = persistentId;
     this.sessionId = sessionId;
     this.clientLanguage = clientLanguage == null ? "" : clientLanguage;
-    agent = UADetectorServiceFactory.getResourceModuleParser().parse(clientAgent);
-    queuedMessages = new PriorityBlockingQueue<>();
+    this.clientAgent = clientAgent == null ? "unknown" : clientAgent;
+    if (clientAgent != null) this.agent = UADetectorServiceFactory.getResourceModuleParser().parse(clientAgent);
+    else this.agent = null;
+    this.queuedMessages = new PriorityBlockingQueue<>();
   }
 
   /**
    * Enqueue a new message to be delivered to the user.
    *
-   * @param message
-   *          Message to enqueue.
+   * @param message Message to enqueue.
    */
   public void enqueueMessage(final QueuedMessage message) {
     synchronized (queuedMessageSynchronization) {
@@ -133,10 +127,9 @@ public class User {
   /**
    * Wait for a new message to be queued.
    *
-   * @see java.lang.Object#wait(long timeout)
-   * @param timeout
-   *          Maximum time to wait in milliseconds.
+   * @param timeout Maximum time to wait in milliseconds.
    * @throws InterruptedException
+   * @see java.lang.Object#wait(long timeout)
    */
   public void waitForNewMessageNotification(final long timeout) throws InterruptedException {
     if (timeout > 0) {
@@ -161,8 +154,7 @@ public class User {
   }
 
   /**
-   * @param maxElements
-   *          Maximum number of messages to return.
+   * @param maxElements Maximum number of messages to return.
    * @return The next {@code maxElements} messages queued for this user.
    */
   public Collection<QueuedMessage> getNextQueuedMessages(final int maxElements) {
@@ -215,7 +207,8 @@ public class User {
   }
 
   public String getAgentName() {
-    return agent.getName();
+    if (agent == null || agent.getName().equals("unknown")) return clientAgent;
+    else return agent.getName();
   }
 
   public String getAgentType() {
@@ -301,13 +294,11 @@ public class User {
 
   /**
    * Marks a given game as this user's active game.
-   *
+   * <p>
    * This should only be called from Game itself.
    *
-   * @param game
-   *          Game in which this user is playing.
-   * @throws IllegalStateException
-   *           Thrown if this user is already in another game.
+   * @param game Game in which this user is playing.
+   * @throws IllegalStateException Thrown if this user is already in another game.
    */
   void joinGame(final Game game) throws IllegalStateException {
     if (currentGame != null) {
@@ -318,11 +309,10 @@ public class User {
 
   /**
    * Marks the user as no longer participating in a game.
-   *
+   * <p>
    * This should only be called from Game itself.
    *
-   * @param game
-   *          Game from which to remove the user.
+   * @param game Game from which to remove the user.
    */
   void leaveGame(final Game game) {
     if (currentGame == game) {
