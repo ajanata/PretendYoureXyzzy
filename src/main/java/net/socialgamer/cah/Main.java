@@ -8,9 +8,7 @@ import io.undertow.server.handlers.resource.FileResourceManager;
 import io.undertow.server.handlers.resource.ResourceHandler;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.*;
-import net.socialgamer.cah.servlets.AjaxServlet;
-import net.socialgamer.cah.servlets.JavascriptConfigServlet;
-import net.socialgamer.cah.servlets.LongPollServlet;
+import net.socialgamer.cah.servlets.*;
 import org.apache.jasper.deploy.JspPropertyGroup;
 import org.apache.jasper.deploy.TagLibraryInfo;
 import org.apache.tomcat.InstanceManager;
@@ -62,6 +60,10 @@ public class Main {
             .addFilter(new FilterInfo("SetCacheControl", CacheControlFilter.class))
             .addServlets(
                     JspServletBuilder.createServlet("JspServlet", "*.jsp"),
+                    Servlets.servlet("ServerAliveServlet", ServerAliveServlet.class)
+                            .addMapping("/ServerAlive"),
+                    Servlets.servlet("SchemaServlet", Schema.class)
+                            .addMapping("/Schema"),
                     Servlets.servlet("AjaxServlet", AjaxServlet.class)
                             .addMapping("/AjaxServlet"),
                     Servlets.servlet("JsConfigServlet", JavascriptConfigServlet.class)
