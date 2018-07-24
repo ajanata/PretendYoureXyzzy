@@ -27,9 +27,11 @@ import java.util.Map;
 public class Main {
 
   public static void main(String[] args) throws ServletException {
+    int port = Integer.parseInt(args[0]);
+
     File pyxDirectory;
-    if (args.length == 0) pyxDirectory = new File("./PYX");
-    else pyxDirectory = new File(args[0]);
+    if (args.length <= 1) pyxDirectory = new File("./PYX");
+    else pyxDirectory = new File(args[1]);
 
     ConfigurationHolder conf = ConfigurationHolder.init(pyxDirectory);
     FileResourceManager fileResourceManager = new FileResourceManager(conf.getWebContent());
@@ -55,11 +57,11 @@ public class Main {
                 };
               }
             }))
-            .setDeploymentName("test.war")
+            .setDeploymentName("PYX")
             .setResourceManager(fileResourceManager)
             .addFilter(new FilterInfo("SetCacheControl", CacheControlFilter.class))
             .addServlets(
-                    JspServletBuilder.createServlet("Default Jsp Servlet", "*.jsp"),
+                    JspServletBuilder.createServlet("JspServlet", "*.jsp"),
                     Servlets.servlet("AjaxServlet", AjaxServlet.class)
                             .addMapping("/AjaxServlet"),
                     Servlets.servlet("JsConfigServlet", JavascriptConfigServlet.class)
@@ -104,12 +106,10 @@ public class Main {
 
       @Override
       public void newInstance(Object o) {
-
       }
 
       @Override
       public void destroyInstance(Object o) {
-
       }
     });
 
@@ -119,7 +119,7 @@ public class Main {
             .addPrefixPath("/", manager.start());
 
     Undertow server = Undertow.builder()
-            .addHttpListener(8080, "0.0.0.0")
+            .addHttpListener(port, "")
             .setHandler(path)
             .build();
     server.start();
