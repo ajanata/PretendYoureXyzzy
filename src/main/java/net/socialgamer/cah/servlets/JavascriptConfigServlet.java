@@ -39,55 +39,45 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Properties;
 
 
 @WebServlet("/js/cah.config.js")
 public class JavascriptConfigServlet extends HttpServlet {
-
   private static final long serialVersionUID = 4287566906479434127L;
-
   private String configString;
 
   @Override
   public void init(final ServletConfig config) throws ServletException {
     final StringBuilder builder = new StringBuilder(256);
-    //TODO: these should be loadable from the web.xml
-    builder.append("cah.DEBUG = false;\n");
-    builder.append("cah.SILENT_DEBUG = false;\n");
-
     String contextPath = config.getServletContext().getContextPath();
-    if (!contextPath.endsWith("/")) {
-      contextPath += "/";
-    }
+    if (!contextPath.endsWith("/")) contextPath += "/";
     builder.append(String.format("cah.AJAX_URI = '%sAjaxServlet';\n", contextPath));
     builder.append(String.format("cah.LONGPOLL_URI = '%sLongPollServlet';\n", contextPath));
-
     configString = builder.toString();
-
     super.init(config);
   }
 
   @Override
-  protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
-          throws IOException {
+  protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
+    StringBuilder builder = new StringBuilder(256).append(configString);
+    Injector injector = (Injector) getServletContext().getAttribute(StartupUtils.INJECTOR);
 
-    // We have to do this every time since these come from the properties file and that can change...
-    final StringBuilder builder = new StringBuilder(256).append(configString);
-    // Ideally we'd figure out how to make this Servlet itself injectable but I don't have time.
-    final Injector injector = (Injector) getServletContext().getAttribute(StartupUtils.INJECTOR);
-    final String cookieDomain = injector.getInstance(Key.get(String.class, CookieDomain.class));
-    final Boolean globalChatEnabled = injector.getInstance(Key.get(Boolean.class, GlobalChatEnabled.class));
-    final Boolean insecureIdAllowed = injector
-            .getInstance(Key.get(Boolean.class, InsecureIdAllowed.class));
-    final Boolean broadcastingUsers = injector
-            .getInstance(Key.get(Boolean.class, BroadcastConnectsAndDisconnects.class));
+    String cookieDomain = injector.getInstance(Key.get(String.class, CookieDomain.class));
     builder.append(String.format("cah.COOKIE_DOMAIN = '%s';\n", cookieDomain));
+    boolean globalChatEnabled = injector.getInstance(Key.get(Boolean.class, GlobalChatEnabled.class));
     builder.append(String.format("cah.GLOBAL_CHAT_ENABLED = %b;\n", globalChatEnabled));
+    boolean insecureIdAllowed = injector.getInstance(Key.get(Boolean.class, InsecureIdAllowed.class));
     builder.append(String.format("cah.INSECURE_ID_ALLOWED = %b;\n", insecureIdAllowed));
+    boolean broadcastingUsers = injector.getInstance(Key.get(Boolean.class, BroadcastConnectsAndDisconnects.class));
     builder.append(String.format("cah.BROADCASTING_USERS = %b;\n", broadcastingUsers));
 
+    Properties properties = injector.getInstance(Properties.class);
+    builder.append(String.format("cah.DEBUG = %s;\n", properties.getProperty("pyx.client.debug", "false")));
+    builder.append(String.format("cah.SILENT_DEBUG = %s;\n", properties.getProperty("pyx.client.silent_debug", "false")));
+
     resp.setContentType("text/javascript");
-    final PrintWriter out = resp.getWriter();
+    PrintWriter out = resp.getWriter();
     out.println(builder.toString());
     out.flush();
     out.close();
