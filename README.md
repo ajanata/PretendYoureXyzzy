@@ -9,7 +9,7 @@ A Cards Against Humanity clone, server and web client. Play at http://pyx.gianlu
 
 To build this using Maven run `mvn clean package`, then execute `java -jar target/PYX-jar-with-dependencies.jar`.
 
-For GeoIP functions to work, download http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz somewhere, gunzip it, and update the geoip.db value in build.properties to point to it.
+For GeoIP functions to work, download http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz somewhere, gunzip it, and update the geoip.db value in `pyx.properties` to point to it.
 
 ## Server discovery API
 
