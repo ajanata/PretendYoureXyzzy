@@ -6,26 +6,20 @@
     <groupId>net.socialgamer</groupId>
     <artifactId>pyx</artifactId>
     <version>0.7.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>pyx</name>
 
     <scm>
-        <url>https://github.com/ajanata/PretendYoureXyzzy</url>
-        <connection>scm:git:ssh://git@github.com/ajanata/PretendYoureXyzzy.git</connection>
+        <url>https://github.com/devgianlu/PretendYoureXyzzy</url>
+        <connection>scm:git:ssh://git@github.com/devgianlu/PretendYoureXyzzy.git</connection>
     </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <build-prop-file>heroku-build.properties</build-prop-file>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>hibernatesqlite-maven</id>
-            <url>https://hibernate-sqlite.googlecode.com/svn/trunk/mavenrepo</url>
-        </repository>
-    </repositories>
 
     <developers>
         <developer>
@@ -33,10 +27,15 @@
             <name>Andy Janata</name>
             <email>ajanata@gmail.com</email>
         </developer>
+        <developer>
+            <id>devgianlu</id>
+            <name>Gianluca Altomani</name>
+            <email>altomanigianluca@gmail.com</email>
+        </developer>
     </developers>
 
     <build>
-        <finalName>ZY</finalName>
+        <finalName>PYX</finalName>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -56,164 +55,26 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <executable>${java.home}/bin</executable>
-
-                    <!-- false = true and true = false... http://jira.codehaus.org/browse/MCOMPILER-209 -->
-                    <useIncrementalCompilation>false</useIncrementalCompilation>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>1.3.1</version>
-                <executions>
-                    <execution>
-                        <id>enforce-files-exist</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireFilesExist>
-                                    <files>
-                                        <file>${build-prop-file}</file>
-                                    </files>
-                                </requireFilesExist>
-                            </rules>
-                            <fail>true</fail>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Read database credentials etc. from file. -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0-alpha-2</version>
-                <executions>
-                    <execution>
-                        <id>read-build-properties</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>read-report-properties</id>
-                        <phase>pre-site</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <files>
-                        <file>${build-prop-file}</file>
-                    </files>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.4</version>
-
-                <!-- for exploded war -->
-                <!--
-                <executions>
-                  <execution>
-                    <id>default-war</id>
-                    <phase>none</phase>
-                  </execution>
-                  <execution>
-                    <id>war-exploded</id>
-                    <phase>package</phase>
-                    <goals>
-                      <goal>exploded</goal>
-                    </goals>
-                  </execution>
-                </executions>
-                -->
-
-                <configuration>
-                    <webResources>
-                        <resource>
-                            <directory>src/main/resources</directory>
-                            <filtering>false</filtering>
-                        </resource>
-                        <resource>
-                            <directory>src/main/filtered-resources</directory>
-                            <filtering>true</filtering>
-                        </resource>
-                        <resource>
-                            <directory>WebContent</directory>
-                            <filtering>false</filtering>
-                        </resource>
-                    </webResources>
-
-                    <!-- Web XML is in a filtered folder due to the DTD -->
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-
-                    <!-- Pack classes into a jar -->
-                    <archiveClasses>true</archiveClasses>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.4</version>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>copy</goal>
+                            <goal>single</goal>
                         </goals>
                         <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.eclipse.jetty</groupId>
-                                    <artifactId>jetty-runner</artifactId>
-                                    <version>9.4.9.v20180320</version>
-                                    <destFileName>jetty-runner.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
+                            <archive>
+                                <manifest>
+                                    <mainClass>net.socialgamer.cah.Main</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.3.0.v20150612</version>
-
-                <configuration>
-                    <!-- Uncomment this to enable JMX in Jetty for debugging. -->
-                    <!-- <jettyXml>${appserver.web-inf.dir}/jetty-jmx.xml</jettyXml> -->
-                    <webApp>
-                        <!--<defaultsDescriptor>${project.basedir}/jetty-defaults.xml</defaultsDescriptor> -->
-                        <descriptor>${project.build.directory}/${project.build.artifact.name}/WEB-INF/web.xml
-                        </descriptor>
-                        <resourceBases>
-                            <!-- Non-filtered -->
-                            <resource>src/main/resources</resource>
-                            <!-- Filtered -->
-                            <resource>${project.build.directory}/ZY</resource>
-                        </resourceBases>
-                    </webApp>
-                    <scanTargets>
-                        <scanTarget>src/main/filtered-resources</scanTarget>
-                    </scanTargets>
-                    <scanIntervalSeconds>0</scanIntervalSeconds>
-                    <reload>manual</reload>
-                    <webAppSourceDirectory>WebContent</webAppSourceDirectory>
-                    <stopPort>8081</stopPort>
-                    <stopKey>STOP</stopKey>
-                </configuration>
             </plugin>
         </plugins>
     </build>
