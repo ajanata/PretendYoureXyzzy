@@ -24,7 +24,6 @@
 package net.socialgamer.cah;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 
 
 /**
@@ -41,6 +40,6 @@ public class HibernateUtil {
   public final SessionFactory sessionFactory;
 
   private HibernateUtil() {
-    sessionFactory = new Configuration().configure(ConfigurationHolder.get().getHibernateConfig()).buildSessionFactory();
+    sessionFactory = ConfigurationHolder.get().getHibernateConfiguration().buildSessionFactory();
   }
 }

@@ -38,7 +38,6 @@ import net.socialgamer.cah.metrics.UniqueIds;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
-import javax.servlet.ServletContext;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.*;
@@ -58,10 +57,7 @@ public class CahModule extends AbstractModule {
 
   private final Properties properties = new Properties();
 
-  private final ServletContext context;
-
-  public CahModule(final ServletContext context) {
-    this.context = context;
+  public CahModule() {
   }
 
   @Override
@@ -76,7 +72,7 @@ public class CahModule extends AbstractModule {
     bind(new TypeLiteral<Set<String>>() {
     })
             .annotatedWith(BanList.class)
-            .toInstance(Collections.synchronizedSet(new HashSet<String>()));
+            .toInstance(Collections.synchronizedSet(new HashSet<>()));
 
     bind(Properties.class).toInstance(properties);
 

@@ -96,8 +96,7 @@ public class SqliteDialect extends Dialect {
 
   @Override
   public String getLimitString(final String query, final boolean hasOffset) {
-    return new StringBuffer(query.length() + 20).append(query)
-            .append(hasOffset ? " limit ? offset ?" : " limit ?").toString();
+    return query + (hasOffset ? " limit ? offset ?" : " limit ?");
   }
 
   @Override

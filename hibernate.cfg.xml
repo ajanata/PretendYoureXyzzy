@@ -8,7 +8,7 @@
         <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
         <property name="hibernate.connection.url">jdbc:sqlite:pyx.sqlite</property>
         <property name="hibernate.connection.username">pyx</property>
-        <property name="hibernate.connection.password">orrectHorseBatteryStaple</property>
+        <property name="hibernate.connection.password">CorrectHorseBatteryStaple</property>
         <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 
         <property name="hibernate.cache.use_second_level_cache">false</property>

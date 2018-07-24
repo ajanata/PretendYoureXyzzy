@@ -40,7 +40,6 @@ import org.apache.log4j.PropertyConfigurator;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
-import java.io.FileReader;
 import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -86,7 +85,7 @@ public class StartupUtils extends GuiceServletContextListener {
    */
   private static final long BROADCAST_UPDATE_DELAY = TimeUnit.SECONDS.toMillis(60);
 
-  public static void reloadProperties(final ServletContext context) {
+  public static void reloadProperties(ServletContext context) {
     final Injector injector = (Injector) context.getAttribute(INJECTOR);
     final Properties props = injector.getInstance(Properties.class);
     reloadProperties(props);
@@ -100,8 +99,7 @@ public class StartupUtils extends GuiceServletContextListener {
 
     try {
       synchronized (props) {
-        props.clear();
-        props.load(new FileReader(ConfigurationHolder.get().getPyxConfig()));
+        ConfigurationHolder.asProperties(props);
       }
     } catch (final Exception e) {
       // we should probably do something?
@@ -133,7 +131,7 @@ public class StartupUtils extends GuiceServletContextListener {
   public void contextInitialized(final ServletContextEvent contextEvent) {
     final ServletContext context = contextEvent.getServletContext();
     reconfigureLogging();
-    final Injector injector = getInjector(context);
+    final Injector injector = getInjector();
 
     final ScheduledThreadPoolExecutor timer = injector
             .getInstance(ScheduledThreadPoolExecutor.class);
@@ -164,12 +162,8 @@ public class StartupUtils extends GuiceServletContextListener {
             injector.getInstance(Key.get(String.class, UniqueId.class)));
   }
 
-  protected Injector getInjector(final ServletContext context) {
-    return Guice.createInjector(new CahModule(context), new CardcastModule());
-  }
-
   @Override
   protected Injector getInjector() {
-    throw new RuntimeException("Not supported.");
+    return Guice.createInjector(new CahModule(), new CardcastModule());
   }
 }

@@ -114,7 +114,7 @@ Administration tools.
 
     String reloadLog4j = request.getParameter("reloadLog4j");
     if ("true".equals(reloadLog4j)) {
-        StartupUtils.reconfigureLogging(this.getServletContext());
+        StartupUtils.reconfigureLogging();
     }
 
     String reloadProps = request.getParameter("reloadProps");

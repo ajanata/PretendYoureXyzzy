@@ -14,7 +14,7 @@ import org.apache.jasper.deploy.TagLibraryInfo;
 import org.apache.tomcat.InstanceManager;
 
 import javax.servlet.ServletException;
-import java.io.File;
+import java.io.IOException;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,14 +24,11 @@ import java.util.Map;
  */
 public class Main {
 
-  public static void main(String[] args) throws ServletException {
-    int port = Integer.parseInt(args[0]);
+  public static void main(String[] args) throws ServletException, IOException {
+    ConfigurationHolder conf = ConfigurationHolder.init(args);
 
-    File pyxDirectory;
-    if (args.length <= 1) pyxDirectory = new File("./PYX");
-    else pyxDirectory = new File(args[1]);
+    int port = Integer.parseInt(conf.getOrDefault("pyx.server.port", "80"));
 
-    ConfigurationHolder conf = ConfigurationHolder.init(pyxDirectory);
     FileResourceManager fileResourceManager = new FileResourceManager(conf.getWebContent());
 
     DeploymentInfo servletBuilder = Servlets.deployment()
