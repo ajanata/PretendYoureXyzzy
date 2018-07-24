@@ -58,7 +58,9 @@ public class Main {
             .setResourceManager(fileResourceManager)
             .addFilter(new FilterInfo("SetCacheControl", CacheControlFilter.class))
             .addServlets(
-                    JspServletBuilder.createServlet("JspServlet", "*.jsp"),
+                    JspServletBuilder.createServlet("JspServlet", "*.jsp")
+                            .addInitParam("compilerSourceVM", "1.8")
+                            .addInitParam("compilerTargetVM", "1.8"),
                     Servlets.servlet("ServerAliveServlet", ServerAliveServlet.class)
                             .addMapping("/ServerAlive"),
                     Servlets.servlet("SchemaServlet", Schema.class)
