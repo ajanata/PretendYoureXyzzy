@@ -21,7 +21,7 @@ If you deployed on Heroku, instead of having to change the `pyx.properties` file
 
 
 ## Build
-To build this using Maven run `mvn clean package`, then execute `java -jar target/PYX-jar-with-dependencies.jar`.
+To build this using Maven run `mvn clean package`, then execute `java -jar target/PYX-jar-with-dependencies.jar`. You can now edit the `pyx.properties` file to customize the server.
 
 For GeoIP functions to work, download http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz somewhere, gunzip it, and update the geoip.db value in `pyx.properties` to point to it.
 
