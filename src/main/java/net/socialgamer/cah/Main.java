@@ -17,7 +17,6 @@ import org.apache.tomcat.InstanceManager;
 
 import javax.servlet.ServletException;
 import java.io.File;
-import java.net.URISyntaxException;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,10 +26,13 @@ import java.util.Map;
  */
 public class Main {
 
-  public static void main(String[] args) throws ServletException, URISyntaxException {
-    System.out.println(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath());
+  public static void main(String[] args) throws ServletException {
+    File pyxDirectory;
+    if (args.length == 0) pyxDirectory = new File("./PYX");
+    else pyxDirectory = new File(args[0]);
 
-    FileResourceManager fileResourceManager = new FileResourceManager(new File("C:\\Users\\Gianlu\\Documents\\Java projects\\PretendYoureXyzzy\\WebContent"));
+    ConfigurationHolder conf = ConfigurationHolder.init(pyxDirectory);
+    FileResourceManager fileResourceManager = new FileResourceManager(conf.getWebContent());
 
     DeploymentInfo servletBuilder = Servlets.deployment()
             .setClassLoader(Main.class.getClassLoader())

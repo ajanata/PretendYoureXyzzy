@@ -81,9 +81,9 @@ public class CahModule extends AbstractModule {
     bind(Properties.class).toInstance(properties);
 
     // this is only so injected constructors can log
-    StartupUtils.reconfigureLogging(context);
+    StartupUtils.reconfigureLogging();
     // FIXME huge hack.
-    StartupUtils.reloadProperties(context, properties);
+    StartupUtils.reloadProperties(properties);
     final String metricsClassName = properties.getProperty("pyx.metrics.impl");
     try {
       @SuppressWarnings("unchecked") final Class<? extends Metrics> metricsClass = (Class<? extends Metrics>) Class

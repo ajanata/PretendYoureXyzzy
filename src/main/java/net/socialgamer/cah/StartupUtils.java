@@ -40,7 +40,6 @@ import org.apache.log4j.PropertyConfigurator;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
-import java.io.File;
 import java.io.FileReader;
 import java.util.Date;
 import java.util.Properties;
@@ -90,20 +89,19 @@ public class StartupUtils extends GuiceServletContextListener {
   public static void reloadProperties(final ServletContext context) {
     final Injector injector = (Injector) context.getAttribute(INJECTOR);
     final Properties props = injector.getInstance(Properties.class);
-    reloadProperties(context, props);
+    reloadProperties(props);
   }
 
   /**
    * Hack method for calling inside CahModule before the injector is usable.
    */
-  public static void reloadProperties(final ServletContext context, final Properties props) {
+  public static void reloadProperties(final Properties props) {
     LOG.info("Reloading pyx.properties");
 
-    final File propsFile = new File("C:\\Users\\Gianlu\\Documents\\Java projects\\PretendYoureXyzzy\\pyx-build.properties");
     try {
       synchronized (props) {
         props.clear();
-        props.load(new FileReader(propsFile));
+        props.load(new FileReader(ConfigurationHolder.get().getPyxConfig()));
       }
     } catch (final Exception e) {
       // we should probably do something?
@@ -111,10 +109,9 @@ public class StartupUtils extends GuiceServletContextListener {
     }
   }
 
-  public static void reconfigureLogging(final ServletContext context) {
+  public static void reconfigureLogging() {
     LOG.info("Reloading log4j.properties");
-
-    PropertyConfigurator.configure("C:\\Users\\Gianlu\\Documents\\Java projects\\PretendYoureXyzzy\\log4j.properties");
+    PropertyConfigurator.configure(ConfigurationHolder.get().getLog4JConfig().getAbsolutePath());
   }
 
   @Override
@@ -135,7 +132,7 @@ public class StartupUtils extends GuiceServletContextListener {
   @Override
   public void contextInitialized(final ServletContextEvent contextEvent) {
     final ServletContext context = contextEvent.getServletContext();
-    reconfigureLogging(context);
+    reconfigureLogging();
     final Injector injector = getInjector(context);
 
     final ScheduledThreadPoolExecutor timer = injector

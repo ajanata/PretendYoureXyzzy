@@ -26,8 +26,6 @@ package net.socialgamer.cah;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import java.io.File;
-
 
 /**
  * Utility class for Hibernate.
@@ -43,6 +41,6 @@ public class HibernateUtil {
   public final SessionFactory sessionFactory;
 
   private HibernateUtil() {
-    sessionFactory = new Configuration().configure(new File("C:\\Users\\Gianlu\\Documents\\Java projects\\PretendYoureXyzzy\\build-hibernate.cfg.xml")).buildSessionFactory();
+    sessionFactory = new Configuration().configure(ConfigurationHolder.get().getHibernateConfig()).buildSessionFactory();
   }
 }
