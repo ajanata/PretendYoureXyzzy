@@ -54,6 +54,7 @@ public class Main {
             }))
             .setDeploymentName("test.war")
             .setResourceManager(fileResourceManager)
+            .addFilter(new FilterInfo("SetCacheControl", CacheControlFilter.class))
             .addServlets(
                     JspServletBuilder.createServlet("Default Jsp Servlet", "*.jsp"),
                     Servlets.servlet("AjaxServlet", AjaxServlet.class)
