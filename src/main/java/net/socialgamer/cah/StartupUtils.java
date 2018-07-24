@@ -99,7 +99,7 @@ public class StartupUtils extends GuiceServletContextListener {
   public static void reloadProperties(final ServletContext context, final Properties props) {
     LOG.info("Reloading pyx.properties");
 
-    final File propsFile = new File(context.getRealPath("/WEB-INF/pyx.properties"));
+    final File propsFile = new File("C:\\Users\\Gianlu\\Documents\\Java projects\\PretendYoureXyzzy\\pyx-build.properties");
     try {
       synchronized (props) {
         props.clear();
@@ -114,7 +114,7 @@ public class StartupUtils extends GuiceServletContextListener {
   public static void reconfigureLogging(final ServletContext context) {
     LOG.info("Reloading log4j.properties");
 
-    PropertyConfigurator.configure(context.getRealPath("/WEB-INF/log4j.properties"));
+    PropertyConfigurator.configure("C:\\Users\\Gianlu\\Documents\\Java projects\\PretendYoureXyzzy\\src\\main\\resources\\WEB-INF\\log4j.properties" /* context.getRealPath("/WEB-INF/log4j.properties") */);
   }
 
   @Override

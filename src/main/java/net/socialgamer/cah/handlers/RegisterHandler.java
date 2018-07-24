@@ -112,7 +112,7 @@ public class RegisterHandler extends Handler {
       final String nick = request.getParameter(AjaxRequest.NICKNAME).trim();
       final String nickLower = nick.toLowerCase(Locale.ENGLISH);
       for (final String banned : bannedNickList) {
-        if (nickLower.contains(banned)) {
+        if (!banned.isEmpty() && nickLower.contains(banned)) {
           return error(ErrorCode.RESERVED_NICK);
         }
       }
