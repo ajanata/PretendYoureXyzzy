@@ -59,18 +59,6 @@ Administration tools.
     Set<String> banList = injector.getInstance(Key.get(new TypeLiteral<Set<String>>() {
     }, BanList.class));
 
-// process verbose toggle
-    String verboseParam = request.getParameter("verbose");
-    if (verboseParam != null) {
-        if (verboseParam.equals("on")) {
-            servletContext.setAttribute(StartupUtils.VERBOSE_DEBUG, Boolean.TRUE);
-        } else {
-            servletContext.setAttribute(StartupUtils.VERBOSE_DEBUG, Boolean.FALSE);
-        }
-        response.sendRedirect("admin.jsp");
-        return;
-    }
-
 // process kick
     String kickParam = request.getParameter("kick");
     if (kickParam != null) {
@@ -226,17 +214,6 @@ User list:
         }
     %>
 </table>
-
-<%
-    // TODO remove this "verbose logging" crap now that log4j is working.
-    Boolean verboseDebugObj = (Boolean) servletContext.getAttribute(StartupUtils.VERBOSE_DEBUG);
-    boolean verboseDebug = verboseDebugObj != null && verboseDebugObj;
-%>
-<p>
-    Verbose logging is currently <strong><%= verboseDebug ? "ON" : "OFF" %>
-</strong>.
-    <a href="?verbose=on">Turn on.</a> <a href="?verbose=off">Turn off.</a>
-</p>
 <p>
     <a href="?reloadLog4j=true">Reload log4j.properties.</a>
 </p>

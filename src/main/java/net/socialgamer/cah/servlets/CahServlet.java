@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
  * <p>
@@ -39,8 +39,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +53,7 @@ import java.util.Map;
 public abstract class CahServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  public static JSONObject createObject(Map<ReturnableData, Object> data) {
+  private static JSONObject createObject(Map<ReturnableData, Object> data) {
     JSONObject obj = new JSONObject();
     for (ReturnableData key : data.keySet()) obj.put(key.toString(), data.get(key));
     return obj;
@@ -85,19 +83,6 @@ public abstract class CahServlet extends HttpServlet {
       final HttpSession hSession = request.getSession(true);
       final User user = (User) hSession.getAttribute(SessionAttribute.USER);
 
-      if (verboseDebug()) {
-        // TODO if we have any sort of authentication later, we need to make sure to not log passwords!
-        // I could use getParameterMap, but that returns an array, and getting pretty strings out of
-        // array values is a lot of work.
-        final Map<String, Object> params = new HashMap<>();
-        final Enumeration<String> paramNames = request.getParameterNames();
-        while (paramNames.hasMoreElements()) {
-          final String name = paramNames.nextElement();
-          params.put(name, request.getParameter(name));
-        }
-        log(user, "Request: " + params);
-      }
-
       final String op = request.getParameter(AjaxRequest.OP.toString());
       // we don't make sure they have a User object if they are doing either of the requests that
       // create or check for the User object. That would be silly.
@@ -105,13 +90,13 @@ public abstract class CahServlet extends HttpServlet {
               && (op.equals(AjaxOperation.REGISTER.toString())
               || op.equals(AjaxOperation.FIRST_LOAD.toString()));
       if (!skipSessionUserCheck && hSession.getAttribute(SessionAttribute.USER) == null) {
-        returnError(user, response.getWriter(), ErrorCode.NOT_REGISTERED, serial);
+        returnError(response.getWriter(), ErrorCode.NOT_REGISTERED, serial);
       } else if (user != null
               && !user.isValidFromHost(new RequestWrapper(request).getRemoteAddr())) {
         // user probably pinged out, or possibly kicked by admin
         // or their IP address magically changed (working around a ban?)
         hSession.invalidate();
-        returnError(user, response.getWriter(), ErrorCode.SESSION_EXPIRED, serial);
+        returnError(response.getWriter(), ErrorCode.SESSION_EXPIRED, serial);
       } else {
         try {
           handleRequest(request, response, hSession);
@@ -122,16 +107,8 @@ public abstract class CahServlet extends HttpServlet {
       }
     } catch (final IllegalStateException ise) {
       // session invalidated, so pretend they don't have one.
-      returnError(null, response.getWriter(), ErrorCode.NO_SESSION, serial);
+      returnError(response.getWriter(), ErrorCode.NO_SESSION, serial);
     }
-  }
-
-  /**
-   * @return Whether verbose logging is enabled.
-   */
-  private boolean verboseDebug() {
-    final Boolean verboseDebugObj = (Boolean) getServletContext().getAttribute(StartupUtils.VERBOSE_DEBUG);
-    return verboseDebugObj != null && verboseDebugObj;
   }
 
   /**
@@ -140,8 +117,6 @@ public abstract class CahServlet extends HttpServlet {
    * @param request  The request data.
    * @param response The response to the client.
    * @param hSession The client's session.
-   * @throws ServletException
-   * @throws IOException
    */
   protected abstract void handleRequest(final HttpServletRequest request,
                                         final HttpServletResponse response, final HttpSession hSession) throws ServletException,
@@ -150,13 +125,11 @@ public abstract class CahServlet extends HttpServlet {
   /**
    * Return an error to the client.
    *
-   * @param user   User that caused the error.
    * @param writer Response writer to send the error data to.
    * @param code   Error code to return to client.
    * @param serial Request serial number from client.
    */
-  @SuppressWarnings("unchecked")
-  protected void returnError(@Nullable final User user, final PrintWriter writer, final ErrorCode code, final int serial) {
+  protected void returnError(final PrintWriter writer, final ErrorCode code, final int serial) {
     final JSONObject ret = new JSONObject();
     ret.put(AjaxResponse.ERROR.toString(), Boolean.TRUE);
     ret.put(AjaxResponse.ERROR_CODE.toString(), code.toString());
@@ -167,38 +140,34 @@ public abstract class CahServlet extends HttpServlet {
   /**
    * Return response data to the client.
    *
-   * @param user   User this response is for.
    * @param writer Writer for the response.
    * @param data   Key-value data to return as the response.
    */
-  protected void returnData(@Nullable final User user, final PrintWriter writer, final Map<ReturnableData, Object> data) {
-    returnObject(user, writer, createObject(data));
+  protected void returnData(final PrintWriter writer, final Map<ReturnableData, Object> data) {
+    returnObject(writer, createObject(data));
   }
 
   /**
    * Return multiple response data to the client.
    *
-   * @param user      User this response is for.
    * @param writer    Writer for the response.
    * @param data_list List of key-value data to return as the response.
    */
-  protected void returnArray(@Nullable final User user, final PrintWriter writer, final List<Map<ReturnableData, Object>> data_list) {
+  protected void returnArray(final PrintWriter writer, final List<Map<ReturnableData, Object>> data_list) {
     JSONArray array = new JSONArray();
     for (Map<ReturnableData, Object> data : data_list)
       array.put(createObject(data));
-    returnObject(user, writer, array);
+    returnObject(writer, array);
   }
 
   /**
    * Return any response data to the client.
    *
-   * @param user   User this response is for.
    * @param writer Writer for the response.
    * @param object Data to return.
    */
-  private void returnObject(@Nullable final User user, final PrintWriter writer, final Object object) {
+  private void returnObject(final PrintWriter writer, final Object object) {
     writer.println(object.toString());
-    if (verboseDebug()) log(user, "Response: " + object);
   }
 
   /**

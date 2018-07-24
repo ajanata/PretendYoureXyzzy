@@ -54,7 +54,7 @@ import java.util.concurrent.TimeUnit;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class StartupUtils extends GuiceServletContextListener {
-
+  private static final Logger LOG = Logger.getLogger(StartupUtils.class);
   /**
    * Context attribute key name for the Guice injector.
    */
@@ -63,11 +63,6 @@ public class StartupUtils extends GuiceServletContextListener {
    * Context attribute key name for the time the server was started.
    */
   public static final String DATE_NAME = "started_at";
-  /**
-   * Context attribute key name for whether verbose request and response logging is enabled.
-   */
-  public static final String VERBOSE_DEBUG = "verbose_debug";
-  private static final Logger LOG = Logger.getLogger(StartupUtils.class);
   /**
    * Delay before the disconnected client timer is started when the server starts, in milliseconds.
    */
