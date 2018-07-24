@@ -37,7 +37,8 @@ Interface to view and search all existing cards and card sets.
 <%@ page import="net.socialgamer.cah.db.PyxCardSet" %>
 <%@ page import="net.socialgamer.cah.db.PyxWhiteCard" %>
 <%@ page import="org.hibernate.Session" %>
-<%@ page import="org.json.simple.JSONValue" %>
+<%@ page import="org.json.JSONArray" %>
+<%@ page import="org.json.JSONObject" %>
 <%@ page import="java.util.*" %>
 <%
     Session hibernateSession = HibernateUtil.instance.sessionFactory.openSession();
@@ -57,7 +58,7 @@ Interface to view and search all existing cards and card sets.
                 .list();
 
         // all of the data to send to the client
-        Map<String, Object> data = new HashMap<String, Object>();
+        JSONObject data = new JSONObject();
 
         // mapping of what card sets each card is in
         Map<Integer, List<Integer>> whiteCardSets = new HashMap<Integer, List<Integer>>();
@@ -67,18 +68,18 @@ Interface to view and search all existing cards and card sets.
         Set<PyxWhiteCard> whiteCards = new HashSet<PyxWhiteCard>();
         Set<PyxBlackCard> blackCards = new HashSet<PyxBlackCard>();
 
-        Map<Integer, Object> cardSetsData = new HashMap<Integer, Object>();
+        JSONArray cardSetsData = new JSONArray();
         data.put("cardSets", cardSetsData);
         int i = 0;
         for (PyxCardSet cardSet : cardSets) {
-            Map<String, Object> cardSetData = new HashMap<String, Object>();
+            JSONObject cardSetData = new JSONObject();
             cardSetData.put("name", cardSet.getName());
             cardSetData.put("id", cardSet.getId());
             cardSetData.put("description", cardSet.getDescription());
 
-            List<Integer> whiteCardIds = new ArrayList<Integer>(cardSet.getWhiteCards().size());
+            JSONArray whiteCardIds = new JSONArray();
             for (PyxWhiteCard whiteCard : cardSet.getWhiteCards()) {
-                whiteCardIds.add(whiteCard.getId());
+                whiteCardIds.put(whiteCard.getId());
                 whiteCards.add(whiteCard);
                 if (!whiteCardSets.containsKey(whiteCard.getId())) {
                     whiteCardSets.put(whiteCard.getId(), new ArrayList<Integer>());
@@ -87,9 +88,9 @@ Interface to view and search all existing cards and card sets.
             }
             cardSetData.put("whiteCards", whiteCardIds);
 
-            List<Integer> blackCardIds = new ArrayList<Integer>(cardSet.getBlackCards().size());
+            JSONArray blackCardIds = new JSONArray();
             for (PyxBlackCard blackCard : cardSet.getBlackCards()) {
-                blackCardIds.add(blackCard.getId());
+                blackCardIds.put(blackCard.getId());
                 blackCards.add(blackCard);
                 if (!blackCardSets.containsKey(blackCard.getId())) {
                     blackCardSets.put(blackCard.getId(), new ArrayList<Integer>());
@@ -101,10 +102,10 @@ Interface to view and search all existing cards and card sets.
             cardSetsData.put(i++, cardSetData);
         }
 
-        Map<Integer, Object> blackCardsData = new HashMap<Integer, Object>();
+        JSONObject blackCardsData = new JSONObject();
         data.put("blackCards", blackCardsData);
         for (PyxBlackCard blackCard : blackCards) {
-            Map<String, Object> blackCardData = new HashMap<String, Object>();
+            JSONObject blackCardData = new JSONObject();
 
             blackCardData.put("text", blackCard.getText());
             blackCardData.put("watermark", blackCard.getWatermark());
@@ -112,19 +113,19 @@ Interface to view and search all existing cards and card sets.
             blackCardData.put("pick", blackCard.getPick());
             blackCardData.put("card_sets", blackCardSets.get(blackCard.getId()));
 
-            blackCardsData.put(blackCard.getId(), blackCardData);
+            blackCardsData.put(String.valueOf(blackCard.getId()), blackCardData);
         }
 
-        Map<Integer, Object> whiteCardsData = new HashMap<Integer, Object>();
+        JSONObject whiteCardsData = new JSONObject();
         data.put("whiteCards", whiteCardsData);
         for (PyxWhiteCard whiteCard : whiteCards) {
-            Map<String, Object> whiteCardData = new HashMap<String, Object>();
+            JSONObject whiteCardData = new JSONObject();
 
             whiteCardData.put("text", whiteCard.getText());
             whiteCardData.put("watermark", whiteCard.getWatermark());
             whiteCardData.put("card_sets", whiteCardSets.get(whiteCard.getId()));
 
-            whiteCardsData.put(whiteCard.getId(), whiteCardData);
+            whiteCardsData.put(String.valueOf(whiteCard.getId()), whiteCardData);
         }
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -144,7 +145,8 @@ Interface to view and search all existing cards and card sets.
     <link rel="stylesheet" type="text/css" href="jquery-ui.min.css" media="screen"/>
     <jsp:include page="analytics.jsp"/>
     <script type="text/javascript">
-        var data = <%= JSONValue.toJSONString(data) %>;
+        var data = <%= data.toString() %>;
+        console.log(data);
 
         $(document).ready(function () {
             var cardSetsElem = $('#cardSets');

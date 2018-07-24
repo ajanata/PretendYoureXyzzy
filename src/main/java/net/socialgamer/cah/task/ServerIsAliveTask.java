@@ -6,8 +6,7 @@ import com.google.inject.Singleton;
 import net.socialgamer.cah.CahModule;
 import net.socialgamer.cah.data.ServerIsAliveTokenHolder;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,8 +60,8 @@ public class ServerIsAliveTask extends SafeTimerTask {
           conn.connect();
 
           try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-            JSONObject obj = (JSONObject) JSONValue.parse(reader.readLine());
-            myIp = obj.get("ip") + ":" + discoveryPortProvider.get();
+            JSONObject obj = new JSONObject(reader.readLine());
+            myIp = obj.getString("ip") + ":" + discoveryPortProvider.get();
             logger.info("Successfully retrieved server IP: " + myIp);
           }
 
@@ -78,8 +77,8 @@ public class ServerIsAliveTask extends SafeTimerTask {
       conn.connect();
 
       try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-        JSONObject obj = (JSONObject) JSONValue.parse(reader.readLine());
-        if (obj.containsKey("error")) {
+        JSONObject obj = new JSONObject(reader.readLine());
+        if (obj.has("error")) {
           logger.error("Failed registering to the discovery API: " + obj.get("error"));
         } else {
           String token = (String) obj.get("token");

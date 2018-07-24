@@ -5,7 +5,7 @@ import net.socialgamer.cah.StartupUtils;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.ServerIsAliveTokenHolder;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,6 +42,6 @@ public class ServerAliveServlet extends HttpServlet {
     obj.put("games", games.getGameList().size());
     obj.put("maxUsers", props.get("pyx.server.max_users"));
     obj.put("maxGames", props.get("pyx.server.max_games"));
-    resp.getWriter().write(obj.toJSONString());
+    resp.getWriter().write(obj.toString());
   }
 }

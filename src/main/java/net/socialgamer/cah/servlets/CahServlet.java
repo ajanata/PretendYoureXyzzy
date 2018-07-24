@@ -28,8 +28,8 @@ import net.socialgamer.cah.Constants.*;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.StartupUtils;
 import net.socialgamer.cah.data.User;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.annotation.Nullable;
 import javax.servlet.ServletException;
@@ -47,13 +47,19 @@ import java.util.Map;
 
 /**
  * Servlet implementation class CahServlet.
- *
+ * <p>
  * Superclass for all CAH servlets. Provides utility methods to return errors and data, and to log.
  *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public abstract class CahServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
+
+  public static JSONObject createObject(Map<ReturnableData, Object> data) {
+    JSONObject obj = new JSONObject();
+    for (ReturnableData key : data.keySet()) obj.put(key.toString(), data.get(key));
+    return obj;
+  }
 
   /**
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -89,7 +95,7 @@ public abstract class CahServlet extends HttpServlet {
           final String name = paramNames.nextElement();
           params.put(name, request.getParameter(name));
         }
-        log(user, "Request: " + JSONValue.toJSONString(params));
+        log(user, "Request: " + params);
       }
 
       final String op = request.getParameter(AjaxRequest.OP.toString());
@@ -133,12 +139,9 @@ public abstract class CahServlet extends HttpServlet {
   /**
    * Handles a request from a CAH client. A session is guaranteed to exist at this point.
    *
-   * @param request
-   *          The request data.
-   * @param response
-   *          The response to the client.
-   * @param hSession
-   *          The client's session.
+   * @param request  The request data.
+   * @param response The response to the client.
+   * @param hSession The client's session.
    * @throws ServletException
    * @throws IOException
    */
@@ -149,72 +152,55 @@ public abstract class CahServlet extends HttpServlet {
   /**
    * Return an error to the client.
    *
-   * @param user
-   *          User that caused the error.
-   * @param writer
-   *          Response writer to send the error data to.
-   * @param code
-   *          Error code to return to client.
-   * @param serial
-   *          Request serial number from client.
+   * @param user   User that caused the error.
+   * @param writer Response writer to send the error data to.
+   * @param code   Error code to return to client.
+   * @param serial Request serial number from client.
    */
   @SuppressWarnings("unchecked")
-  protected void returnError(@Nullable final User user, final PrintWriter writer,
-                             final ErrorCode code, final int serial) {
+  protected void returnError(@Nullable final User user, final PrintWriter writer, final ErrorCode code, final int serial) {
     final JSONObject ret = new JSONObject();
-    ret.put(AjaxResponse.ERROR, Boolean.TRUE);
-    ret.put(AjaxResponse.ERROR_CODE, code.toString());
-    ret.put(AjaxResponse.SERIAL, serial);
-    writer.println(ret.toJSONString());
+    ret.put(AjaxResponse.ERROR.toString(), Boolean.TRUE);
+    ret.put(AjaxResponse.ERROR_CODE.toString(), code.toString());
+    ret.put(AjaxResponse.SERIAL.toString(), serial);
+    writer.println(ret.toString());
   }
 
   /**
    * Return response data to the client.
    *
-   * @param user
-   *          User this response is for.
-   * @param writer
-   *          Writer for the response.
-   * @param data
-   *          Key-value data to return as the response.
+   * @param user   User this response is for.
+   * @param writer Writer for the response.
+   * @param data   Key-value data to return as the response.
    */
-  protected void returnData(@Nullable final User user, final PrintWriter writer,
-                            final Map<ReturnableData, Object> data) {
-    returnObject(user, writer, data);
+  protected void returnData(@Nullable final User user, final PrintWriter writer, final Map<ReturnableData, Object> data) {
+    returnObject(user, writer, createObject(data));
   }
 
   /**
    * Return multiple response data to the client.
    *
-   * @param user
-   *          User this response is for.
-   * @param writer
-   *          Writer for the response.
-   * @param data_list
-   *          List of key-value data to return as the response.
+   * @param user      User this response is for.
+   * @param writer    Writer for the response.
+   * @param data_list List of key-value data to return as the response.
    */
-  protected void returnArray(@Nullable final User user, final PrintWriter writer,
-                             final List<Map<ReturnableData, Object>> data_list) {
-    returnObject(user, writer, data_list);
+  protected void returnArray(@Nullable final User user, final PrintWriter writer, final List<Map<ReturnableData, Object>> data_list) {
+    JSONArray array = new JSONArray();
+    for (Map<ReturnableData, Object> data : data_list)
+      array.put(createObject(data));
+    returnObject(user, writer, array);
   }
 
   /**
    * Return any response data to the client.
    *
-   * @param user
-   *          User this response is for.
-   * @param writer
-   *          Writer for the response.
-   * @param object
-   *          Data to return.
+   * @param user   User this response is for.
+   * @param writer Writer for the response.
+   * @param object Data to return.
    */
-  private void returnObject(@Nullable final User user, final PrintWriter writer,
-                            final Object object) {
-    final String ret = JSONValue.toJSONString(object);
-    writer.println(ret);
-    if (verboseDebug()) {
-      log(user, "Response: " + ret);
-    }
+  private void returnObject(@Nullable final User user, final PrintWriter writer, final Object object) {
+    writer.println(object.toString());
+    if (verboseDebug()) log(user, "Response: " + object);
   }
 
   /**
@@ -227,10 +213,8 @@ public abstract class CahServlet extends HttpServlet {
   /**
    * Log a message, with the user's name if {@code user} is not null.
    *
-   * @param user
-   *          The user this log message is about, or {@code null} if unknown.
-   * @param message
-   *          The message to log.
+   * @param user    The user this log message is about, or {@code null} if unknown.
+   * @param message The message to log.
    */
   protected void log(@Nullable final User user, final String message) {
     final String userStr;

@@ -23,8 +23,7 @@
 
 package net.socialgamer.cah;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import org.json.JSONObject;
 
 
 /**
@@ -38,11 +37,10 @@ public class JsonWrapper {
   /**
    * Create a new JsonWrapper.
    *
-   * @param json
-   *          The JSON text to parse.
+   * @param json The JSON text to parse.
    */
-  public JsonWrapper(final String json) {
-    this.json = (JSONObject) JSONValue.parse(json);
+  public JsonWrapper(String json) {
+    this.json = new JSONObject(json);
   }
 
   /**

@@ -39,7 +39,7 @@ import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONValue;
+import org.json.JSONObject;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -76,6 +76,12 @@ public class KafkaMetrics implements Metrics {
     LOG.info("Sending metrics to Kafka topic " + topic);
     producerProps = getProducerProps(properties);
     tryEnsureProducer();
+  }
+
+  public static JSONObject createObject(Map<String, Object> data) {
+    JSONObject obj = new JSONObject();
+    for (String key : data.keySet()) obj.put(key, data.get(key));
+    return obj;
   }
 
   private Properties getProducerProps(final Properties inProps) {
@@ -120,6 +126,7 @@ public class KafkaMetrics implements Metrics {
   /**
    * Helper method to log at TRACE level while only taking string format penalties if such logging
    * is enabled. Includes the method name as well.
+   *
    * @param format Format string to log
    * @param params Parameters for format string
    */
@@ -170,7 +177,7 @@ public class KafkaMetrics implements Metrics {
   }
 
   private void send(final Map<String, Object> map) {
-    send(JSONValue.toJSONString(map));
+    send(createObject(map).toString());
   }
 
   private void send(final String json) {

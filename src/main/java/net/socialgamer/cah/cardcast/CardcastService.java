@@ -28,9 +28,8 @@ import com.google.inject.Provider;
 import net.socialgamer.cah.cardcast.CardcastModule.CardcastCardId;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.net.ssl.*;
 import java.io.BufferedReader;
@@ -168,7 +167,7 @@ public class CardcastService {
         cacheMissingSet(setId);
         return null;
       }
-      final JSONObject info = (JSONObject) JSONValue.parse(infoContent);
+      final JSONObject info = new JSONObject(infoContent);
 
       final String cardContent = getUrlContent(String.format(
               CARD_SET_CARDS_URL_FORMAT_STRING, setId));
@@ -177,7 +176,7 @@ public class CardcastService {
         cacheMissingSet(setId);
         return null;
       }
-      final JSONObject cards = (JSONObject) JSONValue.parse(cardContent);
+      final JSONObject cards = new JSONObject(cardContent);
 
       final String name = (String) info.get("name");
       final String description = (String) info.get("description");
@@ -190,13 +189,13 @@ public class CardcastService {
               StringEscapeUtils.escapeXml11(description));
 
       // load up the cards
-      final JSONArray blacks = (JSONArray) cards.get("calls");
+      final JSONArray blacks = cards.getJSONArray("calls");
       if (null != blacks) {
         for (final Object black : blacks) {
-          final JSONArray texts = (JSONArray) ((JSONObject) black).get("text");
+          final JSONArray texts = ((JSONObject) black).getJSONArray("text");
           if (null != texts) {
             final String text = formatHelper.formatBlackCard(texts);
-            final int pick = texts.size() - 1;
+            final int pick = texts.length() - 1;
             final int draw = (pick >= 3 ? pick - 1 : 0);
             final CardcastBlackCard card = new CardcastBlackCard(cardIdProvider.get(), text, draw,
                     pick, setId);
