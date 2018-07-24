@@ -10,6 +10,7 @@ import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.*;
 import net.socialgamer.cah.servlets.*;
 import org.apache.jasper.deploy.JspPropertyGroup;
+import org.apache.log4j.Logger;
 import org.apache.tomcat.InstanceManager;
 
 import javax.servlet.ServletException;
@@ -22,6 +23,8 @@ import java.util.Map;
  * @author Gianlu
  */
 public class Main {
+
+  private static final Logger logger = Logger.getLogger(Main.class);
 
   public static void main(String[] args) throws ServletException, IOException {
     ConfigurationHolder conf = ConfigurationHolder.init(args);
@@ -117,9 +120,11 @@ public class Main {
             .addPrefixPath("/", manager.start());
 
     Undertow server = Undertow.builder()
-            .addHttpListener(port, "")
+            .addHttpListener(port, "0.0.0.0")
             .setHandler(path)
             .build();
     server.start();
+
+    logger.info("Server started on port " + port);
   }
 }
