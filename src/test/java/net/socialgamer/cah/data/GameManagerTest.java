@@ -37,6 +37,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -91,7 +92,7 @@ public class GameManagerTest {
                           final AtomicInteger threadCount = new AtomicInteger();
 
                           @Override
-                          public Thread newThread(final Runnable r) {
+                          public Thread newThread(@Nonnull final Runnable r) {
                             final Thread t = new Thread(r);
                             t.setDaemon(true);
                             t.setName("timer-task-" + threadCount.incrementAndGet());
@@ -198,7 +199,7 @@ public class GameManagerTest {
 
     userMock.joinGame(anyObject(Game.class));
     expectLastCall().times(3);
-    userMock.getNickname();
+    assertNull(userMock.getNickname());
     expectLastCall().andReturn("test").times(3);
     replay(userMock);
 

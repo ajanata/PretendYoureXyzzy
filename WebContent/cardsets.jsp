@@ -26,7 +26,7 @@ Administration tools.
 
 @author Andy Janata (ajanata@socialgamer.net)
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.google.inject.Injector" %>
 <%@ page import="com.google.inject.Key" %>
 <%@ page import="com.google.inject.TypeLiteral" %>
@@ -54,7 +54,7 @@ Administration tools.
         return;
     }
 
-    List<String> messages = new ArrayList<String>();
+    List<String> messages = new ArrayList<>();
 
     Session hibernateSession = HibernateUtil.instance.sessionFactory.openSession();
 
@@ -88,7 +88,7 @@ Administration tools.
         String actionParam = request.getParameter("action");
         if ("edit".equals(actionParam)) {
             String idParam = request.getParameter("cardSetId");
-            int id = 0;
+            int id;
             try {
                 id = Integer.parseInt(idParam);
                 if (-1 == id) {
@@ -124,11 +124,11 @@ Administration tools.
                         editCardSet.setWeight(weight);
                         editCardSet.setActive("on".equals(activeParam));
                         editCardSet.setBaseDeck("on".equals(baseDeckParam));
-                        List<Integer> blackCardIds = new ArrayList<Integer>(selectedBlackCardsParam.length);
+                        List<Integer> blackCardIds = new ArrayList<>(selectedBlackCardsParam.length);
                         for (String bc : selectedBlackCardsParam) {
                             blackCardIds.add(Integer.parseInt(bc));
                         }
-                        List<Integer> whiteCardIds = new ArrayList<Integer>(selectedWhiteCardsParam.length);
+                        List<Integer> whiteCardIds = new ArrayList<>(selectedWhiteCardsParam.length);
                         for (String wc : selectedWhiteCardsParam) {
                             whiteCardIds.add(Integer.parseInt(wc));
                         }
@@ -245,7 +245,7 @@ Administration tools.
     }
 %>
 <h2>Existing card sets</h2>
-<table style="1px solid black">
+<table style="border:1px solid black">
     <thead>
     <tr>
         <th>Name</th>
@@ -289,7 +289,7 @@ Administration tools.
         <%
             if (editCardSet != null) {
         %>
-        Editing <span style="text-decoration:italic"><%=editCardSet.getName()%></span>
+        Editing <span style="font-style:italic"><%=editCardSet.getName()%></span>
         <%
         } else {
         %>

@@ -54,7 +54,7 @@ public class CreateGameHandler extends Handler {
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
                                             final HttpSession session) {
-    final Map<ReturnableData, Object> ret = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> ret = new HashMap<>();
 
     final User user = (User) session.getAttribute(SessionAttribute.USER);
     assert (user != null);

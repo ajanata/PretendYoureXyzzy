@@ -166,7 +166,7 @@ public class UpdateGoConstants {
     }
 
     final Field[] flds = enumClass.getDeclaredFields();
-    final HashMap<String, String> enumMap = new HashMap<String, String>();
+    final HashMap<String, String> enumMap = new HashMap<>();
     for (final Field f : flds) {
       if (f.isEnumConstant()) {
         enumMap.put(f.getName(), f.get(null).toString());
@@ -198,7 +198,7 @@ public class UpdateGoConstants {
     }
 
     final Field[] flds = enumClass.getDeclaredFields();
-    final HashMap<String, String> messageMap = new HashMap<String, String>();
+    final HashMap<String, String> messageMap = new HashMap<>();
     for (final Field f : flds) {
       if (f.isEnumConstant()) {
         if (Localizable.class.isAssignableFrom(enumClass)) {
@@ -233,7 +233,7 @@ public class UpdateGoConstants {
     }
 
     final Field[] flds = enumClass.getDeclaredFields();
-    final HashMap<String, String> messageMap = new HashMap<String, String>();
+    final HashMap<String, String> messageMap = new HashMap<>();
     for (final Field f : flds) {
       if (f.isEnumConstant()) {
         messageMap.put(f.get(null).toString(), ((DoubleLocalizable) f.get(null)).getString2());

@@ -84,7 +84,7 @@ public class CardcastService {
   private static final Pattern validIdPattern = Pattern.compile("[A-Z0-9]{5}");
 
   private static final Map<String, SoftReference<CardcastCacheEntry>> cache = Collections
-          .synchronizedMap(new HashMap<String, SoftReference<CardcastCacheEntry>>());
+          .synchronizedMap(new HashMap<>());
 
   private final Provider<Integer> cardIdProvider;
   private final CardcastFormatHelper formatHelper;
@@ -232,7 +232,7 @@ public class CardcastService {
 
   private void cachePut(final String setId, final CardcastDeck deck, final long timeout) {
     LOG.info(String.format("Caching %s=%s for %d ms", setId, deck, timeout));
-    cache.put(setId, new SoftReference<CardcastCacheEntry>(new CardcastCacheEntry(timeout, deck)));
+    cache.put(setId, new SoftReference<>(new CardcastCacheEntry(timeout, deck)));
   }
 
   private void cacheSet(final String setId, final CardcastDeck deck) {

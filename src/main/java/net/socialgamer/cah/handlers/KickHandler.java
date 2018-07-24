@@ -43,7 +43,7 @@ public class KickHandler extends Handler {
       return error(ErrorCode.NO_SUCH_USER);
     }
 
-    final Map<ReturnableData, Object> kickData = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> kickData = new HashMap<>();
     kickData.put(LongPollResponse.EVENT, LongPollEvent.KICKED.toString());
     final QueuedMessage qm = new QueuedMessage(MessageType.KICKED, kickData);
     kickUser.enqueueMessage(qm);
@@ -52,6 +52,6 @@ public class KickHandler extends Handler {
     logger.warn(String.format("Kicking %s by request of %s", kickUser.getNickname(),
             user.getNickname()));
 
-    return new HashMap<ReturnableData, Object>();
+    return new HashMap<>();
   }
 }

@@ -58,10 +58,10 @@ public class GameListHandler extends Handler {
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
                                             final HttpSession session) {
-    final Map<ReturnableData, Object> ret = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> ret = new HashMap<>();
     final Collection<Game> games = gameManager.getGameList();
     final List<Map<GameInfo, Object>> gameInfos =
-            new ArrayList<Map<GameInfo, Object>>(games.size());
+            new ArrayList<>(games.size());
     for (final Game game : games) {
       final Map<GameInfo, Object> info = game.getInfo();
       if (null != info) {

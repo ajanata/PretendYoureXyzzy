@@ -36,7 +36,7 @@ public class CardcastFormatHelper {
 
   public String formatBlackCard(final JSONArray textParts) {
     // TODO this is going to need some work to look pretty.
-    final List<String> strs = new ArrayList<String>(textParts.length());
+    final List<String> strs = new ArrayList<>(textParts.length());
     for (final Object o : textParts) {
       strs.add((String) o);
     }
@@ -46,7 +46,7 @@ public class CardcastFormatHelper {
 
   public String formatWhiteCard(final JSONArray textParts) {
     // The white cards should only ever have one element in text, but let's be safe.
-    final List<String> strs = new ArrayList<String>(textParts.length());
+    final List<String> strs = new ArrayList<>(textParts.length());
     for (final Object o : textParts) {
       final String cardCastString = (String) o;
       if (cardCastString.isEmpty()) {

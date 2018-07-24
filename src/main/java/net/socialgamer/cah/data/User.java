@@ -107,7 +107,7 @@ public class User {
     this.sessionId = sessionId;
     this.clientLanguage = clientLanguage == null ? "" : clientLanguage;
     agent = UADetectorServiceFactory.getResourceModuleParser().parse(clientAgent);
-    queuedMessages = new PriorityBlockingQueue<QueuedMessage>();
+    queuedMessages = new PriorityBlockingQueue<>();
   }
 
   /**
@@ -166,7 +166,7 @@ public class User {
    * @return The next {@code maxElements} messages queued for this user.
    */
   public Collection<QueuedMessage> getNextQueuedMessages(final int maxElements) {
-    final ArrayList<QueuedMessage> c = new ArrayList<QueuedMessage>(maxElements);
+    final ArrayList<QueuedMessage> c = new ArrayList<>(maxElements);
     synchronized (queuedMessageSynchronization) {
       queuedMessages.drainTo(c, maxElements);
     }

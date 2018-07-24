@@ -45,7 +45,7 @@ public class ScoreHandler extends Handler {
       return error(ErrorCode.INVALID_GAME);
     }
 
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> data = new HashMap<>();
 
     if (user.isAdmin() && args.length == 2) {
       // for now only admins can change scores.  could possibly extend this to let the host do it,

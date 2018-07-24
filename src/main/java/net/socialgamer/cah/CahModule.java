@@ -38,6 +38,7 @@ import net.socialgamer.cah.metrics.UniqueIds;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
+import javax.annotation.Nonnull;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.*;
@@ -99,7 +100,7 @@ public class CahModule extends AbstractModule {
                       final AtomicInteger threadCount = new AtomicInteger();
 
                       @Override
-                      public Thread newThread(final Runnable r) {
+                      public Thread newThread(@Nonnull final Runnable r) {
                         final Thread t = new Thread(r);
                         t.setDaemon(true);
                         t.setName("timer-task-" + threadCount.incrementAndGet());

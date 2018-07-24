@@ -56,7 +56,7 @@ public class PlayCardHandler extends GameWithPlayerHandler {
   @Override
   public Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,
                                                           final HttpSession session, final User user, final Game game) {
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> data = new HashMap<>();
 
     final int cardId;
 

@@ -35,7 +35,7 @@ import java.util.List;
 public class Player {
   private final User user;
 
-  private final List<WhiteCard> hand = new LinkedList<WhiteCard>();
+  private final List<WhiteCard> hand = new LinkedList<>();
   private int score = 0;
   private int skipCount = 0;
 

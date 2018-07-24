@@ -27,7 +27,7 @@ created for the user now.
 
 @author Andy Janata (ajanata@socialgamer.net)
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="net.socialgamer.cah.data.GameOptions" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%

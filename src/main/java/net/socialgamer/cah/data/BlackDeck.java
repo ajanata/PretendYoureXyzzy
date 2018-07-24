@@ -41,13 +41,13 @@ public class BlackDeck {
    * Create a new black card deck, loading the cards from the database and shuffling them.
    */
   public BlackDeck(final Collection<CardSet> cardSets) {
-    final Set<BlackCard> allCards = new HashSet<BlackCard>();
+    final Set<BlackCard> allCards = new HashSet<>();
     for (final CardSet cardSet : cardSets) {
       allCards.addAll(cardSet.getBlackCards());
     }
-    deck = new ArrayList<BlackCard>(allCards);
+    deck = new ArrayList<>(allCards);
     Collections.shuffle(deck);
-    discard = new ArrayList<BlackCard>(deck.size());
+    discard = new ArrayList<>(deck.size());
   }
 
   /**
@@ -58,12 +58,9 @@ public class BlackDeck {
    *           There are no more cards in the deck.
    */
   public synchronized BlackCard getNextCard() throws OutOfCardsException {
-    if (deck.size() == 0) {
-      throw new OutOfCardsException();
-    }
+    if (deck.size() == 0) throw new OutOfCardsException();
     // we have an ArrayList here, so this is faster
-    final BlackCard card = deck.remove(deck.size() - 1);
-    return card;
+    return deck.remove(deck.size() - 1);
   }
 
   /**
@@ -73,9 +70,7 @@ public class BlackDeck {
    *          Card to add to discard pile.
    */
   public synchronized void discard(final BlackCard card) {
-    if (card != null) {
-      discard.add(card);
-    }
+    if (card != null) discard.add(card);
   }
 
   /**

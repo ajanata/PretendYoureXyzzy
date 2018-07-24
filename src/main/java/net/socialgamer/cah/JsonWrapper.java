@@ -57,7 +57,7 @@ public class JsonWrapper {
   /**
    * Returns the value of a property as a String, or the default if the parameter does not exist.
    *
-   * @param parameter
+   * @param key
    *          Parameter to get.
    * @param defaultValue
    *          The value to return if the parameter does not exist.
@@ -71,7 +71,7 @@ public class JsonWrapper {
   /**
    * Returns the value of a property as an integer, or the default if the parameter does not exist.
    *
-   * @param parameter
+   * @param key
    *          Parameter to get.
    * @param defaultValue
    *          The value to return if the parameter does not exist.
@@ -88,7 +88,7 @@ public class JsonWrapper {
   /**
    * Returns the value of a property as a boolean, or the default if the parameter does not exist.
    *
-   * @param parameter
+   * @param key
    *          Parameter to get.
    * @param defaultValue
    *          The value to return if the parameter does not exist.

@@ -92,7 +92,7 @@ public class GameTest {
     assertFalse(game.removePlayer(user1));
     assertEquals(user2, game.getHost());
     assertTrue(game.removePlayer(user2));
-    assertEquals(null, game.getHost());
+    assertNull(game.getHost());
 
     verify(cuMock);
     verify(gmMock);

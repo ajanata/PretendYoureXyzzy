@@ -94,7 +94,7 @@ public class RegisterHandler extends Handler {
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
                                             final HttpSession session) {
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> data = new HashMap<>();
 
     if (banList.contains(request.getRemoteAddr())) {
       LOG.info(String.format("Rejecting user %s from %s because they are banned.",

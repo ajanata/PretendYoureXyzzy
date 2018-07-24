@@ -169,7 +169,6 @@ public class ConfigurationHolder {
     boolean precedingBackslash;
 
     while ((limit = lr.readLine()) >= 0) {
-      c = 0;
       keyLen = 0;
       valueStart = limit;
       hasSep = false;
@@ -269,7 +268,7 @@ public class ConfigurationHolder {
 
     int readLine() throws IOException {
       int len = 0;
-      char c = 0;
+      char c;
 
       boolean skipWhiteSpace = true;
       boolean isCommentLine = false;

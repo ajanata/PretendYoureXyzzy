@@ -56,18 +56,18 @@ h2, h3, h4 {
 
 #browser, #browser_inner {
   position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: 9001;
 }
 
 #browser_ok {
   margin: 15px;
   position: absolute;
-  right: 0px;
-  bottom: 0px;
+  right: 0;
+  bottom: 0;
 }
 */
 
@@ -95,7 +95,7 @@ h2, h3, h4 {
 
 #canvas {
     height: 533px;
-    overflow: none;
+    overflow: hidden;
     position: relative;
     width: 100%;
 }
@@ -184,7 +184,7 @@ h2, h3, h4 {
     width: 250px;
     height: 100%;
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
     min-height: 100px;
     border: 1px solid #999;
 }
@@ -193,14 +193,14 @@ h2, h3, h4 {
     min-height: 100px;
     width: 50%;
     height: 100%;
-    border: 0px;
+    border: 0;
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
     right: 14px;
 }
 
 #tabs .ui-widget {
-    font-height: 16px !important;
+    line-height: 16px !important;
 }
 
 .tab-button {
@@ -233,7 +233,7 @@ h2, h3, h4 {
     border-width: 1px;
     position: absolute;
     bottom: 18px;
-    right: 0px;
+    right: 0;
     overflow-y: scroll;
     min-height: 43px;
     font-size: 16px;
@@ -251,10 +251,10 @@ h2, h3, h4 {
 .chat {
     border: 1px solid black;
     left: -1px;
-    bottom: 0px;
+    bottom: 0;
     height: 17px;
     position: absolute;
-    padding: 0px;
+    padding: 0;
     width: 90%;
     font-family: serif;
     font-size: 12pt;
@@ -266,8 +266,8 @@ h2, h3, h4 {
     position: absolute;
     right: -1px;
     bottom: -1px;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     font-size: 14px;
 }
 
@@ -297,9 +297,8 @@ span.debug, span.admin {
 }
 
 .blackcard {
-    background: #231f20;
     color: white;
-    background-image: linear-gradient(#231f20, #231f20 75%, #333)
+    background: #231f20 linear-gradient(#231f20, #231f20 75%, #333);
 }
 
 .whitecard {
@@ -313,8 +312,8 @@ span.debug, span.admin {
 
 .cah {
     position: absolute;
-    bottom: 0px;
-    left: 0px;
+    bottom: 0;
+    left: 0;
     margin: 15px;
 }
 
@@ -336,9 +335,9 @@ span.debug, span.admin {
 
 .game_hand {
     position: absolute;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
+    bottom: 0;
+    left: 0;
+    right: 0;
     height: 30%;
 }
 
@@ -361,7 +360,7 @@ span.debug, span.admin {
 
 .game_hand_cards {
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
     height: 100%;
     width: 99%;
     padding-left: 2px;
@@ -455,7 +454,7 @@ span.debug, span.admin {
 }
 
 .game_white_cards_binder .card_holder {
-    margin-right: 0px;
+    margin-right: 0;
 }
 
 .scoreboard {
@@ -607,7 +606,7 @@ span.debug, span.admin {
 
 .previous_round_close {
     position: absolute;
-    right: 0px;
+    right: 0;
 }
 
 .card_set_label {

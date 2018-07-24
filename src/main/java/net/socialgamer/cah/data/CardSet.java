@@ -39,7 +39,7 @@ public abstract class CardSet {
   }
 
   protected final Map<CardSetData, Object> getCommonClientMetadata() {
-    final Map<CardSetData, Object> cardSetData = new HashMap<CardSetData, Object>();
+    final Map<CardSetData, Object> cardSetData = new HashMap<>();
     cardSetData.put(CardSetData.ID, getId());
     cardSetData.put(CardSetData.CARD_SET_NAME, getName());
     cardSetData.put(CardSetData.CARD_SET_DESCRIPTION, getDescription());

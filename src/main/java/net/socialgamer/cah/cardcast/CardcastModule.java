@@ -34,8 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class CardcastModule extends AbstractModule {
-
-  AtomicInteger cardId = new AtomicInteger(-(GameOptions.MAX_BLANK_CARD_LIMIT + 1));
+  private final AtomicInteger cardId = new AtomicInteger(-(GameOptions.MAX_BLANK_CARD_LIMIT + 1));
 
   @Override
   protected void configure() {

@@ -25,6 +25,7 @@ package net.socialgamer.cah.data;
 
 import net.socialgamer.cah.Constants.ReturnableData;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 
 
@@ -71,7 +72,7 @@ public class QueuedMessage implements Comparable<QueuedMessage> {
    * ordering.
    */
   @Override
-  public int compareTo(final QueuedMessage qm) {
+  public int compareTo(@Nonnull final QueuedMessage qm) {
     return this.messageType.getWeight() - qm.messageType.getWeight();
   }
 

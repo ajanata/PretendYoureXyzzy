@@ -89,7 +89,7 @@ public abstract class CahServlet extends HttpServlet {
         // TODO if we have any sort of authentication later, we need to make sure to not log passwords!
         // I could use getParameterMap, but that returns an array, and getting pretty strings out of
         // array values is a lot of work.
-        final Map<String, Object> params = new HashMap<String, Object>();
+        final Map<String, Object> params = new HashMap<>();
         final Enumeration<String> paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
           final String name = paramNames.nextElement();
@@ -130,10 +130,8 @@ public abstract class CahServlet extends HttpServlet {
    * @return Whether verbose logging is enabled.
    */
   private boolean verboseDebug() {
-    final Boolean verboseDebugObj = (Boolean) getServletContext().getAttribute(
-            StartupUtils.VERBOSE_DEBUG);
-    final boolean verboseDebug = verboseDebugObj != null && verboseDebugObj.booleanValue();
-    return verboseDebug;
+    final Boolean verboseDebugObj = (Boolean) getServletContext().getAttribute(StartupUtils.VERBOSE_DEBUG);
+    return verboseDebugObj != null && verboseDebugObj;
   }
 
   /**

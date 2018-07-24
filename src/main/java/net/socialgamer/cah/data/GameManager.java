@@ -51,7 +51,7 @@ public class GameManager implements Provider<Integer> {
   private static final Logger logger = Logger.getLogger(GameManager.class);
 
   private final Provider<Integer> maxGamesProvider;
-  private final Map<Integer, Game> games = new TreeMap<Integer, Game>();
+  private final Map<Integer, Game> games = new TreeMap<>();
   private final Provider<Game> gameProvider;
   private final BroadcastGameListUpdateTask broadcastUpdate;
 
@@ -67,8 +67,6 @@ public class GameManager implements Provider<Integer> {
    *          Provider for new {@code Game} instances.
    * @param maxGamesProvider
    *          Provider for maximum number of games allowed on the server.
-   * @param users
-   *          Connected user manager.
    */
   @Inject
   public GameManager(final Provider<Game> gameProvider,
@@ -239,7 +237,7 @@ public class GameManager implements Provider<Integer> {
   public Collection<Game> getGameList() {
     synchronized (games) {
       // return a copy
-      return new ArrayList<Game>(games.values());
+      return new ArrayList<>(games.values());
     }
   }
 

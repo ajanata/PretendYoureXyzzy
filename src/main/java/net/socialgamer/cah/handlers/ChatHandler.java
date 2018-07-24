@@ -62,7 +62,7 @@ public class ChatHandler extends Handler {
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
                                             final HttpSession session) {
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> data = new HashMap<>();
 
     final User user = (User) session.getAttribute(SessionAttribute.USER);
     assert (user != null);
@@ -83,36 +83,15 @@ public class ChatHandler extends Handler {
 
       LongPollEvent event = LongPollEvent.CHAT;
       final ChatFilter.Result filterResult = chatFilter.filterGlobal(user, message);
-      switch (filterResult) {
-        case CAPSLOCK:
-          return error(ErrorCode.CAPSLOCK);
-        case DROP_MESSAGE:
-          // Don't tell the user we dropped it, and don't send it to everyone else...
-          // but let any online admins know about it
-          event = LongPollEvent.FILTERED_CHAT;
-          break;
-        case NO_MESSAGE:
-          return error(ErrorCode.NO_MSG_SPECIFIED);
-        case NOT_ENOUGH_SPACES:
-          return error(ErrorCode.NOT_ENOUGH_SPACES);
-        case OK:
-          // nothing to do
-          break;
-        case REPEAT:
-          return error(ErrorCode.REPEAT_MESSAGE);
-        case REPEAT_WORDS:
-          return error(ErrorCode.REPEATED_WORDS);
-        case TOO_FAST:
-          return error(ErrorCode.TOO_FAST);
-        case TOO_LONG:
-          return error(ErrorCode.MESSAGE_TOO_LONG);
-        case TOO_MANY_SPECIALS:
-          return error(ErrorCode.TOO_MANY_SPECIAL_CHARACTERS);
-        default:
-          LOG.error(String.format("Unknown chat filter result %s", filterResult));
+      ErrorCode error = filterResult.getErrorCode();
+      if (error == null) {
+        LongPollEvent filterEvent = filterResult.getEvent();
+        if (filterEvent != null) event = filterEvent;
+      } else {
+        return error(error);
       }
 
-      final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
+      final HashMap<ReturnableData, Object> broadcastData = new HashMap<>();
       broadcastData.put(LongPollResponse.EVENT, event.toString());
       broadcastData.put(LongPollResponse.FROM, user.getNickname());
       broadcastData.put(LongPollResponse.MESSAGE, message);

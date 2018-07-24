@@ -80,7 +80,7 @@ public class FirstLoadHandler extends Handler {
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
                                             final HttpSession session) {
-    final HashMap<ReturnableData, Object> ret = new HashMap<ReturnableData, Object>();
+    final HashMap<ReturnableData, Object> ret = new HashMap<>();
     ret.put(AjaxResponse.GLOBAL_CHAT_ENABLED, globalChatEnabled);
 
     if (banList.contains(request.getRemoteAddr())) {
@@ -128,7 +128,7 @@ public class FirstLoadHandler extends Handler {
               .setCacheable(true)
               .list();
       final List<Map<CardSetData, Object>> cardSetsData =
-              new ArrayList<Map<CardSetData, Object>>(cardSets.size());
+              new ArrayList<>(cardSets.size());
       for (final PyxCardSet cardSet : cardSets) {
         cardSetsData.add(cardSet.getClientMetadata(hibernateSession));
       }

@@ -26,7 +26,7 @@ Administration tools.
 
 @author Andy Janata (ajanata@socialgamer.net)
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.google.inject.Injector" %>
 <%@ page import="com.google.inject.Key" %>
 <%@ page import="com.google.inject.TypeLiteral" %>
@@ -76,7 +76,7 @@ Administration tools.
     if (kickParam != null) {
         User user = connectedUsers.getUser(kickParam);
         if (user != null) {
-            Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+            Map<ReturnableData, Object> data = new HashMap<>();
             data.put(LongPollResponse.EVENT, LongPollEvent.KICKED.toString());
             QueuedMessage qm = new QueuedMessage(MessageType.KICKED, data);
             user.enqueueMessage(qm);
@@ -92,7 +92,7 @@ Administration tools.
     if (banParam != null) {
         User user = connectedUsers.getUser(banParam);
         if (user != null) {
-            Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+            Map<ReturnableData, Object> data = new HashMap<>();
             data.put(LongPollResponse.EVENT, LongPollEvent.BANNED.toString());
             QueuedMessage qm = new QueuedMessage(MessageType.KICKED, data);
             user.enqueueMessage(qm);
@@ -230,7 +230,7 @@ User list:
 <%
     // TODO remove this "verbose logging" crap now that log4j is working.
     Boolean verboseDebugObj = (Boolean) servletContext.getAttribute(StartupUtils.VERBOSE_DEBUG);
-    boolean verboseDebug = verboseDebugObj != null && verboseDebugObj.booleanValue();
+    boolean verboseDebug = verboseDebugObj != null && verboseDebugObj;
 %>
 <p>
     Verbose logging is currently <strong><%= verboseDebug ? "ON" : "OFF" %>

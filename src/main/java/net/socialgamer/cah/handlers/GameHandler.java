@@ -43,8 +43,7 @@ import java.util.Map;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public abstract class GameHandler extends Handler {
-
-  protected GameManager gameManager;
+  protected final GameManager gameManager;
 
   public GameHandler(final GameManager gameManager) {
     this.gameManager = gameManager;

@@ -107,7 +107,7 @@ public class Game {
   private final static Set<String> FINITE_PLAYTIMES;
 
   static {
-    final Set<String> finitePlaytimes = new TreeSet<String>(Arrays.asList(
+    final Set<String> finitePlaytimes = new TreeSet<>(Arrays.asList(
             "0.25x", "0.5x", "0.75x", "1x", "1.25x", "1.5x", "1.75x", "2x", "2.5x", "3x", "4x", "5x", "10x"));
     FINITE_PLAYTIMES = Collections.unmodifiableSet(finitePlaytimes);
   }
@@ -116,19 +116,19 @@ public class Game {
   /**
    * All players present in the game.
    */
-  private final List<Player> players = Collections.synchronizedList(new ArrayList<Player>(10));
+  private final List<Player> players = Collections.synchronizedList(new ArrayList<>(10));
   /**
    * Players participating in the current round.
    */
-  private final List<Player> roundPlayers = Collections.synchronizedList(new ArrayList<Player>(9));
+  private final List<Player> roundPlayers = Collections.synchronizedList(new ArrayList<>(9));
   private final PlayerPlayedCardsTracker playedCards = new PlayerPlayedCardsTracker();
-  private final List<User> spectators = Collections.synchronizedList(new ArrayList<User>(10));
+  private final List<User> spectators = Collections.synchronizedList(new ArrayList<>(10));
   private final ConnectedUsers connectedUsers;
   private final GameManager gameManager;
   private final Provider<Session> sessionProvider;
   private final Object blackCardLock = new Object();
   private final GameOptions options = new GameOptions();
-  private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<String>());
+  private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<>());
   private final Metrics metrics;
   private final Provider<Boolean> showGameLinkProvider;
   private final Provider<String> gamePermalinkFormatProvider;
@@ -172,7 +172,6 @@ public class Game {
    * @param gameManager
    *          The game manager, for broadcasting game list refresh notices and destroying this game
    *          when everybody leaves.
-   * @param hibernateSession Hibernate session from which to load cards.
    * @param globalTimer The global timer on which to schedule tasks.
    */
   @Inject
@@ -383,7 +382,7 @@ public class Game {
   /**
    * Remove a spectator from the game.
    * <br/>
-   * Synchronizes on {@link #spectator}.
+   * Synchronizes on {@link #spectators}.
    *
    * @param user
    *          Spectator to remove from the game.
@@ -526,7 +525,7 @@ public class Game {
    */
   @Nullable
   public Map<GameInfo, Object> getInfo(final boolean includePassword) {
-    final Map<GameInfo, Object> info = new HashMap<GameInfo, Object>();
+    final Map<GameInfo, Object> info = new HashMap<>();
     info.put(GameInfo.ID, id);
     // This is probably happening because the game ceases to exist in the middle of getting the
     // game list. Just return nothing.
@@ -539,15 +538,15 @@ public class Game {
     info.put(GameInfo.GAME_OPTIONS, options.serialize(includePassword));
     info.put(GameInfo.HAS_PASSWORD, options.password != null && !options.password.equals(""));
 
-    final Player[] playersCopy = players.toArray(new Player[players.size()]);
-    final List<String> playerNames = new ArrayList<String>(playersCopy.length);
+    final Player[] playersCopy = players.toArray(new Player[0]);
+    final List<String> playerNames = new ArrayList<>(playersCopy.length);
     for (final Player player : playersCopy) {
       playerNames.add(player.getUser().getNickname());
     }
     info.put(GameInfo.PLAYERS, playerNames);
 
-    final User[] spectatorsCopy = spectators.toArray(new User[spectators.size()]);
-    final List<String> spectatorNames = new ArrayList<String>(spectatorsCopy.length);
+    final User[] spectatorsCopy = spectators.toArray(new User[0]);
+    final List<String> spectatorNames = new ArrayList<>(spectatorsCopy.length);
     for (final User spectator : spectatorsCopy) {
       spectatorNames.add(spectator.getNickname());
     }
@@ -562,8 +561,8 @@ public class Game {
    */
   public List<Map<GamePlayerInfo, Object>> getAllPlayerInfo() {
     final List<Map<GamePlayerInfo, Object>> info;
-    final Player[] playersCopy = players.toArray(new Player[players.size()]);
-    info = new ArrayList<Map<GamePlayerInfo, Object>>(playersCopy.length);
+    final Player[] playersCopy = players.toArray(new Player[0]);
+    info = new ArrayList<>(playersCopy.length);
     for (final Player player : playersCopy) {
       final Map<GamePlayerInfo, Object> playerInfo = getPlayerInfo(player);
       info.add(playerInfo);
@@ -572,7 +571,7 @@ public class Game {
   }
 
   public final List<Player> getPlayers() {
-    final List<Player> copy = new ArrayList<Player>(players.size());
+    final List<Player> copy = new ArrayList<>(players.size());
     copy.addAll(players);
     return copy;
   }
@@ -585,7 +584,7 @@ public class Game {
    * @return Information for {@code player}: Name, score, status.
    */
   public Map<GamePlayerInfo, Object> getPlayerInfo(final Player player) {
-    final Map<GamePlayerInfo, Object> playerInfo = new HashMap<GamePlayerInfo, Object>();
+    final Map<GamePlayerInfo, Object> playerInfo = new HashMap<>();
     // TODO make sure this can't happen in the first place
     if (player == null) {
       return playerInfo;
@@ -787,10 +786,10 @@ public class Game {
    * <br/>
    */
   private void dealState() {
-    final Player[] playersCopy = players.toArray(new Player[players.size()]);
+    final Player[] playersCopy = players.toArray(new Player[0]);
     for (final Player player : playersCopy) {
       final List<WhiteCard> hand = player.getHand();
-      final List<WhiteCard> newCards = new LinkedList<WhiteCard>();
+      final List<WhiteCard> newCards = new LinkedList<>();
       while (hand.size() < 10) {
         final WhiteCard card = getNextWhiteCard();
         hand.add(card);
@@ -828,7 +827,7 @@ public class Game {
           if (getJudge() == player) {
             continue;
           }
-          final List<WhiteCard> cards = new ArrayList<WhiteCard>(newBlackCard.getDraw());
+          final List<WhiteCard> cards = new ArrayList<>(newBlackCard.getDraw());
           for (int i = 0; i < newBlackCard.getDraw(); i++) {
             cards.add(getNextWhiteCard());
           }
@@ -900,7 +899,7 @@ public class Game {
         for (final Player player : roundPlayers) {
           final List<WhiteCard> cards = playedCards.getCards(player);
           if (cards == null || cards.size() < blackCard.getPick()) {
-            final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+            final Map<ReturnableData, Object> data = new HashMap<>();
             data.put(LongPollResponse.EVENT, LongPollEvent.HURRY_UP.toString());
             data.put(LongPollResponse.GAME_ID, this.id);
             final QueuedMessage q = new QueuedMessage(MessageType.GAME_EVENT, data);
@@ -926,7 +925,7 @@ public class Game {
       killRoundTimer();
 
       if (state == GameState.JUDGING) {
-        final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+        final Map<ReturnableData, Object> data = new HashMap<>();
         data.put(LongPollResponse.EVENT, LongPollEvent.HURRY_UP.toString());
         data.put(LongPollResponse.GAME_ID, this.id);
         final QueuedMessage q = new QueuedMessage(MessageType.GAME_EVENT, data);
@@ -970,8 +969,8 @@ public class Game {
 
   private void skipIdlePlayers() {
     killRoundTimer();
-    final List<User> playersToRemove = new ArrayList<User>();
-    final List<Player> playersToUpdateStatus = new ArrayList<Player>();
+    final List<User> playersToRemove = new ArrayList<>();
+    final List<Player> playersToUpdateStatus = new ArrayList<>();
     synchronized (roundPlayers) {
 
       for (final Player player : roundPlayers) {
@@ -1191,7 +1190,7 @@ public class Game {
    * @return A HashMap to use for events dispatched from this game, with the game id already set.
    */
   public HashMap<ReturnableData, Object> getEventMap() {
-    final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final HashMap<ReturnableData, Object> data = new HashMap<>();
     data.put(LongPollResponse.GAME_ID, id);
     return data;
   }
@@ -1235,7 +1234,7 @@ public class Game {
    */
   @Nullable
   public Player getPlayerForUser(final User user) {
-    final Player[] playersCopy = players.toArray(new Player[players.size()]);
+    final Player[] playersCopy = players.toArray(new Player[0]);
     for (final Player player : playersCopy) {
       if (player.getUser() == user) {
         return player;
@@ -1265,13 +1264,13 @@ public class Game {
    */
   private List<List<Map<WhiteCardData, Object>>> getWhiteCards() {
     if (state != GameState.JUDGING) {
-      return new ArrayList<List<Map<WhiteCardData, Object>>>();
+      return new ArrayList<>();
     } else {
       final List<List<WhiteCard>> shuffledPlayedCards;
-      shuffledPlayedCards = new ArrayList<List<WhiteCard>>(playedCards.cards());
+      shuffledPlayedCards = new ArrayList<>(playedCards.cards());
       // list of all sets of cards played, which have data. this looks terrible...
       final List<List<Map<WhiteCardData, Object>>> cardData =
-              new ArrayList<List<Map<WhiteCardData, Object>>>(shuffledPlayedCards.size());
+              new ArrayList<>(shuffledPlayedCards.size());
       Collections.shuffle(shuffledPlayedCards);
       for (final List<WhiteCard> cards : shuffledPlayedCards) {
         cardData.add(getWhiteCardData(cards));
@@ -1291,14 +1290,14 @@ public class Game {
     if (state == GameState.JUDGING) {
       return getWhiteCards();
     } else if (state != GameState.PLAYING) {
-      return new ArrayList<List<Map<WhiteCardData, Object>>>();
+      return new ArrayList<>();
     } else {
       // getPlayerForUser synchronizes on players. This has caused a deadlock in the past.
       // Good idea to not nest synchronizes if possible anyway.
       final Player player = getPlayerForUser(user);
       synchronized (playedCards) {
         final List<List<Map<WhiteCardData, Object>>> cardData =
-                new ArrayList<List<Map<WhiteCardData, Object>>>(playedCards.size());
+                new ArrayList<>(playedCards.size());
         int faceDownCards = playedCards.size();
         if (playedCards.hasPlayer(player)) {
           cardData.add(getWhiteCardData(playedCards.getCards(player)));
@@ -1306,7 +1305,7 @@ public class Game {
         }
         // TODO make this figure out how many blank cards in each spot, for multi-play cards
         while (faceDownCards-- > 0) {
-          cardData.add(Arrays.asList(WhiteCard.getFaceDownCardClientData()));
+          cardData.add(Collections.singletonList(WhiteCard.getFaceDownCardClientData()));
         }
         return cardData;
       }
@@ -1322,7 +1321,7 @@ public class Game {
    */
   private List<Map<WhiteCardData, Object>> getWhiteCardData(final List<WhiteCard> cards) {
     final List<Map<WhiteCardData, Object>> data =
-            new ArrayList<Map<WhiteCardData, Object>>(cards.size());
+            new ArrayList<>(cards.size());
     for (final WhiteCard card : cards) {
       data.add(card.getClientData());
     }
@@ -1361,7 +1360,7 @@ public class Game {
         return getWhiteCardData(hand);
       }
     } else {
-      return new ArrayList<Map<WhiteCardData, Object>>(0);
+      return new ArrayList<>(0);
     }
   }
 
@@ -1370,8 +1369,8 @@ public class Game {
    */
   private List<User> playersToUsers() {
     final List<User> users;
-    final Player[] playersCopy = players.toArray(new Player[players.size()]);
-    users = new ArrayList<User>(playersCopy.length);
+    final Player[] playersCopy = players.toArray(new Player[0]);
+    users = new ArrayList<>(playersCopy.length);
     for (final Player player : playersCopy) {
       users.add(player.getUser());
     }

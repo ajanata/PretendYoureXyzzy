@@ -117,18 +117,17 @@ cah.Ajax.prototype.error = function (jqXHR, textStatus, errorThrown) {
  */
 cah.Ajax.prototype.done = function (data) {
     cah.log.debug("ajax done", data);
+    var req = this.pendingRequests_[data[cah.$.AjaxResponse.SERIAL]];
     if (data[cah.$.AjaxResponse.ERROR]) {
         // TODO cancel any timers or whatever we may have, and disable interface
         // or probably in individual error handlers as there are some errors that are fine like
         // "you don't have that card" etc.
-        var req = this.pendingRequests_[data[cah.$.AjaxResponse.SERIAL]];
         if (req && cah.ajax.ErrorHandlers[req.getOp()]) {
             cah.ajax.ErrorHandlers[req.getOp()](data, req.data);
         } else {
             cah.log.error(cah.$.ErrorCode_msg[data[cah.$.AjaxResponse.ERROR_CODE]]);
         }
     } else {
-        var req = this.pendingRequests_[data[cah.$.AjaxResponse.SERIAL]];
         if (req && cah.ajax.SuccessHandlers[req.getOp()]) {
             cah.ajax.SuccessHandlers[req.getOp()](data, req.data);
         } else if (req) {

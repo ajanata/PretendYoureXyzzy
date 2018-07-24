@@ -56,12 +56,12 @@ public class JoinGameHandler extends GameHandler {
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
                                             final HttpSession session, final User user, final Game game) {
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> data = new HashMap<>();
 
     final String password = request.getParameter(AjaxRequest.PASSWORD);
     final String gamePassword = game.getPassword();
     if (gamePassword != null && !gamePassword.equals("")) {
-      if (password == null || !gamePassword.equals(password)) {
+      if (!gamePassword.equals(password)) {
         return error(ErrorCode.WRONG_PASSWORD);
       }
     }

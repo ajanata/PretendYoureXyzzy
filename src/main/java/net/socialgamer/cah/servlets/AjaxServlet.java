@@ -50,8 +50,7 @@ public class AjaxServlet extends CahServlet {
   private static final long serialVersionUID = 1L;
 
   /**
-   * @see CahServlet#doPost(HttpServletRequest request, HttpServletResponse response, HttpSession
-   *      hSession)
+   * @see CahServlet#doPost(HttpServletRequest, HttpServletResponse)
    */
   @Override
   protected void handleRequest(final HttpServletRequest request,
@@ -90,6 +89,5 @@ public class AjaxServlet extends CahServlet {
     final Map<ReturnableData, Object> data = handler.handle(new RequestWrapper(request), hSession);
     data.put(AjaxResponse.SERIAL, serial);
     returnData(user, out, data);
-    return;
   }
 }

@@ -27,7 +27,7 @@ most useful graph if it is only updated every 15 minutes, but it is still nice t
 
 @author Andy Janata (ajanata@socialgamer.net)
 --%>
-<%@ page language="java" contentType="text/plain; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/plain; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.google.inject.Injector" %>
 <%@ page import="net.socialgamer.cah.StartupUtils" %>
 <%@ page import="net.socialgamer.cah.data.ConnectedUsers" %>

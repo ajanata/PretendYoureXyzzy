@@ -881,13 +881,13 @@ cah.Game.prototype.updateGameStatus = function (data) {
     $(".blanks_limit", this.optionsElement_).val(options[cah.$.GameOptionData.BLANKS_LIMIT]);
 
     var playerInfos = data[cah.$.AjaxResponse.PLAYER_INFO];
-    for (var index in playerInfos) {
-        this.updateUserStatus(playerInfos[index]);
+    for (var i in playerInfos) {
+        this.updateUserStatus(playerInfos[i]);
     }
 
     var spectators = gameInfo[cah.$.GameInfo.SPECTATORS];
-    for (var index in spectators) {
-        this.updateSpectator(spectators[index]);
+    for (var j in spectators) {
+        this.updateSpectator(spectators[j]);
     }
 };
 

@@ -49,7 +49,7 @@ public abstract class Handler {
    * @return The data to return as the result of the request.
    */
   protected static Map<ReturnableData, Object> error(final ErrorCode errorCode) {
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> data = new HashMap<>();
     data.put(AjaxResponse.ERROR, Boolean.TRUE);
     data.put(AjaxResponse.ERROR_CODE, errorCode.toString());
     return data;

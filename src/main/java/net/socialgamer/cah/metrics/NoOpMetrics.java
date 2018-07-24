@@ -30,6 +30,7 @@ import net.socialgamer.cah.data.CardSet;
 import net.socialgamer.cah.data.WhiteCard;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +72,7 @@ public class NoOpMetrics implements Metrics {
   @Override
   public void gameStart(final String gameId, final Collection<CardSet> decks, final int blanks,
                         final int maxPlayers, final int scoreGoal, final boolean hasPassword) {
-    LOG.trace(String.format("gameStart(%s, %s, %d, %d, %d, %s)", gameId, decks.toArray(), blanks,
+    LOG.trace(String.format("gameStart(%s, %s, %d, %d, %d, %s)", gameId, Arrays.toString(decks.toArray()), blanks,
             maxPlayers, scoreGoal, hasPassword));
   }
 

@@ -42,16 +42,16 @@ public class WhiteDeck {
    * Create a new white card deck, loading the cards from the database and shuffling them.
    */
   public WhiteDeck(final Collection<CardSet> cardSets, final int numBlanks) {
-    final Set<WhiteCard> allCards = new HashSet<WhiteCard>();
+    final Set<WhiteCard> allCards = new HashSet<>();
     for (final CardSet cardSet : cardSets) {
       allCards.addAll(cardSet.getWhiteCards());
     }
-    deck = new ArrayList<WhiteCard>(allCards);
+    deck = new ArrayList<>(allCards);
     for (int i = 0; i < numBlanks && i < GameOptions.MAX_BLANK_CARD_LIMIT; i++) {
       deck.add(createBlankCard());
     }
     Collections.shuffle(deck);
-    discard = new ArrayList<WhiteCard>(deck.size());
+    discard = new ArrayList<>(deck.size());
   }
 
   /**
@@ -72,12 +72,9 @@ public class WhiteDeck {
    *           There are no more cards in the deck.
    */
   public synchronized WhiteCard getNextCard() throws OutOfCardsException {
-    if (deck.size() == 0) {
-      throw new OutOfCardsException();
-    }
+    if (deck.size() == 0) throw new OutOfCardsException();
     // we have an ArrayList here, so this is faster
-    final WhiteCard card = deck.remove(deck.size() - 1);
-    return card;
+    return deck.remove(deck.size() - 1);
   }
 
   /**
@@ -111,8 +108,7 @@ public class WhiteDeck {
    * @return A newly created blank card.
    */
   private WhiteCard createBlankCard() {
-    final WhiteCard blank = new BlankWhiteCard(--lastBlankCardId);
-    return blank;
+    return new BlankWhiteCard(--lastBlankCardId);
   }
 
   public synchronized int totalCount() {

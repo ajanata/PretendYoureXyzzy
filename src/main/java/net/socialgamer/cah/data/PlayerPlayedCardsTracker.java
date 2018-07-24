@@ -24,6 +24,7 @@
 package net.socialgamer.cah.data;
 
 import java.util.*;
+import java.util.function.Function;
 
 
 /**
@@ -38,11 +39,11 @@ public class PlayerPlayedCardsTracker {
   /**
    * Forward mapping of player to cards.
    */
-  private final Map<Player, List<WhiteCard>> playerCardMap = new HashMap<Player, List<WhiteCard>>();
+  private final Map<Player, List<WhiteCard>> playerCardMap = new HashMap<>();
   /**
    * Reverse mapping of cards to player.
    */
-  private final Map<Integer, Player> reverseIdMap = new HashMap<Integer, Player>();
+  private final Map<Integer, Player> reverseIdMap = new HashMap<>();
 
   /**
    * Add a played card to the mappings.
@@ -53,11 +54,12 @@ public class PlayerPlayedCardsTracker {
    *          The card the player played.
    */
   public synchronized void addCard(final Player player, final WhiteCard card) {
-    List<WhiteCard> cards = playerCardMap.get(player);
-    if (cards == null) {
-      cards = new ArrayList<WhiteCard>(3);
-      playerCardMap.put(player, cards);
-    }
+    List<WhiteCard> cards = playerCardMap.computeIfAbsent(player, new Function<Player, List<WhiteCard>>() {
+      @Override
+      public List<WhiteCard> apply(Player player) {
+        return new ArrayList<>(3);
+      }
+    });
     reverseIdMap.put(card.getId(), player);
     cards.add(card);
   }

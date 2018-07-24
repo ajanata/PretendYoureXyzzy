@@ -113,7 +113,7 @@ public class ConnectedUsers {
         logger.info(String.format("New user %s from %s (admin=%b, id=%s)", user.toString(),
                 user.getHostname(), user.isAdmin(), user.getIdCode()));
         users.put(user.getNickname().toLowerCase(), user);
-        final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+        final HashMap<ReturnableData, Object> data = new HashMap<>();
         data.put(LongPollResponse.EVENT, LongPollEvent.NEW_PLAYER.toString());
         data.put(LongPollResponse.NICKNAME, user.getNickname());
         data.put(LongPollResponse.SIGIL, user.getSigil().toString());
@@ -181,7 +181,7 @@ public class ConnectedUsers {
    */
   private void notifyRemoveUser(final User user, final DisconnectReason reason) {
     // Games are informed about the user leaving when the user object is marked invalid.
-    final HashMap<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final HashMap<ReturnableData, Object> data = new HashMap<>();
     data.put(LongPollResponse.EVENT, LongPollEvent.PLAYER_LEAVE.toString());
     data.put(LongPollResponse.NICKNAME, user.getNickname());
     data.put(LongPollResponse.REASON, reason.toString());
@@ -202,7 +202,7 @@ public class ConnectedUsers {
    * but have not actually done anything for a long time.
    */
   public void checkForPingAndIdleTimeouts() {
-    final Map<User, DisconnectReason> removedUsers = new HashMap<User, DisconnectReason>();
+    final Map<User, DisconnectReason> removedUsers = new HashMap<>();
     synchronized (users) {
       final Iterator<User> iterator = users.values().iterator();
       while (iterator.hasNext()) {
@@ -274,7 +274,7 @@ public class ConnectedUsers {
    */
   public Collection<User> getUsers() {
     synchronized (users) {
-      return new ArrayList<User>(users.values());
+      return new ArrayList<>(users.values());
     }
   }
 
@@ -283,7 +283,7 @@ public class ConnectedUsers {
    */
   public Collection<User> getAdmins() {
     synchronized (users) {
-      return users.values().stream().filter(u -> u.isAdmin()).collect(Collectors.toSet());
+      return users.values().stream().filter(User::isAdmin).collect(Collectors.toSet());
     }
   }
 }

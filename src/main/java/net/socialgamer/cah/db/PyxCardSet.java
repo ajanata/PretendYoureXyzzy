@@ -46,8 +46,8 @@ public class PyxCardSet extends CardSet {
   private int weight;
 
   public PyxCardSet() {
-    blackCards = new HashSet<PyxBlackCard>();
-    whiteCards = new HashSet<PyxWhiteCard>();
+    blackCards = new HashSet<>();
+    whiteCards = new HashSet<>();
   }
 
   public static String getCardsetQuery(final boolean includeInactive) {

@@ -2270,7 +2270,7 @@
                     }
 
                     //TODO: What's that good for? There's not anything to be executed left
-                    if (!$(this.handles[i]).length)
+                    //  if (!$(this.handles[i]).length)
 
 
                         }

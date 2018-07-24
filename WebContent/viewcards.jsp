@@ -27,7 +27,7 @@ Interface to view and search all existing cards and card sets.
 @author Andy Janata (ajanata@socialgamer.net)
 --%>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.google.inject.Injector" %>
 <%@ page import="com.google.inject.Key" %>
 <%@ page import="net.socialgamer.cah.CahModule.IncludeInactiveCardsets" %>
@@ -61,12 +61,12 @@ Interface to view and search all existing cards and card sets.
         JSONObject data = new JSONObject();
 
         // mapping of what card sets each card is in
-        Map<Integer, List<Integer>> whiteCardSets = new HashMap<Integer, List<Integer>>();
-        Map<Integer, List<Integer>> blackCardSets = new HashMap<Integer, List<Integer>>();
+        Map<Integer, List<Integer>> whiteCardSets = new HashMap<>();
+        Map<Integer, List<Integer>> blackCardSets = new HashMap<>();
 
         // all of the cards that are actually in a card set
-        Set<PyxWhiteCard> whiteCards = new HashSet<PyxWhiteCard>();
-        Set<PyxBlackCard> blackCards = new HashSet<PyxBlackCard>();
+        Set<PyxWhiteCard> whiteCards = new HashSet<>();
+        Set<PyxBlackCard> blackCards = new HashSet<>();
 
         JSONArray cardSetsData = new JSONArray();
         data.put("cardSets", cardSetsData);
@@ -82,7 +82,7 @@ Interface to view and search all existing cards and card sets.
                 whiteCardIds.put(whiteCard.getId());
                 whiteCards.add(whiteCard);
                 if (!whiteCardSets.containsKey(whiteCard.getId())) {
-                    whiteCardSets.put(whiteCard.getId(), new ArrayList<Integer>());
+                    whiteCardSets.put(whiteCard.getId(), new ArrayList<>());
                 }
                 whiteCardSets.get(whiteCard.getId()).add(cardSet.getId());
             }
@@ -93,7 +93,7 @@ Interface to view and search all existing cards and card sets.
                 blackCardIds.put(blackCard.getId());
                 blackCards.add(blackCard);
                 if (!blackCardSets.containsKey(blackCard.getId())) {
-                    blackCardSets.put(blackCard.getId(), new ArrayList<Integer>());
+                    blackCardSets.put(blackCard.getId(), new ArrayList<>());
                 }
                 blackCardSets.get(blackCard.getId()).add(cardSet.getId());
             }

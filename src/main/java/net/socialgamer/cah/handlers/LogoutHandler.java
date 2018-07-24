@@ -56,7 +56,7 @@ public class LogoutHandler extends Handler {
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
                                             final HttpSession session) {
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> data = new HashMap<>();
 
     final User user = (User) session.getAttribute(SessionAttribute.USER);
     assert (user != null);

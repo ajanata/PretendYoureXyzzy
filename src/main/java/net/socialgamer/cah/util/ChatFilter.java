@@ -99,7 +99,7 @@ public class ChatFilter {
       return Result.REPEAT_WORDS;
     }
 
-    final long caps = message.codePoints().filter(c -> Character.isUpperCase(c)).count();
+    final long caps = message.codePoints().filter(Character::isUpperCase).count();
     if (total >= getIntParameter(Scope.global, "capslock_min_len", DEFAULT_CAPSLOCK_MIN_MSG_LENGTH)
             && ((double) caps) / total > getDoubleParameter(Scope.global, "capslock_ratio",
             DEFAULT_CAPSLOCK_RATIO)) {
@@ -179,7 +179,7 @@ public class ChatFilter {
               getPropValue(String.format("pyx.chat.%s.%s", scope, name), String.valueOf(defaultValue)));
     } catch (final NumberFormatException e) {
       LOG.warn(String.format("Unable to parse pyx.chat.%s.%s as a number,"
-              + " using default of %d", scope, name, defaultValue), e);
+              + " using default of %.3f", scope, name, defaultValue), e);
       return defaultValue;
     }
   }
@@ -230,7 +230,41 @@ public class ChatFilter {
   }
 
   public enum Result {
-    CAPSLOCK, DROP_MESSAGE, NO_MESSAGE, NOT_ENOUGH_SPACES, OK, REPEAT, REPEAT_WORDS, TOO_FAST, TOO_LONG, TOO_MANY_SPECIALS
+    CAPSLOCK, DROP_MESSAGE, NO_MESSAGE, NOT_ENOUGH_SPACES, OK, REPEAT, REPEAT_WORDS, TOO_FAST, TOO_LONG, TOO_MANY_SPECIALS;
+
+    public Constants.LongPollEvent getEvent() {
+      // Don't tell the user we dropped it, and don't send it to everyone else...
+      // but let any online admins know about it
+      if (this == DROP_MESSAGE) return Constants.LongPollEvent.FILTERED_CHAT;
+      else return null;
+    }
+
+    public Constants.ErrorCode getErrorCode() {
+      switch (this) {
+        case CAPSLOCK:
+          return Constants.ErrorCode.CAPSLOCK;
+        case NO_MESSAGE:
+          return Constants.ErrorCode.NO_MSG_SPECIFIED;
+        case NOT_ENOUGH_SPACES:
+          return Constants.ErrorCode.NOT_ENOUGH_SPACES;
+        case REPEAT:
+          return Constants.ErrorCode.REPEAT_MESSAGE;
+        case REPEAT_WORDS:
+          return Constants.ErrorCode.REPEATED_WORDS;
+        case TOO_FAST:
+          return Constants.ErrorCode.TOO_FAST;
+        case TOO_LONG:
+          return Constants.ErrorCode.MESSAGE_TOO_LONG;
+        case TOO_MANY_SPECIALS:
+          return Constants.ErrorCode.TOO_MANY_SPECIAL_CHARACTERS;
+        case DROP_MESSAGE:
+          // handled by #getEvent()
+        case OK:
+        default:
+          LOG.error(String.format("Unknown chat filter result %s", this));
+          return null;
+      }
+    }
   }
 
   private enum Scope {

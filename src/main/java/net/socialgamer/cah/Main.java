@@ -10,7 +10,6 @@ import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.*;
 import net.socialgamer.cah.servlets.*;
 import org.apache.jasper.deploy.JspPropertyGroup;
-import org.apache.jasper.deploy.TagLibraryInfo;
 import org.apache.tomcat.InstanceManager;
 
 import javax.servlet.ServletException;
@@ -68,7 +67,7 @@ public class Main {
                     Servlets.servlet("LongPollServlet", LongPollServlet.class)
                             .addMapping("/LongPollServlet"));
 
-    JspServletBuilder.setupDeployment(servletBuilder, new HashMap<String, JspPropertyGroup>(), new HashMap<String, TagLibraryInfo>(), new InstanceManager() {
+    JspServletBuilder.setupDeployment(servletBuilder, new HashMap<String, JspPropertyGroup>(), new HashMap<>(), new InstanceManager() {
       private final Map<Class, Object> map = new HashMap<>();
 
       @Override

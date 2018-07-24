@@ -30,7 +30,7 @@ public class ConstantsTest {
     }
 
     final Field[] flds = enumClass.getDeclaredFields();
-    final HashMap<String, String> enumMap = new HashMap<String, String>();
+    final HashMap<String, String> enumMap = new HashMap<>();
     for (final Field f : flds) {
       if (f.isEnumConstant() && !f.isAnnotationPresent(DuplicationAllowed.class)) {
         enumMap.put(f.getName(), f.get(null).toString());
@@ -46,7 +46,7 @@ public class ConstantsTest {
    */
   @Test
   public void ensureNoDuplicateValues() throws Exception {
-    final Map<String, String> allFields = new HashMap<String, String>();
+    final Map<String, String> allFields = new HashMap<>();
 
     final Class<?>[] classes = Constants.class.getClasses();
     for (final Class<?> c : classes) {

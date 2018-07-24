@@ -51,7 +51,7 @@ public class GameOptions {
   public static final int MIN_BLANK_CARD_LIMIT = 0;
   public static final int DEFAULT_BLANK_CARD_LIMIT = 0;
   public static final int MAX_BLANK_CARD_LIMIT = 30;
-  public final Set<Integer> cardSetIds = new HashSet<Integer>();
+  public final Set<Integer> cardSetIds = new HashSet<>();
   // These are the default values new games get.
   public int blanksInDeck = DEFAULT_BLANK_CARD_LIMIT;
   public int playerLimit = DEFAULT_PLAYER_LIMIT;
@@ -118,7 +118,7 @@ public class GameOptions {
    * @return This game's general information: ID, host, state, player list, etc.
    */
   public Map<GameOptionData, Object> serialize(final boolean includePassword) {
-    final Map<GameOptionData, Object> info = new HashMap<GameOptionData, Object>();
+    final Map<GameOptionData, Object> info = new HashMap<>();
 
     info.put(GameOptionData.CARD_SETS, cardSetIds);
     info.put(GameOptionData.BLANKS_LIMIT, blanksInDeck);
@@ -137,7 +137,7 @@ public class GameOptions {
    * @return Selected card set IDs which are local to PYX, for querying the database.
    */
   public Set<Integer> getPyxCardSetIds() {
-    final Set<Integer> pyxCardSetIds = new HashSet<Integer>();
+    final Set<Integer> pyxCardSetIds = new HashSet<>();
     for (final Integer cardSetId : cardSetIds) {
       if (cardSetId > 0) {
         pyxCardSetIds.add(cardSetId);

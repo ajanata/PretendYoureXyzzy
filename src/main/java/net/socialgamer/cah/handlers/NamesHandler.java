@@ -54,9 +54,9 @@ public class NamesHandler extends Handler {
   @Override
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
                                             final HttpSession session) {
-    final Map<ReturnableData, Object> ret = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> ret = new HashMap<>();
     final Collection<User> userList = users.getUsers();
-    final List<String> names = new ArrayList<String>(userList.size());
+    final List<String> names = new ArrayList<>(userList.size());
     for (final User u : userList) {
       names.add(u.getSigil() + u.getNickname());
     }

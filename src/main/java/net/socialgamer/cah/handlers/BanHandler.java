@@ -70,7 +70,7 @@ public class BanHandler extends Handler {
     if (null != kickUser) {
       banIp = kickUser.getHostname();
 
-      final Map<ReturnableData, Object> kickData = new HashMap<ReturnableData, Object>();
+      final Map<ReturnableData, Object> kickData = new HashMap<>();
       kickData.put(LongPollResponse.EVENT, LongPollEvent.BANNED.toString());
       final QueuedMessage qm = new QueuedMessage(MessageType.KICKED, kickData);
       kickUser.enqueueMessage(qm);
@@ -84,6 +84,6 @@ public class BanHandler extends Handler {
     }
     banList.add(banIp);
 
-    return new HashMap<ReturnableData, Object>();
+    return new HashMap<>();
   }
 }

@@ -35,7 +35,7 @@ public abstract class BlackCard {
    * @return Client representation of this card.
    */
   public final Map<BlackCardData, Object> getClientData() {
-    final Map<BlackCardData, Object> cardData = new HashMap<BlackCardData, Object>();
+    final Map<BlackCardData, Object> cardData = new HashMap<>();
     cardData.put(BlackCardData.ID, getId());
     cardData.put(BlackCardData.TEXT, getText());
     cardData.put(BlackCardData.DRAW, getDraw());

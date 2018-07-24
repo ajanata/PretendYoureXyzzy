@@ -114,7 +114,7 @@ public class LongPollServlet extends CahServlet {
       // just in case...
       if (msgs.size() > 0) {
         final List<Map<ReturnableData, Object>> data =
-                new ArrayList<Map<ReturnableData, Object>>(msgs.size());
+                new ArrayList<>(msgs.size());
         for (final QueuedMessage qm : msgs) {
           data.add(qm.getData());
         }
@@ -123,7 +123,7 @@ public class LongPollServlet extends CahServlet {
       }
     }
     // otherwise, return that there is no new data
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> data = new HashMap<>();
     data.put(LongPollResponse.EVENT, LongPollEvent.NOOP.toString());
     data.put(LongPollResponse.TIMESTAMP, System.currentTimeMillis());
     returnData(user, out, data);

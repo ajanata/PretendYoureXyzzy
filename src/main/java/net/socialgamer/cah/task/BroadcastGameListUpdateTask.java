@@ -29,7 +29,7 @@ public class BroadcastGameListUpdateTask extends SafeTimerTask {
   @Override
   public void process() {
     if (needsUpdate) {
-      final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
+      final HashMap<ReturnableData, Object> broadcastData = new HashMap<>();
       broadcastData.put(LongPollResponse.EVENT, LongPollEvent.GAME_LIST_REFRESH.toString());
       users.broadcastToAll(MessageType.GAME_EVENT, broadcastData);
       needsUpdate = false;
