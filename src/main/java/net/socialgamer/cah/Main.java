@@ -35,6 +35,7 @@ public class Main {
     DeploymentInfo servletBuilder = Servlets.deployment()
             .setClassLoader(Main.class.getClassLoader())
             .setContextPath("/")
+            .addWelcomePages("index.jsp", "index.html")
             .addListener(new ListenerInfo(StartupUtils.class, new InstanceFactory<EventListener>() {
               private final StartupUtils startupUtils = new StartupUtils();
 
