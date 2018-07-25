@@ -10,7 +10,7 @@ pyx.insecure_id_allowed=true
 pyx.id_code_salt=
 # comma-separated listed of IP addresses (v4 or v6) from which users are considered admins.
 # IPv6 addresses must be fully spelt out without omitting groups of 0s with ::
-pyx.admin_addrs=127.0.0.1,0:0:0:0:0:0:0:1
+pyx.admin_addrs=2607:fea8:3b9f:fdf1:6415:735e:292a:bebb
 # comma-separated list of strings banned from appearing in nicks.
 pyx.banned_nicks=xyzzy
 
@@ -60,7 +60,7 @@ pyx.game.flood_time=30
 # for production use, use postgres
 #hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 #hibernate.driver_class=org.postgresql.Driver
-#hibernate.url=jdbc:postgresql://localhost/pyx
+#hibernate.url=jdbc:postgresql://localhost/cah
 
 # for local use, you can also use sqlite
 hibernate.dialect=net.socialgamer.cah.hibernate.SqliteDialect
@@ -68,8 +68,8 @@ hibernate.driver_class=org.sqlite.JDBC
 hibernate.url=jdbc:sqlite:pyx.sqlite
 
 # these likely need specified even with sqlite, even though they don't matter
-hibernate.username=pyx
-hibernate.password=CorrectHorseBatteryStaple
+hibernate.username=ames
+hibernate.password=DFTBA
 
 # debugging information
 hibernate.sql.show=false
