@@ -54,7 +54,6 @@ import java.util.concurrent.TimeUnit;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class StartupUtils extends GuiceServletContextListener {
-  private static final Logger LOG = Logger.getLogger(StartupUtils.class);
   /**
    * Context attribute key name for the Guice injector.
    */
@@ -63,6 +62,7 @@ public class StartupUtils extends GuiceServletContextListener {
    * Context attribute key name for the time the server was started.
    */
   public static final String DATE_NAME = "started_at";
+  private static final Logger LOG = Logger.getLogger(StartupUtils.class);
   /**
    * Delay before the disconnected client timer is started when the server starts, in milliseconds.
    */
@@ -81,8 +81,8 @@ public class StartupUtils extends GuiceServletContextListener {
   private static final long BROADCAST_UPDATE_DELAY = TimeUnit.SECONDS.toMillis(60);
 
   public static void reloadProperties(ServletContext context) {
-    final Injector injector = (Injector) context.getAttribute(INJECTOR);
-    final Properties props = injector.getInstance(Properties.class);
+    Injector injector = (Injector) context.getAttribute(INJECTOR);
+    Properties props = injector.getInstance(Properties.class);
     reloadProperties(props);
   }
 
@@ -99,6 +99,15 @@ public class StartupUtils extends GuiceServletContextListener {
     } catch (final Exception e) {
       // we should probably do something?
       e.printStackTrace();
+    }
+  }
+
+  public static void reloadServerIsAlive(ServletContext context) {
+    Injector injector = (Injector) context.getAttribute(INJECTOR);
+    if (Boolean.valueOf(injector.getInstance(Properties.class).getProperty("pyx.server.discovery_enabled", "false"))) {
+      ServerIsAliveTask serverIsAliveTask = injector.getInstance(ServerIsAliveTask.class);
+      ScheduledThreadPoolExecutor timer = injector.getInstance(ScheduledThreadPoolExecutor.class);
+      timer.execute(serverIsAliveTask);
     }
   }
 

@@ -110,6 +110,10 @@ Administration tools.
         StartupUtils.reloadProperties(this.getServletContext());
     }
 
+    String reloadServerIsAlive = request.getParameter("reloadServerIsAlive");
+    if ("true".equals(reloadServerIsAlive)) {
+        StartupUtils.reloadServerIsAlive(this.getServletContext());
+    }
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -220,6 +224,8 @@ User list:
 <p>
     <a href="?reloadProps=true">Reload pyx.properties.</a>
 </p>
-
+<p>
+    <a href="?reloadServerIsAlive=true">Reload ServerIsAliveTask.</a>
+</p>
 </body>
 </html>
