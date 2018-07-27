@@ -42,6 +42,10 @@ public class ConfigurationHolder {
     this.log4jConfig = new File(pyxDirectory, "log4j.properties");
   }
 
+  public static void reload() throws IOException {
+    get().reloadConfiguration();
+  }
+
   public static void asProperties(Properties props) {
     ConfigurationHolder conf = get();
 

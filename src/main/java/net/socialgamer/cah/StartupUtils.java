@@ -94,11 +94,11 @@ public class StartupUtils extends GuiceServletContextListener {
 
     try {
       synchronized (props) {
+        ConfigurationHolder.reload();
         ConfigurationHolder.asProperties(props);
       }
-    } catch (final Exception e) {
-      // we should probably do something?
-      e.printStackTrace();
+    } catch (Exception ex) {
+      LOG.error("Failed reloading pyx.properties!", ex);
     }
   }
 
