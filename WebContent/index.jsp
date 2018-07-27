@@ -40,9 +40,8 @@ to, for instance, display the number of connected players.
 <body>
 <div id="tweetbox">
     <h3>Recent tweets (mainly server status updates)</h3>
-    <a class="twitter-timeline" data-height="500" data-dnt="true" data-theme="light"
-       href="https://twitter.com/_PYX_?ref_src=twsrc%5Etfw">Tweets by _PYX_</a>
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <a class="twitter-timeline" href="https://twitter.com/devgianlu?ref_src=twsrc%5Etfw">Tweets by devgianlu</a>
+    <script defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </div>
 <h1>
     Pretend You're <dfn style="border-bottom: 1px dotted black"
