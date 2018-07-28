@@ -48,6 +48,7 @@ import org.hibernate.Session;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+import net.socialgamer.cah.CahModule.AllowBlankCards;
 import net.socialgamer.cah.CahModule.GamePermalinkUrlFormat;
 import net.socialgamer.cah.CahModule.RoundPermalinkUrlFormat;
 import net.socialgamer.cah.CahModule.ShowGamePermalink;
@@ -121,6 +122,7 @@ public class Game {
   private final Provider<String> gamePermalinkFormatProvider;
   private final Provider<Boolean> showRoundLinkProvider;
   private final Provider<String> roundPermalinkFormatProvider;
+  private final Provider<Boolean> allowBlankCardsProvider;
   private final long created = System.currentTimeMillis();
 
   private int judgeIndex = 0;
@@ -216,7 +218,8 @@ public class Game {
       final Metrics metrics, @ShowRoundPermalink final Provider<Boolean> showRoundLinkProvider,
       @RoundPermalinkUrlFormat final Provider<String> roundPermalinkFormatProvider,
       @ShowGamePermalink final Provider<Boolean> showGameLinkProvider,
-      @GamePermalinkUrlFormat final Provider<String> gamePermalinkFormatProvider) {
+      @GamePermalinkUrlFormat final Provider<String> gamePermalinkFormatProvider,
+      @AllowBlankCards final Provider<Boolean> allowBlankCardsProvider) {
     this.id = id;
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
@@ -229,6 +232,7 @@ public class Game {
     this.roundPermalinkFormatProvider = roundPermalinkFormatProvider;
     this.showGameLinkProvider = showGameLinkProvider;
     this.gamePermalinkFormatProvider = gamePermalinkFormatProvider;
+    this.allowBlankCardsProvider = allowBlankCardsProvider;
 
     state = GameState.LOBBY;
   }
@@ -787,7 +791,7 @@ public class Game {
   }
 
   public WhiteDeck loadWhiteDeck(final List<CardSet> cardSets) {
-    return new WhiteDeck(cardSets, options.blanksInDeck);
+    return new WhiteDeck(cardSets, allowBlankCardsProvider.get() ? options.blanksInDeck : 0);
   }
 
   public int getRequiredWhiteCardCount() {

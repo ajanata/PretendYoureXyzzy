@@ -28,12 +28,22 @@ created for the user now.
 @author Andy Janata (ajanata@socialgamer.net)
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="com.google.inject.Injector" %>
+<%@ page import="com.google.inject.Key" %>
+<%@ page import="com.google.inject.TypeLiteral" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page import="net.socialgamer.cah.CahModule.AllowBlankCards" %>
+<%@ page import="net.socialgamer.cah.RequestWrapper" %>
+<%@ page import="net.socialgamer.cah.StartupUtils" %>
 <%@ page import="net.socialgamer.cah.data.GameOptions" %>
 <%
 // Ensure a session exists for the user.
 @SuppressWarnings("unused")
 HttpSession hSession = request.getSession(true);
+RequestWrapper wrapper = new RequestWrapper(request);
+ServletContext servletContext = pageContext.getServletContext();
+Injector injector = (Injector) servletContext.getAttribute(StartupUtils.INJECTOR);
+boolean allowBlankCards = injector.getInstance(Key.get(new TypeLiteral<Boolean>(){}, AllowBlankCards.class));
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -507,16 +517,18 @@ HttpSession hSession = request.getSession(true);
         <span class="base_card_sets"></span>
         <span class="extra_card_sets"></span>
       </fieldset>
-      <br/>
-      <label id="blanks_limit_label" title="Blank cards allow a player to type in their own answer.">
-        Also include <select id="blanks_limit_template" class="blanks_limit">
-        <%
-          for (int i = GameOptions.MIN_BLANK_CARD_LIMIT; i <= GameOptions.MAX_BLANK_CARD_LIMIT; i++) {
-        %>
-          <option <%= i == GameOptions.DEFAULT_BLANK_CARD_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
-        <% } %>
-        </select> blank white cards.
-      </label>
+      <% if (allowBlankCards) { %>
+        <br/>
+        <label id="blanks_limit_label" title="Blank cards allow a player to type in their own answer.">
+          Also include <select id="blanks_limit_template" class="blanks_limit">
+          <%
+            for (int i = GameOptions.MIN_BLANK_CARD_LIMIT; i <= GameOptions.MAX_BLANK_CARD_LIMIT; i++) {
+          %>
+            <option <%= i == GameOptions.DEFAULT_BLANK_CARD_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+          <% } %>
+          </select> blank white cards.
+        </label>
+      <% } %>
       <br/>
       <label id="game_password_template_label" for="game_password_template">Game password:</label>
       <input type="text" id="game_password_template" class="game_password"

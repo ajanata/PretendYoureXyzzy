@@ -297,6 +297,14 @@ public class CahModule extends AbstractModule {
     }
   }
 
+  @Provides
+  @AllowBlankCards
+  Boolean provideAllowBlankCards() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty("pyx.server.allow_blank_cards", "true"));
+    }
+  }
+
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface BanList {
@@ -400,5 +408,10 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface BannedNicks {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface AllowBlankCards {
   }
 }

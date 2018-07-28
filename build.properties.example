@@ -4,6 +4,8 @@ pyx.max_games=25
 pyx.include_inactive_cardsets=true
 pyx.broadcast_connects_and_disconnects=true
 pyx.global_chat_enabled=true
+# allow fill-in-the-blank cards at all. Limits are set via constants in GameOptions.
+pyx.allow_blank_cards=true
 # allow identification codes to be used without HTTPS
 pyx.insecure_id_allowed=true
 # set this to some secure random value, and never change it, unless you want to break all codes
