@@ -170,6 +170,14 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
+  @GameChatEnabled
+  Boolean provideGameChatEnabled() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty("pyx.server.game_chat_enabled", "true"));
+    }
+  }
+
+  @Provides
   @ShowGamePermalink
   Boolean provideShowGamePermalink() {
     synchronized (properties) {
@@ -363,6 +371,11 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface GlobalChatEnabled {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface GameChatEnabled {
   }
 
   @BindingAnnotation

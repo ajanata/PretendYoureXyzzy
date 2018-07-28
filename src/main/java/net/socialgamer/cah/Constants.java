@@ -274,6 +274,8 @@ public class Constants {
     @GoDataType("[]GameInfo")
     GAMES("gl"),
     @GoDataType("bool")
+    GAME_CHAT_ENABLED("Gce"),
+    @GoDataType("bool")
     GLOBAL_CHAT_ENABLED("gce"),
     @GoDataType("[]int")
     HAND("h"),

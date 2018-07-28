@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 
+import net.socialgamer.cah.CahModule.GameChatEnabled;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.ErrorCode;
@@ -59,13 +60,15 @@ public class GameChatHandler extends GameWithPlayerHandler {
 
   private final ChatFilter chatFilter;
   private final ConnectedUsers users;
+  private final boolean gameChatEnabled;
 
   @Inject
   public GameChatHandler(final GameManager gameManager, final ChatFilter chatFilter,
-      final ConnectedUsers users) {
+      final ConnectedUsers users, @GameChatEnabled final boolean gameChatEnabled) {
     super(gameManager);
     this.chatFilter = chatFilter;
     this.users = users;
+    this.gameChatEnabled = gameChatEnabled;
   }
 
   @Override
@@ -78,6 +81,9 @@ public class GameChatHandler extends GameWithPlayerHandler {
     LongPollEvent event = LongPollEvent.CHAT;
     if (request.getParameter(AjaxRequest.MESSAGE) == null) {
       return error(ErrorCode.NO_MSG_SPECIFIED);
+    } else if (!gameChatEnabled && !user.isAdmin()) {
+      // game chat can be turned off in the properties file
+      return error(ErrorCode.NOT_ADMIN);
     } else {
       final String message = request.getParameter(AjaxRequest.MESSAGE).trim();
 
