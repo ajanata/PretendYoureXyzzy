@@ -1,7 +1,7 @@
 Pretend You're Xyzzy
 ===================
 
-A Cards Against Humanity clone, server and web client. Play on the [web](http://pyx.gianlu.xyz/), or from the [app](https://play.google.com/store/apps/details?id=com.gianlu.pretendyourexyzzy&utm_source=github&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1).
+A Cards Against Humanity clone, server and web client. Play on the [web](https://script.google.com/macros/s/AKfycbxaWVr4sEiivlmw_0WqNaYXyMwkZGoarBXcQ7HfZ3tJ53WFqogG/exec?op=list) (pick one from the list), or from the [app](https://play.google.com/store/apps/details?id=com.gianlu.pretendyourexyzzy&utm_source=github&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1).
 
 <a href='https://play.google.com/store/apps/details?id=com.gianlu.pretendyourexyzzy&utm_source=github&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' width='300' style='max-width:100%' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
