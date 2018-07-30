@@ -4,17 +4,14 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import net.socialgamer.cah.CahModule;
-import net.socialgamer.cah.data.ServerIsAliveTokenHolder;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
+import java.net.*;
 
 /**
  * @author Gianlu
@@ -22,7 +19,6 @@ import java.net.URL;
 @Singleton
 public class ServerIsAliveTask extends SafeTimerTask {
   private static final URL GET_MY_IP;
-  private static final String AM_ALIVE_API = "https://script.google.com/macros/s/AKfycbxaWVr4sEiivlmw_0WqNaYXyMwkZGoarBXcQ7HfZ3tJ53WFqogG/exec?op=amAlive&ip=";
   private static final Logger logger = Logger.getLogger(ServerIsAliveTask.class);
 
   static {
@@ -35,25 +31,32 @@ public class ServerIsAliveTask extends SafeTimerTask {
 
   private final Provider<String> discoveryAddressProvider;
   private final Provider<Integer> discoveryPortProvider;
-  private String myIp = null;
+  private final Provider<Boolean> discoverySecureProvider;
+  private String host = null;
+  private int port = -1;
+  private boolean secure = false;
 
   @Inject
   public ServerIsAliveTask(@CahModule.ServerDiscoveryAddress Provider<String> discoveryAddressProvider,
-                           @CahModule.ServerDiscoveryPort Provider<Integer> discoveryPortProvider) {
+                           @CahModule.ServerDiscoveryPort Provider<Integer> discoveryPortProvider,
+                           @CahModule.ServerDiscoverySecure Provider<Boolean> discoverySecureProvider) {
     this.discoveryAddressProvider = discoveryAddressProvider;
     this.discoveryPortProvider = discoveryPortProvider;
+    this.discoverySecureProvider = discoverySecureProvider;
   }
 
   @Override
   public void process() {
-    if (myIp == null) {
+    if (host == null || port == -1) {
       Integer discoveryPort = discoveryPortProvider.get();
       if (discoveryPort == null || discoveryPort <= 0 || discoveryPort >= 65536)
         throw new IllegalArgumentException("Invalid server discovery configuration!");
 
       String discoveryAddress = discoveryAddressProvider.get();
       if (discoveryAddress != null && !discoveryAddress.isEmpty()) {
-        myIp = discoveryAddress + ":" + discoveryPort;
+        host = discoveryAddress;
+        port = discoveryPort;
+        secure = discoverySecureProvider.get();
       } else {
         try {
           HttpURLConnection conn = (HttpURLConnection) GET_MY_IP.openConnection();
@@ -61,8 +64,9 @@ public class ServerIsAliveTask extends SafeTimerTask {
 
           try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             JSONObject obj = new JSONObject(reader.readLine());
-            myIp = obj.getString("ip") + ":" + discoveryPortProvider.get();
-            logger.info("Successfully retrieved server IP: " + myIp);
+            host = obj.getString("ip");
+            port = discoveryPortProvider.get();
+            logger.info("Successfully retrieved server IP: " + host);
           }
 
           conn.disconnect();
@@ -73,22 +77,35 @@ public class ServerIsAliveTask extends SafeTimerTask {
     }
 
     try {
-      HttpURLConnection conn = (HttpURLConnection) URI.create(AM_ALIVE_API + myIp).toURL().openConnection();
+      URI uri = new URI("http", "localhost", "/AmAlive", null);
+
+      JSONObject req = new JSONObject();
+      req.put("host", host)
+              .put("port", port)
+              .put("secure", secure);
+
+      HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
+      conn.setRequestMethod("POST");
+      conn.setDoOutput(true);
       conn.connect();
 
+      try (BufferedOutputStream out = new BufferedOutputStream(conn.getOutputStream())) {
+        String json = req.toString();
+        out.write(json.getBytes());
+        out.flush();
+      }
+
       try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-        JSONObject obj = new JSONObject(reader.readLine());
-        if (obj.has("error")) {
-          logger.error("Failed registering to the discovery API: " + obj.get("error"));
+        JSONObject resp = new JSONObject(reader.readLine());
+        if (resp.has("error")) {
+          logger.error("Failed registering to the discovery API: " + resp.get("error"));
         } else {
-          String token = (String) obj.get("token");
-          ServerIsAliveTokenHolder.set(token);
-          logger.info("Registered successfully to the discovery API with token " + token);
+          System.out.println(reader);  // TODO
         }
       }
 
       conn.disconnect();
-    } catch (IOException ex) {
+    } catch (IOException | URISyntaxException ex) {
       logger.error("Failed contacting server discovery API!", ex);
     }
   }

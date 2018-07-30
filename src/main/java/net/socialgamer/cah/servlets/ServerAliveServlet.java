@@ -1,6 +1,5 @@
 package net.socialgamer.cah.servlets;
 
-import net.socialgamer.cah.data.ServerIsAliveTokenHolder;
 import org.json.JSONObject;
 
 import javax.servlet.annotation.WebServlet;

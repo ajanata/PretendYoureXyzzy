@@ -156,6 +156,14 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
+  @ServerDiscoveryPort
+  boolean provideServerDiscoverySecure() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty("pyx.server.discovery_secure", "false"));
+    }
+  }
+
+  @Provides
   @BroadcastConnectsAndDisconnects
   Boolean provideBroadcastConnectsAndDisconnects() {
     synchronized (properties) {
@@ -414,5 +422,10 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface ServerDiscoveryPort {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface ServerDiscoverySecure {
   }
 }
