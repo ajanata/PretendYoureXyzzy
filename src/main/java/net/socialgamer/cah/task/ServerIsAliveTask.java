@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import net.socialgamer.cah.CahModule;
+import net.socialgamer.cah.serveralive.DiffieHellman;
+import net.socialgamer.cah.serveralive.ServerAliveConnectionHolder;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
@@ -11,7 +13,12 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * @author Gianlu
@@ -79,15 +86,19 @@ public class ServerIsAliveTask extends SafeTimerTask {
     try {
       URI uri = new URI("http", "localhost", "/AmAlive", null);
 
+      DiffieHellman diffieHellman = new DiffieHellman();
+      BigInteger publicKey = diffieHellman.generatePublicKey();
+
       JSONObject req = new JSONObject();
       req.put("host", host)
               .put("port", port)
+              .put("publicKey", publicKey.toString(16))
+              .put("metrics", (String) null) // TODO
               .put("secure", secure);
 
       HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
       conn.setRequestMethod("POST");
       conn.setDoOutput(true);
-      conn.connect();
 
       try (BufferedOutputStream out = new BufferedOutputStream(conn.getOutputStream())) {
         String json = req.toString();
@@ -100,12 +111,14 @@ public class ServerIsAliveTask extends SafeTimerTask {
         if (resp.has("error")) {
           logger.error("Failed registering to the discovery API: " + resp.get("error"));
         } else {
-          System.out.println(reader);  // TODO
+          byte[] sharedKey = diffieHellman.computeSharedKey(new BigInteger(resp.getString("publicKey"), 16));
+          ServerAliveConnectionHolder.init(sharedKey);
+          logger.info("Registered to discovery API!");
         }
       }
 
       conn.disconnect();
-    } catch (IOException | URISyntaxException ex) {
+    } catch (IOException | URISyntaxException | InvalidKeyException | NoSuchAlgorithmException | InvalidAlgorithmParameterException | InvalidKeySpecException ex) {
       logger.error("Failed contacting server discovery API!", ex);
     }
   }

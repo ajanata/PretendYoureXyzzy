@@ -156,7 +156,7 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
-  @ServerDiscoveryPort
+  @ServerDiscoverySecure
   boolean provideServerDiscoverySecure() {
     synchronized (properties) {
       return Boolean.valueOf(properties.getProperty("pyx.server.discovery_secure", "false"));
