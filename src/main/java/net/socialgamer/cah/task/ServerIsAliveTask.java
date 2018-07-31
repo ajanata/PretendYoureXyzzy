@@ -87,7 +87,7 @@ public class ServerIsAliveTask extends SafeTimerTask {
     }
 
     try {
-      URI uri = new URI("http", "localhost", "/AmAlive", null);
+      URI uri = new URI("http", "localhost" /* FIXME */, "/AmAlive", null);
 
       DiffieHellman diffieHellman = new DiffieHellman();
       BigInteger publicKey = diffieHellman.generatePublicKey();
@@ -109,15 +109,15 @@ public class ServerIsAliveTask extends SafeTimerTask {
         out.flush();
       }
 
-      try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-        JSONObject resp = new JSONObject(reader.readLine());
-        if (resp.has("error")) {
-          logger.error("Failed registering to the discovery API: " + resp.get("error"));
-        } else {
+      if (conn.getResponseCode() == 200) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+          JSONObject resp = new JSONObject(reader.readLine());
           byte[] sharedKey = diffieHellman.computeSharedKey(new BigInteger(resp.getString("publicKey"), 16));
           ServerAliveConnectionHolder.init(sharedKey);
           logger.info("Registered to discovery API!");
         }
+      } else {
+        logger.error("Failed registering to the discovery API: " + conn.getResponseCode());
       }
 
       conn.disconnect();

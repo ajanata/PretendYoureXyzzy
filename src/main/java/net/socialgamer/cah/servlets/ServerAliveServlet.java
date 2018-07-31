@@ -2,14 +2,16 @@ package net.socialgamer.cah.servlets;
 
 import net.socialgamer.cah.serveralive.ServerAliveConnectionHolder;
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.math.BigInteger;
 
 /**
  * @author Gianlu
@@ -22,24 +24,21 @@ public class ServerAliveServlet extends HttpServlet {
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     ServerAliveConnectionHolder holder = ServerAliveConnectionHolder.get();
     if (holder == null) {
-      logger.trace("ServerAliveConnectionHolder isn't initialized!");
+      logger.warn("ServerAliveConnectionHolder isn't initialized!");
       resp.setStatus(400);
       return;
     }
 
-    InputStream in = req.getInputStream();
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    byte[] buffer = new byte[4096];
-    int read;
-    while ((read = in.read(buffer)) != -1) {
-      holder.decryptBlock(buffer, read);
-      out.write(buffer, 0, read);
-    }
+    JSONObject obj = new JSONObject(new JSONTokener(new InputStreamReader(req.getInputStream())));
+    BigInteger nonce = obj.getBigInteger("nonce");
+    byte[] challenge = new BigInteger(obj.getString("challenge"), 16).toByteArray();
 
-    holder.endDecrypt();
-    String uuid = new String(out.toByteArray());
+    holder.decrypt(nonce, challenge);
+
+    String uuid = new String(challenge);
     resp.getWriter().write(uuid);
 
     logger.trace("Decoded ServerAlive payload: " + uuid);
+    logger.debug(holder);
   }
 }
