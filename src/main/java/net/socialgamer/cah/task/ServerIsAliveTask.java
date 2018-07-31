@@ -14,7 +14,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -27,10 +30,12 @@ import java.security.spec.InvalidKeySpecException;
 public class ServerIsAliveTask extends SafeTimerTask {
   private static final URL GET_MY_IP;
   private static final Logger logger = Logger.getLogger(ServerIsAliveTask.class);
+  private static final URL AM_ALIVE_API;
 
   static {
     try {
       GET_MY_IP = URI.create("https://api.ipify.org?format=json").toURL();
+      AM_ALIVE_API = URI.create("http://discovery.pyx.gianlu.xyz/AmAlive").toURL();
     } catch (MalformedURLException ex) {
       throw new RuntimeException(ex);
     }
@@ -87,8 +92,6 @@ public class ServerIsAliveTask extends SafeTimerTask {
     }
 
     try {
-      URI uri = new URI("http", "localhost" /* FIXME */, "/AmAlive", null);
-
       DiffieHellman diffieHellman = new DiffieHellman();
       BigInteger publicKey = diffieHellman.generatePublicKey();
 
@@ -99,7 +102,7 @@ public class ServerIsAliveTask extends SafeTimerTask {
               .put("metrics", discoveryMetricsProvider.get())
               .put("secure", secure);
 
-      HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
+      HttpURLConnection conn = (HttpURLConnection) AM_ALIVE_API.openConnection();
       conn.setRequestMethod("POST");
       conn.setDoOutput(true);
 
@@ -121,7 +124,7 @@ public class ServerIsAliveTask extends SafeTimerTask {
       }
 
       conn.disconnect();
-    } catch (IOException | URISyntaxException | InvalidKeyException | NoSuchAlgorithmException | InvalidAlgorithmParameterException | InvalidKeySpecException ex) {
+    } catch (IOException | InvalidKeyException | NoSuchAlgorithmException | InvalidAlgorithmParameterException | InvalidKeySpecException ex) {
       logger.error("Failed contacting server discovery API!", ex);
     }
   }
