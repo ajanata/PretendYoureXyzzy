@@ -164,6 +164,14 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
+  @ServerDiscoveryMetrics
+  String provideServerDiscoveryMetrics() {
+    synchronized (properties) {
+      return properties.getProperty("pyx.server.discovery_metrics", null);
+    }
+  }
+
+  @Provides
   @BroadcastConnectsAndDisconnects
   Boolean provideBroadcastConnectsAndDisconnects() {
     synchronized (properties) {
@@ -427,5 +435,10 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface ServerDiscoverySecure {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface ServerDiscoveryMetrics {
   }
 }

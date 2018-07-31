@@ -39,6 +39,7 @@ public class ServerIsAliveTask extends SafeTimerTask {
   private final Provider<String> discoveryAddressProvider;
   private final Provider<Integer> discoveryPortProvider;
   private final Provider<Boolean> discoverySecureProvider;
+  private final Provider<String> discoveryMetricsProvider;
   private String host = null;
   private int port = -1;
   private boolean secure = false;
@@ -46,10 +47,12 @@ public class ServerIsAliveTask extends SafeTimerTask {
   @Inject
   public ServerIsAliveTask(@CahModule.ServerDiscoveryAddress Provider<String> discoveryAddressProvider,
                            @CahModule.ServerDiscoveryPort Provider<Integer> discoveryPortProvider,
-                           @CahModule.ServerDiscoverySecure Provider<Boolean> discoverySecureProvider) {
+                           @CahModule.ServerDiscoverySecure Provider<Boolean> discoverySecureProvider,
+                           @CahModule.ServerDiscoveryMetrics Provider<String> discoveryMetricsProvider) {
     this.discoveryAddressProvider = discoveryAddressProvider;
     this.discoveryPortProvider = discoveryPortProvider;
     this.discoverySecureProvider = discoverySecureProvider;
+    this.discoveryMetricsProvider = discoveryMetricsProvider;
   }
 
   @Override
@@ -93,7 +96,7 @@ public class ServerIsAliveTask extends SafeTimerTask {
       req.put("host", host)
               .put("port", port)
               .put("publicKey", publicKey.toString(16))
-              .put("metrics", (String) null) // TODO
+              .put("metrics", discoveryMetricsProvider.get())
               .put("secure", secure);
 
       HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
