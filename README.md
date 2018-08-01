@@ -1,7 +1,7 @@
 Pretend You're Xyzzy
 ===================
 
-A Cards Against Humanity clone, server and web client. Play on the [web](https://script.google.com/macros/s/AKfycbxaWVr4sEiivlmw_0WqNaYXyMwkZGoarBXcQ7HfZ3tJ53WFqogG/exec?op=list) (pick one from the list), or from the [app](https://play.google.com/store/apps/details?id=com.gianlu.pretendyourexyzzy&utm_source=github&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1).
+A Cards Against Humanity clone, server and web client. Play on the [web](http://discovery.pyx.gianlu.xyz/ListAll) (pick one from the list), or from the [app](https://play.google.com/store/apps/details?id=com.gianlu.pretendyourexyzzy&utm_source=github&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1).
 
 <a href='https://play.google.com/store/apps/details?id=com.gianlu.pretendyourexyzzy&utm_source=github&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' width='300' style='max-width:100%' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
@@ -33,6 +33,7 @@ By default this feature is disabled. To enable it:
  - Find your `pyx.properties` file
  - Set `pyx.server.discovery_enabled` to `true`
  - Set `pyx.server.discovery_address` to your external IP address or domain
- - Set `pyx.server.discovery_port` to the external port
+ - Set `pyx.server.discovery_port` to the external port+
+ - (Optional) Set `pyx.server.discovery_metrics` to the metrics base URL
  - Open the necessary ports on your router/firewall
- - Deploy! In a few minutes, if your configuration is correct, your server will appear [here](https://script.google.com/macros/s/AKfycbxaWVr4sEiivlmw_0WqNaYXyMwkZGoarBXcQ7HfZ3tJ53WFqogG/exec?op=list).
+ - Deploy! In a few minutes, if your configuration is correct, your server will appear [here](http://discovery.pyx.gianlu.xyz/ListAll).
