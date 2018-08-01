@@ -4,17 +4,24 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import net.socialgamer.cah.CahModule;
-import net.socialgamer.cah.data.ServerIsAliveTokenHolder;
+import net.socialgamer.cah.serveralive.DiffieHellman;
+import net.socialgamer.cah.serveralive.ServerAliveConnectionHolder;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * @author Gianlu
@@ -22,12 +29,13 @@ import java.net.URL;
 @Singleton
 public class ServerIsAliveTask extends SafeTimerTask {
   private static final URL GET_MY_IP;
-  private static final String AM_ALIVE_API = "https://script.google.com/macros/s/AKfycbxaWVr4sEiivlmw_0WqNaYXyMwkZGoarBXcQ7HfZ3tJ53WFqogG/exec?op=amAlive&ip=";
   private static final Logger logger = Logger.getLogger(ServerIsAliveTask.class);
+  private static final URL AM_ALIVE_API;
 
   static {
     try {
       GET_MY_IP = URI.create("https://api.ipify.org?format=json").toURL();
+      AM_ALIVE_API = URI.create("http://discovery.pyx.gianlu.xyz/AmAlive").toURL();
     } catch (MalformedURLException ex) {
       throw new RuntimeException(ex);
     }
@@ -35,25 +43,35 @@ public class ServerIsAliveTask extends SafeTimerTask {
 
   private final Provider<String> discoveryAddressProvider;
   private final Provider<Integer> discoveryPortProvider;
-  private String myIp = null;
+  private final Provider<Boolean> discoverySecureProvider;
+  private final Provider<String> discoveryMetricsProvider;
+  private String host = null;
+  private int port = -1;
+  private boolean secure = false;
 
   @Inject
   public ServerIsAliveTask(@CahModule.ServerDiscoveryAddress Provider<String> discoveryAddressProvider,
-                           @CahModule.ServerDiscoveryPort Provider<Integer> discoveryPortProvider) {
+                           @CahModule.ServerDiscoveryPort Provider<Integer> discoveryPortProvider,
+                           @CahModule.ServerDiscoverySecure Provider<Boolean> discoverySecureProvider,
+                           @CahModule.ServerDiscoveryMetrics Provider<String> discoveryMetricsProvider) {
     this.discoveryAddressProvider = discoveryAddressProvider;
     this.discoveryPortProvider = discoveryPortProvider;
+    this.discoverySecureProvider = discoverySecureProvider;
+    this.discoveryMetricsProvider = discoveryMetricsProvider;
   }
 
   @Override
   public void process() {
-    if (myIp == null) {
+    if (host == null || port == -1) {
       Integer discoveryPort = discoveryPortProvider.get();
       if (discoveryPort == null || discoveryPort <= 0 || discoveryPort >= 65536)
         throw new IllegalArgumentException("Invalid server discovery configuration!");
 
       String discoveryAddress = discoveryAddressProvider.get();
       if (discoveryAddress != null && !discoveryAddress.isEmpty()) {
-        myIp = discoveryAddress + ":" + discoveryPort;
+        host = discoveryAddress;
+        port = discoveryPort;
+        secure = discoverySecureProvider.get();
       } else {
         try {
           HttpURLConnection conn = (HttpURLConnection) GET_MY_IP.openConnection();
@@ -61,8 +79,9 @@ public class ServerIsAliveTask extends SafeTimerTask {
 
           try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             JSONObject obj = new JSONObject(reader.readLine());
-            myIp = obj.getString("ip") + ":" + discoveryPortProvider.get();
-            logger.info("Successfully retrieved server IP: " + myIp);
+            host = obj.getString("ip");
+            port = discoveryPortProvider.get();
+            logger.info("Successfully retrieved server IP: " + host);
           }
 
           conn.disconnect();
@@ -73,22 +92,39 @@ public class ServerIsAliveTask extends SafeTimerTask {
     }
 
     try {
-      HttpURLConnection conn = (HttpURLConnection) URI.create(AM_ALIVE_API + myIp).toURL().openConnection();
-      conn.connect();
+      DiffieHellman diffieHellman = new DiffieHellman();
+      BigInteger publicKey = diffieHellman.generatePublicKey();
 
-      try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-        JSONObject obj = new JSONObject(reader.readLine());
-        if (obj.has("error")) {
-          logger.error("Failed registering to the discovery API: " + obj.get("error"));
-        } else {
-          String token = (String) obj.get("token");
-          ServerIsAliveTokenHolder.set(token);
-          logger.info("Registered successfully to the discovery API with token " + token);
+      JSONObject req = new JSONObject();
+      req.put("host", host)
+              .put("port", port)
+              .put("publicKey", publicKey.toString(16))
+              .put("metrics", discoveryMetricsProvider.get())
+              .put("secure", secure);
+
+      HttpURLConnection conn = (HttpURLConnection) AM_ALIVE_API.openConnection();
+      conn.setRequestMethod("POST");
+      conn.setDoOutput(true);
+
+      try (BufferedOutputStream out = new BufferedOutputStream(conn.getOutputStream())) {
+        String json = req.toString();
+        out.write(json.getBytes());
+        out.flush();
+      }
+
+      if (conn.getResponseCode() == 200) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+          JSONObject resp = new JSONObject(reader.readLine());
+          byte[] sharedKey = diffieHellman.computeSharedKey(new BigInteger(resp.getString("publicKey"), 16));
+          ServerAliveConnectionHolder.init(sharedKey);
+          logger.info("Registered to discovery API!");
         }
+      } else {
+        logger.error("Failed registering to the discovery API: " + conn.getResponseCode());
       }
 
       conn.disconnect();
-    } catch (IOException ex) {
+    } catch (IOException | InvalidKeyException | NoSuchAlgorithmException | InvalidAlgorithmParameterException | InvalidKeySpecException ex) {
       logger.error("Failed contacting server discovery API!", ex);
     }
   }

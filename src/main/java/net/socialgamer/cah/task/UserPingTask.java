@@ -37,7 +37,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  */
 @Singleton
 public class UserPingTask extends SafeTimerTask {
-
   private final ConnectedUsers users;
   private final ScheduledThreadPoolExecutor globalTimer;
 
