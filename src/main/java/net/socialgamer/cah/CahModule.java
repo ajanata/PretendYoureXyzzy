@@ -172,6 +172,14 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
+  @ServerDiscoveryPath
+  String provideServerDiscoveryPath() {
+    synchronized (properties) {
+      return properties.getProperty("pyx.server.discovery_path", "/");
+    }
+  }
+
+  @Provides
   @BroadcastConnectsAndDisconnects
   Boolean provideBroadcastConnectsAndDisconnects() {
     synchronized (properties) {
@@ -440,5 +448,10 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface ServerDiscoveryMetrics {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface ServerDiscoveryPath {
   }
 }

@@ -45,6 +45,7 @@ public class ServerIsAliveTask extends SafeTimerTask {
   private final Provider<Integer> discoveryPortProvider;
   private final Provider<Boolean> discoverySecureProvider;
   private final Provider<String> discoveryMetricsProvider;
+  private final Provider<String> discoveryPathProvider;
   private String host = null;
   private int port = -1;
   private boolean secure = false;
@@ -53,11 +54,13 @@ public class ServerIsAliveTask extends SafeTimerTask {
   public ServerIsAliveTask(@CahModule.ServerDiscoveryAddress Provider<String> discoveryAddressProvider,
                            @CahModule.ServerDiscoveryPort Provider<Integer> discoveryPortProvider,
                            @CahModule.ServerDiscoverySecure Provider<Boolean> discoverySecureProvider,
-                           @CahModule.ServerDiscoveryMetrics Provider<String> discoveryMetricsProvider) {
+                           @CahModule.ServerDiscoveryMetrics Provider<String> discoveryMetricsProvider,
+                           @CahModule.ServerDiscoveryPath Provider<String> discoveryPathProvider) {
     this.discoveryAddressProvider = discoveryAddressProvider;
     this.discoveryPortProvider = discoveryPortProvider;
     this.discoverySecureProvider = discoverySecureProvider;
     this.discoveryMetricsProvider = discoveryMetricsProvider;
+    this.discoveryPathProvider = discoveryPathProvider;
   }
 
   @Override
@@ -97,10 +100,11 @@ public class ServerIsAliveTask extends SafeTimerTask {
 
       JSONObject req = new JSONObject();
       req.put("host", host)
-              .put("port", port)
-              .put("publicKey", publicKey.toString(16))
-              .put("metrics", discoveryMetricsProvider.get())
-              .put("secure", secure);
+          .put("path", discoveryPathProvider.get())
+          .put("port", port)
+          .put("publicKey", publicKey.toString(16))
+          .put("metrics", discoveryMetricsProvider.get())
+          .put("secure", secure);
 
       HttpURLConnection conn = (HttpURLConnection) AM_ALIVE_API.openConnection();
       conn.setRequestMethod("POST");
