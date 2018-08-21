@@ -30,7 +30,7 @@ public class ServerAliveServlet extends HttpServlet {
     }
 
     JSONObject obj = new JSONObject(new JSONTokener(new InputStreamReader(req.getInputStream())));
-    BigInteger nonce = obj.getBigInteger("nonce");
+    BigInteger nonce = new BigInteger(obj.getString("nonce"), 16);
     byte[] challenge = new BigInteger(obj.getString("challenge"), 16).toByteArray();
 
     holder.decrypt(nonce, challenge);
