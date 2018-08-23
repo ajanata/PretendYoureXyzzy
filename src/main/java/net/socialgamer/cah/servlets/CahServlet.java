@@ -28,10 +28,10 @@ import net.socialgamer.cah.Constants.*;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.StartupUtils;
 import net.socialgamer.cah.data.User;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.annotation.Nullable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

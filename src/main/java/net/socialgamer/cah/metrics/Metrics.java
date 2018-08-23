@@ -27,8 +27,8 @@ import com.maxmind.geoip2.model.CityResponse;
 import net.socialgamer.cah.data.BlackCard;
 import net.socialgamer.cah.data.CardSet;
 import net.socialgamer.cah.data.WhiteCard;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

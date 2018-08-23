@@ -1,6 +1,7 @@
 package net.socialgamer.cah.serveralive;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
+
 import java.math.BigInteger;
 
 /**

@@ -34,8 +34,8 @@ import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.GeoIP;
 import net.socialgamer.cah.metrics.Metrics;
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;

@@ -30,8 +30,8 @@ import net.sf.uadetector.service.UADetectorServiceFactory;
 import net.socialgamer.cah.CahModule.UniqueId;
 import net.socialgamer.cah.Constants.Sigil;
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
