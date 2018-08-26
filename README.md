@@ -11,3 +11,11 @@ If you're doing ```mvn clean package war:exploded jetty:run```, you now need to 
 
 
 For GeoIP functions to work, download http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz somewhere, gunzip it, and update the geoip.db value in build.properties to point to it.
+
+## Third-Party Usage
+
+A Docker package for this project exists at [emcniece/DockerYourXyzzy](https://github.com/emcniece/DockerYourXyzzy):
+
+```sh
+docker run -d -p 8080:8080 emcniece/dockeryourxyzzy:dev
+```
