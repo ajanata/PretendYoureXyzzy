@@ -6255,7 +6255,7 @@ COPY white_cards (id, text, watermark) FROM stdin;
 1391	Grandpa's ashes.	INTL
 1392	Reverse cowgirl.	INTL
 1393	Keanu Reeves.	INTL
-1394	LIving in a trashcan.	INTL
+1394	Living in a trashcan.	INTL
 1395	My first kill.	INTL
 1396	Mom.	INTL
 1397	Children on leashes.	INTL
