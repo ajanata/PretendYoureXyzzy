@@ -338,7 +338,7 @@ COPY black_cards (id, draw, pick, text, watermark) FROM stdin;
 200	0	1	During his midlife crisis, my dad got really into ____.	INTL
 201	0	2	When you get right down to it, ____ is just ____.	INTL
 202	0	1	This is your captain speaking. Fasten your seatbelts and prepare for ____.	INTL
-203	0	1	Tonight's top story: What you don't know about ____ could kills you.	INTL
+203	0	1	Tonight's top story: What you don't know about ____ could kill you.	INTL
 204	0	1	Future historians will agree that ____ marked the beginning of America's decline.	INTL
 205	0	1	Coming this season, Samuel Beckett's classic existential play: <i>Waiting for ____.</i>	INTL
 206	0	1	When I pooped, what came out of my butt?	INTL
@@ -644,7 +644,7 @@ COPY black_cards (id, draw, pick, text, watermark) FROM stdin;
 534	0	1	Computer! Display ____ on screen. Enhance.	SCIFI
 535	0	1	You're not going to believe this, but I'm you from the future! You've got to stop ____.	SCIFI
 536	0	1	This won't be like negotiating with the Vogons. Humans only respond to one thing: ____.	SCIFI
-537	0	1	Madam President, the asteroid is headed directly for Earth and there's one one thing that can stop it: ____.	SCIFI
+537	0	1	Madam President, the asteroid is headed directly for Earth and there's one thing that can stop it: ____.	SCIFI
 538	0	1	You have violated the Prime Directive! You exposed an alien culture to ____ before they were ready.	SCIFI
 539	0	1	What is the answer to life, the universe, and everything?	SCIFI
 540	0	1	Why did the chicken cross the road?	RJCT2
