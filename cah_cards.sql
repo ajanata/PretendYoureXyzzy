@@ -6161,7 +6161,7 @@ COPY white_cards (id, text, watermark) FROM stdin;
 1297	A low standard of living.	INTL
 1298	Wearing an octopus for a hat.	INTL
 1299	Whining like a little bitch.	INTL
-1300	Not having sex,	INTL
+1300	Not having sex.	INTL
 1301	A fat bald man from the Internet.	INTL
 1302	Basic human decency.	INTL
 1303	How awesome it is to be white.	INTL
