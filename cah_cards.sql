@@ -5560,7 +5560,7 @@ COPY white_cards (id, text, watermark) FROM stdin;
 696	The Boy Scouts of America.	US
 697	Bananas.	US
 698	Masturbating.	US
-699	All the dues I've fucked.	US
+699	All the dudes I've fucked.	US
 700	Famine.	US
 701	Hillary Clinton's emails.	US
 702	Executing a hostage every hour.	US
