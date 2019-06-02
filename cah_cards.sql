@@ -6178,7 +6178,7 @@ COPY white_cards (id, text, watermark) FROM stdin;
 1314	My machete.	INTL
 1315	Multiple orgasms.	INTL
 1316	Daddy's belt.	INTL
-1317	Eating a hard boiled out of my husband's asshole.	INTL
+1317	Eating a hard boiled egg out of my husband's asshole.	INTL
 1318	Friendly fire.	INTL
 1319	The boners of the elderly.	INTL
 1320	The hiccups.	INTL
