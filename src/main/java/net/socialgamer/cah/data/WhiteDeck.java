@@ -46,13 +46,13 @@ public class WhiteDeck {
   /**
    * Create a new white card deck, loading the cards from the database and shuffling them.
    */
-  public WhiteDeck(final Collection<CardSet> cardSets, final int numBlanks) {
+  public WhiteDeck(int maxBlankCardLimit, final Collection<CardSet> cardSets, final int numBlanks) {
     final Set<WhiteCard> allCards = new HashSet<WhiteCard>();
     for (final CardSet cardSet : cardSets) {
       allCards.addAll(cardSet.getWhiteCards());
     }
     deck = new ArrayList<WhiteCard>(allCards);
-    for (int i = 0; i < numBlanks && i < GameOptions.MAX_BLANK_CARD_LIMIT; i++) {
+    for (int i = 0; i < numBlanks && i < maxBlankCardLimit; i++) {
       deck.add(createBlankCard());
     }
     Collections.shuffle(deck);

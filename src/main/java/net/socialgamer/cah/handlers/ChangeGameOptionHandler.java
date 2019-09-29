@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.google.inject.Provider;
+import net.socialgamer.cah.CahModule;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.AjaxRequest;
 import net.socialgamer.cah.Constants.ErrorCode;
@@ -22,10 +24,12 @@ import com.google.inject.Inject;
 public class ChangeGameOptionHandler extends GameWithPlayerHandler {
 
   public static final String OP = AjaxOperation.CHANGE_GAME_OPTIONS.toString();
+  private Provider<GameOptions> gameOptionsProvider;
 
   @Inject
-  public ChangeGameOptionHandler(final GameManager gameManager) {
+  public ChangeGameOptionHandler(final GameManager gameManager, Provider<GameOptions> gameOptionsProvider) {
     super(gameManager);
+    this.gameOptionsProvider = gameOptionsProvider;
   }
 
   @Override
@@ -40,7 +44,7 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
     } else {
       try {
         final String value = request.getParameter(AjaxRequest.GAME_OPTIONS);
-        final GameOptions options = GameOptions.deserialize(value);
+        final GameOptions options = GameOptions.deserialize(gameOptionsProvider, value);
         final String oldPassword = game.getPassword();
         game.updateGameSettings(options);
 

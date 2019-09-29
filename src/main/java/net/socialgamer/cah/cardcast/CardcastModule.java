@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,34 +23,34 @@
 
 package net.socialgamer.cah.cardcast;
 
+import com.google.inject.*;
+import net.socialgamer.cah.CahModule;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.BindingAnnotation;
-import com.google.inject.Provides;
-
-import net.socialgamer.cah.data.GameOptions;
-
 
 public class CardcastModule extends AbstractModule {
 
-  AtomicInteger cardId = new AtomicInteger(-(GameOptions.MAX_BLANK_CARD_LIMIT + 1));
+    private AtomicInteger cardId;
+    private Provider<Integer> maxBlankCardLimitProvider;
 
-  @Override
-  protected void configure() {
-  }
+    @Override
+    protected void configure() {
+        maxBlankCardLimitProvider = getProvider(Key.get(Integer.class, CahModule.MaxBlankCardLimit.class));
+    }
 
-  @Provides
-  @CardcastCardId
-  Integer provideCardId() {
-    return cardId.decrementAndGet();
-  }
+    @Provides
+    @CardcastCardId
+    Integer provideCardId() {
+        if (cardId == null)    cardId = new AtomicInteger(-(maxBlankCardLimitProvider.get() + 1));
+        return cardId.decrementAndGet();
+    }
 
-  @BindingAnnotation
-  @Retention(RetentionPolicy.RUNTIME)
-  public @interface CardcastCardId {
-    /**/
-  }
+    @BindingAnnotation
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface CardcastCardId {
+        /**/
+    }
 }

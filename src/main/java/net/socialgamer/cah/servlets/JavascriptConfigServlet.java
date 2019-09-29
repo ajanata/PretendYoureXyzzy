@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 
+import net.socialgamer.cah.CahModule;
 import net.socialgamer.cah.CahModule.BroadcastConnectsAndDisconnects;
 import net.socialgamer.cah.CahModule.CookieDomain;
 import net.socialgamer.cah.CahModule.GameChatEnabled;
