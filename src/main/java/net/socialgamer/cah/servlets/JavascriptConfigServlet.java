@@ -93,6 +93,22 @@ public class JavascriptConfigServlet extends HttpServlet {
     builder.append(String.format("cah.INSECURE_ID_ALLOWED = %b;\n", insecureIdAllowed));
     builder.append(String.format("cah.BROADCASTING_USERS = %b;\n", broadcastingUsers));
 
+    builder.append(String.format("cah.game.MIN_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MinPlayerLimit.class))));
+    builder.append(String.format("cah.game.DEFAULT_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.DefaultPlayerLimit.class))));
+    builder.append(String.format("cah.game.MAX_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MaxPlayerLimit.class))));
+
+    builder.append(String.format("cah.game.MIN_SPECTATOR_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MinSpectatorLimit.class))));
+    builder.append(String.format("cah.game.DEFAULT_SPECTATOR_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.DefaultSpectatorLimit.class))));
+    builder.append(String.format("cah.game.MAX_SPECTATOR_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MaxSpectatorLimit.class))));
+
+    builder.append(String.format("cah.game.MIN_SCORE_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MinScoreLimit.class))));
+    builder.append(String.format("cah.game.DEFAULT_SCORE_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.DefaultScoreLimit.class))));
+    builder.append(String.format("cah.game.MAX_SCORE_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MaxScoreLimit.class))));
+
+    builder.append(String.format("cah.game.MIN_BLANK_CARD_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MinBlankCardLimit.class))));
+    builder.append(String.format("cah.game.DEFAULT_BLANK_CARD_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.DefaultBlankCardLimit.class))));
+    builder.append(String.format("cah.game.MAX_BLANK_CARD_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MaxBlankCardLimit.class))));
+
     resp.setContentType("text/javascript");
     final PrintWriter out = resp.getWriter();
     out.println(builder.toString());
