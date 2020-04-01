@@ -300,7 +300,7 @@ COPY black_cards (id, draw, pick, text, watermark) FROM stdin;
 160	0	1	This season at the Old Vic, Samuel Beckett's classic existential play: Waiting for ____.	UK
 161	0	1	Channel 5's new reality show feature eight washed-up celebrities living with ____.	UK
 162	0	1	I'm sorry, Sir, but I couldn't complete my homework because of ____.	UK
-163	0	1	____. That's what mums go to Iceland.	UK
+163	0	1	____. That's why mums go to Iceland.	UK
 164	0	2	Channel 4 presents "____: the Story of ____."	UK
 165	0	1	Dear Agony Aunt, I'm having some trouble with ____ and would like your advice.	UK
 167	0	1	Oi! Show us ____!	AU
