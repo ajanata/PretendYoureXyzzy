@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%--
-Copyright (c) 2012-2018, Andy Janata
+Copyright (c) 2012-2020, Andy Janata
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -95,10 +95,6 @@ boolean allowBlankCards = injector.getInstance(Key.get(new TypeLiteral<Boolean>(
   </h1>
   <h3>A <a href="http://cardsagainsthumanity.com/">Cards Against Humanity</a> clone.</h3>
   <p>
-    This webapp is still in development. There will be bugs, but hopefully they won't affect gameplay
-    very much.
-  </p>
-  <p>
     If this is your first time playing, you may wish to read <a href="index.jsp">the changelog and
     list of known issues</a>.
   </p>
@@ -113,6 +109,10 @@ boolean allowBlankCards = injector.getInstance(Key.get(new TypeLiteral<Boolean>(
     <a href="https://gist.githubusercontent.com/ajanata/07ededdb584f7bb77a8c7191d3a4bbcc/raw/e76faacc19c2bb598a1a8fd94b9ebcb29c5502e0">
     here's why.</a></li>
   </ul>
+  <h2>The servers are incredibly busy right now. There are several servers to try, there will be
+  room elsewhere! <a href='https://pretendyoure.xyz/zy'>CLICK HERE</a> to see the server list. As
+  long as you're on the same server as your friends, you can play together. Please stop crowding
+  pyx-1 ("The Biggest, Blackest Dick").</h2>
   <div id="nickbox">
     <label for="nickname">Nickname:</label>
     <input type="text" id="nickname" value="" maxlength="30" role="textbox"

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2018, Andy Janata
+ * Copyright (c) 2012-2020, Andy Janata
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -415,8 +415,8 @@ public class Constants {
         "an existing game, or wait for one to become available."),
     TOO_MANY_SPECIAL_CHARACTERS("tmsc",
         "You used too many special characters in that message."),
-    TOO_MANY_USERS("tmu", "There are too many users connected. Either join another server, or " +
-        "wait for a user to disconnect."),
+    TOO_MANY_USERS("tmu", "There are too many users connected. "
+        + "<strong><a href='https://pretendyoure.xyz/zy'>Try another server.</a></strong>"),
     WRONG_PASSWORD("wp", "That password is incorrect.");
 
     private final String code;

@@ -51,10 +51,6 @@ to, for instance, display the number of connected players.
 </h1>
 <h3>A Cards Against Humanity clone.</h3>
 <p>
-  This webapp is still in development. There will be bugs, but hopefully they won't affect gameplay
-  very much.</strong>
-</p>
-<p>
   Your computer's IP address will <strong>always</strong> be logged when you load the game client.
   It is not tied in any way to your username, except possibly if a server error occurs. Gameplay
   results are logged permanently, but without information identifying you.

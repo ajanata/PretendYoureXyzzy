@@ -199,7 +199,7 @@ cah.$.ErrorCode_msg['niu'] = "Nickname is already in use.";
 cah.$.ErrorCode_msg['ngs'] = "No game specified.";
 cah.$.ErrorCode_msg['nes'] = "You must use more words in a message that long.";
 cah.$.ErrorCode_msg['nitg'] = "You are not in that game.";
-cah.$.ErrorCode_msg['tmu'] = "There are too many users connected. Either join another server, or wait for a user to disconnect.";
+cah.$.ErrorCode_msg['tmu'] = "There are too many users connected. <strong><a href='https://pretendyoure.xyz/zy'>Try another server.</a></strong>";
 cah.$.ErrorCode_msg['ig'] = "Invalid game specified.";
 cah.$.ErrorCode_msg['gf'] = "That game is full. Join another.";
 cah.$.ErrorCode_msg['ncs'] = "No card specified.";

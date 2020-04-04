@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2018, Andy Janata
+ * Copyright (c) 2012-2020, Andy Janata
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -48,7 +48,8 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
 };
 
 cah.ajax.ErrorHandlers[cah.$.AjaxOperation.REGISTER] = function(data) {
-  $("#nickbox_error").text(cah.$.ErrorCode_msg[data[cah.$.AjaxResponse.ERROR_CODE]]);
+  // we actually want to allow HTML here since we're putting a link to the server list
+  $("#nickbox_error").html(cah.$.ErrorCode_msg[data[cah.$.AjaxResponse.ERROR_CODE]]);
   $("#nickname").focus();
 };
 
