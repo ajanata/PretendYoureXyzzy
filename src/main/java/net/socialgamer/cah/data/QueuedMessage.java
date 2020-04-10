@@ -33,7 +33,7 @@ import net.socialgamer.cah.Constants.ReturnableData;
  * 
  * @author Andy Janata (ajanata@socialgamer.net)
  */
-public class QueuedMessage implements Comparable<QueuedMessage> {
+public class QueuedMessage {
 
   private final MessageType messageType;
   private final Map<ReturnableData, Object> data;
@@ -42,8 +42,7 @@ public class QueuedMessage implements Comparable<QueuedMessage> {
    * Create a new queued message.
    * 
    * @param messageType
-   *          Type of message to be queued. The type influences the priority in returning messages
-   *          to the client.
+   *          Type of message to be queued.
    * @param data
    *          The data of the message to be queued.
    */
@@ -66,15 +65,6 @@ public class QueuedMessage implements Comparable<QueuedMessage> {
     return data;
   }
 
-  /**
-   * This is not guaranteed to be consistent with .equals() since we do not care about the data for
-   * ordering.
-   */
-  @Override
-  public int compareTo(final QueuedMessage qm) {
-    return this.messageType.getWeight() - qm.messageType.getWeight();
-  }
-
   @Override
   public String toString() {
     return messageType.toString() + "_" + data.toString();
@@ -91,10 +81,6 @@ public class QueuedMessage implements Comparable<QueuedMessage> {
 
     MessageType(final int weight) {
       this.weight = weight;
-    }
-
-    public int getWeight() {
-      return weight;
     }
   }
 }
