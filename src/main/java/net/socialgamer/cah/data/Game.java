@@ -703,47 +703,39 @@ public class Game {
    *         game is already started, or doesn't have enough cards, but hopefully callers and
    *         clients would prevent that from happening!
    */
-  public boolean start() {
-    Session session = null;
-    try {
-      session = sessionProvider.get();
-      if (state != GameState.LOBBY || !hasEnoughCards(session)) {
-        return false;
-      }
-      boolean started;
-      final int numPlayers = players.size();
-      if (numPlayers >= 3) {
-        // Pick a random start judge, though the "next" judge will actually go first.
-        judgeIndex = (int) (Math.random() * numPlayers);
-        started = true;
-      } else {
-        started = false;
-      }
-      if (started) {
-        currentUniqueId = uniqueIdProvider.get();
-        logger.info(String.format("Starting game %d with card sets %s, Cardcast %s, %d blanks, %d "
-            + "max players, %d max spectators, %d score limit, players %s, unique %s.",
-            id, options.cardSetIds, cardcastDeckIds, options.blanksInDeck, options.playerLimit,
-            options.spectatorLimit, options.scoreGoal, players, currentUniqueId));
-        // do this stuff outside the players lock; they will lock players again later for much less
-        // time, and not at the same time as trying to lock users, which has caused deadlocks
-        final List<CardSet> cardSets;
-        synchronized (options.cardSetIds) {
-          cardSets = loadCardSets(session);
-          blackDeck = loadBlackDeck(cardSets);
-          whiteDeck = loadWhiteDeck(cardSets);
-        }
-        metrics.gameStart(currentUniqueId, cardSets, options.blanksInDeck, options.playerLimit,
-            options.scoreGoal, !StringUtils.isBlank(options.password));
-        startNextRound();
-        gameManager.broadcastGameListRefresh();
-      }
-      return started;
-    } finally {
-      if (null != session) {
-        session.close();
-      }
+  public boolean start(Session session) {
+    if (state != GameState.LOBBY || !hasEnoughCards(session)) {
+      return false;
     }
+    boolean started;
+    final int numPlayers = players.size();
+    if (numPlayers >= 3) {
+      // Pick a random start judge, though the "next" judge will actually go first.
+      judgeIndex = (int) (Math.random() * numPlayers);
+      started = true;
+    } else {
+      started = false;
+    }
+    if (started) {
+      currentUniqueId = uniqueIdProvider.get();
+      logger.info(String.format("Starting game %d with card sets %s, Cardcast %s, %d blanks, %d "
+          + "max players, %d max spectators, %d score limit, players %s, unique %s.",
+          id, options.cardSetIds, cardcastDeckIds, options.blanksInDeck, options.playerLimit,
+          options.spectatorLimit, options.scoreGoal, players, currentUniqueId));
+      // do this stuff outside the players lock; they will lock players again later for much less
+      // time, and not at the same time as trying to lock users, which has caused deadlocks
+      final List<CardSet> cardSets;
+      synchronized (options.cardSetIds) {
+        cardSets = loadCardSets(session);
+        blackDeck = loadBlackDeck(cardSets);
+        whiteDeck = loadWhiteDeck(cardSets);
+      }
+      metrics.gameStart(currentUniqueId, cardSets, options.blanksInDeck, options.playerLimit,
+          options.scoreGoal, !StringUtils.isBlank(options.password));
+      startNextRound();
+      gameManager.broadcastGameListRefresh();
+    }
+    return started;
   }
 
   public List<CardSet> loadCardSets(final Session session) {
