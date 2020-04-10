@@ -80,7 +80,7 @@ public class StartGameHandler extends GameWithPlayerHandler {
         data.put(ErrorInformation.WHITE_CARDS_PRESENT, game.loadWhiteDeck(cardSets).totalCount());
         data.put(ErrorInformation.WHITE_CARDS_REQUIRED, game.getRequiredWhiteCardCount());
         return error(ErrorCode.NOT_ENOUGH_CARDS, data);
-      } else if (!game.start()) {
+      } else if (!game.start(hibernateSession)) {
         return error(ErrorCode.NOT_ENOUGH_PLAYERS);
       } else {
         return data;
