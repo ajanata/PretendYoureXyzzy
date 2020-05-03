@@ -6700,7 +6700,7 @@ COPY white_cards (id, text, watermark) FROM stdin;
 1836	The hottest MILF in Dallas.	GREEN
 1837	Getting trapped in a conversation about Ayn Rand.	GREEN
 1838	Happy daddies with happy sandals.	GREEN
-1839	A dolphin that learns to talk and becomes the Dead of Harvard Law School.	GREEN
+1839	A dolphin that learns to talk and becomes the Dean of Harvard Law School.	GREEN
 1840	The graceful path of an autumn leaf as it falls to its earthen cradle.	GREEN
 1841	Meatloaf, the food.	GREEN
 1842	10,000 shrieking teenage girls.	GREEN
