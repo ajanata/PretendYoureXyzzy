@@ -213,25 +213,33 @@ function chatsubmit_click(game_id, parent_element) {
       case 'names':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.NAMES);
         break;
-      case 'addcardcast':
+      case 'addcustomdeck_json':
         if (game_id !== null) {
-          ajax = cah.Ajax.build(cah.$.AjaxOperation.CARDCAST_ADD_CARDSET).withCardcastId(
-              text.split(' ')[0]).withGameId(game_id);
+          ajax = cah.Ajax.build(cah.$.AjaxOperation.ADD_CARDSET)
+              .withCustomDeckJson(text).withGameId(game_id);
         } else {
           cah.log.error("This command only works in a game.");
         }
         break;
-      case 'removecardcast':
+      case 'addcustomdeck_url':
         if (game_id !== null) {
-          ajax = cah.Ajax.build(cah.$.AjaxOperation.CARDCAST_REMOVE_CARDSET).withCardcastId(
-              text.split(' ')[0]).withGameId(game_id);
+          ajax = cah.Ajax.build(cah.$.AjaxOperation.ADD_CARDSET)
+              .withCustomDeckUrl(text).withGameId(game_id);
         } else {
           cah.log.error("This command only works in a game.");
         }
         break;
-      case 'listcardcast':
+      case 'removecustomdeck':
         if (game_id !== null) {
-          ajax = cah.Ajax.build(cah.$.AjaxOperation.CARDCAST_LIST_CARDSETS).withGameId(game_id);
+          ajax = cah.Ajax.build(cah.$.AjaxOperation.REMOVE_CARDSET).withCustomDeckId(parseInt(text.split(' ')[0]))
+              .withGameId(game_id);
+        } else {
+          cah.log.error("This command only works in a game.");
+        }
+        break;
+      case 'listcustomdecks':
+        if (game_id !== null) {
+          ajax = cah.Ajax.build(cah.$.AjaxOperation.LIST_CARDSETS).withGameId(game_id);
         } else {
           cah.log.error("This command only works in a game.");
         }

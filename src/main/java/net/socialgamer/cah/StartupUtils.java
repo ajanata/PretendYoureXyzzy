@@ -35,8 +35,7 @@ import javax.servlet.ServletContextEvent;
 
 import net.socialgamer.cah.CahModule.ServerStarted;
 import net.socialgamer.cah.CahModule.UniqueId;
-import net.socialgamer.cah.cardcast.CardcastModule;
-import net.socialgamer.cah.cardcast.CardcastService;
+import net.socialgamer.cah.customsets.CustomCardsService;
 import net.socialgamer.cah.metrics.Metrics;
 import net.socialgamer.cah.task.BroadcastGameListUpdateTask;
 import net.socialgamer.cah.task.UserPingTask;
@@ -134,7 +133,7 @@ public class StartupUtils extends GuiceServletContextListener {
     // this is called in the process of setting up the injector right now... ideally we wouldn't
     // need to do that there and can just do it here again.
     // reloadProperties(context);
-    CardcastService.hackSslVerifier();
+    CustomCardsService.hackSslVerifier();
 
     // log that the server (re-)started to metrics logging (to flush all old games and users)
     injector.getInstance(Metrics.class).serverStart(
@@ -172,7 +171,7 @@ public class StartupUtils extends GuiceServletContextListener {
   }
 
   protected Injector getInjector(final ServletContext context) {
-    return Guice.createInjector(new CahModule(context), new CardcastModule());
+    return Guice.createInjector(new CahModule(context));
   }
 
   @Override

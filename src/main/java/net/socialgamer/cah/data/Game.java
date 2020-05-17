@@ -65,8 +65,8 @@ import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.Constants.WhiteCardData;
-import net.socialgamer.cah.cardcast.CardcastDeck;
-import net.socialgamer.cah.cardcast.CardcastService;
+import net.socialgamer.cah.customsets.CustomDeck;
+import net.socialgamer.cah.customsets.CustomCardsService;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.Metrics;
@@ -116,7 +116,7 @@ public class Game {
   private WhiteDeck whiteDeck;
   private GameState state;
   private final GameOptions options = new GameOptions();
-  private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<String>());
+  private final Set<Integer> cardcastDeckIds = Collections.synchronizedSet(new HashSet<Integer>());
   private final Metrics metrics;
   private final Provider<Boolean> showGameLinkProvider;
   private final Provider<String> gamePermalinkFormatProvider;
@@ -187,7 +187,7 @@ public class Game {
   private final Object roundTimerLock = new Object();
   private volatile ScheduledFuture<?> lastScheduledFuture;
   private final ScheduledThreadPoolExecutor globalTimer;
-  private final Provider<CardcastService> cardcastServiceProvider;
+  private final Provider<CustomCardsService> cardcastServiceProvider;
   private final Provider<String> uniqueIdProvider;
   private String currentUniqueId;
   /**
@@ -213,7 +213,7 @@ public class Game {
   public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
       final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer,
       final Provider<Session> sessionProvider,
-      final Provider<CardcastService> cardcastServiceProvider,
+      final Provider<CustomCardsService> cardcastServiceProvider,
       @UniqueId final Provider<String> uniqueIdProvider,
       final Metrics metrics, @ShowRoundPermalink final Provider<Boolean> showRoundLinkProvider,
       @RoundPermalinkUrlFormat final Provider<String> roundPermalinkFormatProvider,
@@ -536,7 +536,7 @@ public class Game {
     notifyGameOptionsChanged();
   }
 
-  public Set<String> getCardcastDeckIds() {
+  public Set<Integer> getCustomDeckIds() {
     return cardcastDeckIds;
   }
 
@@ -762,20 +762,20 @@ public class Game {
         // Not injecting the service itself because we might need to assisted inject it later
         // with card id stuff.
         // also TODO maybe make card ids longs instead of ints
-        final CardcastService service = cardcastServiceProvider.get();
+        final CustomCardsService service = cardcastServiceProvider.get();
 
         // Avoid ConcurrentModificationException
-        for (final String cardcastId : cardcastDeckIds.toArray(new String[0])) {
+        for (final Integer customDeckId : cardcastDeckIds.toArray(new Integer[0])) {
           // Ideally, we can assume that anything in that set is going to load, but it is entirely
           // possible that the cache has expired and we can't re-load it for some reason, so
           // let's be safe.
-          final CardcastDeck cardcastDeck = service.loadSet(cardcastId);
-          if (null == cardcastDeck) {
+          final CustomDeck customDeck = service.loadSet(customDeckId);
+          if (null == customDeck) {
             // TODO better way to indicate this to the user
-            logger.error(String.format("Unable to load %s from Cardcast", cardcastId));
+            logger.error(String.format("Unable to load custom deck %d", customDeckId));
             return null;
           }
-          cardSets.add(cardcastDeck);
+          cardSets.add(customDeck);
         }
 
         return cardSets;

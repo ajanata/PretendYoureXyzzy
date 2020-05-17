@@ -13,8 +13,8 @@ import net.socialgamer.cah.Constants.LongPollEvent;
 import net.socialgamer.cah.Constants.LongPollResponse;
 import net.socialgamer.cah.Constants.ReturnableData;
 import net.socialgamer.cah.RequestWrapper;
-import net.socialgamer.cah.cardcast.CardcastDeck;
-import net.socialgamer.cah.cardcast.CardcastService;
+import net.socialgamer.cah.customsets.CustomDeck;
+import net.socialgamer.cah.customsets.CustomCardsService;
 import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
@@ -22,17 +22,17 @@ import net.socialgamer.cah.data.User;
 
 import com.google.inject.Inject;
 
-public class CardcastRemoveCardsetHandler extends GameWithPlayerHandler {
+public class AddCardsetHandler extends GameWithPlayerHandler {
 
-  public static final String OP = AjaxOperation.CARDCAST_REMOVE_CARDSET.toString();
+  public static final String OP = AjaxOperation.ADD_CARDSET.toString();
 
-  private final CardcastService cardcastService;
+  private final CustomCardsService customCardsService;
 
   @Inject
-  public CardcastRemoveCardsetHandler(final GameManager gameManager,
-      final CardcastService cardcastService) {
+  public AddCardsetHandler(final GameManager gameManager,
+      final CustomCardsService customCardsService) {
     super(gameManager);
-    this.cardcastService = cardcastService;
+    this.customCardsService = customCardsService;
   }
 
   @Override
@@ -45,26 +45,26 @@ public class CardcastRemoveCardsetHandler extends GameWithPlayerHandler {
     } else if (game.getState() != GameState.LOBBY) {
       return error(ErrorCode.ALREADY_STARTED);
     } else {
-      String deckId = request.getParameter(AjaxRequest.CARDCAST_ID);
-      if (null == deckId) {
+      String deckUrl = request.getParameter(AjaxRequest.CUSTOM_CARDSET_URL);
+      String deckJson = request.getParameter(AjaxRequest.CUSTOM_CARDSET_JSON);
+      if ((deckJson == null && deckUrl == null) || (deckJson != null && deckUrl != null)) {
         return error(ErrorCode.BAD_REQUEST);
       }
-      deckId = deckId.toUpperCase();
-      if (deckId.length() != 5) {
-        return error(ErrorCode.CARDCAST_INVALID_ID);
-      }
 
-      // Remove it from the set regardless if it loads or not.
-      game.getCardcastDeckIds().remove(deckId);
-      final CardcastDeck deck = cardcastService.loadSet(deckId);
+      CustomDeck deck;
+      if (deckUrl != null) deck = customCardsService.loadSetFromUrl(deckUrl);
+      else deck = customCardsService.loadSetFromJson(deckJson);
+
       if (null == deck) {
-        return error(ErrorCode.CARDCAST_CANNOT_FIND);
+        return error(ErrorCode.CUSTOM_SET_CANNOT_FIND);
       }
 
       final HashMap<ReturnableData, Object> map = game.getEventMap();
-      map.put(LongPollResponse.EVENT, LongPollEvent.CARDCAST_REMOVE_CARDSET.toString());
-      map.put(LongPollResponse.CARDCAST_DECK_INFO, deck.getClientMetadata());
+      map.put(LongPollResponse.EVENT, LongPollEvent.ADD_CARDSET.toString());
+      map.put(LongPollResponse.CUSTOM_DECK_INFO, deck.getClientMetadata());
       game.broadcastToPlayers(MessageType.GAME_EVENT, map);
+
+      game.getCustomDeckIds().add(deck.getId());
 
       return data;
     }

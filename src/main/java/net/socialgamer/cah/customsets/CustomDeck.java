@@ -21,36 +21,66 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.socialgamer.cah.cardcast;
+package net.socialgamer.cah.customsets;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.HashSet;
+import java.util.Set;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.BindingAnnotation;
-import com.google.inject.Provides;
-
-import net.socialgamer.cah.data.GameOptions;
+import net.socialgamer.cah.data.CardSet;
 
 
-public class CardcastModule extends AbstractModule {
+public class CustomDeck extends CardSet {
+  private final int id;
+  private final String name;
+  private final String description;
+  private final Set<CustomBlackCard> blackCards = new HashSet<CustomBlackCard>();
+  private final Set<CustomWhiteCard> whiteCards = new HashSet<CustomWhiteCard>();
 
-  AtomicInteger cardId = new AtomicInteger(-(GameOptions.MAX_BLANK_CARD_LIMIT + 1));
+  public CustomDeck(final int id, final String name, final String description) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+
+    if (id >= 0) throw new IllegalArgumentException("Custom deck ID must be negative.");
+  }
 
   @Override
-  protected void configure() {
+  public int getId() {
+    return id;
   }
 
-  @Provides
-  @CardcastCardId
-  Integer provideCardId() {
-    return cardId.decrementAndGet();
+  @Override
+  public String getName() {
+    return name;
   }
 
-  @BindingAnnotation
-  @Retention(RetentionPolicy.RUNTIME)
-  public @interface CardcastCardId {
-    /**/
+  @Override
+  public String getDescription() {
+    return description;
+  }
+
+  @Override
+  public boolean isActive() {
+    return true;
+  }
+
+  @Override
+  public boolean isBaseDeck() {
+    return false;
+  }
+
+  @Override
+  public int getWeight() {
+    return Integer.MAX_VALUE;
+  }
+
+  @Override
+  public Set<CustomBlackCard> getBlackCards() {
+    return blackCards;
+  }
+
+  @Override
+  public Set<CustomWhiteCard> getWhiteCards() {
+    return whiteCards;
   }
 }

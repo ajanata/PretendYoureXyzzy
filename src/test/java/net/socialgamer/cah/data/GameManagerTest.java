@@ -57,7 +57,6 @@ import net.socialgamer.cah.CahModule.ShowGamePermalink;
 import net.socialgamer.cah.CahModule.ShowRoundPermalink;
 import net.socialgamer.cah.CahModule.UniqueId;
 import net.socialgamer.cah.HibernateUtil;
-import net.socialgamer.cah.cardcast.CardcastModule.CardcastCardId;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.GameManager.MaxGames;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
@@ -140,12 +139,6 @@ public class GameManagerTest {
       @Provides
       Session provideSession() {
         return HibernateUtil.instance.sessionFactory.openSession();
-      }
-
-      @Provides
-      @CardcastCardId
-      Integer provideCardcastCardId() {
-        return 0;
       }
 
       @Provides
