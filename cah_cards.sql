@@ -682,6 +682,258 @@ COPY black_cards (id, draw, pick, text, watermark) FROM stdin;
 578	0	2	I need you like ____ needs ____.	WWW
 579	0	2	Such ____. Very ____. Wow.	WWW
 580	0	1	Nothing says "I love you" like ____.	WWW
+1000	0	1	 Alles ist besser mit ____.	 DE
+1001	0	1	 Warum tut mir alles weh?	 DE
+1002	0	1	 Wegen eines PR-Debakels bietet Aldi nun nicht mehr ____ an	 DE
+1003	0	1	 Meine Lebensphilosophie: ____	 DE
+1004	0	1	 Im siebten Kreis der Hölle müssen die Sünder ____ für alle Ewigkeit ertragen	 DE
+1005	0	1	 Für mehr ____ in der Öffentlichkeit!	 DE
+1006	0	1	 IS verspricht Selbstmordattentätern neuerdings ____ statt 72 Jungfrauen.	 DE
+1007	0	1	 Ich mochte ____ bevor es cool war	 DE
+1008	0	1	 ____: Toll in der Theorie ein ziemliches Durcheinander in der Praxis	 DE
+1009	0	2	 Probleme mit ____? Versuche es mit ____!	 DE
+1010	0	1	 Dank ____ hatte ich ein verlängertes Wochenende.	DE
+1011	0	1	 In ihrem neuen Kinofilm schlägt sich die Eisprinzessin Elsa das erste mal mit ____ herum.	 DE
+1012	0	1	 Mein Plan für die Weltherrschaft beginnt mit ____.	 DE
+1013	0	1	 Beim Sex denke ich gerne an ____.	 DE
+1014	0	1	 Was ist Liebe ohne ____?	 DE
+1015	0	1	 Was brachte die Orgie zu einem schlagartigen Stillstand?	 DE
+1016	0	1	 ____ ist was Frauen wollen.	 DE
+1017	0	1	 Ich habe auf die harte Tour gelernt dass man einen trauernden Freund nicht mit ____ aufheitern kann.	 DE
+1018	0	1	 Wocher kommt der Fleck auf meiner Couch?	 DE
+1019	0	1	 ____ - geführchtet mit 5 begeht mit 18.	 DE
+1020	0	1	 Ich trinke um ____ zu vergessen.	 DE
+1021	0	1	 Am achten Tag erschuf Gott ____. Er ist seitdem nicht mehr gesehen worden.	 DE
+1022	0	1	 Wie komensiere ich für meinen winzigen Penis?	 DE
+1023	0	1	 Dank ____ halte ich meine Beziehung am Laufen.	 DE
+1024	0	1	 ____ - da muss ich an deine Mutter denken.	 DE
+1025	0	2	 ____ gibt ____ eine ganz neue Bedeutung.	 DE
+1026	0	1	 ____ ruiniert unser Land.	 DE
+1027	0	1	 In seiner Oster-Ansprache betonte der Pabst die Wichtigkeit von ____ als christlichem Wert.	 DE
+1028	0	1	 Die AfD fordert in ihrem Wahlprogramm mehr ____ für Deutsche.	 DE
+1029	0	1	 Ich liebe den Geruch von ____ am Morgen.	 DE
+1030	0	1	 ____ - furchtbare Tragödie oder sexuelle Gelegenheit?	 DE
+1031	0	2	 ____ führt grundsätzlich zu ____.	 DE
+1032	0	1	 Wir haben nichts zu fürchten außer ____ an sich	 DE
+1033	0	1	 Was hat zum Ende meiner letzten Beziehung geführt?	 DE
+1034	0	1	 Für was hälst Du mich eigentlich?	 DE
+1035	0	1	 Um mehr Besucher anzulocken hat das Deutsche Museum eine interaktive Ausstellugn über ____ eröffnet.	 DE
+1036	0	1	 Papa Warum weint Mama?	 DE
+1037	0	1	 Statt Kohle gibt der Weihnachtsmann bösen Kindern nun ____.	 DE
+1038	0	2	 Du hast nicht wirklich gelebt bis Du ____ und ____ zusammen erlebt hast.	 DE
+1039	0	1	 In ienem Tweet hat Donald Trump ____ für sein Versagen verantwortlich gemacht.	 DE
+1040	0	2	 Schritt1: ____. Schritt 2: ____. Schritt 3: Profit	DE
+1041	0	1	Ich habe letzte nacht fünf Stunden mit Internettrollen über ____ gestritten.	DE
+1042	0	1	Um sein Land wieder unter Kontrolle zu bringen, setzt Assad auf ____.	DE
+1043	0	1	Angela Merkel hat ____ zur Chefsache erklärt.	DE
+1101	0	1	Rentner haben ____ völlig verlernt.	DE
+1102	1	3	____ + ____ = ____	DE
+1103	0	2	____ ist nichts, was Du nicht mit ____ lösen kannst.	DE
+1104	0	2	Lieber ____ als ____!	DE
+1105	0	1	Wenn ein Goldtopf an einem Ende des Regenbogens ist, was ist am anderen?	DE
+1106	0	1	Scharade war für mich für immer ruiniert, als meine Mutter ____ nachspielen musste.	DE
+1107	0	1	Egal wie oft ich es sehe, ____ brint mir immer eine Träne in mein Auge.	DE
+1108	0	1	____ - So kann der Tag beginnen.	DE
+1109	0	1	Neu auf Kickstarter: ____ - Das Brettspiel.	DE
+1110	0	1	____ gibt es jetzt auch als Familienpack im Sonderangebot.	DE
+1111	0	1	Auf was verzichte ich während der Fastenzeit?	DE
+1112	0	1	Warum kann ich nachts nicht schlafen?	DE
+1113	0	1	Wer ____ kontrolliert, kontrolliert die Welt.	DE
+1114	0	1	Ein erfolgreiches Jobinterview beginnt mit einem festen Händedruck und endet mit ____.	DE
+1115	0	1	Wovon gibt es tonnenweise im Himmel?	DE
+1116	0	1	____ - die perfekte Beschäftigugn in langweiligen Vorträgen.	DE
+1117	0	1	Wenn Kinder ____ sehen, bekommen sie ein Leuchten in die Augen.	DE
+1118	0	1	Womit kriegst Du immer jemanden ins Bett?	DE
+1119	0	1	____ ist meine schlimmste Angewohnheit.	DE
+1120	0	1	Die 30er Jahre werden oft als Goldenes Zeitalter von ____ angesehen.	DE
+1121	0	1	Wer nichts mehr zu verlieren hat, kann in ____ den letzten Ausweg finden.	DE
+1122	0	1	____ - von Kindern getestet, von Müttern für gut befunden.	DE
+1123	0	1	Ich weiß nicht, welche Waffen im nächsten Krieg zur Anwendung kommen, wohl aber, welche im übernächsten: ____.	DE
+1124	0	1	Demnächst in der Hamburger Elbphilarmonie: ____ - Das Musical	DE
+1125	0	2	Egal wie man es betrachtet, letztendlich ist ____ verwantortlich für ____.	DE
+1126	0	1	Während die USA und Russland den Mond erobern wollten, haben die Franzosen ihr Geld in die Erforschung von ____ gesteckt.	DE
+1127	0	1	Ich habe 99 Probleme, aer ____ ist keines davon.	DE
+1128	0	1	Mama sagte immer, das Leben sei wie ____.	DE
+1129	0	1	Was fände Oma verstörend und gleichzeitig sonderbar charmant?	DE
+1130	0	2	____ - bei Risiken und Nebenwirkungen fragen Sie ____.	DE
+1131	0	1	Die Straße zum Erfolg ist gepflastert mit ____.	DE
+1132	0	1	Was stinkt hier so?	DE
+1133	0	1	Wer hätte vermutet, dass die Invasion der Außerirdischen durch ____ leicht vereitelt werden könnte?	DE
+1134	0	1	Eine Wahrsagerind sagte mir, ich würde ein Leben voller ____ leben und sie hatte Recht.	DE
+1135	0	1	Ich habe nie in meinem Leben härter gelacht, als als ich zum ersten Mal ____ gesehen habe.	DE
+1136	0	1	Die UNO hat ____ zu einem grundlegenden Menschenrecht erkärt.	DE
+1137	0	1	Das ist mein ____-Outfit.	DE
+1138	0	1	Ich waulifiziere mich für diesen Job, weil ich mehrere Jahre Erfahrung auf dem Gebiet von ____ habe.	DE
+1139	0	2	Wenn Gott nicht gewollt hätte, dass wir uns an ____ erfreuen, hätte er uns nicht ____ gegeben.	DE
+1140	0	1	____ - da wird mir warm ums Herz.	DE
+1141	0	1	Was habe ich heute erreicht?	DE
+1142	0	1	In 1000 Jahren, wenn Geld aus Papier nicht mehr existiert, ist ____ unsere einzige Währung.	DE
+1143	0	1	Jedes Jahr betrinkt sich mein Onkel und erzählt die Geschichte von ____.	DE
+1144	0	1	Am liebsten rede ich mit meinen Kindern über ____.	DE
+1145	0	1	Ich habe den Schlimmsten TAg aller Zeiten!! #____	DE
+1201	0	1	Es ist eine Schande, dass Kinder heutzutage in ____ hineingezogen werden.	DE
+1202	0	1	Lange Rede, kurzer Sinn: Ich endete in der Notaufnahme mit ____ in meinem Arsch.	DE
+1203	0	1	____ - kein Grund, den Kindergarten gleich zu schließen.	DE
+1204	0	1	Die CIA verhört nun feindliche Agenten, indem sie sie wideholt ____ aussetzt.	DE
+1205	0	1	Was würde Jesus tun?	DE
+1206	0	1	Was war Michael Jacksons letzter Gedanke?	DE
+1207	0	1	Die Bundeswehr hat mit dem Abwurf von____ für Afghanische Kinder begonnen.	DE
+1208	0	1	____ ist eine Familientradition.	DE
+1209	0	1	Unliebsame Gaste vertreibe ich am effektivsten mit ____.	DE
+1210	0	1	Peinliches Schweigen durch ____? Nicht mit mir!	DE
+1211	0	1	Wie habe ich meine Jungfräulichkeit verloren?	DE
+1212	0	1	Wenn alles andere fehlschlägt, kann ich immer noch zu ____ masturbieren.	DE
+1213	0	1	____: So will ich sterben.	DE
+1214	0	2	Deine Mutter ist soooo dumm. Sie verwechselt ständig ____ und ____.	DE
+1215	0	1	Ohne ____ ist ein Genozid einfach nicht das Gleiche.	DE
+1216	0	1	____ ist die Wurzel allen Übels.	DE
+1217	0	1	Was hilft Papa beim Entspannen?	DE
+1218	0	1	____ ist schlimmer als Hitler.	DE
+1301	0	1	Ein romantisches Abendessen bei Kerzenlicht wäre unvollständig ohne ____.	DE
+1302	0	1	Was willst Du nicht in deinem chinesischen Essen finden?	DE
+1303	0	1	Wissenschaftler haben kürzlich einen Stamm entdeckt, der ____ anbeitet.	DE
+1304	0	1	Ich wünschte, ich hätte die Anleitung für ____ nicht verloren.	DE
+1305	0	1	Studenten wollen doch alle nur ____.	DE
+1306	0	1	Der Teufel hat mir ____ für meine Seele versprochen. Aber ich bekam nur ____.	DE
+1307	0	1	Demnächst von J.K. Rowling: Harry Potter und die Kammer der/des ____.	DE
+1308	0	1	Laut Gerüchten gibt es im Vatikan ein geheimes Zimmer für ____.	DE
+1309	0	1	____ in die Badewanne mitzunehmen, ist eine ganz neue Erfahrung.	DE
+1310	0	2	Wenn Dir das Leben ____ gibt, mache ____ daraus.	DE
+1311	0	1	Und nun euf Eurosport: Das Meisterschaftsturnier des ____.	DE
+1312	0	1	Die Klassenfahrt wurde von ____ komplett versaut.	DE
+1313	0	2	____ ist ein klassischer Fall von ____.	DE
+1314	0	1	Ich werde ____ auf meine Zeitreise mitnehmen, um die Menschen zu überzeugen, dass ich ein mächtiger Zauberer bin.	DE
+1315	0	1	Der Handel mit ____ wird in den USA von der Regierung subventioniert.	DE
+1316	0	1	____ ist ein eliebtes Motiv für Tätowierungen.	DE
+1317	0	1	Politanalysten sagen vorher, dass ____ in kürze eine neue Flüchtlichgswelle auslösen wird.	DE
+1318	0	1	Es ist mir unvorstellbar, jemals auf ____zu verzichten.	DE
+1319	0	2	Mein guter Vorsatz fürs neue Jahr ist weniger ____ un mehr ____.	DE
+1320	0	1	Der wahre Grund, warum ich euch eingeladen habe, ist ____.	DE
+1321	0	1	Flugsicherheitsrichtlinien verbieten neuerdings ____ in Flugzeugen.	DE
+1322	0	1	Wissenschaftlern ist es endlich gelungen, den Geschmack von ____ sysnthetisch herzustellen.	DE
+1323	0	1	Was zum Teufel ist los mit dir?	DE
+1324	0	2	____ beim Vorstellungsgespräch kann helfen, aber nur, wenn der Chef auch auf ____ steht.	DE
+1325	0	1	Was ist Batmans heimliches Laster?	DE
+1326	0	1	Weil der Pharao alle Reformen alehnte, beschwor Moses die ____-Plage.	DE
+1327	0	2	Auf meinem letzten LSD-Trip hat sich ____ in ____ verwandelt.	DE
+1328	0	2	Dank ____ ist ____ jetzt noch besser!	DE
+1329	0	1	Warum bin ich so klebrig?	DE
+1330	0	1	Österreicher mögen ____.	DE
+1331	0	1	Während Picasso oft übersehener brauner Periode schuf er Hunderte Bilder von ____.	DE
+1332	0	1	Es gibt endlich einen Service, der dir ____ direkt  is zur Haustür liefert.	DE
+1333	0	1	In RTL2s neuer Reality Show leben acht B-Promis mit ____.	DE
+1334	0	1	Ich tausche bei Siedler von Catan gerne Schafe gegen ____.	DE
+1335	0	1	Die Polizei regt sich neuerdings über ____ auf Demonstrationen auf.	DE
+1336	0	1	Bevor ich sie töte, Mr. Bond, muss ich ihnen noch ____ zeigen.	DE
+1337	0	1	Warum liegt hier eigentlich Stroh?	DE
+1338	0	1	Kalorien verbrenne ich am liebsten mit ____.	DE
+1339	0	1	Wissenschaftler werden niemals ____ erklären können.	DE
+1340	0	2	Ich habe ____ nie wirklich verstanden, bis ich auf ____ gestoßen bin.	DE
+1341	0	2	Forscher haben herausgefunden, dass ____ in direktem Zusammenhang mit ____steht.	DE
+1342	0	2	Viele Menschen denken bei ____ auch immer gleich an ____.	DE
+1343	0	1	Neuer VHS-Kurs: ____ für Fortgeschrittene.	DE
+1344	0	1	Was ist das nächste Happy-Meal-Spielzeug?	DE
+1345	0	1	Forscher haben herausgefunden, dass ____ zum Ende der Dinosaurier geführt hat.	DE
+1346	0	1	Ich habe ____ aus Amsterdam mitgebracht.	DE
+1347	0	2	Das Verbot von ____ führt zu einer rasanten Zunahme von ____.	DE
+1348	0	1	Wenn Du in der Vorlesung müde wirst, hilft Dir ____.	DE
+1349	0	1	Die fünf Phasen der Trauer: Verleugnung, Zorn, Verhandeln, ____ und Akzeptanz.	DE
+1350	0	2	N-TV präsentiert: ____, die geheime Geschichte von ____	DE
+1351	0	1	In der Bundesliga wurde ____ verboten, weil es Spielern einen unfairen Vorteil brachte.	DE
+1352	0	1	Was ist meine geheime Fähigkeit?	DE
+1353	0	2	Über kurz oder lang führt ____ doch immer zu ____.	DE
+1354	0	1	Alternative Medizin setzt neuerdings auf die heilende Wirkung von ____.	DE
+1355	0	1	Jeder gute Christ hat ein Anrecht auf ____.	DE
+1356	0	1	Was ist das Spiel des Jahres?	DE
+1357	0	1	In der JVA Tegel kann man angeblich 200 Zigaretten gegen ____ eintauschen.	DE
+1358	0	1	____ - lecker bis zum letzten Tropfen.	DE
+1359	0	1	Wenn ich mal ins Gefängnis muss, werde ich ____hineinschmuggeln.	DE
+1360	0	1	Merkel muss ____.	DE
+1361	0	1	____ ist das beste Geschenk, das mir Oma je gegeben hat.	DE
+1362	0	1	Bevor ich Kanzler werde, muss ich alle Beweise meiner Beschäftigung mit ____ zerstören.	DE
+1363	0	1	Ich bin überzeugt davon, dass nichts flexibler verwendbar ist als ____.	DE
+1364	0	1	Was macht eine utopische Welt aus?	DE
+1365	0	1	____ - geschüttelt, nicht gerührt.	DE
+1366	0	1	Nur zwei Dinge im Leben sind unausweichlich: Tod und ____.	DE
+1367	0	1	Wenn Du dem Bettler Geld gibst, wird er es nur für ____ ausgeben.	DE
+1368	0	1	Warnung! Dieses Produkt kann Spuren von ____ enthalten.	DE
+1369	0	1	____ for president.	DE
+1370	0	1	Mein Sportlehrer wurde gefeuert, weil er ____ zum Hindernislauf hinzufügte.	DE
+1371	0	2	Beim Studium von ____ trifft man die meisten ____.	DE
+1372	0	1	Alkohol und ____: Was ist das Schlimmste, das passieren kann?	DE
+1373	0	1	Ein toller Actionfilm wäre " ____ des Todes"	DE
+1374	0	2	Und der Oskar für ____ geht an____.	DE
+1375	0	1	Was verstecken meine Eltern vor mir?	DE
+1376	0	2	Wieso immer gleich ____? Manchmal reicht doch auch ____.	DE
+1377	0	1	____ für Dummies.	DE
+1378	0	1	Leitartikel in der Cosmopolitan: "Bring Feuer in dein Sexleben, indem Du ____ ins Schlafzimmer bringst."	DE
+1379	0	1	Die Welt endet nicht mit einem Knall, sondern mit ____.	DE
+1380	0	1	____ - aber bitte mit Sahne!	DE
+1381	0	1	Als ich 15 war, habe ich einen Preis für ____ gewonnen.	DE
+1382	0	2	Um Kunden zurückzugewinnen, bietet McDonalds neuerdings ____ mit ____ an.	DE
+1383	0	1	Disney präsentiert: ____ on ice!	DE
+1384	0	1	Gibt es eine App für ____?	DE
+1385	0	1	Was ist der Sinn des Lebens?	DE
+1386	0	1	Die Stimmen sind gezählt und ____ ist das neue Schulmaskottchen.	DE
+1387	0	1	____ bringt die Miezen ans Gerät.	DE
+1388	0	2	Genie ist 10% ____ und 90% ____.	DE
+1389	0	2	____ am besten mit einem Spritzer ____ genießen.	DE
+1390	0	1	Es stellt sich heraus, dass ____-Man weder der Held war, den wir brauchten noch wollten.	DE
+1391	0	1	Sei die ____, die Du in der Welt sehen möchtest.	DE
+1392	0	1	Geld kann mir nicht Liebe kaufen, aber es kann mir ____ kaufen. Und das ist fast das Gleiche.	DE
+1393	0	1	Ih habe eine extrem starke Allergie gegen ____.	DE
+1394	0	1	Lieber Dr. Sommer, ich habe Probleme mit ____ und würde dich gerne um Rat bitten.	DE
+1395	0	2	Buzzfeed präsentiert: 25 Bilder von ____, die wie ____ aussehen.	DE
+1396	0	1	____ ist mein Geisttier.	DE
+1397	0	1	____.com	DE
+1398	0	1	Ab dem nächsten Jahr wird auf dem Oktoberfest ____ angeboten.	DE
+1399	0	1	Was wird mit zunehmendem Alter besser?	DE
+1400	0	1	Wenn ich die Zeit anhalten könnte, würde ich 6 Monate mit ____ verbringen.	DE
+1401	0	1	Es soll Außerirdische geben, die sich von ____ ernähren.	DE
+1402	0	2	Das Buch über ____ gab es nicht, dafür haben sie mir ____ empfohlen.	DE
+1403	0	2	Du wurdest schulding gesprochen in fünf Fällen von ____ und elf Fällen von ____.	DE
+1404	0	1	Wenn ich Kanzler bin, werde ich das Amt für ____ einrichten.	DE
+1405	0	1	Ich hätte nicht erwartet, dass ich von ____ leben kann.	DE
+1406	0	1	____ sollte es besser nicht geben.	DE
+1407	0	1	Ich lebe mein Leben nach den Weisheiten von ____.	DE
+1408	0	2	Bei einer Allergie gegen ____ kann ____ helfen.	DE
+1409	0	1	Es tut mir Lied, Herr Lehrer, aber ich konnte meine Hausaufgaben wegen ____ nicht machen.	DE
+1410	0	1	Wonach riechen alte Leute?	DE
+1411	0	1	Womit motiviert meine Nachhilfe ihre Schüler?	DE
+1412	0	1	Was machte dich heute glücklich?	DE
+1413	0	1	Es wird häufig behauptet, dass unsere Vorfahren sich ohne ____ nie so weit entwickelt hätten.	DE
+1414	0	1	Mein Vermieter hatte eine Menge unangenehmer Fragen für mich, als er ____ in meinem Schlafzimmer fand während ich bei der Arbeit war.	DE
+1415	0	2	Um ____ zu mögen braucht es ____.	DE
+1416	0	1	____ - perfekt fürs erste Date.	DE
+1417	0	1	Der Himmel ist voller ____.	DE
+1418	0	2	Die neue Reality Show: ____ mit ____.	DE
+1419	0	1	Das Leben der Höhlenmenschen war vor ____ sehr schwierig.	DE
+1420	0	1	Erdogan hat den deutschen Botschafter wegen ____ einbestellt.	DE
+1421	0	1	Was war das für ein Geräusch?	DE
+1422	0	1	____ ist die häufigste Todesursache bei B-Promis.	DE
+1423	0	1	Das Geheimnis meines Erfolges ist ____.	DE
+1424	0	1	Manchmal muss man einfach ____.	DE
+1425	0	1	Ich glaube nicht an Liebe auf den ersten Blick, aber ich glaube an ____.	DE
+1426	0	1	____ hätte ich gerne selbst erfunden.	DE
+1427	0	1	Meiner neuesten Eroberung würde ich meine ____-Sammlung zeigen.	DE
+1428	0	1	____-Pornos.	DE
+1429	0	1	Meine Mutter hat mir immer gesagt: "Der Schlüssel zu einem glücklichen Leben ist ____."	DE
+1430	0	1	Der älteste Mensch der Welt sagt, das Geheimnis eines langen Lebens ist ____.	DE
+1431	0	1	Hast Du von dem Typen gehört, der ____ in das Hotel geschmuggelt hat?	DE
+1432	0	1	Wovon kriege ich unkontrollierbare Blähungen?	DE
+1433	0	1	Ich wusste nicht, dass es für ____ einen Fetisch gibt.	DE
+1434	0	2	Vor ____ hatten wir nur ____.	DE
+1435	0	1	In der Zukunft werden Historiker darin übereinstimmen, dass ____ den Beginn von Deutschlands Niedergang markierte.	DE
+1436	0	1	Was macht jede Party besser?	DE
+1437	0	1	____ - mit Liebe gemacht.	DE
+1438	0	1	Eines Tages, wenn ich Kinder habe, möchte ich mit ihnen die Freuden von ____ teilen.	DE
+1439	0	2	Genug Zeit und Druck wird ____ in ____ verwandeln.	DE
+1440	0	2	In einer von ____ verwüsteten Welt ist ____ unsere letzte Hoffnung.	DE
+1441	0	1	Was habe ich in Russland gesehen?	DE
+1442	0	1	Ein weiser Mann sagte: "Alles dreht sich um Sex. Außer Sex. Sex ist über ____."	DE
+1443	0	1	Klasse! Ich muss jetzt den Rest meines Lebens so tun, als wäre ____ nie passiert. Das werden lustige 70 Jahre.	DE
+1444	0	1	Wenn ich reich werde, werde ich eine 100 Meter hohe Statue zum Gedenken an ____ erreichten lassen.	DE
+1445	0	1	Ein Leben ohne ____ ist möglich, aber sinnlos.	DE
 \.
 
 
@@ -734,6 +986,10 @@ COPY card_set (id, active, base_deck, description, name, weight) FROM stdin;
 2131	t	f	Box Expansion Pack	Box Expansion Pack	30
 2152	t	f	Hidden Compartment Pack	Hidden Compartment Pack	30
 2374	t	f	PAX Prime 2014 Pack	PAX Prime 2014 Pack	107
+3001	t	f	Basis-Set 1 (DE)	Basis-Set 1 (DE)	1
+3002	t	f	Basis-Set 2 (DE)	Basis-Set 2 (DE)	1
+3003	t	f	Expansion 1 (DE)	Expansion 1 (DE)	1
+3004	t	f	Expansion 2 (DE)	Expansion 2 (DE)	1
 \.
 
 
@@ -1593,6 +1849,258 @@ COPY card_set_black_card (card_set_id, black_card_id) FROM stdin;
 572	573
 572	574
 572	575
+3001	1000
+3001	1001
+3001	1002
+3001	1003
+3001	1004
+3001	1005
+3001	1006
+3001	1007
+3001	1008
+3001	1009
+3001	1010
+3001	1011
+3001	1012
+3001	1013
+3001	1014
+3001	1015
+3001	1016
+3001	1017
+3001	1018
+3001	1019
+3001	1020
+3001	1021
+3001	1022
+3001	1023
+3001	1024
+3001	1025
+3001	1026
+3001	1027
+3001	1028
+3001	1029
+3001	1030
+3001	1031
+3001	1032
+3001	1033
+3001	1034
+3001	1035
+3001	1036
+3001	1037
+3001	1038
+3001	1039
+3001	1040
+3001	1041
+3001	1445
+3001	1042
+3001	1043
+3002	1101
+3002	1102
+3002	1103
+3002	1104
+3002	1105
+3002	1106
+3002	1107
+3002	1108
+3002	1109
+3002	1110
+3002	1111
+3002	1112
+3002	1113
+3002	1114
+3002	1115
+3002	1116
+3002	1117
+3002	1118
+3002	1119
+3002	1120
+3002	1121
+3002	1122
+3002	1123
+3002	1124
+3002	1125
+3002	1126
+3002	1127
+3002	1128
+3002	1129
+3002	1130
+3002	1131
+3002	1132
+3002	1133
+3002	1134
+3002	1135
+3002	1136
+3002	1137
+3002	1138
+3002	1139
+3002	1140
+3002	1141
+3002	1142
+3002	1143
+3002	1144
+3002	1145
+3003	1201
+3003	1202
+3003	1203
+3003	1204
+3003	1205
+3003	1206
+3003	1207
+3003	1208
+3003	1209
+3003	1210
+3003	1211
+3003	1212
+3003	1213
+3003	1214
+3003	1215
+3003	1216
+3003	1217
+3003	1218
+3004	1301
+3004	1302
+3004	1303
+3004	1304
+3004	1305
+3004	1306
+3004	1307
+3004	1308
+3004	1309
+3004	1310
+3004	1311
+3004	1312
+3004	1313
+3004	1314
+3004	1315
+3004	1316
+3004	1317
+3004	1318
+3004	1319
+3004	1320
+3004	1321
+3004	1322
+3004	1323
+3004	1324
+3004	1325
+3004	1326
+3004	1327
+3004	1328
+3004	1329
+3004	1330
+3004	1331
+3004	1332
+3004	1333
+3004	1334
+3004	1335
+3004	1336
+3004	1337
+3004	1338
+3004	1339
+3004	1340
+3004	1341
+3004	1342
+3004	1343
+3004	1344
+3004	1345
+3004	1346
+3004	1347
+3004	1348
+3004	1349
+3004	1350
+3004	1351
+3004	1352
+3004	1353
+3004	1354
+3004	1355
+3004	1356
+3004	1357
+3004	1358
+3004	1359
+3004	1360
+3004	1361
+3004	1362
+3004	1363
+3004	1364
+3004	1365
+3004	1366
+3004	1367
+3004	1368
+3004	1369
+3004	1370
+3004	1371
+3004	1372
+3004	1373
+3004	1374
+3004	1375
+3004	1376
+3004	1377
+3004	1378
+3004	1379
+3004	1380
+3004	1381
+3004	1382
+3004	1383
+3004	1384
+3004	1385
+3004	1386
+3004	1387
+3004	1388
+3004	1389
+3004	1390
+3004	1391
+3004	1392
+3004	1393
+3004	1394
+3004	1395
+3004	1396
+3004	1397
+3004	1398
+3004	1399
+3004	1400
+3004	1401
+3004	1402
+3004	1403
+3004	1404
+3004	1405
+3004	1406
+3004	1407
+3004	1408
+3004	1409
+3004	1410
+3004	1411
+3004	1412
+3004	1413
+3004	1414
+3004	1415
+3004	1416
+3004	1417
+3004	1418
+3004	1419
+3004	1420
+3004	1421
+3004	1422
+3004	1423
+3004	1424
+3004	1425
+3004	1426
+3004	1427
+3004	1428
+3004	1429
+3004	1430
+3004	1431
+3004	1432
+3004	1433
+3004	1434
+3004	1435
+3004	1436
+3004	1437
+3004	1438
+3004	1439
+3004	1440
+3004	1441
+3004	1442
+3004	1443
+3004	1444
 \.
 
 
@@ -5432,6 +5940,589 @@ COPY card_set_white_card (card_set_id, white_card_id) FROM stdin;
 2374	2365
 2374	2366
 2374	2367
+3001	3001
+3001	3002
+3001	3003
+3001	3004
+3001	3005
+3001	3006
+3001	3007
+3001	3008
+3001	3009
+3001	3010
+3001	3011
+3001	3012
+3001	3013
+3001	3014
+3001	3015
+3001	3016
+3001	3017
+3001	3018
+3001	3019
+3001	3020
+3001	3021
+3001	3022
+3001	3023
+3001	3024
+3001	3025
+3001	3026
+3001	3027
+3001	3028
+3001	3029
+3001	3030
+3001	3031
+3001	3032
+3001	3033
+3001	3034
+3001	3035
+3001	3036
+3001	3037
+3001	3038
+3001	3039
+3001	3040
+3001	3041
+3001	3042
+3001	3043
+3001	3044
+3001	3045
+3001	3046
+3001	3047
+3001	3048
+3001	3049
+3001	3050
+3001	3051
+3001	3052
+3001	3053
+3001	3054
+3001	3055
+3001	3056
+3001	3057
+3001	3058
+3001	3059
+3001	3060
+3001	3061
+3001	3062
+3001	3063
+3001	3064
+3001	3065
+3001	3066
+3001	3067
+3001	3068
+3001	3069
+3001	3070
+3001	3071
+3001	3072
+3001	3073
+3001	3074
+3001	3075
+3001	3076
+3001	3077
+3001	3078
+3001	3079
+3001	3080
+3001	3081
+3001	3082
+3001	3083
+3001	3084
+3001	3085
+3001	3086
+3001	3087
+3001	3088
+3001	3089
+3001	3090
+3001	3091
+3001	3092
+3001	3093
+3001	3094
+3001	3095
+3001	3096
+3001	3097
+3001	3098
+3001	3099
+3001	3100
+3001	3101
+3001	3102
+3001	3103
+3001	3104
+3001	3105
+3001	3106
+3001	3107
+3001	3108
+3001	3109
+3001	3110
+3001	3111
+3001	3112
+3001	3113
+3001	3114
+3001	3115
+3001	3116
+3001	3117
+3001	3118
+3001	3119
+3001	3120
+3001	3121
+3001	3122
+3001	3123
+3001	3124
+3001	3125
+3001	3126
+3001	3127
+3001	3128
+3001	3129
+3001	3130
+3001	3131
+3001	3132
+3001	3133
+3001	3134
+3001	3135
+3001	3136
+3001	3137
+3001	3138
+3001	3139
+3001	3140
+3001	3141
+3001	3142
+3001	3143
+3001	3144
+3001	3145
+3001	3146
+3001	3147
+3001	3148
+3001	3149
+3001	3150
+3001	3151
+3001	3152
+3001	3153
+3001	3154
+3001	3155
+3001	3156
+3001	3157
+3001	3158
+3001	3159
+3001	3160
+3001	3161
+3001	3162
+3001	3163
+3001	3164
+3001	3165
+3001	3166
+3001	3167
+3001	3168
+3001	3169
+3001	3170
+3001	3171
+3001	3172
+3001	3173
+3001	3174
+3001	3175
+3001	3176
+3001	3177
+3001	3178
+3001	3179
+3001	3180
+3001	3181
+3001	3182
+3001	3183
+3001	3184
+3001	3185
+3001	3186
+3001	3187
+3001	3188
+3001	3189
+3001	3190
+3001	3191
+3001	3192
+3001	3193
+3001	3194
+3001	3195
+3001	3196
+3001	3197
+3001	3198
+3001	3199
+3001	3200
+3001	3201
+3001	3202
+3001	3203
+3001	3204
+3001	3205
+3001	3206
+3001	3207
+3001	3208
+3001	3209
+3001	3210
+3001	3211
+3001	3212
+3001	3213
+3001	3214
+3001	3215
+3002	3301
+3002	3302
+3002	3303
+3002	3304
+3002	3305
+3002	3306
+3002	3307
+3002	3308
+3002	3309
+3002	3310
+3002	3311
+3002	3312
+3002	3313
+3002	3314
+3002	3315
+3002	3316
+3002	3317
+3002	3318
+3002	3319
+3002	3320
+3002	3321
+3002	3322
+3002	3323
+3002	3324
+3002	3325
+3002	3326
+3002	3327
+3002	3328
+3002	3329
+3002	3330
+3002	3331
+3002	3332
+3002	3333
+3002	3334
+3002	3335
+3002	3336
+3002	3337
+3002	3338
+3002	3339
+3002	3340
+3002	3341
+3002	3342
+3002	3343
+3002	3344
+3002	3345
+3002	3346
+3002	3347
+3002	3348
+3002	3349
+3002	3350
+3002	3351
+3002	3352
+3002	3353
+3002	3354
+3002	3355
+3002	3356
+3002	3357
+3002	3358
+3002	3359
+3002	3360
+3002	3361
+3002	3362
+3002	3363
+3002	3364
+3002	3365
+3002	3366
+3002	3367
+3002	3368
+3002	3369
+3002	3370
+3002	3371
+3002	3372
+3002	3373
+3002	3374
+3002	3375
+3002	3376
+3002	3377
+3002	3378
+3002	3379
+3002	3380
+3002	3381
+3002	3382
+3002	3383
+3002	3384
+3002	3385
+3002	3386
+3002	3387
+3002	3388
+3002	3389
+3002	3390
+3002	3391
+3002	3392
+3002	3393
+3002	3394
+3002	3395
+3002	3396
+3002	3397
+3002	3398
+3002	3399
+3002	3400
+3002	3401
+3002	3402
+3002	3403
+3002	3404
+3002	3405
+3002	3406
+3002	3407
+3002	3408
+3002	3409
+3002	3410
+3002	3411
+3002	3412
+3002	3413
+3002	3414
+3002	3415
+3002	3416
+3002	3417
+3002	3418
+3002	3419
+3002	3420
+3002	3421
+3002	3422
+3002	3423
+3002	3424
+3002	3425
+3002	3426
+3002	3427
+3002	3428
+3002	3429
+3002	3430
+3002	3431
+3002	3432
+3002	3433
+3002	3434
+3002	3435
+3002	3436
+3002	3437
+3002	3438
+3002	3439
+3002	3440
+3002	3441
+3002	3442
+3002	3443
+3002	3444
+3002	3445
+3002	3446
+3002	3447
+3002	3448
+3002	3449
+3002	3450
+3002	3451
+3002	3452
+3002	3453
+3002	3454
+3002	3455
+3002	3456
+3002	3457
+3002	3458
+3002	3459
+3002	3460
+3002	3461
+3002	3462
+3002	3463
+3002	3464
+3002	3465
+3002	3466
+3002	3467
+3002	3468
+3002	3469
+3002	3470
+3002	3471
+3002	3472
+3002	3473
+3002	3474
+3002	3475
+3002	3476
+3002	3477
+3002	3478
+3002	3479
+3002	3480
+3002	3481
+3002	3482
+3002	3483
+3002	3484
+3002	3485
+3002	3486
+3002	3487
+3002	3488
+3002	3489
+3002	3490
+3002	3491
+3002	3492
+3002	3493
+3002	3494
+3002	3495
+3002	3496
+3002	3497
+3002	3498
+3002	3499
+3002	3500
+3002	3501
+3002	3502
+3002	3503
+3002	3504
+3002	3505
+3002	3506
+3002	3507
+3002	3508
+3002	3509
+3002	3510
+3002	3511
+3002	3512
+3002	3513
+3002	3514
+3002	3515
+3002	3516
+3003	3601
+3003	3602
+3003	3603
+3003	3604
+3003	3605
+3003	3606
+3003	3607
+3003	3608
+3003	3609
+3003	3610
+3003	3611
+3003	3612
+3003	3613
+3003	3614
+3003	3615
+3003	3616
+3003	3617
+3003	3618
+3003	3619
+3003	3620
+3003	3621
+3003	3622
+3003	3623
+3003	3624
+3003	3625
+3003	3626
+3003	3627
+3003	3628
+3003	3629
+3003	3630
+3003	3631
+3003	3632
+3003	3633
+3003	3634
+3003	3635
+3003	3636
+3003	3637
+3003	3638
+3003	3639
+3003	3640
+3003	3641
+3003	3642
+3003	3643
+3003	3644
+3003	3645
+3003	3646
+3003	3647
+3003	3648
+3003	3649
+3003	3650
+3003	3651
+3003	3652
+3003	3653
+3003	3654
+3003	3655
+3003	3656
+3003	3657
+3003	3658
+3003	3659
+3003	3660
+3003	3661
+3003	3662
+3003	3663
+3003	3664
+3003	3665
+3003	3666
+3003	3667
+3003	3668
+3003	3669
+3003	3670
+3003	3671
+3003	3672
+3003	3673
+3003	3674
+3003	3675
+3003	3676
+3003	3677
+3003	3678
+3003	3679
+3003	3680
+3003	3681
+3003	3682
+3003	3683
+3003	3684
+3003	3685
+3003	3686
+3003	3687
+3003	3688
+3003	3689
+3003	3690
+3003	3691
+3003	3692
+3003	3693
+3003	3694
+3003	3695
+3003	3696
+3003	3697
+3003	3698
+3003	3699
+3003	3700
+3003	3701
+3003	3702
+3003	3703
+3003	3704
+3003	3705
+3003	3706
+3003	3707
+3003	3708
+3003	3709
+3003	3710
+3003	3711
+3003	3712
+3003	3713
+3003	3714
+3003	3715
+3003	3716
+3003	3717
+3003	3718
+3003	3719
+3003	3720
+3003	3721
+3003	3722
+3003	3723
+3003	3724
+3003	3725
+3003	3726
+3003	3727
+3003	3728
+3003	3729
+3003	3730
+3003	3731
+3003	3732
+3003	3733
+3003	3734
+3003	3735
+3003	3736
+3003	3738
+3003	3739
+3003	3740
+3003	3741
+3003	3742
+3003	3743
+3003	3744
+3003	3745
+3003	3746
+3003	3747
+3003	3748
+3003	3749
+3003	3750
+3003	3751
+3003	3752
+3003	3753
 \.
 
 
@@ -7481,6 +8572,589 @@ COPY white_cards (id, text, watermark) FROM stdin;
 2620	Game of Thrones spoilers.	WWW
 2621	Cat massage.	WWW
 2622	Matching with Mom on Tinder.	WWW
+3001	Ein gebleichtes Arschloch	DE
+3002	Ein Mikropenis	DE
+3003	Ein Hirntumor	DE
+3004	Meine Genitalien	DE
+3005	Resteficken	DE
+3006	Weihnachtsbescherung im Kinderheim	DE
+3007	Sonnenschein und Regenbögen	DE
+3008	Second-Hand-Sexshop	DE
+3009	Eurovision Song Contest	DE
+3010	Islamisierung des Abendlandes	DE
+3011	Mein Browserverlauf	DE
+3012	Postnatale Abtreibung	DE
+3013	Omas Pornokiste	DE
+3014	Gleichgeschlechtlicher Eiskunstlauf	DE
+3015	50 Shades of Grey	DE
+3016	Die Kommentare auf RedTube Deutsch	DE
+3017	Brustmlich-Eiscreme	DE
+3018	Donald Trumps Toupet	DE
+3019	Gruppensex in der Demenzklinik	DE
+3020	Deiner Partnerin einen Dreier mit ihrer Mutter Vorschlagen	DE
+3021	Ein epileptischer Anfall bei der Bombenentschärfung	DE
+3022	Verschwörungstheorien	DE
+3023	1.000 schottische Krieger, die gleichzeitig ihre Kilts anheben.	DE
+3024	Männer im String-Tanga auf einem Kinderspielplatz	DE
+3025	Tränengas im Kindergarten.	DE
+3026	Bibel-Fanfiction	DE
+3027	Brexit	DE
+3028	RTL2	DE
+3029	Zombie-Clowns	DE
+3030	Ein dicker Mann mittleren Alters in einem zu kleinen Sailor-Moon-Kostüm.	DE
+3031	Minions	DE
+3032	Horst Seehofer	DE
+3033	Freunde mit einer Skimaske und Kettensäge überraschen	DE
+3034	Frauenwahlrecht	DE
+3035	Schluss machen per Twitter	DE
+3036	Natursekt	DE
+3037	Deine Mudda	DE
+3038	FC Bayern-Fans	DE
+3039	Die genetische Verbesserung der Menscheit	DE
+3040	Ethnische Säuberung	DE
+3041	KatzenBabies	DE
+3042	Mädels vor der Abtreibungsklinik aufreißen	DR
+3043	Netflix	DE
+3044	Klitoris	DE
+3045	Stephen Hawking, wenn er schmutzige Sachen sagt	DE
+3046	Penispropeller	DE
+3047	Kackende Frauen	DE
+3048	Eine gewachste Vagina	DE
+3049	Meine Sexspielzeugsammlung	DE
+3050	Frauen am Steuer	DE
+3051	Genitalherpes	DE
+3052	Jesus	DE
+3053	Katapulte	DE
+3054	Einen Orgasmus vortäuschen	DE
+3055	Pornodarsteller	DE
+3056	Blackjack und Nutten	DE
+3057	Osteuropäische Volksmusik	DE
+3058	Wichsvorlagen	DE
+3059	Etwas anlecken, um es zu markieren	DE
+3060	Polizeigewalt	DE
+3061	Impotenz	DE
+3062	Männliche Rückenbehaarung	DE
+3063	Eine Erektion, die mehrere Stunden anhält	DE
+3064	Penisneid	DE
+3065	Sex im Fahrstuhl	DE
+3066	Sharknado	DE
+3067	Ein toter Anhalter im Kofferaum	DE
+3068	Politische Flüchtlinge	DE
+3069	Chemische Kastration	DE
+3070	Geschichtsrevisionismus	DE
+3071	Der Nationalsozialistische Untergrund	DE
+3072	Bahnhofsklatscher	DE
+3073	Eine Kühltasche voller Organe	DE
+3074	Ein Swingerclub mit Kinderbetreuung	DE
+3075	Zwei Zwerge, die zusammen in einen Eimer scheißen	DE
+3076	Gebrauchte Damenunterwäsche aus dem Automaten	DE
+3077	Sich den Arsch mit 100-Euro-Scheinen abwischen	DE
+3078	Grammatiknazi mit Legasthenie	DE
+3079	Das Vierte Reich	DE
+3080	Eispickel-Lobotomie	DE
+3081	Ein unerfülltes Sexleben	DE
+3082	Furchtbar kitschige Pärchen	DE
+3083	Genmanipulierte Angrifsschildkröten mit Säureatem	DE
+3084	Bambis Mutter	DE
+3085	Ein 30cm langer Penis	DE
+3086	Kannibalinnen im Avocadodschungel des Todes	DE
+3087	Schimpansen mit mangelnder Selbstbeherrschung	DE
+3088	Chilisauce als Gleitgel verwenden	DE
+3089	Muttertag	DE
+3090	Einem Kind Süßigkeiten wegnehmen	DE
+3091	Ein Kondom ausleihen und gebraucht zurückgeben	DE
+3092	Intravenöse Koffeinzufuhr	DE
+3093	Wikipedia bearbeiten, um einen Streit zu gewinnen	DE
+3094	Sich nackt ausziehen und den Kinderkanal ansehen	DE
+3095	Die Verletzung grundlegender Menschenrechte	DE
+3096	Die Alternative für Deutschland	DE
+3097	Versehentlich eine Sexnachricht an deine Mutter schicken	DE
+3098	Japanische Schulmädchen	DE
+3099	Autokannibalismus	DE
+3100	Gutmenschen	DE
+3101	Neonazis im Dönerladen	DE
+3102	Germany's next Topmodel	DE
+3103	Chemtrails	DE
+3104	Eine furzende Antilope	DE
+3105	Kampfjetpiloten mit Narkolepsie	DE
+3106	Vladimier Putins Oben-Ohne-Fotos	DE
+3107	Ein Hello-Kitty-Vibrator	DE
+3108	Pummeleinhorn	DE
+3109	Fake News	DE
+3110	Software-Absturz im Herzschrittmacher	DE
+3111	Das Oktoberfest	DE
+3112	Verpflichtende Homo-Ehe	DE
+3113	Deinem Haustier beim Sex zusehen	DE
+3114	Hormonstau	DE
+3115	Regel #34	DE
+3116	Der Liebhaber deiner Mutter	DE
+3117	Der weibliche Orgasmus	DE
+3118	Das Safeword vergessen	DE
+3119	Es von hinten besorgt bekommen	DE
+3120	Einen Haufen im Bällebad hinterlassen	DE
+3121	Den Spieleabend zu einer Sex-Orgie ausarten lassen	DE
+3122	Obszöne Yogaposen	DE
+3123	Christliche Werte	DE
+3124	Axe Body Spray	DE
+3125	Candle-Light-Dinner im Schlossgarten	DE
+3126	Grumpy Cat	DE
+3127	Von Disney inspirierte Pornografie	DE
+3128	Weihnachtsplätzchen mit Knoblauch und Tabasco	DE
+3129	Sexuell anzügliche Weihnachtsdekoration	DE
+3130	Masernparties	DE
+3131	Moderate Faschisten	DE
+3132	Beatrix von Storch	DE
+3133	Wirtschaftsflüchtlinge	DE
+3134	Russische Regierungskritiker	DE
+3135	Niveaulimbo	DE
+3136	Mein Sexleben	DE
+3137	Facebook	DE
+3138	Pubertierende Mädchen	DE
+3139	Kinderschönheitswettbewerbe	DE
+3140	Ahnungsloses Fingern	DE
+3141	Schwanzwedeln	DE
+3142	Unterwäsche auf links tragen, um nicht waschen zu müssen	DE
+3143	Pokemon Go	DE
+3144	Eine arschfreie Cowboyhose	DE
+3145	Bilder von Titten	DE
+3146	Einen Ständer kaschieren	DE
+3147	Eigenurin-Behandlungen	DE
+3148	Halbherziges Vorspiel	DE
+3149	Penispumpen	DE
+3150	Zweckentfremdetes Stangengemüse	DE
+3151	Kondome mit Geschmack	DE
+3152	Das bedingungslose Grundeinkommen	DE
+3153	Tierbefreiung im Seuchenlabor	DE
+3154	Aufgewärmter, vier Tage alter Kaffee	DE
+3155	Biologische Kampfstoffe	DE
+3156	Die Kinder in der Badewanne ertränken	DE
+3157	Der massive Penis von King Kong	DE
+3158	Haschkekse auf dem Kirchenpicknick	DE
+3159	Ein Leck in der Gasleitung	DE
+3160	Fleshlight	DE
+3161	Hochzeiten mit Disneymotto	DE
+3162	Frauen in Joghurt Werbespots	DE
+3163	Ein zartes streicheln der Oberschenkel-Innenseite	DE
+3164	Friends with Benefits	DE
+3165	Fanatische Nickelbeck-Fans	DE
+3166	Passiv-aggressive Post-It-Notizen	DE
+3167	Ein Niesfetisch	DE
+3168	Ein kischelbedürftiger Grizzly	DE
+3169	Cards vs Humanity	DE
+3170	Magic Mushrooms	DE
+3171	Eine Alkoholvergiftung	DE
+3172	Die Bild-Zeitung	DE
+3173	Kostenlose Süßigkeiten von Fremden	DE
+3174	Die deutsche Bahn	DE
+3175	YouTube	DE
+3176	Spongebob Schwammkopf	DE
+3177	Neil Patrick Harris	DE
+3178	Die Augsburger Puppenkiste	DE
+3179	Origami Sexpielzeug	DE
+3180	In die Badewanne scheißen	DE
+3181	Gesichtsmalereo mit Permanentfarben	DE
+3182	Die Tränen eines Clowns	DE
+3183	Die zerschmetterten Träume einer Stripperin	DE
+3184	Ein Einlauf mit Mentos und Cola	DE
+3185	Eltern wegen ihres weinenden Babies an den Pranger stellen	DE
+3186	Die schwarze Seele von Markus Söder	DE
+3187	Riesige mutierte Kakerlaken	DE
+3188	Gerhard Schröder	DE
+3189	Helmut Kohl	DE
+3190	Angela Merkel	DE
+3191	Sich einscheißen	DE
+3192	Genitalläuse	DE
+3193	Meine heiße Cousine	DE
+3194	Einen Moment der Stille	DE
+3195	Borat	DE
+3196	Die Matrix	DE
+3197	Recep Tayyip Erdogan	DE
+3198	Ein vernachlässigtes Tamagotchi	DE
+3199	Chuck Norris	DE
+3200	Ein mit Katzenpisse geladene Supersoaker	DE
+3201	Eheliche Pflichten	DE
+3202	Hipster mit ihren iPhones	DE
+3203	Mohandas "Mahatma" Gandhi	DE
+3204	Dessous von KiK	DE
+3205	Analpolonaise	DE
+3206	nananananananana BATMAN!	DE
+3207	Um drei Uhr morgens nackt Parkour laufen	DE
+3208	Tentacle Porn	DE
+3209	Eine Jungfrau in einen Vulkan werfen	DE
+3210	Maximalpigmentierte Mitbürger	DE
+3211	Elektroschok-Therapie	DE
+3212	Arschgeweihe	DE
+3213	Nymphomaninnen	DE
+3214	Ein Handjob in der U-Bahn	DE
+3215	Essbare Unterwäsche	DE
+3301	Fehlerhafte Brustimplantate	DE
+3302	Auf der Arbeit masturbieren	DE
+3303	500g feinster Schnee	DE
+3304	Die Rekolonialisierung Afrikas	DE
+3305	Teabagging	DE
+3306	Einen in die Schüssel brüllen	DE
+3307	Arnold Schwarzenegget	DE
+3308	Rassismus	DE
+3309	Überraschungssex	DE
+3310	Taubstummen ein Ständchen bringen	DE
+3311	Über den Fight Club reden	DE
+3312	Globale Erwärmung	DE
+3313	Eine aufgedonnerte Türkin	DE
+3314	Selbstfahrende Autos	DE
+3315	Nächtliche Ausscheidungen	DE
+3316	YOLO	DE
+3317	Sodomie	DE
+3318	Sich jemanden schöntrinken	DE
+3319	Latexhandschuhe	DE
+3320	Pelzträger mit Farbe bewerfen	DE
+3321	Die wahre Bedeutung Weihnachtens	DE
+3322	Senioren in den Hintern kneifen	DE
+3323	Eine ausgedruckte Version von Google Earth	DE
+3324	Alkoholsucht	DE
+3325	Trichtersaufen	DE
+3326	Sexy Kissenschlachten	DE
+3327	Graf Dracula	DE
+3328	Meister Proper	DE
+3329	Natürliche Selektion	DE
+3330	Analsex haben	DE
+3331	Sektenanführer	DE
+3332	Monsanto	DE
+3333	Ihr den Arsch abwischen	DE
+3334	Kondomballontiere	DE
+3335	Der Ku-Klux-Klan	DE
+3336	Zusammen duschen	DE
+3337	Menstruation	DE
+3338	Selbsthass	DE
+3339	Regierungspropaganda	DE
+3340	Männerquote	DE
+3341	Niger falsch aussprechen	DE
+3342	Rückwärtseinpark-korrigierer	DE
+3343	Schrödingers Katze	DE
+3344	One-Night-Stand	DE
+3345	Sexting	DE
+3346	Waldorfschulen	DE
+3347	Halbherzige Kompromisse	DE
+3348	Der Geruch von faulen Eiern	DE
+3349	Mein Beziehungsstatus	DE
+3350	Kleber schnüffeln	DE
+3351	Bergwanderung in High Heels	DE
+3352	Frauenquote	DE
+3353	Analperlenkette	DE
+3354	Der unausweichliche Hitzetod des Universums	DE
+3355	Vor dem Orgasmus rausziehen	DE
+3356	Richtig high werden	DE
+3357	Jagdunfälle	DE
+3358	Mein Arsch	DE
+3359	RoboCop	DE
+3360	In einen Pool Lava fallen	DE
+3361	Dinosaurierangriffe	DE
+3362	Ein Atommüllager	DE
+3363	Geruch und Fettfilz unter der Gürtellinie	DE
+3364	Ein Mann mittleren Alters auf Rollschuhen	DE
+3365	Inkontinenz	DE
+3366	Süße, süße Rache	DE
+3367	Feuchte Träume	DE
+3368	Vaginalsekret	DE
+3369	Ganzkörperenthaarungen	DE
+3370	Dicke Kinder	DE
+3371	Gutes aus einem Viertelliter Milch	DE
+3372	Kinder scheiße behandeln	DE
+3373	Sich für Oralsex nicht revangieren	DE
+3374	Zu viel Haargel	DE
+3375	Subtiles Fummeln	DE
+3376	In den Sonnenuntergang reiten	DE
+3377	Prankcalls bei der NSA	DE
+3378	Piepen beim Rückwärtsgehen	DE
+3379	Gruppenkuscheln	DE
+3380	Hormonspritzen	DE
+3381	Ein Dreirad mit Chromfelgen	DE
+3382	Scientology	DE
+3383	Sich selbst einen blasen	DE
+3384	Harry Potter-Erotik	DE
+3385	Ritalin	DE
+3386	Doppelkorn, der dir die Falten aus dem Sack zieht	DE
+3387	Eine peinliche Nachricht auf dem Anrufbeantworter hinterlassen	DE
+3388	Kinderherzen	DE
+3389	Ein zu großer Penisring	DE
+3390	Whiskas	DE
+3391	Fleißige Beamte	DE
+3392	Wenn beim Furzen Land mitkommt	DE
+3393	Nach dem Kotzen weitersaufen	DE
+3394	Ein Zigeunerfluch	DE
+3395	Theologiestudenten	DE
+3396	Sich in die Hose machen	DE
+3397	Durch die Vagina furzen	DE
+3398	Eine Schnallschildkröte, die in die Spitze deines Penis beißt	DE
+3399	Eine mit Waffen vollgestopfte Tasche im Taxi liegen lassen	DE
+3400	Brunch	DE
+3401	Blutiger Auswurf	DE
+3402	Die Macht	DE
+3403	Vorhaut	DE
+3404	Hungersnot	DE
+3405	Vorzeitige Ejakulation	DE
+3406	Ein bisschen gottverdammte Ruhe und Frieden	DE
+3407	Analphabeten	DE
+3408	Zivile Verluste	DE
+3409	Nuklearer Winter	DE
+3410	Scheinheilige Trauer	DE
+3411	Geruch von alten Leuten	DE
+3412	Terroristen	DE
+3413	Entführungen durch Außerirdische	DE
+3414	Castingshows	DE
+3415	Fremdgehen	DE
+3416	Heiße Transvestiten	DE
+3417	Vorgeben zu verhüten	DE
+3418	Noch ein verdammter Superheldenfilm	DE
+3419	Flugsauriereier	DE
+3420	Ecstasy	DE
+3421	Ihr den Hintern versohlen	DE
+3422	Am Steuer einen geblasen bekommen	DE
+3423	Antifa e.V.	DE
+3424	Deutschland	DE
+3425	Einen Nierenstein ausscheiden	DE
+3426	Sesamstraße	DE
+3427	Hartz-IV-Empfänger	DE
+3428	Die längste Praline der Welt	DE
+3429	Ein sexistischer Unterton	DE
+3430	SMS von gestern Nacht	DE
+3431	Kommen und "Erster!" schreien	DE
+3432	Sich mit Mundwasser betrinken	DE
+3433	Stiftung Warentest	DE
+3434	Weltfrieden	DE
+3435	Vaterkomplexe	DE
+3436	Die vier Reiter der Apokalypse	DE
+3437	Gentrifizierung	DE
+3438	Schwerst- Mehrfachbehinderte	DE
+3439	Placebo-Anti-Baby-Pillen	DE
+3440	Drogenkartelle	DE
+3441	Dieser eine schwule Teletubby	DE
+3442	Ein Zigarettenautomat im Wasserstoffzeppelin	DE
+3443	Oma	DE
+3444	Blinden ein Bein stellen	DE
+3445	Samuel L. Jackson	DE
+3446	Kundenservicemitarbeiter	DE
+3447	Furzen und Weggehen	DE
+3448	Nackt auf einem McDonalds Parkplatz aufwachen	DE
+3449	Eiterbeulen	DE
+3450	Dieses Teil, das deine Muskeln mit Elektroschoks aufbaut	DE
+3451	Ein Voodoo-Fluch	DE
+3452	Linksträger	DE
+3453	Seinen eigenen Tod vortäuschen	DE
+3454	Schlimmw Laser- Haarentfernungsunfälle	DE
+3455	Viagra	DE
+3456	Die Frau eines Freundes angraben	DE
+3457	Ein Nerdgasm	DE
+3458	Fangfragen in der Abschlussprüfung	DE
+3459	Schwule	DE
+3460	Deine Hand auf die Schulter deines Urinalnachbarns legen	DE
+3461	Nicolas Cage	DE
+3462	Hundekotbeutel	DE
+3463	Vodka	DE
+3464	Östrogen	DE
+3465	Nutten verarschen	DE
+3466	Ödipuskomplex	DE
+3467	Sich mit Fremden im Internet streiten	DE
+3468	Eine vollständige Kopie des gesamten Internets	DE
+3469	Gott	DE
+3470	Free Hugs	DE
+3471	Vorzugeben, glücklich zu sein	DE
+3472	Deutschland GmbH	DE
+3473	Blutige Damenbinden	DE
+3474	Barack Obama	DE
+3475	Bayern	DE
+3476	Akne	DE
+3477	Eine halbe Stunde zu spät kommen	DE
+3478	Vertretungslehrer	DE
+3479	Gasmasken	DE
+3480	Eine salzige Überraschung	DE
+3481	Ins rote Meer stechen	DE
+3482	Sich heimlich den Arsch kratzen	DE
+3483	Ein rechtschaffender Cop, der nichts zu verlieren hat	DE
+3484	Verdrehte Hoden	DE
+3485	Wahrheitsserum	DE
+3486	Genitalpiercings	DE
+3487	Cannabis legalisieren	DE
+3488	AIDS	DE
+3489	Papst	DE
+3490	Sexuelle Spannung	DE
+3491	Fette Schenkel	DE
+3492	Toilettenpapier mit Juckpulver	DE
+3493	Öffentliche Toiletten	DE
+3494	Ein realistischer Sexbot	DE
+3495	Sexuelle Gefälligkeiten	DE
+3496	Zentauren	DE
+3497	Ein Pantomime mit Tourette-Syndrom	DE
+3498	Das Michelin -Männchen	DE
+3499	Mundgeruch	DE
+3500	Ein vollständig bekleideter weiblicher Videospielcharakter	DE
+3501	Eine Bürgerversicherung	DE
+3502	Computerspiele Sex mit deiner Freundin vorziehen	DE
+3503	Pet Play	DE
+3504	Typen, die nicht anrufen	DE
+3505	Gummis mit Noppen	DE
+3506	Menschenopfer	DE
+3507	Das Passwort deiner Mutter	DE
+3508	Im Kino einen runtergeholt bekommen	DE
+3509	Bis zur Hochzeit warten	DE
+3510	Fahrerflucht unter Alkoholeinfluss	DE
+3511	Einen Furz, der Wellen in die Tapete schlägt	DE
+3512	Das Leben in vollen Zügen genießen	DE
+3513	Sitzblockade im Kreisverwaltungsreferat	DE
+3514	20 Euro	DE
+3515	Die Village People	DE
+3516	Auf die dritte Welt scheißen	DE
+3601	Donald Trump	DE
+3602	Es wie einen Selbstmord aussehen lassen	DE
+3603	Die Kreuzigung Jesu	DE
+3604	Schindlers Liste	DE
+3605	Barfuß auf einen Legostein treten	DE
+3606	Arisch sein	DE
+3607	Mecha-Hitler	DE
+3608	Fettleibigkeit	DE
+3609	Ein afrikanischer Kriegsfürst	DE
+3610	Volksverräter	DE
+3611	Edathys Festplatte	DE
+3612	Spritzen teilen	DE
+3613	Die Pubertät	DE
+3614	Nekrophilie	DE
+3615	Missverstandene Pädophile	DE
+3616	Kleinkinder mit vollautomatischen Waffen	DE
+3617	Apartheid	DE
+3618	Kinder an Leinen	DE
+3619	Eine unfreiwillige Lebendorganspende	DE
+3620	Jailbait	DE
+3621	Scheinhinrichtung	DE
+3622	Rape Culture 	DE
+3623	Pädophilie	DE
+3624	72 Jungfrauen	DE
+3625	Stalingrad- Flashbacks	DE
+3626	Kamikazepiloten	DE
+3627	Das letzte lebende Einhorn fressen	DE
+3628	Bei den Paralympics schummeln	DE
+3629	Ins Kinderbecken pinkeln	DE
+3630	Bedrohliche Hintergrundmusik	DE
+3631	Eine Bombendrohung	DE
+3632	Napalm	DE
+3633	An Durchfall sterben	DE
+3634	Afrikanische Kinder	DE
+3635	Vergewaltigen und Plündern	DE
+3636	Atombomben -Explosionen	DE
+3637	Nach Frankreich nur auf Ketten	DE
+3638	Volkstod	DE
+3639	Versehentlicher Inzest	DE
+3640	Mauerschützen	DE
+3641	Stockholm-Syndrom	DE
+3642	Granny Porn	DE
+3643	Blitzkrieg	DE
+3644	Herausfinden, dass die eigenen Eltern überzeugte Neonazis sind	DE
+3645	Ein Darwin- Award	DE
+3646	Michael Jackson	DE
+3647	Ein Molotov- Cocktail	DE
+3648	Querschnittslähmung	DE
+3649	Soylent Green	DE
+3650	Tote Babies	DE
+3651	Ordnungsliebende Stasi- Offiziere	DE
+3652	Salafisten	DE
+3653	Dönermorde	DE
+3654	Schlagringe	DE
+3655	Nachbarländer überfallen	DE
+3656	Santa mit einer Boden- zu- Luft- Rakete abschießen	DE
+3657	Beweise zerstören und Augenzeugen beseitigen	DE
+3658	Kim Jong-un	DE
+3659	Kinderliebende Priester	DE
+3660	Militante Atheisten	DE
+3661	Erfolgreiche Kindersoldaten	DE
+3662	Die Werbung von CHECK24	DE
+3663	Dschingis Khan	DE
+3664	Erich Honecker	DE
+3665	Al Kaida	DE
+3666	Mehrfache Stichwunden	DE
+3667	Britney Spears mit 55	DE
+3668	Aktives Zuhören	DE
+3669	Justin Bieber	DE
+3670	Attila Hildmann	DE
+3671	Notgeile Professoren	DE
+3672	Durchfall während der Yogastunde	DE
+3673	Abführmittel ins All-you- can-eat-Buffet mischen	DE
+3674	Quotenschwarze	DE
+3675	Tote Eltern	DE
+3676	Waterboarding	DE
+3677	Plutonium im Frühstückskaffee	DE
+3678	Contagan	DE
+3679	Babysitter mit hohem Sexualtrieb	DE
+3680	K.O.- Tropfen	DE
+3681	One-Night-Stands bei Familientreffen	DE
+3682	McFit-Stammkunden	DE
+3683	Einen ungehorsamen Sklaven auspeitschen	DE
+3684	Herzzereißende Waisenkinder	DE
+3685	Christliche Fundamentalisten den Löwen vorwerfen	DE
+3686	Zwergenwerfen	DE
+3687	Heteronormativität	DE
+3688	Nickelback	DE
+3689	Spontane Selbstverbrennung	DE
+3690	Eine überraschend klebrige Tastatur	DE
+3691	Die RAF	DE
+3692	Sado-Maso-Kindersex	DE
+3693	Kleiderbügelabtreibungen	DE
+3694	Das "stand your ground"- Gesetzt	DE
+3695	Sexuelle Erregung durch Kindercartoons	DE
+3696	Pädobär	DE
+3697	Obdachlose zu mobilen Hotspots aufrüsten	DE
+3698	Ein dunkelhäutiger jüdischer Neonazi	DE
+3699	Minderjährige Unterwäschemodels	DE
+3700	Auschwitz	DE
+3701	Landminen	DE
+3702	Russisch Roulette	DE
+3703	Lepra	DE
+3704	Autistische Kinder	DE
+3705	Schlecht getimte Holocaustwitze	DE
+3706	Schwiegermütter	DE
+3707	Gräber plündern	DE
+3708	Manga Jesus	DE
+3709	So tun, als ob der Jenga- Turm das World Trade Center wäre	DE
+3710	Neonazis für Tierrechte	DE
+3711	Messdiener	DE
+3712	Ein Drive-By-Shooting	DE
+3713	Anne Frank	DE
+3714	Politiker beim Ficken	DE
+3715	Kinder mit Arschkrebs	DE
+3716	Selbstjustiz	DE
+3717	Sextourismus in Thailand	DE
+3718	Uneingeschränkter Atomkrieg	DE
+3719	In einen Pool von Kindertränen wichsen	DE
+3720	Gleichgeschaltete Medien	DE
+3721	Samdalen mit weißen Socken	DE
+3722	Links-Faschisten	DE
+3723	Eine Drohne mit einer Nagelpistole ausstatetn	DE
+3724	Darth Vader	DE
+3725	Freitod	DE
+3726	An Kinderhosen schnuppern	DE
+3727	Pick-Up-Artists	DE
+3728	Taliban	DE
+3729	Human Centipede	DE
+3730	Laktoseintoleranz	DE
+3731	Mutter Theresa	DE
+3732	Femnazis	DE
+3733	Massengräber	DE
+3734	Der Amoklauf von Erfurt	DE
+3735	Ehrenmord	DE
+3736	Ein Picknick im KZ Dachau	DE
+3738	Unangenehm attraktive Tiere	DE
+3739	Schlafentzugsfolter	DE
+3740	Das Lächeln eines Babys	DE
+3741	Bomben für den Frieden	DE
+3742	Ein Fötus	DE
+3743	Kinderarbeit in der Munitionsfabrik	DE
+3744	Snuff-Pornos	DE
+3745	Israel	DE
+3746	Leichenschändungen	DE
+3747	Eine Supporthotline für Selbstmordattentäter	DE
+3748	Kofferbomben	DE
+3749	Ein einzelnes Schamhaar	DE
+3750	Kollateralschäden	DE
+3751	Oma nackt sehen	DE
+3752	Übermäßig geschminkte Zehnjährige	DE
+3753	Demenz	DE
 \.
 
 
