@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 
 public class CustomCardsService {
@@ -52,6 +53,8 @@ public class CustomCardsService {
 
   private static final Map<Integer, SoftReference<CustomDeck>> cache = Collections
       .synchronizedMap(new HashMap<Integer, SoftReference<CustomDeck>>());
+
+  private static final Pattern VALID_WATERMARK_PATTERN = Pattern.compile("[A-Z0-9]{5}");
 
   private static final AtomicInteger cardIdCounter = new AtomicInteger(-(GameOptions.MAX_BLANK_CARD_LIMIT + 1));
   private static final AtomicInteger deckIdCounter = new AtomicInteger(0);
@@ -90,14 +93,13 @@ public class CustomCardsService {
 
       final String name = (String) obj.get("name");
       final String description = (String) obj.get("description");
-      if (null == name || null == description || name.isEmpty()) {
-        // We require a name. Blank description is acceptable, but cannot be null.
+      final String watermark = (String) obj.get("watermark");
+      if (null == name || null == description || name.isEmpty() || watermark == null || !VALID_WATERMARK_PATTERN.matcher(watermark).matches()) {
+        // We require a name. Blank description is acceptable, but cannot be null. Watermark is required and must respect the pattern.
         return null;
       }
 
       int deckId = deckIdCounter.decrementAndGet();
-      String watermark = getWatermark(deckId);
-
       final CustomDeck deck = new CustomDeck(deckId, StringEscapeUtils.escapeXml11(name), StringEscapeUtils.escapeXml11(description));
 
       // load up the cards
@@ -137,10 +139,6 @@ public class CustomCardsService {
       e.printStackTrace();
       return null;
     }
-  }
-
-  private String getWatermark(int deckId) {
-    return Integer.toString(deckId, 16); // TODO: Custom deck watermark
   }
 
   private String getUrlContent(final String urlStr) throws IOException {
