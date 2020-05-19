@@ -25,6 +25,7 @@ package net.socialgamer.cah.customsets;
 
 import com.google.inject.Inject;
 import net.socialgamer.cah.data.GameOptions;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -38,9 +39,8 @@ import java.io.InputStreamReader;
 import java.lang.ref.SoftReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
@@ -51,10 +51,20 @@ public class CustomCardsService {
 
   private static final int GET_TIMEOUT = (int) TimeUnit.SECONDS.toMillis(3);
 
-  private static final Map<Integer, SoftReference<CustomDeck>> cache = Collections
-      .synchronizedMap(new HashMap<Integer, SoftReference<CustomDeck>>());
+  private static final LinkedList<SoftReference<CacheEntry>> cache = new LinkedList<SoftReference<CacheEntry>>();
 
   private static final Pattern VALID_WATERMARK_PATTERN = Pattern.compile("[A-Z0-9]{5}");
+
+  /**
+   * How long to cache nonexistent card sets, or after an error occurs while querying for the card
+   * set. We need to do this to prevent DoS attacks.
+   */
+  private static final long INVALID_SET_CACHE_LIFETIME = TimeUnit.SECONDS.toMillis(30);
+
+  /**
+   * How long to cache valid card sets.
+   */
+  private static final long VALID_SET_CACHE_LIFETIME = TimeUnit.MINUTES.toMillis(15);
 
   private static final AtomicInteger cardIdCounter = new AtomicInteger(-(GameOptions.MAX_BLANK_CARD_LIMIT + 1));
   private static final AtomicInteger deckIdCounter = new AtomicInteger(0);
@@ -68,26 +78,33 @@ public class CustomCardsService {
   }
 
   public CustomDeck loadSet(int customDeckId) {
-    SoftReference<CustomDeck> soft = cache.get(customDeckId);
-    if (soft == null) {
-      return null;
-    }
-
-    return soft.get();
+    CacheEntry entry = checkCacheId(customDeckId);
+    if (checkCacheValid(entry, "id", String.valueOf(customDeckId))) return entry.deck;
+    else return null;
   }
 
   public CustomDeck loadSetFromUrl(String url) {
+    CacheEntry entry = checkCacheUrl(url);
+    if (checkCacheValid(entry, "url", url))
+      return entry.deck;
+
     try {
       String content = getUrlContent(url);
-      return loadSetFromJson(content);
+      return loadSetFromJson(content, url);
     } catch (IOException e) {
+      putCache(null, INVALID_SET_CACHE_LIFETIME, url, null);
       LOG.error(String.format("Unable to load deck from %s", url), e);
       e.printStackTrace();
       return null;
     }
   }
 
-  public CustomDeck loadSetFromJson(String jsonStr) {
+  public CustomDeck loadSetFromJson(String jsonStr, String url) {
+    String hash = DigestUtils.md5Hex(jsonStr);
+    CacheEntry entry = checkCacheHash(url);
+    if (checkCacheValid(entry, "json", hash))
+      return entry.deck;
+
     try {
       JSONObject obj = (JSONObject) JSONValue.parse(jsonStr);
 
@@ -132,12 +149,86 @@ public class CustomCardsService {
         }
       }
 
-      cache.put(deckId, new SoftReference<CustomDeck>(deck));
+      putCache(deck, VALID_SET_CACHE_LIFETIME, url, hash);
       return deck;
     } catch (Exception e) {
+      putCache(null, INVALID_SET_CACHE_LIFETIME, url, hash);
       LOG.error("Unable to load deck.", e);
       e.printStackTrace();
       return null;
+    }
+  }
+
+  private CacheEntry checkCacheId(int id) {
+    synchronized (cache) {
+      ListIterator<SoftReference<CacheEntry>> iterator = cache.listIterator();
+      while (iterator.hasNext()) {
+        CacheEntry entry = iterator.next().get();
+        if (entry == null) {
+          iterator.remove();
+          continue;
+        }
+
+        if (entry.deck != null && entry.deck.getId() == id)
+          return entry;
+      }
+
+      return null;
+    }
+  }
+
+  private CacheEntry checkCacheUrl(String url) {
+    synchronized (cache) {
+      ListIterator<SoftReference<CacheEntry>> iterator = cache.listIterator();
+      while (iterator.hasNext()) {
+        CacheEntry entry = iterator.next().get();
+        if (entry == null) {
+          iterator.remove();
+          continue;
+        }
+
+        if (url.equals(entry.url))
+          return entry;
+      }
+
+      return null;
+    }
+  }
+
+  private CacheEntry checkCacheHash(String hash) {
+    synchronized (cache) {
+      ListIterator<SoftReference<CacheEntry>> iterator = cache.listIterator();
+      while (iterator.hasNext()) {
+        CacheEntry entry = iterator.next().get();
+        if (entry == null) {
+          iterator.remove();
+          continue;
+        }
+
+        if (hash.equals(entry.hash))
+          return entry;
+      }
+
+      return null;
+    }
+  }
+
+  private boolean checkCacheValid(CacheEntry entry, String method, String key) {
+    if (null != entry && entry.expires > System.currentTimeMillis()) {
+      LOG.info(String.format("Using cache (%s): %s=%s", method, key, entry.deck));
+      return true;
+    } else if (null != entry) {
+      LOG.info(String.format("Cache stale (%s): %s", method, key));
+      return false;
+    } else {
+      LOG.info(String.format("Cache miss (%s): %s", method, key));
+      return false;
+    }
+  }
+
+  private void putCache(CustomDeck deck, long timeout, String url, String hash) {
+    synchronized (cache) {
+      cache.add(new SoftReference<CacheEntry>(new CacheEntry(timeout + System.currentTimeMillis(), deck, url, hash)));
     }
   }
 
@@ -176,5 +267,19 @@ public class CustomCardsService {
     is.close();
 
     return builder.toString();
+  }
+
+  private static class CacheEntry {
+    final long expires;
+    final CustomDeck deck;
+    final String url;
+    final String hash;
+
+    CacheEntry(long expires, CustomDeck deck, String url, String hash) {
+      this.expires = expires;
+      this.deck = deck;
+      this.url = url;
+      this.hash = hash;
+    }
   }
 }

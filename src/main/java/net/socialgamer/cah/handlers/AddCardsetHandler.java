@@ -53,7 +53,7 @@ public class AddCardsetHandler extends GameWithPlayerHandler {
 
       CustomDeck deck;
       if (deckUrl != null) deck = customCardsService.loadSetFromUrl(deckUrl);
-      else deck = customCardsService.loadSetFromJson(deckJson);
+      else deck = customCardsService.loadSetFromJson(deckJson, null);
 
       if (null == deck) {
         return error(ErrorCode.CUSTOM_SET_CANNOT_FIND);
