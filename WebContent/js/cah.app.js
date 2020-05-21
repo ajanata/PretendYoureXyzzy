@@ -213,22 +213,6 @@ function chatsubmit_click(game_id, parent_element) {
       case 'names':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.NAMES);
         break;
-      case 'addcustomdeck_json':
-        if (game_id !== null) {
-          ajax = cah.Ajax.build(cah.$.AjaxOperation.ADD_CARDSET)
-              .withCustomDeckJson(text).withGameId(game_id);
-        } else {
-          cah.log.error("This command only works in a game.");
-        }
-        break;
-      case 'addcustomdeck_url':
-        if (game_id !== null) {
-          ajax = cah.Ajax.build(cah.$.AjaxOperation.ADD_CARDSET)
-              .withCustomDeckUrl(text).withGameId(game_id);
-        } else {
-          cah.log.error("This command only works in a game.");
-        }
-        break;
       case 'removecustomdeck':
         if (game_id !== null) {
           ajax = cah.Ajax.build(cah.$.AjaxOperation.REMOVE_CARDSET).withCustomDeckId(parseInt(text.split(' ')[0]))

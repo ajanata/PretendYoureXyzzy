@@ -90,6 +90,8 @@ public class CustomCardsService {
 
     try {
       String content = getUrlContent(url);
+      if (content == null) return null;
+
       return loadSetFromJson(content, url);
     } catch (IOException e) {
       putCache(null, INVALID_SET_CACHE_LIFETIME, url, null);

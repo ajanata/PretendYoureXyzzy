@@ -305,6 +305,8 @@ cah.Game = function(id) {
   $(".confirm_card", this.element_).click(cah.bind(this, this.confirmClick_));
   $(".game_show_last_round", this.element_).click(cah.bind(this, this.showLastRoundClick_));
   $(".game_show_options", this.element_).click(cah.bind(this, this.showOptionsClick_));
+  $(".add_custom_deck_json", this.element_).click(cah.bind(this, this.addCustomDeckJson_));
+  $(".add_custom_deck_url", this.element_).click(cah.bind(this, this.addCustomDeckUrl_));
   $("select", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
   $("input", this.optionsElement_).blur(cah.bind(this, this.optionChanged_));
   $(".timer_multiplier", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
@@ -1477,6 +1479,38 @@ cah.Game.prototype.updateOptionsEnabled_ = function() {
     // let all players adjust the "hide password" option themselves
     $(".game_hide_password", this.optionsElement_).removeAttr("disabled");
   }
+};
+
+/**
+ * Upload custom deck with a given URL.
+ *
+ * @param e
+ * @private
+ */
+cah.Game.prototype.addCustomDeckUrl_ = function(e) {
+  var url = prompt("Insert a valid URL pointing to the deck.");
+  cah.Ajax.build(cah.$.AjaxOperation.ADD_CARDSET).withGameId(this.id_).withCustomDeckUrl(url).run();
+};
+
+/**
+ * Upload custom deck from JSON.
+ *
+ * @param e
+ * @private
+ */
+cah.Game.prototype.addCustomDeckJson_ = function(e) {
+  var gid = this.id_;
+  var file_input = $('#file-input')[0];
+  file_input.onchange = function (ee) {
+    var reader = new FileReader();
+    reader.readAsText(ee.target.files[0],'UTF-8');
+    reader.onload = readerEvent => {
+      var content = readerEvent.target.result;
+      cah.Ajax.build(cah.$.AjaxOperation.ADD_CARDSET).withGameId(gid).withCustomDeckJson(content).run();
+    }
+  }
+
+  file_input.click();
 };
 
 /**
