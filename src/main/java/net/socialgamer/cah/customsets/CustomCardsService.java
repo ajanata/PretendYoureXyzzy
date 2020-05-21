@@ -23,6 +23,8 @@
 
 package net.socialgamer.cah.customsets;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.ByteSource;
 import com.google.inject.Inject;
 import net.socialgamer.cah.data.GameOptions;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -32,10 +34,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.ref.SoftReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -90,7 +89,10 @@ public class CustomCardsService {
 
     try {
       String content = getUrlContent(url);
-      if (content == null) return null;
+      if (content == null) {
+        putCache(null, INVALID_SET_CACHE_LIFETIME, url, null);
+        return null;
+      }
 
       return loadSetFromJson(content, url);
     } catch (IOException e) {
@@ -103,7 +105,7 @@ public class CustomCardsService {
 
   public CustomDeck loadSetFromJson(String jsonStr, String url) {
     String hash = DigestUtils.md5Hex(jsonStr);
-    CacheEntry entry = checkCacheHash(url);
+    CacheEntry entry = checkCacheHash(hash);
     if (checkCacheValid(entry, "json", hash))
       return entry.deck;
 
@@ -250,25 +252,19 @@ public class CustomCardsService {
       return null;
     }
     final String contentType = conn.getContentType();
-    if (!"application/json".equals(contentType)) {
+    if (contentType == null || !contentType.startsWith("application/json")) {
       LOG.error(String.format("Got content-type %s for %s", contentType, urlStr));
       return null;
     }
 
-    final InputStream is = conn.getInputStream();
-    final InputStreamReader isr = new InputStreamReader(is);
-    final BufferedReader reader = new BufferedReader(isr);
-    final StringBuilder builder = new StringBuilder(4096);
-    String line;
-    while ((line = reader.readLine()) != null) {
-      builder.append(line);
-      builder.append('\n');
+    try (InputStream is = conn.getInputStream()) {
+      return new ByteSource() {
+        @Override
+        public InputStream openStream() {
+          return is;
+        }
+      }.asCharSource(Charsets.UTF_8).read();
     }
-    reader.close();
-    isr.close();
-    is.close();
-
-    return builder.toString();
   }
 
   private static class CacheEntry {
