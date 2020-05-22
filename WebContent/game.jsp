@@ -483,10 +483,8 @@ boolean allowBlankCards = injector.getInstance(Key.get(new TypeLiteral<Boolean>(
       </fieldset>
       <fieldset>
         <legend>Custom Card Sets</legend>
-        <input type="button" class="add_custom_deck_json" value="Upload JSON"/>
-        <input type="button" class="add_custom_deck_url" value="Download from URL"/>
-
-        <input id="file-input" type="file" accept="application/json" style="display: none;"/>
+        <input type="button" class="add_custom_deck_json skip_changed" value="Upload JSON"/>
+        <input type="button" class="add_custom_deck_url skip_changed" value="Download from URL"/>
       </fieldset>
       <% if (allowBlankCards) { %>
         <br/>

@@ -307,8 +307,8 @@ cah.Game = function(id) {
   $(".game_show_options", this.element_).click(cah.bind(this, this.showOptionsClick_));
   $(".add_custom_deck_json", this.element_).click(cah.bind(this, this.addCustomDeckJson_));
   $(".add_custom_deck_url", this.element_).click(cah.bind(this, this.addCustomDeckUrl_));
-  $("select", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
-  $("input", this.optionsElement_).blur(cah.bind(this, this.optionChanged_));
+  $("select:not(.skip_changed)", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
+  $("input:not(.skip_changed)", this.optionsElement_).blur(cah.bind(this, this.optionChanged_));
   $(".timer_multiplier", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
   $(".card_set", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
   $(".game_hide_password", this.optionsElement_).click(cah.bind(this, this.showOrHidePassword_));
@@ -1500,17 +1500,22 @@ cah.Game.prototype.addCustomDeckUrl_ = function(e) {
  */
 cah.Game.prototype.addCustomDeckJson_ = function(e) {
   var gid = this.id_;
-  var file_input = $('#file-input')[0];
-  file_input.onchange = function (ee) {
+  var file_input = $(document.createElement("input"));
+  file_input.attr("type", "file");
+  file_input.attr("accept", "application/json");
+  file_input.attr("style", "display: none;");
+
+  document.body.appendChild(file_input[0]);
+  file_input.on("change", function (ee) {
+    document.body.removeChild(this);
+
     var reader = new FileReader();
     reader.readAsText(ee.target.files[0],'UTF-8');
     reader.onload = readerEvent => {
       var content = readerEvent.target.result;
       cah.Ajax.build(cah.$.AjaxOperation.ADD_CARDSET).withGameId(gid).withCustomDeckJson(content).run();
     }
-  }
-
-  file_input.click();
+  }).trigger("click");
 };
 
 /**
