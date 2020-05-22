@@ -23,6 +23,7 @@
 
 package net.socialgamer.cah.customsets;
 
+import com.dampcake.bencode.Bencode;
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteSource;
 import com.google.inject.Inject;
@@ -34,7 +35,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -67,6 +69,8 @@ public class CustomCardsService {
 
   private static final AtomicInteger cardIdCounter = new AtomicInteger(-(GameOptions.MAX_BLANK_CARD_LIMIT + 1));
   private static final AtomicInteger deckIdCounter = new AtomicInteger(0);
+
+  private final Bencode bencode = new Bencode();
 
   @Inject
   public CustomCardsService() {
@@ -104,14 +108,23 @@ public class CustomCardsService {
   }
 
   public CustomDeck loadSetFromJson(String jsonStr, String url) {
-    String hash = DigestUtils.md5Hex(jsonStr);
+    JSONObject obj;
+    String hash;
+    try {
+      obj = (JSONObject) JSONValue.parse(jsonStr);
+      hash = DigestUtils.md5Hex(bencode.encode(obj));
+    } catch (Exception e) {
+      putCache(null, INVALID_SET_CACHE_LIFETIME, url, null);
+      LOG.error("Unable to parse deck.", e);
+      e.printStackTrace();
+      return null;
+    }
+
     CacheEntry entry = checkCacheHash(hash);
     if (checkCacheValid(entry, "json", hash))
       return entry.deck;
 
     try {
-      JSONObject obj = (JSONObject) JSONValue.parse(jsonStr);
-
       final String name = (String) obj.get("name");
       final String description = (String) obj.get("description");
       final String watermark = (String) obj.get("watermark");
