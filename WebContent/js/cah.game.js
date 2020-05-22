@@ -107,6 +107,16 @@ cah.Game = function(id) {
   $("#timer_multiplier_template", this.optionsElement_).attr("id", "timer_multiplier_" + id);
   $("#blanks_limit_template", this.optionsElement_).attr("id", "blanks_limit_" + id);
 
+  /**
+   * The custom decks list element
+   *
+   * @type {HTMLElement}
+   * @private
+   */
+  this.customDecksElement_ = $(".custom_decks_list", this.optionsElement_);
+  this.customDecksElement_.empty();
+
+
   for ( var key in cah.CardSet.byWeight) {
     /** @type {cah.CardSet} */
     var cardSet = cah.CardSet.byWeight[key];
@@ -307,6 +317,7 @@ cah.Game = function(id) {
   $(".game_show_options", this.element_).click(cah.bind(this, this.showOptionsClick_));
   $(".add_custom_deck_json", this.element_).click(cah.bind(this, this.addCustomDeckJson_));
   $(".add_custom_deck_url", this.element_).click(cah.bind(this, this.addCustomDeckUrl_));
+  $(".remove_selected_custom_deck", this.element_).click(cah.bind(this, this.removeSelectedCustomDeck_));
   $("select:not(.skip_changed)", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
   $("input:not(.skip_changed)", this.optionsElement_).blur(cah.bind(this, this.optionChanged_));
   $(".timer_multiplier", this.optionsElement_).change(cah.bind(this, this.optionChanged_));
@@ -785,59 +796,6 @@ cah.Game.prototype.insertIntoDocument = function() {
   linkToChatArea.click();
   this.windowResize_();
   // TODO display a loading animation
-};
-
-/**
- * Display a message that a Cardcast deck has been added to the game.
- * 
- * @param {object}
- *          data Payload from server.
- */
-cah.Game.prototype.addCardcastDeck = function(data) {
-  this.displayCardcastDeckMessage_(data[cah.$.LongPollResponse.CUSTOM_DECK_INFO], "Added");
-};
-
-/**
- * Display a message that a Cardcast deck has been removed from the game.
- * 
- * @param {object}
- *          data Payload from server.
- */
-cah.Game.prototype.removeCardcastDeck = function(data) {
-  this.displayCardcastDeckMessage_(data[cah.$.LongPollResponse.CUSTOM_DECK_INFO], "Removed");
-};
-
-/**
- * Display a list of currently in-use Cardcast decks.
- * 
- * @param {array}
- *          data Array of CardSetDatas.
- */
-cah.Game.prototype.listCardcastDecks = function(cardSets) {
-  cah.log.status_with_game(this, "The following custom decks are in use in this game (<a"
-      + " target='_blank' href='https://github.com/ajanata/PretendYoureXyzzy/wiki/Cardcast'>"
-      + "instructions</a>):", 'admin', true);
-  for ( var key in cardSets) {
-    var cardSetData = cardSets[key];
-    this.displayCardcastDeckMessage_(cardSetData, "In use");
-  }
-};
-
-/**
- * Display a message about a Cardcast deck.
- * 
- * @param {object}
- *          deckInfo The CardSetData of the deck.
- * @param {string}
- *          verb Verb to display at the beginning of the message: "Added", "Removed", "In use", etc.
- * @private
- */
-cah.Game.prototype.displayCardcastDeckMessage_ = function(deckInfo, verb) {
-  var id = deckInfo[cah.$.CardSetData.ID];
-  var str = verb + ": Cardcast deck '" + deckInfo[cah.$.CardSetData.CARD_SET_NAME]
-      + "' (id: " + id + "), with " + deckInfo[cah.$.CardSetData.BLACK_CARDS_IN_DECK]
-      + " black cards and " + deckInfo[cah.$.CardSetData.WHITE_CARDS_IN_DECK] + " white cards.";
-  cah.log.status_with_game(this, str, 'admin', true);
 };
 
 /**
@@ -1489,6 +1447,8 @@ cah.Game.prototype.updateOptionsEnabled_ = function() {
  */
 cah.Game.prototype.addCustomDeckUrl_ = function(e) {
   var url = prompt("Insert a valid URL pointing to the deck.");
+  if (url.length == 0) return;
+
   cah.Ajax.build(cah.$.AjaxOperation.ADD_CARDSET).withGameId(this.id_).withCustomDeckUrl(url).run();
 };
 
@@ -1516,6 +1476,19 @@ cah.Game.prototype.addCustomDeckJson_ = function(e) {
       cah.Ajax.build(cah.$.AjaxOperation.ADD_CARDSET).withGameId(gid).withCustomDeckJson(content).run();
     }
   }).trigger("click");
+};
+
+/**
+ * Remove the selected custom decks.
+ *
+ * @param e
+ * @private
+ */
+cah.Game.prototype.removeSelectedCustomDeck_ = function(e) {
+  var sets = this.customDecksElement_.val();
+  for (var i = 0; i < sets.length; i++) {
+    cah.Ajax.build(cah.$.AjaxOperation.REMOVE_CARDSET).withGameId(this.id_).withCustomDeckId(sets[i]).run();
+  }
 };
 
 /**
@@ -1547,6 +1520,40 @@ cah.Game.prototype.optionChanged_ = function(e) {
 
   cah.Ajax.build(cah.$.AjaxOperation.CHANGE_GAME_OPTIONS).withGameId(this.id_).withGameOptions(
       options).run();
+};
+
+/**
+ * A custom deck has been added.
+ *
+ * @param data {object} Event data from server.
+ */
+cah.Game.prototype.customDeckAdded = function(data) {
+  var optElm = $(document.createElement("option"));
+  optElm.text(data[cah.$.CardSetData.CARD_SET_NAME]);
+  optElm.attr("value", data[cah.$.CardSetData.ID]);
+  this.customDecksElement_.append(optElm);
+};
+
+/**
+ * A custom deck has been removed.
+ *
+ * @param data {object} Event data from server.
+ */
+cah.Game.prototype.customDeckRemoved = function(data) {
+  var id = data[cah.$.CardSetData.ID];
+  this.customDecksElement_.find("option[value=\"" + id + "\"]").remove();
+};
+
+/**
+ * Updates the list of currently in-use custom decks.
+ *
+ * @param data {array} The list of decks.
+ */
+cah.Game.prototype.updateCustomDecks = function(data) {
+  this.customDecksElement_.empty();
+  for (var i = 0; i < data.length; i++) {
+    this.customDeckAdded(data[i])
+  }
 };
 
 /**

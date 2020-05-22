@@ -80,6 +80,19 @@ public class CustomCardsService {
     // TODO: Nothing to hack?
   }
 
+  private static boolean checkCacheValid(CacheEntry entry, String method, String key) {
+    if (null != entry && entry.expires > System.currentTimeMillis()) {
+      LOG.info(String.format("Using cache (%s): %s=%s", method, key, entry.deck));
+      return true;
+    } else if (null != entry) {
+      LOG.info(String.format("Cache stale (%s): %s", method, key));
+      return false;
+    } else {
+      LOG.info(String.format("Cache miss (%s): %s", method, key));
+      return false;
+    }
+  }
+
   public CustomDeck loadSet(int customDeckId) {
     CacheEntry entry = checkCacheId(customDeckId);
     if (checkCacheValid(entry, "id", String.valueOf(customDeckId))) return entry.deck;
@@ -227,19 +240,6 @@ public class CustomCardsService {
       }
 
       return null;
-    }
-  }
-
-  private boolean checkCacheValid(CacheEntry entry, String method, String key) {
-    if (null != entry && entry.expires > System.currentTimeMillis()) {
-      LOG.info(String.format("Using cache (%s): %s=%s", method, key, entry.deck));
-      return true;
-    } else if (null != entry) {
-      LOG.info(String.format("Cache stale (%s): %s", method, key));
-      return false;
-    } else {
-      LOG.info(String.format("Cache miss (%s): %s", method, key));
-      return false;
     }
   }
 

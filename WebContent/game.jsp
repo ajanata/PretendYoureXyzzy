@@ -485,6 +485,9 @@ boolean allowBlankCards = injector.getInstance(Key.get(new TypeLiteral<Boolean>(
         <legend>Custom Card Sets</legend>
         <input type="button" class="add_custom_deck_json skip_changed" value="Upload JSON"/>
         <input type="button" class="add_custom_deck_url skip_changed" value="Download from URL"/>
+        <input type="button" class="remove_selected_custom_deck skip_changed" value="Removed selected"/>
+        <select class="custom_decks_list skip_changed" multiple="multiple">
+        </select>
       </fieldset>
       <% if (allowBlankCards) { %>
         <br/>

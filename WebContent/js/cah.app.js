@@ -213,21 +213,6 @@ function chatsubmit_click(game_id, parent_element) {
       case 'names':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.NAMES);
         break;
-      case 'removecustomdeck':
-        if (game_id !== null) {
-          ajax = cah.Ajax.build(cah.$.AjaxOperation.REMOVE_CARDSET).withCustomDeckId(parseInt(text.split(' ')[0]))
-              .withGameId(game_id);
-        } else {
-          cah.log.error("This command only works in a game.");
-        }
-        break;
-      case 'listcustomdecks':
-        if (game_id !== null) {
-          ajax = cah.Ajax.build(cah.$.AjaxOperation.LIST_CARDSETS).withGameId(game_id);
-        } else {
-          cah.log.error("This command only works in a game.");
-        }
-        break;
       case 'whois':
         ajax = cah.Ajax.build(cah.$.AjaxOperation.WHOIS).withNickname(text.split(' ')[0]);
         // so we can show it in the right place; the server ignores this

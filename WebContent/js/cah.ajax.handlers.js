@@ -312,7 +312,7 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LIST_CARDSETS] = function(data, req
   var gameId = req[cah.$.AjaxRequest.GAME_ID];
   var game = cah.currentGames[gameId];
   if (game) {
-    game.listCardcastDecks(data[cah.$.AjaxResponse.CARD_SETS]);
+    game.updateCustomDecks(data[cah.$.AjaxResponse.CARD_SETS]);
   }
 };
 

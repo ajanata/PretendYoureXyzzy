@@ -262,11 +262,11 @@ cah.longpoll.EventHandlers.__gameEvent = function(data, func, funcData, errorStr
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.ADD_CARDSET] = function(data) {
-  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.addCardcastDeck, data,
-      "add Cardcast");
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.customDeckAdded, data[cah.$.LongPollResponse.CUSTOM_DECK_INFO],
+      "add custom deck");
 };
 
 cah.longpoll.EventHandlers[cah.$.LongPollEvent.REMOVE_CARDSET] = function(data) {
-  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.removeCardcastDeck, data,
-      "remove Cardcast");
+  cah.longpoll.EventHandlers.__gameEvent(data, cah.Game.prototype.customDeckRemoved, data[cah.$.LongPollResponse.CUSTOM_DECK_INFO],
+      "remove custom deck");
 };
