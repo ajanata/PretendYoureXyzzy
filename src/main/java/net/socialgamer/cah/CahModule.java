@@ -25,18 +25,14 @@ package net.socialgamer.cah;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.ServletContext;
 
+import com.google.common.collect.ImmutableList;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
@@ -311,6 +307,19 @@ public class CahModule extends AbstractModule {
     synchronized (properties) {
       return Boolean.valueOf(properties.getProperty("pyx.server.allow_blank_cards", "true"));
     }
+  }
+
+  @Provides
+  @CustomDecksAllowedUrls
+  List<String> provideAllowedCustomDecksUrls() {
+    synchronized (properties) {
+      return ImmutableList.copyOf(properties.getProperty("pyx.server.allowed_custom_decks_urls", "").split(","));
+    }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface CustomDecksAllowedUrls {
   }
 
   @BindingAnnotation

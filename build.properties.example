@@ -16,6 +16,8 @@ pyx.id_code_salt=
 pyx.admin_addrs=127.0.0.1,0:0:0:0:0:0:0:1
 # comma-separated list of strings banned from appearing in nicks.
 pyx.banned_nicks=xyzzy
+# comma-separated list of url patterns to allow custom decks
+pyx.allowed_custom_decks_urls=*
 
 # The name of a class that implements net.socialgamer.cah.util.ChatFilter.ShadowBannedStringProvider
 # which will then be called to get the shadowbanned strings.

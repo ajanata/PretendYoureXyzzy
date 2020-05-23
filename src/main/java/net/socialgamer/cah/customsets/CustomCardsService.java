@@ -27,6 +27,8 @@ import com.dampcake.bencode.Bencode;
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteSource;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import net.socialgamer.cah.CahModule.CustomDecksAllowedUrls;
 import net.socialgamer.cah.data.GameOptions;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -41,6 +43,7 @@ import java.lang.ref.SoftReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -71,9 +74,11 @@ public class CustomCardsService {
   private static final AtomicInteger deckIdCounter = new AtomicInteger(0);
 
   private final Bencode bencode = new Bencode();
+  private final Provider<List<String>> allowedUrlsProvider;
 
   @Inject
-  public CustomCardsService() {
+  public CustomCardsService(@CustomDecksAllowedUrls Provider<List<String>> allowedUrlsProvider) {
+    this.allowedUrlsProvider = allowedUrlsProvider;
   }
 
   public static void hackSslVerifier() {
@@ -251,6 +256,27 @@ public class CustomCardsService {
 
   private String getUrlContent(final String urlStr) throws IOException {
     final URL url = new URL(urlStr);
+
+    List<String> allowedUrls = allowedUrlsProvider.get();
+    boolean allowed = false;
+    for (String pattern : allowedUrls) {
+      if ("*".equals(pattern)) {
+        allowed = true;
+      } else if (pattern.charAt(0) == '*') {
+        allowed = url.getHost().endsWith(pattern.substring(1));
+      } else {
+        allowed = url.getHost().equals(pattern);
+      }
+
+      if (allowed)
+        break;
+    }
+
+    if (!allowed) {
+      LOG.info("Cannot load deck, domain is not allowed: " + url.getHost());
+      return null;
+    }
+
     final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
     conn.setDoInput(true);
     conn.setDoOutput(false);
