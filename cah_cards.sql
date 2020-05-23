@@ -196,7 +196,7 @@ COPY black_cards (id, draw, pick, text, watermark) FROM stdin;
 54	0	1	This season at Steppenwolf, Samuel Beckett's classic existential play: Waiting for ____.	US
 55	0	1	A recent laboratory study shows that undergraduates have 50% less sex after being exposed to ____.	US
 56	0	2	Introducing the amazing superhero/sidekick duo! It's ____ and ____!	US
-57	0	1	Mabe she's born with it. Maybe it's ____.	US
+57	0	1	Maybe she's born with it. Maybe it's ____.	US
 58	0	2	They said we were crazy. They said we couldn't put ____ inside of ____. They were wrong.	US
 59	0	1	Arby's: We Have ____.	US
 60	0	1	What will always get you laid?	US
