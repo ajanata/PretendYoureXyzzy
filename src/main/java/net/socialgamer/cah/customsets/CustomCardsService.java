@@ -29,7 +29,6 @@ import com.google.common.io.ByteSource;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import net.socialgamer.cah.CahModule.CustomDecksAllowedUrls;
-import net.socialgamer.cah.data.GameOptions;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
@@ -70,7 +69,7 @@ public class CustomCardsService {
    */
   private static final long VALID_SET_CACHE_LIFETIME = TimeUnit.MINUTES.toMillis(15);
 
-  private static final AtomicInteger cardIdCounter = new AtomicInteger(-(GameOptions.MAX_BLANK_CARD_LIMIT + 1));
+  private static final AtomicInteger cardIdCounter = new AtomicInteger(Integer.MIN_VALUE);
   private static final AtomicInteger deckIdCounter = new AtomicInteger(0);
 
   private final Bencode bencode = new Bencode();
@@ -163,7 +162,7 @@ public class CustomCardsService {
             final String text = CustomCardFormatHelper.formatBlackCard(texts);
             final int pick = texts.size() - 1;
             final int draw = (pick >= 3 ? pick - 1 : 0);
-            final CustomBlackCard card = new CustomBlackCard(cardIdCounter.decrementAndGet(), text, draw, pick, watermark);
+            final CustomBlackCard card = new CustomBlackCard(cardIdCounter.incrementAndGet(), text, draw, pick, watermark);
             deck.getBlackCards().add(card);
           }
         }
@@ -177,7 +176,7 @@ public class CustomCardsService {
             final String text = CustomCardFormatHelper.formatWhiteCard(texts);
             // don't add blank cards, they don't do anything
             if (!text.isEmpty()) {
-              final CustomWhiteCard card = new CustomWhiteCard(cardIdCounter.decrementAndGet(), text, watermark);
+              final CustomWhiteCard card = new CustomWhiteCard(cardIdCounter.incrementAndGet(), text, watermark);
               deck.getWhiteCards().add(card);
             }
           }
@@ -296,13 +295,16 @@ public class CustomCardsService {
       return null;
     }
 
-    try (InputStream is = conn.getInputStream()) {
+    final InputStream is = conn.getInputStream();
+    try {
       return new ByteSource() {
         @Override
         public InputStream openStream() {
           return is;
         }
       }.asCharSource(Charsets.UTF_8).read();
+    } finally {
+      is.close();
     }
   }
 

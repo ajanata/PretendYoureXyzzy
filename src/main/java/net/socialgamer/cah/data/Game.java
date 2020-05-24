@@ -27,8 +27,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import net.socialgamer.cah.CahModule.*;
 import net.socialgamer.cah.Constants.*;
-import net.socialgamer.cah.cardcast.CardcastDeck;
-import net.socialgamer.cah.cardcast.CardcastService;
+import net.socialgamer.cah.customsets.CustomCardsService;
+import net.socialgamer.cah.customsets.CustomDeck;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.Metrics;
@@ -87,8 +87,8 @@ public class Game {
   private final Object blackCardLock = new Object();
   private WhiteDeck whiteDeck;
   private GameState state;
-  private final GameOptions options = new GameOptions();
-  private final Set<Integer> cardcastDeckIds = Collections.synchronizedSet(new HashSet<Integer>());
+  private final GameOptions options;
+  private final Set<Integer> customDecksIds = Collections.synchronizedSet(new HashSet<Integer>());
   private final Metrics metrics;
   private final Provider<Boolean> showGameLinkProvider;
   private final Provider<String> gamePermalinkFormatProvider;
@@ -147,33 +147,6 @@ public class Game {
         new String[]{"0.25x", "0.5x", "0.75x", "1x", "1.25x", "1.5x", "1.75x", "2x", "2.5x", "3x", "4x", "5x", "10x"}));
     FINITE_PLAYTIMES = Collections.unmodifiableSet(finitePlaytimes);
   }
-
-    private final int id;
-    /**
-     * All players present in the game.
-     */
-    private final List<Player> players = Collections.synchronizedList(new ArrayList<Player>(10));
-    /**
-     * Players participating in the current round.
-     */
-    private final List<Player> roundPlayers = Collections.synchronizedList(new ArrayList<Player>(9));
-    private final PlayerPlayedCardsTracker playedCards = new PlayerPlayedCardsTracker();
-    private final List<User> spectators = Collections.synchronizedList(new ArrayList<User>(10));
-    private final ConnectedUsers connectedUsers;
-    private final GameManager gameManager;
-    private final Provider<Session> sessionProvider;
-    private final Object blackCardLock = new Object();
-    private final GameOptions options;
-    private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<String>());
-    private final Metrics metrics;
-    private final Provider<Boolean> showGameLinkProvider;
-    private final Provider<String> gamePermalinkFormatProvider;
-    private final Provider<Boolean> showRoundLinkProvider;
-    private final Provider<String> roundPermalinkFormatProvider;
-
-    // All of these delays could be moved to pyx.properties.
-    private final Provider<Boolean> allowBlankCardsProvider;
-    private final long created = System.currentTimeMillis();
     /**
      * Lock object to prevent judging during idle judge detection and vice-versa.
      */
@@ -183,14 +156,8 @@ public class Game {
      */
     private final Object roundTimerLock = new Object();
     private final ScheduledThreadPoolExecutor globalTimer;
-    private final Provider<CustomCardsService> cardcastServiceProvider;
+    private final Provider<CustomCardsService> customDecksServiceProvider;
     private final Provider<String> uniqueIdProvider;
-    private Player host;
-    private BlackDeck blackDeck;
-    private BlackCard blackCard;
-    private WhiteDeck whiteDeck;
-    private GameState state;
-    private int judgeIndex = 0;
     private volatile ScheduledFuture<?> lastScheduledFuture;
     private String currentUniqueId;
     /**
@@ -216,7 +183,7 @@ public class Game {
     public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
                 final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer,
                 final Provider<Session> sessionProvider,
-                final Provider<CustomCardsService> cardcastServiceProvider,
+                final Provider<CustomCardsService> customDecksServiceProvider,
                 @UniqueId final Provider<String> uniqueIdProvider,
                 final Metrics metrics, @ShowRoundPermalink final Provider<Boolean> showRoundLinkProvider,
                 @RoundPermalinkUrlFormat final Provider<String> roundPermalinkFormatProvider,
@@ -230,7 +197,7 @@ public class Game {
         this.gameManager = gameManager;
         this.globalTimer = globalTimer;
         this.sessionProvider = sessionProvider;
-        this.cardcastServiceProvider = cardcastServiceProvider;
+        this.customDecksServiceProvider = customDecksServiceProvider;
         this.uniqueIdProvider = uniqueIdProvider;
         this.metrics = metrics;
         this.showRoundLinkProvider = showRoundLinkProvider;
@@ -541,8 +508,8 @@ public class Game {
         notifyGameOptionsChanged();
     }
 
-  public Set<String> getCardcastDeckIds() {
-    return cardcastDeckIds;
+  public Set<Integer> getCustomDeckIds() {
+    return customDecksIds;
   }
 
     /**
@@ -728,7 +695,7 @@ public class Game {
                 currentUniqueId = uniqueIdProvider.get();
                 logger.info(String.format("Starting game %d with card sets %s, Cardcast %s, %d blanks, %d "
                                 + "max players, %d max spectators, %d score limit, players %s, unique %s.",
-                        id, options.cardSetIds, cardcastDeckIds, options.blanksInDeck, options.playerLimit,
+                        id, options.cardSetIds, customDecksIds, options.blanksInDeck, options.playerLimit,
                         options.spectatorLimit, options.scoreGoal, players, currentUniqueId));
                 // do this stuff outside the players lock; they will lock players again later for much less
                 // time, and not at the same time as trying to lock users, which has caused deadlocks
@@ -766,10 +733,10 @@ public class Game {
         // Not injecting the service itself because we might need to assisted inject it later
         // with card id stuff.
         // also TODO maybe make card ids longs instead of ints
-        final CustomCardsService service = cardcastServiceProvider.get();
+        final CustomCardsService service = customDecksServiceProvider.get();
 
         // Avoid ConcurrentModificationException
-        for (final Integer customDeckId : cardcastDeckIds.toArray(new Integer[0])) {
+        for (final Integer customDeckId : customDecksIds.toArray(new Integer[0])) {
           // Ideally, we can assume that anything in that set is going to load, but it is entirely
           // possible that the cache has expired and we can't re-load it for some reason, so
           // let's be safe.
