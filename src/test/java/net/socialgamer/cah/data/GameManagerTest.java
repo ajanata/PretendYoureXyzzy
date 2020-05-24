@@ -73,6 +73,15 @@ public class GameManagerTest {
   private int gameId;
   private final ScheduledThreadPoolExecutor timer = new ScheduledThreadPoolExecutor(1);
   private Metrics metricsMock;
+  private final Provider<GameOptions> gameOptionsProvider = new Provider<GameOptions>() {
+    @Override
+    public GameOptions get() {
+      return new GameOptions(20, 10, 3,
+              20, 10, 0,
+              4, 69, 8,
+              0, 0, 30);
+    }
+  };
   private final Provider<Boolean> falseProvider = new Provider<Boolean>() {
     @Override
     public Boolean get() {
@@ -117,6 +126,7 @@ public class GameManagerTest {
         bind(Boolean.class).annotatedWith(ShowGamePermalink.class).toProvider(falseProvider);
         bind(String.class).annotatedWith(GamePermalinkUrlFormat.class).toProvider(formatProvider);
         bind(Boolean.class).annotatedWith(AllowBlankCards.class).toProvider(falseProvider);
+        bind(GameOptions.class).toProvider(gameOptionsProvider);
       }
 
       @Provides
@@ -167,15 +177,15 @@ public class GameManagerTest {
     assertEquals(0, gameManager.get().intValue());
     gameManager.getGames().put(0,
         new Game(0, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
-            formatProvider, falseProvider, formatProvider, falseProvider));
+            formatProvider, falseProvider, formatProvider, falseProvider, gameOptionsProvider));
     assertEquals(1, gameManager.get().intValue());
     gameManager.getGames().put(1,
         new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
-            formatProvider, falseProvider, formatProvider, falseProvider));
+            formatProvider, falseProvider, formatProvider, falseProvider, gameOptionsProvider));
     assertEquals(2, gameManager.get().intValue());
     gameManager.getGames().put(2,
         new Game(2, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
-            formatProvider, falseProvider, formatProvider, falseProvider));
+            formatProvider, falseProvider, formatProvider, falseProvider, gameOptionsProvider));
     // make sure it says it can't make any more
     assertEquals(-1, gameManager.get().intValue());
 
@@ -185,7 +195,7 @@ public class GameManagerTest {
     assertEquals(1, gameManager.get().intValue());
     gameManager.getGames().put(1,
         new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
-            formatProvider, falseProvider, formatProvider, falseProvider));
+            formatProvider, falseProvider, formatProvider, falseProvider, gameOptionsProvider));
     assertEquals(-1, gameManager.get().intValue());
 
     // remove game 1 out from under it, to make sure it'll fix itself
@@ -193,7 +203,7 @@ public class GameManagerTest {
     assertEquals(1, gameManager.get().intValue());
     gameManager.getGames().put(1,
         new Game(1, cuMock, gameManager, timer, null, null, null, metricsMock, falseProvider,
-            formatProvider, falseProvider, formatProvider, falseProvider));
+            formatProvider, falseProvider, formatProvider, falseProvider, gameOptionsProvider));
     assertEquals(-1, gameManager.get().intValue());
 
     gameManager.destroyGame(2);
