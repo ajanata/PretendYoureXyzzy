@@ -60,6 +60,15 @@ public class GameTest {
   private GameManager gmMock;
   private Metrics metricsMock;
   private final ScheduledThreadPoolExecutor timer = new ScheduledThreadPoolExecutor(1);
+  private final Provider<GameOptions> gameOptionsProvider = new Provider<GameOptions>() {
+    @Override
+    public GameOptions get() {
+      return new GameOptions(20, 10, 3,
+              20, 10, 0,
+              4, 69, 8,
+              0, 0, 30);
+    }
+  };
   private final Provider<Boolean> falseProvider = new Provider<Boolean>() {
     @Override
     public Boolean get() {
@@ -79,7 +88,7 @@ public class GameTest {
     gmMock = createMock(GameManager.class);
     metricsMock = createMock(Metrics.class);
     game = new Game(0, cuMock, gmMock, timer, null, null, null, metricsMock, falseProvider,
-        formatProvider, falseProvider, formatProvider, falseProvider);
+        formatProvider, falseProvider, formatProvider, falseProvider, gameOptionsProvider);
   }
 
   @SuppressWarnings("unchecked")
