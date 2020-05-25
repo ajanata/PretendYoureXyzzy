@@ -22,14 +22,14 @@ public class AddCardsetHandler extends GameWithPlayerHandler {
 
   @Inject
   public AddCardsetHandler(final GameManager gameManager,
-      final CustomCardsService customCardsService) {
+                           final CustomCardsService customCardsService) {
     super(gameManager);
     this.customCardsService = customCardsService;
   }
 
   @Override
   public Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,
-      final HttpSession session, final User user, final Game game) {
+                                                          final HttpSession session, final User user, final Game game) {
     final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
 
     if (game.getHost() != user) {
