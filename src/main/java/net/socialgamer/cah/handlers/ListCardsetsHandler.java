@@ -31,7 +31,7 @@ public class ListCardsetsHandler extends GameWithPlayerHandler {
   @Override
   public Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,
                                                           final HttpSession session, final User user, final Game game) {
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+    final Map<ReturnableData, Object> data = new HashMap<>();
 
     final List<Map<CardSetData, Object>> setDatas = new ArrayList<>();
     for (final Integer deckId : game.getCustomDeckIds().toArray(new Integer[0])) {

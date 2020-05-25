@@ -33,8 +33,8 @@ public class CustomDeck extends CardSet {
   private final int id;
   private final String name;
   private final String description;
-  private final Set<CustomBlackCard> blackCards = new HashSet<CustomBlackCard>();
-  private final Set<CustomWhiteCard> whiteCards = new HashSet<CustomWhiteCard>();
+  private final Set<CustomBlackCard> blackCards = new HashSet<>();
+  private final Set<CustomWhiteCard> whiteCards = new HashSet<>();
 
   public CustomDeck(final int id, final String name, final String description) {
     this.id = id;

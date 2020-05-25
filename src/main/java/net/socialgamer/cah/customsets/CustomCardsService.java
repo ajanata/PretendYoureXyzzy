@@ -249,7 +249,7 @@ public class CustomCardsService {
 
   private void putCache(CustomDeck deck, long timeout, String url, String hash) {
     synchronized (cache) {
-      cache.add(new SoftReference<CacheEntry>(new CacheEntry(timeout + System.currentTimeMillis(), deck, url, hash)));
+      cache.add(new SoftReference<>(new CacheEntry(timeout + System.currentTimeMillis(), deck, url, hash)));
     }
   }
 
@@ -295,16 +295,13 @@ public class CustomCardsService {
       return null;
     }
 
-    final InputStream is = conn.getInputStream();
-    try {
+    try (InputStream is = conn.getInputStream()) {
       return new ByteSource() {
         @Override
         public InputStream openStream() {
           return is;
         }
       }.asCharSource(Charsets.UTF_8).read();
-    } finally {
-      is.close();
     }
   }
 
