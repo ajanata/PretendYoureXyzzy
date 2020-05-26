@@ -546,6 +546,15 @@ public class Game {
     }
     info.put(GameInfo.SPECTATORS, spectatorNames);
 
+    CustomCardsService customCardsService = customDecksServiceProvider.get();
+    final List<Map<CardSetData, Object>> cardSets = new ArrayList<>();
+    for (final Integer deckId : getCustomDeckIds().toArray(new Integer[0])) {
+      final CustomDeck deck = customCardsService.loadSet(deckId);
+      if (null == deck) continue;
+      cardSets.add(deck.getClientMetadata());
+    }
+    info.put(GameInfo.CUSTOM_CARD_SETS, cardSets);
+
     return info;
   }
 

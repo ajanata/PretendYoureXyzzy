@@ -58,6 +58,7 @@ cah.$.GameInfo.GAME_OPTIONS = "go";
 cah.$.GameInfo.CREATED = "gca";
 cah.$.GameInfo.PLAYERS = "P";
 cah.$.GameInfo.SPECTATORS = "V";
+cah.$.GameInfo.CUSTOM_CARD_SETS = "ccs";
 cah.$.GameInfo.HOST = "H";
 cah.$.GameInfo.STATE = "S";
 cah.$.GameInfo.ID = "gid";

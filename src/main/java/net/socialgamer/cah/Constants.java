@@ -729,6 +729,8 @@ public class Constants {
     @DuplicationAllowed
     @GoDataType("GameOptionData")
     GAME_OPTIONS(AjaxRequest.GAME_OPTIONS),
+    @GoDataType("[]CardSetData")
+    CUSTOM_CARD_SETS("ccs"),
     @GoDataType("bool")
     HAS_PASSWORD("hp"),
     @GoDataType("[]string")
