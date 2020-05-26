@@ -37,11 +37,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 
 import net.socialgamer.cah.CahModule;
-import net.socialgamer.cah.CahModule.BroadcastConnectsAndDisconnects;
-import net.socialgamer.cah.CahModule.CookieDomain;
-import net.socialgamer.cah.CahModule.GameChatEnabled;
-import net.socialgamer.cah.CahModule.GlobalChatEnabled;
-import net.socialgamer.cah.CahModule.InsecureIdAllowed;
+import net.socialgamer.cah.CahModule.*;
 import net.socialgamer.cah.StartupUtils;
 
 
@@ -93,21 +89,21 @@ public class JavascriptConfigServlet extends HttpServlet {
     builder.append(String.format("cah.INSECURE_ID_ALLOWED = %b;\n", insecureIdAllowed));
     builder.append(String.format("cah.BROADCASTING_USERS = %b;\n", broadcastingUsers));
 
-    builder.append(String.format("cah.game.MIN_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MinPlayerLimit.class))));
-    builder.append(String.format("cah.game.DEFAULT_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.DefaultPlayerLimit.class))));
-    builder.append(String.format("cah.game.MAX_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MaxPlayerLimit.class))));
+    builder.append(String.format("cah.MIN_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MinPlayerLimit.class))));
+    builder.append(String.format("cah.DEFAULT_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, DefaultPlayerLimit.class))));
+    builder.append(String.format("cah.MAX_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MaxPlayerLimit.class))));
 
-    builder.append(String.format("cah.game.MIN_SPECTATOR_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MinSpectatorLimit.class))));
-    builder.append(String.format("cah.game.DEFAULT_SPECTATOR_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.DefaultSpectatorLimit.class))));
-    builder.append(String.format("cah.game.MAX_SPECTATOR_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MaxSpectatorLimit.class))));
+    builder.append(String.format("cah.MIN_SPECTATOR_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MinSpectatorLimit.class))));
+    builder.append(String.format("cah.DEFAULT_SPECTATOR_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, DefaultSpectatorLimit.class))));
+    builder.append(String.format("cah.MAX_SPECTATOR_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MaxSpectatorLimit.class))));
 
-    builder.append(String.format("cah.game.MIN_SCORE_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MinScoreLimit.class))));
-    builder.append(String.format("cah.game.DEFAULT_SCORE_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.DefaultScoreLimit.class))));
-    builder.append(String.format("cah.game.MAX_SCORE_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MaxScoreLimit.class))));
+    builder.append(String.format("cah.MIN_SCORE_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MinScoreLimit.class))));
+    builder.append(String.format("cah.DEFAULT_SCORE_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, DefaultScoreLimit.class))));
+    builder.append(String.format("cah.MAX_SCORE_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MaxScoreLimit.class))));
 
-    builder.append(String.format("cah.game.MIN_BLANK_CARD_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MinBlankCardLimit.class))));
-    builder.append(String.format("cah.game.DEFAULT_BLANK_CARD_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.DefaultBlankCardLimit.class))));
-    builder.append(String.format("cah.game.MAX_BLANK_CARD_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, CahModule.MaxBlankCardLimit.class))));
+    builder.append(String.format("cah.MIN_BLANK_CARD_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MinBlankCardLimit.class))));
+    builder.append(String.format("cah.DEFAULT_BLANK_CARD_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, DefaultBlankCardLimit.class))));
+    builder.append(String.format("cah.MAX_BLANK_CARD_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MaxBlankCardLimit.class))));
 
     resp.setContentType("text/javascript");
     final PrintWriter out = resp.getWriter();
