@@ -664,6 +664,8 @@ public class Constants {
     CARD_SET_DESCRIPTION("csd"),
     CARD_SET_NAME("csn"),
     @DuplicationAllowed
+    WATERMARK(WhiteCardData.WATERMARK),
+    @DuplicationAllowed
     @GoDataType("int")
     ID(WhiteCardData.ID),
     @GoDataType("int")

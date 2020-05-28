@@ -151,7 +151,7 @@ public class CustomCardsService {
       }
 
       int deckId = deckIdCounter.decrementAndGet();
-      final CustomDeck deck = new CustomDeck(deckId, StringEscapeUtils.escapeXml11(name), StringEscapeUtils.escapeXml11(description));
+      final CustomDeck deck = new CustomDeck(deckId, StringEscapeUtils.escapeXml11(name), StringEscapeUtils.escapeXml11(watermark), StringEscapeUtils.escapeXml11(description));
 
       // load up the cards
       final JSONArray blacks = (JSONArray) obj.get("calls");

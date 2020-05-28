@@ -23,22 +23,26 @@
 
 package net.socialgamer.cah.customsets;
 
+import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.data.CardSet;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
 public class CustomDeck extends CardSet {
   private final int id;
   private final String name;
+  private final String watermark;
   private final String description;
   private final Set<CustomBlackCard> blackCards = new HashSet<>();
   private final Set<CustomWhiteCard> whiteCards = new HashSet<>();
 
-  public CustomDeck(final int id, final String name, final String description) {
+  public CustomDeck(final int id, final String name, final String watermark, final String description) {
     this.id = id;
     this.name = name;
+    this.watermark = watermark;
     this.description = description;
 
     if (id >= 0) throw new IllegalArgumentException("Custom deck ID must be negative.");
@@ -82,5 +86,12 @@ public class CustomDeck extends CardSet {
   @Override
   public Set<CustomWhiteCard> getWhiteCards() {
     return whiteCards;
+  }
+
+  @Override
+  protected Map<Constants.CardSetData, Object> getCommonClientMetadata() {
+    Map<Constants.CardSetData, Object> data = super.getCommonClientMetadata();
+    data.put(Constants.CardSetData.WATERMARK, watermark);
+    return data;
   }
 }
