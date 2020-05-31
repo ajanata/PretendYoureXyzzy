@@ -7285,7 +7285,7 @@ COPY white_cards (id, text, watermark) FROM stdin;
 2424	Mild amusement.	PST45
 2425	A back-alley abortion from a Mexican cyborg doctor.	PST45
 2426	Rage.	PST45
-2427	World Wards 3 through 5.	PST45
+2427	World Wars 3 through 5.	PST45
 2428	President Donald Trump.	PST45
 2429	Making Islam illegal.	PST45
 2430	Trying to wake up from this nightmare.	PST45
