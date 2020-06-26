@@ -53,4 +53,5 @@ out.println("METRICS_GAME_ENABLED " + props.get("pyx.metrics.game.enabled"));
 out.println("METRICS_ROUND_ENABLED " + props.get("pyx.metrics.round.enabled"));
 out.println("METRICS_SESSION_ENABLED " + props.get("pyx.metrics.session.enabled"));
 out.println("METRICS_USER_ENABLED " + props.get("pyx.metrics.user.enabled"));
+out.println("CUSTOM_DECKS_ENABLED " + props.get("pyx.server.custom_decks_enabled"));
 %>

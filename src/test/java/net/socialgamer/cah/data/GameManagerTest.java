@@ -153,6 +153,12 @@ public class GameManagerTest {
       }
 
       @Provides
+      @CustomDecksEnabled
+      Boolean provideCustomDecksEnabled() {
+        return true;
+      }
+
+      @Provides
       @CustomDecksAllowedUrls
       List<String> provideAllowedCustomDecksUrls() {
         return Collections.singletonList("*");

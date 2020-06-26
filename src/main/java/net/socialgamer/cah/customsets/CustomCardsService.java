@@ -28,7 +28,9 @@ import com.google.common.base.Charsets;
 import com.google.common.io.ByteSource;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import net.socialgamer.cah.CahModule;
 import net.socialgamer.cah.CahModule.CustomDecksAllowedUrls;
+import net.socialgamer.cah.CahModule.CustomDecksEnabled;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
@@ -73,10 +75,12 @@ public class CustomCardsService {
   private static final AtomicInteger deckIdCounter = new AtomicInteger(0);
 
   private final Bencode bencode = new Bencode();
+  private final Provider<Boolean> enabledProvider;
   private final Provider<List<String>> allowedUrlsProvider;
 
   @Inject
-  public CustomCardsService(@CustomDecksAllowedUrls Provider<List<String>> allowedUrlsProvider) {
+  public CustomCardsService(@CustomDecksEnabled Provider<Boolean> enabledProvider, @CustomDecksAllowedUrls Provider<List<String>> allowedUrlsProvider) {
+    this.enabledProvider = enabledProvider;
     this.allowedUrlsProvider = allowedUrlsProvider;
   }
 
@@ -98,12 +102,18 @@ public class CustomCardsService {
   }
 
   public CustomDeck loadSet(int customDeckId) {
+    if (!enabledProvider.get())
+      return null;
+
     CacheEntry entry = checkCacheId(customDeckId);
     if (checkCacheValid(entry, "id", String.valueOf(customDeckId))) return entry.deck;
     else return null;
   }
 
   public CustomDeck loadSetFromUrl(String url) {
+    if (!enabledProvider.get())
+      return null;
+
     CacheEntry entry = checkCacheUrl(url);
     if (checkCacheValid(entry, "url", url))
       return entry.deck;
@@ -125,6 +135,9 @@ public class CustomCardsService {
   }
 
   public CustomDeck loadSetFromJson(String jsonStr, String url) {
+    if (!enabledProvider.get())
+      return null;
+
     JSONObject obj;
     String hash;
     try {

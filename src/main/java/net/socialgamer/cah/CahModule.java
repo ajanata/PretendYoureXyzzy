@@ -308,11 +308,24 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
+  @CustomDecksEnabled
+  Boolean provideCustomDecksEnabled() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty("pyx.server.custom_decks_enabled", "true"));
+    }
+  }
+
+  @Provides
   @CustomDecksAllowedUrls
   List<String> provideAllowedCustomDecksUrls() {
     synchronized (properties) {
       return ImmutableList.copyOf(properties.getProperty("pyx.server.allowed_custom_decks_urls", "").split(","));
     }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface CustomDecksEnabled {
   }
 
   @BindingAnnotation

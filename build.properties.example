@@ -16,6 +16,8 @@ pyx.id_code_salt=
 pyx.admin_addrs=127.0.0.1,0:0:0:0:0:0:0:1
 # comma-separated list of strings banned from appearing in nicks.
 pyx.banned_nicks=xyzzy
+# whether the custom decks functionality is enabled
+pyx.custom_decks_enabled=true
 # comma-separated list of url patterns to allow custom decks
 pyx.allowed_custom_decks_urls=*
 
