@@ -18,6 +18,8 @@ pyx.admin_addrs=127.0.0.1,0:0:0:0:0:0:0:1
 pyx.banned_nicks=xyzzy
 # whether the custom decks functionality is enabled
 pyx.custom_decks_enabled=true
+pyx.show_add_custom_deck_url=true
+pyx.show_add_custom_deck_json=true
 # comma-separated list of url patterns to allow custom decks
 pyx.allowed_custom_decks_urls=*
 

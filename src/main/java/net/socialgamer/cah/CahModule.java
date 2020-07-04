@@ -316,6 +316,22 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
+  @ShowAddCustomDeckUrl
+  Boolean provideShowAddCustomDeckUrl() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty("pyx.client.show_add_custom_deck_url", "true"));
+    }
+  }
+
+  @Provides
+  @ShowAddCustomDeckJson
+  Boolean provideShowAddCustomDeckJson() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty("pyx.client.show_add_custom_deck_json", "true"));
+    }
+  }
+
+  @Provides
   @CustomDecksAllowedUrls
   List<String> provideAllowedCustomDecksUrls() {
     synchronized (properties) {
@@ -326,6 +342,16 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface CustomDecksEnabled {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface ShowAddCustomDeckUrl {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface ShowAddCustomDeckJson {
   }
 
   @BindingAnnotation

@@ -87,6 +87,7 @@ cah.$.CardSetData.BLACK_CARDS_IN_DECK = "bcid";
 cah.$.CardSetData.CARD_SET_NAME = "csn";
 cah.$.CardSetData.CARD_SET_DESCRIPTION = "csd";
 cah.$.CardSetData.BASE_DECK = "bd";
+cah.$.CardSetData.WATERMARK = "W";
 cah.$.CardSetData.ID = "cid";
 cah.$.CardSetData.WEIGHT = "w";
 
