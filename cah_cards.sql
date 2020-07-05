@@ -6385,7 +6385,7 @@ COPY white_cards (id, text, watermark) FROM stdin;
 1521	A crappy little hand.	RED
 1522	The systemic destruction of an entire people and their way of life.	RED
 1523	Clenched butt cheeks.	RED
-1524	Filing my son with spaghetti.	RED
+1524	Filling my son with spaghetti.	RED
 1525	Blowing some dudes in an alley.	RED
 1526	Words, words, words.	RED
 1527	Clams.	RED
