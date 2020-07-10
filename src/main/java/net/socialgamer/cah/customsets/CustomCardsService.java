@@ -67,9 +67,14 @@ public class CustomCardsService {
   private static final long INVALID_SET_CACHE_LIFETIME = TimeUnit.SECONDS.toMillis(30);
 
   /**
-   * How long to cache valid card sets.
+   * How long to cache valid card sets added by URL.
    */
-  private static final long VALID_SET_CACHE_LIFETIME = TimeUnit.MINUTES.toMillis(15);
+  private static final long VALID_SET_CACHE_LIFETIME_URL = TimeUnit.MINUTES.toMillis(15);
+
+  /**
+   * How long to cache valid card sets added by JSON.
+   */
+  private static final long VALID_SET_CACHE_LIFETIME_JSON =  TimeUnit.HOURS.toMillis(12);
 
   private static final AtomicInteger cardIdCounter = new AtomicInteger(Integer.MIN_VALUE);
   private static final AtomicInteger deckIdCounter = new AtomicInteger(0);
@@ -196,7 +201,7 @@ public class CustomCardsService {
         }
       }
 
-      putCache(deck, VALID_SET_CACHE_LIFETIME, url, hash);
+      putCache(deck, url == null ? VALID_SET_CACHE_LIFETIME_JSON : VALID_SET_CACHE_LIFETIME_URL, url, hash);
       return deck;
     } catch (Exception e) {
       putCache(null, INVALID_SET_CACHE_LIFETIME, url, hash);
