@@ -338,7 +338,7 @@ COPY black_cards (id, draw, pick, text, watermark) FROM stdin;
 200	0	1	During his midlife crisis, my dad got really into ____.	INTL
 201	0	2	When you get right down to it, ____ is just ____.	INTL
 202	0	1	This is your captain speaking. Fasten your seatbelts and prepare for ____.	INTL
-203	0	1	Tonight's top story: What you don't know about ____ could kills you.	INTL
+203	0	1	Tonight's top story: What you don't know about ____ could kill you.	INTL
 204	0	1	Future historians will agree that ____ marked the beginning of America's decline.	INTL
 205	0	1	Coming this season, Samuel Beckett's classic existential play: <i>Waiting for ____.</i>	INTL
 206	0	1	When I pooped, what came out of my butt?	INTL
@@ -5560,7 +5560,7 @@ COPY white_cards (id, text, watermark) FROM stdin;
 696	The Boy Scouts of America.	US
 697	Bananas.	US
 698	Masturbating.	US
-699	All the dues I've fucked.	US
+699	All the dudes I've fucked.	US
 700	Famine.	US
 701	Hillary Clinton's emails.	US
 702	Executing a hostage every hour.	US
