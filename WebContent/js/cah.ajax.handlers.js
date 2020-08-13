@@ -300,19 +300,19 @@ cah.ajax.SuccessHandlers[cah.$.AjaxOperation.SCORE] = function(data, req) {
   }
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CARDCAST_ADD_CARDSET] = function(data) {
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.ADD_CARDSET] = function(data) {
   // pass
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CARDCAST_REMOVE_CARDSET] = function(data) {
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.REMOVE_CARDSET] = function(data) {
   // pass
 };
 
-cah.ajax.SuccessHandlers[cah.$.AjaxOperation.CARDCAST_LIST_CARDSETS] = function(data, req) {
+cah.ajax.SuccessHandlers[cah.$.AjaxOperation.LIST_CARDSETS] = function(data, req) {
   var gameId = req[cah.$.AjaxRequest.GAME_ID];
   var game = cah.currentGames[gameId];
   if (game) {
-    game.listCardcastDecks(data[cah.$.AjaxResponse.CARD_SETS]);
+    game.updateCustomDecks(data[cah.$.AjaxResponse.CARD_SETS]);
   }
 };
 

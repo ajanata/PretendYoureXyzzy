@@ -305,6 +305,8 @@ cah.GameListLobby = function(parentElem, data) {
   $(".gamelist_lobby_max_spectators", this.element_).text(
       options[cah.$.GameOptionData.SPECTATOR_LIMIT]);
   $(".gamelist_lobby_goal", this.element_).text(options[cah.$.GameOptionData.SCORE_LIMIT]);
+
+
   var cardSets = options[cah.$.GameOptionData.CARD_SETS];
   var cardSetNames = [];
   cardSets.sort();
@@ -312,6 +314,12 @@ cah.GameListLobby = function(parentElem, data) {
     var cardSetId = cardSets[key];
     cardSetNames.push(cah.CardSet.list[cardSetId].getName());
   }
+
+  var customCardSets = data[cah.$.GameInfo.CUSTOM_CARD_SETS];
+  for ( var key in customCardSets) {
+    cardSetNames.push("<i>" + customCardSets[key][cah.$.CardSetData.CARD_SET_NAME] + "</i>");
+  }
+
   $(".gamelist_lobby_cardset", this.element_).html(cardSetNames.join(', '));
 
   if (data[cah.$.GameInfo.HAS_PASSWORD]) {

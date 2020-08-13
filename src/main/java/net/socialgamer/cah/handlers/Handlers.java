@@ -10,10 +10,8 @@ public class Handlers {
 
   static {
     LIST = new HashMap<String, Class<? extends Handler>>();
+    LIST.put(AddCardsetHandler.OP, AddCardsetHandler.class);
     LIST.put(BanHandler.OP, BanHandler.class);
-    LIST.put(CardcastAddCardsetHandler.OP, CardcastAddCardsetHandler.class);
-    LIST.put(CardcastListCardsetsHandler.OP, CardcastListCardsetsHandler.class);
-    LIST.put(CardcastRemoveCardsetHandler.OP, CardcastRemoveCardsetHandler.class);
     LIST.put(ChangeGameOptionHandler.OP, ChangeGameOptionHandler.class);
     LIST.put(ChatHandler.OP, ChatHandler.class);
     LIST.put(CreateGameHandler.OP, CreateGameHandler.class);
@@ -26,10 +24,12 @@ public class Handlers {
     LIST.put(JudgeSelectHandler.OP, JudgeSelectHandler.class);
     LIST.put(KickHandler.OP, KickHandler.class);
     LIST.put(LeaveGameHandler.OP, LeaveGameHandler.class);
+    LIST.put(ListCardsetsHandler.OP, ListCardsetsHandler.class);
     LIST.put(LogoutHandler.OP, LogoutHandler.class);
     LIST.put(NamesHandler.OP, NamesHandler.class);
     LIST.put(PlayCardHandler.OP, PlayCardHandler.class);
     LIST.put(RegisterHandler.OP, RegisterHandler.class);
+    LIST.put(RemoveCardsetHandler.OP, RemoveCardsetHandler.class);
     LIST.put(ScoreHandler.OP, ScoreHandler.class);
     LIST.put(SpectateGameHandler.OP, SpectateGameHandler.class);
     LIST.put(StartGameHandler.OP, StartGameHandler.class);
