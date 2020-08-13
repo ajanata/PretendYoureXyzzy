@@ -90,7 +90,7 @@ public class JavascriptConfigServlet extends HttpServlet {
     builder.append(String.format("cah.BROADCASTING_USERS = %b;\n", broadcastingUsers));
     builder.append(String.format("cah.BROADCASTING_USERS = %b;\n", broadcastingUsers));
 
-    builder.append(String.format("cah.CUSTOM_DECKS_ENABLED = %b;\n", injector.getInstance(Key.get(Integer.class, CustomDecksEnabled.class))));
+    builder.append(String.format("cah.CUSTOM_DECKS_ENABLED = %b;\n", injector.getInstance(Key.get(Boolean.class, CustomDecksEnabled.class))));
 
     builder.append(String.format("cah.MIN_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MinPlayerLimit.class))));
     builder.append(String.format("cah.DEFAULT_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, DefaultPlayerLimit.class))));
