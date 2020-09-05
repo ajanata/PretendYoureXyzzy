@@ -135,3 +135,24 @@ cah.updateHash = function(hash) {
   window.location.replace(window.location.protocol + '//' + window.location.host
       + window.location.pathname.replace(/#$/g, '') + '#' + hash);
 };
+
+
+
+/**
+ * Sends notifications, when the window is not in focus
+ * 
+ * @notifcont {String}
+ *          string A string to notify to the user
+ */
+cah.notifyBg = function(notifcont) {
+  if ("Notification" in window) { // if browser supports notifications
+    // If it's okay let's create a notification
+    if (Notification.permission === "granted" && !(document.hasFocus())) {
+      var notification = new Notification(notifcont);
+    }
+    // Otherwise, we need to ask the user for permission
+    else if (Notification.permission !== "denied") {
+      Notification.requestPermission();
+    }
+  }
+}

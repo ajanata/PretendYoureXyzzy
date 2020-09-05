@@ -83,6 +83,7 @@ cah.log.status_with_game = function(game_or_id, text, opt_class, opt_allow_html,
   if (game_or_id === null || game_or_id === undefined) {
     logElement = cah.log.log;
   } else {
+    cah.notifyBg(text); // send notifications of game chat, when in bg
     var game;
     if (game_or_id instanceof cah.Game) {
       game = game_or_id;
