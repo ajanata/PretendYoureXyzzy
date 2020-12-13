@@ -1,0 +1,14 @@
+{
+  "name": "Pretend You're Xyzzy",
+  "description": "Web clone of the card game Cards Against Humanity",
+  "repository": "https://github.com/ajanata/PretendYoureXyzzy",
+  "keywords": [
+    "java",
+    "maven",
+    "cards against humanity"
+  ],
+  "env": {
+    "MAVEN_CUSTOM_GOALS": "clean package war:war",
+    "MAVEN_CUSTOM_OPTS": "-Dmaven.buildNumber.doCheck=false -Dmaven.buildNumber.doUpdate=false -DskipTests"
+  }
+}
