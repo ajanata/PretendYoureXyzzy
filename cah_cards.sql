@@ -6141,7 +6141,7 @@ COPY white_cards (id, text, watermark) FROM stdin;
 1277	Whiskas&reg; Catmilk.	AU
 1278	Steve Irwin.	AU
 1279	Chunks of dead backpacker.	AU
-1280	The inevitable heath death of the universe.	AU
+1280	The inevitable heat death of the universe.	AU
 1281	A six-point plan to stop the boats.	AU
 1282	Whoever the Prime Minister is these days.	AU
 1283	An ass disaster.	INTL
