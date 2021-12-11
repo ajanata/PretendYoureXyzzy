@@ -27,7 +27,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Singleton;
 import com.maxmind.geoip2.model.CityResponse;
@@ -45,7 +46,7 @@ import net.socialgamer.cah.data.WhiteCard;
 @Singleton
 public class NoOpMetrics implements Metrics {
 
-  private static final Logger LOG = Logger.getLogger(NoOpMetrics.class);
+  private static final Logger LOG = LogManager.getLogger(NoOpMetrics.class);
 
   @Override
   public void shutdown() {

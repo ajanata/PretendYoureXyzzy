@@ -44,13 +44,14 @@ import net.socialgamer.cah.data.QueuedMessage;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.data.User;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 
 
 public class BanHandler extends Handler {
-  protected final Logger logger = Logger.getLogger(BanHandler.class);
+  protected final Logger logger = LogManager.getLogger(BanHandler.class);
 
   public static final String OP = AjaxOperation.BAN.toString();
 

@@ -34,7 +34,8 @@ import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.metrics.Metrics;
 import net.socialgamer.cah.task.SafeTimerTask;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
 import javax.annotation.Nonnull;
@@ -76,7 +77,7 @@ public class Game {
    * We need 20 * maxPlayers cards. This allows black cards up to "draw 9" to work correctly.
    */
   public final static int MINIMUM_WHITE_CARDS_PER_PLAYER = 20;
-  private static final Logger logger = Logger.getLogger(Game.class);
+  private static final Logger logger = LogManager.getLogger(Game.class);
   /**
    * Time, in milliseconds, to delay before starting a new round.
    */
