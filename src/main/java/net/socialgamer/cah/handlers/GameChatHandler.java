@@ -28,7 +28,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 
@@ -55,7 +56,7 @@ import net.socialgamer.cah.util.ChatFilter;
  */
 public class GameChatHandler extends GameWithPlayerHandler {
 
-  private static final Logger LOG = Logger.getLogger(GameChatHandler.class);
+  private static final Logger LOG = LogManager.getLogger(GameChatHandler.class);
   public static final String OP = AjaxOperation.GAME_CHAT.toString();
 
   private final ChatFilter chatFilter;

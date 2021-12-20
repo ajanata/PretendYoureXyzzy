@@ -35,7 +35,8 @@ import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
@@ -51,7 +52,7 @@ import net.socialgamer.cah.data.User;
  */
 @Singleton
 public class ChatFilter {
-  private static final Logger LOG = Logger.getLogger(ChatFilter.class);
+  private static final Logger LOG = LogManager.getLogger(ChatFilter.class);
 
   private static final int DEFAULT_CHAT_FLOOD_MESSAGE_COUNT = 4;
   private static final int DEFAULT_CHAT_FLOOD_TIME_SECONDS = 30;

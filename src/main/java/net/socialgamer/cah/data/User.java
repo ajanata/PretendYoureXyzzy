@@ -30,7 +30,8 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 import javax.annotation.Nullable;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -48,7 +49,7 @@ import net.socialgamer.cah.Constants.Sigil;
  */
 public class User {
 
-  private static final Logger LOG = Logger.getLogger(User.class);
+  private static final Logger LOG = LogManager.getLogger(User.class);
 
   private final String nickname;
 

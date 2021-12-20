@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2020, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,16 +23,16 @@
 
 package net.socialgamer.cah;
 
+import net.socialgamer.cah.data.Game;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-
-import net.socialgamer.cah.data.Game;
 
 
 /**
  * Constants needed on both the CAH server and client. This file is examined with reflection to
  * produce a Javascript version for the client to use.
- *
+ * <p>
  * All of the enums in here take a string in their constructor to define the over-the-wire value to
  * be used to represent that enum value. This allows for verbose names while debugging, and short
  * names to reduce traffic and latency, by only having to change it in one place for both the server
@@ -45,41 +45,6 @@ public class Constants {
   public static final int CHAT_FLOOD_MESSAGE_COUNT = 4;
   public static final int CHAT_FLOOD_TIME = 30 * 1000;
   public static final int CHAT_MAX_LENGTH = 200;
-
-  /**
-   * Enums that implement this interface are valid keys for data returned to clients.
-   */
-  public interface ReturnableData {
-  }
-
-  /**
-   * Enums that implement this interface have a user-visible string associated with them.
-   *
-   * There presently is not support for localization, but the name fits.
-   */
-  public interface Localizable {
-    /**
-     * @return The user-visible string that is associated with this enum value.
-     */
-    public String getString();
-  }
-
-  /**
-   * Enums that implement this interface have two user-visible strings associated with them.
-   *
-   * There presently is not support for localization, but the name fits.
-   */
-  public interface DoubleLocalizable {
-    /**
-     * @return The first user-visible string that is associated with this enum value.
-     */
-    public String getString();
-
-    /**
-     * @return The second user-visible string that is associated with this enum value.
-     */
-    public String getString2();
-  }
 
   /**
    * Reason why a client disconnected.
@@ -127,7 +92,7 @@ public class Constants {
 
   /**
    * The next thing the client should do during reconnect phase.
-   *
+   * <p>
    * Leaving these as longer strings as they are only used once per client.
    */
   public enum ReconnectNextAction {
@@ -159,9 +124,9 @@ public class Constants {
   public enum AjaxOperation {
     ADMIN_SET_VERBOSE_LOG("svl"),
     BAN("b"),
-    CARDCAST_ADD_CARDSET("cac"),
-    CARDCAST_LIST_CARDSETS("clc"),
-    CARDCAST_REMOVE_CARDSET("crc"),
+    ADD_CARDSET("acs"),
+    LIST_CARDSETS("lcs"),
+    REMOVE_CARDSET("rcs"),
     CHANGE_GAME_OPTIONS("cgo"),
     CHAT("c"),
     CREATE_GAME("cg"),
@@ -209,7 +174,10 @@ public class Constants {
   public enum AjaxRequest {
     @GoDataType("int")
     CARD_ID("cid"),
-    CARDCAST_ID("cci"),
+    @GoDataType("int")
+    CUSTOM_CARDSET_ID("cci"),
+    CUSTOM_CARDSET_URL("ccu"),
+    CUSTOM_CARDSET_JSON("ccj"),
     @GoDataType("bool")
     EMOTE("me"),
     @GoDataType("int")
@@ -365,9 +333,8 @@ public class Constants {
     BANNED(DisconnectReason.BANNED, "Banned."),
     CANNOT_JOIN_ANOTHER_GAME("cjag", "You cannot join another game."),
     CAPSLOCK("CL", "Try turning caps lock off."),
-    CARDCAST_CANNOT_FIND("ccf", "Cannot find Cardcast deck with given ID. If you just added this"
-        + " deck to Cardcast, wait a few minutes and try again."),
-    CARDCAST_INVALID_ID("cii", "Invalid Cardcast ID. Must be exactly 5 characters."),
+    CUSTOM_SET_CANNOT_FIND("cscf", "Cannot find custom deck with the given ID or URL or invalid JSON "
+        + "was provided."),
     DO_NOT_HAVE_CARD("dnhc", "You don't have that card."),
     GAME_FULL("gf", "That game is full. Join another."),
     INVALID_CARD("ic", "Invalid card specified."),
@@ -423,10 +390,8 @@ public class Constants {
     private final String message;
 
     /**
-     * @param code
-     *          Error code to send over the wire to the client.
-     * @param message
-     *          Message the client should display for the error code.
+     * @param code    Error code to send over the wire to the client.
+     * @param message Message the client should display for the error code.
      */
     ErrorCode(final String code, final String message) {
       this.code = code;
@@ -456,9 +421,9 @@ public class Constants {
     @DuplicationAllowed
     BANNED(DisconnectReason.BANNED),
     @DuplicationAllowed
-    CARDCAST_ADD_CARDSET(AjaxOperation.CARDCAST_ADD_CARDSET),
+    ADD_CARDSET(AjaxOperation.ADD_CARDSET),
     @DuplicationAllowed
-    CARDCAST_REMOVE_CARDSET(AjaxOperation.CARDCAST_REMOVE_CARDSET),
+    REMOVE_CARDSET(AjaxOperation.REMOVE_CARDSET),
     @DuplicationAllowed
     CHAT(AjaxOperation.CHAT),
     FILTERED_CHAT("FC"),
@@ -514,7 +479,7 @@ public class Constants {
     @DuplicationAllowed
     @GoDataType("BlackCardData")
     BLACK_CARD(AjaxResponse.BLACK_CARD),
-    CARDCAST_DECK_INFO("cdi"),
+    CUSTOM_DECK_INFO("cdi"),
     @DuplicationAllowed
     @GoDataType("bool")
     EMOTE(AjaxRequest.EMOTE),
@@ -530,6 +495,7 @@ public class Constants {
     FROM("f"),
     /**
      * A chat message is from an admin. This is going to be done with IP addresses for now.
+     *
      * @deprecated Compare the SIGIL field to Sigil.ADMIN.
      */
     @Deprecated
@@ -698,6 +664,8 @@ public class Constants {
     CARD_SET_DESCRIPTION("csd"),
     CARD_SET_NAME("csn"),
     @DuplicationAllowed
+    WATERMARK(WhiteCardData.WATERMARK),
+    @DuplicationAllowed
     @GoDataType("int")
     ID(WhiteCardData.ID),
     @GoDataType("int")
@@ -763,6 +731,8 @@ public class Constants {
     @DuplicationAllowed
     @GoDataType("GameOptionData")
     GAME_OPTIONS(AjaxRequest.GAME_OPTIONS),
+    @GoDataType("[]CardSetData")
+    CUSTOM_CARD_SETS("ccs"),
     @GoDataType("bool")
     HAS_PASSWORD("hp"),
     @GoDataType("[]string")
@@ -886,10 +856,38 @@ public class Constants {
   }
 
   /**
-   * Attributes stored in a client session.
+   * Enums that implement this interface are valid keys for data returned to clients.
    */
-  public class SessionAttribute {
-    public static final String USER = "user";
+  public interface ReturnableData {
+  }
+
+  /**
+   * Enums that implement this interface have a user-visible string associated with them.
+   * <p>
+   * There presently is not support for localization, but the name fits.
+   */
+  public interface Localizable {
+    /**
+     * @return The user-visible string that is associated with this enum value.
+     */
+    public String getString();
+  }
+
+  /**
+   * Enums that implement this interface have two user-visible strings associated with them.
+   * <p>
+   * There presently is not support for localization, but the name fits.
+   */
+  public interface DoubleLocalizable {
+    /**
+     * @return The first user-visible string that is associated with this enum value.
+     */
+    public String getString();
+
+    /**
+     * @return The second user-visible string that is associated with this enum value.
+     */
+    public String getString2();
   }
 
   /**
@@ -916,5 +914,12 @@ public class Constants {
   @Retention(RetentionPolicy.RUNTIME)
   public @interface GoDataType {
     String value() default "string";
+  }
+
+  /**
+   * Attributes stored in a client session.
+   */
+  public class SessionAttribute {
+    public static final String USER = "user";
   }
 }

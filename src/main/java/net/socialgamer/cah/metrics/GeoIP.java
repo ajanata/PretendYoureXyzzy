@@ -29,7 +29,8 @@ import java.net.InetAddress;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -48,7 +49,7 @@ import com.maxmind.geoip2.model.CityResponse;
 @Singleton
 public class GeoIP {
 
-  private static final Logger LOG = Logger.getLogger(GeoIP.class);
+  private static final Logger LOG = LogManager.getLogger(GeoIP.class);
 
   private DatabaseReader reader;
   private boolean initialized = false;

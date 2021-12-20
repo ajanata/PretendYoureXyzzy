@@ -31,7 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.inject.BindingAnnotation;
@@ -54,7 +55,7 @@ import net.socialgamer.cah.task.BroadcastGameListUpdateTask;
 @Singleton
 @GameId
 public class GameManager implements Provider<Integer> {
-  private static final Logger logger = Logger.getLogger(GameManager.class);
+  private static final Logger logger = LogManager.getLogger(GameManager.class);
 
   private final Provider<Integer> maxGamesProvider;
   private final Map<Integer, Game> games = new TreeMap<Integer, Game>();

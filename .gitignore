@@ -3,3 +3,5 @@ build.properties
 target
 ssl/
 src/main/java/net/socialgamer/cah/util/RealShadowBannedStringProvider.java
+.idea
+*.iml

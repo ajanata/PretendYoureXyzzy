@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -21,22 +21,23 @@
  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.socialgamer.cah.cardcast;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+package net.socialgamer.cah.customsets;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-public class CardcastFormatHelper {
+public final class CustomCardFormatHelper {
+  private CustomCardFormatHelper() {
+  }
 
-  public String formatBlackCard(final JSONArray textParts) {
+  public static String formatBlackCard(final JSONArray textParts) {
     // TODO this is going to need some work to look pretty.
-    final List<String> strs = new ArrayList<String>(textParts.size());
+    final List<String> strs = new ArrayList<>(textParts.size());
     for (final Object o : textParts) {
       strs.add((String) o);
     }
@@ -44,9 +45,9 @@ public class CardcastFormatHelper {
     return StringEscapeUtils.escapeXml11(text);
   }
 
-  public String formatWhiteCard(final JSONArray textParts) {
+  public static String formatWhiteCard(final JSONArray textParts) {
     // The white cards should only ever have one element in text, but let's be safe.
-    final List<String> strs = new ArrayList<String>(textParts.size());
+    final List<String> strs = new ArrayList<>(textParts.size());
     for (final Object o : textParts) {
       final String cardCastString = (String) o;
       if (cardCastString.isEmpty()) {

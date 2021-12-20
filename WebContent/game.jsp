@@ -45,6 +45,9 @@ RequestWrapper wrapper = new RequestWrapper(request);
 ServletContext servletContext = pageContext.getServletContext();
 Injector injector = (Injector) servletContext.getAttribute(StartupUtils.INJECTOR);
 boolean allowBlankCards = injector.getInstance(Key.get(new TypeLiteral<Boolean>(){}, AllowBlankCards.class));
+boolean customDecksEnabled = injector.getInstance(Key.get(new TypeLiteral<Boolean>(){}, CustomDecksEnabled.class));
+boolean showAddCustomDeckUrl = injector.getInstance(Key.get(new TypeLiteral<Boolean>(){}, ShowAddCustomDeckUrl.class));
+boolean showAddCustomDeckJson = injector.getInstance(Key.get(new TypeLiteral<Boolean>(){}, ShowAddCustomDeckJson.class));
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -477,11 +480,29 @@ boolean allowBlankCards = injector.getInstance(Key.get(new TypeLiteral<Boolean>(
       	<option value="Unlimited">Unlimited</option>
       </select>
       <br/>
-      <fieldset class="card_sets">
-        <legend>Card Sets</legend>
-        <span class="base_card_sets"></span>
-        <span class="extra_card_sets"></span>
-      </fieldset>
+      <div style="display: flex">
+        <fieldset class="card_sets">
+          <legend>Card Sets</legend>
+          <span class="base_card_sets"></span>
+          <span class="extra_card_sets"></span>
+        </fieldset>
+        <% if (customDecksEnabled) { %>
+          <fieldset>
+            <legend>Custom Card Sets</legend>
+            <% if (showAddCustomDeckJson) { %>
+              <input type="button" class="add_custom_deck_json skip_changed" value="Upload JSON"/>
+            <% } %>
+
+            <% if (showAddCustomDeckUrl) { %>
+              <input type="button" class="add_custom_deck_url skip_changed" value="Download from URL"/>
+            <% } %>
+
+            <input type="button" class="remove_selected_custom_deck skip_changed" value="Removed selected"/>
+            <select class="custom_decks_list skip_changed" multiple="multiple">
+            </select>
+        </fieldset>
+        <% } %>
+      </div>
       <% if (allowBlankCards) { %>
         <br/>
         <label id="blanks_limit_label" title="Blank cards allow a player to type in their own answer.">
