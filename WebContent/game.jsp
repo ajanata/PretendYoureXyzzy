@@ -86,7 +86,7 @@ boolean allowBlankCards = injector.getInstance(Key.get(new TypeLiteral<Boolean>(
   <div id="tweetbox">
     <h3>Recent tweets (mainly server status updates)</h3>
     <a class="twitter-timeline" data-height="500" data-dnt="true" data-theme="light"
-    href="https://twitter.com/_PYX_?ref_src=twsrc%5Etfw">Tweets by _PYX_</a>
+    href="https://twitter.com/TheJavaHacker?ref_src=twsrc%5Etfw">Tweets by TheJavaHacker</a>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   </div>
   <h1 tabindex="0">
@@ -104,11 +104,12 @@ boolean allowBlankCards = injector.getInstance(Key.get(new TypeLiteral<Boolean>(
     It is not tied in any way to your username, except possibly if a server error occurs. Gameplay
     results are logged permanently, but without information identifying you.
   </p>
-  <p tabindex="0">Most recent update: 3 September 2018:</p>
+  <p tabindex="0">Most recent update: 25 December 2021:</p>
   <ul>
-    <li>All chat and fill-in-the-blank cards have been disabled. If you're still out of the loop,
-    <a href="https://gist.githubusercontent.com/ajanata/07ededdb584f7bb77a8c7191d3a4bbcc/raw/e76faacc19c2bb598a1a8fd94b9ebcb29c5502e0">
-    here's why.</a></li>
+    <li>I've enabled chat per-game.</li>
+    <li>I've disabled global chat.</li>
+    <li>I've removed CardCast and replaced it with CRCards.</li>
+    <li>I've re-enabled blank white cards and have set their max limit to 1000 per game.</li>
   </ul>
   <h2>The servers are incredibly busy right now. There are several servers to try, there will be
   room elsewhere! <a href='https://pretendyoure.xyz/zy'>CLICK HERE</a> to see the server list. As
