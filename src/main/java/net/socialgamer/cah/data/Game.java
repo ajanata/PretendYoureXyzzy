@@ -68,7 +68,7 @@ public class Game {
     /**
      * The minimum number of black cards that must be added to a game for it to be able to start.
      */
-    public final static int MINIMUM_BLACK_CARDS = 150;
+    public final static int MINIMUM_BLACK_CARDS = 50;
     /**
      * The minimum number of white cards per player limit slots that must be added to a game for it to
      * be able to start.
