@@ -59,12 +59,12 @@ import net.socialgamer.cah.cardcast.CardcastModule.CardcastCardId;
 public class CardcastService {
   private static final Logger LOG = Logger.getLogger(CardcastService.class);
 
-  private static final String HOSTNAME = "api.cardcastgame.com";
+  private static final String HOSTNAME = "castapi.clrtd.com";
 
   /**
    * Base URL to the Cardcast API.
    */
-  private static final String BASE_URL = "https://" + HOSTNAME + "/v1/decks/";
+  private static final String BASE_URL = "https://" + HOSTNAME + "/cc/decks/";
   /**
    * URL to the Cardcast API for information about a card set. The only format replacement is the
    * string deck ID.
