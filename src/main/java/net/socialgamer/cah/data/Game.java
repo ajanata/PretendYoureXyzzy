@@ -36,9 +36,9 @@ import net.socialgamer.cah.task.SafeTimerTask;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -49,12 +49,12 @@ import java.util.concurrent.TimeUnit;
  * Game data and logic class. Games are simple finite state machines, with 3 states that wait for
  * user input, and 3 transient states that it quickly passes through on the way back to a waiting
  * state:
- *
+ * <p>
  * ......Lobby.----------->.Dealing.(transient).-------->.Playing
  * .......^........................^.........................|....................
  * .......|.v----.Win.(transient).<+------.Judging.<---------+....................
  * .....Reset.(transient)
- *
+ * <p>
  * Lobby is the default state. When the game host sends a start game event, the game moves to the
  * Dealing state, where it deals out cards to every player and automatically moves into the Playing
  * state. After all players have played a card, the game moves to Judging and waits for the judge to
@@ -72,7 +72,7 @@ public class Game {
   /**
    * The minimum number of white cards per player limit slots that must be added to a game for it to
    * be able to start.
-   *
+   * <p>
    * We need 20 * maxPlayers cards. This allows black cards up to "draw 9" to work correctly.
    */
   public final static int MINIMUM_WHITE_CARDS_PER_PLAYER = 20;
@@ -107,8 +107,7 @@ public class Game {
   private final static Set<String> FINITE_PLAYTIMES;
 
   static {
-    final Set<String> finitePlaytimes = new TreeSet<>(Arrays.asList(
-            "0.25x", "0.5x", "0.75x", "1x", "1.25x", "1.5x", "1.75x", "2x", "2.5x", "3x", "4x", "5x", "10x"));
+    final Set<String> finitePlaytimes = new TreeSet<>(Arrays.asList("0.25x", "0.5x", "0.75x", "1x", "1.25x", "1.5x", "1.75x", "2x", "2.5x", "3x", "4x", "5x", "10x"));
     FINITE_PLAYTIMES = Collections.unmodifiableSet(finitePlaytimes);
   }
 
@@ -127,7 +126,7 @@ public class Game {
   private final GameManager gameManager;
   private final Provider<Session> sessionProvider;
   private final Object blackCardLock = new Object();
-  private final GameOptions options = new GameOptions();
+  private final GameOptions options;
   private final Set<String> cardcastDeckIds = Collections.synchronizedSet(new HashSet<>());
   private final Metrics metrics;
   private final Provider<Boolean> showGameLinkProvider;
@@ -136,6 +135,7 @@ public class Game {
 
   // All of these delays could be moved to pyx.properties.
   private final Provider<String> roundPermalinkFormatProvider;
+  private final Provider<Boolean> allowBlankCardsProvider;
   private final long created = System.currentTimeMillis();
   /**
    * Lock object to prevent judging during idle judge detection and vice-versa.
@@ -165,26 +165,16 @@ public class Game {
   /**
    * Create a new game.
    *
-   * @param id
-   *          The game's ID.
-   * @param connectedUsers
-   *          The user manager, for broadcasting messages.
-   * @param gameManager
-   *          The game manager, for broadcasting game list refresh notices and destroying this game
-   *          when everybody leaves.
-   * @param globalTimer The global timer on which to schedule tasks.
+   * @param id             The game's ID.
+   * @param connectedUsers The user manager, for broadcasting messages.
+   * @param gameManager    The game manager, for broadcasting game list refresh notices and destroying this game
+   *                       when everybody leaves.
+   * @param globalTimer    The global timer on which to schedule tasks.
    */
   @Inject
-  public Game(@GameId final Integer id, final ConnectedUsers connectedUsers,
-              final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer,
-              final Provider<Session> sessionProvider,
-              final Provider<CardcastService> cardcastServiceProvider,
-              @UniqueId final Provider<String> uniqueIdProvider,
-              final Metrics metrics, @ShowRoundPermalink final Provider<Boolean> showRoundLinkProvider,
-              @RoundPermalinkUrlFormat final Provider<String> roundPermalinkFormatProvider,
-              @ShowGamePermalink final Provider<Boolean> showGameLinkProvider,
-              @GamePermalinkUrlFormat final Provider<String> gamePermalinkFormatProvider) {
+  public Game(@GameId final Integer id, final ConnectedUsers connectedUsers, final GameManager gameManager, final ScheduledThreadPoolExecutor globalTimer, final Provider<Session> sessionProvider, final Provider<CardcastService> cardcastServiceProvider, @UniqueId final Provider<String> uniqueIdProvider, final Metrics metrics, @ShowRoundPermalink final Provider<Boolean> showRoundLinkProvider, @RoundPermalinkUrlFormat final Provider<String> roundPermalinkFormatProvider, @ShowGamePermalink final Provider<Boolean> showGameLinkProvider, @GamePermalinkUrlFormat final Provider<String> gamePermalinkFormatProvider, @AllowBlankCards final Provider<Boolean> allowBlankCardsProvider, final Provider<GameOptions> gameOptionsProvider) {
     this.id = id;
+    this.options = gameOptionsProvider.get();
     this.connectedUsers = connectedUsers;
     this.gameManager = gameManager;
     this.globalTimer = globalTimer;
@@ -196,6 +186,7 @@ public class Game {
     this.roundPermalinkFormatProvider = roundPermalinkFormatProvider;
     this.showGameLinkProvider = showGameLinkProvider;
     this.gamePermalinkFormatProvider = gamePermalinkFormatProvider;
+    this.allowBlankCardsProvider = allowBlankCardsProvider;
 
     state = GameState.LOBBY;
   }
@@ -203,26 +194,23 @@ public class Game {
   /**
    * Adds a permalink to this game to the client request response data, if said permalinks are
    * enabled.
+   *
    * @param data A map of data being returned to a client request.
    */
   public void maybeAddPermalinkToData(final Map<ReturnableData, Object> data) {
     if (showGameLinkProvider.get() && null != currentUniqueId) {
-      data.put(AjaxResponse.GAME_PERMALINK,
-              String.format(gamePermalinkFormatProvider.get(), currentUniqueId));
+      data.put(AjaxResponse.GAME_PERMALINK, String.format(gamePermalinkFormatProvider.get(), currentUniqueId));
     }
   }
 
   /**
    * Add a player to the game.
-   *
+   * <p>
    * Synchronizes on {@link #players}.
    *
-   * @param user
-   *          Player to add to this game.
-   * @throws TooManyPlayersException
-   *           Thrown if this game is at its maximum player capacity.
-   * @throws IllegalStateException
-   *           Thrown if {@code user} is already in a game.
+   * @param user Player to add to this game.
+   * @throws TooManyPlayersException Thrown if this game is at its maximum player capacity.
+   * @throws IllegalStateException   Thrown if {@code user} is already in a game.
    */
   public void addPlayer(final User user) throws TooManyPlayersException, IllegalStateException {
     logger.info(String.format("%s joined game %d.", user.toString(), id));
@@ -254,8 +242,7 @@ public class Game {
    * Synchronizes on {@link #players}, {@link #playedCards}, {@link #whiteDeck}, and
    * {@link #roundTimerLock}.
    *
-   * @param user
-   *          Player to remove from the game.
+   * @param user Player to remove from the game.
    * @return True if {@code user} was the last player in the game.
    */
   public boolean removePlayer(final User user) {
@@ -328,8 +315,7 @@ public class Game {
         gameManager.destroyGame(id);
       }
       if (players.size() < 3 && state != GameState.LOBBY) {
-        logger.info(String.format("Resetting game %d due to too few players after someone left.",
-                id));
+        logger.info(String.format("Resetting game %d due to too few players after someone left.", id));
         resetState(true);
       } else if (wasJudge) {
         synchronized (roundTimerLock) {
@@ -349,18 +335,14 @@ public class Game {
 
   /**
    * Add a spectator to the game.
-   *
+   * <p>
    * Synchronizes on {@link #spectators}.
    *
-   * @param user
-   *          Spectator to add to this game.
-   * @throws TooManySpectatorsException
-   *           Thrown if this game is at its maximum spectator capacity.
-   * @throws IllegalStateException
-   *           Thrown if {@code user} is already in a game.
+   * @param user Spectator to add to this game.
+   * @throws TooManySpectatorsException Thrown if this game is at its maximum spectator capacity.
+   * @throws IllegalStateException      Thrown if {@code user} is already in a game.
    */
-  public void addSpectator(final User user) throws TooManySpectatorsException,
-          IllegalStateException {
+  public void addSpectator(final User user) throws TooManySpectatorsException, IllegalStateException {
     logger.info(String.format("%s joined game %d as a spectator.", user.toString(), id));
     synchronized (spectators) {
       if (spectators.size() >= options.spectatorLimit) {
@@ -384,8 +366,7 @@ public class Game {
    * <br/>
    * Synchronizes on {@link #spectators}.
    *
-   * @param user
-   *          Spectator to remove from the game.
+   * @param user Spectator to remove from the game.
    */
   public void removeSpectator(final User user) {
     logger.info(String.format("Removing spectator %s from game %d.", user.toString(), id));
@@ -425,22 +406,18 @@ public class Game {
   /**
    * Broadcast a message to all players in this game.
    *
-   * @param type
-   *          Type of message to broadcast. This determines the order the messages are returned by
-   *          priority.
-   * @param masterData
-   *          Message data to broadcast.
+   * @param type       Type of message to broadcast. This determines the order the messages are returned by
+   *                   priority.
+   * @param masterData Message data to broadcast.
    */
-  public void broadcastToPlayers(final MessageType type,
-                                 final HashMap<ReturnableData, Object> masterData) {
+  public void broadcastToPlayers(final MessageType type, final HashMap<ReturnableData, Object> masterData) {
     connectedUsers.broadcastToList(playersToUsers(), type, masterData);
   }
 
   /**
    * Sends updated player information about a specific player to all players in the game.
    *
-   * @param player
-   *          The player whose information has been changed.
+   * @param player The player whose information has been changed.
    */
   public void notifyPlayerInfoChange(final Player player) {
     final HashMap<ReturnableData, Object> data = getEventMap();
@@ -507,6 +484,7 @@ public class Game {
    * Get information about this game, without the game's password.
    * <br/>
    * Synchronizes on {@link #players}.
+   *
    * @return This game's general information: ID, host, state, player list, etc.
    */
   @Nullable
@@ -518,9 +496,9 @@ public class Game {
    * Get information about this game.
    * <br/>
    * Synchronizes on {@link #players}.
-   * @param includePassword
-   *          Include the actual password with the information. This should only be
-   *          sent to people in the game.
+   *
+   * @param includePassword Include the actual password with the information. This should only be
+   *                        sent to people in the game.
    * @return This game's general information: ID, host, state, player list, etc.
    */
   @Nullable
@@ -557,6 +535,7 @@ public class Game {
 
   /**
    * Synchronizes on {@link #players}.
+   *
    * @return Player information for every player in this game: Name, score, status.
    */
   public List<Map<GamePlayerInfo, Object>> getAllPlayerInfo() {
@@ -579,8 +558,7 @@ public class Game {
   /**
    * Get player information for a single player.
    *
-   * @param player
-   *          The player for whom to get status.
+   * @param player The player for whom to get status.
    * @return Information for {@code player}: Name, score, status.
    */
   public Map<GamePlayerInfo, Object> getPlayerInfo(final Player player) {
@@ -599,11 +577,10 @@ public class Game {
   /**
    * Determine the player status for a given player, based on game state.
    *
-   * @param player
-   *          Player for whom to get the state.
+   * @param player Player for whom to get the state.
    * @return The state of {@code player}, one of {@code HOST}, {@code IDLE}, {@code JUDGE},
-   *         {@code PLAYING}, {@code JUDGING}, or {@code WINNER}, depending on the game's state and
-   *         what the player has done.
+   * {@code PLAYING}, {@code JUDGING}, or {@code WINNER}, depending on the game's state and
+   * what the player has done.
    */
   private GamePlayerStatus getPlayerStatus(final Player player) {
     final GamePlayerStatus playerStatus;
@@ -625,8 +602,7 @@ public class Game {
             break;
           }
           final List<WhiteCard> playerCards = playedCards.getCards(player);
-          if (playerCards != null && blackCard != null
-                  && playerCards.size() == blackCard.getPick()) {
+          if (playerCards != null && blackCard != null && playerCards.size() == blackCard.getPick()) {
             playerStatus = GamePlayerStatus.IDLE;
           } else {
             playerStatus = GamePlayerStatus.PLAYING;
@@ -663,8 +639,8 @@ public class Game {
    * Synchronizes on {@link #players}.
    *
    * @return True if the game is started. Would only be false if there aren't enough players, or the
-   *         game is already started, or doesn't have enough cards, but hopefully callers and
-   *         clients would prevent that from happening!
+   * game is already started, or doesn't have enough cards, but hopefully callers and
+   * clients would prevent that from happening!
    */
   public boolean start() {
     Session session = null;
@@ -684,10 +660,7 @@ public class Game {
       }
       if (started) {
         currentUniqueId = uniqueIdProvider.get();
-        logger.info(String.format("Starting game %d with card sets %s, Cardcast %s, %d blanks, %d "
-                        + "max players, %d max spectators, %d score limit, players %s, unique %s.",
-                id, options.cardSetIds, cardcastDeckIds, options.blanksInDeck, options.playerLimit,
-                options.spectatorLimit, options.scoreGoal, players, currentUniqueId));
+        logger.info(String.format("Starting game %d with card sets %s, Cardcast %s, %d blanks, %d " + "max players, %d max spectators, %d score limit, players %s, unique %s.", id, options.cardSetIds, cardcastDeckIds, options.blanksInDeck, options.playerLimit, options.spectatorLimit, options.scoreGoal, players, currentUniqueId));
         // do this stuff outside the players lock; they will lock players again later for much less
         // time, and not at the same time as trying to lock users, which has caused deadlocks
         final List<CardSet> cardSets;
@@ -696,8 +669,7 @@ public class Game {
           blackDeck = loadBlackDeck(cardSets);
           whiteDeck = loadWhiteDeck(cardSets);
         }
-        metrics.gameStart(currentUniqueId, cardSets, options.blanksInDeck, options.playerLimit,
-                options.scoreGoal, !StringUtils.isBlank(options.password));
+        metrics.gameStart(currentUniqueId, cardSets, options.blanksInDeck, options.playerLimit, options.scoreGoal, !StringUtils.isBlank(options.password));
         startNextRound();
         gameManager.broadcastGameListRefresh();
       }
@@ -715,9 +687,7 @@ public class Game {
         final List<CardSet> cardSets = new ArrayList<>();
 
         if (!options.getPyxCardSetIds().isEmpty()) {
-          @SuppressWarnings("unchecked") final List<CardSet> pyxCardSets = session
-                  .createQuery("from PyxCardSet where id in (:ids)")
-                  .setParameterList("ids", options.getPyxCardSetIds()).list();
+          @SuppressWarnings("unchecked") final List<CardSet> pyxCardSets = session.createQuery("from PyxCardSet where id in (:ids)").setParameterList("ids", options.getPyxCardSetIds()).list();
           cardSets.addAll(pyxCardSets);
         }
 
@@ -753,7 +723,7 @@ public class Game {
   }
 
   public WhiteDeck loadWhiteDeck(final List<CardSet> cardSets) {
-    return new WhiteDeck(cardSets, options.blanksInDeck);
+    return new WhiteDeck(options.maxBlankCardLimit, cardSets, allowBlankCardsProvider.get() ? options.blanksInDeck : 0);
   }
 
   public int getRequiredWhiteCardCount() {
@@ -1012,9 +982,7 @@ public class Game {
       if (state == GameState.PLAYING || playersToRemove.size() == 0) {
         // not sure how much of this check is actually required
         if (players.size() < 3 || playedCards.size() < 2) {
-          logger.info(String.format(
-                  "Resetting game %d due to insufficient players after removing %d idle players.",
-                  id, playersToRemove.size()));
+          logger.info(String.format("Resetting game %d due to insufficient players after removing %d idle players.", id, playersToRemove.size()));
           resetState(true);
         } else {
           judgingState();
@@ -1086,12 +1054,11 @@ public class Game {
 
   /**
    * Reset the game state to a lobby.
-   *
+   * <p>
    * TODO change the message sent to the client if the game reset due to insufficient players.
    *
-   * @param lostPlayer
-   *          True if because there are no long enough people to play a game, false if because the
-   *          previous game finished.
+   * @param lostPlayer True if because there are no long enough people to play a game, false if because the
+   *                   previous game finished.
    */
   public void resetState(final boolean lostPlayer) {
     logger.info(String.format("Resetting game %d to lobby (lostPlayer=%b)", id, lostPlayer));
@@ -1230,7 +1197,7 @@ public class Game {
    *
    * @param user
    * @return The {@code Player} object representing {@code user} in this game, or {@code null} if
-   *         {@code user} is not in this game.
+   * {@code user} is not in this game.
    */
   @Nullable
   public Player getPlayerForUser(final User user) {
@@ -1247,7 +1214,7 @@ public class Game {
    * Synchronizes on {@link #blackCardLock}.
    *
    * @return Client data for the current {@code BlackCard}, or {@code null} if there is not a
-   *         {@code BlackCard}.
+   * {@code BlackCard}.
    */
   public Map<BlackCardData, Object> getBlackCard() {
     synchronized (blackCardLock) {
@@ -1269,8 +1236,7 @@ public class Game {
       final List<List<WhiteCard>> shuffledPlayedCards;
       shuffledPlayedCards = new ArrayList<>(playedCards.cards());
       // list of all sets of cards played, which have data. this looks terrible...
-      final List<List<Map<WhiteCardData, Object>>> cardData =
-              new ArrayList<>(shuffledPlayedCards.size());
+      final List<List<Map<WhiteCardData, Object>>> cardData = new ArrayList<>(shuffledPlayedCards.size());
       Collections.shuffle(shuffledPlayedCards);
       for (final List<WhiteCard> cards : shuffledPlayedCards) {
         cardData.add(getWhiteCardData(cards));
@@ -1280,10 +1246,9 @@ public class Game {
   }
 
   /**
-   * @param user
-   *          User to return white cards for.
+   * @param user User to return white cards for.
    * @return The white cards the specified user can see, i.e., theirs and face-down cards for
-   *         everyone else.
+   * everyone else.
    */
   public List<List<Map<WhiteCardData, Object>>> getWhiteCards(final User user) {
     // if we're in judge mode, return all of the cards and ignore which user is asking
@@ -1296,8 +1261,7 @@ public class Game {
       // Good idea to not nest synchronizes if possible anyway.
       final Player player = getPlayerForUser(user);
       synchronized (playedCards) {
-        final List<List<Map<WhiteCardData, Object>>> cardData =
-                new ArrayList<>(playedCards.size());
+        final List<List<Map<WhiteCardData, Object>>> cardData = new ArrayList<>(playedCards.size());
         int faceDownCards = playedCards.size();
         if (playedCards.hasPlayer(player)) {
           cardData.add(getWhiteCardData(playedCards.getCards(player)));
@@ -1315,13 +1279,11 @@ public class Game {
   /**
    * Convert a list of {@code WhiteCard}s to data suitable for sending to a client.
    *
-   * @param cards
-   *          Cards to convert to client data.
+   * @param cards Cards to convert to client data.
    * @return Client representation of {@code cards}.
    */
   private List<Map<WhiteCardData, Object>> getWhiteCardData(final List<WhiteCard> cards) {
-    final List<Map<WhiteCardData, Object>> data =
-            new ArrayList<>(cards.size());
+    final List<Map<WhiteCardData, Object>> data = new ArrayList<>(cards.size());
     for (final WhiteCard card : cards) {
       data.add(card.getClientData());
     }
@@ -1331,10 +1293,8 @@ public class Game {
   /**
    * Send a list of {@code WhiteCard}s to a player.
    *
-   * @param player
-   *          Player to send the cards to.
-   * @param cards
-   *          The cards to send the player.
+   * @param player Player to send the cards to.
+   * @param cards  The cards to send the player.
    */
   private void sendCardsToPlayer(final Player player, final List<WhiteCard> cards) {
     final Map<ReturnableData, Object> data = getEventMap();
@@ -1347,8 +1307,7 @@ public class Game {
   /**
    * Get a client data representation of a user's hand.
    *
-   * @param user
-   *          User whose hand to convert to client data.
+   * @param user User whose hand to convert to client data.
    * @return Client representation of {@code user}'s hand.
    */
   @Nonnull
@@ -1395,15 +1354,12 @@ public class Game {
   /**
    * Play a card.
    *
-   * @param user
-   *          User playing the card.
-   * @param cardId
-   *          ID of the card to play.
-   * @param cardText
-   *          User text for a blank card.  Ignored for normal cards.
+   * @param user     User playing the card.
+   * @param cardId   ID of the card to play.
+   * @param cardText User text for a blank card.  Ignored for normal cards.
    * @return An {@code ErrorCode} if the play was unsuccessful ({@code user} doesn't have the card,
-   *         {@code user} is the judge, etc.), or {@code null} if there was no error and the play
-   *         was successful.
+   * {@code user} is the judge, etc.), or {@code null} if there was no error and the play
+   * was successful.
    */
   public ErrorCode playCard(final User user, final int cardId, final String cardText) {
     final Player player = getPlayerForUser(user);
@@ -1459,10 +1415,8 @@ public class Game {
    * black cards that have multiple selection, however only the first card in the set's ID will be
    * passed around to clients.
    *
-   * @param judge
-   *          Judge user.
-   * @param cardId
-   *          Selected card ID.
+   * @param judge  Judge user.
+   * @param cardId Selected card ID.
    * @return Error code if there is an error, or null if success.
    */
   public ErrorCode judgeCard(final User judge, final int cardId) {
@@ -1497,8 +1451,7 @@ public class Game {
     data.put(LongPollResponse.WINNING_CARD, clientCardId);
     data.put(LongPollResponse.INTERMISSION, ROUND_INTERMISSION);
     if (showRoundLinkProvider.get()) {
-      data.put(LongPollResponse.ROUND_PERMALINK,
-              String.format(roundPermalinkFormatProvider.get(), roundId));
+      data.put(LongPollResponse.ROUND_PERMALINK, String.format(roundPermalinkFormatProvider.get(), roundId));
     }
     broadcastToPlayers(MessageType.GAME_EVENT, data);
 
@@ -1527,10 +1480,8 @@ public class Game {
     }
 
     final Map<String, List<WhiteCard>> cardsBySessionId = new HashMap<>();
-    playedCards.cardsByUser().forEach(
-            (key, value) -> cardsBySessionId.put(key.getSessionId(), value));
-    metrics.roundComplete(currentUniqueId, roundId, judge.getSessionId(),
-            cardPlayer.getUser().getSessionId(), blackCard, cardsBySessionId);
+    playedCards.cardsByUser().forEach((key, value) -> cardsBySessionId.put(key.getSessionId(), value));
+    metrics.roundComplete(currentUniqueId, roundId, judge.getSessionId(), cardPlayer.getUser().getSessionId(), blackCard, cardsBySessionId);
 
     return null;
   }

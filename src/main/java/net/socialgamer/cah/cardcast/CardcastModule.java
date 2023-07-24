@@ -23,9 +23,8 @@
 
 package net.socialgamer.cah.cardcast;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.BindingAnnotation;
-import com.google.inject.Provides;
+import com.google.inject.*;
+import net.socialgamer.cah.CahModule;
 import net.socialgamer.cah.data.GameOptions;
 
 import java.lang.annotation.Retention;
@@ -34,15 +33,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class CardcastModule extends AbstractModule {
-  private final AtomicInteger cardId = new AtomicInteger(-(GameOptions.MAX_BLANK_CARD_LIMIT + 1));
+  private AtomicInteger cardId;
+  private Provider<Integer> maxBlankCardLimitProvider;
 
   @Override
   protected void configure() {
+    maxBlankCardLimitProvider = getProvider(Key.get(Integer.class, CahModule.MaxBlankCardLimit.class));
   }
 
   @Provides
   @CardcastCardId
   Integer provideCardId() {
+    if (cardId == null) cardId = new AtomicInteger(-(maxBlankCardLimitProvider.get() + 1));
     return cardId.decrementAndGet();
   }
 

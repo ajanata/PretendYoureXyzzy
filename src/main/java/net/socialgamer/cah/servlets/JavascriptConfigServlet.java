@@ -25,11 +25,8 @@ package net.socialgamer.cah.servlets;
 
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import net.socialgamer.cah.CahModule.BroadcastConnectsAndDisconnects;
-import net.socialgamer.cah.CahModule.CookieDomain;
-import net.socialgamer.cah.CahModule.GlobalChatEnabled;
-import net.socialgamer.cah.CahModule.InsecureIdAllowed;
 import net.socialgamer.cah.StartupUtils;
+import net.socialgamer.cah.CahModule.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -67,10 +64,28 @@ public class JavascriptConfigServlet extends HttpServlet {
     builder.append(String.format("cah.COOKIE_DOMAIN = '%s';\n", cookieDomain));
     boolean globalChatEnabled = injector.getInstance(Key.get(Boolean.class, GlobalChatEnabled.class));
     builder.append(String.format("cah.GLOBAL_CHAT_ENABLED = %b;\n", globalChatEnabled));
+    boolean gameChatEnabled = injector.getInstance(Key.get(Boolean.class, GameChatEnabled.class));
+    builder.append(String.format("cah.GAME_CHAT_ENABLED = %b;\n", gameChatEnabled));
     boolean insecureIdAllowed = injector.getInstance(Key.get(Boolean.class, InsecureIdAllowed.class));
     builder.append(String.format("cah.INSECURE_ID_ALLOWED = %b;\n", insecureIdAllowed));
     boolean broadcastingUsers = injector.getInstance(Key.get(Boolean.class, BroadcastConnectsAndDisconnects.class));
     builder.append(String.format("cah.BROADCASTING_USERS = %b;\n", broadcastingUsers));
+
+    builder.append(String.format("cah.MIN_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MinPlayerLimit.class))));
+    builder.append(String.format("cah.DEFAULT_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, DefaultPlayerLimit.class))));
+    builder.append(String.format("cah.MAX_PLAYER_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MaxPlayerLimit.class))));
+
+    builder.append(String.format("cah.MIN_SPECTATOR_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MinSpectatorLimit.class))));
+    builder.append(String.format("cah.DEFAULT_SPECTATOR_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, DefaultSpectatorLimit.class))));
+    builder.append(String.format("cah.MAX_SPECTATOR_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MaxSpectatorLimit.class))));
+
+    builder.append(String.format("cah.MIN_SCORE_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MinScoreLimit.class))));
+    builder.append(String.format("cah.DEFAULT_SCORE_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, DefaultScoreLimit.class))));
+    builder.append(String.format("cah.MAX_SCORE_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MaxScoreLimit.class))));
+
+    builder.append(String.format("cah.MIN_BLANK_CARD_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MinBlankCardLimit.class))));
+    builder.append(String.format("cah.DEFAULT_BLANK_CARD_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, DefaultBlankCardLimit.class))));
+    builder.append(String.format("cah.MAX_BLANK_CARD_LIMIT = %d;\n", injector.getInstance(Key.get(Integer.class, MaxBlankCardLimit.class))));
 
     Properties properties = injector.getInstance(Properties.class);
     builder.append(String.format("cah.DEBUG = %s;\n", properties.getProperty("pyx.client.debug", "false")));

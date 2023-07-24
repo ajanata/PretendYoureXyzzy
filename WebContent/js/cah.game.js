@@ -335,6 +335,9 @@ cah.Game.joinGame = function (gameId, data) {
     game.showGamePermalink_(data);
 
     cah.updateHash('game=' + gameId);
+    if (!cah.GAME_CHAT_ENABLED) {
+      cah.log.status_with_game(game, "IMPORTANT: Game chat has been disabled.", "error");
+    }
 };
 
 /**

@@ -40,7 +40,7 @@ import java.util.Map;
 
 /**
  * Servlet implementation class AjaxServlet.
- *
+ * <p>
  * This servlet is only used for client actions, not for long-polling.
  *
  * @author Andy Janata (ajanata@socialgamer.net)

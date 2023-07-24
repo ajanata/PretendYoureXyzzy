@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012-2018, Andy Janata
+ * Copyright (c) 2012-2020, Andy Janata
  * All rights reserved.
  * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -32,7 +32,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Constants needed on both the CAH server and client. This file is examined with reflection to
  * produce a Javascript version for the client to use.
- *
+ * <p>
  * All of the enums in here take a string in their constructor to define the over-the-wire value to
  * be used to represent that enum value. This allows for verbose names while debugging, and short
  * names to reduce traffic and latency, by only having to change it in one place for both the server
@@ -92,7 +92,7 @@ public class Constants {
 
   /**
    * The next thing the client should do during reconnect phase.
-   *
+   * <p>
    * Leaving these as longer strings as they are only used once per client.
    */
   public enum ReconnectNextAction {
@@ -239,6 +239,8 @@ public class Constants {
     @GoDataType("[]GameInfo")
     GAMES("gl"),
     @GoDataType("bool")
+    GAME_CHAT_ENABLED("Gce"),
+    @GoDataType("bool")
     GLOBAL_CHAT_ENABLED("gce"),
     @GoDataType("[]int")
     HAND("h"),
@@ -378,18 +380,16 @@ public class Constants {
             "an existing game, or wait for one to become available."),
     TOO_MANY_SPECIAL_CHARACTERS("tmsc",
             "You used too many special characters in that message."),
-    TOO_MANY_USERS("tmu", "There are too many users connected. Either join another server, or " +
-            "wait for a user to disconnect."),
+    TOO_MANY_USERS("tmu", "There are too many users connected. "
+            + "<strong><a href='https://pretendyoure.xyz/zy'>Try another server.</a></strong>"),
     WRONG_PASSWORD("wp", "That password is incorrect.");
 
     private final String code;
     private final String message;
 
     /**
-     * @param code
-     *          Error code to send over the wire to the client.
-     * @param message
-     *          Message the client should display for the error code.
+     * @param code    Error code to send over the wire to the client.
+     * @param message Message the client should display for the error code.
      */
     ErrorCode(final String code, final String message) {
       this.code = code;
@@ -493,6 +493,7 @@ public class Constants {
     FROM("f"),
     /**
      * A chat message is from an admin. This is going to be done with IP addresses for now.
+     *
      * @deprecated Compare the SIGIL field to Sigil.ADMIN.
      */
     @Deprecated
@@ -856,7 +857,7 @@ public class Constants {
 
   /**
    * Enums that implement this interface have a user-visible string associated with them.
-   *
+   * <p>
    * There presently is not support for localization, but the name fits.
    */
   public interface Localizable {

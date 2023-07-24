@@ -39,8 +39,7 @@ public class RequestWrapper {
   /**
    * Create a new RequestWrapper.
    *
-   * @param request
-   *          An {@code HttpServletRequest} to wrap around.
+   * @param request An {@code HttpServletRequest} to wrap around.
    */
   public RequestWrapper(final HttpServletRequest request) {
     this.request = request;
@@ -49,8 +48,7 @@ public class RequestWrapper {
   /**
    * Returns the value of a request parameter as a String, or null if the parameter does not exist.
    *
-   * @param parameter
-   *          Parameter to get.
+   * @param parameter Parameter to get.
    * @return Value of parameter, or null if parameter does not exist.
    */
   public String getParameter(final AjaxRequest parameter) {
@@ -61,8 +59,7 @@ public class RequestWrapper {
    * Returns the value of a request header as a String, or {@code null} if the header does not
    * exist.
    *
-   * @param header
-   *          Header to get.
+   * @param header Header to get.
    * @return Value of header, or {@code null} if header does not exist.
    */
   public String getHeader(final String header) {
@@ -72,6 +69,7 @@ public class RequestWrapper {
   /**
    * If there is an {@code X-Forwarded-For} header, the <strong>first</strong> entry in that list
    * is returned instead.
+   *
    * @see HttpServletRequest#getRemoteAddr()
    */
   public String getRemoteAddr() {

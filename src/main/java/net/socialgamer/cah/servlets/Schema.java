@@ -36,7 +36,7 @@ import java.io.PrintWriter;
 
 /**
  * Servlet implementation class Schema.
- *
+ * <p>
  * Get the database schema for known Hibernate objects.
  */
 @WebServlet("/Schema")

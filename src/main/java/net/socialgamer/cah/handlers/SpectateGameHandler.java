@@ -60,8 +60,8 @@ public class SpectateGameHandler extends GameHandler {
 
     final String password = request.getParameter(AjaxRequest.PASSWORD);
     final String gamePassword = game.getPassword();
-    if (gamePassword != null && !gamePassword.equals("")) {
-      if (!gamePassword.equals(password)) {
+    if (gamePassword != null && !gamePassword.equals("") && !user.isAdmin()) {
+      if (password == null || !gamePassword.equals(password)) {
         return error(ErrorCode.WRONG_PASSWORD);
       }
     }

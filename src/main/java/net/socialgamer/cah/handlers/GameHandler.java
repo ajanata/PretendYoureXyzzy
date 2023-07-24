@@ -78,14 +78,10 @@ public abstract class GameHandler extends Handler {
   /**
    * Handle a client request. The {@code Game} is guaranteed to be valid.
    *
-   * @param request
-   *          The request data.
-   * @param session
-   *          The client's session.
-   * @param user
-   *          The client's {@code User}.
-   * @param game
-   *          The {@code Game} for this request.
+   * @param request The request data.
+   * @param session The client's session.
+   * @param user    The client's {@code User}.
+   * @param game    The {@code Game} for this request.
    * @return Response data.
    */
   public abstract Map<ReturnableData, Object> handle(final RequestWrapper request,

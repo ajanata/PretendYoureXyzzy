@@ -42,11 +42,9 @@ public class QueuedMessage implements Comparable<QueuedMessage> {
   /**
    * Create a new queued message.
    *
-   * @param messageType
-   *          Type of message to be queued. The type influences the priority in returning messages
-   *          to the client.
-   * @param data
-   *          The data of the message to be queued.
+   * @param messageType Type of message to be queued. The type influences the priority in returning messages
+   *                    to the client.
+   * @param data        The data of the message to be queued.
    */
   public QueuedMessage(final MessageType messageType, final Map<ReturnableData, Object> data) {
     this.messageType = messageType;

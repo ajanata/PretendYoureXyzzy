@@ -42,8 +42,7 @@ public class Player {
   /**
    * Create a new player object.
    *
-   * @param user
-   *          The {@code User} associated with this player.
+   * @param user The {@code User} associated with this player.
    */
   public Player(final User user) {
     this.user = user;

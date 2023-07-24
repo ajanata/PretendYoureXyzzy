@@ -28,7 +28,7 @@ import java.util.*;
 
 /**
  * Deck of Black Cards.
- *
+ * <p>
  * This class is thread-safe.
  *
  * @author Andy Janata (ajanata@socialgamer.net)
@@ -54,8 +54,7 @@ public class BlackDeck {
    * Get the next card from the top of deck.
    *
    * @return The next card.
-   * @throws OutOfCardsException
-   *           There are no more cards in the deck.
+   * @throws OutOfCardsException There are no more cards in the deck.
    */
   public synchronized BlackCard getNextCard() throws OutOfCardsException {
     if (deck.size() == 0) throw new OutOfCardsException();
@@ -66,8 +65,7 @@ public class BlackDeck {
   /**
    * Add a card to the discard pile.
    *
-   * @param card
-   *          Card to add to discard pile.
+   * @param card Card to add to discard pile.
    */
   public synchronized void discard(final BlackCard card) {
     if (card != null) discard.add(card);

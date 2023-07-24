@@ -44,8 +44,7 @@ public abstract class Handler {
   /**
    * Get a data set for an error response.
    *
-   * @param errorCode
-   *          The error code.
+   * @param errorCode The error code.
    * @return The data to return as the result of the request.
    */
   protected static Map<ReturnableData, Object> error(final ErrorCode errorCode) {
@@ -57,6 +56,7 @@ public abstract class Handler {
 
   /**
    * Get a data set for an error response, with extra error information.
+   *
    * @param errorCode The error code.
    * @param extraData Additional data to return with the error.
    * @return The data to return as the result of the request.

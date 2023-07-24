@@ -46,8 +46,7 @@ public class JsonWrapper {
   /**
    * Returns the value of a property as an Object, or null if the property does not exist.
    *
-   * @param key
-   *          Property to get (should be one of the defined Constants).
+   * @param key Property to get (should be one of the defined Constants).
    * @return Value of the property, or null if property does not exist.
    */
   public Object getValue(final Object key) {
@@ -57,10 +56,8 @@ public class JsonWrapper {
   /**
    * Returns the value of a property as a String, or the default if the parameter does not exist.
    *
-   * @param key
-   *          Parameter to get.
-   * @param defaultValue
-   *          The value to return if the parameter does not exist.
+   * @param key          Parameter to get.
+   * @param defaultValue The value to return if the parameter does not exist.
    * @return Value of parameter, or the default if parameter does not exist.
    */
   public String getString(final Object key, final String defaultValue) {
@@ -71,10 +68,8 @@ public class JsonWrapper {
   /**
    * Returns the value of a property as an integer, or the default if the parameter does not exist.
    *
-   * @param key
-   *          Parameter to get.
-   * @param defaultValue
-   *          The value to return if the parameter does not exist.
+   * @param key          Parameter to get.
+   * @param defaultValue The value to return if the parameter does not exist.
    * @return Value of parameter, or the default if parameter does not exist.
    */
   public int getInteger(final Object key, final int defaultValue) {
@@ -88,10 +83,8 @@ public class JsonWrapper {
   /**
    * Returns the value of a property as a boolean, or the default if the parameter does not exist.
    *
-   * @param key
-   *          Parameter to get.
-   * @param defaultValue
-   *          The value to return if the parameter does not exist.
+   * @param key          Parameter to get.
+   * @param defaultValue The value to return if the parameter does not exist.
    * @return Value of parameter, or the default if parameter does not exist.
    */
   public boolean getBoolean(final Object key, final boolean defaultValue) {

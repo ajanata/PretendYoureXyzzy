@@ -100,11 +100,11 @@ public class ServerIsAliveTask extends SafeTimerTask {
 
       JSONObject req = new JSONObject();
       req.put("host", host)
-          .put("path", discoveryPathProvider.get())
-          .put("port", port)
-          .put("publicKey", publicKey.toString(16))
-          .put("metrics", discoveryMetricsProvider.get())
-          .put("secure", secure);
+              .put("path", discoveryPathProvider.get())
+              .put("port", port)
+              .put("publicKey", publicKey.toString(16))
+              .put("metrics", discoveryMetricsProvider.get())
+              .put("secure", secure);
 
       HttpURLConnection conn = (HttpURLConnection) AM_ALIVE_API.openConnection();
       conn.setRequestMethod("POST");
@@ -128,7 +128,8 @@ public class ServerIsAliveTask extends SafeTimerTask {
       }
 
       conn.disconnect();
-    } catch (IOException | InvalidKeyException | NoSuchAlgorithmException | InvalidAlgorithmParameterException | InvalidKeySpecException ex) {
+    } catch (IOException | InvalidKeyException | NoSuchAlgorithmException | InvalidAlgorithmParameterException |
+             InvalidKeySpecException ex) {
       logger.error("Failed contacting server discovery API!", ex);
     }
   }

@@ -30,7 +30,7 @@ import java.util.function.Function;
 /**
  * Class to track which card(s) have been played by players. Can get the card(s) for a player, and
  * also which player played a given card.
- *
+ * <p>
  * All methods in this class are synchronized.
  *
  * @author Andy Janata (ajanata@socialgamer.net)
@@ -48,10 +48,8 @@ public class PlayerPlayedCardsTracker {
   /**
    * Add a played card to the mappings.
    *
-   * @param player
-   *          Player which played the card.
-   * @param card
-   *          The card the player played.
+   * @param player Player which played the card.
+   * @param card   The card the player played.
    */
   public synchronized void addCard(final Player player, final WhiteCard card) {
     List<WhiteCard> cards = playerCardMap.computeIfAbsent(player, new Function<Player, List<WhiteCard>>() {
@@ -67,8 +65,7 @@ public class PlayerPlayedCardsTracker {
   /**
    * Get the {@code Player} that played a card, given the card's ID.
    *
-   * @param id
-   *          Card ID to check.
+   * @param id Card ID to check.
    * @return The {@code Player} that played the card.
    */
   public synchronized Player getPlayerForId(final int id) {
@@ -78,8 +75,7 @@ public class PlayerPlayedCardsTracker {
   /**
    * Determine whether a player has played any cards this round.
    *
-   * @param player
-   *          Player to check.
+   * @param player Player to check.
    * @return True if the player has played any cards this round.
    */
   public synchronized boolean hasPlayer(final Player player) {
@@ -89,14 +85,13 @@ public class PlayerPlayedCardsTracker {
   /**
    * @param player
    * @return The list of cards {@code player} has played this round, or {@code null} if they have
-   *         not played any cards.
+   * not played any cards.
    */
   public synchronized List<WhiteCard> getCards(final Player player) {
     return playerCardMap.get(player);
   }
 
   /**
-   *
    * @param player
    * @return The number of played cards by {@code player}
    */
@@ -108,8 +103,7 @@ public class PlayerPlayedCardsTracker {
   /**
    * Remove and return a player's cards from the played cards tracking.
    *
-   * @param player
-   *          Player to remove.
+   * @param player Player to remove.
    * @return The cards the player had played, or {@code null} if the player had not played cards.
    */
   public synchronized List<WhiteCard> remove(final Player player) {

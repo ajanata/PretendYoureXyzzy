@@ -198,6 +198,14 @@ public class CahModule extends AbstractModule {
   }
 
   @Provides
+  @GameChatEnabled
+  Boolean provideGameChatEnabled() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty("pyx.server.game_chat_enabled", "true"));
+    }
+  }
+
+  @Provides
   @ShowGamePermalink
   Boolean provideShowGamePermalink() {
     synchronized (properties) {
@@ -325,6 +333,14 @@ public class CahModule extends AbstractModule {
     }
   }
 
+  @Provides
+  @AllowBlankCards
+  Boolean provideAllowBlankCards() {
+    synchronized (properties) {
+      return Boolean.valueOf(properties.getProperty("pyx.server.allow_blank_cards", "true"));
+    }
+  }
+
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface BanList {
@@ -392,6 +408,11 @@ public class CahModule extends AbstractModule {
 
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
+  public @interface GameChatEnabled {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
   public @interface InsecureIdAllowed {
   }
 
@@ -433,6 +454,167 @@ public class CahModule extends AbstractModule {
   @BindingAnnotation
   @Retention(RetentionPolicy.RUNTIME)
   public @interface BannedNicks {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface AllowBlankCards {
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface MinScoreLimit {
+  }
+
+  @Provides
+  @MinScoreLimit
+  Integer provideMinScoreLimit() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.game.min_score_limit", "4"));
+    }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface DefaultScoreLimit {
+  }
+
+  @Provides
+  @DefaultScoreLimit
+  Integer provideDefaultScoreLimit() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.game.default_score_limit", "8"));
+    }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface MaxScoreLimit {
+  }
+
+  @Provides
+  @MaxScoreLimit
+  Integer provideMaxScoreLimit() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.game.max_score_limit", "69"));
+    }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface MinPlayerLimit {
+  }
+
+  @Provides
+  @MinPlayerLimit
+  Integer provideMinPlayerLimit() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.game.min_player_limit", "3"));
+    }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface DefaultPlayerLimit {
+  }
+
+  @Provides
+  @DefaultPlayerLimit
+  Integer provideDefaultPlayerLimit() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.game.default_player_limit", "10"));
+    }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface MaxPlayerLimit {
+  }
+
+  @Provides
+  @MaxPlayerLimit
+  Integer provideMaxPlayerLimit() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.game.max_player_limit", "20"));
+    }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface MinSpectatorLimit {
+  }
+
+  @Provides
+  @MinSpectatorLimit
+  Integer provideMinSpectatorLimit() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.game.min_spectator_limit", "0"));
+    }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface DefaultSpectatorLimit {
+  }
+
+  @Provides
+  @DefaultSpectatorLimit
+  Integer provideDefaultSpectatorLimit() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.game.default_spectator_limit", "10"));
+    }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface MaxSpectatorLimit {
+  }
+
+  @Provides
+  @MaxSpectatorLimit
+  Integer provideMaxSpectatorLimit() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.game.max_spectator_limit", "20"));
+    }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface MinBlankCardLimit {
+  }
+
+  @Provides
+  @MinBlankCardLimit
+  Integer provideMinBlankCardLimit() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.game.min_blank_card_limit", "0"));
+    }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface DefaultBlankCardLimit {
+  }
+
+  @Provides
+  @DefaultBlankCardLimit
+  Integer provideDefaultBlankCardLimit() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.game.default_blank_card_limit", "0"));
+    }
+  }
+
+  @BindingAnnotation
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface MaxBlankCardLimit {
+  }
+
+  @Provides
+  @MaxBlankCardLimit
+  Integer provideMaxBlankCardLimit() {
+    synchronized (properties) {
+      return Integer.valueOf(properties.getProperty("pyx.game.max_blank_card_limit", "30"));
+    }
   }
 
   @BindingAnnotation

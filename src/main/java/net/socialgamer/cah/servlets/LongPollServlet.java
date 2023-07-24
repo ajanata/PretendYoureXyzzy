@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Servlet implementation class LongPollServlet.
- *
+ * <p>
  * This servlet is used for client long polling requests.
  *
  * @author Andy Janata (ajanata@socialgamer.net)

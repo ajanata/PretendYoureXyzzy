@@ -59,6 +59,7 @@ public class GeoIP {
 
   /**
    * Look up the given IP address in the GeoIP database.
+   *
    * @param addr The address to look up.
    * @return Information about the address, or {@code null} if an error occurred or a GeoIP
    * database was not configured.

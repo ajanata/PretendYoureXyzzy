@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%--
-Copyright (c) 2012-2018, Andy Janata
+Copyright (c) 2012-2020, Andy Janata
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -27,13 +27,24 @@ created for the user now.
 
 @author Andy Janata (ajanata@socialgamer.net)
 --%>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="net.socialgamer.cah.data.GameOptions" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="com.google.inject.Injector" %>
+<%@ page import="com.google.inject.Key" %>
+<%@ page import="com.google.inject.TypeLiteral" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page import="net.socialgamer.cah.RequestWrapper" %>
+<%@ page import="net.socialgamer.cah.StartupUtils" %>
+<%@ page import="net.socialgamer.cah.data.GameOptions" %>
+<%@ page import="net.socialgamer.cah.CahModule" %>
+<%@ page import="net.socialgamer.cah.CahModule.*" %>
 <%
-    // Ensure a session exists for the user.
-    @SuppressWarnings("unused")
-    HttpSession hSession = request.getSession(true);
+// Ensure a session exists for the user.
+@SuppressWarnings("unused")
+HttpSession hSession = request.getSession(true);
+RequestWrapper wrapper = new RequestWrapper(request);
+ServletContext servletContext = pageContext.getServletContext();
+Injector injector = (Injector) servletContext.getAttribute(StartupUtils.INJECTOR);
+boolean allowBlankCards = injector.getInstance(Key.get(new TypeLiteral<Boolean>(){}, AllowBlankCards.class));
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -72,6 +83,57 @@ created for the user now.
 <body id="gamebody">
 
 <div id="welcome">
+  <h1 tabindex="0">
+    Pretend You're <dfn
+    title="Xyzzy is an Artificial Unintelligence bot. You'll be making more sense than him in this game.">
+    Xyzzy</dfn>
+  </h1>
+  <h3>A <a href="http://cardsagainsthumanity.com/">Cards Against Humanity</a> clone.</h3>
+  <p>
+    If this is your first time playing, you may wish to read <a href="index.jsp">the changelog and
+    list of known issues</a>.
+  </p>
+  <p>
+    Your computer's IP address will <strong>always</strong> be logged when you load the game client.
+    It is not tied in any way to your username, except possibly if a server error occurs. Gameplay
+    results are logged permanently, but without information identifying you.
+  </p>
+  <p tabindex="0">Most recent update: 3 September 2018:</p>
+  <ul>
+    <li>All chat and fill-in-the-blank cards have been disabled. If you're still out of the loop,
+    <a href="https://gist.githubusercontent.com/ajanata/07ededdb584f7bb77a8c7191d3a4bbcc/raw/e76faacc19c2bb598a1a8fd94b9ebcb29c5502e0">
+    here's why.</a></li>
+  </ul>
+  <h2>The servers are incredibly busy right now. There are several servers to try, there will be
+  room elsewhere! <a href='https://pretendyoure.xyz/zy'>CLICK HERE</a> to see the server list. As
+  long as you're on the same server as your friends, you can play together. Please stop crowding
+  pyx-1 ("The Biggest, Blackest Dick").</h2>
+  <div id="nickbox">
+    <label for="nickname">Nickname:</label>
+    <input type="text" id="nickname" value="" maxlength="30" role="textbox"
+        aria-label="Enter your nickname." data-lpignore="true" />
+    <label for="idcode">
+    <dfn title="Only available via HTTPS. Provide a secret identification code to positively identify yourself in the chat.">
+    Optional identification code:</dfn></label>
+    <input type="password" id="idcode" value="" maxlength="100" disabled="disabled"
+        aria-label="Optionally enter an identification code." />
+    <a href="https://github.com/ajanata/PretendYoureXyzzy/wiki/Identification-Codes">(Help)</a>
+    <input type="button" id="nicknameconfirm" value="Set" />
+    <span id="nickbox_error" class="error"></span>
+  </div>
+  <p><a href="privacy.html"><strong>Hey, this is important:</strong> Read the privacy page for
+  details about what gameplay information is collected and how it's shared.</a></p>
+  <p>
+    Pretend You're Xyzzy is a Cards Against Humanity clone, which is available at
+    <a href="http://www.cardsagainsthumanity.com/">cardsagainsthumanity.com</a>, where you can buy
+    it or download and print it out yourself. It is distributed under a
+    <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons - Attribution -
+    Noncommercial - Share Alike license</a>. This web version is in no way endorsed or sponsored by
+    cardsagainsthumanity.com. You may download the source code to this version from
+    <a href="https://github.com/ajanata/PretendYoureXyzzy">GitHub</a>. For full license
+    information, including information about included libraries, see the
+    <a href="license.html">full license information</a>.
+  </p>
     <h1 tabindex="0">
         Pretend You're <dfn
             title="Xyzzy is an Artificial Unintelligence bot. You'll be making more sense than him in this game.">
@@ -457,98 +519,96 @@ created for the user now.
 
 <!-- Template for game options. -->
 <div class="hide">
-    <div class="game_options" id="game_options_template">
-        <span class="options_host_only">Only the game host can change options.</span>
-        <br/><br/>
-        <fieldset>
-            <legend>Game options:</legend>
-            <label id="score_limit_template_label" for="score_limit_template">Score limit:</label>
-            <select id="score_limit_template" class="score_limit">
-                <%
-                    for (int i = GameOptions.MIN_SCORE_LIMIT; i <= GameOptions.MAX_SCORE_LIMIT; i++) {
-                %>
-                <option <%= i == GameOptions.DEFAULT_SCORE_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %>
-                </option>
-                <% } %>
-            </select>
-            <br/>
-            <label id="player_limit_template_label" for="player_limit_template">Player limit:</label>
-            <select id="player_limit_template" class="player_limit"
-                    aria-label="Player limit. Having more than 10 players may cause issues both for screen readers and traditional browsers.">
-                <%
-                    for (int i = GameOptions.MIN_PLAYER_LIMIT; i <= GameOptions.MAX_PLAYER_LIMIT; i++) {
-                %>
-                <option <%= i == GameOptions.DEFAULT_PLAYER_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %>
-                </option>
-                <% } %>
-            </select>
-            Having more than 10 players may get cramped!
-            <br/>
-            <label id="spectator_limit_template_label" for="spectator_limit_template">Spectator limit:</label>
-            <select id="spectator_limit_template" class="spectator_limit"
-                    aria-label="Spectator limit.">
-                <%
-                    for (int i = GameOptions.MIN_SPECTATOR_LIMIT; i <= GameOptions.MAX_SPECTATOR_LIMIT; i++) {
-                %>
-                <option <%= i == GameOptions.DEFAULT_SPECTATOR_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %>
-                </option>
-                <% } %>
-            </select>
-            Spectators can watch and chat, but not actually play. Not even as Czar.
-            <br/>
-            <label id="timer_multiplier_template_label" for="timer_multiplier_template"
-                   title="Players will be skipped if they have not played within a reasonable amount of time. This is the multiplier to apply to the default timeouts, or Unlimited to disable timeouts.">
-                Idle timer multiplier:
-            </label>
-            <select id="timer_multiplier_template" class="timer_multiplier"
-                    title="Players will be skipped if they have not played within a reasonable amount of time. This is the multiplier to apply to the default timeouts, or Unlimited to disable timeouts."
-                    aria-label="Players will be skipped if they have not played within a reasonable amount of time. This is the multiplier to apply to the default timeouts, or Unlimited to disable timeouts.">
-                <option value="0.25x">0.25x</option>
-                <option value="0.5x">0.5x</option>
-                <option value="0.75x">0.75x</option>
-                <option selected="selected" value="1x">1x</option>
-                <option value="1.25x">1.25x</option>
-                <option value="1.5x">1.5x</option>
-                <option value="1.75x">1.75x</option>
-                <option value="2x">2x</option>
-                <option value="2.5x">2.5x</option>
-                <option value="3x">3x</option>
-                <option value="4x">4x</option>
-                <option value="5x">5x</option>
-                <option value="10x">10x</option>
-                <option value="Unlimited">Unlimited</option>
-            </select>
-            <br/>
-            <fieldset class="card_sets">
-                <legend>Card Sets</legend>
-                <span class="base_card_sets"></span>
-                <span class="extra_card_sets"></span>
-            </fieldset>
-            <br/>
-            <label id="blanks_limit_label" title="Blank cards allow a player to type in their own answer.">
-                Also include <select id="blanks_limit_template" class="blanks_limit">
-                <%
-                    for (int i = GameOptions.MIN_BLANK_CARD_LIMIT; i <= GameOptions.MAX_BLANK_CARD_LIMIT; i++) {
-                %>
-                <option <%= i == GameOptions.DEFAULT_BLANK_CARD_LIMIT ? "selected='selected' " : "" %>value="<%= i %>"><%= i %>
-                </option>
-                <% } %>
-            </select> blank white cards.
-            </label>
-            <br/>
-            <label id="game_password_template_label" for="game_password_template">Game password:</label>
-            <input type="text" id="game_password_template" class="game_password"
-                   aria-label="Game password. You must tab outside of the box to apply the password."/>
-            <input type="password" id="game_fake_password_template" class="game_fake_password hide"/>
-            You must click outside the box to apply the password.
-            <input type="checkbox" id="game_hide_password_template" class="game_hide_password"/>
-            <label id="game_hide_password_template_label" for="game_hide_password_template"
-                   aria-label="Hide password from your screen."
-                   title="Hides the password from your screen, so people watching your stream can't see it.">
-                Hide password.
-            </label>
-        </fieldset>
-    </div>
+  <div class="game_options" id="game_options_template">
+    <span class="options_host_only">Only the game host can change options.</span>
+    <br/><br/>
+    <fieldset>
+      <legend>Game options:</legend>
+      <label id="score_limit_template_label" for="score_limit_template">Score limit:</label>
+      <select id="score_limit_template" class="score_limit">
+        <%
+          for (int i = injector.getInstance(Key.get(Integer.class, MinScoreLimit.class)); i <= injector.getInstance(Key.get(Integer.class, MaxScoreLimit.class)); i++) {
+        %>
+          <option <%=(i == injector.getInstance(Key.get(Integer.class, DefaultScoreLimit.class))) ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+        <% } %>
+      </select>
+      <br/>
+      <label id="player_limit_template_label" for="player_limit_template">Player limit:</label>
+      <select id="player_limit_template" class="player_limit"
+          aria-label="Player limit. Having more than 10 players may cause issues both for screen readers and traditional browsers.">
+        <%
+          for (int i = injector.getInstance(Key.get(Integer.class, MinPlayerLimit.class)); i <= injector.getInstance(Key.get(Integer.class, MaxPlayerLimit.class)); i++) {
+        %>
+          <option <%= i == injector.getInstance(Key.get(Integer.class, DefaultPlayerLimit.class)) ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+        <% } %>
+      </select>
+      Having more than 10 players may get cramped!
+      <br/>
+      <label id="spectator_limit_template_label" for="spectator_limit_template">Spectator limit:</label>
+      <select id="spectator_limit_template" class="spectator_limit"
+          aria-label="Spectator limit.">
+        <%
+          for (int i = injector.getInstance(Key.get(Integer.class, MinSpectatorLimit.class)); i <= injector.getInstance(Key.get(Integer.class, MaxSpectatorLimit.class)); i++) {
+        %>
+          <option <%= i == injector.getInstance(Key.get(Integer.class, DefaultSpectatorLimit.class)) ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+        <% } %>
+      </select>
+      Spectators can watch and chat, but not actually play. Not even as Czar.
+      <br/>
+      <label id="timer_multiplier_template_label" for="timer_multiplier_template"
+          title="Players will be skipped if they have not played within a reasonable amount of time. This is the multiplier to apply to the default timeouts, or Unlimited to disable timeouts.">
+          Idle timer multiplier:
+      </label>
+      <select id="timer_multiplier_template" class="timer_multiplier"
+          title="Players will be skipped if they have not played within a reasonable amount of time. This is the multiplier to apply to the default timeouts, or Unlimited to disable timeouts."
+          aria-label="Players will be skipped if they have not played within a reasonable amount of time. This is the multiplier to apply to the default timeouts, or Unlimited to disable timeouts.">
+      	<option value="0.25x">0.25x</option>
+      	<option value="0.5x">0.5x</option>
+      	<option value="0.75x">0.75x</option>
+      	<option selected="selected" value="1x">1x</option>
+      	<option value="1.25x">1.25x</option>
+      	<option value="1.5x">1.5x</option>
+      	<option value="1.75x">1.75x</option>
+      	<option value="2x">2x</option>
+      	<option value="2.5x">2.5x</option>
+      	<option value="3x">3x</option>
+      	<option value="4x">4x</option>
+      	<option value="5x">5x</option>
+      	<option value="10x">10x</option>
+      	<option value="Unlimited">Unlimited</option>
+      </select>
+      <br/>
+      <fieldset class="card_sets">
+        <legend>Card Sets</legend>
+        <span class="base_card_sets"></span>
+        <span class="extra_card_sets"></span>
+      </fieldset>
+      <% if (allowBlankCards) { %>
+        <br/>
+        <label id="blanks_limit_label" title="Blank cards allow a player to type in their own answer.">
+          Also include <select id="blanks_limit_template" class="blanks_limit">
+          <%
+            for (int i = injector.getInstance(Key.get(Integer.class, MinBlankCardLimit.class)); i <= injector.getInstance(Key.get(Integer.class, MaxBlankCardLimit.class)); i++) {
+          %>
+            <option <%= i == injector.getInstance(Key.get(Integer.class, DefaultBlankCardLimit.class)) ? "selected='selected' " : "" %>value="<%= i %>"><%= i %></option>
+          <% } %>
+          </select> blank white cards.
+        </label>
+      <% } %>
+      <br/>
+      <label id="game_password_template_label" for="game_password_template">Game password:</label>
+      <input type="text" id="game_password_template" class="game_password"
+          aria-label="Game password. You must tab outside of the box to apply the password."/>
+      <input type="password" id="game_fake_password_template" class="game_fake_password hide" />
+      You must click outside the box to apply the password.
+      <input type="checkbox" id="game_hide_password_template" class="game_hide_password" />
+      <label id="game_hide_password_template_label" for="game_hide_password_template"
+          aria-label="Hide password from your screen."
+          title="Hides the password from your screen, so people watching your stream can't see it.">
+        Hide password.
+      </label>
+    </fieldset>
+  </div>
 </div>
 <div style="position:absolute; left:-99999px" role="alert" id="aria-notifications"></div>
 </body>

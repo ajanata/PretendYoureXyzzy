@@ -83,8 +83,7 @@ public class ConnectedUsers {
   }
 
   /**
-   * @param userName
-   *          User name to check.
+   * @param userName User name to check.
    * @return True if {@code userName} is a connected user.
    */
   public boolean hasUser(final String userName) {
@@ -94,6 +93,7 @@ public class ConnectedUsers {
   /**
    * Checks to see if the specified {@code user} is allowed to connect, and if so, add the user,
    * as an atomic operation.
+   *
    * @param user User to add. {@code getNickname()} is used to determine the nickname.
    * @return {@code null} if the user was added, or an {@link ErrorCode} explaining why the user was
    * rejected.
@@ -144,10 +144,8 @@ public class ConnectedUsers {
    * Remove a user from the user list, and mark them as invalid so the next time they make a request
    * they can be informed.
    *
-   * @param user
-   *          User to remove.
-   * @param reason
-   *          Reason the user is being removed.
+   * @param user   User to remove.
+   * @param reason Reason the user is being removed.
    */
   public void removeUser(final User user, final DisconnectReason reason) {
     synchronized (users) {
@@ -174,10 +172,8 @@ public class ConnectedUsers {
   /**
    * Broadcast to all remaining users that a user has left. Also logs for metrics.
    *
-   * @param user
-   *          User that has left.
-   * @param reason
-   *          Reason why the user has left.
+   * @param user   User that has left.
+   * @param reason Reason why the user has left.
    */
   private void notifyRemoveUser(final User user, final DisconnectReason reason) {
     // Games are informed about the user leaving when the user object is marked invalid.
@@ -235,11 +231,9 @@ public class ConnectedUsers {
   /**
    * Broadcast a message to all connected players.
    *
-   * @param type
-   *          Type of message to broadcast. This determines the order the messages are returned by
-   *          priority.
-   * @param masterData
-   *          Message data to broadcast.
+   * @param type       Type of message to broadcast. This determines the order the messages are returned by
+   *                   priority.
+   * @param masterData Message data to broadcast.
    */
   public void broadcastToAll(final MessageType type,
                              final HashMap<ReturnableData, Object> masterData) {
@@ -249,13 +243,10 @@ public class ConnectedUsers {
   /**
    * Broadcast a message to a specified subset of connected players.
    *
-   * @param broadcastTo
-   *          List of users to broadcast the message to.
-   * @param type
-   *          Type of message to broadcast. This determines the order the messages are returned by
-   *          priority.
-   * @param masterData
-   *          Message data to broadcast.
+   * @param broadcastTo List of users to broadcast the message to.
+   * @param type        Type of message to broadcast. This determines the order the messages are returned by
+   *                    priority.
+   * @param masterData  Message data to broadcast.
    */
   public void broadcastToList(final Collection<User> broadcastTo, final MessageType type,
                               final HashMap<ReturnableData, Object> masterData) {

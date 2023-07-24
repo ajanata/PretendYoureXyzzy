@@ -61,14 +61,10 @@ public abstract class GameWithPlayerHandler extends GameHandler {
    * Handle a request, with a {@code Game} that is guaranteed to have the requesting {@code User} in
    * it.
    *
-   * @param request
-   *          Request data.
-   * @param session
-   *          The client's session.
-   * @param user
-   *          The client's {@code User}.
-   * @param game
-   *          The {@code Game} for this request, which {@code user} is guaranteed to be in.
+   * @param request Request data.
+   * @param session The client's session.
+   * @param user    The client's {@code User}.
+   * @param game    The {@code Game} for this request, which {@code user} is guaranteed to be in.
    * @return Response data.
    */
   public abstract Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,

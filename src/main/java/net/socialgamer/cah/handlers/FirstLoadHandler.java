@@ -50,6 +50,7 @@ public class FirstLoadHandler extends Handler {
   private final Set<String> banList;
   private final Session hibernateSession;
   private final boolean includeInactiveCardsets;
+  private final boolean gameChatEnabled;
   private final boolean globalChatEnabled;
   private final boolean showSessionPermalink;
   private final String sessionPermalinkFormatString;
@@ -60,6 +61,7 @@ public class FirstLoadHandler extends Handler {
   @Inject
   public FirstLoadHandler(final Session hibernateSession, @BanList final Set<String> banList,
                           @IncludeInactiveCardsets final boolean includeInactiveCardsets,
+                          @GameChatEnabled final boolean gameChatEnabled,
                           @GlobalChatEnabled final boolean globalChatEnabled,
                           @ServerStarted final Date serverStarted,
                           @ShowSessionPermalink final boolean showSessionPermalink,
@@ -69,6 +71,7 @@ public class FirstLoadHandler extends Handler {
     this.banList = banList;
     this.hibernateSession = hibernateSession;
     this.includeInactiveCardsets = includeInactiveCardsets;
+    this.gameChatEnabled = gameChatEnabled;
     this.globalChatEnabled = globalChatEnabled;
     this.serverStarted = serverStarted;
     this.showSessionPermalink = showSessionPermalink;
@@ -81,6 +84,7 @@ public class FirstLoadHandler extends Handler {
   public Map<ReturnableData, Object> handle(final RequestWrapper request,
                                             final HttpSession session) {
     final HashMap<ReturnableData, Object> ret = new HashMap<>();
+    ret.put(AjaxResponse.GAME_CHAT_ENABLED, gameChatEnabled);
     ret.put(AjaxResponse.GLOBAL_CHAT_ENABLED, globalChatEnabled);
 
     if (banList.contains(request.getRemoteAddr())) {

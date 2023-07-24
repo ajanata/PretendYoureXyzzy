@@ -190,9 +190,9 @@ public class ChatFilter {
               .forName(getPropValue("pyx.chat.shadowban_strings_provider",
                       DEFAULT_SHADOWBAN_PROVIDER)).newInstance()).getShadowBannedStrings();
     } catch (final InstantiationException | IllegalAccessException | ClassNotFoundException
-            | ClassCastException e) {
+                   | ClassCastException e) {
       LOG.error(String.format("Unable to load shadowban string provider %s, using empty set.",
-              getPropValue("pyx.chat.shadowban_strings_provider", DEFAULT_SHADOWBAN_PROVIDER)),
+                      getPropValue("pyx.chat.shadowban_strings_provider", DEFAULT_SHADOWBAN_PROVIDER)),
               e);
       return Collections.emptySet();
     }

@@ -113,13 +113,10 @@ public class UpdateJsConstants {
    * Return a map of enum values in an Enum class, with the enum field names as keys and the values
    * of toString() as the values.
    *
-   * @param enumClass
-   *          The Enum to examine.
+   * @param enumClass The Enum to examine.
    * @return Map of field name -> toString values.
-   * @throws IllegalArgumentException
-   *           Thrown if {@code enumClass} isn't actually an enum.
-   * @throws IllegalAccessException
-   *           If the value was unable to be retrieved.
+   * @throws IllegalArgumentException Thrown if {@code enumClass} isn't actually an enum.
+   * @throws IllegalAccessException   If the value was unable to be retrieved.
    */
   private static Map<String, String> getEnumValues(final Class<?> enumClass)
           throws IllegalArgumentException, IllegalAccessException {
@@ -141,13 +138,10 @@ public class UpdateJsConstants {
    * Return a map of {@code Localizable} message values in an Enum class, with the enum field names
    * as keys and the values of getString() as the values.
    *
-   * @param enumClass
-   *          The Enum to examine.
+   * @param enumClass The Enum to examine.
    * @return Map of field name -> getString values.
-   * @throws IllegalArgumentException
-   *           Thrown if {@code enumClass} isn't actually an enum.
-   * @throws IllegalAccessException
-   *           If the value was unable to be retrieved.
+   * @throws IllegalArgumentException Thrown if {@code enumClass} isn't actually an enum.
+   * @throws IllegalAccessException   If the value was unable to be retrieved.
    */
   private static Map<String, String> getEnumMessageValues(final Class<?> enumClass)
           throws IllegalArgumentException, IllegalAccessException {
@@ -177,13 +171,10 @@ public class UpdateJsConstants {
    * Return a map of {@code DoubleLocalizable} message values in an Enum class, with the enum field
    * names as keys and the values of getString2() as the values.
    *
-   * @param enumClass
-   *          The Enum to examine.
+   * @param enumClass The Enum to examine.
    * @return Map of field name -> getString2 values.
-   * @throws IllegalArgumentException
-   *           Thrown if {@code enumClass} isn't actually an enum.
-   * @throws IllegalAccessException
-   *           If the value was unable to be retrieved.
+   * @throws IllegalArgumentException Thrown if {@code enumClass} isn't actually an enum.
+   * @throws IllegalAccessException   If the value was unable to be retrieved.
    */
   private static Map<String, String> getEnumMessage2Values(final Class<?> enumClass)
           throws IllegalArgumentException, IllegalAccessException {

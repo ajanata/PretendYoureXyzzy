@@ -9,7 +9,7 @@ public class Handlers {
   public final static Map<String, Class<? extends Handler>> LIST;
 
   static {
-    LIST = new HashMap<>();
+    LIST = new HashMap<String, Class<? extends Handler>>();
     LIST.put(BanHandler.OP, BanHandler.class);
     LIST.put(CardcastAddCardsetHandler.OP, CardcastAddCardsetHandler.class);
     LIST.put(CardcastListCardsetsHandler.OP, CardcastListCardsetsHandler.class);

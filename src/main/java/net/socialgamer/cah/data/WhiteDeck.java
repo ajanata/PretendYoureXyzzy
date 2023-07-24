@@ -28,7 +28,7 @@ import java.util.*;
 
 /**
  * Deck of White Cards.
- *
+ * <p>
  * This class is thread-safe.
  *
  * @author Andy Janata (ajanata@socialgamer.net)
@@ -41,13 +41,13 @@ public class WhiteDeck {
   /**
    * Create a new white card deck, loading the cards from the database and shuffling them.
    */
-  public WhiteDeck(final Collection<CardSet> cardSets, final int numBlanks) {
+  public WhiteDeck(int maxBlankCardLimit, final Collection<CardSet> cardSets, final int numBlanks) {
     final Set<WhiteCard> allCards = new HashSet<>();
     for (final CardSet cardSet : cardSets) {
       allCards.addAll(cardSet.getWhiteCards());
     }
     deck = new ArrayList<>(allCards);
-    for (int i = 0; i < numBlanks && i < GameOptions.MAX_BLANK_CARD_LIMIT; i++) {
+    for (int i = 0; i < numBlanks && i < maxBlankCardLimit; i++) {
       deck.add(createBlankCard());
     }
     Collections.shuffle(deck);
@@ -68,8 +68,7 @@ public class WhiteDeck {
    * Get the next card from the top of deck.
    *
    * @return The next card.
-   * @throws OutOfCardsException
-   *           There are no more cards in the deck.
+   * @throws OutOfCardsException There are no more cards in the deck.
    */
   public synchronized WhiteCard getNextCard() throws OutOfCardsException {
     if (deck.size() == 0) throw new OutOfCardsException();
@@ -80,8 +79,7 @@ public class WhiteDeck {
   /**
    * Add a card to the discard pile.
    *
-   * @param card
-   *          Card to add to discard pile.
+   * @param card Card to add to discard pile.
    */
   public synchronized void discard(final WhiteCard card) {
     if (card != null) {

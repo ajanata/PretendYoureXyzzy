@@ -40,7 +40,7 @@ import java.util.*;
 
 /**
  * Manage games for the server.
- *
+ * <p>
  * This is also a Guice provider for game ids.
  *
  * @author Andy Janata (ajanata@socialgamer.net)
@@ -63,10 +63,8 @@ public class GameManager implements Provider<Integer> {
   /**
    * Create a new game manager.
    *
-   * @param gameProvider
-   *          Provider for new {@code Game} instances.
-   * @param maxGamesProvider
-   *          Provider for maximum number of games allowed on the server.
+   * @param gameProvider     Provider for new {@code Game} instances.
+   * @param maxGamesProvider Provider for maximum number of games allowed on the server.
    */
   @Inject
   public GameManager(final Provider<Game> gameProvider,
@@ -104,16 +102,14 @@ public class GameManager implements Provider<Integer> {
   /**
    * Creates a new game and puts the specified user into the game, if there are free game slots.
    * Returns {@code null} if there are already the maximum number of games in progress.
-   *
+   * <p>
    * Creating the game and adding the user are done atomically with respect to another game getting
    * created, or even getting the list of active games. It is impossible for another user to join
    * the game before the requesting user.
    *
-   * @param user
-   *          User to place into the game.
+   * @param user User to place into the game.
    * @return Newly created game, or {@code null} if the maximum number of games are in progress.
-   * @throws IllegalStateException
-   *           If the user is already in a game and cannot join another.
+   * @throws IllegalStateException If the user is already in a game and cannot join another.
    */
   public Game createGameWithPlayer(final User user) throws IllegalStateException {
     synchronized (games) {
@@ -140,12 +136,11 @@ public class GameManager implements Provider<Integer> {
   /**
    * This probably will not be used very often in the server: Games should normally be deleted when
    * all players leave it. I'm putting this in if only to help with testing.
-   *
+   * <p>
    * Destroys a game immediately. This will almost certainly cause errors on the client for any
    * players left in the game. If {@code gameId} isn't valid, this method silently returns.
    *
-   * @param gameId
-   *          ID of game to destroy.
+   * @param gameId ID of game to destroy.
    */
   public void destroyGame(final int gameId) {
     synchronized (games) {
@@ -179,7 +174,7 @@ public class GameManager implements Provider<Integer> {
   /**
    * Get an unused game ID, or -1 if the maximum number of games are in progress. This should not be
    * called in such a case, though!
-   *
+   * <p>
    * TODO: make this not suck
    *
    * @return Next game id, or {@code -1} if the maximum number of games are in progress.
@@ -209,8 +204,7 @@ public class GameManager implements Provider<Integer> {
   /**
    * Try to guess a good candidate for the next game id.
    *
-   * @param skip
-   *          An id to skip over.
+   * @param skip An id to skip over.
    * @return A guess for the next game id.
    */
   private int candidateGameId(final int skip) {
@@ -244,8 +238,7 @@ public class GameManager implements Provider<Integer> {
   /**
    * Gets the game with the specified id, or {@code null} if there is no game with that id.
    *
-   * @param id
-   *          Id of game to retrieve.
+   * @param id Id of game to retrieve.
    * @return The Game, or {@code null} if there is no game with that id.
    */
   public Game getGame(final int id) {
