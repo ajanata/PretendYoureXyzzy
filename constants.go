@@ -78,6 +78,7 @@ const (
 	GameInfo_CREATED = "gca"
 	GameInfo_PLAYERS = "P"
 	GameInfo_SPECTATORS = "V"
+	GameInfo_CUSTOM_CARD_SETS = "ccs"
 	GameInfo_HOST = "H"
 	GameInfo_STATE = "S"
 	GameInfo_ID = "gid"
@@ -89,6 +90,7 @@ type GameInfo struct {
 	Created int64 `json:"gca"`
 	Players []string `json:"P"`
 	Spectators []string `json:"V"`
+	CustomCardSets []CardSetData `json:"ccs"`
 	Host string `json:"H"`
 	State string `json:"S"`
 	Id int `json:"gid"`
@@ -119,6 +121,7 @@ const (
 	CardSetData_CARD_SET_NAME = "csn"
 	CardSetData_CARD_SET_DESCRIPTION = "csd"
 	CardSetData_BASE_DECK = "bd"
+	CardSetData_WATERMARK = "W"
 	CardSetData_ID = "cid"
 	CardSetData_WEIGHT = "w"
 )
@@ -129,6 +132,7 @@ type CardSetData struct {
 	CardSetName string `json:"csn"`
 	CardSetDescription string `json:"csd"`
 	BaseDeck bool `json:"bd"`
+	Watermark string `json:"W"`
 	Id int `json:"cid"`
 	Weight int `json:"w"`
 }
@@ -197,11 +201,11 @@ const (
 	LongPollResponse_ROUND_WINNER = "rw"
 	LongPollResponse_SIGIL = "?"
 	LongPollResponse_EMOTE = "me"
-	LongPollResponse_CARDCAST_DECK_INFO = "cdi"
 	LongPollResponse_GAME_ID = "gid"
 	LongPollResponse_ROUND_PERMALINK = "rP"
 	LongPollResponse_NICKNAME = "n"
 	LongPollResponse_BLACK_CARD = "bc"
+	LongPollResponse_CUSTOM_DECK_INFO = "cdi"
 	LongPollResponse_GAME_PERMALINK = "gp"
 	LongPollResponse_GAME_STATE = "gs"
 	LongPollResponse_INTERMISSION = "i"
@@ -227,11 +231,11 @@ type LongPollResponse struct {
 	RoundWinner string `json:"rw"`
 	Sigil string `json:"?"`
 	Emote bool `json:"me"`
-	CardcastDeckInfo string `json:"cdi"`
 	GameId *int `json:"gid"`
 	RoundPermalink string `json:"rP"`
 	Nickname string `json:"n"`
 	BlackCard BlackCardData `json:"bc"`
+	CustomDeckInfo string `json:"cdi"`
 	GamePermalink string `json:"gp"`
 	GameState string `json:"gs"`
 	Intermission int `json:"i"`
@@ -294,7 +298,7 @@ const (
 	ErrorCode_NICK_IN_USE = "niu"
 	ErrorCode_NOT_JUDGE = "nj"
 	ErrorCode_SERVER_ERROR = "serr"
-	ErrorCode_CARDCAST_INVALID_ID = "cii"
+	ErrorCode_CUSTOM_SET_CANNOT_FIND = "cscf"
 	ErrorCode_TOO_FAST = "tf"
 	ErrorCode_NOT_ENOUGH_CARDS = "nec"
 	ErrorCode_NO_CARD_SPECIFIED = "ncs"
@@ -304,7 +308,6 @@ const (
 	ErrorCode_TOO_MANY_SPECIAL_CHARACTERS = "tmsc"
 	ErrorCode_BAD_REQUEST = "br"
 	ErrorCode_NOT_ENOUGH_PLAYERS = "nep"
-	ErrorCode_CARDCAST_CANNOT_FIND = "ccf"
 	ErrorCode_NOT_IN_THAT_GAME = "nitg"
 	ErrorCode_NO_SUCH_USER = "nsu"
 	ErrorCode_NOT_REGISTERED = "nr"
@@ -320,11 +323,9 @@ const (
 )
 
 var ErrorCodeMsgs = map[string]string{
-	 "cii": "Invalid Cardcast ID. Must be exactly 5 characters.",
 	 "nr": "Not registered. Refresh the page.",
 	 "iid": "Identification code, if provided, must be between 8 and 100 characters, inclusive.",
 	 "ns": "Session not detected. Make sure you have cookies enabled.",
-	 "ccf": "Cannot find Cardcast deck with given ID. If you just added this deck to Cardcast, wait a few minutes and try again.",
 	 "nyt": "It is not your turn to play a card.",
 	 "bo": "Invalid operation.",
 	 "nec": "You must add card sets containing at least 50 black cards and 20 times the player limit white cards.",
@@ -364,6 +365,7 @@ var ErrorCodeMsgs = map[string]string{
 	 "rm": "You can't repeat the same message multiple times in a row.",
 	 "nj": "You are not the judge.",
 	 "rn": "That nick is reserved.",
+	 "cscf": "Cannot find custom deck with the given ID or URL or invalid JSON was provided.",
 	 "tmsc": "You used too many special characters in that message.",
 }
 
@@ -454,14 +456,16 @@ const (
 	AjaxRequest_SERIAL = "s"
 	AjaxRequest_OP = "o"
 	AjaxRequest_WALL = "wall"
+	AjaxRequest_CUSTOM_CARDSET_URL = "ccu"
 	AjaxRequest_PERSISTENT_ID = "pid"
 	AjaxRequest_EMOTE = "me"
-	AjaxRequest_CARDCAST_ID = "cci"
+	AjaxRequest_CUSTOM_CARDSET_JSON = "ccj"
 	AjaxRequest_GAME_ID = "gid"
 	AjaxRequest_GAME_OPTIONS = "go"
 	AjaxRequest_MESSAGE = "m"
 	AjaxRequest_NICKNAME = "n"
 	AjaxRequest_PASSWORD = "pw"
+	AjaxRequest_CUSTOM_CARDSET_ID = "cci"
 	AjaxRequest_CARD_ID = "cid"
 	AjaxRequest_ID_CODE = "idc"
 )
@@ -470,14 +474,16 @@ type AjaxRequest struct {
 	Serial int `json:"s"`
 	Op string `json:"o"`
 	Wall bool `json:"wall"`
+	CustomCardsetUrl string `json:"ccu"`
 	PersistentId string `json:"pid"`
 	Emote bool `json:"me"`
-	CardcastId string `json:"cci"`
+	CustomCardsetJson string `json:"ccj"`
 	GameId int `json:"gid"`
 	GameOptions GameOptionData `json:"go"`
 	Message string `json:"m"`
 	Nickname string `json:"n"`
 	Password string `json:"pw"`
+	CustomCardsetId int `json:"cci"`
 	CardId int `json:"cid"`
 	IdCode string `json:"idc"`
 }

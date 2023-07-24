@@ -26,220 +26,206 @@ Administration tools.
 
 @author Andy Janata (ajanata@socialgamer.net)
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.google.inject.Injector" %>
 <%@ page import="com.google.inject.Key" %>
 <%@ page import="com.google.inject.TypeLiteral" %>
-<%@ page import="net.socialgamer.cah.RequestWrapper" %>
-<%@ page import="net.socialgamer.cah.StartupUtils" %>
 <%@ page import="net.socialgamer.cah.CahModule.Admins" %>
 <%@ page import="net.socialgamer.cah.CahModule.BanList" %>
 <%@ page import="net.socialgamer.cah.Constants.DisconnectReason" %>
 <%@ page import="net.socialgamer.cah.Constants.LongPollEvent" %>
 <%@ page import="net.socialgamer.cah.Constants.LongPollResponse" %>
 <%@ page import="net.socialgamer.cah.Constants.ReturnableData" %>
+<%@ page import="net.socialgamer.cah.RequestWrapper" %>
+<%@ page import="net.socialgamer.cah.StartupUtils" %>
 <%@ page import="net.socialgamer.cah.data.ConnectedUsers" %>
 <%@ page import="net.socialgamer.cah.data.QueuedMessage" %>
 <%@ page import="net.socialgamer.cah.data.QueuedMessage.MessageType" %>
 <%@ page import="net.socialgamer.cah.data.User" %>
-<%@ page import="java.util.Collection" %>
-<%@ page import="java.util.Date" %>
-<%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.util.Set" %>
+<%@ page import="java.util.*" %>
 
 <%
-RequestWrapper wrapper = new RequestWrapper(request);
-ServletContext servletContext = pageContext.getServletContext();
-Injector injector = (Injector) servletContext.getAttribute(StartupUtils.INJECTOR);
-Set<String> admins = injector.getInstance(Key.get(new TypeLiteral<Set<String>>(){}, Admins.class));
-if (!admins.contains(wrapper.getRemoteAddr())) {
-  response.sendError(403, "Access is restricted to known hosts");
-  return;
-}
+    RequestWrapper wrapper = new RequestWrapper(request);
+    ServletContext servletContext = pageContext.getServletContext();
+    Injector injector = (Injector) servletContext.getAttribute(StartupUtils.INJECTOR);
+    Set<String> admins = injector.getInstance(Key.get(new TypeLiteral<Set<String>>() {
+    }, Admins.class));
+    if (!admins.contains(wrapper.getRemoteAddr())) {
+        response.sendError(403, "Access is restricted to known hosts");
+        return;
+    }
 
-ConnectedUsers connectedUsers = injector.getInstance(ConnectedUsers.class);
-Set<String> banList = injector.getInstance(Key.get(new TypeLiteral<Set<String>>(){}, BanList.class));
-
-// process verbose toggle
-String verboseParam = request.getParameter("verbose");
-if (verboseParam != null) {
-  if (verboseParam.equals("on")) {
-    servletContext.setAttribute(StartupUtils.VERBOSE_DEBUG, Boolean.TRUE);
-  } else {
-    servletContext.setAttribute(StartupUtils.VERBOSE_DEBUG, Boolean.FALSE);
-  }
-  response.sendRedirect("admin.jsp");
-  return;
-}
+    ConnectedUsers connectedUsers = injector.getInstance(ConnectedUsers.class);
+    Set<String> banList = injector.getInstance(Key.get(new TypeLiteral<Set<String>>() {
+    }, BanList.class));
 
 // process kick
-String kickParam = request.getParameter("kick");
-if (kickParam != null) {
-  User user = connectedUsers.getUser(kickParam);
-  if (user != null) {
-    Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-    data.put(LongPollResponse.EVENT, LongPollEvent.KICKED.toString());
-    QueuedMessage qm = new QueuedMessage(MessageType.KICKED, data);
-    user.enqueueMessage(qm);
+    String kickParam = request.getParameter("kick");
+    if (kickParam != null) {
+        User user = connectedUsers.getUser(kickParam);
+        if (user != null) {
+            Map<ReturnableData, Object> data = new HashMap<>();
+            data.put(LongPollResponse.EVENT, LongPollEvent.KICKED.toString());
+            QueuedMessage qm = new QueuedMessage(MessageType.KICKED, data);
+            user.enqueueMessage(qm);
 
-    connectedUsers.removeUser(user, DisconnectReason.KICKED);
-  }
-  response.sendRedirect("admin.jsp");
-  return;
-}
+            connectedUsers.removeUser(user, DisconnectReason.KICKED);
+        }
+        response.sendRedirect("admin.jsp");
+        return;
+    }
 
 // process ban
-String banParam = request.getParameter("ban");
-if (banParam != null) {
-  User user = connectedUsers.getUser(banParam);
-  if (user != null) {
-   Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
-   data.put(LongPollResponse.EVENT, LongPollEvent.BANNED.toString());
-   QueuedMessage qm = new QueuedMessage(MessageType.KICKED, data);
-   user.enqueueMessage(qm);
+    String banParam = request.getParameter("ban");
+    if (banParam != null) {
+        User user = connectedUsers.getUser(banParam);
+        if (user != null) {
+            Map<ReturnableData, Object> data = new HashMap<>();
+            data.put(LongPollResponse.EVENT, LongPollEvent.BANNED.toString());
+            QueuedMessage qm = new QueuedMessage(MessageType.KICKED, data);
+            user.enqueueMessage(qm);
 
-   connectedUsers.removeUser(user, DisconnectReason.BANNED);
-   banList.add(user.getHostname());
-  }
-  response.sendRedirect("admin.jsp");
-  return;
-}
+            connectedUsers.removeUser(user, DisconnectReason.BANNED);
+            banList.add(user.getHostname());
+        }
+        response.sendRedirect("admin.jsp");
+        return;
+    }
 
 // process unban
-String unbanParam = request.getParameter("unban");
-if (unbanParam != null) {
-  banList.remove(unbanParam);
-  response.sendRedirect("admin.jsp");
-  return;
-}
+    String unbanParam = request.getParameter("unban");
+    if (unbanParam != null) {
+        banList.remove(unbanParam);
+        response.sendRedirect("admin.jsp");
+        return;
+    }
 
-String reloadLog4j = request.getParameter("reloadLog4j");
-if ("true".equals(reloadLog4j)) {
-  StartupUtils.reconfigureLogging(this.getServletContext());
-}
+    String reloadLog4j = request.getParameter("reloadLog4j");
+    if ("true".equals(reloadLog4j)) {
+        StartupUtils.reconfigureLogging();
+    }
 
-String reloadProps = request.getParameter("reloadProps");
-if ("true".equals(reloadProps)) {
-  StartupUtils.reloadProperties(this.getServletContext());
-}
+    String reloadProps = request.getParameter("reloadProps");
+    if ("true".equals(reloadProps)) {
+        StartupUtils.reloadProperties(this.getServletContext());
+    }
 
+    String reloadServerIsAlive = request.getParameter("reloadServerIsAlive");
+    if ("true".equals(reloadServerIsAlive)) {
+        StartupUtils.reloadServerIsAlive(this.getServletContext());
+    }
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>PYX - Admin</title>
-<style type="text/css" media="screen">
-table, th, td {
-  border: 1px solid black;
-}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>PYX - Admin</title>
+    <style type="text/css" media="screen">
+        table, th, td {
+            border: 1px solid black;
+        }
 
-th, td {
-  padding: 5px;
-}
-</style>
+        th, td {
+            padding: 5px;
+        }
+    </style>
 </head>
 <body>
 
 <p>
-  Server up since
-  <%
-  Date startedDate = (Date) servletContext.getAttribute(StartupUtils.DATE_NAME);
-  long uptime = System.currentTimeMillis() - startedDate.getTime();
-  uptime /= 1000L;
-  long seconds = uptime % 60L;
-  long minutes = (uptime / 60L) % 60L;
-  long hours = (uptime / 60L / 60L) % 24L;
-  long days = (uptime / 60L / 60L / 24L);
-  out.print(String.format("%s (%d days, %02d:%02d:%02d)",
-      startedDate.toString(), days, hours, minutes, seconds));
-  %>
+    Server up since
+    <%
+        Date startedDate = (Date) servletContext.getAttribute(StartupUtils.DATE_NAME);
+        long uptime = System.currentTimeMillis() - startedDate.getTime();
+        uptime /= 1000L;
+        long seconds = uptime % 60L;
+        long minutes = (uptime / 60L) % 60L;
+        long hours = (uptime / 60L / 60L) % 24L;
+        long days = (uptime / 60L / 60L / 24L);
+        out.print(String.format("%s (%d days, %02d:%02d:%02d)",
+                startedDate.toString(), days, hours, minutes, seconds));
+    %>
 </p>
 
 <table>
-  <tr>
-    <th>Stat</th>
-    <th>MiB</th>
-  </tr>
-  <tr>  
-    <td>In Use</td>
-    <td><%= (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
-        / 1024L / 1024L %></td>
-  </tr>
-  <tr>  
-    <td>Free</td>
-    <td><% out.print(Runtime.getRuntime().freeMemory() / 1024L / 1024L); %></td>
-  </tr>
-  <tr>  
-    <td>JVM Allocated</td>
-    <td><% out.print(Runtime.getRuntime().totalMemory() / 1024L / 1024L); %></td>
-  </tr>
-  <tr>  
-    <td>JVM Max</td>
-    <td><% out.print(Runtime.getRuntime().maxMemory() / 1024L / 1024L); %></td>
-  </tr>
+    <tr>
+        <th>Stat</th>
+        <th>MiB</th>
+    </tr>
+    <tr>
+        <td>In Use</td>
+        <td><%= (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
+                / 1024L / 1024L %>
+        </td>
+    </tr>
+    <tr>
+        <td>Free</td>
+        <td><% out.print(Runtime.getRuntime().freeMemory() / 1024L / 1024L); %></td>
+    </tr>
+    <tr>
+        <td>JVM Allocated</td>
+        <td><% out.print(Runtime.getRuntime().totalMemory() / 1024L / 1024L); %></td>
+    </tr>
+    <tr>
+        <td>JVM Max</td>
+        <td><% out.print(Runtime.getRuntime().maxMemory() / 1024L / 1024L); %></td>
+    </tr>
 </table>
 <br/>
 Ban list:
 <table>
-  <tr>
-    <th>Host</th>
-    <th>Actions</th>
-  </tr>
-  <%
-  for (String host : banList) {
-    %>
     <tr>
-      <td><%= host %></td>
-      <td><a href="?unban=<%= host %>">Unban</a></td>
+        <th>Host</th>
+        <th>Actions</th>
     </tr>
     <%
-  }
-  %>
+        for (String host : banList) {
+    %>
+    <tr>
+        <td><%= host %>
+        </td>
+        <td><a href="?unban=<%= host %>">Unban</a></td>
+    </tr>
+    <%
+        }
+    %>
 </table>
 <br/>
 User list:
 <table>
-  <tr>
-    <th>Username</th>
-    <th>Host</th>
-    <th>Actions</th>
-  </tr>
-  <%
-  Collection<User> users = connectedUsers.getUsers();
-  for (User u : users) {
-    // TODO have a ban system. would need to store them somewhere.
-	  %>
-	  <tr>
-	    <td><%= u.getNickname() %></td>
-	    <td><%= u.getHostname() %></td>
-	    <td>
-        <a href="?kick=<%= u.getNickname() %>">Kick</a>
-        <a href="?ban=<%= u.getNickname() %>">Ban</a>
-      </td>
-	  </tr>
-	  <%
-  }
-  %>
+    <tr>
+        <th>Username</th>
+        <th>Host</th>
+        <th>Actions</th>
+    </tr>
+    <%
+        Collection<User> users = connectedUsers.getUsers();
+        for (User u : users) {
+            // TODO have a ban system. would need to store them somewhere.
+    %>
+    <tr>
+        <td><%= u.getNickname() %>
+        </td>
+        <td><%= u.getHostname() %>
+        </td>
+        <td>
+            <a href="?kick=<%= u.getNickname() %>">Kick</a>
+            <a href="?ban=<%= u.getNickname() %>">Ban</a>
+        </td>
+    </tr>
+    <%
+        }
+    %>
 </table>
-
-<%
-// TODO remove this "verbose logging" crap now that log4j is working.
-Boolean verboseDebugObj = (Boolean) servletContext.getAttribute(StartupUtils.VERBOSE_DEBUG); 
-boolean verboseDebug = verboseDebugObj != null ? verboseDebugObj.booleanValue() : false;
-%>
 <p>
-  Verbose logging is currently <strong><%= verboseDebug ? "ON" : "OFF" %></strong>.
-  <a href="?verbose=on">Turn on.</a> <a href="?verbose=off">Turn off.</a>
+    <a href="?reloadLog4j=true">Reload log4j.properties.</a>
 </p>
 <p>
-  <a href="?reloadLog4j=true">Reload log4j.properties.</a>
+    <a href="?reloadProps=true">Reload pyx.properties.</a>
 </p>
 <p>
-  <a href="?reloadProps=true">Reload pyx.properties.</a>
+    <a href="?reloadServerIsAlive=true">Reload ServerIsAliveTask.</a>
 </p>
-
 </body>
 </html>

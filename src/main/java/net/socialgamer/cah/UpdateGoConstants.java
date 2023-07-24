@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,17 +23,17 @@
 
 package net.socialgamer.cah;
 
+import net.socialgamer.cah.Constants.DoubleLocalizable;
+import net.socialgamer.cah.Constants.GoDataType;
+import net.socialgamer.cah.Constants.GoStruct;
+import net.socialgamer.cah.Constants.Localizable;
+
 import java.io.File;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import net.socialgamer.cah.Constants.DoubleLocalizable;
-import net.socialgamer.cah.Constants.GoDataType;
-import net.socialgamer.cah.Constants.GoStruct;
-import net.socialgamer.cah.Constants.Localizable;
 
 
 /**
@@ -151,22 +151,19 @@ public class UpdateGoConstants {
    * Return a map of enum values in an Enum class, with the enum field names as keys and the values
    * of toString() as the values.
    *
-   * @param enumClass
-   *          The Enum to examine.
+   * @param enumClass The Enum to examine.
    * @return Map of field name -> toString values.
-   * @throws IllegalArgumentException
-   *           Thrown if {@code enumClass} isn't actually an enum.
-   * @throws IllegalAccessException
-   *           If the value was unable to be retrieved.
+   * @throws IllegalArgumentException Thrown if {@code enumClass} isn't actually an enum.
+   * @throws IllegalAccessException   If the value was unable to be retrieved.
    */
   private static Map<String, String> getEnumValues(final Class<?> enumClass)
-      throws IllegalArgumentException, IllegalAccessException {
+          throws IllegalArgumentException, IllegalAccessException {
     if (!enumClass.isEnum()) {
       throw new IllegalArgumentException(enumClass.getName() + " is not an enum");
     }
 
     final Field[] flds = enumClass.getDeclaredFields();
-    final HashMap<String, String> enumMap = new HashMap<String, String>();
+    final HashMap<String, String> enumMap = new HashMap<>();
     for (final Field f : flds) {
       if (f.isEnumConstant()) {
         enumMap.put(f.getName(), f.get(null).toString());
@@ -179,26 +176,23 @@ public class UpdateGoConstants {
    * Return a map of {@code Localizable} message values in an Enum class, with the enum field names
    * as keys and the values of getString() as the values.
    *
-   * @param enumClass
-   *          The Enum to examine.
+   * @param enumClass The Enum to examine.
    * @return Map of field name -> getString values.
-   * @throws IllegalArgumentException
-   *           Thrown if {@code enumClass} isn't actually an enum.
-   * @throws IllegalAccessException
-   *           If the value was unable to be retrieved.
+   * @throws IllegalArgumentException Thrown if {@code enumClass} isn't actually an enum.
+   * @throws IllegalAccessException   If the value was unable to be retrieved.
    */
   private static Map<String, String> getEnumMessageValues(final Class<?> enumClass)
-      throws IllegalArgumentException, IllegalAccessException {
+          throws IllegalArgumentException, IllegalAccessException {
     if (!enumClass.isEnum()) {
       throw new IllegalArgumentException(enumClass.getName() + " is not an enum");
     } else if (!Localizable.class.isAssignableFrom(enumClass)
-        && !DoubleLocalizable.class.isAssignableFrom(enumClass)) {
+            && !DoubleLocalizable.class.isAssignableFrom(enumClass)) {
       throw new IllegalArgumentException(enumClass.getName()
-          + " does not implement Localizable or DoubleLocalizable.");
+              + " does not implement Localizable or DoubleLocalizable.");
     }
 
     final Field[] flds = enumClass.getDeclaredFields();
-    final HashMap<String, String> messageMap = new HashMap<String, String>();
+    final HashMap<String, String> messageMap = new HashMap<>();
     for (final Field f : flds) {
       if (f.isEnumConstant()) {
         if (Localizable.class.isAssignableFrom(enumClass)) {
@@ -215,25 +209,22 @@ public class UpdateGoConstants {
    * Return a map of {@code DoubleLocalizable} message values in an Enum class, with the enum field
    * names as keys and the values of getString2() as the values.
    *
-   * @param enumClass
-   *          The Enum to examine.
+   * @param enumClass The Enum to examine.
    * @return Map of field name -> getString2 values.
-   * @throws IllegalArgumentException
-   *           Thrown if {@code enumClass} isn't actually an enum.
-   * @throws IllegalAccessException
-   *           If the value was unable to be retrieved.
+   * @throws IllegalArgumentException Thrown if {@code enumClass} isn't actually an enum.
+   * @throws IllegalAccessException   If the value was unable to be retrieved.
    */
   private static Map<String, String> getEnumMessage2Values(final Class<?> enumClass)
-      throws IllegalArgumentException, IllegalAccessException {
+          throws IllegalArgumentException, IllegalAccessException {
     if (!enumClass.isEnum()) {
       throw new IllegalArgumentException(enumClass.getName() + " is not an enum");
     } else if (!DoubleLocalizable.class.isAssignableFrom(enumClass)) {
       throw new IllegalArgumentException(enumClass.getName()
-          + " does not implement DoubleLocalizable.");
+              + " does not implement DoubleLocalizable.");
     }
 
     final Field[] flds = enumClass.getDeclaredFields();
-    final HashMap<String, String> messageMap = new HashMap<String, String>();
+    final HashMap<String, String> messageMap = new HashMap<>();
     for (final Field f : flds) {
       if (f.isEnumConstant()) {
         messageMap.put(f.get(null).toString(), ((DoubleLocalizable) f.get(null)).getString2());

@@ -23,129 +23,129 @@
 
 /**
  * Preferences manager.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 
 cah.Preferences = {};
 
-cah.Preferences.apply = function() {
-  cah.hideConnectQuit = !!$("#hide_connect_quit").attr("checked");
-  cah.noPersistentId = !!$("#no_persistent_id").attr("checked");
+cah.Preferences.apply = function () {
+    cah.hideConnectQuit = !!$("#hide_connect_quit").attr("checked");
+    cah.noPersistentId = !!$("#no_persistent_id").attr("checked");
 
-  cah.ignoreList = {};
-  $($('#ignore_list').val().split('\n')).each(function() {
-    cah.ignoreList[this] = true;
-  });
-
-  // TODO card set filters
-};
-
-cah.Preferences.load = function() {
-  if ($.cookie("hide_connect_quit")) {
-    $("#hide_connect_quit").attr('checked', 'checked');
-  } else {
-    $("#hide_connect_quit").removeAttr('checked');
-  }
-
-  if ($.cookie("no_persistent_id")) {
-    $("#no_persistent_id").attr('checked', 'checked');
-    cah.persistentId = null;
-  } else {
-    $("#no_persistent_id").removeAttr('checked');
-    cah.persistentId = $.cookie("persistent_id");
-  }
-
-  if ($.cookie("ignore_list")) {
-    $("#ignore_list").val($.cookie("ignore_list"));
-  } else {
-    $("#ignore_list").val("");
-  }
-
-  // If we haven't gotten the list of card sets from the server yet, this should fail silently.
-  cah.Preferences.updateCardSetFilters();
-
-  cah.Preferences.apply();
-};
-
-cah.Preferences.save = function() {
-  if ($("#hide_connect_quit").attr("checked")) {
-    cah.setCookie("hide_connect_quit", true);
-  } else {
-    cah.removeCookie("hide_connect_quit");
-  }
-
-  if ($("#no_persistent_id").attr("checked")) {
-    cah.setCookie("no_persistent_id", true);
-    cah.removeCookie("persistent_id");
-    cah.persistentId = null;
-  } else {
-    cah.removeCookie("no_persistent_id");
-  }
-
-  cah.setCookie("ignore_list", $("#ignore_list").val());
-
-  // card set filters
-  var bannedSets = [];
-  var requiredSets = [];
-  var func = function(whichList, setArray) {
-    $("#cardsets_" + whichList + " option").each(function() {
-      setArray.push(this.value);
+    cah.ignoreList = {};
+    $($('#ignore_list').val().split('\n')).each(function () {
+        cah.ignoreList[this] = true;
     });
-  };
-  func("banned", bannedSets);
-  func("required", requiredSets);
-  cah.setCookie("cardsets_banned", bannedSets.join(","));
-  cah.setCookie("cardsets_required", requiredSets.join(","));
 
-  cah.Preferences.apply();
+    // TODO card set filters
 };
 
-cah.Preferences.getBannedCardSetIds = function() {
-  var banned = [];
-  if (cah.getCookie("cardsets_banned")) {
-    banned = cah.getCookie("cardsets_banned").split(",");
-  }
-  for ( var index in banned) {
-    banned[index] = Number(banned[index]);
-  }
-
-  return banned;
-};
-
-cah.Preferences.getRequiredCardSetIds = function() {
-  var required = [];
-  if (cah.getCookie("cardsets_required")) {
-    required = cah.getCookie("cardsets_required").split(",");
-  }
-  for ( var index in required) {
-    required[index] = Number(required[index]);
-  }
-
-  return required;
-};
-
-cah.Preferences.updateCardSetFilters = function() {
-  $("#cardsets_banned").find("option").remove();
-  $("#cardsets_neutral").find("option").remove();
-  $("#cardsets_required").find("option").remove();
-
-  var banned = cah.Preferences.getBannedCardSetIds();
-  var required = cah.Preferences.getRequiredCardSetIds();
-  for ( var weight in cah.CardSet.byWeight) {
-    var cardSet = cah.CardSet.byWeight[weight];
-    var whichList = "neutral";
-    if (-1 !== $.inArray(cardSet.getId(), banned)) {
-      whichList = "banned";
-    } else if (-1 !== $.inArray(cardSet.getId(), required)) {
-      whichList = "required";
+cah.Preferences.load = function () {
+    if ($.cookie("hide_connect_quit")) {
+        $("#hide_connect_quit").attr('checked', 'checked');
+    } else {
+        $("#hide_connect_quit").removeAttr('checked');
     }
-    cah.addItem("cardsets_" + whichList, cardSet.getId(), cardSet.getName(), whichList);
-  }
+
+    if ($.cookie("no_persistent_id")) {
+        $("#no_persistent_id").attr('checked', 'checked');
+        cah.persistentId = null;
+    } else {
+        $("#no_persistent_id").removeAttr('checked');
+        cah.persistentId = $.cookie("persistent_id");
+    }
+
+    if ($.cookie("ignore_list")) {
+        $("#ignore_list").val($.cookie("ignore_list"));
+    } else {
+        $("#ignore_list").val("");
+    }
+
+    // If we haven't gotten the list of card sets from the server yet, this should fail silently.
+    cah.Preferences.updateCardSetFilters();
+
+    cah.Preferences.apply();
 };
 
-cah.Preferences.transferCardSets = function(sourceList, destList) {
-  cah.transferItems("cardsets_" + sourceList, "cardsets_" + destList, destList, function(a, b) {
-    return cah.CardSet.list[a.value].getWeight() - cah.CardSet.list[b.value].getWeight();
-  });
+cah.Preferences.save = function () {
+    if ($("#hide_connect_quit").attr("checked")) {
+        cah.setCookie("hide_connect_quit", true);
+    } else {
+        cah.removeCookie("hide_connect_quit");
+    }
+
+    if ($("#no_persistent_id").attr("checked")) {
+        cah.setCookie("no_persistent_id", true);
+        cah.removeCookie("persistent_id");
+        cah.persistentId = null;
+    } else {
+        cah.removeCookie("no_persistent_id");
+    }
+
+    cah.setCookie("ignore_list", $("#ignore_list").val());
+
+    // card set filters
+    var bannedSets = [];
+    var requiredSets = [];
+    var func = function (whichList, setArray) {
+        $("#cardsets_" + whichList + " option").each(function () {
+            setArray.push(this.value);
+        });
+    };
+    func("banned", bannedSets);
+    func("required", requiredSets);
+    cah.setCookie("cardsets_banned", bannedSets.join(","));
+    cah.setCookie("cardsets_required", requiredSets.join(","));
+
+    cah.Preferences.apply();
+};
+
+cah.Preferences.getBannedCardSetIds = function () {
+    var banned = [];
+    if (cah.getCookie("cardsets_banned")) {
+        banned = cah.getCookie("cardsets_banned").split(",");
+    }
+    for (var index in banned) {
+        banned[index] = Number(banned[index]);
+    }
+
+    return banned;
+};
+
+cah.Preferences.getRequiredCardSetIds = function () {
+    var required = [];
+    if (cah.getCookie("cardsets_required")) {
+        required = cah.getCookie("cardsets_required").split(",");
+    }
+    for (var index in required) {
+        required[index] = Number(required[index]);
+    }
+
+    return required;
+};
+
+cah.Preferences.updateCardSetFilters = function () {
+    $("#cardsets_banned").find("option").remove();
+    $("#cardsets_neutral").find("option").remove();
+    $("#cardsets_required").find("option").remove();
+
+    var banned = cah.Preferences.getBannedCardSetIds();
+    var required = cah.Preferences.getRequiredCardSetIds();
+    for (var weight in cah.CardSet.byWeight) {
+        var cardSet = cah.CardSet.byWeight[weight];
+        var whichList = "neutral";
+        if (-1 !== $.inArray(cardSet.getId(), banned)) {
+            whichList = "banned";
+        } else if (-1 !== $.inArray(cardSet.getId(), required)) {
+            whichList = "required";
+        }
+        cah.addItem("cardsets_" + whichList, cardSet.getId(), cardSet.getName(), whichList);
+    }
+};
+
+cah.Preferences.transferCardSets = function (sourceList, destList) {
+    cah.transferItems("cardsets_" + sourceList, "cardsets_" + destList, destList, function (a, b) {
+        return cah.CardSet.list[a.value].getWeight() - cah.CardSet.list[b.value].getWeight();
+    });
 };

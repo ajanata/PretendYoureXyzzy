@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,23 +23,9 @@
 
 package net.socialgamer.cah.handlers;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.inject.Inject;
-
 import net.socialgamer.cah.CahModule.GameChatEnabled;
-import net.socialgamer.cah.Constants.AjaxOperation;
-import net.socialgamer.cah.Constants.AjaxRequest;
-import net.socialgamer.cah.Constants.ErrorCode;
-import net.socialgamer.cah.Constants.LongPollEvent;
-import net.socialgamer.cah.Constants.LongPollResponse;
-import net.socialgamer.cah.Constants.ReturnableData;
+import net.socialgamer.cah.Constants.*;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.ConnectedUsers;
 import net.socialgamer.cah.data.Game;
@@ -48,6 +34,10 @@ import net.socialgamer.cah.data.QueuedMessage.MessageType;
 import net.socialgamer.cah.data.User;
 import net.socialgamer.cah.util.ChatFilter;
 
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * Handler for chat messages.
@@ -55,17 +45,14 @@ import net.socialgamer.cah.util.ChatFilter;
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 public class GameChatHandler extends GameWithPlayerHandler {
-
-  private static final Logger LOG = LogManager.getLogger(GameChatHandler.class);
   public static final String OP = AjaxOperation.GAME_CHAT.toString();
-
   private final ChatFilter chatFilter;
   private final ConnectedUsers users;
   private final boolean gameChatEnabled;
 
   @Inject
   public GameChatHandler(final GameManager gameManager, final ChatFilter chatFilter,
-      final ConnectedUsers users, @GameChatEnabled final boolean gameChatEnabled) {
+                         final ConnectedUsers users, @GameChatEnabled final boolean gameChatEnabled) {
     super(gameManager);
     this.chatFilter = chatFilter;
     this.users = users;
@@ -74,10 +61,10 @@ public class GameChatHandler extends GameWithPlayerHandler {
 
   @Override
   public Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,
-      final HttpSession session, final User user, final Game game) {
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+                                                          final HttpSession session, final User user, final Game game) {
+    final Map<ReturnableData, Object> data = new HashMap<>();
     final boolean emote = request.getParameter(AjaxRequest.EMOTE) != null
-        && Boolean.valueOf(request.getParameter(AjaxRequest.EMOTE));
+            && Boolean.valueOf(request.getParameter(AjaxRequest.EMOTE));
 
     LongPollEvent event = LongPollEvent.CHAT;
     if (request.getParameter(AjaxRequest.MESSAGE) == null) {
@@ -89,36 +76,15 @@ public class GameChatHandler extends GameWithPlayerHandler {
       final String message = request.getParameter(AjaxRequest.MESSAGE).trim();
 
       final ChatFilter.Result filterResult = chatFilter.filterGame(user, message);
-      switch (filterResult) {
-        case CAPSLOCK:
-          return error(ErrorCode.CAPSLOCK);
-        case DROP_MESSAGE:
-          // Don't tell the user we dropped it, and don't send it to everyone else...
-          // but let any online admins know about it
-          event = LongPollEvent.FILTERED_CHAT;
-          break;
-        case NO_MESSAGE:
-          return error(ErrorCode.NO_MSG_SPECIFIED);
-        case NOT_ENOUGH_SPACES:
-          return error(ErrorCode.NOT_ENOUGH_SPACES);
-        case OK:
-          // nothing to do
-          break;
-        case REPEAT:
-          return error(ErrorCode.REPEAT_MESSAGE);
-        case REPEAT_WORDS:
-          return error(ErrorCode.REPEATED_WORDS);
-        case TOO_FAST:
-          return error(ErrorCode.TOO_FAST);
-        case TOO_LONG:
-          return error(ErrorCode.MESSAGE_TOO_LONG);
-        case TOO_MANY_SPECIALS:
-          return error(ErrorCode.TOO_MANY_SPECIAL_CHARACTERS);
-        default:
-          LOG.error(String.format("Unknown chat filter result %s", filterResult));
+      ErrorCode error = filterResult.getErrorCode();
+      if (error == null) {
+        LongPollEvent filterEvent = filterResult.getEvent();
+        if (filterEvent != null) event = filterEvent;
+      } else {
+        return error(error);
       }
 
-      final HashMap<ReturnableData, Object> broadcastData = new HashMap<ReturnableData, Object>();
+      final HashMap<ReturnableData, Object> broadcastData = new HashMap<>();
       broadcastData.put(LongPollResponse.EVENT, event.toString());
       broadcastData.put(LongPollResponse.FROM, user.getNickname());
       broadcastData.put(LongPollResponse.MESSAGE, message);

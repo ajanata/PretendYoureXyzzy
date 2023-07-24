@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,16 +23,11 @@
 
 package net.socialgamer.cah.db;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import net.socialgamer.cah.data.BlackCard;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
 
 
 /**

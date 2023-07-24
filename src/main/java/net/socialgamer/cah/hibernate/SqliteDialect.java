@@ -11,13 +11,13 @@
 
 package net.socialgamer.cah.hibernate;
 
-import java.sql.Types;
-
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.function.SQLFunctionTemplate;
 import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.dialect.function.VarArgsSQLFunction;
 import org.hibernate.type.StandardBasicTypes;
+
+import java.sql.Types;
 
 
 public class SqliteDialect extends Dialect {
@@ -96,8 +96,7 @@ public class SqliteDialect extends Dialect {
 
   @Override
   public String getLimitString(final String query, final boolean hasOffset) {
-    return new StringBuffer(query.length() + 20).append(query)
-        .append(hasOffset ? " limit ? offset ?" : " limit ?").toString();
+    return query + (hasOffset ? " limit ? offset ?" : " limit ?");
   }
 
   @Override
@@ -163,22 +162,22 @@ public class SqliteDialect extends Dialect {
   @Override
   public String getDropForeignKeyString() {
     throw new UnsupportedOperationException(
-        "No drop foreign key syntax supported by SQLiteDialect");
+            "No drop foreign key syntax supported by SQLiteDialect");
   }
 
   @Override
   public String getAddForeignKeyConstraintString(final String constraintName,
-      final String[] foreignKey,
-      final String referencedTable, final String[] primaryKey,
-      final boolean referencesPrimaryKey) {
+                                                 final String[] foreignKey,
+                                                 final String referencedTable, final String[] primaryKey,
+                                                 final boolean referencesPrimaryKey) {
     throw new UnsupportedOperationException(
-        "No add foreign key syntax supported by SQLiteDialect");
+            "No add foreign key syntax supported by SQLiteDialect");
   }
 
   @Override
   public String getAddPrimaryKeyConstraintString(final String constraintName) {
     throw new UnsupportedOperationException(
-        "No add primary key syntax supported by SQLiteDialect");
+            "No add primary key syntax supported by SQLiteDialect");
   }
 
   @Override
@@ -186,7 +185,7 @@ public class SqliteDialect extends Dialect {
     return true;
   }
 
-@Override
+  @Override
   public boolean supportsCascadeDelete() {
     return false;
   }

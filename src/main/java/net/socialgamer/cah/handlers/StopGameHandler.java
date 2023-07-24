@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2012, Andy Janata
  * All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- * 
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,11 +23,7 @@
 
 package net.socialgamer.cah.handlers;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
+import com.google.inject.Inject;
 import net.socialgamer.cah.Constants.AjaxOperation;
 import net.socialgamer.cah.Constants.ErrorCode;
 import net.socialgamer.cah.Constants.GameState;
@@ -40,16 +36,16 @@ import net.socialgamer.cah.data.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.inject.Inject;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
  * Handler to stop a game.
  */
 public class StopGameHandler extends GameWithPlayerHandler {
-
-  protected final Logger logger = LogManager.getLogger(GameWithPlayerHandler.class);
-
+  protected final Logger LOG = LogManager.getLogger(GameWithPlayerHandler.class);
   public static final String OP = AjaxOperation.STOP_GAME.toString();
 
   @Inject
@@ -59,16 +55,16 @@ public class StopGameHandler extends GameWithPlayerHandler {
 
   @Override
   public Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,
-      final HttpSession session, final User user, final Game game) {
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+                                                          final HttpSession session, final User user, final Game game) {
+    final Map<ReturnableData, Object> data = new HashMap<>();
 
     if (game.getHost() != user) {
       return error(ErrorCode.NOT_GAME_HOST);
     } else if (game.getState() == GameState.LOBBY) {
       return error(ErrorCode.ALREADY_STOPPED);
     } else {
-      logger.info(String.format("Game %d stopped by host %s. Players: %s", game.getId(), user,
-          game.getPlayers()));
+      LOG.info(String.format("Game %d stopped by host %s. Players: %s", game.getId(), user,
+              game.getPlayers()));
       game.resetState(false);
       return data;
     }

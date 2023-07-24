@@ -1,10 +1,10 @@
 package net.socialgamer.cah.data;
 
+import net.socialgamer.cah.Constants.CardSetData;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import net.socialgamer.cah.Constants.CardSetData;
 
 
 public abstract class CardSet {
@@ -28,6 +28,7 @@ public abstract class CardSet {
   /**
    * Get the JSON representation of this card set's metadata. This method will cause lazy-loading of
    * the card collections.
+   *
    * @return Client representation of this card set.
    */
   public final Map<CardSetData, Object> getClientMetadata() {
@@ -38,7 +39,7 @@ public abstract class CardSet {
   }
 
   protected Map<CardSetData, Object> getCommonClientMetadata() {
-    final Map<CardSetData, Object> cardSetData = new HashMap<CardSetData, Object>();
+    final Map<CardSetData, Object> cardSetData = new HashMap<>();
     cardSetData.put(CardSetData.ID, getId());
     cardSetData.put(CardSetData.CARD_SET_NAME, getName());
     cardSetData.put(CardSetData.CARD_SET_DESCRIPTION, getDescription());
@@ -50,7 +51,7 @@ public abstract class CardSet {
   @Override
   public String toString() {
     return String.format("%s[name=%s, base=%b, id=%d, active=%b, weight=%d, black=%d, white=%d]",
-        getClass().getName(), getName(), isBaseDeck(), getId(), isActive(), getWeight(),
-        getBlackCards().size(), getWhiteCards().size());
+            getClass().getName(), getName(), isBaseDeck(), getId(), isActive(), getWeight(),
+            getBlackCards().size(), getWhiteCards().size());
   }
 }

@@ -26,6 +26,8 @@ package net.socialgamer.cah.customsets;
 import net.socialgamer.cah.Constants;
 import net.socialgamer.cah.data.CardSet;
 
+import net.socialgamer.cah.data.CardSet;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;

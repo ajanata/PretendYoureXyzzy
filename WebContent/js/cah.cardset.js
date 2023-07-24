@@ -23,7 +23,7 @@
 
 /**
  * CardSet class and static list.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 
@@ -42,7 +42,7 @@ cah.CardSet.byWeight = {};
 /**
  * Class containing information about a CardSet. Should only be used by utility function in this
  * file that populates cah.CardSet.list during initial load of the game.
- * 
+ *
  * @param {Number}
  *          id CardSet's database/wire ID.
  * @param {String}
@@ -61,136 +61,136 @@ cah.CardSet.byWeight = {};
  * @constructor
  * @private
  */
-cah.CardSet = function(id, name, description, baseDeck, blackCardCount, whiteCardCount, weight) {
-  /**
-   * CardSet's database/wire ID.
-   * 
-   * @type {Number}
-   * @private
-   */
-  this.id_ = id;
+cah.CardSet = function (id, name, description, baseDeck, blackCardCount, whiteCardCount, weight) {
+    /**
+     * CardSet's database/wire ID.
+     *
+     * @type {Number}
+     * @private
+     */
+    this.id_ = id;
 
-  /**
-   * CardSet's name.
-   * 
-   * @type {String}
-   * @private
-   */
-  this.name_ = name;
+    /**
+     * CardSet's name.
+     *
+     * @type {String}
+     * @private
+     */
+    this.name_ = name;
 
-  /**
-   * CardSet's description.
-   * 
-   * @type {String}
-   * @private
-   */
-  this.description_ = description;
+    /**
+     * CardSet's description.
+     *
+     * @type {String}
+     * @private
+     */
+    this.description_ = description;
 
-  /**
-   * Whether this CardSet can be used as a base deck. At least one base deck must be used per game.
-   * 
-   * @type {Boolean}
-   * @private
-   */
-  this.baseDeck_ = baseDeck;
+    /**
+     * Whether this CardSet can be used as a base deck. At least one base deck must be used per game.
+     *
+     * @type {Boolean}
+     * @private
+     */
+    this.baseDeck_ = baseDeck;
 
-  /**
-   * The number of black cards in this CardSet.
-   * 
-   * @type {Number}
-   * @private
-   */
-  this.blackCardCount_ = blackCardCount;
+    /**
+     * The number of black cards in this CardSet.
+     *
+     * @type {Number}
+     * @private
+     */
+    this.blackCardCount_ = blackCardCount;
 
-  /**
-   * The number of white cards in this CardSet.
-   * 
-   * @type {Number}
-   * @private
-   */
-  this.whiteCardCount_ = whiteCardCount;
+    /**
+     * The number of white cards in this CardSet.
+     *
+     * @type {Number}
+     * @private
+     */
+    this.whiteCardCount_ = whiteCardCount;
 
-  /**
-   * The sort weight of this CardSet.
-   * 
-   * @type {Number}
-   * @private
-   */
-  this.weight_ = weight;
+    /**
+     * The sort weight of this CardSet.
+     *
+     * @type {Number}
+     * @private
+     */
+    this.weight_ = weight;
 };
 
 /**
  * @returns {number} This CardSet's database/wire ID.
  */
-cah.CardSet.prototype.getId = function() {
-  return this.id_;
+cah.CardSet.prototype.getId = function () {
+    return this.id_;
 };
 
 /**
  * @returns {String} This CardSet's name.
  */
-cah.CardSet.prototype.getName = function() {
-  return this.name_;
+cah.CardSet.prototype.getName = function () {
+    return this.name_;
 };
 
 /**
  * @returns {String} This CardSet's description.
  */
-cah.CardSet.prototype.getDescription = function() {
-  return this.description_;
+cah.CardSet.prototype.getDescription = function () {
+    return this.description_;
 };
 
 /**
  * @returns {Boolean} Whether this CardSet can be used as the base deck in a game.
  */
-cah.CardSet.prototype.isBaseDeck = function() {
-  return this.baseDeck_;
+cah.CardSet.prototype.isBaseDeck = function () {
+    return this.baseDeck_;
 };
 
 /**
  * @returns {Number} The number of black cards in this CardSet.
  */
-cah.CardSet.prototype.getBlackCardCount = function() {
-  return this.blackCardCount_;
+cah.CardSet.prototype.getBlackCardCount = function () {
+    return this.blackCardCount_;
 };
 
 /**
  * @returns {Number} The number of white cards in this CardSet.
  */
-cah.CardSet.prototype.getWhiteCardCount = function() {
-  return this.whiteCardCount_;
+cah.CardSet.prototype.getWhiteCardCount = function () {
+    return this.whiteCardCount_;
 };
 
 /**
  * @returns {Number} The sort weight of this CardSet.
  */
-cah.CardSet.prototype.getWeight = function() {
-  return this.weight_;
+cah.CardSet.prototype.getWeight = function () {
+    return this.weight_;
 };
 
 /**
  * Populate the internal list of CardSets from data provided by the server.
- * 
+ *
  * @param {Array}
  *          cardSets Array of CardSet data from server.
  */
-cah.CardSet.populateCardSets = function(cardSets) {
-  cah.CardSet.list = {};
-  cah.CardSet.byWeight = {};
-  // the server already sends us an ordered list, so let's just use that ordering
-  var i = 0;
-  for ( var key in cardSets) {
-    var cardSetData = cardSets[key];
-    var cardSet = new cah.CardSet(cardSetData[cah.$.CardSetData.ID],
-        cardSetData[cah.$.CardSetData.CARD_SET_NAME],
-        cardSetData[cah.$.CardSetData.CARD_SET_DESCRIPTION],
-        cardSetData[cah.$.CardSetData.BASE_DECK],
-        cardSetData[cah.$.CardSetData.BLACK_CARDS_IN_DECK],
-        cardSetData[cah.$.CardSetData.WHITE_CARDS_IN_DECK], cardSetData[cah.$.CardSetData.WEIGHT]);
-    cah.CardSet.list[cardSet.getId()] = cardSet;
-    cah.CardSet.byWeight[i++] = cardSet;
-  }
+cah.CardSet.populateCardSets = function (cardSets) {
+    cah.CardSet.list = {};
+    cah.CardSet.byWeight = {};
+    // the server already sends us an ordered list, so let's just use that ordering
+    var i = 0;
+    for (var key in cardSets) {
+        var cardSetData = cardSets[key];
+        var cardSet = new cah.CardSet(cardSetData[cah.$.CardSetData.ID],
+            cardSetData[cah.$.CardSetData.CARD_SET_NAME],
+            cardSetData[cah.$.CardSetData.CARD_SET_DESCRIPTION],
+            cardSetData[cah.$.CardSetData.BASE_DECK],
+            cardSetData[cah.$.CardSetData.BLACK_CARDS_IN_DECK],
+            cardSetData[cah.$.CardSetData.WHITE_CARDS_IN_DECK], cardSetData[cah.$.CardSetData.WEIGHT]);
+        cah.CardSet.list[cardSet.getId()] = cardSet;
+        cah.CardSet.byWeight[i++] = cardSet;
+    }
 
-  // not sure if there's a better way to call this...
-  cah.Preferences.updateCardSetFilters();
+    // not sure if there's a better way to call this...
+    cah.Preferences.updateCardSetFilters();
 };

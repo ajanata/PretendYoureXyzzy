@@ -23,7 +23,7 @@
 
 /**
  * Global data and helper functions.
- * 
+ *
  * @author Andy Janata (ajanata@socialgamer.net)
  */
 
@@ -31,42 +31,42 @@ var cah = {};
 
 /**
  * This client's nickname.
- * 
+ *
  * @type {string}
  */
 cah.nickname = "";
 
 /**
  * The games this client is playing in. Key is game id.
- * 
+ *
  * @type {Object}
  */
 cah.currentGames = {};
 
 /**
  * User's ignore list. Map of nickname -> true. If a nickname is present, it is ignored.
- * 
+ *
  * @type {Object}
  */
 cah.ignoreList = {};
 
 /**
  * Whether to hide connect/disconnect messages.
- * 
+ *
  * @type {Boolean}
  */
 cah.hideConnectQuit = false;
 
 /**
  * Whether to ignore the persistent ID the server gives us.
- * 
+ *
  * @type {Boolean}
  */
 cah.noPersistentId = false;
 
 /**
  * Our persistent ID.
- * 
+ *
  * @type {string}
  */
 cah.persistentId = null;
@@ -74,14 +74,14 @@ cah.persistentId = null;
 /**
  * Whether the game's browser window has focus, so we don't update the game list when we're not
  * active.
- * 
+ *
  * @type {Boolean}
  */
 cah.windowActive = true;
 
 /**
  * Whether we've missed a game list refresh due to not being the active window.
- * 
+ *
  * @type {Boolean}
  */
 cah.missedGameListRefresh = false;
@@ -89,49 +89,48 @@ cah.missedGameListRefresh = false;
 /**
  * Binds a function to a "this object". Result is a new function that will do the right thing across
  * contexts.
- * 
+ *
  * @param {Object}
  *          selfObj Object for "this" when calling the returned function.
  * @param {Function}
  *          func Function to call with selfObjc as "this".
  * @returns {Function}
  */
-cah.bind = function(selfObj, func) {
-  return function() {
-    func.apply(selfObj, arguments);
-  };
+cah.bind = function (selfObj, func) {
+    return function () {
+        func.apply(selfObj, arguments);
+    };
 };
 
 /**
  * Inherit the proto methods from one constructor to another.
- * 
+ *
  * @param {Function}
  *          childCtor Child class.
  * @param {Function}
  *          parentCtor Parent class.
  */
-cah.inherits = function(childCtor, parentCtor) {
-  /** @constructor */
-  function tempCtor() {
-    // pass
-  }
-  ;
+cah.inherits = function (childCtor, parentCtor) {
+    /** @constructor */
+    function tempCtor() {
+        // pass
+    }
 
-  tempCtor.prototype = parentCtor.prototype;
-  childCtor.superClass_ = parentCtor.prototype;
-  childCtor.prototype = new tempCtor();
-  childCtor.prototype.constructor = childCtor;
+    tempCtor.prototype = parentCtor.prototype;
+    childCtor.superClass_ = parentCtor.prototype;
+    childCtor.prototype = new tempCtor();
+    childCtor.prototype.constructor = childCtor;
 };
 
 /**
  * Updates the hash in the browser's URL for deeplinks.
- * 
+ *
  * TODO: If we ever want more than just game=id here, this will have to deal with a map somehow.
- * 
+ *
  * @param {String}
  *          hash The hash to use in the URL.
  */
-cah.updateHash = function(hash) {
-  window.location.replace(window.location.protocol + '//' + window.location.host
-      + window.location.pathname.replace(/#$/g, '') + '#' + hash);
+cah.updateHash = function (hash) {
+    window.location.replace(window.location.protocol + '//' + window.location.host
+        + window.location.pathname.replace(/#$/g, '') + '#' + hash);
 };

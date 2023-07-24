@@ -1,24 +1,18 @@
 package net.socialgamer.cah;
 
+import javax.servlet.*;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
 
 
 public class CacheControlFilter implements Filter {
 
   @Override
   public void doFilter(final ServletRequest request, final ServletResponse response,
-      final FilterChain chain) throws IOException, ServletException {
+                       final FilterChain chain) throws IOException, ServletException {
 
     final HttpServletResponse resp = (HttpServletResponse) response;
 
@@ -32,7 +26,7 @@ public class CacheControlFilter implements Filter {
   }
 
   @Override
-  public void init(final FilterConfig filterConfig) throws ServletException {
+  public void init(final FilterConfig filterConfig) {
     // pass
   }
 

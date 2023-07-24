@@ -340,13 +340,13 @@ public class Constants {
     INVALID_CARD("ic", "Invalid card specified."),
     INVALID_GAME("ig", "Invalid game specified."),
     INVALID_ID_CODE("iid", "Identification code, if provided, must be between 8 and 100 characters,"
-        + " inclusive."),
+            + " inclusive."),
     /**
      * TODO this probably should be pulled in from a static inside the RegisterHandler.
      */
     INVALID_NICK("in", "Nickname must contain only upper and lower case letters, " +
-        "numbers, or underscores, must be 3 to 30 characters long, and must not start with a " +
-        "number."),
+            "numbers, or underscores, must be 3 to 30 characters long, and must not start with a " +
+            "number."),
     /**
      * TODO this probably should be pulled in from a static inside the ChatHandler.
      */
@@ -360,8 +360,8 @@ public class Constants {
     NO_SUCH_USER("nsu", "No such user."),
     NOT_ADMIN("na", "You are not an administrator."),
     NOT_ENOUGH_CARDS("nec", "You must add card sets containing at least "
-        + Game.MINIMUM_BLACK_CARDS + " black cards and " + Game.MINIMUM_WHITE_CARDS_PER_PLAYER
-        + " times the player limit white cards."),
+            + Game.MINIMUM_BLACK_CARDS + " black cards and " + Game.MINIMUM_WHITE_CARDS_PER_PLAYER
+            + " times the player limit white cards."),
     NOT_ENOUGH_PLAYERS("nep", "There are not enough players to start the game."),
     NOT_ENOUGH_SPACES("nes", "You must use more words in a message that long."),
     NOT_GAME_HOST("ngh", "Only the game host can do that."),
@@ -373,17 +373,17 @@ public class Constants {
     PLAYED_ALL_CARDS("pac", "You already played all the necessary cards!"),
     RESERVED_NICK("rn", "That nick is reserved."),
     REPEAT_MESSAGE("rm",
-        "You can't repeat the same message multiple times in a row."),
+            "You can't repeat the same message multiple times in a row."),
     REPEATED_WORDS("rW", "You must use more unique words in your message."),
     SERVER_ERROR("serr", "An error occurred on the server."),
     SESSION_EXPIRED("se", "Your session has expired. Refresh the page."),
     TOO_FAST("tf", "You are chatting too fast. Wait a few seconds and try again."),
     TOO_MANY_GAMES("tmg", "There are too many games already in progress. Either join " +
-        "an existing game, or wait for one to become available."),
+            "an existing game, or wait for one to become available."),
     TOO_MANY_SPECIAL_CHARACTERS("tmsc",
-        "You used too many special characters in that message."),
+            "You used too many special characters in that message."),
     TOO_MANY_USERS("tmu", "There are too many users connected. "
-        + "<strong><a href='https://pretendyoure.xyz/zy'>Try another server.</a></strong>"),
+            + "<strong><a href='https://pretendyoure.xyz/zy'>Try another server.</a></strong>"),
     WRONG_PASSWORD("wp", "That password is incorrect.");
 
     private final String code;

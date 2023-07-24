@@ -1,30 +1,22 @@
 package net.socialgamer.cah.handlers;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
+import com.google.inject.Inject;
 import com.google.inject.Provider;
-import net.socialgamer.cah.CahModule;
-import net.socialgamer.cah.Constants.AjaxOperation;
-import net.socialgamer.cah.Constants.AjaxRequest;
-import net.socialgamer.cah.Constants.ErrorCode;
-import net.socialgamer.cah.Constants.GameState;
-import net.socialgamer.cah.Constants.ReturnableData;
+import net.socialgamer.cah.Constants.*;
 import net.socialgamer.cah.RequestWrapper;
 import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.GameOptions;
 import net.socialgamer.cah.data.User;
 
-import com.google.inject.Inject;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ChangeGameOptionHandler extends GameWithPlayerHandler {
-
   public static final String OP = AjaxOperation.CHANGE_GAME_OPTIONS.toString();
-  private Provider<GameOptions> gameOptionsProvider;
+  private final Provider<GameOptions> gameOptionsProvider;
 
   @Inject
   public ChangeGameOptionHandler(final GameManager gameManager, Provider<GameOptions> gameOptionsProvider) {
@@ -34,8 +26,8 @@ public class ChangeGameOptionHandler extends GameWithPlayerHandler {
 
   @Override
   public Map<ReturnableData, Object> handleWithUserInGame(final RequestWrapper request,
-      final HttpSession session, final User user, final Game game) {
-    final Map<ReturnableData, Object> data = new HashMap<ReturnableData, Object>();
+                                                          final HttpSession session, final User user, final Game game) {
+    final Map<ReturnableData, Object> data = new HashMap<>();
 
     if (game.getHost() != user) {
       return error(ErrorCode.NOT_GAME_HOST);

@@ -1,16 +1,16 @@
 /**
  * Copyright (c) 2017-2018, Andy Janata
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- *
+ * <p>
  * * Redistributions of source code must retain the above copyright notice, this list of conditions
- *   and the following disclaimer.
+ * and the following disclaimer.
  * * Redistributions in binary form must reproduce the above copyright notice, this list of
- *   conditions and the following disclaimer in the documentation and/or other materials provided
- *   with the distribution.
- *
+ * conditions and the following disclaimer in the documentation and/or other materials provided
+ * with the distribution.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -23,17 +23,15 @@
 
 package net.socialgamer.cah.metrics;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
 import com.maxmind.geoip2.model.CityResponse;
-
 import net.socialgamer.cah.data.BlackCard;
 import net.socialgamer.cah.data.CardSet;
 import net.socialgamer.cah.data.WhiteCard;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -47,17 +45,17 @@ public interface Metrics {
   void serverStart(String startupId);
 
   void userConnect(String persistentId, String sessionId, @Nullable CityResponse geoIp,
-      String agentName, String agentType, String agentOs, String agentLanguage);
+                   String agentName, String agentType, String agentOs, String agentLanguage);
 
   void userDisconnect(String sessionId);
 
   // The card data is way too complicated to dictate the format it should be in, so let
   // implementations deal with the structured data.
   void roundComplete(String gameId, String roundId, String judgeSessionId, String winnerSessionId,
-      BlackCard blackCard, Map<String, List<WhiteCard>> cards);
+                     BlackCard blackCard, Map<String, List<WhiteCard>> cards);
 
   void gameStart(String gameId, Collection<CardSet> decks, int blanks, int maxPlayers,
-      int scoreGoal, boolean hasPassword);
+                 int scoreGoal, boolean hasPassword);
 
   void cardDealt(String gameId, String sessionId, WhiteCard card, long dealSeq);
 }

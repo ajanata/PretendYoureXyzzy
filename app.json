@@ -1,0 +1,10 @@
+{
+  "name": "PYX server",
+  "description": "A Pretend You're Xyzzy server",
+  "repository": "https://github.com/devgianlu/PretendYoureXyzzy",
+  "keywords": [
+    "game",
+    "cards-against-humanity",
+    "card-game"
+  ]
+}

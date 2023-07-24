@@ -35,9 +35,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -147,8 +146,8 @@ public class CustomCardsService {
     JSONObject obj;
     String hash;
     try {
-      obj = (JSONObject) JSONValue.parse(jsonStr);
-      hash = DigestUtils.md5Hex(bencode.encode(obj));
+      obj = new JSONObject(jsonStr);
+      hash = DigestUtils.md5Hex(bencode.encode(obj.toMap()));
     } catch (Exception e) {
       putCache(null, INVALID_SET_CACHE_LIFETIME, url, null);
       LOG.error("Unable to parse deck.", e);
@@ -179,7 +178,7 @@ public class CustomCardsService {
           final JSONArray texts = (JSONArray) ((JSONObject) black).get("text");
           if (null != texts) {
             final String text = CustomCardFormatHelper.formatBlackCard(texts);
-            final int pick = texts.size() - 1;
+            final int pick = texts.length() - 1;
             final int draw = (pick >= 3 ? pick - 1 : 0);
             final CustomBlackCard card = new CustomBlackCard(cardIdCounter.incrementAndGet(), text, draw, pick, watermark);
             deck.getBlackCards().add(card);
