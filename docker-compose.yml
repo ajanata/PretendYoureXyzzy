@@ -9,5 +9,28 @@ services:
       - ./log4j.properties:/opt/log4j.properties:ro
       - ./hibernate.cfg.xml:/opt/hibernate.cfg.xml:ro
       - ./pyx.sqlite:/opt/pyx.sqlite:ro
-    ports:
-      - "8080:8080"
+    depends_on:
+      - kafka
+    networks:
+      - internal
+
+  kafka:
+    image: ubuntu/kafka
+    restart: unless-stopped
+    command: ["/etc/kafka/server.properties", "--override", "auto.create.topics.enable=true"]
+    environment:
+      ZOOKEEPER_HOST: zookeeper
+    depends_on:
+      - zookeeper
+    networks:
+      - internal
+
+  zookeeper:
+    image: ubuntu/zookeeper
+    restart: unless-stopped
+    networks:
+      - internal
+
+networks:
+  internal:
+    internal: true
