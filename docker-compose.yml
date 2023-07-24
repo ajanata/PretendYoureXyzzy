@@ -1,0 +1,13 @@
+services:
+  server:
+    build: .
+    restart: unless-stopped
+    command:
+      - "--pyx.server.port=8080"
+    volumes:
+      - ./pyx.properties:/opt/pyx.properties:ro
+      - ./log4j.properties:/opt/log4j.properties:ro
+      - ./hibernate.cfg.xml:/opt/hibernate.cfg.xml:ro
+      - ./pyx.sqlite:/opt/pyx.sqlite:ro
+    ports:
+      - "8080:8080"
