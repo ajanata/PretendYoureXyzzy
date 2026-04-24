@@ -18,3 +18,4 @@ docker run -d -p 8080:8080 ghcr.io/cyb3r-jak3/dockeryourxyzzy:prebuilt
 ## License
 
 Original code by Andy Janata. See LICENSE file.
+
