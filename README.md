@@ -1,6 +1,8 @@
 Pretend You're Xyzzy
 ===================
 
+# This project is retired. The server is still running, but I will never come back to working on the code.
+
 A Cards Against Humanity clone, server and web client. See WebContent/license.html for full details.
 
 Note: This project is only known to work with Tomcat 7, all other versions are unsupported. 
