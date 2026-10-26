@@ -33,12 +33,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.socialgamer.cah.CahModule;
+import net.socialgamer.cah.CahModule.*;
 import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
@@ -50,14 +51,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.Provides;
 
-import net.socialgamer.cah.CahModule.AllowBlankCards;
-import net.socialgamer.cah.CahModule.GamePermalinkUrlFormat;
-import net.socialgamer.cah.CahModule.RoundPermalinkUrlFormat;
-import net.socialgamer.cah.CahModule.ShowGamePermalink;
-import net.socialgamer.cah.CahModule.ShowRoundPermalink;
-import net.socialgamer.cah.CahModule.UniqueId;
 import net.socialgamer.cah.HibernateUtil;
-import net.socialgamer.cah.cardcast.CardcastModule.CardcastCardId;
 import net.socialgamer.cah.data.GameManager.GameId;
 import net.socialgamer.cah.data.GameManager.MaxGames;
 import net.socialgamer.cah.data.QueuedMessage.MessageType;
@@ -153,15 +147,21 @@ public class GameManagerTest {
       }
 
       @Provides
-      @CardcastCardId
-      Integer provideCardcastCardId() {
-        return 0;
-      }
-
-      @Provides
       @UniqueId
       String provideUniqueId() {
         return "1";
+      }
+
+      @Provides
+      @CustomDecksEnabled
+      Boolean provideCustomDecksEnabled() {
+        return true;
+      }
+
+      @Provides
+      @CustomDecksAllowedUrls
+      List<String> provideAllowedCustomDecksUrls() {
+        return Collections.singletonList("*");
       }
     });
 

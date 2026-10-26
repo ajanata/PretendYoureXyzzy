@@ -32,7 +32,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -67,7 +68,7 @@ import net.socialgamer.cah.db.PyxCardSet;
  */
 public class FirstLoadHandler extends Handler {
 
-  private static final Logger LOG = Logger.getLogger(FirstLoadHandler.class);
+  private static final Logger LOG = LogManager.getLogger(FirstLoadHandler.class);
   public static final String OP = AjaxOperation.FIRST_LOAD.toString();
 
   private final Set<String> banList;

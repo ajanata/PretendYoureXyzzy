@@ -37,7 +37,8 @@ import net.socialgamer.cah.data.Game;
 import net.socialgamer.cah.data.GameManager;
 import net.socialgamer.cah.data.User;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 
@@ -47,7 +48,7 @@ import com.google.inject.Inject;
  */
 public class StopGameHandler extends GameWithPlayerHandler {
 
-  protected final Logger logger = Logger.getLogger(GameWithPlayerHandler.class);
+  protected final Logger logger = LogManager.getLogger(GameWithPlayerHandler.class);
 
   public static final String OP = AjaxOperation.STOP_GAME.toString();
 
